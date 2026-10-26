@@ -46,6 +46,10 @@ TECH_LADDER = [
     ("metallurgy",    "granary",       0.06, 250),
     ("writing",       "lore",          0.05, 400),
 ]
+ARTS = ["cave paintings", "drum songs", "the dance of the tides",
+        "carved totems", "the story of the stars", "spirit masks",
+        "tattoo rites", "the great feast", "shell jewelry", "the long game"]
+
 TECH_LABEL = {
     "fire": "fire is tamed", "stone_tools": "stone tools are knapped",
     "fishing": "fishing is learned", "shelter": "shelters are raised",
@@ -74,21 +78,36 @@ def age_of(p, day):
 # ---------------------------------------------------------------- world gen
 
 def make_lagoon_terrain(seed):
-    """0 grass, 1 woods, 2 water, 3 beach, 4 farm."""
+    """An island in the ocean. 0 grass, 1 woods, 2 water, 3 beach, 4 farm."""
     rng = random.Random(seed)
     s = LAGOON_SIZE
-    t = [[0] * s for _ in range(s)]
-    cx, cy, rad = 70, 68, 19  # the lagoon
+    cx = cy = s // 2
+    coast = [rng.uniform(0.80, 1.0) for _ in range(72)]  # wobbly coastline
+    t = [[2] * s for _ in range(s)]                       # ocean everywhere
+    R = 44
     for y in range(s):
         for x in range(s):
             d = math.hypot(x - cx, y - cy)
-            if d < rad:
+            a = int((math.atan2(y - cy, x - cx) % (2 * math.pi))
+                    / (2 * math.pi) * 72) % 72
+            r = R * coast[a]
+            if d < r - 2.5:
+                t[y][x] = 0
+            elif d < r:
+                t[y][x] = 3                               # beach ring
+    lx, ly, lr = 60, 58, 11                               # the inner lagoon
+    for y in range(s):
+        for x in range(s):
+            if t[y][x] != 0:
+                continue
+            d = math.hypot(x - lx, y - ly)
+            if d < lr:
                 t[y][x] = 2
-            elif d < rad + 2.5:
+            elif d < lr + 2:
                 t[y][x] = 3
-    for _ in range(9):  # woods: blobby random walks
-        x, y = rng.randrange(4, 56), rng.randrange(4, 56)
-        for _ in range(260):
+    for _ in range(10):                                   # woods blobs
+        x, y = rng.randrange(20, 76), rng.randrange(20, 76)
+        for _ in range(300):
             if t[y][x] == 0:
                 t[y][x] = 1
             x = min(s - 1, max(0, x + rng.choice([-1, 0, 1])))
@@ -126,11 +145,12 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None):
         u["tech"] = []
         u["store"] = 0.0
         u["farms"] = []            # [x, y] tilled tiles
-        u["settlements"] = [{"x": 58, "y": 52, "r": 5, "n": make_name(rng)}]
+        u["settlements"] = [{"x": 73, "y": 57, "r": 5, "n": make_name(rng)}]
         u["innocent"] = True       # Blue Lagoon: reproduction not yet discovered
+        u["culture"] = []          # arts appear when bellies stay full
         u["drought"] = 0           # years remaining
         u["harsh_winter"] = False
-        spots = [(57, 51), (58, 51), (58, 53), (59, 52)]
+        spots = [(72, 56), (73, 56), (73, 58), (74, 57)]
     for i, (x, y) in enumerate(spots):
         sex = "m" if i % 2 == 0 else "f"
         name = f"E-{u['next_id']:04d}" if kind == "EDEN" else make_name(rng)
@@ -317,9 +337,9 @@ def tick_eden(u, rng, events):
         # the beautiful ones: incompetent adults withdraw for good
         if not p["c"] and not p["w"] and age_of(p, day) >= ADULT_AGE:
             p["w"] = True
-        # wander the pen
-        p["x"] = min(EDEN_SIZE - 2, max(1, p["x"] + rng.choice([-1, 0, 1])))
-        p["y"] = min(EDEN_SIZE - 2, max(1, p["y"] + rng.choice([-1, 0, 1])))
+        # wander the pen (walls are 2 tiles thick)
+        p["x"] = min(EDEN_SIZE - 3, max(2, p["x"] + rng.choice([-1, 0, 1])))
+        p["y"] = min(EDEN_SIZE - 3, max(2, p["y"] + rng.choice([-1, 0, 1])))
 
     for p in dead:
         people.remove(p)
@@ -683,6 +703,18 @@ def tick_lagoon(u, rng, events):
                                            st["y"] + rng.randint(-7, 7)])
                 break  # at most one discovery a year
 
+        # full bellies and long evenings: surplus turns into art and pleasure
+        if (has(u, "lore") and u["store"] > need * 20 and adults
+                and len(u.get("culture", [])) < len(ARTS)
+                and rng.random() < 0.2):
+            art = next(a for a in ARTS if a not in u["culture"])
+            u.setdefault("culture", []).append(art)
+            maker = rng.choice(adults)["n"]
+            events.append((day, "LAGOON", "culture",
+                           f"Year {year}: with food enough and nothing to fear, "
+                           f"{art} appear{'s' if not art.startswith('the') else ''} — "
+                           f"first made by {maker}."))
+
         if has(u, "agriculture") and len(u["farms"]) < pop // 3:
             st = rng.choice(u["settlements"])
             u["farms"].append([st["x"] + rng.randint(-8, 8),
@@ -697,10 +729,18 @@ def tick_lagoon(u, rng, events):
             st = u["settlements"][min(si, len(u["settlements"]) - 1)]
             st["r"] = max(5, int(4 + math.sqrt(n) * 1.3))
             if n > limit and len(u["settlements"]) < 12:
-                ang = rng.uniform(0, 2 * math.pi)
-                dist = rng.uniform(12, 24)
-                nx = int(min(LAGOON_SIZE - 6, max(5, st["x"] + math.cos(ang) * dist)))
-                ny = int(min(LAGOON_SIZE - 6, max(5, st["y"] + math.sin(ang) * dist)))
+                terr = terrain_of(u)
+                nx = ny = None
+                for _ in range(12):  # find dry ground for the new camp
+                    ang = rng.uniform(0, 2 * math.pi)
+                    dist = rng.uniform(12, 24)
+                    tx = int(min(LAGOON_SIZE - 6, max(5, st["x"] + math.cos(ang) * dist)))
+                    ty = int(min(LAGOON_SIZE - 6, max(5, st["y"] + math.sin(ang) * dist)))
+                    if terr[ty][tx] != 2:
+                        nx, ny = tx, ty
+                        break
+                if nx is None:
+                    continue
                 tribe = make_name(rng)
                 u["settlements"].append({"x": nx, "y": ny, "r": 5, "n": tribe})
                 new_i = len(u["settlements"]) - 1
@@ -780,6 +820,7 @@ def summarize(world):
             info["farms"] = u["farms"]
             info["store"] = round(u["store"], 1)
             info["lessons"] = u.get("lessons", [])
+            info["culture"] = u.get("culture", [])
             info["phase"] = ("innocence" if u["innocent"] else
                              u["tech"][-1] if u["tech"] else "foragers")
         else:

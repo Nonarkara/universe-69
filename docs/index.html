@@ -6,255 +6,287 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:#10101c; color:#e8e8f0; font-family:Menlo,Monaco,monospace;
-         display:flex; flex-direction:column; align-items:center; min-height:100vh;
-         padding-bottom:20px; }
-  #logo { margin:16px 0 2px; font-size:20px; letter-spacing:8px; color:#fff;
-          text-shadow:3px 3px 0 #4040a0; font-weight:bold; }
-  #sub { font-size:10px; color:#8888aa; margin-bottom:10px; letter-spacing:3px; }
-  #ff { color:#f8d848; font-size:10px; height:14px; margin-bottom:6px; letter-spacing:1px; }
-  #panels { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
-  /* classic JRPG window: dark blue, double border */
-  .win { background:#101848; border:3px solid #f0f0f0; outline:2px solid #101848;
-         box-shadow:0 0 0 5px #585878; border-radius:2px; }
-  .panel { padding:5px; }
-  .hud { font-size:10px; line-height:1.5; padding:4px 7px 6px; white-space:pre; }
-  .hud .uname { color:#f8d848; font-weight:bold; }
-  canvas { display:block; image-rendering:pixelated; background:#000; }
-  #ticker { width:min(96vw, 1012px); margin-top:16px; padding:8px 12px;
-            font-size:11px; line-height:1.8; height:150px; overflow:hidden; }
-  #ticker .cur::after { content:"▼"; color:#f8d848; margin-left:6px;
-                        animation:blink 1s steps(1) infinite; }
+  html, body { height:100%; overflow:hidden; }
+  body { background:#000; color:#d8d8e8; font-family:Menlo,Monaco,monospace;
+         display:flex; flex-direction:column; }
+  #worlds { flex:2; display:flex; min-height:0; }
+  .world { flex:1; position:relative; min-width:0; }
+  #divider { width:2px; background:#3a3a55; }
+  canvas.view { width:100%; height:100%; display:block; image-rendering:pixelated; }
+  .hud { position:absolute; top:0; left:0; right:0; padding:6px 10px;
+         font-size:11px; line-height:1.5; white-space:pre-wrap;
+         background:rgba(0,0,10,0.55); pointer-events:none; }
+  .hud b { color:#f8d848; font-weight:bold; }
+  #god { flex:1; border-top:2px solid #3a3a55; display:flex; min-height:0;
+         background:#07070e; }
+  .stat { width:25%; padding:8px 12px; font-size:11px; line-height:1.7;
+          overflow:hidden; white-space:pre-wrap; }
+  .stat h2 { font-size:11px; margin-bottom:2px; letter-spacing:1px; }
+  #s6 h2 { color:#a8c0f0; } #s9 h2 { color:#a0e898; }
+  .trend { width:100%; height:44px; image-rendering:pixelated; display:block;
+           margin:4px 0; }
+  #records { flex:1; padding:8px 14px; font-size:11px; line-height:1.85;
+             overflow:hidden; border-left:2px solid #3a3a55;
+             border-right:2px solid #3a3a55; }
+  #records h2 { font-size:11px; color:#f8d848; letter-spacing:2px; margin-bottom:2px; }
+  #records .cur::after { content:"▼"; color:#f8d848; margin-left:6px;
+                         animation:blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity:0; } }
-  .ev6 { color:#a8c0f0; } .ev9 { color:#a0e898; } .evy { color:#707090; }
+  .ev6 { color:#a8c0f0; } .ev9 { color:#a0e898; } .evy { color:#666a88; }
+  .dim { color:#8888aa; }
 </style>
 </head>
 <body>
-<div id="logo">UNIVERSE 69</div>
-<div id="sub">TWO SEALED WORLDS &middot; THE OBSERVERS ONLY WATCH</div>
-<div id="ff"></div>
-<div id="panels">
-  <div class="win panel">
-    <div class="hud" id="hud6"><span class="uname">UNIVERSE 6 · EDEN</span></div>
-    <canvas id="c6" width="480" height="480"></canvas>
-  </div>
-  <div class="win panel">
-    <div class="hud" id="hud9"><span class="uname">UNIVERSE 9 · LAGOON</span></div>
-    <canvas id="c9" width="480" height="480"></canvas>
-  </div>
+<div id="worlds">
+  <div class="world"><canvas id="c6" class="view"></canvas>
+    <div class="hud" id="hud6"><b>UNIVERSE 6 · EDEN</b></div></div>
+  <div id="divider"></div>
+  <div class="world"><canvas id="c9" class="view"></canvas>
+    <div class="hud" id="hud9"><b>UNIVERSE 9 · LAGOON</b></div></div>
 </div>
-<div class="win" id="ticker"></div>
+<div id="god">
+  <div class="stat" id="s6"></div>
+  <div id="records"><h2>THE OBSERVER'S RECORD</h2><div id="reclines"></div></div>
+  <div class="stat" id="s9"></div>
+</div>
 
 <script src="config.js"></script>
 <script>
 var SNAP = window.SNAPSHOT_URL || null;
-var PX = 4; // offscreen pixels per world tile
+var PX = 4;
 
-// palette — flat, SNES-leaning
 var P = {
-  grass1:"#3f8f3f", grass2:"#4aa04a", grass3:"#348334",
-  wood1:"#1f5c26",  wood2:"#2a6e31",  trunk:"#5c3a1e", leafhi:"#3f8f3f",
-  water1:"#2558b0", water2:"#3068c8", foam:"#9cc4ee",
-  sand1:"#d8c070",  sand2:"#c8ae60",
-  farm1:"#8a6530",  farm2:"#75521f",
-  hutwall:"#8a5a30", hutroof:"#b03828", hutroof2:"#8c2c20",
-  floor1:"#cfc6b4", floor2:"#c2b8a6", wall:"#5a4e40", walltop:"#6e604e",
-  hopper:"#e8c040", pellet:"#b89020", trough:"#4a90d9",
-  child:"#f8e060", man:"#5080e0", woman:"#e07098", elder:"#a8a8a8",
-  withdrawn:"#90f0e8", shadow:"rgba(0,0,0,0.25)"
+  grass:"#4a9a44", flower:"#e8e060",
+  forest:"#2a6830", canopy:"#1d4f24", trunk:"#5c3a1e",
+  water:"#2860b8", foam:"#9cc4ee",
+  sand:"#d8c070", pebble:"#b09850",
+  farm:"#8a6530", farmrow:"#6e4e1c",
+  hutwall:"#8a5a30", hutroof:"#b03828", hutroof2:"#7c2418", hutdoor:"#301808",
+  floor:"#ccc3b1", floorline:"#bcb3a1", wall:"#5a4e40", walltop:"#71634f",
+  hopper:"#e8c040", pellet:"#a07c18", trough:"#4a90d9",
+  child:"#f8e060", man:"#5080e0", woman:"#e87098", elder:"#aaaaaa",
+  withdrawn:"#90f0e8", skin:"#f8d8b0", shadow:"rgba(0,0,0,0.3)"
 };
 var CLS = [P.child, P.man, P.woman, P.elder, P.withdrawn];
 
-function hash2(x, y){ var h = (x*374761393 + y*668265263) >>> 0;
-  h = (h ^ (h >> 13)) * 1274126177 >>> 0; return (h ^ (h >> 16)) / 4294967295; }
-function lerp(a,b,t){ return a + (b-a)*t; }
-function fetchJSON(u){ return fetch(u, {cache:"no-store"}).then(function(r){ return r.json(); }); }
+function hash2(x,y){ var h=(x*374761393+y*668265263)>>>0;
+  h=(h^(h>>13))*1274126177>>>0; return (h^(h>>16))/4294967295; }
+function lerp(a,b,t){ return a+(b-a)*t; }
+function fetchJSON(u){ return fetch(u,{cache:"no-store"}).then(function(r){ return r.json(); }); }
 
-var worldInfo = null, lagoonIter = -1, state = null, tick = 0;
-var off6 = document.createElement("canvas");
-var off9 = document.createElement("canvas");
-off6.width = off6.height = 48 * PX;
-off9.width = off9.height = 96 * PX;
-var cam = { e:{x:24,y:24,h:9}, l:{x:58,y:52,h:9} };
+var worldInfo=null, lagoonIter=-1, state=null, tick=0;
+var off6=document.createElement("canvas"), off9=document.createElement("canvas");
+off6.width=off6.height=48*PX; off9.width=off9.height=96*PX;
+var cam={ e:{x:24,y:24,h:9}, l:{x:73,y:57,h:9} };
 
-// ---- tile painters ------------------------------------------------------
-function tile(ctx, x, y, color){ ctx.fillStyle = color; ctx.fillRect(x*PX, y*PX, PX, PX); }
-function dot(ctx, x, y, dx, dy, color){ ctx.fillStyle = color; ctx.fillRect(x*PX+dx, y*PX+dy, 1, 1); }
+// ---- tiles: uniform bases, sparse clear decorations (no confetti) -------
+function T(ctx,x,y,c){ ctx.fillStyle=c; ctx.fillRect(x*PX,y*PX,PX,PX); }
 
-function paintGrass(ctx, x, y){
-  var h = hash2(x,y);
-  tile(ctx, x, y, h < 0.33 ? P.grass1 : h < 0.66 ? P.grass2 : P.grass3);
-  if (h > 0.8) dot(ctx, x, y, (h*17|0)%PX, (h*31|0)%PX, P.grass3);  // blades
-}
-function paintWoods(ctx, x, y){
-  tile(ctx, x, y, hash2(x,y) < 0.5 ? P.wood1 : P.wood2);
-  if (hash2(x+7, y+3) > 0.45){                         // a tree
-    dot(ctx, x, y, 1, 3, P.trunk);
-    ctx.fillStyle = P.leafhi; ctx.fillRect(x*PX, y*PX, 3, 2);
-    dot(ctx, x, y, 1, 0, P.wood2);
+function paintLagoonBase(ctx, terrain, t){
+  var S=96;
+  for (var y=0;y<S;y++) for (var x=0;x<S;x++){
+    var k=terrain[y][x];
+    if (k===2){
+      T(ctx,x,y,P.water);
+      if ((x*7+y*13+(t>>3))%31===0){ ctx.fillStyle=P.foam;
+        ctx.fillRect(x*PX+((x+t>>2)%3), y*PX+1, 2, 1); }
+    } else if (k===1){
+      T(ctx,x,y,P.forest);
+    } else if (k===3){
+      T(ctx,x,y,P.sand);
+      if (hash2(x,y)>0.93){ ctx.fillStyle=P.pebble; ctx.fillRect(x*PX+1,y*PX+2,1,1); }
+    } else {
+      T(ctx,x,y,P.grass);
+      if (hash2(x,y)>0.95){ ctx.fillStyle=P.flower; ctx.fillRect(x*PX+2,y*PX+1,1,1); }
+    }
+  }
+  // distinct trees on a sparse lattice over forest
+  for (var y=1;y<S-1;y++) for (var x=1;x<S-1;x++){
+    if (terrain[y][x]===1 && hash2(x*3,y*5)>0.82){
+      ctx.fillStyle=P.canopy; ctx.fillRect(x*PX-1, y*PX-2, PX+2, PX);
+      ctx.fillRect(x*PX, y*PX-3, PX, 1);
+      ctx.fillStyle=P.trunk; ctx.fillRect(x*PX+1, y*PX-1+PX-2, 2, 2);
+    }
   }
 }
-function paintWater(ctx, x, y, t){
-  tile(ctx, x, y, hash2(x,y) < 0.5 ? P.water1 : P.water2);
-  // shimmering foam: drifts with time, classic 16-bit water
-  if ((x + y + (t>>3)) % 7 === 0) dot(ctx, x, y, (x+t>>2)%PX, (y*3)%PX, P.foam);
+function paintFarm(ctx,x,y){
+  T(ctx,x,y,P.farm);
+  ctx.fillStyle=P.farmrow;
+  ctx.fillRect(x*PX,y*PX+1,PX,1); ctx.fillRect(x*PX,y*PX+3,PX,1);
 }
-function paintSand(ctx, x, y){
-  tile(ctx, x, y, hash2(x,y) < 0.6 ? P.sand1 : P.sand2);
-  if (hash2(x+3,y+9) > 0.85) dot(ctx, x, y, 2, 2, P.farm2);  // pebble
+function paintHut(ctx,x,y){
+  ctx.fillStyle=P.hutwall; ctx.fillRect(x*PX+1,y*PX+3,PX*2-2,PX+1);
+  ctx.fillStyle=P.hutroof; ctx.fillRect(x*PX,y*PX+1,PX*2,2);
+  ctx.fillStyle=P.hutroof2; ctx.fillRect(x*PX+1,y*PX,PX*2-2,1);
+  ctx.fillStyle=P.hutdoor; ctx.fillRect(x*PX+PX-1,y*PX+PX+1,2,3);
 }
-function paintFarm(ctx, x, y){
-  tile(ctx, x, y, P.farm1);
-  ctx.fillStyle = P.farm2;                                   // tilled rows
-  ctx.fillRect(x*PX, y*PX+1, PX, 1); ctx.fillRect(x*PX, y*PX+3, PX, 1);
-}
-function paintHut(ctx, x, y){
-  ctx.fillStyle = P.hutwall; ctx.fillRect(x*PX+1, y*PX+3, PX*2-2, PX+1);
-  ctx.fillStyle = P.hutroof; ctx.fillRect(x*PX,   y*PX+1, PX*2,   2);
-  ctx.fillStyle = P.hutroof2; ctx.fillRect(x*PX+1, y*PX,  PX*2-2, 1);
-  ctx.fillStyle = "#301808"; ctx.fillRect(x*PX+PX-1, y*PX+PX+1, 2, 3); // door
-}
-function paintPerson(ctx, p, t){
-  var x = p[0]*PX, y = p[1]*PX, c = CLS[p[2]];
-  var bob = ((p[0]*31 + p[1]*17 + (t>>4)) % 2);   // 2-frame idle bob
-  ctx.fillStyle = P.shadow; ctx.fillRect(x, y+3, 3, 1);
-  ctx.fillStyle = c;        ctx.fillRect(x, y+1-bob, 3, 2);  // body
-  ctx.fillStyle = "#f8d8b0"; ctx.fillRect(x+1, y-1-bob, 1, 1); // head
-  if (p[2] === 0){ ctx.fillStyle = c; ctx.fillRect(x+1, y+1, 1, 2); } // kids: smaller
-}
-
-// ---- world painting -----------------------------------------------------
-function paintEden(ctx, t){
-  var S = 48;
-  for (var y=0; y<S; y++) for (var x=0; x<S; x++){
-    var h = hash2(x,y);
-    tile(ctx, x, y, ((x+y)%2 ? P.floor1 : (h<0.9 ? P.floor1 : P.floor2)));
-    if (h > 0.96) dot(ctx, x, y, 1, 1, P.floor2);
+function paintEdenBase(ctx,t){
+  // overhead view of Calhoun's Universe 25: a walled square pen, every wall
+  // lined with nest-box "apartments", hopper stations, open floor inside
+  var S=48;
+  ctx.fillStyle=P.floor; ctx.fillRect(0,0,S*PX,S*PX);
+  ctx.fillStyle=P.wall;
+  ctx.fillRect(0,0,S*PX,PX*2); ctx.fillRect(0,(S-2)*PX,S*PX,PX*2);
+  ctx.fillRect(0,0,PX*2,S*PX); ctx.fillRect((S-2)*PX,0,PX*2,S*PX);
+  ctx.fillStyle=P.walltop; ctx.fillRect(0,0,S*PX,2); ctx.fillRect(0,0,2,S*PX);
+  // nest boxes along each wall, entrances facing the floor
+  ctx.save();
+  for (var i=4;i<S-6;i+=5){
+    [[i,2,0,1],[i,S-4,0,-1],[2,i,1,0],[S-4,i,-1,0]].forEach(function(b){
+      var bx=b[0],by=b[1];
+      ctx.fillStyle=P.floorline; ctx.fillRect(bx*PX,by*PX,PX*2,PX*2);
+      ctx.fillStyle=P.wall;      ctx.strokeStyle=P.wall;
+      ctx.fillRect(bx*PX,by*PX,PX*2,1); ctx.fillRect(bx*PX,by*PX,1,PX*2);
+      ctx.fillRect(bx*PX,(by+2)*PX-1,PX*2,1); ctx.fillRect((bx+2)*PX-1,by*PX,1,PX*2);
+      ctx.fillStyle=P.hutdoor;   // entrance hole on the floor side
+      ctx.fillRect((bx+1)*PX-1+b[2]*PX, (by+1)*PX-1+b[3]*PX, 2, 2);
+    });
   }
-  ctx.fillStyle = P.wall;
-  ctx.fillRect(0,0,S*PX,PX); ctx.fillRect(0,(S-1)*PX,S*PX,PX);
-  ctx.fillRect(0,0,PX,S*PX); ctx.fillRect((S-1)*PX,0,PX,S*PX);
-  ctx.fillStyle = P.walltop;
-  ctx.fillRect(0,0,S*PX,2); ctx.fillRect(0,0,2,S*PX);
-  [[3,3],[S-6,3],[3,S-6],[S-6,S-6]].forEach(function(hp){      // food hoppers
-    ctx.fillStyle = P.hopper; ctx.fillRect(hp[0]*PX, hp[1]*PX, PX*2, PX*2);
-    ctx.fillStyle = P.pellet;
-    dot(ctx,hp[0],hp[1],2,2,P.pellet); dot(ctx,hp[0]+1,hp[1]+1,1,1,P.pellet);
+  ctx.restore();
+  // four hopper stations + water
+  [[8,8],[S-10,8],[8,S-10],[S-10,S-10]].forEach(function(h){
+    ctx.fillStyle=P.hopper; ctx.fillRect(h[0]*PX,h[1]*PX,PX*2,PX*2);
+    ctx.fillStyle=P.pellet; ctx.fillRect(h[0]*PX+2,h[1]*PX+2,2,1);
+    ctx.fillRect(h[0]*PX+5,h[1]*PX+5,2,1);
   });
-  for (var i=0;i<6;i++){                                       // water trough
-    var wx=(S>>1)-3+i;
-    tile(ctx,wx,1,P.trough);
-    if ((wx+(t>>3))%3===0) dot(ctx,wx,1,1,1,P.foam);
-  }
+  for (var i=0;i<6;i++){ var wx=(48>>1)-3+i;
+    T(ctx,wx,2,P.trough);
+    if ((wx+(t>>3))%3===0){ ctx.fillStyle=P.foam; ctx.fillRect(wx*PX+1,2*PX+1,1,1); } }
 }
-function paintLagoon(ctx, t, st){
-  var S = 96, terrain = SNAP ? (st.world && st.world.terrain) : (worldInfo && worldInfo.terrain);
-  if (!terrain) return;
-  for (var y=0; y<S; y++) for (var x=0; x<S; x++){
-    var k = terrain[y][x];
-    if (k===0) paintGrass(ctx,x,y);
-    else if (k===1) paintWoods(ctx,x,y);
-    else if (k===2) paintWater(ctx,x,y,t);
-    else paintSand(ctx,x,y);
-  }
-  var u = st.u.lagoon;
-  (u.farms||[]).forEach(function(f){
-    if (f[0]>=0 && f[0]<S && f[1]>=0 && f[1]<S) paintFarm(ctx, f[0], f[1]);
-  });
-  (u.settlements||[]).forEach(function(s){ paintHut(ctx, s.x-1, s.y-1); });
+function paintPerson(ctx,p,t){
+  var x=p[0]*PX, y=p[1]*PX, c=CLS[p[2]];
+  var bob=((p[0]*31+p[1]*17+(t>>4))%2);
+  ctx.fillStyle=P.shadow; ctx.fillRect(x,y+3,3,1);
+  ctx.fillStyle=c; ctx.fillRect(x,y+1-bob,3,2);
+  ctx.fillStyle=P.skin; ctx.fillRect(x+1,y-1-bob,1,1);
 }
 
-// ---- camera + blit ------------------------------------------------------
+// ---- camera + blit (aspect-correct) -------------------------------------
 function render(canvas, offc, u, key, st){
-  var ctx = offc.getContext("2d");
-  if (key === "e") paintEden(ctx, tick); else paintLagoon(ctx, tick, st);
+  var ctx=offc.getContext("2d");
+  if (key==="e") paintEdenBase(ctx,tick);
+  else {
+    var terrain = SNAP ? (st.world&&st.world.terrain) : (worldInfo&&worldInfo.terrain);
+    if (!terrain) return;
+    paintLagoonBase(ctx,terrain,tick);
+    (u.farms||[]).forEach(function(f){
+      if (f[0]>0&&f[0]<95&&f[1]>0&&f[1]<95) paintFarm(ctx,f[0],f[1]); });
+    (u.settlements||[]).forEach(function(s){ paintHut(ctx,s.x-1,s.y-1); });
+  }
   var minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
   u.people.forEach(function(p){
-    paintPerson(ctx, p, tick);
-    if (p[0]<minx)minx=p[0]; if (p[0]>maxx)maxx=p[0];
-    if (p[1]<miny)miny=p[1]; if (p[1]>maxy)maxy=p[1];
+    paintPerson(ctx,p,tick);
+    if(p[0]<minx)minx=p[0]; if(p[0]>maxx)maxx=p[0];
+    if(p[1]<miny)miny=p[1]; if(p[1]>maxy)maxy=p[1];
   });
-  var S = offc.width / PX, c = cam[key === "e" ? "e" : "l"];
-  var tx, ty, th;
+  var S=offc.width/PX, c=cam[key==="e"?"e":"l"];
+  var tx,ty,th;
   if (u.people.length){
     tx=(minx+maxx)/2; ty=(miny+maxy)/2;
-    th=Math.max(9, Math.min(S/2, Math.max(maxx-minx, maxy-miny)/2 + 7));
+    th=Math.max(8, Math.min(S/2, Math.max(maxx-minx,maxy-miny)/2+7));
   } else { tx=S/2; ty=S/2; th=S/2; }
   c.x=lerp(c.x,tx,0.04); c.y=lerp(c.y,ty,0.04); c.h=lerp(c.h,th,0.04);
-  var h=c.h, sx=Math.max(0,Math.min(S-2*h,c.x-h)), sy=Math.max(0,Math.min(S-2*h,c.y-h));
+  var aspect=canvas.width/canvas.height;
+  var hy=c.h, hx=Math.min(S/2, c.h*aspect);
+  if (hx/aspect<hy) hy=hx/aspect;
+  var sx=Math.max(0,Math.min(S-2*hx,c.x-hx)), sy=Math.max(0,Math.min(S-2*hy,c.y-hy));
   var g=canvas.getContext("2d");
   g.imageSmoothingEnabled=false;
-  g.drawImage(offc, sx*PX, sy*PX, 2*h*PX, 2*h*PX, 0, 0, canvas.width, canvas.height);
+  g.fillStyle="#000"; g.fillRect(0,0,canvas.width,canvas.height);
+  g.drawImage(offc, sx*PX, sy*PX, 2*hx*PX, 2*hy*PX, 0, 0, canvas.width, canvas.height);
 }
 
-// ---- HUD + ticker -------------------------------------------------------
-function hudText(name, u, line2){
-  return "<span class='uname'>" + name + "</span>  IT " + u.iter +
-         " · Y" + u.year + " · POP " + u.pop + " · GEN " + u.gen +
-         " · PK " + u.peak + "\n" + line2;
-}
-function updateHud(st){
-  var e = st.u.eden, l = st.u.lagoon;
-  var e2 = "PHASE: " + e.phase.toUpperCase();
-  if (e.std) e2 += " · OUTBREAK";
-  if (e.ennui > 0.25) e2 += " · ENNUI " + Math.round(e.ennui*100) + "%";
-  document.getElementById("hud6").innerHTML = hudText("UNIVERSE 6 · EDEN", e, e2);
-  var age = l.tech && l.tech.length ? "AGE OF " + l.tech[l.tech.length-1].replace("_"," ").toUpperCase()
-                                    : l.phase.toUpperCase();
-  var l2 = age + " · TRIBES " + ((l.settlements||[]).length);
-  if (l.lessons && l.lessons.length) l2 += "\nINSTINCTS: " + l.lessons.join(" · ").toUpperCase();
-  document.getElementById("hud9").innerHTML = hudText("UNIVERSE 9 · LAGOON", l, l2);
-}
-
-// typewriter ticker, newest event spelled out JRPG-style
-var shown = [], typing = "", typeFull = "", typePos = 0;
-function updateTicker(events){
-  if (!events || !events.length) return;
-  var last = events[events.length-1];
-  var key = last.d + last.msg;
-  if (typeFull !== key){
-    typeFull = key; typing = ""; typePos = 0;
-    shown = events.slice(-6, -1);
+// ---- god panel ----------------------------------------------------------
+function sparkline(id, census, color){
+  var cv=document.getElementById(id);
+  if (!cv || !census || census.length<2) return;
+  var g=cv.getContext("2d"), W=cv.width=cv.clientWidth||200, H=cv.height=44;
+  g.fillStyle="#07070e"; g.fillRect(0,0,W,H);
+  var max=1; census.forEach(function(r){ if(r[1]>max)max=r[1]; });
+  var n=census.length, bw=Math.max(1,Math.floor(W/n));
+  g.fillStyle=color;
+  for (var i=0;i<n;i++){
+    var h=Math.max(1,Math.round(census[i][1]/max*(H-4)));
+    g.fillRect(i*bw, H-h, Math.max(1,bw-1), h);
   }
-  var lastLine = last.msg.slice(0, typePos);
-  typePos = Math.min(last.msg.length, typePos + 2);
-  var html = shown.map(function(e){
-    var cls = e.u === "EDEN" ? "ev6" : "ev9";
-    return "<div class='"+cls+"'><span class='evy'>Y"+e.y+" "+(e.u==="EDEN"?"U6":"U9")+"</span> "+e.msg+"</div>";
-  }).join("");
-  var cls = last.u === "EDEN" ? "ev6" : "ev9";
-  html += "<div class='"+cls+" cur'><span class='evy'>Y"+last.y+" "+(last.u==="EDEN"?"U6":"U9")+"</span> "+lastLine+"</div>";
-  document.getElementById("ticker").innerHTML = html;
+}
+function statHTML(u, kind){
+  var out="<h2>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</h2>";
+  out+="ITERATION "+u.iter+" · YEAR "+u.year+"\n";
+  out+="POP "+u.pop+" · PEAK "+u.peak+" · GEN "+u.gen+"\n";
+  out+="<canvas id='tr"+kind+"' class='trend'></canvas>";
+  if (kind==="e"){
+    out+="PHASE: "+u.phase.toUpperCase();
+    if (u.std) out+="\n<span class='dim'>OUTBREAK IN THE PEN</span>";
+    if (u.ennui>0.2) out+="\n<span class='dim'>ENNUI "+Math.round(u.ennui*100)+"%</span>";
+  } else {
+    var age=u.tech&&u.tech.length?("AGE OF "+u.tech[u.tech.length-1].replace("_"," ").toUpperCase()):u.phase.toUpperCase();
+    out+=age+" · TRIBES "+((u.settlements||[]).length)+" · STORE "+Math.round(u.store||0);
+    if (u.lessons&&u.lessons.length) out+="\n<span class='dim'>INSTINCTS: "+u.lessons.join(" · ").toUpperCase()+"</span>";
+    if (u.culture&&u.culture.length) out+="\n<span class='dim'>ARTS: "+u.culture.length+" — "+u.culture[u.culture.length-1].toUpperCase()+"</span>";
+  }
+  return out;
+}
+function hudText(u, kind){
+  var l2 = kind==="e" ? u.phase.toUpperCase()
+    : (u.tech&&u.tech.length?"AGE OF "+u.tech[u.tech.length-1].replace("_"," ").toUpperCase():u.phase.toUpperCase());
+  return "<b>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</b>  Y"+u.year+" · POP "+u.pop+" · "+l2;
 }
 
-// ---- loops --------------------------------------------------------------
+var typeFull="", typePos=0, shown=[];
+function updateRecords(events){
+  var el=document.getElementById("reclines");
+  if (!events||!events.length){ el.innerHTML="<span class='dim'>Nothing yet. The worlds are young.</span>"; return; }
+  var last=events[events.length-1], key=last.d+last.msg;
+  if (typeFull!==key){ typeFull=key; typePos=0; shown=events.slice(-7,-1); }
+  typePos=Math.min(last.msg.length, typePos+2);
+  function row(e,cur){
+    var cls=e.u==="EDEN"?"ev6":"ev9";
+    return "<div class='"+cls+(cur?" cur":"")+"'><span class='evy'>Y"+e.y+" "
+      +(e.u==="EDEN"?"U6":"U9")+"</span> "+(cur?last.msg.slice(0,typePos):e.msg)+"</div>";
+  }
+  el.innerHTML=shown.map(function(e){return row(e,false);}).join("")+row(last,true);
+}
+
+function fit(){
+  ["c6","c9"].forEach(function(id){
+    var cv=document.getElementById(id);
+    cv.width=cv.clientWidth; cv.height=cv.clientHeight;
+  });
+}
+window.addEventListener("resize", fit);
+
 function loadWorld(){
   if (SNAP) return Promise.resolve();
-  return fetchJSON("/world").then(function(w){ worldInfo = w; lagoonIter = w.lagoon_iter; });
+  return fetchJSON("/world").then(function(w){ worldInfo=w; lagoonIter=w.lagoon_iter; });
 }
 function poll(){
-  (SNAP ? fetchJSON(SNAP) : fetchJSON("/state")).then(function(st){
-    state = st;
-    if (!SNAP && worldInfo && st.u.lagoon.iter !== lagoonIter) loadWorld();
-    updateHud(st);
-    var ff = document.getElementById("ff");
-    if (st.status && st.status.catching_up)
-      ff.textContent = "FAST-FORWARDING — " + st.status.behind_days + " DAYS BEHIND THE CLOCK";
-    else if (SNAP)
-      ff.textContent = "MIRROR · LAST OBSERVED " + new Date(st.wall*1000).toLocaleString();
-    else ff.textContent = "";
-  }).catch(function(){ document.getElementById("ff").textContent = "SIGNAL LOST — RETRYING"; });
+  (SNAP?fetchJSON(SNAP):fetchJSON("/state")).then(function(st){
+    state=st;
+    if (!SNAP&&worldInfo&&st.u.lagoon.iter!==lagoonIter) loadWorld();
+    var e=st.u.eden,l=st.u.lagoon;
+    var extra="";
+    if (st.status&&st.status.catching_up) extra="  ·  FAST-FORWARDING "+st.status.behind_days+" DAYS";
+    else if (SNAP) extra="  ·  MIRROR "+new Date(st.wall*1000).toLocaleTimeString();
+    document.getElementById("hud6").innerHTML=hudText(e,"e")+extra;
+    document.getElementById("hud9").innerHTML=hudText(l,"l");
+    document.getElementById("s6").innerHTML=statHTML(e,"e");
+    document.getElementById("s9").innerHTML=statHTML(l,"l");
+    sparkline("tre", e.census, "#a8c0f0");
+    sparkline("trl", l.census, "#a0e898");
+  }).catch(function(){});
 }
 function frame(){
   tick++;
   if (state){
     render(document.getElementById("c6"), off6, state.u.eden, "e", state);
     render(document.getElementById("c9"), off9, state.u.lagoon, "l", state);
-    if (tick % 3 === 0) updateTicker(state.events);
+    if (tick%3===0) updateRecords(state.events);
   }
-  setTimeout(function(){ requestAnimationFrame(frame); }, 100); // ~10fps, old-laptop friendly
+  setTimeout(function(){ requestAnimationFrame(frame); }, 100);
 }
-loadWorld().then(function(){ poll(); setInterval(poll, 2000); frame(); });
+fit();
+loadWorld().then(function(){ poll(); setInterval(poll,2000); frame(); });
 </script>
 </body>
 </html>
