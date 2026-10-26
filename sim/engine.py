@@ -865,7 +865,7 @@ def summarize(world):
                    4 if p["w"] else
                    3 if a >= ELDER_AGE else
                    1 if p["s"] == "m" else 2)
-            ppl.append([p["x"], p["y"], cls])
+            ppl.append([p["x"], p["y"], cls, 1 if p["s"] == "f" else 0])
         info = {"day": day, "year": day // DAYS_PER_YEAR, "pop": len(u["people"]),
                 "gen": u["gen_max"], "peak": u["peak"], "phase": u["phase"],
                 "iter": u["iteration"], "people": ppl, "census": u["census"][-120:]}
@@ -876,6 +876,11 @@ def summarize(world):
             info["store"] = round(u["store"], 1)
             info["lessons"] = u.get("lessons", [])
             info["culture"] = u.get("culture", [])
+            d = day % DAYS_PER_YEAR
+            info["season"] = ("winter" if 240 <= d < 330 else
+                              "summer" if 60 <= d < 150 else "spring")
+            info["harsh"] = bool(u.get("harsh_winter"))
+            info["dry"] = u.get("drought", 0) > 0
             info["phase"] = ("innocence" if u["innocent"] else
                              u["tech"][-1] if u["tech"] else "foragers")
         else:

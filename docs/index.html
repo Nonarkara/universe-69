@@ -175,13 +175,55 @@ function paintHut9(g,x,y){
   g.fillRect(X,Y+6,PX*2,1); g.fillRect(X,Y+10,PX*2,1); g.fillRect(X,Y+PX+1,PX*2,2);
   g.fillStyle=P.thatchL; g.fillRect(X+2,Y+2,PX*2-4,2);
 }
+var boats9=[], snow9=null, snowKey="";
 function buildSemi9(u){
   var g=semi9.getContext("2d");
   g.drawImage(base9,0,0);
   var S=terr9.length;
   (u.farms||[]).forEach(function(f){
     if (f[0]>0&&f[0]<S-1&&f[1]>0&&f[1]<S-1) paintFarm9(g,f[0],f[1]); });
-  (u.settlements||[]).forEach(function(s){ paintHut9(g,s.x-1,s.y-1); });
+  var walled = (u.tech||[]).indexOf("metallurgy")>=0;
+  (u.settlements||[]).forEach(function(s){
+    if (walled && s.r>=10){                      // city walls, with a gate
+      var r=s.r+1, X=(s.x-r)*PX, Y=(s.y-r)*PX, W=2*r*PX;
+      g.fillStyle=P.wall;
+      g.fillRect(X,Y,W,6); g.fillRect(X,Y+W-6,W,6);
+      g.fillRect(X,Y,6,W); g.fillRect(X+W-6,Y,6,W);
+      g.fillStyle=P.wallTop;
+      g.fillRect(X,Y,W,2); g.fillRect(X,Y,2,W);
+      g.fillStyle=P.hutdoor; g.fillRect(X+W/2-8,Y+W-6,16,6);  // south gate
+    }
+    paintHut9(g,s.x-1,s.y-1);
+  });
+  // boats moored off every settlement once seacraft exists
+  boats9=[];
+  if ((u.tech||[]).indexOf("seacraft")>=0){
+    (u.settlements||[]).forEach(function(s){
+      for (var d=2; d<9; d++){
+        var cand=[[s.x-d,s.y],[s.x+d,s.y],[s.x,s.y-d],[s.x,s.y+d]];
+        for (var i=0;i<cand.length;i++){
+          var cx=cand[i][0], cy=cand[i][1];
+          if (cx>1&&cy>1&&cx<S-1&&cy<S-1&&terr9[cy][cx]===2){
+            boats9.push([cx,cy]); return;
+          }
+        }
+      }
+    });
+  }
+}
+function buildSnow9(harsh){
+  var S=terr9.length;
+  snow9=mkCanvas(S*PX);
+  var g=snow9.getContext("2d");
+  var cover=harsh?0.15:0.42;
+  for (var y=0;y<S;y++) for (var x=0;x<S;x++){
+    if (terr9[y][x]!==2 && hash2(x*7,y*11)>cover){
+      g.fillStyle="rgba(236,242,250,0.88)";
+      g.fillRect(x*PX+1,y*PX+1,PX-2,PX-3);
+      g.fillStyle="rgba(200,214,232,0.7)";
+      g.fillRect(x*PX+2,y*PX+PX-3,PX-4,1);
+    }
+  }
 }
 
 // =========================================================== EDEN layers
@@ -254,22 +296,58 @@ function buildBase6(){
 }
 
 // =========================================================== people
-function drawPerson(g, tx, ty, cls, t){
+// Adults are drawn at Vitruvian proportion (head = 1/8 of height, arm span =
+// height). Before clothing exists they are nude, and men and women are told
+// apart the way nature does it; once shelter is mastered, the first garments
+// appear. EDEN is clothed from day one — the resort provides everything.
+var SKIN="#eac898", SKIND="#c9a271", LEG="#d8b586";
+function drawPerson(g, tx, ty, cls, sex, clothed, t){
   var X=tx*PX, Y=ty*PX, f=((tx*29+ty*13+(t>>3))%2);
-  var kid=(cls===0);
+  var kid=(cls===0), eld=(cls===3), fem=(sex===1);
   g.fillStyle=P.shadow; g.fillRect(X+2,Y+PX-2,PX-4,2);
-  var w=kid?5:7, cx=X+((PX-w)>>1), top=kid?Y+2:Y-2;
-  g.fillStyle="#241a12";                                 // legs, walking
-  g.fillRect(cx+1, Y+PX-5+(f?1:0), 2, 4-(f?1:0));
-  g.fillRect(cx+w-3, Y+PX-5+(f?0:1), 2, 4-(f?0:1));
-  g.fillStyle=TUN[cls]; g.fillRect(cx, top+5, w, kid?4:6); // tunic
-  g.fillStyle=TUS[cls]; g.fillRect(cx+w-2, top+5, 2, kid?4:6);
-  g.fillStyle=P.skin;                                    // arms swing
-  g.fillRect(cx-1, top+6+(f?1:0), 1, 3);
-  g.fillRect(cx+w, top+6+(f?0:1), 1, 3);
-  var hw=kid?3:4, hx=X+((PX-hw)>>1);                     // head + hair
-  g.fillStyle=P.skin; g.fillRect(hx, top, hw, hw);
-  g.fillStyle=HAIR[cls]; g.fillRect(hx, top-1, hw, 2);
+  if (kid){                                             // children: small, alike
+    var cx=X+4, top=Y+2;
+    g.fillStyle=LEG;
+    g.fillRect(cx, Y+PX-4+(f?1:0), 2, 3-(f?1:0));
+    g.fillRect(cx+2, Y+PX-4+(f?0:1), 2, 3-(f?0:1));
+    g.fillStyle=clothed?TUN[0]:SKIN; g.fillRect(cx-1, top+3, 6, 5);
+    g.fillStyle=SKIN; g.fillRect(cx, top, 4, 3);
+    g.fillStyle=HAIR[0]; g.fillRect(cx, top-1, 4, 1);
+    return;
+  }
+  var H=16, top=Y+PX-H;                                 // feet on tile bottom
+  var shW=fem?5:7, hpW=fem?7:5;                         // dimorphic frame
+  var cxS=X+((PX-shW)>>1), cxH=X+((PX-hpW)>>1);
+  // legs (slightly hunched elders are one pixel shorter)
+  g.fillStyle=LEG;
+  g.fillRect(X+4, Y+PX-6+(f?1:0), 2, 5-(f?1:0)-(eld?1:0));
+  g.fillRect(X+6, Y+PX-6+(f?0:1), 2, 5-(f?0:1)-(eld?1:0));
+  if (clothed){
+    var tun=TUN[cls], tus=TUS[cls];
+    g.fillStyle=tun;
+    g.fillRect(cxS, top+4, shW, 3);                     // shoulders
+    g.fillRect(cxH, top+7, hpW, 3);                     // hips/skirt
+    g.fillStyle=tus; g.fillRect(cxS+shW-1, top+4, 1, 3);
+    g.fillRect(cxH+hpW-1, top+7, 1, 3);
+  } else {
+    g.fillStyle=SKIN;
+    g.fillRect(cxS, top+4, shW, 3);                     // torso
+    g.fillRect(X+4, top+6, 4, 2);                       // waist
+    g.fillRect(cxH, top+8, hpW, 2);                     // hips
+    g.fillStyle=SKIND;
+    g.fillRect(cxS+shW-1, top+4, 1, 4);                 // side shading
+    if (fem){ g.fillRect(cxS+1, top+5, 1, 1); g.fillRect(cxS+3, top+5, 1, 1); }
+    else    { g.fillRect(X+5, top+9, 2, 1); }
+  }
+  // arms: span ~= height, hanging to the hips, swinging as they walk
+  g.fillStyle=SKIN;
+  g.fillRect(cxS-1, top+4+(f?1:0), 1, 5);
+  g.fillRect(cxS+shW, top+4+(f?0:1), 1, 5);
+  // head: 1/8 of the figure, hair by age and sex
+  g.fillStyle=SKIN; g.fillRect(X+4, top+1, 4, 3);
+  g.fillStyle=eld?"#d8d8d8":(cls===4?HAIR[4]:(fem?HAIR[2]:HAIR[1]));
+  g.fillRect(X+4, top, 4, 1);
+  if (fem){ g.fillRect(X+3, top+1, 1, 3); g.fillRect(X+8, top+1, 1, 3); }
 }
 
 // =========================================================== compose + blit
@@ -280,13 +358,38 @@ function compose9(u, st){
   if (semi9seq!==pollSeq){ buildSemi9(u); semi9seq=pollSeq; }
   var g=frame9.getContext("2d");
   g.drawImage(semi9,0,0);
+  // winter buries the island; ice-age winters bury it deeper
+  if (u.season==="winter"){
+    var key=(u.harsh?"H":"W")+(u.iter||1);
+    if (!snow9||snowKey!==key){ buildSnow9(u.harsh); snowKey=key; }
+    g.drawImage(snow9,0,0);
+  }
   g.fillStyle=P.waterL;                                   // living water
   for (var i=0;i<water9.length;i++){
     var w=water9[i];
     if ((w[0]+w[1]+(tick>>2))%9===0) g.fillRect(w[0]*PX+((w[0]+tick)>>1)%6, w[1]*PX+5, 6, 1);
   }
+  // moored boats, bobbing on the tide
+  g.fillStyle=P.trunk;
+  for (var i=0;i<boats9.length;i++){
+    var b=boats9[i], bob=((i+(tick>>3))%2);
+    g.fillRect(b[0]*PX+1, b[1]*PX+5+bob, 10, 3);
+    g.fillRect(b[0]*PX+5, b[1]*PX+bob, 1, 5);
+  }
+  // campfires flicker beside every hut once fire is tamed
+  if ((u.tech||[]).indexOf("fire")>=0){
+    (u.settlements||[]).forEach(function(s,i){
+      var fx=(s.x+2)*PX, fy=(s.y+1)*PX, fl=((i+(tick>>1))%2);
+      g.fillStyle=P.trunkD; g.fillRect(fx,fy+6,6,2);
+      g.fillStyle=fl?"#e86820":"#f8a030"; g.fillRect(fx+1,fy+2,4,4);
+      g.fillStyle=fl?"#f8d848":"#f8f0a0"; g.fillRect(fx+2,fy+ (fl?3:1),2,3);
+    });
+  }
+  var clothed = !!(u.tech && u.tech.indexOf("shelter")>=0);
   u.people.slice().sort(function(a,b){return a[1]-b[1];})
-    .forEach(function(p){ drawPerson(g,p[0],p[1],p[2],tick); });
+    .forEach(function(p){
+      var sex = p.length>3 ? p[3] : (p[2]===2?1:0);
+      drawPerson(g,p[0],p[1],p[2],sex,clothed,tick); });
   return frame9;
 }
 function compose6(u){
@@ -294,7 +397,9 @@ function compose6(u){
   var g=frame6.getContext("2d");
   g.drawImage(base6,0,0);
   u.people.slice().sort(function(a,b){return a[1]-b[1];})
-    .forEach(function(p){ drawPerson(g,p[0]+EM,p[1]+EM,p[2],tick); });
+    .forEach(function(p){
+      var sex = p.length>3 ? p[3] : (p[2]===2?1:0);
+      drawPerson(g,p[0]+EM,p[1]+EM,p[2],sex,true,tick); });  // the resort clothes them
   return frame6;
 }
 
@@ -349,6 +454,8 @@ function statHTML(u, kind){
   } else {
     var age=u.tech&&u.tech.length?("AGE OF "+u.tech[u.tech.length-1].replace("_"," ").toUpperCase()):u.phase.toUpperCase();
     out+=age+" · TRIBES "+((u.settlements||[]).length)+" · STORE "+Math.round(u.store||0);
+    if (u.season==="winter") out+="\n"+(u.harsh?"AN ICE-AGE WINTER":"WINTER");
+    else if (u.dry) out+="\nDROUGHT";
     if (u.lessons&&u.lessons.length) out+="\n<span class='dim'>INSTINCTS: "+u.lessons.join(" · ").toUpperCase()+"</span>";
     if (u.culture&&u.culture.length) out+="\n<span class='dim'>ARTS: "+u.culture.length+" — "+u.culture[u.culture.length-1].toUpperCase()+"</span>";
   }
