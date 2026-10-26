@@ -63,7 +63,7 @@
 <script src="config.js"></script>
 <script>
 var SNAP = window.SNAPSHOT_URL || null;
-var PX = 4;
+var PX = 12, U = PX/4;   // 12 offscreen pixels per world tile, art unit U
 
 var P = {
   grass:"#4a9a44", flower:"#e8e060",
@@ -85,90 +85,116 @@ function lerp(a,b,t){ return a+(b-a)*t; }
 function fetchJSON(u){ return fetch(u,{cache:"no-store"}).then(function(r){ return r.json(); }); }
 
 var worldInfo=null, lagoonIter=-1, state=null, tick=0;
+var EM=12;  // EDEN resort margin: the pen sits inside a themed resort
 var off6=document.createElement("canvas"), off9=document.createElement("canvas");
-off6.width=off6.height=48*PX; off9.width=off9.height=96*PX;
-var cam={ e:{x:24,y:24,h:9}, l:{x:73,y:57,h:9} };
+off6.width=off6.height=(48+2*EM)*PX; off9.width=off9.height=160*PX;
+var cam={ e:{x:24+EM,y:24+EM,h:9}, l:{x:137,y:109,h:9} };
 
 // ---- tiles: uniform bases, sparse clear decorations (no confetti) -------
 function T(ctx,x,y,c){ ctx.fillStyle=c; ctx.fillRect(x*PX,y*PX,PX,PX); }
 
 function paintLagoonBase(ctx, terrain, t){
-  var S=96;
+  var S=terrain.length;
+  if (off9.width!==S*PX){ off9.width=off9.height=S*PX; }
   for (var y=0;y<S;y++) for (var x=0;x<S;x++){
     var k=terrain[y][x];
     if (k===2){
       T(ctx,x,y,P.water);
       if ((x*7+y*13+(t>>3))%31===0){ ctx.fillStyle=P.foam;
-        ctx.fillRect(x*PX+((x+t>>2)%3), y*PX+1, 2, 1); }
+        ctx.fillRect(x*PX+((x+t>>2)%3)*U, y*PX+U, 2*U, U); }
     } else if (k===1){
       T(ctx,x,y,P.forest);
     } else if (k===3){
       T(ctx,x,y,P.sand);
-      if (hash2(x,y)>0.93){ ctx.fillStyle=P.pebble; ctx.fillRect(x*PX+1,y*PX+2,1,1); }
+      if (hash2(x,y)>0.93){ ctx.fillStyle=P.pebble; ctx.fillRect(x*PX+U,y*PX+2*U,U,U); }
     } else {
       T(ctx,x,y,P.grass);
-      if (hash2(x,y)>0.95){ ctx.fillStyle=P.flower; ctx.fillRect(x*PX+2,y*PX+1,1,1); }
+      if (hash2(x,y)>0.95){ ctx.fillStyle=P.flower; ctx.fillRect(x*PX+2*U,y*PX+U,U,U); }
     }
   }
   // distinct trees on a sparse lattice over forest
   for (var y=1;y<S-1;y++) for (var x=1;x<S-1;x++){
     if (terrain[y][x]===1 && hash2(x*3,y*5)>0.82){
-      ctx.fillStyle=P.canopy; ctx.fillRect(x*PX-1, y*PX-2, PX+2, PX);
-      ctx.fillRect(x*PX, y*PX-3, PX, 1);
-      ctx.fillStyle=P.trunk; ctx.fillRect(x*PX+1, y*PX-1+PX-2, 2, 2);
+      ctx.fillStyle=P.canopy; ctx.fillRect(x*PX-U, y*PX-2*U, PX+2*U, PX);
+      ctx.fillRect(x*PX, y*PX-3*U, PX, U);
+      ctx.fillStyle=P.trunk; ctx.fillRect(x*PX+U, y*PX+PX-3*U, 2*U, 2*U);
     }
   }
 }
 function paintFarm(ctx,x,y){
   T(ctx,x,y,P.farm);
   ctx.fillStyle=P.farmrow;
-  ctx.fillRect(x*PX,y*PX+1,PX,1); ctx.fillRect(x*PX,y*PX+3,PX,1);
+  ctx.fillRect(x*PX,y*PX+U,PX,U); ctx.fillRect(x*PX,y*PX+3*U,PX,U);
 }
 function paintHut(ctx,x,y){
-  ctx.fillStyle=P.hutwall; ctx.fillRect(x*PX+1,y*PX+3,PX*2-2,PX+1);
-  ctx.fillStyle=P.hutroof; ctx.fillRect(x*PX,y*PX+1,PX*2,2);
-  ctx.fillStyle=P.hutroof2; ctx.fillRect(x*PX+1,y*PX,PX*2-2,1);
-  ctx.fillStyle=P.hutdoor; ctx.fillRect(x*PX+PX-1,y*PX+PX+1,2,3);
+  ctx.fillStyle=P.hutwall; ctx.fillRect(x*PX+U,y*PX+3*U,PX*2-2*U,PX+U);
+  ctx.fillStyle=P.hutroof; ctx.fillRect(x*PX,y*PX+U,PX*2,2*U);
+  ctx.fillStyle=P.hutroof2; ctx.fillRect(x*PX+U,y*PX,PX*2-2*U,U);
+  ctx.fillStyle=P.hutdoor; ctx.fillRect(x*PX+PX-U,y*PX+PX+U,2*U,3*U);
 }
 function paintEdenBase(ctx,t){
-  // overhead view of Calhoun's Universe 25: a walled square pen, every wall
-  // lined with nest-box "apartments", hopper stations, open floor inside
-  var S=48;
+  // The pen sits inside a themed resort — the zoom-out is the Truman reveal:
+  // manicured lawn, palms, a pool nobody in the pen will ever see.
+  var S=48, W=S+2*EM;
+  ctx.fillStyle="#58a850"; ctx.fillRect(0,0,W*PX,W*PX);          // lawn
+  for (var i=0;i<W;i+=3){                                         // mow lines
+    ctx.fillStyle="#52a04a"; ctx.fillRect(i*PX,0,PX,W*PX);
+  }
+  for (var py=2;py<W-2;py+=5) for (var px=2;px<W-2;px+=5){        // palms
+    if ((px<EM-2||px>W-EM+0||py<EM-2||py>W-EM+0) && hash2(px,py)>0.55){
+      ctx.fillStyle=P.trunk; ctx.fillRect(px*PX+U,py*PX+U,2*U,2*U);
+      ctx.fillStyle="#2f7a38";
+      ctx.fillRect(px*PX-U,py*PX-U,PX+U,U); ctx.fillRect(px*PX,py*PX-2*U,U,U);
+      ctx.fillRect(px*PX-2*U,py*PX,U,U); ctx.fillRect(px*PX+PX,py*PX,U,U);
+    }
+  }
+  ctx.fillStyle="#38b8e0";                                        // the pool
+  ctx.fillRect(3*PX,3*PX,6*PX,4*PX);
+  ctx.fillStyle=P.foam; ctx.fillRect(4*PX,4*PX,2*U,U); ctx.fillRect(7*PX,5*PX,2*U,U);
+  ctx.fillStyle="#e8e8e0";                                        // resort fence
+  ctx.fillRect((EM-2)*PX,(EM-2)*PX,(S+4)*PX,U);
+  ctx.fillRect((EM-2)*PX,(S+EM+2)*PX-U,(S+4)*PX,U);
+  ctx.fillRect((EM-2)*PX,(EM-2)*PX,U,(S+4)*PX);
+  ctx.fillRect((S+EM+2)*PX-U,(EM-2)*PX,U,(S+4)*PX);
+  ctx.save();
+  ctx.translate(EM*PX, EM*PX);
   ctx.fillStyle=P.floor; ctx.fillRect(0,0,S*PX,S*PX);
   ctx.fillStyle=P.wall;
   ctx.fillRect(0,0,S*PX,PX*2); ctx.fillRect(0,(S-2)*PX,S*PX,PX*2);
   ctx.fillRect(0,0,PX*2,S*PX); ctx.fillRect((S-2)*PX,0,PX*2,S*PX);
-  ctx.fillStyle=P.walltop; ctx.fillRect(0,0,S*PX,2); ctx.fillRect(0,0,2,S*PX);
+  ctx.fillStyle=P.walltop; ctx.fillRect(0,0,S*PX,2*U); ctx.fillRect(0,0,2*U,S*PX);
   // nest boxes along each wall, entrances facing the floor
-  ctx.save();
   for (var i=4;i<S-6;i+=5){
     [[i,2,0,1],[i,S-4,0,-1],[2,i,1,0],[S-4,i,-1,0]].forEach(function(b){
       var bx=b[0],by=b[1];
       ctx.fillStyle=P.floorline; ctx.fillRect(bx*PX,by*PX,PX*2,PX*2);
-      ctx.fillStyle=P.wall;      ctx.strokeStyle=P.wall;
-      ctx.fillRect(bx*PX,by*PX,PX*2,1); ctx.fillRect(bx*PX,by*PX,1,PX*2);
-      ctx.fillRect(bx*PX,(by+2)*PX-1,PX*2,1); ctx.fillRect((bx+2)*PX-1,by*PX,1,PX*2);
+      ctx.fillStyle=P.wall;
+      ctx.fillRect(bx*PX,by*PX,PX*2,U); ctx.fillRect(bx*PX,by*PX,U,PX*2);
+      ctx.fillRect(bx*PX,(by+2)*PX-U,PX*2,U); ctx.fillRect((bx+2)*PX-U,by*PX,U,PX*2);
       ctx.fillStyle=P.hutdoor;   // entrance hole on the floor side
-      ctx.fillRect((bx+1)*PX-1+b[2]*PX, (by+1)*PX-1+b[3]*PX, 2, 2);
+      ctx.fillRect((bx+1)*PX-U+b[2]*PX, (by+1)*PX-U+b[3]*PX, 2*U, 2*U);
     });
   }
-  ctx.restore();
   // four hopper stations + water
   [[8,8],[S-10,8],[8,S-10],[S-10,S-10]].forEach(function(h){
     ctx.fillStyle=P.hopper; ctx.fillRect(h[0]*PX,h[1]*PX,PX*2,PX*2);
-    ctx.fillStyle=P.pellet; ctx.fillRect(h[0]*PX+2,h[1]*PX+2,2,1);
-    ctx.fillRect(h[0]*PX+5,h[1]*PX+5,2,1);
+    ctx.fillStyle=P.pellet; ctx.fillRect(h[0]*PX+2*U,h[1]*PX+2*U,2*U,U);
+    ctx.fillRect(h[0]*PX+5*U,h[1]*PX+5*U,2*U,U);
   });
   for (var i=0;i<6;i++){ var wx=(48>>1)-3+i;
     T(ctx,wx,2,P.trough);
-    if ((wx+(t>>3))%3===0){ ctx.fillStyle=P.foam; ctx.fillRect(wx*PX+1,2*PX+1,1,1); } }
+    if ((wx+(t>>3))%3===0){ ctx.fillStyle=P.foam; ctx.fillRect(wx*PX+U,2*PX+U,U,U); } }
+  ctx.restore();
 }
 function paintPerson(ctx,p,t){
   var x=p[0]*PX, y=p[1]*PX, c=CLS[p[2]];
-  var bob=((p[0]*31+p[1]*17+(t>>4))%2);
-  ctx.fillStyle=P.shadow; ctx.fillRect(x,y+3,3,1);
-  ctx.fillStyle=c; ctx.fillRect(x,y+1-bob,3,2);
-  ctx.fillStyle=P.skin; ctx.fillRect(x+1,y-1-bob,1,1);
+  var bob=((p[0]*31+p[1]*17+(t>>4))%2)*U;
+  var w = p[2]===0 ? 2*U : 3*U;            // children are smaller
+  ctx.fillStyle=P.shadow; ctx.fillRect(x,y+3*U,w,U);
+  ctx.fillStyle="rgba(0,0,0,0.35)";        // soft outline for readability
+  ctx.fillRect(x-1,y+U-bob-1,w+2,2*U+2);
+  ctx.fillStyle=c; ctx.fillRect(x,y+U-bob,w,2*U);
+  ctx.fillStyle=P.skin; ctx.fillRect(x+(w>>1)-(U>>1),y-U-bob,U,U);
 }
 
 // ---- camera + blit (aspect-correct) -------------------------------------
@@ -179,15 +205,17 @@ function render(canvas, offc, u, key, st){
     var terrain = SNAP ? (st.world&&st.world.terrain) : (worldInfo&&worldInfo.terrain);
     if (!terrain) return;
     paintLagoonBase(ctx,terrain,tick);
+    var TS=terrain.length;
     (u.farms||[]).forEach(function(f){
-      if (f[0]>0&&f[0]<95&&f[1]>0&&f[1]<95) paintFarm(ctx,f[0],f[1]); });
+      if (f[0]>0&&f[0]<TS-1&&f[1]>0&&f[1]<TS-1) paintFarm(ctx,f[0],f[1]); });
     (u.settlements||[]).forEach(function(s){ paintHut(ctx,s.x-1,s.y-1); });
   }
+  var ox = key==="e" ? EM : 0;   // pen coordinates sit inside the resort
   var minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
   u.people.forEach(function(p){
-    paintPerson(ctx,p,tick);
-    if(p[0]<minx)minx=p[0]; if(p[0]>maxx)maxx=p[0];
-    if(p[1]<miny)miny=p[1]; if(p[1]>maxy)maxy=p[1];
+    paintPerson(ctx,[p[0]+ox,p[1]+ox,p[2]],tick);
+    if(p[0]+ox<minx)minx=p[0]+ox; if(p[0]+ox>maxx)maxx=p[0]+ox;
+    if(p[1]+ox<miny)miny=p[1]+ox; if(p[1]+ox>maxy)maxy=p[1]+ox;
   });
   var S=offc.width/PX, c=cam[key==="e"?"e":"l"];
   var tx,ty,th;
@@ -259,9 +287,11 @@ function updateRecords(events){
 }
 
 function fit(){
+  var dpr=Math.min(window.devicePixelRatio||1, 3);
   ["c6","c9"].forEach(function(id){
     var cv=document.getElementById(id);
-    cv.width=cv.clientWidth; cv.height=cv.clientHeight;
+    cv.width=Math.round(cv.clientWidth*dpr);
+    cv.height=Math.round(cv.clientHeight*dpr);
   });
 }
 window.addEventListener("resize", fit);

@@ -25,7 +25,7 @@ EDEN_SIZE = 48
 EDEN_CAP = 900          # nominal capacity of the pen
 EDEN_STAGNATION = 0.35  # crowding level where the behavioral sink begins
 
-LAGOON_SIZE = 96
+LAGOON_SIZE = 160   # an island off the coast of a greater land
 RESEED_YEARS = 30       # quiet years before the Observers reseed (Ice Age cycle)
 
 SYLLABLES = ["ka", "ra", "no", "ta", "mi", "lu", "se", "an", "ko", "ri",
@@ -42,6 +42,7 @@ TECH_LADDER = [
     ("agriculture",   "preservation",  0.10, 90),
     ("domestication", "agriculture",   0.12, 120),  # unlocks epidemics (germs)
     ("granary",       "agriculture",   0.20, 120),
+    ("seacraft",      "fishing",       0.08, 140),
     ("healing",       "lore",          0.10, 150),
     ("metallurgy",    "granary",       0.06, 250),
     ("writing",       "lore",          0.05, 400),
@@ -55,7 +56,8 @@ TECH_LABEL = {
     "fishing": "fishing is learned", "shelter": "shelters are raised",
     "preservation": "food can be kept", "lore": "shared stories bind the bands",
     "agriculture": "seeds are sown on purpose", "domestication": "animals are tamed",
-    "granary": "granaries hold the surplus", "healing": "healing lore spreads",
+    "granary": "granaries hold the surplus",
+    "seacraft": "boats brave the open water", "healing": "healing lore spreads",
     "metallurgy": "metal is smelted", "writing": "marks begin to remember",
 }
 
@@ -78,13 +80,14 @@ def age_of(p, day):
 # ---------------------------------------------------------------- world gen
 
 def make_lagoon_terrain(seed):
-    """An island in the ocean. 0 grass, 1 woods, 2 water, 3 beach, 4 farm."""
+    """An island off a continental coast. 0 grass, 1 woods, 2 water, 3 beach,
+    4 farm. The mainland runs down the west edge; a strait separates them
+    until someone builds boats."""
     rng = random.Random(seed)
     s = LAGOON_SIZE
-    cx = cy = s // 2
-    coast = [rng.uniform(0.80, 1.0) for _ in range(72)]  # wobbly coastline
     t = [[2] * s for _ in range(s)]                       # ocean everywhere
-    R = 44
+    cx, cy, R = 112, 102, 40                              # the island
+    coast = [rng.uniform(0.80, 1.0) for _ in range(72)]
     for y in range(s):
         for x in range(s):
             d = math.hypot(x - cx, y - cy)
@@ -95,7 +98,7 @@ def make_lagoon_terrain(seed):
                 t[y][x] = 0
             elif d < r:
                 t[y][x] = 3                               # beach ring
-    lx, ly, lr = 60, 58, 11                               # the inner lagoon
+    lx, ly, lr = 124, 112, 10                             # the inner lagoon
     for y in range(s):
         for x in range(s):
             if t[y][x] != 0:
@@ -105,8 +108,18 @@ def make_lagoon_terrain(seed):
                 t[y][x] = 2
             elif d < lr + 2:
                 t[y][x] = 3
-    for _ in range(10):                                   # woods blobs
-        x, y = rng.randrange(20, 76), rng.randrange(20, 76)
+    # the mainland: a smoothed coast down the whole west edge
+    edge = [rng.uniform(24, 34) for _ in range(s)]
+    sm = [sum(edge[max(0, i - 2):i + 3]) / len(edge[max(0, i - 2):i + 3])
+          for i in range(s)]
+    for y in range(s):
+        for x in range(s):
+            if x < sm[y] - 3:
+                t[y][x] = 0
+            elif x < sm[y] and t[y][x] == 2:
+                t[y][x] = 3
+    for _ in range(26):                                   # woods on both lands
+        x, y = rng.randrange(2, s - 2), rng.randrange(2, s - 2)
         for _ in range(300):
             if t[y][x] == 0:
                 t[y][x] = 1
@@ -145,12 +158,13 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None):
         u["tech"] = []
         u["store"] = 0.0
         u["farms"] = []            # [x, y] tilled tiles
-        u["settlements"] = [{"x": 73, "y": 57, "r": 5, "n": make_name(rng)}]
+        u["settlements"] = [{"x": 137, "y": 109, "r": 5, "n": make_name(rng)}]
         u["innocent"] = True       # Blue Lagoon: reproduction not yet discovered
         u["culture"] = []          # arts appear when bellies stay full
+        u["continent"] = False     # the greater land, waiting across the strait
         u["drought"] = 0           # years remaining
         u["harsh_winter"] = False
-        spots = [(72, 56), (73, 56), (73, 58), (74, 57)]
+        spots = [(136, 108), (137, 108), (137, 110), (138, 109)]
     for i, (x, y) in enumerate(spots):
         sex = "m" if i % 2 == 0 else "f"
         name = f"E-{u['next_id']:04d}" if kind == "EDEN" else make_name(rng)
@@ -483,8 +497,9 @@ def tick_lagoon(u, rng, events):
         fish_mult *= 0.6
 
     # --- stocks regrow (logistic, daily rate)
-    for key, cap, r in (("plants", 60000, 0.9), ("game", 2500, 0.5),
-                        ("fish", 50000, 0.6)):
+    cont = 3.0 if u.get("continent") else 1.0   # a continent's bounty
+    for key, cap, r in (("plants", 60000 * cont, 0.9), ("game", 2500 * cont, 0.5),
+                        ("fish", 50000 * cont, 0.6)):
         x = stocks[key]
         stocks[key] = max(1.0, x + (r / DAYS_PER_YEAR) * x * (1 - x / cap))
     g = stocks["pred"]
@@ -703,6 +718,29 @@ def tick_lagoon(u, rng, events):
                                            st["y"] + rng.randint(-7, 7)])
                 break  # at most one discovery a year
 
+        # once boats exist and the island feels small, pioneers cross on
+        # their own — no need to wait for a feud to push them out
+        if (has(u, "seacraft") and not u.get("continent") and pop > 160
+                and len(u["settlements"]) < 12 and rng.random() < 0.3):
+            terr = terrain_of(u)
+            for _ in range(40):
+                ty = rng.randrange(40, LAGOON_SIZE - 40)
+                tx = rng.randrange(8, 30)
+                if terr[ty][tx] != 2:
+                    tribe = make_name(rng)
+                    u["settlements"].append({"x": tx, "y": ty, "r": 5, "n": tribe})
+                    new_i = len(u["settlements"]) - 1
+                    pioneers = rng.sample(people, max(8, pop // 5))
+                    for p in pioneers:
+                        p["st"] = new_i
+                        p["x"], p["y"] = tx, ty
+                    u["continent"] = True
+                    events.append((day, "LAGOON", "migration",
+                                   f"Year {year}: the boats cross the strait. The {tribe} tribe "
+                                   f"lands on the greater shore — a land without end, the one "
+                                   f"all their children's children will call home."))
+                    break
+
         # full bellies and long evenings: surplus turns into art and pleasure
         if (has(u, "lore") and u["store"] > need * 20 and adults
                 and len(u.get("culture", [])) < len(ARTS)
@@ -731,14 +769,25 @@ def tick_lagoon(u, rng, events):
             if n > limit and len(u["settlements"]) < 12:
                 terr = terrain_of(u)
                 nx = ny = None
-                for _ in range(12):  # find dry ground for the new camp
-                    ang = rng.uniform(0, 2 * math.pi)
-                    dist = rng.uniform(12, 24)
-                    tx = int(min(LAGOON_SIZE - 6, max(5, st["x"] + math.cos(ang) * dist)))
-                    ty = int(min(LAGOON_SIZE - 6, max(5, st["y"] + math.sin(ang) * dist)))
-                    if terr[ty][tx] != 2:
-                        nx, ny = tx, ty
-                        break
+                crossing = has(u, "seacraft") and not u.get("continent")
+                if crossing:
+                    # the boats cross the strait to the greater land
+                    for _ in range(40):
+                        ty = rng.randrange(40, LAGOON_SIZE - 40)
+                        tx = rng.randrange(8, 30)
+                        if terr[ty][tx] != 2:
+                            nx, ny = tx, ty
+                            break
+                if nx is None:
+                    crossing = False
+                    for _ in range(12):  # find dry ground for the new camp
+                        ang = rng.uniform(0, 2 * math.pi)
+                        dist = rng.uniform(12, 24)
+                        tx = int(min(LAGOON_SIZE - 6, max(5, st["x"] + math.cos(ang) * dist)))
+                        ty = int(min(LAGOON_SIZE - 6, max(5, st["y"] + math.sin(ang) * dist)))
+                        if terr[ty][tx] != 2:
+                            nx, ny = tx, ty
+                            break
                 if nx is None:
                     continue
                 tribe = make_name(rng)
@@ -750,7 +799,13 @@ def tick_lagoon(u, rng, events):
                     p["st"] = new_i
                     p["x"], p["y"] = nx, ny
                 old_tribe = st.get("n", "the old camp")
-                if has(u, "lore"):
+                if crossing:
+                    u["continent"] = True
+                    events.append((day, "LAGOON", "migration",
+                                   f"Year {year}: the boats cross the strait. The {tribe} tribe "
+                                   f"lands on the greater shore — a land without end, the one "
+                                   f"all their children's children will call home."))
+                elif has(u, "lore"):
                     events.append((day, "LAGOON", "migration",
                                    f"Year {year}: a band leaves {old_tribe} in peace and founds "
                                    f"the {tribe} tribe."))
