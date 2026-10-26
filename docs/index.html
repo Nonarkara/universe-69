@@ -18,22 +18,53 @@
          background:rgba(0,0,10,0.55); pointer-events:none; }
   .hud b { color:#f8d848; font-weight:bold; }
   #god { flex:1; border-top:2px solid #3a3a55; display:flex; min-height:0;
-         background:#07070e; }
+         background:#07070e; overflow:hidden; }
   .stat { width:25%; padding:8px 12px; font-size:11px; line-height:1.7;
-          overflow:hidden; white-space:pre-wrap; }
+          overflow-x:hidden; overflow-y:auto; white-space:pre-wrap; min-height:0;
+          scrollbar-width:thin; scrollbar-color:#5a5a78 transparent; }
   .stat h2 { font-size:11px; margin-bottom:2px; letter-spacing:1px; }
   #s6 h2 { color:#a8c0f0; } #s9 h2 { color:#a0e898; }
   .trend { width:100%; height:44px; image-rendering:pixelated; display:block;
            margin:4px 0; }
   #records { flex:1; padding:8px 14px; font-size:11px; line-height:1.85;
              overflow:hidden; border-left:2px solid #3a3a55;
-             border-right:2px solid #3a3a55; }
-  #records h2 { font-size:11px; color:#f8d848; letter-spacing:2px; margin-bottom:2px; }
+             border-right:2px solid #3a3a55; display:flex;
+             flex-direction:column; min-height:0; }
+  #records h2 { font-size:11px; color:#f8d848; letter-spacing:2px; margin-bottom:2px;
+                flex:0 0 auto; }
+  #reclines { overflow-y:auto; min-height:0; flex:1;
+              scrollbar-width:thin; scrollbar-color:#5a5a78 transparent; }
   #records .cur::after { content:"▼"; color:#f8d848; margin-left:6px;
                          animation:blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity:0; } }
   .ev6 { color:#a8c0f0; } .ev9 { color:#a0e898; } .evy { color:#666a88; }
   .dim { color:#8888aa; }
+  .stat::-webkit-scrollbar, #reclines::-webkit-scrollbar { width:8px; }
+  .stat::-webkit-scrollbar-thumb, #reclines::-webkit-scrollbar-thumb { background:#5a5a78; }
+  .banner { flex:0 0 auto; background:#2a2208; color:#f8d848; font-size:11px;
+            letter-spacing:1px; text-align:center; padding:5px 10px;
+            border-top:2px solid #f8d848; }
+  .banner.bad { background:#2a1014; color:#f0a0a8; border-top-color:#f0a0a8; }
+  #veil, #fail { position:fixed; inset:0; z-index:40; display:flex;
+                 align-items:center; justify-content:center; padding:12px; }
+  #veil { background:rgba(0,0,8,0.78); }
+  #fail { z-index:50; background:#000; }
+  #veil[hidden], #fail[hidden], #banner[hidden] { display:none !important; }
+  .card, .failcard { width:100%; max-width:34em; max-height:calc(100vh - 24px);
+                     overflow-y:auto; background:#07070e; border:2px solid #3a3a55;
+                     padding:16px 18px; font-size:12px; line-height:1.55; }
+  .card h2, .failcard h2 { color:#f8d848; letter-spacing:2px; font-size:13px;
+                           margin-bottom:10px; }
+  .card p, .failcard p { margin:0 0 8px; }
+  b.eden { color:#a8c0f0; } b.lagoon { color:#a0e898; }
+  .card button, .failcard button, #veilbtn {
+    font-family:inherit; font-size:12px; letter-spacing:2px; cursor:pointer;
+    background:transparent; color:#f8d848; border:2px solid #f8d848; }
+  .card button, .failcard button { padding:6px 16px; margin-top:4px; }
+  #veilbtn { position:fixed; top:8px; right:8px; z-index:25; line-height:1;
+             background:rgba(0,0,10,0.75); padding:3px 8px; }
+  .card button:hover, .failcard button:hover, #veilbtn:hover {
+    background:#f8d848; color:#07070e; }
   @media (max-width: 760px), (max-aspect-ratio: 4/5) {
     #worlds { flex-direction:column; }
     #divider { width:auto; height:2px; }
@@ -42,6 +73,18 @@
                border-bottom:2px solid #3a3a55; min-height:120px; }
     .stat { width:50%; order:1; font-size:10px; line-height:1.6; }
     .hud { font-size:10px; padding:4px 8px; }
+    #reclines { max-height:28vh; }
+  }
+  /* Short landscape (e.g. 844×390) misses the portrait query and used to clip. */
+  @media (max-height: 520px) and (orientation: landscape) {
+    #worlds { flex:1.15; }
+    #god { overflow-x:hidden; overflow-y:auto; }
+    .stat { width:24%; padding:4px 8px; font-size:10px; line-height:1.45; }
+    #records { padding:4px 8px; font-size:10px; line-height:1.5; }
+    .trend { height:28px; }
+    .hud { font-size:10px; padding:3px 6px; }
+    .banner { font-size:10px; padding:3px 8px; }
+    .card, .failcard { font-size:11px; padding:10px 12px; }
   }
 </style>
 </head>
@@ -53,10 +96,30 @@
   <div class="world"><canvas id="c9" class="view"></canvas>
     <div class="hud" id="hud9"><b>UNIVERSE 9 · LAGOON</b></div></div>
 </div>
+<div id="banner" class="banner" hidden></div>
 <div id="god">
   <div class="stat" id="s6"></div>
   <div id="records"><h2>THE OBSERVER'S RECORD</h2><div id="reclines"></div></div>
   <div class="stat" id="s9"></div>
+</div>
+<button type="button" id="veilbtn" title="What you are watching">?</button>
+<div id="veil" hidden>
+  <div class="card">
+    <h2>UNIVERSE 69</h2>
+    <p><b class="eden">EDEN</b> is universe 6: a sealed pen. Food, water, and weather are free. The only scarce thing is room.</p>
+    <p><b class="lagoon">LAGOON</b> is universe 9: an island of woods, fish, winters, and predators. Nothing is given.</p>
+    <p>Watch only. You cannot feed them or step in. They keep living while you are away — one sim-day every 2 seconds, about 118 sim-years in a real day.</p>
+    <p class="dim">Come back. An hour away is about five years in there: a hard winter, a lesson learned, a pen that dies and is reseeded.</p>
+    <button type="button" id="veilok">WATCH</button>
+  </div>
+</div>
+<div id="fail" hidden>
+  <div class="failcard">
+    <h2 id="failtitle">THE MIRROR IS DARK</h2>
+    <p id="failmsg">Could not read the snapshot.</p>
+    <p class="dim">This page only watches. It will keep trying.</p>
+    <button type="button" id="retry">RETRY</button>
+  </div>
 </div>
 
 <script src="config.js"></script>
@@ -90,7 +153,12 @@ var HAIR= ["#6b4a26", "#2a1c10", "#3a2414", "#d8d8d8", "#bfeae6"];
 function hash2(x,y){ var h=(x*374761393+y*668265263)>>>0;
   h=(h^(h>>13))*1274126177>>>0; return (h^(h>>16))/4294967295; }
 function lerp(a,b,t){ return a+(b-a)*t; }
-function fetchJSON(u){ return fetch(u,{cache:"no-store"}).then(function(r){ return r.json(); }); }
+function fetchJSON(u){
+  return fetch(u,{cache:"no-store"}).then(function(r){
+    if (!r.ok) throw new Error("HTTP "+r.status);
+    return r.json();
+  });
+}
 function mkCanvas(wpx){ var c=document.createElement("canvas"); c.width=c.height=wpx; return c; }
 
 var worldInfo=null, lagoonIter=-1, state=null, tick=0, pollSeq=0;
@@ -305,6 +373,9 @@ function drawPerson(g, tx, ty, cls, sex, clothed, t){
   var X=tx*PX, Y=ty*PX, f=((tx*29+ty*13+(t>>3))%2);
   var kid=(cls===0), eld=(cls===3), fem=(sex===1);
   g.fillStyle=P.shadow; g.fillRect(X+2,Y+PX-2,PX-4,2);
+  // Breath and a one-pixel weight shift, so a held snapshot is not a still.
+  g.save();
+  g.translate(((t>>4)+tx)%2, ((t>>3)+tx*3+ty)%6===0?-1:0);
   if (kid){                                             // children: small, alike
     var cx=X+4, top=Y+2;
     g.fillStyle=LEG;
@@ -313,6 +384,7 @@ function drawPerson(g, tx, ty, cls, sex, clothed, t){
     g.fillStyle=clothed?TUN[0]:SKIN; g.fillRect(cx-1, top+3, 6, 5);
     g.fillStyle=SKIN; g.fillRect(cx, top, 4, 3);
     g.fillStyle=HAIR[0]; g.fillRect(cx, top-1, 4, 1);
+    g.restore();
     return;
   }
   var H=16, top=Y+PX-H;                                 // feet on tile bottom
@@ -348,6 +420,11 @@ function drawPerson(g, tx, ty, cls, sex, clothed, t){
   g.fillStyle=eld?"#d8d8d8":(cls===4?HAIR[4]:(fem?HAIR[2]:HAIR[1]));
   g.fillRect(X+4, top, 4, 1);
   if (fem){ g.fillRect(X+3, top+1, 1, 3); g.fillRect(X+8, top+1, 1, 3); }
+  g.restore();
+}
+function driftMotes(g, span){
+  g.fillStyle="rgba(236,232,196,0.85)";
+  for (var m=0;m<12;m++) g.fillRect((m*173+tick*3)%span, (m*97+(tick<<1))%span, 2, 1);
 }
 
 // =========================================================== compose + blit
@@ -390,6 +467,7 @@ function compose9(u, st){
     .forEach(function(p){
       var sex = p.length>3 ? p[3] : (p[2]===2?1:0);
       drawPerson(g,p[0],p[1],p[2],sex,clothed,tick); });
+  driftMotes(g, frame9.width);
   return frame9;
 }
 function compose6(u){
@@ -400,6 +478,7 @@ function compose6(u){
     .forEach(function(p){
       var sex = p.length>3 ? p[3] : (p[2]===2?1:0);
       drawPerson(g,p[0]+EM,p[1]+EM,p[2],sex,true,tick); });  // the resort clothes them
+  driftMotes(g, frame6.width);
   return frame6;
 }
 
@@ -421,7 +500,8 @@ function render(canvas, composed, u, key, ox){
   var aspect=canvas.width/canvas.height;
   var hy=c.h, hx=Math.min(S/2, c.h*aspect);
   if (hx/aspect<hy) hy=hx/aspect;
-  var sx=Math.max(0,Math.min(S-2*hx,c.x-hx)), sy=Math.max(0,Math.min(S-2*hy,c.y-hy));
+  var sway=Math.sin(tick/36)*0.6, drift=Math.cos(tick/50)*0.35;
+  var sx=Math.max(0,Math.min(S-2*hx,c.x+sway-hx)), sy=Math.max(0,Math.min(S-2*hy,c.y+drift-hy));
   var g=canvas.getContext("2d");
   g.imageSmoothingEnabled=false;
   g.fillStyle="#000"; g.fillRect(0,0,canvas.width,canvas.height);
@@ -432,7 +512,9 @@ function render(canvas, composed, u, key, ox){
 function sparkline(id, census, color){
   var cv=document.getElementById(id);
   if (!cv || !census || census.length<2) return;
-  var g=cv.getContext("2d"), W=cv.width=cv.clientWidth||200, H=cv.height=44;
+  var W=cv.clientWidth||200, H=cv.clientHeight||44;
+  var g=cv.getContext("2d");
+  cv.width=W; cv.height=H;
   g.fillStyle="#07070e"; g.fillRect(0,0,W,H);
   var max=1; census.forEach(function(r){ if(r[1]>max)max=r[1]; });
   var n=census.length, bw=Math.max(1,Math.floor(W/n));
@@ -466,7 +548,7 @@ function hudText(u, kind){
     : (u.tech&&u.tech.length?"AGE OF "+u.tech[u.tech.length-1].replace("_"," ").toUpperCase():u.phase.toUpperCase());
   return "<b>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</b>  Y"+u.year+" · POP "+u.pop+" · "+l2;
 }
-var typeFull="", typePos=0, shown=[];
+var typeFull="", typePos=0, shown=[], recStick=true;
 function updateRecords(events){
   var el=document.getElementById("reclines");
   if (!events||!events.length){ el.innerHTML="<span class='dim'>Nothing yet. The worlds are young.</span>"; return; }
@@ -479,6 +561,7 @@ function updateRecords(events){
       +(e.u==="EDEN"?"U6":"U9")+"</span> "+(cur?last.msg.slice(0,typePos):e.msg)+"</div>";
   }
   el.innerHTML=shown.map(function(e){return row(e,false);}).join("")+row(last,true);
+  if (recStick) el.scrollTop=el.scrollHeight;
 }
 
 // =========================================================== loops
@@ -496,33 +579,158 @@ function loadWorld(){
   if (SNAP) return Promise.resolve();
   return fetchJSON("/world").then(function(w){ worldInfo=w; lagoonIter=w.lagoon_iter; });
 }
+var STALE_SEC=15*60; // gist uploads about every 10 min; warn after a missed one
+var snapWall=0, snapBad=false, snapReady=false, polling=false, loopsArmed=false;
+var hudBase={e:"",l:""};
+
+function agoLabel(sec){
+  sec=Math.max(0, Math.floor(sec));
+  if (sec<45) return "JUST NOW";
+  if (sec<90) return "1 MIN AGO";
+  if (sec<3600) return Math.floor(sec/60)+" MIN AGO";
+  if (sec<5400) return "1 HR AGO";
+  if (sec<86400) return Math.floor(sec/3600)+" HR AGO";
+  var d=Math.floor(sec/86400);
+  return d+(d===1?" DAY AGO":" DAYS AGO");
+}
+function mirrorExtra(){
+  var age=snapWall?(Date.now()/1000-snapWall):0;
+  if (!SNAP) return snapBad?"  ·  LINK DOWN · RETRYING":"";
+  if (snapBad) return "  ·  MIRROR UNREACHABLE"+(snapWall?" · LAST SEEN "+agoLabel(age):"");
+  if (!snapReady) return "";
+  if (!snapWall) return "  ·  LAST SEEN UNKNOWN";
+  if (age>STALE_SEC) return "  ·  LAST SEEN "+agoLabel(age);
+  return "  ·  MIRROR · "+agoLabel(age);
+}
+function paintHud(){
+  if (!hudBase.e) return;
+  var extra="";
+  if (state&&state.status&&state.status.catching_up)
+    extra="  ·  FAST-FORWARDING "+state.status.behind_days+" DAYS";
+  else extra=mirrorExtra();
+  document.getElementById("hud6").innerHTML=hudBase.e+extra;
+  document.getElementById("hud9").innerHTML=hudBase.l+extra;
+}
+function freshness(){
+  paintHud();
+  var banner=document.getElementById("banner");
+  var age=snapWall?(Date.now()/1000-snapWall):0;
+  if (!SNAP){
+    banner.hidden=!(snapBad&&state);
+    banner.className="banner bad";
+    banner.textContent="LINK DOWN · RETRYING";
+    return;
+  }
+  if (snapBad&&!state){ banner.hidden=true; return; }
+  if (snapBad){
+    banner.hidden=false;
+    banner.className="banner bad";
+    banner.textContent=(snapWall?"LAST SEEN "+agoLabel(age)+" · ":"")+"MIRROR UNREACHABLE · RETRYING";
+    return;
+  }
+  if (!snapReady){ banner.hidden=true; return; }
+  if (!snapWall){
+    banner.hidden=false;
+    banner.className="banner";
+    banner.textContent="LAST SEEN UNKNOWN";
+    return;
+  }
+  if (age>STALE_SEC){
+    banner.hidden=false;
+    banner.className="banner";
+    banner.textContent="LAST SEEN "+agoLabel(age);
+  } else banner.hidden=true;
+}
+function showFail(msg){
+  document.getElementById("failtitle").textContent=SNAP?"THE MIRROR IS DARK":"THE WORLDS ARE DARK";
+  document.getElementById("failmsg").textContent=msg;
+  document.getElementById("fail").hidden=false;
+}
+function hideFail(){ document.getElementById("fail").hidden=true; }
+function paintEmpty(canvas, msg){
+  var g=canvas.getContext("2d");
+  g.fillStyle="#000"; g.fillRect(0,0,canvas.width,canvas.height);
+  g.fillStyle="#f8d848";
+  g.font=Math.max(12, Math.round(canvas.width/32))+"px monospace";
+  g.textAlign="center";
+  g.fillText(msg, canvas.width/2, canvas.height/2);
+}
+function seenIntro(){
+  try { return localStorage.getItem("u69-watch-intro")==="1"; }
+  catch(e){ return false; }
+}
+function markIntro(){
+  try { localStorage.setItem("u69-watch-intro","1"); }
+  catch(e){}
+}
+function armLoops(){
+  if (loopsArmed) return;
+  loopsArmed=true;
+  setInterval(poll,2000);
+  frame();
+}
+
 function poll(){
+  if (polling) return;
+  polling=true;
   (SNAP?fetchJSON(SNAP):fetchJSON("/state")).then(function(st){
-    state=st; pollSeq++;
-    if (!SNAP&&worldInfo&&st.u.lagoon.iter!==lagoonIter) loadWorld().then(function(){ base9=null; });
+    if (!st||!st.u||!st.u.eden||!st.u.lagoon) throw new Error("snapshot has no worlds");
+    state=st; pollSeq++; snapBad=false; snapReady=true;
+    if (SNAP) snapWall=+st.wall||0;
+    hideFail();
+    if (!SNAP&&!worldInfo) loadWorld().then(function(){ base9=null; });
+    else if (!SNAP&&worldInfo&&st.u.lagoon.iter!==lagoonIter) loadWorld().then(function(){ base9=null; });
     var e=st.u.eden,l=st.u.lagoon;
-    var extra="";
-    if (st.status&&st.status.catching_up) extra="  ·  FAST-FORWARDING "+st.status.behind_days+" DAYS";
-    else if (SNAP) extra="  ·  MIRROR "+new Date(st.wall*1000).toLocaleTimeString();
-    document.getElementById("hud6").innerHTML=hudText(e,"e")+extra;
-    document.getElementById("hud9").innerHTML=hudText(l,"l");
+    hudBase.e=hudText(e,"e");
+    hudBase.l=hudText(l,"l");
     document.getElementById("s6").innerHTML=statHTML(e,"e");
     document.getElementById("s9").innerHTML=statHTML(l,"l");
     sparkline("tre", e.census, "#a8c0f0");
     sparkline("trl", l.census, "#a0e898");
-  }).catch(function(){});
+    freshness();
+  }).catch(function(err){
+    snapBad=true;
+    var why=(err&&err.message)?err.message:"the snapshot could not be read";
+    if (!state) showFail("Could not read the snapshot ("+why+"). Retrying.");
+    else hideFail();
+    freshness();
+  }).then(function(){ polling=false; });
 }
 function frame(){
   tick++;
   if (state){
-    render(document.getElementById("c6"), compose6(state.u.eden), state.u.eden, "e", EM);
-    render(document.getElementById("c9"), compose9(state.u.lagoon, state), state.u.lagoon, "l", 0);
+    var c6=document.getElementById("c6"), c9=document.getElementById("c9");
+    var ePic=compose6(state.u.eden), lPic=compose9(state.u.lagoon, state);
+    if (ePic) render(c6, ePic, state.u.eden, "e", EM);
+    else paintEmpty(c6, "NO PEN IN THIS SNAPSHOT");
+    if (lPic) render(c9, lPic, state.u.lagoon, "l", 0);
+    else paintEmpty(c9, "NO ISLAND IN THIS SNAPSHOT");
     if (tick%3===0) updateRecords(state.events);
   }
+  if (tick%10===0) freshness();
   setTimeout(function(){ requestAnimationFrame(frame); }, 100);
 }
+document.getElementById("reclines").addEventListener("scroll", function(){
+  recStick=this.scrollHeight-this.scrollTop-this.clientHeight<28;
+});
+document.getElementById("veilok").onclick=function(){
+  document.getElementById("veil").hidden=true;
+  markIntro();
+};
+document.getElementById("veilbtn").onclick=function(){
+  document.getElementById("veil").hidden=false;
+};
+document.getElementById("retry").onclick=function(){ poll(); };
+if (!seenIntro()) document.getElementById("veil").hidden=false;
 fit();
-loadWorld().then(function(){ poll(); setInterval(poll,2000); frame(); });
+loadWorld().then(function(){ armLoops(); poll(); }, function(err){
+  snapBad=true;
+  var why=(err&&err.message)?err.message:"network error";
+  showFail("Could not read the world ("+why+"). Retrying.");
+  freshness();
+  armLoops();
+  poll();
+});
 </script>
 </body>
 </html>

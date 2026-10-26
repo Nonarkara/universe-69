@@ -10,7 +10,7 @@ seasons — nothing given, everything earned.
   & Robots "Ice Age"; Harari's *Sapiens*; Diamond's *Guns, Germs, and Steel*)
 - **Model mapping:** [DESIGN.md](DESIGN.md)
 - **Live local view:** http://localhost:6969
-- **Live web mirror:** https://universe.nonarkara.org (snapshot every 10 min)
+- **Live web mirror:** https://nonarkara.github.io/universe-69/ (snapshot every 10 min)
 
 ## Time
 
