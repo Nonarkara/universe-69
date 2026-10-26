@@ -34,7 +34,6 @@
   @keyframes blink { 50% { opacity:0; } }
   .ev6 { color:#a8c0f0; } .ev9 { color:#a0e898; } .evy { color:#666a88; }
   .dim { color:#8888aa; }
-  /* phone: worlds stacked, the Record first, stats in two columns */
   @media (max-width: 760px), (max-aspect-ratio: 4/5) {
     #worlds { flex-direction:column; }
     #divider { width:auto; height:2px; }
@@ -63,161 +62,251 @@
 <script src="config.js"></script>
 <script>
 var SNAP = window.SNAPSHOT_URL || null;
-var PX = 12, U = PX/4;   // 12 offscreen pixels per world tile, art unit U
+var PX = 12;          // offscreen pixels per world tile
+var EM = 12;          // EDEN resort margin (tiles) around the pen
 
+// ---- palette: muted, 3 tones per material, light from the north-west ----
 var P = {
-  grass:"#4a9a44", flower:"#e8e060",
-  forest:"#2a6830", canopy:"#1d4f24", trunk:"#5c3a1e",
-  water:"#2860b8", foam:"#9cc4ee",
-  sand:"#d8c070", pebble:"#b09850",
-  farm:"#8a6530", farmrow:"#6e4e1c",
-  hutwall:"#8a5a30", hutroof:"#b03828", hutroof2:"#7c2418", hutdoor:"#301808",
-  floor:"#ccc3b1", floorline:"#bcb3a1", wall:"#5a4e40", walltop:"#71634f",
-  hopper:"#e8c040", pellet:"#a07c18", trough:"#4a90d9",
-  child:"#f8e060", man:"#5080e0", woman:"#e87098", elder:"#aaaaaa",
-  withdrawn:"#90f0e8", skin:"#f8d8b0", shadow:"rgba(0,0,0,0.3)"
+  waterD:"#1f4e8c", water:"#2a62a8", waterL:"#4a86c8", foam:"#cfe8f8",
+  sand:"#d4bc7a", sandL:"#e2cf96", sandD:"#b89c58", sandWet:"#b9a060",
+  grass:"#4e8a3a", grassD:"#3f7230", grassL:"#6aa84e",
+  floorF:"#2f5e28", canD:"#1e461e", can:"#2f6b2c", canL:"#4a8a3c",
+  trunk:"#6b4226", trunkD:"#4e2f18",
+  soil:"#8a6530", soilD:"#6e4e1c", soilL:"#a07a3e",
+  thatch:"#9a7a3a", thatchD:"#7c6028", thatchL:"#b8955a",
+  hutwall:"#7a5a34", hutdoor:"#2c1a0c",
+  stone:"#b4ac9c", stoneB:"#bcb4a4", mortar:"#978f80", dust:"#a8a092",
+  wallTop:"#8a7f6c", wall:"#6a5f4e", wallFace:"#473d30", alcove:"#2e2619",
+  hopper:"#e0b838", hopperD:"#b08a18", trough:"#4a90d9",
+  lawn:"#55a04c", lawnD:"#4c9344", palm:"#2f7a38", palmL:"#3f9a48",
+  pool:"#38b8e0", poolL:"#7cd8f0", rim:"#e8e8e0", deck:"#d8c9a0",
+  skin:"#eac898", shadow:"rgba(0,0,0,0.30)"
 };
-var CLS = [P.child, P.man, P.woman, P.elder, P.withdrawn];
+// tunic colours + shade + hair, by class: child, man, woman, elder, withdrawn
+var TUN = ["#e8c94e", "#3f6fd8", "#d45a8c", "#9a9a9a", "#9ae8e0"];
+var TUS = ["#c0a132", "#2e52a8", "#aa4068", "#787878", "#74c2ba"];
+var HAIR= ["#6b4a26", "#2a1c10", "#3a2414", "#d8d8d8", "#bfeae6"];
 
 function hash2(x,y){ var h=(x*374761393+y*668265263)>>>0;
   h=(h^(h>>13))*1274126177>>>0; return (h^(h>>16))/4294967295; }
 function lerp(a,b,t){ return a+(b-a)*t; }
 function fetchJSON(u){ return fetch(u,{cache:"no-store"}).then(function(r){ return r.json(); }); }
+function mkCanvas(wpx){ var c=document.createElement("canvas"); c.width=c.height=wpx; return c; }
 
-var worldInfo=null, lagoonIter=-1, state=null, tick=0;
-var EM=12;  // EDEN resort margin: the pen sits inside a themed resort
-var off6=document.createElement("canvas"), off9=document.createElement("canvas");
-off6.width=off6.height=(48+2*EM)*PX; off9.width=off9.height=160*PX;
+var worldInfo=null, lagoonIter=-1, state=null, tick=0, pollSeq=0;
 var cam={ e:{x:24+EM,y:24+EM,h:9}, l:{x:137,y:109,h:9} };
 
-// ---- tiles: uniform bases, sparse clear decorations (no confetti) -------
-function T(ctx,x,y,c){ ctx.fillStyle=c; ctx.fillRect(x*PX,y*PX,PX,PX); }
+// =========================================================== LAGOON layers
+var base9=null, semi9=null, frame9=null, semi9seq=-1, water9=[], terr9=null;
 
-function paintLagoonBase(ctx, terrain, t){
+function nIs(terrain,x,y,k){ var S=terrain.length;
+  return x>=0&&y>=0&&x<S&&y<S&&terrain[y][x]===k; }
+
+function buildBase9(terrain){
   var S=terrain.length;
-  if (off9.width!==S*PX){ off9.width=off9.height=S*PX; }
+  base9=mkCanvas(S*PX); semi9=mkCanvas(S*PX); frame9=mkCanvas(S*PX);
+  water9=[]; terr9=terrain;
+  var g=base9.getContext("2d");
   for (var y=0;y<S;y++) for (var x=0;x<S;x++){
-    var k=terrain[y][x];
-    if (k===2){
-      T(ctx,x,y,P.water);
-      if ((x*7+y*13+(t>>3))%31===0){ ctx.fillStyle=P.foam;
-        ctx.fillRect(x*PX+((x+t>>2)%3)*U, y*PX+U, 2*U, U); }
-    } else if (k===1){
-      T(ctx,x,y,P.forest);
-    } else if (k===3){
-      T(ctx,x,y,P.sand);
-      if (hash2(x,y)>0.93){ ctx.fillStyle=P.pebble; ctx.fillRect(x*PX+U,y*PX+2*U,U,U); }
-    } else {
-      T(ctx,x,y,P.grass);
-      if (hash2(x,y)>0.95){ ctx.fillStyle=P.flower; ctx.fillRect(x*PX+2*U,y*PX+U,U,U); }
+    var k=terrain[y][x], X=x*PX, Y=y*PX, h=hash2(x,y);
+    if (k===2){ // water: depth mottling + foam against every shore
+      g.fillStyle=P.water; g.fillRect(X,Y,PX,PX);
+      if (h>0.72){ g.fillStyle=P.waterD; g.fillRect(X+2,Y+5,8,4); }
+      if (nIs(terrain,x,y-1,0)||nIs(terrain,x,y-1,1)||nIs(terrain,x,y-1,3)){
+        g.fillStyle=P.foam; g.fillRect(X,Y,PX,2);
+        g.fillStyle=P.waterL; g.fillRect(X,Y+2,PX,1); }
+      if (nIs(terrain,x,y+1,0)||nIs(terrain,x,y+1,1)||nIs(terrain,x,y+1,3)){
+        g.fillStyle=P.foam; g.fillRect(X,Y+PX-2,PX,2); }
+      if (nIs(terrain,x-1,y,0)||nIs(terrain,x-1,y,1)||nIs(terrain,x-1,y,3)){
+        g.fillStyle=P.foam; g.fillRect(X,Y,2,PX); }
+      if (nIs(terrain,x+1,y,0)||nIs(terrain,x+1,y,1)||nIs(terrain,x+1,y,3)){
+        g.fillStyle=P.foam; g.fillRect(X+PX-2,Y,2,PX); }
+      if (h>0.55) water9.push([x,y]);
+    } else if (k===3){ // sand: grain + wet band along the waterline
+      g.fillStyle=P.sand; g.fillRect(X,Y,PX,PX);
+      g.fillStyle=P.sandL; g.fillRect(X+(h*9|0),Y+(h*5|0),2,1);
+      g.fillStyle=P.sandD;
+      g.fillRect(X+(h*6|0)+2,Y+(h*8|0),1,1); g.fillRect(X+(h*11|0),Y+(h*3|0)+6,2,1);
+      g.fillStyle=P.sandWet;
+      if (nIs(terrain,x,y-1,2)) g.fillRect(X,Y,PX,3);
+      if (nIs(terrain,x,y+1,2)) g.fillRect(X,Y+PX-3,PX,3);
+      if (nIs(terrain,x-1,y,2)) g.fillRect(X,Y,3,PX);
+      if (nIs(terrain,x+1,y,2)) g.fillRect(X+PX-3,Y,3,PX);
+    } else if (k===1){ // forest floor
+      g.fillStyle=P.floorF; g.fillRect(X,Y,PX,PX);
+      if (h>0.6){ g.fillStyle=P.grassD; g.fillRect(X+(h*7|0),Y+(h*9|0),3,2); }
+    } else { // grass: mottled patches + tufts
+      g.fillStyle=P.grass; g.fillRect(X,Y,PX,PX);
+      if (h>0.62){ g.fillStyle=P.grassD; g.fillRect(X+(h*6|0),Y+(h*8|0),5,3); }
+      if (h>0.84){ g.fillStyle=P.grassL;
+        g.fillRect(X+(h*9|0),Y+(h*5|0),1,2); g.fillRect(X+(h*9|0)+2,Y+(h*5|0)+1,1,2); }
+      if (hash2(x+9,y+4)>0.96){ g.fillStyle="#e8e060"; g.fillRect(X+5,Y+4,2,2); }
     }
   }
-  // distinct trees on a sparse lattice over forest
+  // trees: layered canopies on a sparse lattice, drawn after ground
   for (var y=1;y<S-1;y++) for (var x=1;x<S-1;x++){
-    if (terrain[y][x]===1 && hash2(x*3,y*5)>0.82){
-      ctx.fillStyle=P.canopy; ctx.fillRect(x*PX-U, y*PX-2*U, PX+2*U, PX);
-      ctx.fillRect(x*PX, y*PX-3*U, PX, U);
-      ctx.fillStyle=P.trunk; ctx.fillRect(x*PX+U, y*PX+PX-3*U, 2*U, 2*U);
+    if (terrain[y][x]===1 && hash2(x*3,y*5)>0.80){
+      var X=x*PX, Y=y*PX;
+      g.fillStyle=P.shadow; g.fillRect(X-2,Y+8,PX+6,3);
+      g.fillStyle=P.trunkD; g.fillRect(X+5,Y+4,4,7);
+      g.fillStyle=P.trunk;  g.fillRect(X+5,Y+4,2,7);
+      g.fillStyle=P.canD;   g.fillRect(X-4,Y-6,PX+8,10);
+      g.fillStyle=P.can;    g.fillRect(X-2,Y-8,PX+4,9);
+      g.fillStyle=P.canL;   g.fillRect(X,Y-9,8,4);
     }
   }
 }
-function paintFarm(ctx,x,y){
-  T(ctx,x,y,P.farm);
-  ctx.fillStyle=P.farmrow;
-  ctx.fillRect(x*PX,y*PX+U,PX,U); ctx.fillRect(x*PX,y*PX+3*U,PX,U);
+
+function paintFarm9(g,x,y){
+  var X=x*PX, Y=y*PX;
+  g.fillStyle=P.soil; g.fillRect(X,Y,PX,PX);
+  g.fillStyle=P.soilD;
+  g.fillRect(X,Y+2,PX,2); g.fillRect(X,Y+6,PX,2); g.fillRect(X,Y+10,PX,2);
+  g.fillStyle=P.soilL; g.fillRect(X,Y,PX,1);
+  if (hash2(x,y)>0.5){ g.fillStyle=P.grassL; g.fillRect(X+3,Y+4,1,2); g.fillRect(X+8,Y+8,1,2); }
 }
-function paintHut(ctx,x,y){
-  ctx.fillStyle=P.hutwall; ctx.fillRect(x*PX+U,y*PX+3*U,PX*2-2*U,PX+U);
-  ctx.fillStyle=P.hutroof; ctx.fillRect(x*PX,y*PX+U,PX*2,2*U);
-  ctx.fillStyle=P.hutroof2; ctx.fillRect(x*PX+U,y*PX,PX*2-2*U,U);
-  ctx.fillStyle=P.hutdoor; ctx.fillRect(x*PX+PX-U,y*PX+PX+U,2*U,3*U);
+function paintHut9(g,x,y){
+  var X=x*PX, Y=y*PX;   // 2x2-tile hut with thatched roof
+  g.fillStyle=P.shadow; g.fillRect(X+2,Y+PX*2-3,PX*2-2,3);
+  g.fillStyle=P.hutwall; g.fillRect(X+2,Y+PX+2,PX*2-4,PX-4);
+  g.fillStyle=P.hutdoor; g.fillRect(X+PX-3,Y+PX+4,6,PX-6);
+  g.fillStyle=P.thatch;  g.fillRect(X,Y+3,PX*2,PX);
+  g.fillStyle=P.thatchD;
+  g.fillRect(X,Y+6,PX*2,1); g.fillRect(X,Y+10,PX*2,1); g.fillRect(X,Y+PX+1,PX*2,2);
+  g.fillStyle=P.thatchL; g.fillRect(X+2,Y+2,PX*2-4,2);
 }
-function paintEdenBase(ctx,t){
-  // The pen sits inside a themed resort — the zoom-out is the Truman reveal:
-  // manicured lawn, palms, a pool nobody in the pen will ever see.
+function buildSemi9(u){
+  var g=semi9.getContext("2d");
+  g.drawImage(base9,0,0);
+  var S=terr9.length;
+  (u.farms||[]).forEach(function(f){
+    if (f[0]>0&&f[0]<S-1&&f[1]>0&&f[1]<S-1) paintFarm9(g,f[0],f[1]); });
+  (u.settlements||[]).forEach(function(s){ paintHut9(g,s.x-1,s.y-1); });
+}
+
+// =========================================================== EDEN layers
+var base6=null, frame6=null;
+function buildBase6(){
   var S=48, W=S+2*EM;
-  ctx.fillStyle="#58a850"; ctx.fillRect(0,0,W*PX,W*PX);          // lawn
-  for (var i=0;i<W;i+=3){                                         // mow lines
-    ctx.fillStyle="#52a04a"; ctx.fillRect(i*PX,0,PX,W*PX);
+  base6=mkCanvas(W*PX); frame6=mkCanvas(W*PX);
+  var g=base6.getContext("2d");
+  // resort lawn with mow stripes
+  for (var y=0;y<W;y++) for (var x=0;x<W;x++){
+    g.fillStyle=((x>>1)%2)?P.lawn:P.lawnD; g.fillRect(x*PX,y*PX,PX,PX);
+    if (hash2(x,y)>0.9){ g.fillStyle=P.grassL; g.fillRect(x*PX+4,y*PX+6,2,1); }
   }
-  for (var py=2;py<W-2;py+=5) for (var px=2;px<W-2;px+=5){        // palms
-    if ((px<EM-2||px>W-EM+0||py<EM-2||py>W-EM+0) && hash2(px,py)>0.55){
-      ctx.fillStyle=P.trunk; ctx.fillRect(px*PX+U,py*PX+U,2*U,2*U);
-      ctx.fillStyle="#2f7a38";
-      ctx.fillRect(px*PX-U,py*PX-U,PX+U,U); ctx.fillRect(px*PX,py*PX-2*U,U,U);
-      ctx.fillRect(px*PX-2*U,py*PX,U,U); ctx.fillRect(px*PX+PX,py*PX,U,U);
+  // palms around the margin
+  for (var py=2;py<W-2;py+=4) for (var px=2;px<W-2;px+=4){
+    if ((px<EM-2||px>W-EM||py<EM-2||py>W-EM) && hash2(px,py)>0.62){
+      var X=px*PX, Y=py*PX;
+      g.fillStyle=P.shadow; g.fillRect(X-2,Y+6,16,3);
+      g.fillStyle=P.trunk; g.fillRect(X+2,Y-2,3,9);
+      g.fillStyle=P.palm;
+      g.fillRect(X-6,Y-4,9,2); g.fillRect(X+4,Y-4,9,2);
+      g.fillRect(X+2,Y-8,3,5); g.fillRect(X-3,Y-7,5,2); g.fillRect(X+5,Y-7,5,2);
+      g.fillStyle=P.palmL; g.fillRect(X,Y-5,7,1);
     }
   }
-  ctx.fillStyle="#38b8e0";                                        // the pool
-  ctx.fillRect(3*PX,3*PX,6*PX,4*PX);
-  ctx.fillStyle=P.foam; ctx.fillRect(4*PX,4*PX,2*U,U); ctx.fillRect(7*PX,5*PX,2*U,U);
-  ctx.fillStyle="#e8e8e0";                                        // resort fence
-  ctx.fillRect((EM-2)*PX,(EM-2)*PX,(S+4)*PX,U);
-  ctx.fillRect((EM-2)*PX,(S+EM+2)*PX-U,(S+4)*PX,U);
-  ctx.fillRect((EM-2)*PX,(EM-2)*PX,U,(S+4)*PX);
-  ctx.fillRect((S+EM+2)*PX-U,(EM-2)*PX,U,(S+4)*PX);
-  ctx.save();
-  ctx.translate(EM*PX, EM*PX);
-  ctx.fillStyle=P.floor; ctx.fillRect(0,0,S*PX,S*PX);
-  ctx.fillStyle=P.wall;
-  ctx.fillRect(0,0,S*PX,PX*2); ctx.fillRect(0,(S-2)*PX,S*PX,PX*2);
-  ctx.fillRect(0,0,PX*2,S*PX); ctx.fillRect((S-2)*PX,0,PX*2,S*PX);
-  ctx.fillStyle=P.walltop; ctx.fillRect(0,0,S*PX,2*U); ctx.fillRect(0,0,2*U,S*PX);
-  // nest boxes along each wall, entrances facing the floor
-  for (var i=4;i<S-6;i+=5){
-    [[i,2,0,1],[i,S-4,0,-1],[2,i,1,0],[S-4,i,-1,0]].forEach(function(b){
-      var bx=b[0],by=b[1];
-      ctx.fillStyle=P.floorline; ctx.fillRect(bx*PX,by*PX,PX*2,PX*2);
-      ctx.fillStyle=P.wall;
-      ctx.fillRect(bx*PX,by*PX,PX*2,U); ctx.fillRect(bx*PX,by*PX,U,PX*2);
-      ctx.fillRect(bx*PX,(by+2)*PX-U,PX*2,U); ctx.fillRect((bx+2)*PX-U,by*PX,U,PX*2);
-      ctx.fillStyle=P.hutdoor;   // entrance hole on the floor side
-      ctx.fillRect((bx+1)*PX-U+b[2]*PX, (by+1)*PX-U+b[3]*PX, 2*U, 2*U);
+  // the pool nobody in the pen will ever swim in
+  g.fillStyle=P.deck; g.fillRect(2*PX,2*PX,9*PX,7*PX);
+  g.fillStyle=P.rim;  g.fillRect(3*PX-2,3*PX-2,7*PX+4,5*PX+4);
+  g.fillStyle=P.pool; g.fillRect(3*PX,3*PX,7*PX,5*PX);
+  g.fillStyle=P.poolL; g.fillRect(4*PX,4*PX,8,2); g.fillRect(6*PX,6*PX,10,2);
+  // resort fence
+  g.fillStyle=P.rim;
+  g.fillRect((EM-2)*PX,(EM-2)*PX,(S+4)*PX,3); g.fillRect((EM-2)*PX,(S+EM+2)*PX-3,(S+4)*PX,3);
+  g.fillRect((EM-2)*PX,(EM-2)*PX,3,(S+4)*PX); g.fillRect((S+EM+2)*PX-3,(EM-2)*PX,3,(S+4)*PX);
+  // ---- the pen itself, translated inside the resort
+  g.save(); g.translate(EM*PX, EM*PX);
+  for (var y=0;y<S;y++) for (var x=0;x<S;x++){        // stone floor
+    var X=x*PX, Y=y*PX;
+    g.fillStyle=((x+y)%2)?P.stone:P.stoneB; g.fillRect(X,Y,PX,PX);
+    g.fillStyle=P.mortar; g.fillRect(X,Y+PX-1,PX,1); g.fillRect(X+PX-1,Y,1,PX);
+    if (hash2(x+31,y+7)>0.92){ g.fillStyle=P.dust; g.fillRect(X+3,Y+4,5,3); }
+  }
+  g.fillStyle=P.wall;                                  // perimeter walls
+  g.fillRect(0,0,S*PX,PX*2); g.fillRect(0,(S-2)*PX,S*PX,PX*2);
+  g.fillRect(0,0,PX*2,S*PX); g.fillRect((S-2)*PX,0,PX*2,S*PX);
+  g.fillStyle=P.wallTop;
+  g.fillRect(0,0,S*PX,4); g.fillRect(0,0,4,S*PX);
+  g.fillStyle=P.wallFace;                              // inner face: fake height
+  g.fillRect(PX*2-3,PX*2-3,(S-4)*PX+6,3); g.fillRect(PX*2-3,PX*2-3,3,(S-4)*PX+6);
+  g.fillRect(PX*2-3,(S-2)*PX,(S-4)*PX+6,3); g.fillRect((S-2)*PX,PX*2-3,3,(S-4)*PX+6);
+  for (var i=4;i<S-6;i+=5){                            // nest-box apartments
+    [[i,2],[i,S-4],[2,i],[S-4,i]].forEach(function(b){
+      var X=b[0]*PX, Y=b[1]*PX;
+      g.fillStyle=P.wallTop; g.fillRect(X,Y,PX*2,PX*2);
+      g.fillStyle=P.wall; g.fillRect(X+2,Y+2,PX*2-4,PX*2-4);
+      g.fillStyle=P.alcove; g.fillRect(X+PX-4,Y+PX-4,8,8);
     });
   }
-  // four hopper stations + water
-  [[8,8],[S-10,8],[8,S-10],[S-10,S-10]].forEach(function(h){
-    ctx.fillStyle=P.hopper; ctx.fillRect(h[0]*PX,h[1]*PX,PX*2,PX*2);
-    ctx.fillStyle=P.pellet; ctx.fillRect(h[0]*PX+2*U,h[1]*PX+2*U,2*U,U);
-    ctx.fillRect(h[0]*PX+5*U,h[1]*PX+5*U,2*U,U);
+  [[8,8],[S-10,8],[8,S-10],[S-10,S-10]].forEach(function(hp){  // hoppers
+    var X=hp[0]*PX, Y=hp[1]*PX;
+    g.fillStyle=P.shadow; g.fillRect(X+2,Y+PX*2-2,PX*2-2,2);
+    g.fillStyle=P.hopper; g.fillRect(X,Y,PX*2,PX*2);
+    g.fillStyle=P.hopperD;
+    g.fillRect(X,Y+PX-1,PX*2,2); g.fillRect(X+PX-1,Y,2,PX*2);
+    g.fillRect(X+4,Y+4,3,2); g.fillRect(X+PX+3,Y+PX+4,3,2);
   });
-  for (var i=0;i<6;i++){ var wx=(48>>1)-3+i;
-    T(ctx,wx,2,P.trough);
-    if ((wx+(t>>3))%3===0){ ctx.fillStyle=P.foam; ctx.fillRect(wx*PX+U,2*PX+U,U,U); } }
-  ctx.restore();
-}
-function paintPerson(ctx,p,t){
-  var x=p[0]*PX, y=p[1]*PX, c=CLS[p[2]];
-  var bob=((p[0]*31+p[1]*17+(t>>4))%2)*U;
-  var w = p[2]===0 ? 2*U : 3*U;            // children are smaller
-  ctx.fillStyle=P.shadow; ctx.fillRect(x,y+3*U,w,U);
-  ctx.fillStyle="rgba(0,0,0,0.35)";        // soft outline for readability
-  ctx.fillRect(x-1,y+U-bob-1,w+2,2*U+2);
-  ctx.fillStyle=c; ctx.fillRect(x,y+U-bob,w,2*U);
-  ctx.fillStyle=P.skin; ctx.fillRect(x+(w>>1)-(U>>1),y-U-bob,U,U);
+  g.fillStyle=P.trough; g.fillRect(((S>>1)-3)*PX,2*PX,6*PX,PX);  // water
+  g.fillStyle=P.poolL;  g.fillRect(((S>>1)-3)*PX+4,2*PX+3,10,2);
+  g.restore();
 }
 
-// ---- camera + blit (aspect-correct) -------------------------------------
-function render(canvas, offc, u, key, st){
-  var ctx=offc.getContext("2d");
-  if (key==="e") paintEdenBase(ctx,tick);
-  else {
-    var terrain = SNAP ? (st.world&&st.world.terrain) : (worldInfo&&worldInfo.terrain);
-    if (!terrain) return;
-    paintLagoonBase(ctx,terrain,tick);
-    var TS=terrain.length;
-    (u.farms||[]).forEach(function(f){
-      if (f[0]>0&&f[0]<TS-1&&f[1]>0&&f[1]<TS-1) paintFarm(ctx,f[0],f[1]); });
-    (u.settlements||[]).forEach(function(s){ paintHut(ctx,s.x-1,s.y-1); });
+// =========================================================== people
+function drawPerson(g, tx, ty, cls, t){
+  var X=tx*PX, Y=ty*PX, f=((tx*29+ty*13+(t>>3))%2);
+  var kid=(cls===0);
+  g.fillStyle=P.shadow; g.fillRect(X+2,Y+PX-2,PX-4,2);
+  var w=kid?5:7, cx=X+((PX-w)>>1), top=kid?Y+2:Y-2;
+  g.fillStyle="#241a12";                                 // legs, walking
+  g.fillRect(cx+1, Y+PX-5+(f?1:0), 2, 4-(f?1:0));
+  g.fillRect(cx+w-3, Y+PX-5+(f?0:1), 2, 4-(f?0:1));
+  g.fillStyle=TUN[cls]; g.fillRect(cx, top+5, w, kid?4:6); // tunic
+  g.fillStyle=TUS[cls]; g.fillRect(cx+w-2, top+5, 2, kid?4:6);
+  g.fillStyle=P.skin;                                    // arms swing
+  g.fillRect(cx-1, top+6+(f?1:0), 1, 3);
+  g.fillRect(cx+w, top+6+(f?0:1), 1, 3);
+  var hw=kid?3:4, hx=X+((PX-hw)>>1);                     // head + hair
+  g.fillStyle=P.skin; g.fillRect(hx, top, hw, hw);
+  g.fillStyle=HAIR[cls]; g.fillRect(hx, top-1, hw, 2);
+}
+
+// =========================================================== compose + blit
+function compose9(u, st){
+  var terrain=SNAP ? (st.world&&st.world.terrain) : (worldInfo&&worldInfo.terrain);
+  if (!terrain) return null;
+  if (!base9 || terr9!==terrain) { buildBase9(terrain); semi9seq=-1; }
+  if (semi9seq!==pollSeq){ buildSemi9(u); semi9seq=pollSeq; }
+  var g=frame9.getContext("2d");
+  g.drawImage(semi9,0,0);
+  g.fillStyle=P.waterL;                                   // living water
+  for (var i=0;i<water9.length;i++){
+    var w=water9[i];
+    if ((w[0]+w[1]+(tick>>2))%9===0) g.fillRect(w[0]*PX+((w[0]+tick)>>1)%6, w[1]*PX+5, 6, 1);
   }
-  var ox = key==="e" ? EM : 0;   // pen coordinates sit inside the resort
+  u.people.slice().sort(function(a,b){return a[1]-b[1];})
+    .forEach(function(p){ drawPerson(g,p[0],p[1],p[2],tick); });
+  return frame9;
+}
+function compose6(u){
+  if (!base6) buildBase6();
+  var g=frame6.getContext("2d");
+  g.drawImage(base6,0,0);
+  u.people.slice().sort(function(a,b){return a[1]-b[1];})
+    .forEach(function(p){ drawPerson(g,p[0]+EM,p[1]+EM,p[2],tick); });
+  return frame6;
+}
+
+function render(canvas, composed, u, key, ox){
+  if (!composed) return;
+  var S=composed.width/PX, c=cam[key];
   var minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
   u.people.forEach(function(p){
-    paintPerson(ctx,[p[0]+ox,p[1]+ox,p[2]],tick);
-    if(p[0]+ox<minx)minx=p[0]+ox; if(p[0]+ox>maxx)maxx=p[0]+ox;
-    if(p[1]+ox<miny)miny=p[1]+ox; if(p[1]+ox>maxy)maxy=p[1]+ox;
+    var px=p[0]+ox, py=p[1]+ox;
+    if(px<minx)minx=px; if(px>maxx)maxx=px;
+    if(py<miny)miny=py; if(py>maxy)maxy=py;
   });
-  var S=offc.width/PX, c=cam[key==="e"?"e":"l"];
   var tx,ty,th;
   if (u.people.length){
     tx=(minx+maxx)/2; ty=(miny+maxy)/2;
@@ -231,10 +320,10 @@ function render(canvas, offc, u, key, st){
   var g=canvas.getContext("2d");
   g.imageSmoothingEnabled=false;
   g.fillStyle="#000"; g.fillRect(0,0,canvas.width,canvas.height);
-  g.drawImage(offc, sx*PX, sy*PX, 2*hx*PX, 2*hy*PX, 0, 0, canvas.width, canvas.height);
+  g.drawImage(composed, sx*PX, sy*PX, 2*hx*PX, 2*hy*PX, 0, 0, canvas.width, canvas.height);
 }
 
-// ---- god panel ----------------------------------------------------------
+// =========================================================== god panel
 function sparkline(id, census, color){
   var cv=document.getElementById(id);
   if (!cv || !census || census.length<2) return;
@@ -270,7 +359,6 @@ function hudText(u, kind){
     : (u.tech&&u.tech.length?"AGE OF "+u.tech[u.tech.length-1].replace("_"," ").toUpperCase():u.phase.toUpperCase());
   return "<b>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</b>  Y"+u.year+" · POP "+u.pop+" · "+l2;
 }
-
 var typeFull="", typePos=0, shown=[];
 function updateRecords(events){
   var el=document.getElementById("reclines");
@@ -286,6 +374,7 @@ function updateRecords(events){
   el.innerHTML=shown.map(function(e){return row(e,false);}).join("")+row(last,true);
 }
 
+// =========================================================== loops
 function fit(){
   var dpr=Math.min(window.devicePixelRatio||1, 3);
   ["c6","c9"].forEach(function(id){
@@ -302,8 +391,8 @@ function loadWorld(){
 }
 function poll(){
   (SNAP?fetchJSON(SNAP):fetchJSON("/state")).then(function(st){
-    state=st;
-    if (!SNAP&&worldInfo&&st.u.lagoon.iter!==lagoonIter) loadWorld();
+    state=st; pollSeq++;
+    if (!SNAP&&worldInfo&&st.u.lagoon.iter!==lagoonIter) loadWorld().then(function(){ base9=null; });
     var e=st.u.eden,l=st.u.lagoon;
     var extra="";
     if (st.status&&st.status.catching_up) extra="  ·  FAST-FORWARDING "+st.status.behind_days+" DAYS";
@@ -319,8 +408,8 @@ function poll(){
 function frame(){
   tick++;
   if (state){
-    render(document.getElementById("c6"), off6, state.u.eden, "e", state);
-    render(document.getElementById("c9"), off9, state.u.lagoon, "l", state);
+    render(document.getElementById("c6"), compose6(state.u.eden), state.u.eden, "e", EM);
+    render(document.getElementById("c9"), compose9(state.u.lagoon, state), state.u.lagoon, "l", 0);
     if (tick%3===0) updateRecords(state.events);
   }
   setTimeout(function(){ requestAnimationFrame(frame); }, 100);
