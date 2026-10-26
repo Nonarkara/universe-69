@@ -34,6 +34,16 @@
   @keyframes blink { 50% { opacity:0; } }
   .ev6 { color:#a8c0f0; } .ev9 { color:#a0e898; } .evy { color:#666a88; }
   .dim { color:#8888aa; }
+  /* phone: worlds stacked, the Record first, stats in two columns */
+  @media (max-width: 760px), (max-aspect-ratio: 4/5) {
+    #worlds { flex-direction:column; }
+    #divider { width:auto; height:2px; }
+    #god { flex-direction:row; flex-wrap:wrap; overflow-y:auto; }
+    #records { flex:1 1 100%; order:0; border-left:none; border-right:none;
+               border-bottom:2px solid #3a3a55; min-height:120px; }
+    .stat { width:50%; order:1; font-size:10px; line-height:1.6; }
+    .hud { font-size:10px; padding:4px 8px; }
+  }
 </style>
 </head>
 <body>
