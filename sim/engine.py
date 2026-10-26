@@ -96,23 +96,37 @@ def make_lagoon_terrain(seed):
     return t
 
 
-def genesis_universe(kind, seed, iteration=1):
+LESSON_OF = {"starvation": "preserve", "predator": "vigilance",
+             "epidemic": "cleanliness", "feud": "unity"}
+LESSON_TECH = {"preserve": ("preservation", "fishing"),
+               "vigilance": ("stone_tools",), "unity": ("lore",)}
+
+
+def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None):
     rng = random.Random(seed)
     u = {"kind": kind, "seed": seed, "iteration": iteration, "day": 0,
          "people": [], "next_id": 1, "gen_max": 1, "phase": "strive",
          "peak": 0, "births_y": 0, "deaths_y": 0, "bad_years": 0,
-         "extinct_day": None, "census": [], "year_flags": {}}
+         "extinct_day": None, "census": [], "year_flags": {},
+         "cod": {}, "cod_y": {}, "postmortems": postmortems or [],
+         "lessons": lessons or []}
     if kind == "EDEN":
+        u["ennui"] = 0.0      # hedonic adaptation: easy pleasure dulls appetite
+        u["std_years"] = 0    # years an STD outbreak has left to run
+        u["wary_years"] = 0   # post-outbreak generation keeps its distance
         cx = EDEN_SIZE // 2
         spots = [(cx - 2, cx), (cx - 2, cx + 1), (cx + 2, cx), (cx + 2, cx + 1)]
     else:
         u["terrain_seed"] = seed
-        u["stocks"] = {"plants": 3000.0, "game": 2500.0,
-                       "fish": 4000.0, "pred": 48.0}
+        # sized as a *territory*, not a garden: max sustainable yield is
+        # r*K/4 — plants alone sustain ~50-70 foragers, fish (with the
+        # technology to take them) roughly as many again
+        u["stocks"] = {"plants": 60000.0, "game": 2500.0,
+                       "fish": 50000.0, "pred": 48.0}
         u["tech"] = []
         u["store"] = 0.0
         u["farms"] = []            # [x, y] tilled tiles
-        u["settlements"] = [{"x": 58, "y": 52, "r": 5}]
+        u["settlements"] = [{"x": 58, "y": 52, "r": 5, "n": make_name(rng)}]
         u["innocent"] = True       # Blue Lagoon: reproduction not yet discovered
         u["drought"] = 0           # years remaining
         u["harsh_winter"] = False
@@ -120,7 +134,7 @@ def genesis_universe(kind, seed, iteration=1):
     for i, (x, y) in enumerate(spots):
         sex = "m" if i % 2 == 0 else "f"
         name = f"E-{u['next_id']:04d}" if kind == "EDEN" else make_name(rng)
-        p = person(u["next_id"], name, sex, -20 * DAYS_PER_YEAR, 1, x, y)
+        p = person(u["next_id"], name, sex, -18 * DAYS_PER_YEAR, 1, x, y)
         if kind == "LAGOON":
             p["st"] = 0
         u["people"].append(p)
@@ -141,6 +155,42 @@ def genesis(seed=69):
 
 # ---------------------------------------------------------------- shared
 
+def cod(u, cause, n=1):
+    u["cod"][cause] = u["cod"].get(cause, 0) + n
+    u["cod_y"][cause] = u["cod_y"].get(cause, 0) + n
+
+
+def write_postmortem(u, events):
+    """On extinction: record what happened, how, and the dominant cause.
+    The next iteration of LAGOON inherits a lesson; EDEN, by design, cannot
+    learn its way out — the pen itself is the cause (Calhoun's conclusion)."""
+    total = sum(u["cod"].values()) or 1
+    dominant = max(u["cod"], key=u["cod"].get) if u["cod"] else "unknown"
+    pm = {"iteration": u["iteration"], "day": u["day"], "peak": u["peak"],
+          "gen_max": u["gen_max"], "cod": dict(u["cod"]),
+          "dominant_cause": dominant,
+          "tech": list(u.get("tech", [])),
+          "census_tail": u["census"][-40:],
+          "lessons_held": list(u["lessons"])}
+    if u["kind"] == "LAGOON":
+        lesson = LESSON_OF.get(dominant)
+        pm["lesson"] = lesson
+        pm["preventable"] = bool(lesson)
+        if lesson and lesson not in u["lessons"]:
+            events.append((u["day"], u["kind"], "lesson",
+                           f"Postmortem, iteration {u['iteration']}: dominant cause of death was "
+                           f"{dominant} ({u['cod'].get(dominant, 0)}/{total}). Lesson recorded: "
+                           f"'{lesson}'. The next castaways will not make this mistake."))
+    else:
+        pm["lesson"] = None
+        pm["preventable"] = False
+        events.append((u["day"], u["kind"], "lesson",
+                       f"Postmortem, iteration {u['iteration']}: dominant cause was {dominant}. "
+                       f"Nothing within the walls could have prevented this — the pen itself "
+                       f"is the cause. The experiment can only be escaped, not won."))
+    u["postmortems"] = (u["postmortems"] + [pm])[-20:]
+
+
 def base_mortality(p, day, rng, events, u, label_extra=""):
     """Senescence. Returns True if the person dies of old age."""
     age_y = age_of(p, day) / DAYS_PER_YEAR
@@ -150,16 +200,27 @@ def base_mortality(p, day, rng, events, u, label_extra=""):
     return False
 
 
-def try_conceive(u, rng, females, p_daily):
+def try_conceive(u, rng, females, p_daily, require_pair=True):
+    """Reproduction is free and pedestrian — until the world makes it not so.
+    EDEN mates without pair-bonds (require_pair=False); LAGOON pairs up."""
     day = u["day"]
     for p in females:
-        if p["s"] != "f" or p["due"] or p["p"] is None or p["w"]:
+        if p["s"] != "f" or p["due"] or p["w"]:
+            continue
+        if require_pair and p["p"] is None:
             continue
         a = age_of(p, day)
         if not (ADULT_AGE <= a <= 45 * DAYS_PER_YEAR):
             continue
         if rng.random() < p_daily:
             p["due"] = day + GESTATION
+
+
+def clear_widows(people, dead):
+    dead_ids = {p["id"] for p in dead}
+    for p in people:
+        if p["p"] in dead_ids:
+            p["p"] = None
 
 
 def pair_singles(u, rng, adults):
@@ -188,12 +249,16 @@ def tick_eden(u, rng, events):
     if not people:
         if u["extinct_day"] and day - u["extinct_day"] > RESEED_YEARS * DAYS_PER_YEAR:
             fresh = genesis_universe("EDEN", u["seed"] + u["iteration"],
-                                     u["iteration"] + 1)
+                                     u["iteration"] + 1,
+                                     postmortems=u["postmortems"])
             fresh["day"] = day
+            for p in fresh["people"]:
+                p["b"] = day - 18 * DAYS_PER_YEAR  # young again
             u.clear()
             u.update(fresh)
             events.append((day, "EDEN", "reseed",
-                           f"The Observers reseed the pen. Iteration {u['iteration']} begins."))
+                           f"The Observers reseed the pen. Iteration {u['iteration']} begins "
+                           f"under the same perfect, fatal conditions."))
         return
 
     crowd = pop / EDEN_CAP
@@ -211,11 +276,13 @@ def tick_eden(u, rng, events):
     for p in people:
         if base_mortality(p, day, rng, events, u):
             dead.append(p)
+            cod(u, "age")
             continue
         # violence appears only in the sink
         if (u["phase"] in ("stagnate", "death") and age_of(p, day) >= ADULT_AGE
                 and rng.random() < 4.5e-5 * crowd):
             dead.append(p)
+            cod(u, "violence")
             if rng.random() < 0.08:
                 events.append((day, "EDEN", "violence",
                                f"{p['n']} is killed in a sudden brawl near the hoppers."))
@@ -235,6 +302,7 @@ def tick_eden(u, rng, events):
                 p_incompetent = 0.95
             if rng.random() < p_abandon:
                 u["deaths_y"] += 1  # the infant
+                cod(u, "infant")
                 continue
             competent = rng.random() >= p_incompetent
             sex = rng.choice("mf")
@@ -260,13 +328,56 @@ def tick_eden(u, rng, events):
     people.extend(born)
     u["peak"] = max(u["peak"], len(people))
 
-    if day % 30 == 0:
-        adults = [p for p in people if ADULT_AGE <= age_of(p, day) and p["c"]]
-        pair_singles(u, rng, adults)
+    # mating in the pen is ambient and free — no bonds, no scarcity — as long
+    # as any socially competent adult male remains
+    male_ok = any(p["s"] == "m" and p["c"] and not p["w"]
+                  and age_of(p, day) >= ADULT_AGE for p in people)
     fertility = 1.0 / 180
     if u["phase"] in ("stagnate", "death"):
         fertility *= max(0.25, 1.0 - crowd)
-    try_conceive(u, rng, people, fertility)
+    fertility *= 1.0 - 0.5 * u.get("ennui", 0.0)   # boredom with easy pleasure
+    if u.get("std_years", 0) > 0:
+        fertility *= 0.4
+        # the outbreak also takes adults directly
+        victims = [p for p in people
+                   if age_of(p, day) >= ADULT_AGE and rng.random() < 2e-5]
+        for p in victims:
+            people.remove(p)
+        u["deaths_y"] += len(victims)
+        cod(u, "plague", len(victims))
+    if u.get("wary_years", 0) > 0:
+        fertility *= 0.7                            # the wary generation
+    if male_ok:
+        try_conceive(u, rng, people, fertility, require_pair=False)
+
+    # yearly: ennui creep and disease rolls in a world of free mating
+    if day % DAYS_PER_YEAR == 7:
+        old = u["ennui"]
+        u["ennui"] = min(0.7, u["ennui"] + 0.004)
+        for threshold, msg in ((0.25, "Easy pleasure begins to dull — the pen "
+                                      "grows bored of what costs nothing."),
+                               (0.5, "Whole cohorts now barely seek each other "
+                                     "out. Abundance has made desire optional.")):
+            if old < threshold <= u["ennui"]:
+                events.append((day, "EDEN", "ennui", msg))
+        if u["std_years"] > 0:
+            u["std_years"] -= 1
+            if u["std_years"] == 0:
+                u["wary_years"] = 20
+                events.append((day, "EDEN", "disease",
+                               "The outbreak burns out. The generation that watched "
+                               "it keeps its distance — desire now carries a memory "
+                               "of death."))
+        elif u["wary_years"] > 0:
+            u["wary_years"] -= 1
+            if u["wary_years"] == 0:
+                events.append((day, "EDEN", "disease",
+                               "The wary generation has aged out; the pen forgets."))
+        elif len(people) > 100 and rng.random() < 0.025:
+            u["std_years"] = rng.randint(3, 8)
+            events.append((day, "EDEN", "disease",
+                           "A sickness spread by mating moves through the pen — "
+                           "the one cost free pleasure turned out to carry."))
 
     if day % DAYS_PER_YEAR == 0:
         if (u["phase"] == "stagnate" and u["deaths_y"] > u["births_y"]
@@ -286,6 +397,7 @@ def tick_eden(u, rng, events):
         events.append((day, "EDEN", "extinction",
                        f"UNIVERSE 6 HAS DIED. The pen is empty. Peak population was {u['peak']}, "
                        f"generation {u['gen_max']}. The food hoppers are still full."))
+        write_postmortem(u, events)
 
 
 # ---------------------------------------------------------------- LAGOON
@@ -304,19 +416,42 @@ def has(u, tech):
     return tech in u["tech"]
 
 
+_TERRAIN_CACHE = {}
+
+
+def terrain_of(u):
+    seed = u.get("terrain_seed", u["seed"])
+    if seed not in _TERRAIN_CACHE:
+        _TERRAIN_CACHE[seed] = make_lagoon_terrain(seed)
+    return _TERRAIN_CACHE[seed]
+
+
 def tick_lagoon(u, rng, events):
     day = u["day"] = u["day"] + 1
     people = u["people"]
 
     if not people:
         if u["extinct_day"] and day - u["extinct_day"] > RESEED_YEARS * DAYS_PER_YEAR:
+            lessons = list(u["lessons"])
+            for pm in u["postmortems"]:
+                if pm.get("lesson") and pm["lesson"] not in lessons:
+                    lessons.append(pm["lesson"])
             fresh = genesis_universe("LAGOON", u["seed"] + u["iteration"],
-                                     u["iteration"] + 1)
+                                     u["iteration"] + 1,
+                                     postmortems=u["postmortems"],
+                                     lessons=lessons)
             fresh["day"] = day
+            for p in fresh["people"]:
+                p["b"] = day - 18 * DAYS_PER_YEAR  # young again
+            if "preserve" in lessons:
+                fresh["store"] = 30.0   # they cache food without being told why
             u.clear()
             u.update(fresh)
+            carried = (" They carry the old lessons: " + ", ".join(lessons) + "."
+                       if lessons else "")
             events.append((day, "LAGOON", "reseed",
-                           f"New castaways reach the lagoon. Iteration {u['iteration']} begins."))
+                           f"New castaways reach the lagoon. Iteration {u['iteration']} "
+                           f"begins.{carried}"))
         return
 
     stocks = u["stocks"]
@@ -328,8 +463,8 @@ def tick_lagoon(u, rng, events):
         fish_mult *= 0.6
 
     # --- stocks regrow (logistic, daily rate)
-    for key, cap, r in (("plants", 3000, 0.9), ("game", 2500, 0.5),
-                        ("fish", 4000, 0.6)):
+    for key, cap, r in (("plants", 60000, 0.9), ("game", 2500, 0.5),
+                        ("fish", 50000, 0.6)):
         x = stocks[key]
         stocks[key] = max(1.0, x + (r / DAYS_PER_YEAR) * x * (1 - x / cap))
     g = stocks["pred"]
@@ -343,9 +478,14 @@ def tick_lagoon(u, rng, events):
         (kids if a < ADULT_AGE else elders if a >= ELDER_AGE else adults).append(p)
 
     # --- food
-    foragers = len(adults) + 0.3 * len(elders)
+    juveniles = sum(1 for p in kids
+                    if age_of(p, day) >= 8 * DAYS_PER_YEAR)
+    foragers = len(adults) + 0.3 * len(elders) + 0.35 * juveniles
     tool_mult = 1.25 if has(u, "stone_tools") else 1.0
-    yield_plants = min(foragers * 1.15 * plant_mult * tool_mult,
+    # desperation: a hungry band forages harder and ranges farther
+    avg_hun = sum(p["hun"] for p in people) / len(people)
+    effort = 1.0 + min(0.6, avg_hun / 30.0)
+    yield_plants = min(foragers * 1.5 * plant_mult * tool_mult * effort,
                        stocks["plants"] * 0.004)
     stocks["plants"] -= yield_plants * 0.8
     yield_fish = 0.0
@@ -354,9 +494,12 @@ def tick_lagoon(u, rng, events):
         stocks["fish"] -= yield_fish * 0.7
     # trapping/scavenging works even before stone tools, just poorly
     hunt_eff = 0.4 if has(u, "stone_tools") else 0.25
-    yield_game = min(foragers * hunt_eff * (stocks["game"] / 2500),
+    yield_game = min(foragers * hunt_eff * (stocks["game"] / 2500) * effort,
                      stocks["game"] * 0.002)
     stocks["game"] -= yield_game * 1.1
+    # the shore always gives something: shellfish and tidal gathering,
+    # winter-proof and the reason the lagoon was a good place to wash up
+    yield_shore = foragers * 0.35 * effort
     yield_farm = 0.0
     if has(u, "agriculture"):
         season_farm = 0.25 if winter else 1.0
@@ -367,7 +510,8 @@ def tick_lagoon(u, rng, events):
         yield_farm += len(u["farms"]) * 0.5
 
     need = len(adults) * 1.0 + len(kids) * 0.6 + len(elders) * 0.8
-    total = yield_plants + yield_fish + yield_game + yield_farm + u["store"]
+    total = (yield_plants + yield_fish + yield_game + yield_shore
+             + yield_farm + u["store"])
     if total >= need:
         surplus = total - need
         cap_store = (need * 60 if has(u, "granary")
@@ -384,14 +528,16 @@ def tick_lagoon(u, rng, events):
 
     for p in people:
         a = age_of(p, day)
-        # hunger
+        # hunger — unevenly shared, so famine takes the weakest first
+        # instead of the whole band at once
         if shortfall > 0:
             frail = 1.6 if (a < ADULT_AGE or a >= ELDER_AGE) else 1.0
-            p["hun"] += shortfall * frail
+            p["hun"] += shortfall * frail * rng.uniform(0.5, 1.5)
         else:
             p["hun"] = max(0.0, p["hun"] - 1.0)
         if p["hun"] > 40:
             dead.append(p)
+            cod(u, "starvation")
             if rng.random() < 0.1:
                 events.append((day, "LAGOON", "famine",
                                f"{p['n']} starves in the lean season."))
@@ -400,10 +546,13 @@ def tick_lagoon(u, rng, events):
         pr = 3e-5 * (stocks["pred"] / 48.0)
         if weapons:
             pr *= 0.3
+        if "vigilance" in u["lessons"]:
+            pr *= 0.6          # a lesson paid for in a previous iteration
         if a < ADULT_AGE:
             pr *= 2.0
         if rng.random() < pr:
             dead.append(p)
+            cod(u, "predator")
             if rng.random() < 0.25:
                 events.append((day, "LAGOON", "predator",
                                f"{p['n']} is taken by a predator at the wood's edge."))
@@ -411,6 +560,7 @@ def tick_lagoon(u, rng, events):
         # accidents + senescence
         if rng.random() < 6e-6 or base_mortality(p, day, rng, events, u):
             dead.append(p)
+            cod(u, "age")
             continue
         # births
         if p["due"] and day >= p["due"]:
@@ -419,6 +569,7 @@ def tick_lagoon(u, rng, events):
             mother_loss = 0.008 if healing else 0.02
             if rng.random() < mother_loss:
                 dead.append(p)
+                cod(u, "childbirth")
                 events.append((day, "LAGOON", "childbirth",
                                f"{p['n']} dies bringing new life into the world."))
                 continue
@@ -435,7 +586,8 @@ def tick_lagoon(u, rng, events):
                 u["gen_max"] = max(u["gen_max"], c["g"])
             else:
                 u["deaths_y"] += 1
-        # drift around home settlement
+                cod(u, "infant")
+        # drift around home settlement, keeping to dry land
         st = u["settlements"][min(p.get("st", 0), len(u["settlements"]) - 1)]
         p["x"] += rng.choice([-1, 0, 1])
         p["y"] += rng.choice([-1, 0, 1])
@@ -444,10 +596,14 @@ def tick_lagoon(u, rng, events):
             p["y"] += 1 if st["y"] > p["y"] else -1
         p["x"] = min(LAGOON_SIZE - 2, max(1, p["x"]))
         p["y"] = min(LAGOON_SIZE - 2, max(1, p["y"]))
+        if terrain_of(u)[p["y"]][p["x"]] == 2:  # waded in: back toward camp
+            p["x"] += 1 if st["x"] > p["x"] else -1 if st["x"] < p["x"] else 0
+            p["y"] += 1 if st["y"] > p["y"] else -1 if st["y"] < p["y"] else 0
 
     for p in dead:
         if p in people:
             people.remove(p)
+    clear_widows(people, dead)   # widows re-pair at the next monthly gathering
     u["deaths_y"] += len(dead)
     u["births_y"] += len(born)
     people.extend(born)
@@ -461,7 +617,9 @@ def tick_lagoon(u, rng, events):
                            "The pairs discover, as all life does, how new life begins."))
     else:
         if day % 30 == 0:
-            pair_singles(u, rng, adults)
+            living_adults = [p for p in people
+                             if ADULT_AGE <= age_of(p, day) < ELDER_AGE]
+            pair_singles(u, rng, living_adults)
         fert = 1.0 / 300
         if u["store"] > need * 20:
             fert *= 1.3
@@ -489,12 +647,14 @@ def tick_lagoon(u, rng, events):
             u["store"] *= 0.4
             events.append((day, "LAGOON", "disaster",
                            f"Year {year}: a storm off the lagoon destroys most of the stores."))
-        if has(u, "domestication") and rng.random() < 0.04 and pop > 30:
+        p_epidemic = 0.02 if "cleanliness" in u["lessons"] else 0.04
+        if has(u, "domestication") and rng.random() < p_epidemic and pop > 30:
             kill = rng.uniform(0.15, 0.35)
             victims = rng.sample(people, max(1, int(pop * kill)))
             for v in victims:
                 people.remove(v)
             u["deaths_y"] += len(victims)
+            cod(u, "epidemic", len(victims))
             events.append((day, "LAGOON", "epidemic",
                            f"Year {year}: a sickness born of the herds kills {len(victims)} "
                            f"({int(kill*100)}% of the people)."))
@@ -506,6 +666,9 @@ def tick_lagoon(u, rng, events):
             if prereq and not has(u, prereq):
                 continue
             p_disc = base * min(2.5, math.log(max(2, pop), 8))
+            for lesson in u["lessons"]:
+                if name in LESSON_TECH.get(lesson, ()):
+                    p_disc *= 3.0  # inherited wisdom from a dead iteration
             if name == "agriculture" and shortfall == 0 and pop < 140:
                 p_disc *= 0.3  # agriculture is born of pressure, not comfort
             if rng.random() < p_disc:
@@ -538,25 +701,41 @@ def tick_lagoon(u, rng, events):
                 dist = rng.uniform(12, 24)
                 nx = int(min(LAGOON_SIZE - 6, max(5, st["x"] + math.cos(ang) * dist)))
                 ny = int(min(LAGOON_SIZE - 6, max(5, st["y"] + math.sin(ang) * dist)))
-                u["settlements"].append({"x": nx, "y": ny, "r": 5})
+                tribe = make_name(rng)
+                u["settlements"].append({"x": nx, "y": ny, "r": 5, "n": tribe})
                 new_i = len(u["settlements"]) - 1
                 movers = [p for p in people if p.get("st", 0) == si]
                 rng.shuffle(movers)
                 for p in movers[: int(n * 0.4)]:
                     p["st"] = new_i
                     p["x"], p["y"] = nx, ny
+                old_tribe = st.get("n", "the old camp")
                 if has(u, "lore"):
                     events.append((day, "LAGOON", "migration",
-                                   f"Year {year}: a band departs in peace to found a new settlement."))
+                                   f"Year {year}: a band leaves {old_tribe} in peace and founds "
+                                   f"the {tribe} tribe."))
                 else:
                     losses = rng.sample(movers, min(len(movers), max(1, n // 40)))
                     for v in losses:
                         if v in people:
                             people.remove(v)
                     u["deaths_y"] += len(losses)
+                    cod(u, "feud", len(losses))
                     events.append((day, "LAGOON", "feud",
                                    f"Year {year}: too many strangers, no shared story — a feud splits "
-                                   f"the band; {len(losses)} die, the rest walk away."))
+                                   f"{old_tribe}; {len(losses)} die, the rest walk away and become "
+                                   f"the {tribe} tribe."))
+        # survivors of a near-wipe pass the fear down without words —
+        # instinct, not writing, is the first archive
+        for cause, n in u["cod_y"].items():
+            lesson = LESSON_OF.get(cause)
+            if (lesson and lesson not in u["lessons"]
+                    and n > max(2, 0.2 * max(1, pop))):
+                u["lessons"].append(lesson)
+                events.append((day, "LAGOON", "lesson",
+                               f"Year {year}: {cause} took {n} of them. The survivors carry a "
+                               f"new instinct — '{lesson}' — passed on without a single word."))
+        u["cod_y"] = {}
         record_census(u)
         u["births_y"] = u["deaths_y"] = 0
 
@@ -565,6 +744,7 @@ def tick_lagoon(u, rng, events):
         events.append((day, "LAGOON", "extinction",
                        f"UNIVERSE 9 HAS DIED. The lagoon is quiet again. Peak population {u['peak']}, "
                        f"generation {u['gen_max']}."))
+        write_postmortem(u, events)
 
 
 # ---------------------------------------------------------------- top level
@@ -599,8 +779,12 @@ def summarize(world):
             info["settlements"] = u["settlements"]
             info["farms"] = u["farms"]
             info["store"] = round(u["store"], 1)
+            info["lessons"] = u.get("lessons", [])
             info["phase"] = ("innocence" if u["innocent"] else
                              u["tech"][-1] if u["tech"] else "foragers")
+        else:
+            info["ennui"] = round(u.get("ennui", 0.0), 3)
+            info["std"] = u.get("std_years", 0) > 0
         out["u"][key] = info
     return out
 

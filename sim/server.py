@@ -69,6 +69,21 @@ def target_day():
     return int((time.time() - world["epoch"]) / world["sec_per_day"])
 
 
+def dump_postmortems():
+    """Write any new postmortems to data/postmortems/ for the record."""
+    pmdir = os.path.join(DATA, "postmortems")
+    os.makedirs(pmdir, exist_ok=True)
+    with lock:
+        for key in ("eden", "lagoon"):
+            u = world[key]
+            for pm in u.get("postmortems", []):
+                path = os.path.join(
+                    pmdir, f"u{'6' if key == 'eden' else '9'}-iteration-{pm['iteration']:03d}.json")
+                if not os.path.exists(path):
+                    with open(path, "w") as f:
+                        json.dump(pm, f, indent=2)
+
+
 def engine_loop():
     last_save = time.time()
     while True:
@@ -82,6 +97,8 @@ def engine_loop():
                 for _ in range(batch):
                     engine.tick_world(world, evts)
             log_events(evts)
+            if any(e[2] in ("extinction", "lesson") for e in evts):
+                dump_postmortems()
             if status["catching_up"]:
                 print(f"[universe69] fast-forwarding, {behind - batch} days to go")
         if time.time() - last_save > 60:
@@ -112,10 +129,13 @@ def uploader_loop():
                 snap["world"] = world_payload()
                 body = json.dumps(snap, separators=(",", ":"))
                 if cfg.get("mode") == "gist":
+                    gh = next((g for g in ("/usr/local/bin/gh",
+                                           "/opt/homebrew/bin/gh", "gh")
+                               if g == "gh" or os.path.exists(g)))
                     patch = json.dumps(
                         {"files": {"snapshot.json": {"content": body}}})
                     subprocess.run(
-                        ["gh", "api", "gists/" + cfg["gist_id"],
+                        [gh, "api", "gists/" + cfg["gist_id"],
                          "-X", "PATCH", "--input", "-"],
                         input=patch.encode(), capture_output=True,
                         timeout=60, check=True)

@@ -48,6 +48,40 @@ Two founding pairs with organic names. Nothing is given; everything is earned.
 | GG&S: surplus → specialists → tech          | Tech ladder: fire → stone tools → fishing → shelter → preservation → shared lore → agriculture → domestication → granary → healing lore → metallurgy → writing. Discovery odds scale with population and need |
 | Expansion                                   | Overfull settlements fission; new bands found new settlements — the map fills as the camera zooms out |
 
+## Sex, boredom, and disease (EDEN)
+
+Mating in EDEN is free and pedestrian — no pair-bonds, no cost — until it
+isn't: (1) **ennui** — hedonic adaptation slowly dulls fertility in a world
+where pleasure costs nothing; (2) **STD outbreaks** — free mating at density
+carries one price; outbreaks cut fertility, kill some adults, and leave the
+next generation *wary* (a ~20-year cultural-memory fertility dampener that
+fades when that generation ages out — "the pen forgets"). All logged.
+LAGOON keeps pair-bonds (widows re-pair); there, only famine suppresses
+fertility.
+
+## Death, postmortems, and lessons (the Edge-of-Tomorrow loop)
+
+Every death is tallied by cause. When a universe dies, a **postmortem** is
+recorded (data/postmortems/): peak, generations, technologies, cause-of-death
+table, dominant cause, and whether it was preventable.
+
+- **LAGOON learns.** Reseeded founders inherit lessons mapped from past
+  dominant causes — starvation → *preserve* (starting food cache, faster
+  preservation/fishing), predators → *vigilance* (−40% predation, faster
+  tools), epidemic → *cleanliness* (half outbreak odds), feud → *unity*
+  (faster shared lore). Survivors of a near-wipe (one cause killing >20% in a
+  year) imprint the same lesson without going extinct — instinct passed on
+  with no written language, the way fear of snakes is.
+- **EDEN cannot learn.** Each reseed restarts under identical, perfect, fatal
+  conditions, and each postmortem records the same verdict: nothing within
+  the walls could have prevented it. That asymmetry is the experiment.
+
+## Bands and tribes
+
+Everyone starts together — bonding is survival. Past the cooperation ceiling
+(~80 without shared lore, more with it), settlements fission into *named
+tribes*: peacefully after lore exists, as a deadly feud before it.
+
 ## Rendering (web/index.html)
 
 - Two canvas panels side by side, `image-rendering: pixelated`, flat 16-color
