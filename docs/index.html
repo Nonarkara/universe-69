@@ -709,10 +709,11 @@ var A_WALK=1, A_FORAGE=2, A_HUNT=3, A_FISH=4, A_FARM=5, A_BUILD=6, A_TALK=7,
     A_FIGHT=14, A_PLAY=15, A_RITE=16, A_SLEEP=17, A_WORK=18, A_SCOUT=19, A_WATCH=20, A_GROOM=21;
 var PERIOD = [240,22,100,110,160,90,110,80,60,130,130,240,80,180,40,26,34,300,70,22,260,90];
 
-var SKINS = [ ["#f1d2b0","#c9a079","#f9e4cf"], ["#e3b88c","#b98c5f","#f0cfa8"],
-              ["#b9814f","#8c5c34","#cf9a66"], ["#7a4a2a","#55311b","#935c38"] ];
-var HAIRS = ["#1d1510","#3b2416","#6b3a1e","#a8763a","#2a2a30"];
-var ELDER_HAIR="#d9d9d9";
+// Vagabond / Inoue: skin as a warm gray wash, hair as black ink.
+var SKINS = [ ["#d8d0c4","#a89c8c","#e8e0d4"], ["#c8beb0","#988c7c","#d8cec0"],
+              ["#b8aea0","#887c6c","#c8beb0"], ["#a89e90","#786c5c","#b8aea0"] ];
+var HAIRS = ["#0a0806","#1a1410","#2a2420","#3a3430","#0a0806"];
+var ELDER_HAIR="#9a948c";
 var CXL=0;
 
 // pose solver: every joint from one phase angle, per activity
@@ -852,9 +853,10 @@ function solvePose(act, c, moving, v){
 // show in famine, a belly shows obesity or pregnancy, a bandage and a limp
 // mark an injury. Adults are drawn as bodies are; children are never given
 // genital detail at any zoom.
-var INK="#1d1812", INK_SOFT="rgba(29,24,18,0.32)", PAPER="#f4ead2";
-var DRESS = { swim:["#e8584a","#3f8fd0","#f2c84a","#3fa58a","#d86aa8"],
-              hide:"#8a6238", hideD:"#5e3f20", fur:"#a07850", furD:"#6e4e2c" };
+// Vagabond / Inoue: pure black ink on warm paper, washes instead of color.
+var INK="#0a0806", INK_SOFT="rgba(10,8,6,0.28)", PAPER="#ece4d2";
+var DRESS = { swim:["#2a2420","#1a1814","#3a3430","#242018","#181410"],
+              hide:"#3a3430", hideD:"#1a1814", fur:"#4a4440", furD:"#2a2420" };
 function bodyOf(a){
   var b=a.bmi||22, age=(a.age===undefined)?30:a.age;
   return { adult: typeof a.age==="number" && a.age>=18,
@@ -919,7 +921,7 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
   }
   g.scale(k,k);
   g.lineCap="round"; g.lineJoin="round";
-  var ink=Math.max(0.32, 0.95/k);             // a fine pen: about one device pixel
+  var ink=Math.max(0.36, 1.15/k);             // brush-weight ink: a little heavier, Vagabond line
   function X(x){ return P.cx+x; }
 
   if (s<0.8){                                   // far away: a body's mass, not a stick
