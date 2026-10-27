@@ -43,6 +43,14 @@ generation starts breeding, and two pairs reach 2,000 in **67 years**.
 
 So the ceiling in EDEN is not human fertility. It is the pen.
 
+**And the pen's size is the whole answer.** The table above uses the pen as
+built: capacity 900, 32 nest boxes. Run the same seed in a pen of Calhoun's
+proportions — capacity 3,840, 256 boxes of 15 — and **2,000 people are
+reached in year 75**, the population peaks at 2,866, and it holds there for
+roughly 150 years before the same collapse arrives. The answer to "could they
+populate 2,000?" is therefore *yes*, and it was the pen, not the biology, that
+was saying no.
+
 ## 2. The pen has two capacities, and they disagree
 
 The UI now prints both, because the disagreement is the mechanism:
@@ -67,6 +75,41 @@ python3 tools/sweep.py --study calhoun     # Universe 25 as Calhoun built it
 python3 tools/sweep.py --study boxes       # vary the number of nest boxes
 python3 tools/sweep.py --study crowding    # vary where the sink begins
 ```
+
+### The pen's architecture barely matters
+
+Five pens, each run to extinction and reseeding, seed 69:
+
+| pen | peak | peak year | extinction | reseed |
+|---|---|---|---|---|
+| Universe 25 as built (256 boxes × 15, cap 3840) | 2866 | 92 | 279 | 309 |
+| same boxes, sink at 35% | 2914 | 100 | 250 | 280 |
+| same boxes, sink at 10% | 2912 | 101 | 284 | 314 |
+| 256 boxes of 8 (2048 places) | 2920 | 100 | 288 | 318 |
+| 128 boxes of 15 (1920 places) | 2933 | 101 | 294 | 324 |
+
+**Every pen collapses on the same schedule.** Halve the nest boxes, shrink
+each box, or move the crowding threshold from 10% to 35%, and the peak stays
+within 2% of 2,900 and the extinction within 40 years of the others.
+
+Two things follow.
+
+First, **the model reproduces Calhoun's shape.** His Universe 25 peaked near
+2,200 around day 560 and was functionally extinct by day ~1,600. This pen, in
+his proportions, peaks at 2,866 in year 92 and empties in year 279 — the same
+arc, stretched to human generations.
+
+Second — and this is the uncomfortable part — **this model does not support
+the critique recorded in RESEARCH.md.** Ramsden and Adams argue the outcome
+tracked the *architecture*: that the design funnelled animals into contact,
+and that outcomes were design-dependent rather than an iron law of crowding.
+In this model the architecture is close to irrelevant. What drives the
+collapse is the fertility-versus-crowding feedback, and the sink threshold
+merely sets when it starts. If the critique is right, then the mechanisms
+that make *architecture* matter — the funnel, the territory, the crowding of
+the roles — are under-modelled here. The box system currently records who
+holds a place; it does not yet make *where* the places are shape the
+behaviour.
 
 ## 3. The arc of Universe 6, measured
 
@@ -134,3 +177,10 @@ live history as a record of *that run*, not a property of the model.
 - The causes of death in the EDEN postmortem are cumulative over the whole
   iteration, so "infant" dominating that table describes *how* the last
   generation failed, not the proximate cause of the pen emptying.
+- **A place emptied by death is never taken again** by the people who were
+  already displaced. The viewer shows this directly: amber nest boxes are
+  held, green ones are vacant, and the status line reads *"61 without
+  territory · 85 places vacant, never refilled"*. That is the model's
+  reading of Calhoun's "death squared" — the social death precedes the
+  physical one — and it is why the boxes can be a third empty while a fifth
+  of the pen has nowhere to go.

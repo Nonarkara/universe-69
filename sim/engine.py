@@ -1580,6 +1580,15 @@ def summarize(world):
             info["stagnation"] = design["stagnation"]
             info["box_cap"] = design["box_cap"]
             info["box_slots"] = len(design["boxes"]) * design["box_cap"]
+            # the pen's architecture and who holds what, so the viewer can
+            # show territory rather than only counting it
+            info["boxes_xy"] = [[x, y] for x, y in design["boxes"]]
+            info["box_occ"] = {k: v for k, v in u.get("box_occ", {}).items()}
+            occ = info["box_occ"]
+            info["box_free"] = sum(max(0, design["box_cap"] - occ.get(str(i), 0))
+                                   for i in range(len(design["boxes"])))
+            info["box_vacant"] = sum(1 for i in range(len(design["boxes"]))
+                                     if occ.get(str(i), 0) == 0)
         out["u"][key] = info
     return out
 

@@ -354,10 +354,31 @@ function buildSnow9(harsh){
 }
 
 // =========================================================== EDEN layers
-var base6=null, frame6=null;
-function buildBase6(){
+var base6=null, frame6=null, base6Key=null;
+// The pen's default architecture, mirroring the engine's. The model sends the
+// real list; this is only the fallback for a payload that predates it.
+var EDEN_BOXES_FALLBACK=(function(){
+  var out=[];
+  for (var i=4;i<48-6;i+=5){
+    out.push([i+1,4]); out.push([i+1,48-5]);
+    out.push([4,i+1]); out.push([48-5,i+1]);
+  }
+  return out;
+})();
+// The alcove a nest box sits in: whichever wall the box is against.
+function alcoveFor(b,S){
+  var dN=b[1], dS=S-3-b[1], dW=b[0], dE=S-3-b[0];
+  var m=Math.min(dN,dS,dW,dE);
+  if (m===dN) return [b[0]-1, b[1]-2];
+  if (m===dS) return [b[0]-1, b[1]+1];
+  if (m===dW) return [b[0]-2, b[1]-1];
+  return [b[0]+1, b[1]-1];
+}
+function buildBase6(boxes){
   var S=48, W=S+2*EM;
   base6=mkCanvas(W*PX); frame6=mkCanvas(W*PX);
+  base6Key=boxes?(boxes.length+":"+boxes[0][0]+","+boxes[0][1]+":"+
+                  boxes[boxes.length-1][0]+","+boxes[boxes.length-1][1]):"";
   var g=base6.getContext("2d");
   for (var y=0;y<W;y++) for (var x=0;x<W;x++){
     g.fillStyle=((x>>1)%2)?P.lawn:P.lawnD; g.fillRect(x*PX,y*PX,PX,PX);
@@ -396,14 +417,16 @@ function buildBase6(){
   g.fillStyle=P.wallFace;
   g.fillRect(PX*2-3,PX*2-3,(S-4)*PX+6,3); g.fillRect(PX*2-3,PX*2-3,3,(S-4)*PX+6);
   g.fillRect(PX*2-3,(S-2)*PX,(S-4)*PX+6,3); g.fillRect((S-2)*PX,PX*2-3,3,(S-4)*PX+6);
-  for (var i=4;i<S-6;i+=5){
-    [[i,2],[i,S-4],[2,i],[S-4,i]].forEach(function(b){
-      var X=b[0]*PX, Y=b[1]*PX;
-      g.fillStyle="rgba(0,0,0,0.2)"; g.fillRect(X+3,Y+3,PX*2,PX*2);
-      g.fillStyle=P.wallTop; g.fillRect(X,Y,PX*2,PX*2);
-      g.fillStyle=P.wall; g.fillRect(X+2,Y+2,PX*2-4,PX*2-4);
-      g.fillStyle=P.alcove; g.fillRect(X+PX-4,Y+PX-4,8,8);
-    });
+  // the nest boxes: drawn where the model says they are, so the picture
+  // and the simulation can never disagree about the architecture
+  var bl=(boxes&&boxes.length)?boxes:EDEN_BOXES_FALLBACK;
+  for (var bi=0;bi<bl.length;bi++){
+    var b=bl[bi], ac=alcoveFor(b,S);
+    var X=ac[0]*PX, Y=ac[1]*PX;
+    g.fillStyle="rgba(0,0,0,0.2)"; g.fillRect(X+3,Y+3,PX*2,PX*2);
+    g.fillStyle=P.wallTop; g.fillRect(X,Y,PX*2,PX*2);
+    g.fillStyle=P.wall; g.fillRect(X+2,Y+2,PX*2-4,PX*2-4);
+    g.fillStyle=P.alcove; g.fillRect(X+PX-4,Y+PX-4,8,8);
   }
   [[8,8],[S-10,8],[8,S-10],[S-10,S-10]].forEach(function(hp){
     var X=hp[0]*PX, Y=hp[1]*PX;
@@ -455,7 +478,10 @@ function compose9(u, st){
   return frame9;
 }
 function compose6(u){
-  if (!base6) buildBase6();
+  var bx=u.boxes_xy;
+  var key=bx?(bx.length+":"+bx[0][0]+","+bx[0][1]+":"+
+              bx[bx.length-1][0]+","+bx[bx.length-1][1]):"";
+  if (!base6 || base6Key!==key) buildBase6(bx);
   var g=frame6.getContext("2d");
   g.drawImage(base6,0,0);
   return frame6;
@@ -470,7 +496,7 @@ function compose6(u){
 // by individual.
 
 var ACT_LABEL = ["idle","walking","foraging","hunting","fishing","farming",
-                 "building","talking","together","giving birth",
+                 "building","talking","making love","giving birth",
                  "minding children","resting","eating","withdrawn","fighting",
                  "playing"];
 var A_WALK=1, A_FORAGE=2, A_HUNT=3, A_FISH=4, A_FARM=5, A_BUILD=6, A_TALK=7,
@@ -979,8 +1005,32 @@ function paintOverlay(key){
   var g=ov.getContext("2d");
   g.clearRect(0,0,ov.width,ov.height);
   var map=key==="e"?actors6:actors9;
+  var u=state?state.u[key==="e"?"eden":"lagoon"]:null;
   var ts=v.ts, sx=v.sx, sy=v.sy;
   var dpr=ov.width/(ov.clientWidth||ov.width)||1;
+
+  // Nest-box occupancy: territory, made visible. A held box is drawn in
+  // amber; a vacant one in quiet green. This is the variable Calhoun was
+  // actually studying, so it must be visible and not merely counted.
+  //
+  // Note what green does NOT mean: a vacant place is not an opportunity.
+  // Roles in the pen are filled once. A place emptied by death is taken
+  // again only by a newcomer — never by the people already displaced.
+  // That is the whole of "death squared", and it is why the boxes can be
+  // half empty while a fifth of the pen has no territory at all.
+  if (key==="e" && u && u.boxes_xy && u.box_occ && ts>5){
+    for (var bi=0;bi<u.boxes_xy.length;bi++){
+      var bb=u.boxes_xy[bi];
+      var n=u.box_occ[String(bi)]||0;
+      var ac=alcoveFor(bb,48);
+      var x0=(ac[0]+EM-v.sx)*ts, y0=(ac[1]+EM-v.sy)*ts;
+      if (x0<-60||y0<-60||x0>ov.width+60||y0>ov.height+60) continue;
+      g.lineWidth=Math.max(1,Math.round((n>0?2:1)*dpr));
+      g.strokeStyle=(n>0)?"#f8d848":"#2f5a4c";
+      g.strokeRect(Math.round(x0), Math.round(y0), Math.round(2*ts), Math.round(2*ts));
+    }
+  }
+
   var s=ts*1.45/32;                        // figure scale, as in render()
   var caption = s>=1.6;                   // only caption when few enough to read
   g.textAlign="center"; g.textBaseline="alphabetic";
@@ -1135,7 +1185,11 @@ function statHTML(u, kind){
   if (kind==="e"){
     out+="PHASE: "+u.phase.toUpperCase();
     if (u.sink>45) out+="\n<span class='dim'>BEHAVIOURAL SINK: "+u.sink+"% FEED AT ONE HOPPER</span>";
-    if (u.homeless>0) out+="\n<span class='dim'>WITHOUT TERRITORY: "+u.homeless+" (ONLY "+u.boxes+" NEST BOXES)</span>";
+    if (u.homeless>0) out+="\n<span class='dim'>WITHOUT TERRITORY: "+u.homeless;
+    if (u.homeless>0 && u.box_free>0){
+      out+=" · "+u.box_free+" PLACES VACANT, NEVER REFILLED";
+    }
+    out+="</span>";
     if (u.std) out+="\n<span class='dim'>OUTBREAK IN THE PEN</span>";
     if (u.ennui>0.2) out+="\n<span class='dim'>ENNUI "+Math.round(u.ennui*100)+"%</span>";
   } else {
@@ -1263,7 +1317,9 @@ function buildLegend(){
     return "<span class='chip'><span class='sw' style='background:"+c[1]+"'></span>"+c[2]+"</span>";
   }).join("");
   h+="<span class='chip' style='color:#5e5e7c'>poses: foraging · hunting · fishing · farming · "+
-     "eating · talking · fighting · giving birth · withdrawn</span>";
+     "eating · talking · making love · fighting · giving birth · withdrawn</span>";
+  h+="<span class='chip'><span class='sw' style='background:#f8d848'></span>nest box held</span>"+
+     "<span class='chip'><span class='sw' style='background:#2f5a4c'></span>vacant — roles are filled once</span>";
   document.getElementById("legend").innerHTML=h;
 }
 document.getElementById("filters").addEventListener("click", function(e){
