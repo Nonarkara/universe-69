@@ -324,23 +324,24 @@ var SNAP = window.SNAPSHOT_URL || null;
 var PX = 12;          // offscreen pixels per world tile
 var EM = 12;          // EDEN resort margin (tiles) around the pen
 
-// ---- palette: muted, 3 tones per material, light from the north-west ----
+// ---- palette: Ghibli watercolor: soft, warm, pale and clear ----
 var P = {
-  waterD:"#1a4580", water:"#2559a3", waterS:"#3a78c8", waterL:"#5a94d8", foam:"#d4ecfa",
-  sand:"#d4bc7a", sandL:"#e2cf96", sandD:"#b89c58", sandWet:"#b9a060",
-  grass:"#4e8a3a", grassD:"#3f7230", grassL:"#6aa84e", grassX:"#2f5d26",
-  floorF:"#2f5e28", canD:"#1b421b", can:"#2f6b2c", canL:"#4d8f3e", canX:"#6cab52",
-  trunk:"#6b4226", trunkD:"#4e2f18",
-  soil:"#8a6530", soilD:"#6e4e1c", soilL:"#a07a3e", path:"#a8946a",
-  thatch:"#9a7a3a", thatchD:"#7c6028", thatchL:"#b8955a",
-  hutwall:"#7a5a34", hutdoor:"#2c1a0c",
-  stone:"#b4ac9c", stoneB:"#bcb4a4", mortar:"#978f80", dust:"#a8a092",
-  wallTop:"#8a7f6c", wall:"#6a5f4e", wallFace:"#473d30", alcove:"#2e2619",
-  hopper:"#e0b838", hopperD:"#b08a18", trough:"#4a90d9",
-  lawn:"#55a04c", lawnD:"#4c9344", palm:"#2f7a38", palmL:"#3f9a48",
-  pool:"#38b8e0", poolL:"#7cd8f0", rim:"#e8e8e0", deck:"#d8c9a0",
-  shadow:"rgba(0,0,0,0.30)"
+  waterD:"#2a5f86", water:"#4a86a8", waterS:"#6fa8bc", waterL:"#8fc4c8", foam:"#eef6fa",
+  sand:"#dcc790", sandL:"#ebe1ab", sandD:"#c0a874", sandWet:"#c8b074",
+  grass:"#679a4a", grassD:"#548236", grassL:"#7fae5c", grassX:"#3f6b2f",
+  floorF:"#4a7f34", canD:"#2b5a2f", can:"#3f7a3c", canL:"#5f9c4a", canX:"#7bb06a",
+  trunk:"#7a4a2a", trunkD:"#5a3620",
+  soil:"#a37b40", soilD:"#7d5c24", soilL:"#bb9348", path:"#c0a878",
+  thatch:"#b08d4a", thatchD:"#8e6c30", thatchL:"#cba764",
+  hutwall:"#8a6a42", hutdoor:"#4a3320",
+  stone:"#c4bca8", stoneB:"#cec6b2", mortar:"#a49c88", dust:"#b8b0a0",
+  wallTop:"#9a8f7c", wall:"#7a7060", wallFace:"#57503f", alcove:"#38301f",
+  hopper:"#e8b84a", hopperD:"#c0912a", trough:"#4a90c8",
+  lawn:"#78b45c", lawnD:"#6aa54e", palm:"#3a8a44", palmL:"#4fa254",
+  pool:"#58c4dc", poolL:"#88dcf0", rim:"#f2f2e8", deck:"#e4d6ae",
+  shadow:"rgba(40,30,20,0.18)"
 };
+
 
 function hash2(x,y){ var h=(x*374761393+y*668265263)>>>0;
   h=(h^(h>>13))*1274126177>>>0; return (h^(h>>16))/4294967295; }
@@ -709,11 +710,11 @@ var A_WALK=1, A_FORAGE=2, A_HUNT=3, A_FISH=4, A_FARM=5, A_BUILD=6, A_TALK=7,
     A_FIGHT=14, A_PLAY=15, A_RITE=16, A_SLEEP=17, A_WORK=18, A_SCOUT=19, A_WATCH=20, A_GROOM=21;
 var PERIOD = [240,22,100,110,160,90,110,80,60,130,130,240,80,180,40,26,34,300,70,22,260,90];
 
-// Vagabond / Inoue: skin as a warm gray wash, hair as black ink.
-var SKINS = [ ["#d8d0c4","#a89c8c","#e8e0d4"], ["#c8beb0","#988c7c","#d8cec0"],
-              ["#b8aea0","#887c6c","#c8beb0"], ["#a89e90","#786c5c","#b8aea0"] ];
-var HAIRS = ["#0a0806","#1a1410","#2a2420","#3a3430","#0a0806"];
-var ELDER_HAIR="#9a948c";
+// Ghibli: warm, soft skin tones; hair in warm browns and black.
+var SKINS = [ ["#f2d6bc","#d8b496","#f8e6d4"], ["#e8c4a4","#c8a280","#f0d6b8"],
+              ["#d4a87c","#b98a5c","#e2bd94"], ["#b9885c","#916640","#d09e72"] ];
+var HAIRS = ["#2a1f14","#3a2a1a","#5a4230","#7a5a3a","#2a2a2a"];
+var ELDER_HAIR="#d8d0c4";
 var CXL=0;
 
 // pose solver: every joint from one phase angle, per activity
@@ -853,10 +854,10 @@ function solvePose(act, c, moving, v){
 // show in famine, a belly shows obesity or pregnancy, a bandage and a limp
 // mark an injury. Adults are drawn as bodies are; children are never given
 // genital detail at any zoom.
-// Vagabond / Inoue: pure black ink on warm paper, washes instead of color.
-var INK="#0a0806", INK_SOFT="rgba(10,8,6,0.28)", PAPER="#ece4d2";
-var DRESS = { swim:["#2a2420","#1a1814","#3a3430","#242018","#181410"],
-              hide:"#3a3430", hideD:"#1a1814", fur:"#4a4440", furD:"#2a2420" };
+// Ghibli: warm dark ink on cream paper, washes instead of color.
+var INK="#3a3028", INK_SOFT="rgba(58,48,40,0.20)", PAPER="#fdf6e3";
+var DRESS = { swim:["#d98a9e","#6fa8d4","#e5c46a","#6cb99a","#c98ab8"],
+              hide:"#8a6238", hideD:"#5e4322", fur:"#a07850", furD:"#6e4e2c" };
 function bodyOf(a){
   var b=a.bmi||22, age=(a.age===undefined)?30:a.age;
   return { adult: typeof a.age==="number" && a.age>=18,
@@ -921,7 +922,7 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
   }
   g.scale(k,k);
   g.lineCap="round"; g.lineJoin="round";
-  var ink=Math.max(0.36, 1.15/k);             // brush-weight ink: a little heavier, Vagabond line
+  var ink=Math.max(0.32, 0.95/k);             // Ghibli: whisper of ink, not a black outline
   function X(x){ return P.cx+x; }
 
   if (s<0.8){                                   // far away: a body's mass, not a stick
@@ -1040,7 +1041,7 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
   g.quadraticCurveTo(shX+shW*0.64, P.shY-0.6, nkx, nky);
   g.closePath();
   g.clip();
-  g.fillStyle="rgba(60,40,26,0.16)";
+  g.fillStyle="rgba(90,70,50,0.12)";
   g.beginPath();
   g.moveTo(shX+shW*0.30, nky);
   g.quadraticCurveTo(shX+shW*0.95, P.shY+4, shX+shW*0.55, P.hipY+2);
