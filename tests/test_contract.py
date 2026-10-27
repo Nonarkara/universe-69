@@ -86,19 +86,28 @@ class TestSummarizeShape(unittest.TestCase):
             self.assertEqual(set(u["detail"]), ids,
                              "detail does not line up with the people drawn")
             for pid, d in u["detail"].items():
-                self.assertEqual(len(d), 8, "person detail changed shape")
+                self.assertEqual(len(d), 13, "person detail changed shape")
                 self.assertIsInstance(d[0], str)          # name
                 self.assertIsInstance(d[1], float)        # age in years
                 self.assertIsInstance(d[2], int)          # generation
                 self.assertIsInstance(d[3], int)          # flags
                 self.assertIsInstance(d[6], int)          # partner id
+                self.assertIsInstance(d[8], str)          # what the body looks like
+                for i in (9, 10, 11, 12):                 # purpose, ef, aggression, bmi
+                    self.assertIsInstance(d[i], float)
 
-    def test_people_rows_have_seven_positional_fields(self):
-        """[x, y, cls, sex, id, act, face] — the renderer indexes these."""
+    def test_people_rows_have_twelve_positional_fields(self):
+        """[x, y, cls, sex, id, act, face, age, bmi, strength, injury, wk] —
+        the renderer indexes these; the last five draw the body."""
         for key in ("eden", "lagoon"):
             for p in self.snap["u"][key]["people"]:
-                self.assertEqual(len(p), 7)
-                x, y, cls, sex, pid, act, face = p
+                self.assertEqual(len(p), 12)
+                x, y, cls, sex, pid, act, face, age, bmi, sn, inj, wk = p
+                for v in (age, bmi, sn, inj, wk):
+                    self.assertIsInstance(v, int)
+                self.assertTrue(10 <= bmi <= 50)
+                self.assertTrue(0 <= sn <= 9 and 0 <= inj <= 9)
+                self.assertIn(wk, (0, 1, 2, 3))
                 self.assertIsInstance(x, int)
                 self.assertIsInstance(y, int)
                 self.assertIn(cls, (0, 1, 2, 3, 4))
@@ -131,19 +140,24 @@ class TestActivityCodes(unittest.TestCase):
             "A_TEND": engine.A_TEND, "A_REST": engine.A_REST,
             "A_EAT": engine.A_EAT, "A_WITHDRAW": engine.A_WITHDRAW,
             "A_FIGHT": engine.A_FIGHT, "A_PLAY": engine.A_PLAY,
+            "A_RITE": engine.A_RITE, "A_SLEEP": engine.A_SLEEP,
+            "A_WORK": engine.A_WORK, "A_SCOUT": engine.A_SCOUT,
+            "A_WATCH": engine.A_WATCH, "A_GROOM": engine.A_GROOM,
         }
-        self.assertEqual(len(set(codes.values())), 16)
+        self.assertEqual(len(set(codes.values())), 22)
         self.assertEqual(engine.A_PLAY, 15)
+        self.assertEqual(engine.A_WATCH, 20)
 
     def test_renderer_activity_codes_match_the_engine(self):
         src = read(RENDERER)
-        block = re.search(r"var A_WALK=(\d+),.*?A_PLAY=(\d+);", src, re.S)
+        block = re.search(r"var A_WALK=(\d+),.*?A_GROOM=(\d+);", src, re.S)
         self.assertIsNotNone(block, "renderer activity codes not found")
         pairs = dict(re.findall(r"(A_[A-Z]+)=(\d+)", block.group(0)))
         pairs = {k: int(v) for k, v in pairs.items()}
         for name in ("A_WALK", "A_FORAGE", "A_HUNT", "A_FISH", "A_FARM",
                      "A_BUILD", "A_TALK", "A_MATE", "A_BIRTH", "A_TEND",
-                     "A_REST", "A_EAT", "A_WITHDRAW", "A_FIGHT", "A_PLAY"):
+                     "A_REST", "A_EAT", "A_WITHDRAW", "A_FIGHT", "A_PLAY", "A_RITE",
+                     "A_SLEEP", "A_WORK", "A_SCOUT", "A_WATCH", "A_GROOM"):
             self.assertEqual(pairs[name], getattr(engine, name),
                              f"{name} differs between engine and renderer")
 
@@ -152,7 +166,7 @@ class TestActivityCodes(unittest.TestCase):
         block = re.search(r"var ACT_LABEL = \[(.*?)\];", src, re.S)
         self.assertIsNotNone(block)
         labels = re.findall(r'"([^"]*)"', block.group(1))
-        self.assertEqual(len(labels), 16)
+        self.assertEqual(len(labels), 22)
 
 
 class TestMirrorIsIdentical(unittest.TestCase):

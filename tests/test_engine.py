@@ -62,13 +62,27 @@ class TestGenesis(unittest.TestCase):
             self.assertEqual(people[3]["p"], people[2]["id"])
             self.assertEqual({p["s"] for p in people}, {"m", "f"})
 
-    def test_eden_founders_are_lab_ids_and_lagoon_founders_are_named(self):
+    def test_both_universes_receive_the_same_founders(self):
+        """Same people, different world: the world is the only variable."""
         w = engine.genesis(seed=69)
+        key = lambda p: (p["n"], p["s"], p["ef"], p["ag"])
+        self.assertEqual([key(p) for p in w["eden"]["people"]],
+                         [key(p) for p in w["lagoon"]["people"]])
         for p in w["eden"]["people"]:
-            self.assertTrue(p["n"].startswith("E-"))
-        for p in w["lagoon"]["people"]:
-            self.assertFalse(p["n"].startswith("E-"))
             self.assertTrue(p["n"][0].isupper())
+
+    def test_a_reseed_sends_eight_pairs_of_the_same_people(self):
+        e = engine.genesis_universe("EDEN", 1, iteration=2, fseed=69)
+        l = engine.genesis_universe("LAGOON", 2, iteration=2, fseed=69)
+        self.assertEqual(len(e["people"]), 16)
+        self.assertEqual([p["n"] for p in e["people"]], [p["n"] for p in l["people"]])
+        for i in range(0, 16, 2):
+            self.assertEqual(e["people"][i]["p"], e["people"][i + 1]["id"])
+
+    def test_both_universes_start_innocent(self):
+        w = engine.genesis(seed=69)
+        self.assertTrue(w["eden"]["innocent"])
+        self.assertTrue(w["lagoon"]["innocent"])
 
     def test_lagoon_starts_innocent_and_without_technology(self):
         w = engine.genesis(seed=69)
@@ -214,8 +228,9 @@ class TestBounds(unittest.TestCase):
 
 class TestEden(unittest.TestCase):
     def test_phase_progression_reaches_stagnation(self):
+        # two resort expansions postpone the sink; it still comes
         w = engine.genesis(seed=69)
-        events = run(w, 20000)
+        events = run(w, 100 * engine.DAYS_PER_YEAR)
         kinds = [e[3].lower() for e in events if e[2] == "phase"]
         self.assertTrue(any("exploit" in k for k in kinds))
         self.assertTrue(any("stagnation" in k for k in kinds))
@@ -383,3 +398,117 @@ class TestExtinctionAndPostmortems(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestMinds(unittest.TestCase):
+    """The same Stone-Age brain in two worlds (DESIGN.md, 'Minds and bodies')."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.world = engine.genesis(seed=69)
+        run(cls.world, 100 * engine.DAYS_PER_YEAR)
+
+    def adults(self, key):
+        u = self.world[key]
+        return [p for p in u["people"] if engine.age_of(p, u["day"]) >= engine.ADULT_AGE]
+
+    def mean(self, key, field):
+        a = self.adults(key)
+        return sum(p[field] for p in a) / len(a)
+
+    def test_the_resort_fattens_and_weakens_its_people(self):
+        self.assertGreater(self.mean("eden", "bmi"), self.mean("lagoon", "bmi") + 4)
+        self.assertLess(self.mean("eden", "sn"), self.mean("lagoon", "sn"))
+
+    def test_purpose_drains_where_nothing_is_asked(self):
+        self.assertLess(self.mean("eden", "pu"), self.mean("lagoon", "pu") - 0.3)
+
+    def test_the_withdrawn_keep_apart_from_the_living_pen(self):
+        """Huddled men pool on the floor, women go to the top row of boxes,
+        and none of them is in a circle, a couple or a fight."""
+        u = self.world["eden"]
+        top = min(b[1] for b in engine.eden_design(u)["boxes"])
+        c = engine.eden_size(u) // 2
+        w = [p for p in u["people"] if p["w"]]
+        self.assertTrue(w, "no one has withdrawn in a hundred years of the pen")
+        for p in w:
+            self.assertNotIn(p["a"], (engine.A_TALK, engine.A_MATE, engine.A_FIGHT))
+            self.assertIsNone(p["p"])
+            if p["wk"] == engine.WK_UPSTAIRS:
+                self.assertEqual(p["hy"], top)
+            if p["wk"] == engine.WK_HUDDLE:
+                self.assertLessEqual(abs(p["hx"] - c), 4)
+
+    def test_children_inherit_from_both_parents(self):
+        rng = engine.random.Random(1)
+        mother = engine.person(1, "M", "f", 0, 1, 0, 0)
+        mother["ef"], mother["fe"] = 0.9, [0.9, 0.5]
+        kids = []
+        for i in range(200):
+            c = engine.person(10 + i, "C", "m", 0, 2, 0, 0)
+            engine.minds.inherit(c, mother, rng)
+            kids.append(c["ef"])
+        self.assertGreater(sum(kids) / len(kids), 0.82)
+
+    def test_mind_is_recorded_apart_from_culture(self):
+        for key in ("eden", "lagoon"):
+            m = self.world[key]["mind"]
+            self.assertTrue(m)
+            year, mean, tail, vg = m[-1]
+            self.assertTrue(0 <= mean <= 1 and 0 <= tail <= 1 and 0 <= vg <= 1)
+
+
+class TestResortAndIsland(unittest.TestCase):
+    """EDEN's lodgings, posts and growth; LAGOON's boats and fire."""
+
+    def test_the_resort_grows_when_crowded_and_stops_growing(self):
+        u = engine.genesis(seed=69)["eden"]
+        events = []
+        rng = engine.random.Random(1)
+        for _ in range(engine.EDEN_MAX_EXPANSIONS + 2):
+            engine.expand_pen(u, rng, events)
+        self.assertEqual(u["size"], engine.EDEN_SIZE + 2 * engine.EDEN_EXPAND_STEP * engine.EDEN_MAX_EXPANSIONS)
+        self.assertEqual(u["expansions"], engine.EDEN_MAX_EXPANSIONS)
+        S = u["size"]
+        for x, y in engine.eden_design(u)["boxes"]:
+            self.assertTrue(2 <= x <= S - 3 and 2 <= y <= S - 3)
+
+    def test_posts_are_finite_and_filled_once(self):
+        w = engine.genesis(seed=69)
+        run(w, 40 * engine.DAYS_PER_YEAR)
+        u = w["eden"]
+        held = [r["who"] for r in u["roles"] if r["who"]]
+        self.assertEqual(len(held), len(set(held)))
+        alive = {p["id"] for p in u["people"]}
+        self.assertTrue(set(held) <= alive)
+        for p in u["people"]:
+            if p.get("role") is not None:
+                self.assertEqual(u["roles"][p["role"]]["who"], p["id"])
+
+    def test_a_boat_is_built_before_anyone_crosses(self):
+        u = engine.genesis(seed=69)["lagoon"]
+        events = []
+        crossed_with_boat = False
+        for _ in range(130 * engine.DAYS_PER_YEAR):
+            rng = engine.random.Random((u["seed"] << 20) ^ (u["day"] + 1) ^ u["iteration"])
+            engine.tick_lagoon(u, rng, events)
+            if u.get("voyage"):
+                aboard = [p for p in u["people"] if p.get("ab")]
+                self.assertTrue(aboard)
+                crossed_with_boat = True
+        if any("crosses the strait" in e[3] or "lands on the greater shore" in e[3] for e in events):
+            self.assertTrue(crossed_with_boat, "people reached the mainland without a boat")
+            self.assertTrue(u.get("boats") or u.get("voyage"))
+
+    def test_fertility_follows_age_body_and_nursing(self):
+        p = engine.person(1, "W", "f", 0, 1, 0, 0)
+        Y = engine.DAYS_PER_YEAR
+        self.assertEqual(engine.minds.fertility(p, 12 * Y, 0), 0.0)
+        self.assertAlmostEqual(engine.minds.fertility(p, 25 * Y, 0), 1.0)
+        self.assertLess(engine.minds.fertility(p, 42 * Y, 0), 0.5)
+        self.assertEqual(engine.minds.fertility(p, 51 * Y, 0), 0.0)
+        p["bmi"] = 15.0
+        self.assertEqual(engine.minds.fertility(p, 25 * Y, 0), 0.0)
+        p["bmi"] = 22.0
+        p["nurse"], p["nurse_len"] = 1000, 1000
+        self.assertLess(engine.minds.fertility(p, 25 * Y, 10), 0.1)

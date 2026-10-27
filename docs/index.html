@@ -18,7 +18,12 @@
               border-bottom:1px solid #26263c; }
   #masthead .ttl { color:#f8d848; letter-spacing:3px; font-weight:bold; }
   #masthead .sub { color:#8a8aa8; }
-  #masthead .hint { margin-left:auto; color:#5e5e7c; letter-spacing:1px; }
+  #masthead .hint { margin-left:auto; color:#5e5e7c; letter-spacing:1px; white-space:nowrap;
+                    overflow:hidden; text-overflow:ellipsis; min-width:0; }
+  #masthead .ttl, #masthead .sub { white-space:nowrap; }
+  #walkbtn { font:inherit; font-size:10px; letter-spacing:1px; color:#9fe8c0;
+             background:#12121e; border:1px solid #2f4a3c; padding:0 6px; cursor:pointer; }
+  #walkbtn.on { color:#f8d848; border-color:#5a5a3a; }
 
   #worlds { flex:3 1 0; display:flex; min-height:0; }
   .world { flex:1; position:relative; min-width:0; overflow:hidden; }
@@ -44,33 +49,31 @@
   .card .dl { color:#8a8aa8; }
   .card .dl b { color:#c8c8e0; font-weight:normal; }
 
-  #god { flex:2 1 0; border-top:2px solid #3a3a55; display:flex; min-height:0;
-         background:#07070e; }
-  .stat { width:24%; padding:8px 12px; font-size:11px; line-height:1.7;
-          overflow:hidden; white-space:pre-wrap; }
-  .stat h2 { font-size:11px; margin-bottom:2px; letter-spacing:1px; }
-  #s6 h2 { color:#a8c0f0; } #s9 h2 { color:#a0e898; }
-  .trend { width:100%; height:44px; image-rendering:pixelated; display:block;
-           margin:4px 0; }
+  /* each world's numbers live on its own HUD; the arc of its population sits
+     in the HUD's corner, because it is a fact about that world */
+  .hud .now { color:#a8a8c4; }
+  .hud .dim { color:#8888aa; }
+  .trend { position:absolute; top:6px; right:10px; width:120px; height:14px;
+           image-rendering:pixelated; pointer-events:none; }
+  .hud .l1 { padding-right:130px; }
+  .key { display:inline-block; width:7px; height:7px; border:2px solid;
+         vertical-align:-1px; margin-right:3px; }
 
-  /* the console: the record, and the only scrolling region in the page */
-  #records { flex:1; display:flex; flex-direction:column; min-width:0;
-             border-left:2px solid #3a3a55; border-right:2px solid #3a3a55; }
-  #rechead { flex:0 0 auto; padding:6px 12px 4px; border-bottom:1px solid #1e1e32; }
+  /* the record: one strip, sized to five lines, taller only on request */
+  #god { flex:0 0 auto; border-top:2px solid #3a3a55; background:#07070e; }
+  #records { display:flex; flex-direction:column; min-width:0; }
+  #rechead { flex:0 0 auto; padding:4px 12px 2px; display:flex; align-items:baseline; }
+  #more { margin-left:auto; }
   #records h2 { font-size:11px; color:#f8d848; letter-spacing:2px;
                 display:inline-block; }
   #filters { display:inline-flex; gap:4px; margin-left:10px; vertical-align:baseline; }
-  #filters button { font:inherit; font-size:10px; letter-spacing:1px;
+  #filters button, #more { font:inherit; font-size:10px; letter-spacing:1px;
                     color:#6a6a8a; background:#12121e; border:1px solid #26263c;
                     padding:1px 6px; cursor:pointer; }
-  #filters button.on { color:#f8d848; border-color:#5a5a3a; background:#1a1a16; }
-  #legend { flex:0 0 auto; padding:3px 12px; font-size:10px; color:#6a6a8a;
-            border-bottom:1px solid #1e1e32; display:flex; gap:10px;
-            flex-wrap:wrap; align-items:center; }
-  #legend .chip { display:inline-flex; align-items:center; gap:4px; }
-  #legend .sw { width:8px; height:8px; display:inline-block; }
-  #reclines { flex:1 1 auto; overflow-y:auto; padding:4px 12px 10px;
-              font-size:11px; line-height:1.7; }
+  #filters button.on, #more.on { color:#f8d848; border-color:#5a5a3a; background:#1a1a16; }
+  #reclines { height:calc(5 * 18px + 6px); overflow-y:auto; padding:0 12px 6px;
+              font-size:11px; line-height:18px; }
+  #god.tall #reclines { height:42vh; }
   #reclines::-webkit-scrollbar { width:8px; }
   #reclines::-webkit-scrollbar-thumb { background:#2c2c46; }
   #reclines .row { color:#b8b8d0; }
@@ -80,29 +83,29 @@
   #reclines .row.world { color:#a0a0c0; }
   #reclines .row.end { color:#f0b0b0; }
   #reclines .empty { color:#666a88; }
+  #reclines .n { color:#f8d848; }
 
   .ev6 { color:#a8c0f0; } .ev9 { color:#a0e898; } .evy { color:#666a88; }
   .dim { color:#8888aa; }
 
+  @media (max-width: 1200px) { .hud { font-size:10px; line-height:1.4; } }
   @media (max-width: 760px), (max-aspect-ratio: 4/5) {
     #masthead { flex-wrap:wrap; padding:4px 8px; gap:3px 8px; }
     #masthead .ttl { white-space:nowrap; }
     #masthead .sub { display:none; }
-    #masthead .hint { margin-left:0; flex:1 1 100%; font-size:9px;
+    #walkbtn { order:1; margin-left:auto; }
+    #masthead .hint { order:2; margin-left:0; flex:1 1 100%; font-size:9px;
                       letter-spacing:0; white-space:nowrap;
                       overflow:hidden; text-overflow:ellipsis; }
     #worlds { flex-direction:column; flex:3 1 0; }
     #divider { width:auto; height:2px; }
-    #god { flex-direction:row; flex-wrap:wrap; overflow-y:auto; flex:2 1 0; }
-    /* the numbers first on a narrow screen, then the record: what is
-       happening, then how it got there */
-    .stat { width:50%; order:0; font-size:10px; line-height:1.6; overflow:visible; }
-    #records { flex:1 1 100%; order:1; border-left:none; border-right:none;
-               border-bottom:2px solid #3a3a55; height:230px; min-height:150px; }
+    #reclines { font-size:10px; height:calc(4 * 18px + 6px); }
     .hud { font-size:9px; padding:3px 6px; }
+    .hud .l1 { padding-right:70px; }
+    .trend { width:60px; height:11px; top:4px; right:6px; }
     .card { font-size:10px; padding:4px 8px; max-width:100%; }
-    #legend { font-size:9px; gap:6px; }
-    #filters button { font-size:9px; padding:1px 4px; }
+    #filters button, #more { font-size:9px; padding:1px 4px; }
+    #records h2 .long { display:none; }
   }
 </style>
 </head>
@@ -110,24 +113,26 @@
 <div id="masthead">
   <span class="ttl">UNIVERSE 69</span>
   <span class="sub">two sealed worlds — observed, never helped</span>
-  <span class="hint">wheel zoom · drag to pan · click a person to follow · esc to resume</span>
+  <span class="hint">wheel zoom · drag pan · click to follow · WASD walk in · esc</span>
+  <button id="walkbtn" title="Walk into the world you last touched">WALK</button>
 </div>
 <div id="worlds">
   <div class="world" id="w6"><canvas id="c6" class="view"></canvas>
     <canvas id="o6" class="overlay"></canvas>
     <div class="hud" id="hud6"><b>UNIVERSE 6 · EDEN</b></div>
+    <canvas id="tre" class="trend"></canvas>
     <div class="card" id="card6"></div></div>
   <div id="divider"></div>
   <div class="world" id="w9"><canvas id="c9" class="view"></canvas>
     <canvas id="o9" class="overlay"></canvas>
     <div class="hud" id="hud9"><b>UNIVERSE 9 · LAGOON</b></div>
+    <canvas id="trl" class="trend"></canvas>
     <div class="card" id="card9"></div></div>
 </div>
 <div id="god">
-  <div class="stat" id="s6"></div>
   <div id="records">
     <div id="rechead">
-      <h2>THE OBSERVER'S RECORD</h2>
+      <h2><span class='long'>THE OBSERVER'S </span>RECORD</h2>
       <span id="filters">
         <button data-u="all" class="on">ALL</button>
         <button data-u="EDEN">U6</button>
@@ -136,11 +141,10 @@
         <button data-k="world">WORLD</button>
         <button data-k="end">END</button>
       </span>
+      <span id="filters2" class="filters"><button id="more">MORE</button></span>
     </div>
-    <div id="legend"></div>
     <div id="reclines"></div>
   </div>
-  <div class="stat" id="s9"></div>
 </div>
 
 <script src="config.js"></script>
@@ -182,7 +186,7 @@ var cam={ e:{x:24+EM,y:24+EM,h:10,tx:24+EM,ty:24+EM,th:10,mode:"auto",follow:0},
           l:{x:137,y:109,h:10,tx:137,ty:109,th:10,mode:"auto",follow:0} };
 var view={ e:null, l:null };      // the viewport each frame drew, for input maths
 var sel={ e:0, l:0 };             // the person the viewer picked
-var MIN_H=2.2, MAX_H=90;         // half-height in tiles: 2.2 is face-close
+var MIN_H=1.2, MAX_H=90;         // half-height in tiles: 1.2 is face-close
 var hudCache={ e:"", l:"" };
 
 // =========================================================== LAGOON layers
@@ -315,17 +319,6 @@ function buildSemi9(u){
     paintHut9(g,s.x-1,s.y-1);
   });
   boats9=[];
-  if ((u.tech||[]).indexOf("seacraft")>=0){
-    (u.settlements||[]).forEach(function(s){
-      for (var d=2; d<9; d++){
-        var cand=[[s.x-d,s.y],[s.x+d,s.y],[s.x,s.y-d],[s.x,s.y+d]];
-        for (var i=0;i<cand.length;i++){
-          var cx=cand[i][0], cy=cand[i][1];
-          if (cx>1&&cy>1&&cx<S-1&&cy<S-1&&terr9[cy][cx]===2){ boats9.push([cx,cy]); return; }
-        }
-      }
-    });
-  }
 }
 function snowAmount(x,y){
   // drifts are patchy: a coarse field decides where snow lies at all, a
@@ -374,18 +367,30 @@ function alcoveFor(b,S){
   if (m===dW) return [b[0]-2, b[1]-1];
   return [b[0]+1, b[1]-1];
 }
-function buildBase6(boxes){
-  var S=48, W=S+2*EM;
+// EDEN as the Truman Show's resort: sun, sea and sand inside a painted sky.
+// The pen's geometry is the model's and does not change — the floor is a
+// beach, the hoppers are buffet bars, the nest boxes are cabanas, and the
+// wall is a horizon painted on the inside of the dome. The sea is real and
+// just beyond reach, as it was for Truman.
+var CABANA=["#e8584a","#3f8fd0","#f2c84a","#3fa58a"];
+function buildBase6(boxes, S){
+  S=S||48; var W=S+2*EM;
   base6=mkCanvas(W*PX); frame6=mkCanvas(W*PX);
-  base6Key=boxes?(boxes.length+":"+boxes[0][0]+","+boxes[0][1]+":"+
-                  boxes[boxes.length-1][0]+","+boxes[boxes.length-1][1]):"";
+  base6Key=S+"|"+(boxes?(boxes.length+":"+boxes[0][0]+","+boxes[0][1]+":"+
+                  boxes[boxes.length-1][0]+","+boxes[boxes.length-1][1]):"");
   var g=base6.getContext("2d");
+  var seaY=S+EM+4;                                 // the sea begins south of the dome
   for (var y=0;y<W;y++) for (var x=0;x<W;x++){
-    g.fillStyle=((x>>1)%2)?P.lawn:P.lawnD; g.fillRect(x*PX,y*PX,PX,PX);
-    if (hash2(x,y)>0.9){ g.fillStyle=P.grassL; g.fillRect(x*PX+4,y*PX+6,2,1); }
+    var X=x*PX, Y=y*PX, h=hash2(x,y);
+    if (y>=seaY+2){ g.fillStyle=y>=seaY+5?P.waterD:(y>=seaY+3?P.water:P.waterS); g.fillRect(X,Y,PX,PX);
+      if (h>0.8){ g.fillStyle=P.waterL; g.fillRect(X+2,Y+5,7,1); } continue; }
+    if (y>=seaY){ g.fillStyle=y===seaY+1?P.sandWet:P.sandL; g.fillRect(X,Y,PX,PX);
+      if (y===seaY+1){ g.fillStyle=P.foam; g.fillRect(X,Y+PX-3,PX,3); } continue; }
+    g.fillStyle=((x>>1)%2)?P.lawn:P.lawnD; g.fillRect(X,Y,PX,PX);
+    if (h>0.9){ g.fillStyle=P.grassL; g.fillRect(X+4,Y+6,2,1); }
   }
-  for (var py=2;py<W-2;py+=4) for (var px=2;px<W-2;px+=4){
-    if ((px<EM-2||px>W-EM||py<EM-2||py>W-EM) && hash2(px,py)>0.62){
+  for (var py=2;py<seaY;py+=4) for (var px=2;px<W-2;px+=4){
+    if ((px<EM-2||px>W-EM||py<EM-2||py>S+EM+1) && hash2(px,py)>0.55){
       var X=px*PX, Y=py*PX;
       g.fillStyle="rgba(0,0,0,0.22)"; g.fillRect(X,Y+6,20,4);
       g.fillStyle=P.trunk; g.fillRect(X+2,Y-2,3,9);
@@ -399,45 +404,69 @@ function buildBase6(boxes){
   g.fillStyle=P.rim;  g.fillRect(3*PX-2,3*PX-2,7*PX+4,5*PX+4);
   g.fillStyle=P.pool; g.fillRect(3*PX,3*PX,7*PX,5*PX);
   g.fillStyle=P.poolL; g.fillRect(4*PX,4*PX,8,2); g.fillRect(6*PX,6*PX,10,2);
-  g.fillStyle=P.rim;
-  g.fillRect((EM-2)*PX,(EM-2)*PX,(S+4)*PX,3); g.fillRect((EM-2)*PX,(S+EM+2)*PX-3,(S+4)*PX,3);
-  g.fillRect((EM-2)*PX,(EM-2)*PX,3,(S+4)*PX); g.fillRect((S+EM+2)*PX-3,(EM-2)*PX,3,(S+4)*PX);
   g.save(); g.translate(EM*PX, EM*PX);
+  // the floor is a beach
   for (var y=0;y<S;y++) for (var x=0;x<S;x++){
-    var X=x*PX, Y=y*PX;
-    g.fillStyle=((x+y)%2)?P.stone:P.stoneB; g.fillRect(X,Y,PX,PX);
-    g.fillStyle=P.mortar; g.fillRect(X,Y+PX-1,PX,1); g.fillRect(X+PX-1,Y,1,PX);
-    if (hash2(x+31,y+7)>0.92){ g.fillStyle=P.dust; g.fillRect(X+3,Y+4,5,3); }
+    var X=x*PX, Y=y*PX, h=hash2(x+31,y+7);
+    g.fillStyle=((x*7+y*3)%5===0)?P.sandL:P.sand; g.fillRect(X,Y,PX,PX);
+    g.fillStyle=P.sandD; g.fillRect(X+(h*9|0),Y+(h*7|0)+2,1,1);
+    if (h>0.93){ g.fillStyle="#f0e6cc"; g.fillRect(X+4,Y+5,2,2); }
   }
-  g.fillStyle="rgba(0,0,0,0.18)"; g.fillRect(PX*2,PX*2,(S-4)*PX,5); g.fillRect(PX*2,PX*2,5,(S-4)*PX);
-  g.fillStyle=P.wall;
+  // boardwalks between the four bars
+  g.fillStyle=P.deck;
+  g.fillRect(9*PX,(S>>1)*PX-PX/2,(S-18)*PX,PX); g.fillRect((S>>1)*PX-PX/2,9*PX,PX,(S-18)*PX);
+  g.fillStyle="#b9a77c";
+  for (var k=9;k<S-9;k++){ g.fillRect(k*PX,(S>>1)*PX-PX/2,1,PX); g.fillRect((S>>1)*PX-PX/2,k*PX,PX,1); }
+  // the dome's inside: a horizon painted on the wall, clouds and all
+  g.fillStyle="#9cc8ec";
   g.fillRect(0,0,S*PX,PX*2); g.fillRect(0,(S-2)*PX,S*PX,PX*2);
   g.fillRect(0,0,PX*2,S*PX); g.fillRect((S-2)*PX,0,PX*2,S*PX);
-  g.fillStyle=P.wallTop; g.fillRect(0,0,S*PX,4); g.fillRect(0,0,4,S*PX);
-  g.fillStyle=P.wallFace;
-  g.fillRect(PX*2-3,PX*2-3,(S-4)*PX+6,3); g.fillRect(PX*2-3,PX*2-3,3,(S-4)*PX+6);
-  g.fillRect(PX*2-3,(S-2)*PX,(S-4)*PX+6,3); g.fillRect((S-2)*PX,PX*2-3,3,(S-4)*PX+6);
-  // the nest boxes: drawn where the model says they are, so the picture
-  // and the simulation can never disagree about the architecture
+  g.fillStyle="#f4f8fc";
+  for (var cl=0;cl<S;cl+=5){ var o=(cl*13)%4;
+    g.fillRect(cl*PX+o,PX/2,PX+4,4); g.fillRect(cl*PX+o,(S-2)*PX+PX/2,PX+4,4);
+    g.fillRect(PX/2,cl*PX+o,4,PX+4); g.fillRect((S-2)*PX+PX/2,cl*PX+o,4,PX+4); }
+  g.fillStyle="#6f93b4";                              // the seam where the sky stops
+  g.fillRect(PX*2-2,PX*2-2,(S-4)*PX+4,2); g.fillRect(PX*2-2,PX*2-2,2,(S-4)*PX+4);
+  g.fillRect(PX*2-2,(S-2)*PX,(S-4)*PX+4,2); g.fillRect((S-2)*PX,PX*2-2,2,(S-4)*PX+4);
+  // the mats of the open hall, jjimjilbang style: where the placeless sleep
+  var c0=S>>1;
+  for (var mi=0;mi<70;mi++){
+    var ang=mi*2.39996, r=5.8+((mi*37)%40)/10;
+    var mx=(c0+r*Math.cos(ang))*PX, my=(c0+r*Math.sin(ang))*PX;
+    g.fillStyle=(mi%3===0)?"#c9d8c0":(mi%3===1?"#e2d2b4":"#d4c4dc"); g.fillRect(mx-8,my-3,16,7);
+    g.fillStyle="rgba(0,0,0,0.12)"; g.fillRect(mx-8,my+4,16,1);
+  }
+  // lodgings, where the model's places are: condos for households (even),
+  // capsule hotels for singles (odd) — the same number of places either way
   var bl=(boxes&&boxes.length)?boxes:EDEN_BOXES_FALLBACK;
   for (var bi=0;bi<bl.length;bi++){
     var b=bl[bi], ac=alcoveFor(b,S);
-    var X=ac[0]*PX, Y=ac[1]*PX;
+    var X=ac[0]*PX, Y=ac[1]*PX, col=CABANA[bi%CABANA.length];
     g.fillStyle="rgba(0,0,0,0.2)"; g.fillRect(X+3,Y+3,PX*2,PX*2);
-    g.fillStyle=P.wallTop; g.fillRect(X,Y,PX*2,PX*2);
-    g.fillStyle=P.wall; g.fillRect(X+2,Y+2,PX*2-4,PX*2-4);
-    g.fillStyle=P.alcove; g.fillRect(X+PX-4,Y+PX-4,8,8);
+    if (bi%2===0){                                   // a condo: walls, windows, a door
+      g.fillStyle="#efe6d2"; g.fillRect(X,Y,PX*2,PX*2);
+      g.fillStyle=col; g.fillRect(X,Y,PX*2,4);
+      g.fillStyle="#8fb8d8"; g.fillRect(X+3,Y+7,5,4); g.fillRect(X+PX*2-8,Y+7,5,4);
+      g.fillStyle="#5a3c24"; g.fillRect(X+PX-3,Y+PX+4,6,PX-4);
+    } else {                                         // a capsule hotel: stacked pods
+      g.fillStyle="#e4e8ec"; g.fillRect(X,Y,PX*2,PX*2);
+      g.fillStyle="#2c3440";
+      for (var rr=0;rr<3;rr++) for (var cc=0;cc<3;cc++) g.fillRect(X+2+cc*7,Y+3+rr*7,5,4);
+      g.fillStyle=col; g.fillRect(X,Y+PX*2-2,PX*2,2);
+    }
   }
+  // the buffet bars: thatch over a counter of fruit that never runs out
   [[8,8],[S-10,8],[8,S-10],[S-10,S-10]].forEach(function(hp){
     var X=hp[0]*PX, Y=hp[1]*PX;
     g.fillStyle="rgba(0,0,0,0.22)"; g.fillRect(X+3,Y+4,PX*2,PX*2);
-    g.fillStyle=P.hopper; g.fillRect(X,Y,PX*2,PX*2);
-    g.fillStyle=P.hopperD;
-    g.fillRect(X,Y+PX-1,PX*2,2); g.fillRect(X+PX-1,Y,2,PX*2);
-    g.fillRect(X+4,Y+4,3,2); g.fillRect(X+PX+3,Y+PX+4,3,2);
-    g.fillStyle="#f0d060"; g.fillRect(X,Y,PX*2,2);
+    g.fillStyle=P.thatch; g.fillRect(X-2,Y-2,PX*2+4,PX+4);
+    g.fillStyle=P.thatchD; for (var t=0;t<PX*2+4;t+=4) g.fillRect(X-2+t,Y-2,1,PX+4);
+    g.fillStyle=P.thatchL; g.fillRect(X-2,Y-2,PX*2+4,2);
+    g.fillStyle=P.deck; g.fillRect(X,Y+PX+2,PX*2,PX-2);
+    ["#d6433f","#f2c84a","#5f9a3a","#e88a3a"].forEach(function(fc,i){
+      g.fillStyle=fc; g.fillRect(X+3+i*5,Y+PX+4,3,3); });
   });
-  g.fillStyle=P.trough; g.fillRect(((S>>1)-3)*PX,2*PX,6*PX,PX);
+  g.fillStyle=P.pool; g.fillRect(((S>>1)-3)*PX,2*PX,6*PX,PX);
   g.fillStyle=P.poolL;  g.fillRect(((S>>1)-3)*PX+4,2*PX+3,10,2);
   g.restore();
 }
@@ -478,10 +507,10 @@ function compose9(u, st){
   return frame9;
 }
 function compose6(u){
-  var bx=u.boxes_xy;
-  var key=bx?(bx.length+":"+bx[0][0]+","+bx[0][1]+":"+
-              bx[bx.length-1][0]+","+bx[bx.length-1][1]):"";
-  if (!base6 || base6Key!==key) buildBase6(bx);
+  var bx=u.boxes_xy, S=u.size||48;
+  var key=S+"|"+(bx?(bx.length+":"+bx[0][0]+","+bx[0][1]+":"+
+              bx[bx.length-1][0]+","+bx[bx.length-1][1]):"");
+  if (!base6 || base6Key!==key) buildBase6(bx, S);
   var g=frame6.getContext("2d");
   g.drawImage(base6,0,0);
   return frame6;
@@ -498,40 +527,17 @@ function compose6(u){
 var ACT_LABEL = ["idle","walking","foraging","hunting","fishing","farming",
                  "building","talking","making love","giving birth",
                  "minding children","resting","eating","withdrawn","fighting",
-                 "playing"];
+                 "playing","dancing","sleeping","working","scouting","keeping watch","grooming"];
 var A_WALK=1, A_FORAGE=2, A_HUNT=3, A_FISH=4, A_FARM=5, A_BUILD=6, A_TALK=7,
     A_MATE=8, A_BIRTH=9, A_TEND=10, A_REST=11, A_EAT=12, A_WITHDRAW=13,
-    A_FIGHT=14, A_PLAY=15;
-var PERIOD = [240,22,100,110,160,90,110,80,60,130,130,240,80,180,40,26];
+    A_FIGHT=14, A_PLAY=15, A_RITE=16, A_SLEEP=17, A_WORK=18, A_SCOUT=19, A_WATCH=20, A_GROOM=21;
+var PERIOD = [240,22,100,110,160,90,110,80,60,130,130,240,80,180,40,26,34,300,70,22,260,90];
 
 var SKINS = [ ["#f1d2b0","#c9a079","#f9e4cf"], ["#e3b88c","#b98c5f","#f0cfa8"],
               ["#b9814f","#8c5c34","#cf9a66"], ["#7a4a2a","#55311b","#935c38"] ];
 var HAIRS = ["#1d1510","#3b2416","#6b3a1e","#a8763a","#2a2a30"];
-var ELDER_HAIR="#d9d9d9", WITHDRAWN_HAIR="#bfeae6";
-var CLOTH = [ // per class: 3 variants [main, shade]
-  [["#e8c94e","#bca031"],["#d9a84a","#a97f2d"],["#c6c04e","#999335"]],
-  [["#3f6fd8","#2e52a8"],["#5a4e9a","#3e3570"],["#2f8a7a","#20635a"]],
-  [["#d45a8c","#a8406a"],["#c7643f","#95452a"],["#7f58b8","#5c3d8c"]],
-  [["#9a9a9a","#787878"],["#8f8674","#6c655a"],["#7f8c8a","#5e6a68"]],
-  [["#9ae8e0","#74c2ba"],["#b8e0f0","#88b4c8"],["#c8e8c0","#9ac49a"]]
-];
-var EDGE="#5a3f28", EDGE_D="#3a2616";
-var WOOD="#6b4226", BLADE="#b8bcc4", CXL=7;
-
-function lp(g,ox,oy,s,x,y,w,h){
-  g.fillRect(ox+Math.round(x*s), oy+Math.round(y*s),
-             Math.max(1,Math.round((w===undefined?1:w)*s)),
-             Math.max(1,Math.round((h===undefined?1:h)*s)));
-}
-function limb(g,ox,oy,s,x1,y1,x2,y2,w){
-  var dx=x2-x1, dy=y2-y1;
-  var n=Math.max(2,Math.ceil(Math.max(Math.abs(dx),Math.abs(dy))*1.3));
-  for (var i=0;i<=n;i++) lp(g,ox,oy,s, x1+dx*i/n-(w-1)/2, y1+dy*i/n, w, 1.1);
-}
-function limbE(g,ox,oy,s,x1,y1,x2,y2,w,color,edge){
-  g.fillStyle=edge||EDGE; limb(g,ox,oy,s,x1,y1,x2,y2,w+0.9);
-  g.fillStyle=color; limb(g,ox,oy,s,x1,y1,x2,y2,w);
-}
+var ELDER_HAIR="#d9d9d9";
+var CXL=0;
 
 // pose solver: every joint from one phase angle, per activity
 function solvePose(act, c, moving, v){
@@ -554,6 +560,7 @@ function solvePose(act, c, moving, v){
     P.elbLy=13+Math.abs(sp)*0.5; P.elbRy=P.elbLy;
     P.drop=-Math.abs(sp)*0.7; P.lean=1.2;
     if (act===A_HUNT){ P.tool=1; P.toolAng=-0.3; P.handRx=4.2; P.handRy=14; P.elbRy=11; P.drop+=0.8; P.lean=2; }
+    if (act===A_SCOUT){ P.handRx=3.0; P.handRy=4.2; P.elbRx=4.8; P.elbRy=8.6; P.headTilt=-0.5; P.lean=1.6; }  // shading the eyes
     if (act===A_FORAGE||act===A_PLAY) P.basket=(act===A_FORAGE)?1:0;
     if (act===A_PLAY){ P.lean=2.4; P.drop-=0.6; P.handLy=14; P.handRy=14; }
     return P;
@@ -584,10 +591,11 @@ function solvePose(act, c, moving, v){
     case A_MATE: { var r2=Math.sin(ph);
       P.lean=2.2; P.drop=Math.abs(r2)*0.6; P.handLx=-1.3; P.handLy=13.3; P.elbLx=-4.0; P.elbLy=12;
       P.handRx=5.6; P.handRy=14; P.elbRx=5.3; P.elbRy=12; P.footLx=-1.6; P.footRx=1.6; P.headTilt=0.8; break; }
-    case A_BIRTH: { P.sit=1; P.shY=13.3; P.hipY=26;
-      P.kneeLx=-3.2; P.kneeLy=31; P.kneeRx=3.2; P.kneeRy=31; P.footLx=-4.5; P.footLy=31.7; P.footRx=4.5; P.footRy=31.7;
-      P.handLx=-3.2; P.handLy=23.3; P.handRx=3.2; P.handRy=23.3; P.elbLx=-4.8; P.elbLy=18.6; P.elbRx=4.8; P.elbRy=18.6;
-      P.headTilt=2.2+Math.max(0,Math.sin(ph))*0.8; break; }
+    case A_BIRTH: { var push=Math.max(0,Math.sin(ph));   // kneeling upright, bearing down
+      P.sit=1; P.shY=12.4+push*0.8; P.hipY=24.6+push*0.6; P.lean=0.8+push*0.6;
+      P.kneeLx=1.6; P.kneeLy=31.6; P.kneeRx=2.4; P.kneeRy=31.8; P.footLx=-4.6; P.footLy=31.8; P.footRx=-3.8; P.footRy=32;
+      P.handLx=3.8; P.handLy=18.5; P.handRx=4.8; P.handRy=18; P.elbLx=1.0; P.elbLy=16; P.elbRx=4.6; P.elbRy=14.4;
+      P.headTilt=1.6+push*1.0; break; }
     case A_TEND: { var r3=(Math.sin(ph)+1)/2;
       P.lean=3.4; P.drop=2.1; P.headTilt=2.3; P.handLx=-1.6; P.handLy=24.6+r3*1.6; P.handRx=3.7; P.handRy=24+r3*1.6;
       P.elbLy=19.3; P.elbRy=19.3; break; }
@@ -602,168 +610,384 @@ function solvePose(act, c, moving, v){
     case A_FIGHT: { var l2=Math.sin(ph);
       P.cx=l2*2.4; P.lean=2.4+l2*1.0; P.handRx=4.5+Math.max(0,l2)*4.0; P.handRy=11.3; P.handLx=-2.1; P.handLy=12.6;
       P.elbRx=4.8; P.elbRy=10.6; P.elbLx=-4.2; P.elbLy=12; P.footLx=-3.4; P.footRx=3.2; break; }
+    case A_RITE: { var st=Math.sin(ph), up=Math.abs(Math.cos(ph));  // stepping, arms raised
+      P.drop=-up*1.2; P.footLx=-2.2+st*1.6; P.footRx=2.2+st*1.6; P.footLy=32-Math.max(0,st)*1.6; P.footRy=32-Math.max(0,-st)*1.6;
+      P.kneeLx=-1.8+st*1.4; P.kneeRx=1.8+st*1.4; P.handLx=-5.2; P.handRx=5.2; P.handLy=4.5+up*2; P.handRy=4.5+up*2;
+      P.elbLx=-5.6; P.elbRx=5.6; P.elbLy=8.5; P.elbRy=8.5; P.headTilt=-0.6; break; }
+    case 101: { var br1=Math.sin(ph)*0.2;          // huddled on the floor: knees up, head down
+      P.sit=1; P.shY=17.5+br1; P.hipY=29.4; P.lean=2.6; P.headTilt=2.8;
+      P.kneeLx=3.6; P.kneeLy=24.4; P.kneeRx=4.2; P.kneeRy=24.8; P.footLx=4.6; P.footLy=31.8; P.footRx=5.2; P.footRy=32;
+      P.elbLx=3.2; P.elbLy=22.5; P.elbRx=4.6; P.elbRy=22.8; P.handLx=5.4; P.handLy=25; P.handRx=6; P.handRy=25.4; break; }
+    case 102: { var gr2=Math.sin(ph);              // a beautiful one: grooming, alone
+      P.handRx=1.4+gr2*0.6; P.handRy=4.6+gr2*1.2; P.elbRx=4.8; P.elbRy=8.4; P.handLx=-1.2; P.handLy=5.6-gr2*0.8;
+      P.elbLx=-3.8; P.elbLy=9.5; P.headTilt=0.9; P.lean=0.3; break; }
+    case 103: { var br3=Math.sin(ph)*0.15;         // upstairs: sitting alone, looking out
+      P.sit=1; P.shY=15.2+br3; P.hipY=28.8; P.lean=0.4; P.headTilt=0.2;
+      P.kneeLx=4.4; P.kneeLy=24.8; P.kneeRx=4.8; P.kneeRy=25.2; P.footLx=5.6; P.footLy=31.8; P.footRx=6.2; P.footRy=32;
+      P.elbLx=1.8; P.elbLy=21; P.elbRx=3.4; P.elbRy=21.4; P.handLx=4.2; P.handLy=24.4; P.handRx=4.8; P.handRy=24.8; break; }
+    case A_WORK: { var wv=Math.sin(ph);           // a post: serving, wiping, handing over
+      P.lean=1.4; P.handRx=5.4+wv*0.8; P.handRy=17+Math.abs(wv)*1.2; P.handLx=3.2; P.handLy=17.5-wv*0.6;
+      P.elbRx=4.8; P.elbRy=13.6; P.elbLx=2.0; P.elbLy=14; P.headTilt=1.2; break; }
+    case A_GROOM: { var gm=Math.sin(ph);            // sitting close, picking through hair
+      P.sit=1; P.shY=14.8; P.hipY=28.6; P.lean=1.6; P.headTilt=1.0;
+      P.kneeLx=4.2; P.kneeLy=25.2; P.kneeRx=4.8; P.kneeRy=25.6; P.footLx=5.6; P.footLy=31.8; P.footRx=6.2; P.footRy=32;
+      P.elbRx=5.6; P.elbRy=13.6; P.handRx=7.6+gm*0.4; P.handRy=12.2+gm*0.8; P.elbLx=4.0; P.elbLy=15.4; P.handLx=6.8; P.handLy=14.2; break; }
+    case A_WATCH: { var lk=Math.sin(ph*0.5);       // sitting at the fire, facing the dark
+      P.sit=1; P.shY=14.6; P.hipY=28.4; P.lean=0.6; P.headTilt=-0.4+lk*0.3;
+      P.kneeLx=4.4; P.kneeLy=25.4; P.kneeRx=5.0; P.kneeRy=25.8; P.footLx=5.2; P.footLy=31.8; P.footRx=6.0; P.footRy=32;
+      P.elbLx=2.4; P.elbLy=21; P.elbRx=4.6; P.elbRy=20; P.handLx=4.6; P.handLy=24.2; P.handRx=6.4; P.handRy=17;
+      P.tool=1; P.toolAng=-1.25; break; }
     case A_PLAY: { var j=Math.max(0,Math.sin(ph));
       P.drop=-j*2.4; P.handLx=-4.2; P.handRx=4.2; P.handLy=12-j*4; P.handRy=12-j*4; P.footLy=32-j*1.5; P.footRy=32-j*1.5; break; }
-    default: { var br=Math.sin(ph)*0.45; P.drop=br; P.handLy=19+br; P.handRy=19+br; P.headTilt=Math.sin(ph*0.5)*0.3; }
+    default: { var br=Math.sin(ph)*0.45; P.drop=br; P.handLy=19+br; P.handRy=19+br; P.headTilt=Math.sin(ph*0.5)*0.3;
+      // contrapposto: weight on the back leg, the near knee soft, arms loose
+      P.cx=-0.5; P.footLx=-1.2; P.kneeLx=-1.0; P.footRx=2.6; P.kneeRx=2.6; P.kneeRy=25.6;
+      P.elbLx=-4.6; P.elbLy=12.6; P.handLx=-4.0; P.handRx=4.3; P.elbRx=4.9; P.lean=0.4; }
   }
   return P;
 }
 
-// draw one figure facing right at logical scale s, feet at (cx, footY)
-function drawFigureRaw(g, cx, footY, s, cls, sex, clothed, act, c, moving, v, t){
-  var kid=(cls===0), eld=(cls===3), fem=(sex===1);
-  var H=kid?21:32, scaleY=H/32;
-  var P=solvePose(act, c, moving, v);
-  var ox=Math.round(cx-CXL*s), oy=Math.round(footY-H*s+P.drop*s*scaleY);
-  function X(x){ return CXL+P.cx+x; }
-  function Y(y){ return y*scaleY; }
-  var skin=SKINS[v%4], SK=skin[0], SKD=skin[1], SKL=skin[2];
-  var hairc=eld?ELDER_HAIR:(cls===4?WITHDRAWN_HAIR:HAIRS[(v*7+3)%HAIRS.length]);
-  var hairStyle=(v*3+1)%3;                          // 0 cropped 1 shaggy 2 long/tied
-  var cl=CLOTH[cls][v%3], tun=cl[0], tunD=cl[1];
-  var shW=kid?2.4:(fem?3.2:4.0), hpW=kid?2.4:(fem?4.1:3.0);
-  var leanX=P.lean*1.0;
-  var jitter=(v%5)*0.15-0.3;                       // build varies a touch
-  shW+=jitter*0.5; hpW+=jitter*0.3;
+// ---- the figure, drawn as a life-drawing sketch ------------------------------
+// Ink over a flat wash of skin, the way a figure study is drawn: construction
+// ovals for ribcage and pelvis, gesture lines for the limbs, and a second
+// loose pass over the main lines. Realistic proportion — an adult is about
+// seven and a half heads; a child's head is larger for its body.
+//
+// The body is the record. Width follows BMI, muscle follows strength, ribs
+// show in famine, a belly shows obesity or pregnancy, a bandage and a limp
+// mark an injury. Adults are drawn as bodies are; children are never given
+// genital detail at any zoom.
+var INK="#1d1812", INK_SOFT="rgba(29,24,18,0.32)", PAPER="#f4ead2";
+var DRESS = { swim:["#e8584a","#3f8fd0","#f2c84a","#3fa58a","#d86aa8"],
+              hide:"#8a6238", hideD:"#5e3f20", fur:"#a07850", furD:"#6e4e2c" };
+function bodyOf(a){
+  var b=a.bmi||22, age=(a.age===undefined)?30:a.age;
+  return { stage: age<3?0: age<12?1: age<16?2: age<58?3:4,
+           fat: b<15?0: b<18.5?1: b<25?2: b<30?3:4,
+           strong: (a.sn||5)>=7?1:0,
+           hurt: (a.inj||0)>=5?2:((a.inj||0)>=2?1:0),
+           preg: a.preg?1:0 };
+}
+var STAGE_H=[0.42,0.64,0.88,1.0,0.97];       // height against an adult
+var STAGE_HEAD=[1.55,1.28,1.08,1.0,1.0];     // head size against an adult's
+var FAT_W=[0.66,0.8,1.0,1.24,1.55];           // torso width by BMI band
 
-  if (s<1.25){                                       // far: compact but human
-    var bw=(fem?4.6:5.2);
-    g.fillStyle=clothed?tun:SK; lp(g,ox,oy,s, CXL-bw/2, Y(7), bw, Y(11.5));
-    g.fillStyle=clothed?tunD:SKD; lp(g,ox,oy,s, CXL+bw/2-1.3, Y(7), 1.3, Y(11.5));
-    lp(g,ox,oy,s, X(P.footLx*0.7)-1.0, Y(18.5), 2.0, Y(13.5));
-    lp(g,ox,oy,s, X(P.footRx*0.7)-1.0, Y(18.5), 2.0, Y(13.5));
-    g.fillStyle=SK; lp(g,ox,oy,s, CXL-1.8, Y(1.6), 3.6, Y(5.2));
-    g.fillStyle=hairc; lp(g,ox,oy,s, CXL-2.0, Y(0.8), 4.0, Y(2.0));
-    return;
+function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view){
+  var fem=(sex===1), adult=B.stage>=3, kid=B.stage<=1;
+  // Sleeping, an infant, and two people making love are drawn lying down —
+  // but only once they are there: nobody slides across the ground lying.
+  // Lovemaking is shown as two adults lying together, nothing more explicit.
+  var lying = !moving && (act===A_SLEEP || act===A_MATE || B.stage===0);
+  view = moving ? (view||0) : 0;               // 0 profile, 1 coming toward us, 2 going away
+  var private_ = (act===A_MATE || act===A_BIRTH);
+  var poseAct = lying ? 0 : ((act===A_WITHDRAW && wk) ? 100+wk : act);
+  var P=solvePose(poseAct, c, moving, v);
+  // The pose solver's figure is long in the body and short in the leg. A
+  // realistic adult is about 7.5 heads with the crotch near half height, so
+  // remap every height below the shoulders: torso shortened, legs lengthened.
+  ["shY","hipY","kneeLy","kneeRy","footLy","footRy","handLy","handRy","elbLy","elbRy"].forEach(function(f){
+    var y=P[f];
+    P[f] = y<=6.5 ? y : (y<=19 ? 6.5+(y-6.5)*(9.6/12.5) : 16.1+(y-19)*(15.9/13));
+  });
+  if (B.hurt===2 && !P.sit){ P.lean+=0.8; P.kneeRy-=0.9; P.footRy-=0.7; }   // a limp
+  var Hs=STAGE_H[B.stage], k=s*Hs;
+  var skin=SKINS[v%4], SK=skin[0], SKD=skin[1];
+  var hair=B.stage===4?ELDER_HAIR:HAIRS[(v*7+3)%HAIRS.length];
+  var fw=FAT_W[B.fat], mus=B.strong&&B.stage>=2?1:0;
+  var shW=(B.stage<2?2.5:fem?3.1:3.9)*Math.sqrt(fw)*(1+0.12*mus);
+  var waW=(B.stage<2?2.3:fem?2.2:2.7)*fw;
+  var hpW=(B.stage<2?2.4:fem?3.9:3.0)*Math.pow(fw,0.8);
+  var limbW=(B.stage<2?1.5:fem?1.55:1.75)*Math.pow(fw,0.85)*(1+0.18*mus);
+  if (view){                                    // walking toward or away: a front view
+    var st2=Math.sin(c*Math.PI*2);
+    P.lean=0; P.cx=0; P.headTilt=0; P.tool=0; P.basket=0; P.carry=0;
+    P.footLx=-1.6; P.footRx=1.6; P.kneeLx=-1.5; P.kneeRx=1.5;
+    P.footLy=32-Math.max(0,st2)*1.4; P.footRy=32-Math.max(0,-st2)*1.4;
+    P.kneeLy=26-Math.max(0,st2)*1.2; P.kneeRy=26-Math.max(0,-st2)*1.2;
+    P.handLx=-4.9; P.handRx=4.9; P.elbLx=-4.9; P.elbRx=4.9;
+    P.handLy=18.6-st2*0.9; P.handRy=18.6+st2*0.9; P.elbLy=12.8; P.elbRy=12.8;
   }
-
-  // legs
-  var legC=clothed&&!kid&&!fem?tunD:SKD, legR=clothed&&!kid&&!fem?tun:SK;
-  limbE(g,ox,oy,s, X(-hpW*0.55), Y(P.hipY), X(P.kneeLx), Y(P.kneeLy), 2.0, SKD);
-  limbE(g,ox,oy,s, X(P.kneeLx), Y(P.kneeLy), X(P.footLx), Y(P.footLy), 1.7, SKD);
-  limbE(g,ox,oy,s, X(hpW*0.55), Y(P.hipY), X(P.kneeRx), Y(P.kneeRy), 2.1, SK);
-  limbE(g,ox,oy,s, X(P.kneeRx), Y(P.kneeRy), X(P.footRx), Y(P.footRy), 1.8, SK);
-  g.fillStyle=SKD; lp(g,ox,oy,s, X(P.footLx)-1.2, Y(P.footLy)-0.9, 2.8, 1.0);   // feet
-  g.fillStyle=SK;  lp(g,ox,oy,s, X(P.footRx)-1.0, Y(P.footRy)-0.9, 3.0, 1.0);
-
-  // torso: shoulders taper to the waist, flare to the hips
-  var tTop=Y(P.shY), tBot=Y(P.hipY+1.2);
-  var rows=Math.max(4,Math.round((P.hipY+1.2-P.shY)*scaleY*1.15));
-  for (var i=0;i<rows;i++){
-    var f=i/(rows-1);
-    var w;
-    if (f<0.55) w = shW - (shW-Math.min(shW,hpW)*0.76)*(f/0.55)*0.45;
-    else        w = Math.min(shW,hpW)*0.76*(1-(f-0.55)/0.45) + hpW*((f-0.55)/0.45);
-    var yy=tTop+(tBot-tTop)*f, xx=X(-w)+leanX*(1-f), ww=w*2;
-    var main = clothed ? tun : SK, shade = clothed ? tunD : SKD, light = clothed ? tun : SKL;
-    g.fillStyle=EDGE; lp(g,ox,oy,s, xx-0.45, yy, ww+0.9, 1.15);
-    g.fillStyle=main; lp(g,ox,oy,s, xx, yy, ww, 1.15);
-    g.fillStyle=shade; lp(g,ox,oy,s, xx+ww-1.1, yy, 1.1, 1.15);
-    g.fillStyle=light; lp(g,ox,oy,s, xx+0.2, yy, 0.8, 1.15);
-    if (clothed && !kid && f>0.5 && f<0.58){ g.fillStyle=EDGE_D; lp(g,ox,oy,s, xx, yy, ww, 0.7); } // belt
-    if (clothed && !kid && Math.abs(f-0.3)<0.05){ g.fillStyle=tunD; lp(g,ox,oy,s, xx+ww*0.45, yy, 0.6, 1.1); } // fold
-  }
-  if (clothed && !kid){                               // skirt / tunic hem
-    var hemY=Y(fem?26:23.5), hw2=hpW+0.9;
-    g.fillStyle=EDGE; lp(g,ox,oy,s, X(-hw2)-0.4, Y(P.hipY+1.2), hw2*2+0.8, hemY-Y(P.hipY+1.2)+0.4);
-    g.fillStyle=tun;  lp(g,ox,oy,s, X(-hw2), Y(P.hipY+1.2), hw2*2, hemY-Y(P.hipY+1.2));
-    g.fillStyle=tunD; lp(g,ox,oy,s, X(hw2)-1.2, Y(P.hipY+1.2), 1.2, hemY-Y(P.hipY+1.2));
-    lp(g,ox,oy,s, X(-hw2*0.3), Y(P.hipY+3), 0.6, hemY-Y(P.hipY+3));
-  }
-  // the body as it is, before anyone thought to cover it
-  if (!clothed && !kid && s>=2.4){
-    g.fillStyle=SKD;
-    if (fem){
-      lp(g,ox,oy,s, X(-shW+0.4)+leanX*0.65, Y(9.6), 1.6, Y(1.8));
-      lp(g,ox,oy,s, X(shW-2.0)+leanX*0.65,  Y(9.6), 1.6, Y(1.8));
-      g.fillStyle=SKL; lp(g,ox,oy,s, X(-shW+0.6)+leanX*0.65, Y(9.6), 0.8, 0.8);
-      lp(g,ox,oy,s, X(shW-1.8)+leanX*0.65, Y(9.6), 0.8, 0.8);
-      g.fillStyle="#6a4428"; lp(g,ox,oy,s, X(-0.9), Y(19.4), 1.8, Y(1.0));
-      g.fillStyle=SKD; lp(g,ox,oy,s, X(-0.45), Y(20.2), 0.9, Y(0.9));
-    } else {
-      g.fillStyle=SKD; lp(g,ox,oy,s, X(-0.3), Y(8.8), 0.6, Y(4.0));      // sternum line
-      lp(g,ox,oy,s, X(-shW+1.4)+leanX*0.6, Y(9.4), 0.8, 0.8);              // nipples
-      lp(g,ox,oy,s, X(shW-2.2)+leanX*0.6, Y(9.4), 0.8, 0.8);
-      g.fillStyle="#6a4428"; lp(g,ox,oy,s, X(-0.9), Y(19.6), 1.8, Y(0.9));
-      g.fillStyle=SKD; lp(g,ox,oy,s, X(-0.5), Y(20.3), 1.1, Y(2.4));
-      g.fillStyle=SK;  lp(g,ox,oy,s, X(-0.9), Y(20.6), 0.8, Y(1.6));
+  if (lying){ P.lean=0; P.cx=0; P.drop=0; P.headTilt=0;
+    if (act===A_MATE){ P.elbRx=5.4; P.elbRy=11; P.handRx=7.5; P.handRy=9; } }  // an arm around the other
+  var lean=P.lean, drop=P.drop;
+  g.save();
+  if (lying){
+    if (act===A_SLEEP && B.stage>0){                // a mat or a bedroll under the sleeper
+      g.fillStyle=dress==="fur"?"#8a6a44":"#d8cfa8"; g.strokeStyle=INK; g.lineWidth=Math.max(0.6,0.9);
+      g.fillRect(cx-17*k*Hs, footY-6.5*k, 34*k*Hs, 6*k); g.strokeRect(cx-17*k*Hs, footY-6.5*k, 34*k*Hs, 6*k);
     }
-    g.fillStyle="rgba(90,62,40,0.6)"; lp(g,ox,oy,s, X(-0.4)+leanX*0.35, Y(15.4), 0.9, Y(0.9));  // navel
+    g.translate(cx-16*k, footY-3*k);
+    g.rotate(-Math.PI/2);
+  } else {
+    g.translate(cx, footY-(32-drop)*k);
   }
-  // arms
-  limbE(g,ox,oy,s, X(-shW+0.4)+leanX, Y(P.shY+0.8), X(P.elbLx), Y(P.elbLy), 1.6, SKD);
-  limbE(g,ox,oy,s, X(P.elbLx), Y(P.elbLy), X(P.handLx), Y(P.handLy), 1.45, SKD);
-  limbE(g,ox,oy,s, X(shW-0.4)+leanX, Y(P.shY+0.8), X(P.elbRx), Y(P.elbRy), 1.75, SK);
-  limbE(g,ox,oy,s, X(P.elbRx), Y(P.elbRy), X(P.handRx), Y(P.handRy), 1.55, SK);
-  g.fillStyle=SKD; lp(g,ox,oy,s, X(P.handLx)-1.0, Y(P.handLy)-0.4, 1.9, 1.7);       // hands
-  g.fillStyle=SK;  lp(g,ox,oy,s, X(P.handRx)-1.0, Y(P.handRy)-0.4, 2.0, 1.8);
-  // tools and burdens
+  g.scale(k,k);
+  g.lineCap="round"; g.lineJoin="round";
+  var ink=Math.max(0.32, 0.95/k);             // a fine pen: about one device pixel
+  function X(x){ return P.cx+x; }
+
+  if (s<0.8){                                   // far away: a body's mass, not a stick
+    var edge=Math.max(0.9/k, 0.5);
+    g.strokeStyle=INK; g.fillStyle=SK; g.lineWidth=edge;
+    function thick(x1,y1,x2,y2,w){
+      g.strokeStyle=INK; g.lineWidth=w+edge*2; g.beginPath(); g.moveTo(x1,y1); g.lineTo(x2,y2); g.stroke();
+      g.strokeStyle=dress==="fur"?DRESS.furD:SK; g.lineWidth=w; g.beginPath(); g.moveTo(x1,y1); g.lineTo(x2,y2); g.stroke();
+    }
+    thick(X(-hpW*0.4),P.hipY,X(P.footLx),P.footLy,limbW*1.5);
+    thick(X(hpW*0.4),P.hipY,X(P.footRx),P.footRy,limbW*1.5);
+    g.fillStyle=dress==="fur"?DRESS.fur:(dress==="swim"?DRESS.swim[v%5]:SK); g.strokeStyle=INK; g.lineWidth=edge;
+    g.beginPath(); g.ellipse(X(lean*0.4), (P.shY+P.hipY)/2+0.4, Math.max(shW,hpW)*0.95+(B.fat>=3?1:0), (P.hipY-P.shY)/2+1.2, 0, 0, 6.283);
+    g.fill(); g.stroke();
+    g.fillStyle=SK; g.beginPath(); g.arc(X(lean), P.shY-2.2*STAGE_HEAD[B.stage], 2.3*STAGE_HEAD[B.stage], 0, 6.283);
+    g.fill(); g.stroke();
+    g.restore(); return;
+  }
+
+  function limb(x1,y1,x2,y2,w,col){            // a plain round-ended stroke (the neck)
+    g.strokeStyle=INK; g.lineWidth=w+ink*2;
+    g.beginPath(); g.moveTo(x1,y1); g.lineTo(x2,y2); g.stroke();
+    g.strokeStyle=col; g.lineWidth=w;
+    g.beginPath(); g.moveTo(x1,y1); g.lineTo(x2,y2); g.stroke();
+  }
+  // A limb as a figure drawer draws it: one contour from the root to the
+  // extremity, tapering, the outer side bowed by the muscle beneath it.
+  function bone(ax,ay,bx,by,cx2,cy2,w,col,leg){
+    var w1=w*(leg?1.3:0.95), wk=w*(leg?0.72:0.68), w2=w*(leg?0.42:0.42);
+    var b1=(leg?0.45*fw:0.25)+0.35*mus, b2=leg?0.38+0.2*mus:0.18;
+    function nrm(x1,y1,x2,y2){ var dx=x2-x1, dy=y2-y1, L=Math.hypot(dx,dy)||1; return [-dy/L, dx/L]; }
+    var n1=nrm(ax,ay,bx,by), n2=nrm(bx,by,cx2,cy2);
+    var nk=[(n1[0]+n2[0])/2,(n1[1]+n2[1])/2], nl=Math.hypot(nk[0],nk[1])||1; nk=[nk[0]/nl,nk[1]/nl];
+    var m1=[(ax+bx)/2,(ay+by)/2], m2=[(bx+cx2)/2,(by+cy2)/2];
+    g.beginPath();
+    g.moveTo(ax+n1[0]*w1/2, ay+n1[1]*w1/2);
+    g.quadraticCurveTo(m1[0]+n1[0]*(w1+wk)/4*1.1+n1[0]*b1, m1[1]+n1[1]*((w1+wk)/4*1.1+b1), bx+nk[0]*wk/2, by+nk[1]*wk/2);
+    g.quadraticCurveTo(m2[0]+n2[0]*((wk+w2)/4+b2), m2[1]+n2[1]*((wk+w2)/4+b2), cx2+n2[0]*w2/2, cy2+n2[1]*w2/2);
+    g.arc(cx2, cy2, w2/2, Math.atan2(n2[1],n2[0]), Math.atan2(n2[1],n2[0])+Math.PI, false);
+    g.quadraticCurveTo(m2[0]-n2[0]*(wk+w2)/4, m2[1]-n2[1]*(wk+w2)/4, bx-nk[0]*wk/2, by-nk[1]*wk/2);
+    g.quadraticCurveTo(m1[0]-n1[0]*((w1+wk)/4+b1*0.3), m1[1]-n1[1]*((w1+wk)/4+b1*0.3), ax-n1[0]*w1/2, ay-n1[1]*w1/2);
+    g.closePath();
+    g.fillStyle=col; g.fill();
+    g.strokeStyle=INK; g.lineWidth=ink; g.stroke();
+    if (s>=2){                                    // the knee or elbow, noted
+      g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.8;
+      g.beginPath(); g.arc(bx+nk[0]*wk*0.1, by+nk[1]*wk*0.1, wk*0.28, 0, 3.14); g.stroke();
+    }
+    g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.7;   // the loose second pass
+    g.beginPath(); g.moveTo(ax+n1[0]*w1*0.62,ay+n1[1]*w1*0.62); g.quadraticCurveTo(bx+nk[0]*wk*0.7,by+nk[1]*wk*0.7,cx2+n2[0]*w2*0.6,cy2+n2[1]*w2*0.6); g.stroke();
+    // the extremity: a foot pointing the way they face, or a hand
+    g.fillStyle=col; g.strokeStyle=INK; g.lineWidth=ink;
+    g.beginPath();
+    if (leg) g.ellipse(cx2+0.75, cy2-0.15, 1.15*Math.sqrt(Hs), 0.42, 0, 0, 6.283);
+    else g.ellipse(cx2+0.1, cy2+0.45, w2*0.62, w2*0.85, 0.2, 0, 6.283);
+    g.fill(); g.stroke();
+    if (!leg && s>=4){                            // fingers, as three quick strokes
+      g.lineWidth=ink*0.6;
+      for (var fi=-1;fi<=1;fi++){ g.beginPath(); g.moveTo(cx2+fi*w2*0.3, cy2+w2*0.9); g.lineTo(cx2+fi*w2*0.36, cy2+w2*1.45); g.stroke(); }
+    }
+  }
+  var shX=X(lean), hipX=X(lean*0.25);
+  var legDress = dress==="fur" ? DRESS.furD : null;
+
+  // the far arm and leg first
+  bone(hipX-hpW*0.45,P.hipY, X(P.kneeLx),P.kneeLy, X(P.footLx),P.footLy, limbW*1.6, SKD, true);
+  bone(shX-shW+0.6,P.shY+0.7, X(P.elbLx),P.elbLy, X(P.handLx),P.handLy, limbW*1.05, SKD);
+
+  // torso: shoulders to waist to hips, one closed silhouette over a wash
+  var waY=P.shY+(P.hipY-P.shY)*0.62, wx=X(lean*0.55);
+  var belly=(B.fat>=3?(B.fat-2)*1.3:0)+(B.preg?3.6:0)+(B.fat===0&&kid?1.4:0);
+  if (view){ waW+=belly*0.45; belly=0; }
+  g.beginPath();
+  g.moveTo(shX-shW, P.shY+0.6);
+  g.quadraticCurveTo(wx-waW-0.6, waY-2, wx-waW, waY);
+  g.quadraticCurveTo(hipX-hpW-0.4, P.hipY-1, hipX-hpW, P.hipY+0.6);
+  g.lineTo(hipX+hpW, P.hipY+0.6);
+  g.quadraticCurveTo(wx+waW+belly*1.1, P.hipY-1.5, wx+waW+belly, waY+0.6);
+  g.quadraticCurveTo(wx+waW+0.6, waY-2.6, shX+shW, P.shY+0.6);
+  g.quadraticCurveTo(shX, P.shY-0.6, shX-shW, P.shY+0.6);
+  g.closePath();
+  g.fillStyle=SK; g.fill();
+  g.strokeStyle=INK; g.lineWidth=ink*1.3; g.stroke();
+  // construction ovals, left in the drawing the way a study leaves them
+  g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.7;
+  g.beginPath(); g.ellipse(X(lean*0.75), P.shY+3.6, shW*0.86, 3.6, 0, 0, 6.283); g.stroke();
+  g.beginPath(); g.ellipse(hipX, P.hipY-0.4, hpW*0.92, 2.1, 0, 0, 6.283); g.stroke();
+
+  var bare = !dress || dress==="swim";
+  if (s>=2 && B.stage>=2){
+    g.strokeStyle=INK; g.lineWidth=ink*0.8;
+    if (B.fat===0 || (B.fat===1 && !fem)){           // the ribs show
+      for (var r=0;r<3;r++){ g.beginPath();
+        g.arc(X(lean*0.75)+shW*0.25, P.shY+3.2+r*1.1, shW*0.55, 0.3, 1.5); g.stroke(); }
+    }
+    if (mus && !fem && B.fat<=2){                     // pectorals and the abdomen
+      g.beginPath(); g.moveTo(shX-shW*0.7,P.shY+2.6); g.quadraticCurveTo(shX,P.shY+3.9,shX+shW*0.75,P.shY+2.5); g.stroke();
+      g.beginPath(); g.moveTo(wx+0.3,P.shY+4.4); g.lineTo(wx+0.2,waY+2.2); g.stroke();
+    }
+    if (B.fat>=3){                                    // the belly's fold
+      g.beginPath(); g.moveTo(wx-waW*0.6,waY+1.7); g.quadraticCurveTo(wx+waW*0.4,waY+2.6+belly*0.2,wx+waW+belly*0.8,waY+1.0); g.stroke();
+    }
+    g.fillStyle=INK; g.beginPath(); g.arc(wx+waW*0.15+belly*0.4, waY+1.0, 0.28, 0, 6.283); g.fill();   // navel
+  }
+  // the body as it is: adults only, and only where nothing covers it
+  if (view===2) bare=false;                    // from behind there is only a back
+  if (adult && s>=2 && bare && !private_ && view===1){
+    g.strokeStyle=INK; g.fillStyle=SKD; g.lineWidth=ink*0.9;
+    if (fem){
+      var bs1=0.9+0.35*(B.fat-2)+(B.preg?0.35:0);
+      g.beginPath(); g.arc(-shW*0.45, P.shY+3.6, bs1*1.1, 0.2, 2.9); g.stroke();
+      g.beginPath(); g.arc(shW*0.45, P.shY+3.6, bs1*1.1, 0.2, 2.9); g.stroke();
+    }
+    if (dress!=="swim"){
+      for (var h1=0;h1<5;h1++){ g.beginPath(); g.moveTo(-1.0+h1*0.5,P.hipY-0.2); g.lineTo(-0.8+h1*0.5,P.hipY+0.7); g.stroke(); }
+      if (!fem){ g.fillStyle=SKD; g.beginPath(); g.ellipse(0, P.hipY+1.7, 0.55, 1.1, 0, 0, 6.283); g.fill(); g.stroke(); }
+    }
+  } else if (adult && s>=2 && bare && !private_){
+    g.strokeStyle=INK; g.fillStyle=SKD; g.lineWidth=ink*0.9;
+    if (fem){
+      var bs=0.9+0.35*(B.fat-2)+(B.preg?0.35:0), sag=B.stage===4?0.9:0;
+      g.beginPath(); g.arc(shX+shW*0.45, P.shY+3.4+sag, bs*1.2, -0.2, 2.7); g.stroke();
+      g.beginPath(); g.arc(shX-shW*0.35, P.shY+3.4+sag, bs*1.05, 0.4, 2.9); g.stroke();
+      g.beginPath(); g.arc(shX+shW*0.45+bs*0.5, P.shY+3.9+sag+bs*0.45, 0.32, 0, 6.283); g.fill();
+    } else {
+      g.beginPath(); g.arc(shX+shW*0.5, P.shY+3.0, 0.25, 0, 6.283); g.fill();
+    }
+    if (dress!=="swim"){
+      // pubic hair as a few short strokes, genitals as a plain contour
+      g.strokeStyle=INK; g.lineWidth=ink*0.7;
+      var px0=hipX+hpW*0.25, py0=P.hipY+0.2;
+      for (var h=0;h<4;h++){ g.beginPath(); g.moveTo(px0-0.9+h*0.6,py0-0.3); g.lineTo(px0-0.6+h*0.6,py0+0.6); g.stroke(); }
+      if (!fem){
+        g.fillStyle=SKD; g.beginPath(); g.ellipse(px0+0.5, py0+1.6, 0.55, 1.15, -0.25, 0, 6.283); g.fill(); g.stroke();
+      } else {
+        g.beginPath(); g.moveTo(px0+0.1,py0+0.4); g.lineTo(px0+0.3,py0+1.3); g.stroke();
+      }
+    }
+  }
+  // what covers it, if anything
+  if (dress){
+    if (dress==="swim"){
+      var sc=DRESS.swim[v%DRESS.swim.length];
+      g.fillStyle=sc; g.strokeStyle=INK; g.lineWidth=ink;
+      g.beginPath(); g.moveTo(hipX-hpW,P.hipY-0.6); g.lineTo(hipX+hpW+belly*0.3,P.hipY-0.6);
+      g.lineTo(hipX+hpW*0.4,P.hipY+2.3); g.lineTo(hipX-hpW*0.4,P.hipY+2.3); g.closePath(); g.fill(); g.stroke();
+      if (fem && B.stage>=2){ g.beginPath(); g.rect(shX-shW*0.8, P.shY+2.6, shW*1.7, 1.7); g.fill(); g.stroke(); }
+    } else {
+      var col=dress==="fur"?DRESS.fur:DRESS.hide, colD=dress==="fur"?DRESS.furD:DRESS.hideD;
+      var top=dress==="fur"?P.shY+0.4:P.hipY-1.2, bot=dress==="fur"?P.hipY+4.5:P.hipY+3;
+      g.fillStyle=col; g.strokeStyle=INK; g.lineWidth=ink;
+      g.beginPath(); g.moveTo(X(lean*(dress==="fur"?1:0.3))-(dress==="fur"?shW:hpW)-0.2, top);
+      g.lineTo(X(lean*(dress==="fur"?1:0.3))+(dress==="fur"?shW:hpW)+0.2+belly*0.5, top);
+      g.lineTo(hipX+hpW+0.6+belly*0.3, bot); g.lineTo(hipX-hpW-0.6, bot+0.6); g.closePath();
+      g.fill(); g.stroke();
+      g.strokeStyle=colD; g.lineWidth=ink*0.8;           // hatching: the hide's grain
+      for (var hh=top+1; hh<bot; hh+=1.3){ g.beginPath(); g.moveTo(hipX-hpW+0.3, hh); g.lineTo(hipX-hpW+1.3, hh+0.8); g.stroke(); }
+    }
+  }
+
+  // the near leg and arm
+  bone(hipX+hpW*0.45,P.hipY, X(P.kneeRx),P.kneeRy, X(P.footRx),P.footRy, limbW*1.65, legDress||SK, true);
+  bone(shX+shW-0.6,P.shY+0.7, X(P.elbRx),P.elbRy, X(P.handRx),P.handRy, limbW*1.1, SK);
+  if (mus && s>=2){                                       // the biceps' curve
+    g.strokeStyle=INK; g.lineWidth=ink*0.8; g.beginPath();
+    g.arc((shX+shW+X(P.elbRx))/2, (P.shY+P.elbRy)/2+0.3, limbW*0.7, -1.2, 1.2); g.stroke();
+  }
+  if (B.hurt>0){                                          // a bandage, and where it bled
+    var bx=(hipX+hpW*0.45+X(P.kneeRx))/2, by=(P.hipY+P.kneeRy)/2;
+    if (B.hurt===1){ bx=(shX+shW+X(P.elbRx))/2; by=(P.shY+P.elbRy)/2+0.6; }
+    g.fillStyle="#f4f0e4"; g.strokeStyle=INK; g.lineWidth=ink*0.8;
+    g.beginPath(); g.rect(bx-limbW*0.8, by-0.7, limbW*1.6, 1.4); g.fill(); g.stroke();
+    g.fillStyle="#b8322a"; g.beginPath(); g.arc(bx+0.2, by, 0.42, 0, 6.283); g.fill();
+  }
+
+  // tools and burdens, as ink
+  g.strokeStyle=INK; g.lineWidth=ink*1.2;
   if (P.tool===1){
-    var ang=P.toolAng, L=14, hx=X(P.handRx), hy=Y(P.handRy);
-    var tx2=hx+Math.cos(ang)*L, ty2=hy+Math.sin(ang)*L;
-    g.fillStyle=EDGE_D; limb(g,ox,oy,s, hx-Math.cos(ang)*4, hy-Math.sin(ang)*4, tx2, ty2, 1.9);
-    g.fillStyle=WOOD;   limb(g,ox,oy,s, hx-Math.cos(ang)*4, hy-Math.sin(ang)*4, tx2, ty2, 1.1);
-    g.fillStyle="#6d7078"; limb(g,ox,oy,s, tx2-Math.cos(ang)*2.4, ty2-Math.sin(ang)*2.4, tx2, ty2, 2.0);
-    g.fillStyle=BLADE;  limb(g,ox,oy,s, tx2-Math.cos(ang)*2.2, ty2-Math.sin(ang)*2.2, tx2, ty2, 1.2);
+    var ang=P.toolAng, L=14, hx=X(P.handRx), hy=P.handRy;
+    g.beginPath(); g.moveTo(hx-Math.cos(ang)*4, hy-Math.sin(ang)*4);
+    g.lineTo(hx+Math.cos(ang)*L, hy+Math.sin(ang)*L); g.stroke();
+    g.fillStyle=INK; g.beginPath(); var tx2=hx+Math.cos(ang)*L, ty2=hy+Math.sin(ang)*L;
+    g.moveTo(tx2+Math.cos(ang)*2, ty2+Math.sin(ang)*2);
+    g.lineTo(tx2-Math.sin(ang)*0.7, ty2+Math.cos(ang)*0.7); g.lineTo(tx2+Math.sin(ang)*0.7, ty2-Math.cos(ang)*0.7); g.fill();
   } else if (P.tool===2){
-    var ang2=P.toolAng, L2=12, hx2=X(P.handRx), hy2=Y(P.handRy);
-    var ex=hx2+Math.cos(ang2)*L2, ey=hy2+Math.sin(ang2)*L2;
-    g.fillStyle=EDGE_D; limb(g,ox,oy,s, hx2, hy2, ex, ey, 1.9);
-    g.fillStyle=WOOD; limb(g,ox,oy,s, hx2, hy2, ex, ey, 1.1);
-    g.fillStyle="#6d7078"; lp(g,ox,oy,s, ex-1.6, ey-0.8, 3.4, 2.0);
-    g.fillStyle=BLADE; lp(g,ox,oy,s, ex-1.3, ey-0.5, 2.8, 1.4);
+    var a2=P.toolAng, hx2=X(P.handRx), hy2=P.handRy, ex=hx2+Math.cos(a2)*12, ey=hy2+Math.sin(a2)*12;
+    g.beginPath(); g.moveTo(hx2,hy2); g.lineTo(ex,ey); g.lineTo(ex+1.4,ey+1.2); g.stroke();
+  }
+  if (P.basket){
+    g.fillStyle="#c9a160"; g.beginPath(); g.rect(hipX+hpW, 17.4, 3, 3.4); g.fill(); g.stroke();
+    g.strokeStyle=INK_SOFT; g.beginPath(); g.moveTo(hipX+hpW,18.6); g.lineTo(hipX+hpW+3,18.6); g.stroke();
   }
   if (P.carry){
-    var bx0=X(P.handLx)-0.6;
-    g.fillStyle=EDGE_D; lp(g,ox,oy,s, bx0-0.5, Y(P.handRy)-1.9, X(P.handRx)-bx0+1.6, 3.4);
-    g.fillStyle=WOOD;   lp(g,ox,oy,s, bx0, Y(P.handRy)-1.4, X(P.handRx)-bx0+0.6, 2.4);
-    g.fillStyle="#52321c"; lp(g,ox,oy,s, bx0, Y(P.handRy)+0.4, X(P.handRx)-bx0+0.6, 0.6);
+    g.fillStyle="#7a5a34"; g.beginPath(); g.rect(X(P.handLx)-0.6, P.handRy-1.6, X(P.handRx)-X(P.handLx)+1.2, 2.4); g.fill(); g.stroke();
   }
-  if (P.basket){                                        // a woven basket on the hip
-    g.fillStyle=EDGE_D; lp(g,ox,oy,s, X(hpW)-0.2, Y(17.5), 3.6, 4.4);
-    g.fillStyle="#b8924e"; lp(g,ox,oy,s, X(hpW)+0.2, Y(18), 2.8, 3.6);
-    g.fillStyle="#8d6a30"; lp(g,ox,oy,s, X(hpW)+0.2, Y(19.2), 2.8, 0.5); lp(g,ox,oy,s, X(hpW)+0.2, Y(20.6), 2.8, 0.5);
-    g.fillStyle="#d6433f"; lp(g,ox,oy,s, X(hpW)+0.9, Y(17.6), 0.8, 0.8); g.fillStyle="#5f9a3a"; lp(g,ox,oy,s, X(hpW)+1.9, Y(17.4), 0.9, 0.9);
+
+  // neck and head
+  var hr=2.05*STAGE_HEAD[B.stage]*(B.fat>=4?1.06:1), hcx=X(lean*1.2+P.headTilt*0.5), hcy=P.shY-hr*1.05+P.headTilt*0.35;
+  limb(X(lean*1.05), P.shY+0.4, hcx-0.2, hcy+hr*0.7, hr*0.55, SK);
+  g.fillStyle=SK; g.strokeStyle=INK; g.lineWidth=ink*1.2;
+  g.beginPath(); g.ellipse(hcx, hcy, hr*0.88, hr, 0.08, 0, 6.283); g.fill(); g.stroke();
+  if (B.fat>=3){ g.beginPath(); g.arc(hcx+0.2, hcy+hr*0.6, hr*0.6, 0.3, 2.6); g.stroke(); }   // a soft jaw
+  if (B.fat===0){ g.strokeStyle=INK_SOFT; g.beginPath(); g.moveTo(hcx+hr*0.25,hcy+0.1); g.lineTo(hcx+hr*0.35,hcy+hr*0.55); g.stroke(); }  // hollow cheek
+  // hair: a few strokes, longer for most women, white for the old
+  g.strokeStyle=hair; g.lineWidth=ink*1.6;
+  g.beginPath(); g.ellipse(hcx-0.25, hcy-hr*0.35, hr*0.92, hr*0.72, 0.1, 3.3, 6.1); g.stroke();
+  if (fem && B.stage>=2){
+    g.lineWidth=ink*1.3;
+    for (var hs=0;hs<3;hs++){ g.beginPath(); g.moveTo(hcx-hr*0.6+hs*0.3,hcy-hr*0.5);
+      g.quadraticCurveTo(hcx-hr*1.2,hcy+hr*0.4,hcx-hr*0.9+hs*0.25,hcy+hr*1.6+hs*0.3); g.stroke(); }
+  } else if ((v*3+1)%3===1){
+    g.beginPath(); g.moveTo(hcx-hr*0.8,hcy-hr*0.2); g.lineTo(hcx-hr*1.05,hcy+hr*0.35); g.stroke();
   }
-  // neck, head, face, hair
-  var hw=kid?3.0:3.6, hh=Y(4.0);
-  var hx3=X(-hw/2)+leanX*1.2+P.headTilt*0.5, hy3=Y(P.shY-5.3)+P.headTilt*0.4;
-  g.fillStyle=SKD; lp(g,ox,oy,s, hx3+hw*0.3, hy3+hh*0.85, hw*0.4, Y(1.6));          // neck
-  g.fillStyle=EDGE; lp(g,ox,oy,s, hx3-0.4, hy3-0.4, hw+0.8, hh+0.8);                // skull edge
-  g.fillStyle=SK;  lp(g,ox,oy,s, hx3, hy3, hw, hh);
-  g.fillStyle=SKD; lp(g,ox,oy,s, hx3+hw-0.9, hy3+0.5, 0.9, hh-0.5);                 // cheek shadow
-  g.fillStyle=SKL; lp(g,ox,oy,s, hx3+0.3, hy3+0.6, 0.7, hh*0.5);                    // light on the brow
-  if (s>=2.2){                                                                         // a face
-    g.fillStyle="#2a1a10"; lp(g,ox,oy,s, hx3+hw-1.55, hy3+1.5, 0.75, 0.75);         // eye
-    g.fillStyle="rgba(42,26,16,0.55)"; lp(g,ox,oy,s, hx3+hw-1.9, hy3+0.9, 1.2, 0.35); // brow
-    g.fillStyle="rgba(120,70,60,0.8)"; lp(g,ox,oy,s, hx3+hw-1.5, hy3+2.9, 0.9, 0.35);  // mouth
-    g.fillStyle=SKD; lp(g,ox,oy,s, hx3+hw-0.6, hy3+2.0, 0.5, 0.6);                   // nose
+  if (view===2){                                 // the back of the head: hair, an ear
+    g.fillStyle=hair; g.beginPath(); g.ellipse(hcx, hcy-0.2, hr*0.86, hr*0.94, 0, 0, 6.283); g.fill();
+  } else if (view===1 && s>=2.2){                // a face, toward us
+    g.fillStyle=INK;
+    g.beginPath(); g.arc(hcx-hr*0.32, hcy-0.1, 0.26, 0, 6.283); g.fill();
+    g.beginPath(); g.arc(hcx+hr*0.32, hcy-0.1, 0.26, 0, 6.283); g.fill();
+    g.strokeStyle=INK; g.lineWidth=ink*0.8;
+    g.beginPath(); g.moveTo(hcx,hcy+0.2); g.lineTo(hcx+0.15,hcy+0.75); g.stroke();
+    g.beginPath(); g.moveTo(hcx-0.4,hcy+1.2); g.lineTo(hcx+0.4,hcy+1.2); g.stroke();
   }
-  g.fillStyle=hairc;
-  lp(g,ox,oy,s, hx3-0.3, hy3-0.5, hw+0.6, Y(1.2));                                   // crown
-  if (hairStyle===1||fem){ lp(g,ox,oy,s, hx3-0.3, hy3-0.2, hw*0.55, Y(2.2)); }        // shaggy / fringe
-  if (fem && !kid){ lp(g,ox,oy,s, hx3-0.7, hy3-0.1, 0.9, hh*1.25);                   // long hair
-    if (hairStyle===2) lp(g,ox,oy,s, hx3+hw*0.2, hy3+hh*0.9, hw*0.5, Y(2.2)); }      // tied back
-  else if (!kid && !eld && hairStyle===2){ lp(g,ox,oy,s, hx3-0.5, hy3-0.1, 0.7, hh*0.9); }
+  if (view){ g.restore(); return; }
+  if (s>=4){                                     // close enough for a real face
+    g.fillStyle="#fbf8f0"; g.beginPath(); g.ellipse(hcx+hr*0.44, hcy-0.1, 0.55, 0.3, 0, 0, 6.283); g.fill();
+    g.strokeStyle=INK; g.lineWidth=ink*0.6;
+    g.beginPath(); g.arc(hcx-hr*0.05, hcy+0.1, hr*0.22, -1.2, 1.4); g.stroke();             // ear
+    g.beginPath(); g.moveTo(hcx+hr*0.5,hcy+1.4); g.quadraticCurveTo(hcx+hr*0.62,hcy+1.6,hcx+hr*0.74,hcy+1.35); g.stroke();  // lower lip
+    if (B.stage===4){ g.beginPath(); g.moveTo(hcx+hr*0.2,hcy+0.5); g.lineTo(hcx+hr*0.5,hcy+0.75); g.stroke(); }  // a line of age
+  }
+  if (s>=2.2){                                   // a face, looking where they face
+    g.fillStyle=INK; g.beginPath(); g.arc(hcx+hr*0.42, hcy-0.1, s>=4?0.2:0.3, 0, 6.283); g.fill();
+    g.strokeStyle=INK; g.lineWidth=ink*0.8;
+    g.beginPath(); g.moveTo(hcx+hr*0.2,hcy-0.75); g.lineTo(hcx+hr*0.65,hcy-0.65); g.stroke();       // brow
+    g.beginPath(); g.moveTo(hcx+hr*0.85,hcy+0.1); g.lineTo(hcx+hr*0.98,hcy+0.65); g.lineTo(hcx+hr*0.78,hcy+0.7); g.stroke();  // nose
+    var sad = (act===A_WITHDRAW) ? 0.25 : 0;
+    g.beginPath(); g.moveTo(hcx+hr*0.45,hcy+1.15); g.lineTo(hcx+hr*0.72,hcy+1.1+sad); g.stroke();  // mouth
+  }
+  g.restore();
 }
 
 // ---- sprite cache: one render per (pose, zoom), then a blit per person -----
 var spriteCache={}, spriteCount=0;
-function figureSprite(cls, sex, clothed, act, bucket, moving, v, s){
+function figureSprite(a, act, bucket, moving, s, dress){
   // Individual variation is only visible close up, so it only enters the
-  // cache key when zoomed in; crowds share sprites and stay cheap.
+  // cache key when zoomed in; crowds share sprites and stay cheap. The key
+  // fixes everything the drawing reads, so a cached figure is never someone
+  // else's body.
   var sq = s>=2 ? Math.round(s) : Math.round(s*8)/8;
-  var vk = s>=2 ? (v%6) : (s>=1.25 ? (v%2) : 0);
+  var vk = s>=2 ? (a.v%20) : (s>=1.25 ? (a.v%4) : 0);
   var bk = s>=1.25 ? bucket : (bucket>>2);
-  var key=act+"|"+cls+"|"+sex+"|"+(clothed?1:0)+"|"+bk+"|"+(moving?1:0)+"|"+vk+"|"+sq;
+  var B=bodyOf(a), wk=(act===A_WITHDRAW)?(a.wk||0):0;
+  var view = !moving ? 0 : (Math.abs(a.vy||0)>1.2*Math.abs(a.vx||0) ? ((a.vy>0)?1:2) : 0);
+  var key=act+"|"+B.stage+B.fat+B.strong+B.hurt+B.preg+"|"+a.sex+"|"+(dress||"")+"|"+wk+"|"+
+          bk+"|"+(moving?1:0)+view+"|"+vk+"|"+sq;
   var sp=spriteCache[key];
   if (sp) return sp;
   var cap = sq>=3 ? 420 : 1400;
   if (spriteCount>cap){ spriteCache={}; spriteCount=0; }
-  var W=Math.ceil(36*sq), H=Math.ceil(38*sq);
+  var W=Math.ceil(40*sq), H=Math.ceil(40*sq);
   var c=mkCanvas(W,H), g=c.getContext("2d");
-  drawFigureRaw(g, W/2, H-2*sq, sq, cls, sex, clothed, act, bucket/12+0.02, moving, v, 0);
-  sp={c:c, w:W, h:H, s:sq}; spriteCache[key]=sp; spriteCount++;
+  drawSketch(g, W/2, H-2*sq, sq, act, bucket/12+0.02, moving, vk, B, a.sex, dress, wk, view);
+  sp={c:c, w:W, h:H, s:sq, view:view}; spriteCache[key]=sp; spriteCount++;
   return sp;
 }
 
@@ -778,7 +1002,7 @@ function shadowSprite(ts){                      // one soft ellipse per zoom lev
 
 // ---- actors: the people keep living between observations ----------------
 var actors6={}, actors9={};
-function syncActors(map, people, ox){
+function syncActors(map, people, ox, detail){
   var seen={};
   (people||[]).forEach(function(p,i){
     var id=p.length>4?p[4]:i, sex=p.length>3?p[3]:(p[2]===2?1:0);
@@ -788,21 +1012,48 @@ function syncActors(map, people, ox){
     var a=map[id];
     if (!a){ map[id]=a={x:nx,y:ny,id:id,face:face,moving:false,v:(id*2654435761>>>0)%997}; }
     a.cls=p[2]; a.sex=sex; a.act=act; a.eface=face;
+    if (p.length>11){ a.age=p[7]; a.bmi=p[8]; a.sn=p[9]; a.inj=p[10]; a.wk=p[11]; }
+    var d=detail&&detail[String(id)]; a.preg=d?((d[3]&4)?1:0):0;
     a.tx=nx; a.ty=ny;
   });
   Object.keys(map).forEach(function(id){ if(!seen[id]) delete map[id]; });
 }
+// Movement. Each person is their own walker: when the record gives them a
+// new place to be, they set off after their own small hesitation, at their
+// own pace (age, build, injury, a little temperament), speed up and slow
+// down instead of snapping, and their legs step in time with the ground
+// they actually cover — so a crowd never marches in step.
+function walkerOf(a){
+  var h=((a.id*2654435761)>>>0)/4294967296;
+  var age=a.age===undefined?30:a.age, b=a.bmi||22;
+  var pace=0.042*(0.82+0.36*h);
+  if (age<12) pace*=1.15; else if (age>=58) pace*=0.72;
+  if (b>=30) pace*=0.82; if ((a.inj||0)>=5) pace*=0.6;
+  return {pace:pace, stride:age<12?0.55:(age<16?0.75:0.9), ph0:h};
+}
 function updateActors(map, heat, S){
   Object.keys(map).forEach(function(id){
     var a=map[id];
+    if (!a.wk_){ a.wk_=walkerOf(a); a.vx=a.vy=0; a.dist=a.wk_.ph0*a.wk_.stride; a.wait=0; }
+    if (a.tx!==a.ltx || a.ty!==a.lty){              // a new place to be
+      a.ltx=a.tx; a.lty=a.ty;
+      a.wait=Math.floor(((a.id*7919+tick)%37)*0.9);  // nobody leaves on the same beat
+    }
     var dx=a.tx-a.x, dy=a.ty-a.y, d=Math.hypot(dx,dy);
-    if (d>0.05){
-      var sp=Math.min(0.09, 0.025+d*0.11);     // 30fps: a day's walk in ~1.5s
-      a.x+=dx/d*sp; a.y+=dy/d*sp; a.moving=true;
-      if (Math.abs(dx)>0.1) a.face = dx>0?1:-1;
-      if (heat && (tick%6===0)){ var ix=Math.round(a.x), iy=Math.round(a.y);
-        if (ix>=0&&iy>=0&&ix<S&&iy<S) heat[iy*S+ix]=Math.min(65000, heat[iy*S+ix]+2); }
-    } else { a.x=a.tx; a.y=a.ty; a.moving=false; a.face=a.eface||a.face; }
+    if (d>14){ a.x=a.tx; a.y=a.ty; a.vx=a.vy=0; d=0; }  // a move of camp: cut, don't glide
+    var want=0;
+    if (a.wait>0) a.wait--;
+    else if (d>0.03) want=Math.max(a.wk_.pace, d/52)*Math.min(1, d/0.7);  // arrive within the day; ease in
+    var ux=d>0?dx/d:0, uy=d>0?dy/d:0;
+    a.vx+=(ux*want-a.vx)*0.12; a.vy+=(uy*want-a.vy)*0.12;  // no instant starts or stops
+    var v=Math.hypot(a.vx,a.vy);
+    if (d<=0.03 && v<0.004){ a.x=a.tx; a.y=a.ty; a.vx=a.vy=0; a.moving=false; a.face=a.eface||a.face; return; }
+    a.x+=a.vx; a.y+=a.vy; a.dist+=v;
+    a.moving=v>0.006;
+    if (Math.abs(a.vx)>0.01) a.face=a.vx>0?1:-1;
+    a.walkc=(a.dist/a.wk_.stride)%1;
+    if (heat && (tick%6===0)){ var ix=Math.round(a.x), iy=Math.round(a.y);
+      if (ix>=0&&iy>=0&&ix<S&&iy<S) heat[iy*S+ix]=Math.min(65000, heat[iy*S+ix]+2); }
   });
 }
 
@@ -902,6 +1153,75 @@ function pickShot(key, list, u, S){
 }
 
 // ---- the frame: world, light, people, weather ---------------------------
+function moving0(a){ return a.moving && a.walkc!==undefined; }
+
+// ---- boats: only the ones the people built. A hull on the stocks at the
+// yard while it is being made (ribs first, then planks, as the work grows),
+// the boat itself while it crosses with everyone aboard, and every boat
+// that has landed, pulled up on the far beach.
+function hull(g, x, y, L, ts, done, sails){
+  g.save(); g.translate(x,y);
+  g.strokeStyle=INK; g.lineWidth=Math.max(1,ts*0.04);
+  g.fillStyle="#7a5232";
+  g.beginPath(); g.moveTo(-L/2,0); g.quadraticCurveTo(0,L*0.28,L/2,0); g.lineTo(L*0.42,-L*0.06); g.lineTo(-L*0.42,-L*0.06); g.closePath();
+  if (done>=0.5) g.fill();
+  g.stroke();
+  var ribs=done<1?Math.round(7*Math.min(1,done*2)):0;   // the frame shows until it is planked
+  for (var i=1;i<=ribs;i++){ var t=-0.42+i*0.105; g.beginPath(); g.moveTo(t*L,-L*0.06); g.lineTo(t*L*0.8,L*0.16); g.stroke(); }
+  if (sails){ g.beginPath(); g.moveTo(0,-L*0.06); g.lineTo(0,-L*0.55); g.stroke();
+    g.fillStyle="#efe4c8"; g.beginPath(); g.moveTo(0,-L*0.52); g.lineTo(L*0.3,-L*0.12); g.lineTo(0,-L*0.12); g.closePath(); g.fill(); g.stroke(); }
+  g.restore();
+}
+function drawBoats(g, u, sx, sy, ts){
+  var L=ts*2.6;
+  (u.boats||[]).forEach(function(b){ hull(g,(b[0]-sx)*ts+ts/2,(b[1]-sy)*ts+ts*0.8,L,ts,1,false); });
+  if (u.boat){ hull(g,(u.boat.x-sx)*ts+ts/2,(u.boat.y-sy)*ts+ts*0.8,L,ts,Math.min(1,u.boat.work/400),false); }
+  if (u.voyage){ var bob=Math.sin(tick*0.12)*ts*0.05;
+    hull(g,(u.voyage.x-sx)*ts+ts/2,(u.voyage.y-sy)*ts+ts*1.1+bob,ts*3.6,ts,1,true); }
+}
+
+// ---- wildlife. The model counts game and predators, it does not track
+// animals one by one; the viewer draws as many as the counts imply, roaming
+// the woods, so a hunt has something to hunt and the dark has eyes.
+var wild9=[];
+function drawWild(g, u, sx, sy, ts){
+  if (!terr9 || !u.stocks_view) {}
+  var nGame=Math.min(18, Math.round((u.game||0)/150)), nPred=Math.min(5, Math.round((u.pred||0)/10));
+  while (wild9.length<nGame+nPred){
+    var S=terr9?terr9.length:160, x=0,y=0, tries=0;
+    do { x=20+Math.random()*(S-30); y=20+Math.random()*(S-30); tries++; }
+    while (tries<60 && !(terr9 && terr9[Math.round(y)][Math.round(x)]===1));
+    wild9.push({x:x,y:y,tx:x,ty:y,pred:0,ph:Math.random()});
+  }
+  wild9.length=nGame+nPred;
+  for (var i=0;i<wild9.length;i++){
+    var w=wild9[i]; w.pred=i>=nGame;
+    var d=Math.hypot(w.tx-w.x,w.ty-w.y);
+    if (d<0.1 && Math.random()<0.01){ w.tx=w.x+(Math.random()-0.5)*8; w.ty=w.y+(Math.random()-0.5)*8;
+      if (terr9){ var S2=terr9.length, cx=Math.round(Math.max(1,Math.min(S2-2,w.tx))), cy=Math.round(Math.max(1,Math.min(S2-2,w.ty)));
+        if (terr9[cy][cx]===2){ w.tx=w.x; w.ty=w.y; } } }
+    if (d>0.05){ w.x+=(w.tx-w.x)/d*0.02; w.y+=(w.ty-w.y)/d*0.02; w.f=(w.tx>w.x)?1:-1; }
+    var px=(w.x-sx)*ts, py=(w.y-sy)*ts;
+    if (px<-ts*2||py<-ts*2||px>g.canvas.width+ts*2||py>g.canvas.height+ts*2) continue;
+    var k=ts/12, f=w.f||1; g.save(); g.translate(px,py); g.scale(f*k,k);
+    g.strokeStyle=INK; g.lineWidth=1/k*0.9;
+    if (!w.pred){                                   // a deer: long legs, a neck held high
+      g.fillStyle="#a8784a";
+      g.beginPath(); g.ellipse(0,-7,6,3,0,0,6.283); g.fill(); g.stroke();
+      [-4,-2,3,5].forEach(function(lx){ g.beginPath(); g.moveTo(lx,-5); g.lineTo(lx+Math.sin(tick*0.1+lx)*0.6*(d>0.05?1:0),1); g.stroke(); });
+      g.beginPath(); g.moveTo(5,-9); g.lineTo(8,-14); g.stroke();
+      g.beginPath(); g.ellipse(9,-14.5,2.2,1.4,0.3,0,6.283); g.fill(); g.stroke();
+    } else {                                        // a big cat: low, long, the tail
+      g.fillStyle="#c09048";
+      g.beginPath(); g.ellipse(0,-4.5,7,2.6,0,0,6.283); g.fill(); g.stroke();
+      [-5,-3,3,5].forEach(function(lx){ g.beginPath(); g.moveTo(lx,-3); g.lineTo(lx,1); g.stroke(); });
+      g.beginPath(); g.moveTo(-7,-5); g.quadraticCurveTo(-11,-9,-12,-4); g.stroke();
+      g.beginPath(); g.arc(8,-6,2.4,0,6.283); g.fill(); g.stroke();
+      g.fillStyle="#f8d848"; g.beginPath(); g.arc(9,-6.6,0.6,0,6.283); g.fill();
+    }
+    g.restore();
+  }
+}
 function render(canvas, composed, map, key, u){
   if (!composed) return;
   var S=composed.width/PX, c=cam[key];
@@ -915,7 +1235,9 @@ function render(canvas, composed, map, key, u){
   var sh=shots[key];
   if (tick>=sh.until) pickShot(key, list, u, S);
   var tx,ty,th;
-  if (c.mode==="follow" && map[c.follow]){
+  if (c.mode==="walk"){
+    tx=c.tx; ty=c.ty; th=WALK_H;
+  } else if (c.mode==="follow" && map[c.follow]){
     var who=map[c.follow];
     tx=who.x; ty=who.y; th=c.th;
   } else if (c.mode==="manual"){
@@ -928,7 +1250,7 @@ function render(canvas, composed, map, key, u){
     tx=(minx+maxx)/2; ty=(miny+maxy)/2;
     th=Math.max(7, Math.min(10, Math.max(maxx-minx,maxy-miny)/2+6));
   } else { tx=S/2; ty=S/2; th=10; }
-  var ease = (c.mode==="manual") ? 0.3 : (sh.wide ? 0.02 : 0.035);
+  var ease = (c.mode==="manual"||c.mode==="walk") ? 0.3 : (sh.wide ? 0.02 : 0.035);
   c.x=lerp(c.x,tx,ease); c.y=lerp(c.y,ty,ease); c.h=lerp(c.h,th,ease);
   if (sh.shown!==sh.label){ sh.shown=sh.label; refreshHud(key); }
   var aspect=canvas.width/canvas.height;
@@ -946,6 +1268,7 @@ function render(canvas, composed, map, key, u){
   if (key==="l"){
     if (u.season==="winter"){ g.fillStyle="rgba(186,202,236,0.16)"; g.fillRect(0,0,canvas.width,canvas.height); }
     else if (u.season==="summer"){ g.fillStyle="rgba(255,214,140,0.07)"; g.fillRect(0,0,canvas.width,canvas.height); }
+    else if (u.season==="autumn"){ g.fillStyle="rgba(214,140,60,0.10)"; g.fillRect(0,0,canvas.width,canvas.height); }
     else { g.fillStyle="rgba(230,255,200,0.04)"; g.fillRect(0,0,canvas.width,canvas.height); }
     if ((u.tech||[]).indexOf("fire")>=0){
       g.save(); g.globalCompositeOperation="lighter";
@@ -961,35 +1284,44 @@ function render(canvas, composed, map, key, u){
     }
   }
   spawnParticles(u, key, sx, sy, hx, hy);
+  if (key==="l"){ drawWild(g, u, sx, sy, ts); drawBoats(g, u, sx, sy, ts); }
 
   // people
   var sRaw=ts*1.45/32;
   var s = sRaw>=2 ? Math.round(sRaw) : Math.max(0.5, sRaw);
-  var clothed = key==="e" ? true : !!(u && u.tech && u.tech.indexOf("shelter")>=0);
+  var modesty=(u&&u.modesty)||0, winter=key==="l"&&u&&u.season==="winter";
+  function dressOf(a){
+    if (winter) return "fur";
+    if (a.age!==undefined && a.age<12) return "";
+    if (((a.id*2654435761)>>>0)%1000/1000 >= modesty) return "";
+    return key==="e" ? "swim" : "hide";
+  }
   var cell={};
   for (var i=0;i<list.length;i++){               // pairs face each other
     var a=list[i];
-    if (a.act!==A_MATE && a.act!==A_FIGHT) continue;
+    if (a.act!==A_MATE && a.act!==A_FIGHT && a.act!==A_GROOM) continue;
     var k=Math.round(a.x)+","+Math.round(a.y);
     (cell[k]||(cell[k]=[])).push(a);
   }
   Object.keys(cell).forEach(function(k){ var pr=cell[k]; if (pr.length<2) return;
-    pr.sort(function(p,q){return p.id-q.id;}); pr[0].face=1; pr[0].nudge=-0.3; pr[1].face=-1; pr[1].nudge=0.3; });
+    pr.sort(function(p,q){return p.id-q.id;});
+    if (pr[0].act===A_MATE){ pr[0].face=pr[1].face=1; pr[0].nudge=0; pr[1].nudge=0; pr[1].lift=0.3; return; }
+    pr[0].face=1; pr[0].nudge=-0.3; pr[1].face=-1; pr[1].nudge=0.3; });
   list.sort(function(a,b){ return a.y-b.y; });
   var sh=shadowSprite(ts);
   for (var i=0;i<list.length;i++){
     var a=list[i];
-    var px=(a.x+(a.nudge||0)-sx)*ts+ts/2, py=(a.y-sy)*ts+ts*0.95;
+    var px=(a.x+(a.nudge||0)-sx)*ts+ts/2, py=(a.y-sy-(a.lift||0))*ts+ts*0.95; a.lift=0;
     if (px<-60||py<-90||px>canvas.width+60||py>canvas.height+60) continue;
+    if (a.moving && a.age!==undefined && a.age<1) continue;  // carried in arms, not drawn gliding
     g.drawImage(sh.c, Math.round(px+ts*0.12-sh.w/2), Math.round(py-ts*0.02-sh.h/2));
-    var period=PERIOD[a.act]||200, c0=((tick+a.v*7)%period)/period;
+    var period=PERIOD[a.act]||200, c0=moving0(a)?a.walkc:((tick+a.v*7)%period)/period;
     var bucket=Math.floor(c0*12)%12;
     var moving=a.moving;
-    var sp=figureSprite(a.cls, a.sex, clothed, moving?A_WALK:a.act, bucket, moving, a.v, s);
-    if (moving) sp=figureSprite(a.cls, a.sex, clothed, a.act, bucket, true, a.v, s);
+    var sp=figureSprite(a, a.act, bucket, moving, s, dressOf(a));
     var scale=s/sp.s;
     var dw=sp.w*scale, dh=sp.h*scale;
-    if (a.face>=0){ g.drawImage(sp.c, Math.round(px-dw/2), Math.round(py-dh+2*sp.s*scale), Math.round(dw), Math.round(dh)); }
+    if (a.face>=0 || sp.view){ g.drawImage(sp.c, Math.round(px-dw/2), Math.round(py-dh+2*sp.s*scale), Math.round(dw), Math.round(dh)); }
     else { g.save(); g.translate(Math.round(px), Math.round(py-dh+2*sp.s*scale)); g.scale(-1,1);
            g.drawImage(sp.c, Math.round(-dw/2), 0, Math.round(dw), Math.round(dh)); g.restore(); }
   }
@@ -1022,7 +1354,7 @@ function paintOverlay(key){
     for (var bi=0;bi<u.boxes_xy.length;bi++){
       var bb=u.boxes_xy[bi];
       var n=u.box_occ[String(bi)]||0;
-      var ac=alcoveFor(bb,48);
+      var ac=alcoveFor(bb,u.size||48);
       var x0=(ac[0]+EM-v.sx)*ts, y0=(ac[1]+EM-v.sy)*ts;
       if (x0<-60||y0<-60||x0>ov.width+60||y0>ov.height+60) continue;
       g.lineWidth=Math.max(1,Math.round((n>0?2:1)*dpr));
@@ -1038,11 +1370,22 @@ function paintOverlay(key){
   var placed=[];                          // captions already drawn, to avoid collisions
   var list=[]; Object.keys(map).forEach(function(id){ list.push(map[id]); });
   list.sort(function(a,b){ return a.y-b.y; });
+  // A caption earns its place by telling the viewer something the crowd is
+  // not doing. When a hundred people are withdrawn, "withdrawn" on each of
+  // them is wallpaper; the one fight among them is the news.
+  var seen={}, nSeen=0;
+  for (var q0=0;q0<list.length;q0++){
+    var a0=list[q0], px0=(a0.x-sx)*ts, py0=(a0.y-sy)*ts;
+    if (px0<0||py0<0||px0>ov.width||py0>ov.height) continue;
+    var k0=a0.moving?A_WALK:a0.act; seen[k0]=(seen[k0]||0)+1; nSeen++;
+  }
   for (var i=0;i<list.length;i++){
     var a=list[i];
     var px=(a.x-sx)*ts+ts/2, py=(a.y-sy)*ts+ts*0.95;
     if (px<-60||py<-60||px>ov.width+60||py>ov.height+60) continue;
-    if (!caption) continue;
+    if (!caption || cam[key].mode==="walk") continue;
+    var ak=a.moving?A_WALK:a.act;
+    if (nSeen>12 && (seen[ak]||0)>nSeen*0.06 && a.id!==sel[key]) continue;
     var lbl=(a.moving?"walking":(ACT_LABEL[a.act]||"idle"));
     var wpx=g.measureText(lbl).width;
     var top=py-ts*1.55-13*dpr;
@@ -1060,6 +1403,42 @@ function paintOverlay(key){
                  (a.act===A_BIRTH)?"#ffc2e2":
                  (a.act===A_WITHDRAW)?"#9ae8e0":"#d8d8e8";
     g.fillText(lbl, Math.round(px), Math.round(by+9*dpr));
+  }
+  // walking: everyone within reach is introduced — name, what they are
+  // doing, and what their body says
+  if (cam[key].mode==="walk" && u && u.detail){
+    var cx0=(cam[key].x-sx)*ts, cy0=(cam[key].y-sy)*ts;
+    g.strokeStyle="rgba(248,216,72,0.8)"; g.lineWidth=Math.max(1,dpr);
+    g.beginPath(); g.moveTo(cx0-6*dpr,cy0); g.lineTo(cx0+6*dpr,cy0); g.moveTo(cx0,cy0-6*dpr); g.lineTo(cx0,cy0+6*dpr); g.stroke();
+    g.font=Math.round(10*dpr)+"px Menlo,Monaco,monospace";
+    var near=list.filter(function(a){ return Math.hypot(a.x-cam[key].x,a.y-cam[key].y)<WALK_R; })
+                 .sort(function(a,b){ return Math.hypot(a.x-cam[key].x,a.y-cam[key].y)-Math.hypot(b.x-cam[key].x,b.y-cam[key].y); })
+                 .slice(0,8);
+    var placedW=[];
+    near.forEach(function(a){
+      var d=u.detail[String(a.id)]; if(!d) return;
+      // feet at (a.y-sy)*ts+0.95ts, as render() draws them; an adult stands
+      // about 1.45 tiles tall at this scale
+      var px=(a.x-sx)*ts+ts/2, feet=(a.y-sy)*ts+ts*0.95;
+      var top=feet-ts*1.45*STAGE_H[bodyOf(a).stage]-2*dpr;
+      var l1=d[0]+", "+Math.floor(d[1]), l2=(a.moving?"walking":(ACT_LABEL[a.act]||"idle"))+(d[8]?" · "+d[8]:"");
+      var wpx=Math.max(g.measureText(l1).width,g.measureText(l2).width)+8*dpr, hpx=24*dpr;
+      // over the head if there is room, else under the feet, else not at all:
+      // a label that drifts away from its person introduces no one
+      var bx=px-wpx/2, spots=[top-hpx, feet+4*dpr], by=null;
+      for (var t=0;t<spots.length&&by===null;t++){
+        var ok=true;
+        for (var j=0;j<placedW.length;j++){ var q=placedW[j];
+          if (bx<q.x+q.w && bx+wpx>q.x && spots[t]<q.y+q.h && spots[t]+hpx>q.y){ ok=false; break; } }
+        if (ok) by=spots[t];
+      }
+      if (by===null) return;
+      placedW.push({x:bx,y:by,w:wpx,h:hpx});
+      g.fillStyle="rgba(4,4,10,0.72)"; g.fillRect(Math.round(bx),Math.round(by),Math.round(wpx),Math.round(hpx));
+      g.fillStyle="#f8d848"; g.textAlign="left"; g.fillText(l1, Math.round(bx+4*dpr), Math.round(by+10*dpr));
+      g.fillStyle="#d8d8e8"; g.fillText(l2, Math.round(bx+4*dpr), Math.round(by+21*dpr));
+    });
+    g.textAlign="center";
   }
   // the person you are watching
   var f=sel[key]?map[sel[key]]:null;
@@ -1146,20 +1525,67 @@ function bindWorld(canvasId, key){
   });
   cv.addEventListener("pointercancel", function(){ drag=null; });
 }
+// ---- walking in ------------------------------------------------------------
+// The Observers never intervene, but the viewer may walk the ground at a
+// person's height: the camera becomes a pair of eyes that moves with the
+// keys, and whoever is near is introduced by name.
+var WALK_H=2.6, WALK_R=3.6, WALK_SPEED=0.14, activeWorld="e", held={};
+var WALK_KEYS={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0],
+               w:[0,-1],s:[0,1],a:[-1,0],d:[1,0],W:[0,-1],S:[0,1],A:[-1,0],D:[1,0]};
+function enterWalk(key){
+  var c=cam[key]; if (c.mode==="walk") return;
+  c.mode="walk"; c.follow=0; sel[key]=0; c.tx=c.x; c.ty=c.y;
+  document.getElementById("walkbtn").className="on";
+  refreshHud(key); paintCard(key);
+}
+function leaveWalk(){
+  ["e","l"].forEach(function(k){ cam[k].mode="auto"; cam[k].follow=0; sel[k]=0; });
+  document.getElementById("walkbtn").className="";
+  refreshHud("e"); refreshHud("l"); paintCard("e"); paintCard("l");
+}
+function stepWalk(){
+  ["e","l"].forEach(function(k){
+    var c=cam[k], v=view[k]; if (c.mode!=="walk"||!v) return;
+    var dx=0, dy=0;
+    Object.keys(held).forEach(function(n){ var d=WALK_KEYS[n]; if (d){ dx+=d[0]; dy+=d[1]; } });
+    if (!dx&&!dy) return;
+    var n=Math.hypot(dx,dy);
+    c.tx=Math.max(1,Math.min(v.S-1,c.tx+dx/n*WALK_SPEED));
+    c.ty=Math.max(1,Math.min(v.S-1,c.ty+dy/n*WALK_SPEED));
+  });
+}
+["w6","w9"].forEach(function(id){
+  var el=document.getElementById(id), k=id==="w6"?"e":"l";
+  el.addEventListener("pointerenter", function(){ activeWorld=k; });
+  el.addEventListener("pointerdown", function(){ activeWorld=k; });
+});
+document.getElementById("walkbtn").addEventListener("click", function(){
+  if (cam[activeWorld].mode==="walk") leaveWalk(); else enterWalk(activeWorld);
+});
 document.addEventListener("keydown", function(e){
   if (e.key==="Escape"||e.key===" "){
-    ["e","l"].forEach(function(k){ cam[k].mode="auto"; cam[k].follow=0; sel[k]=0; });
-    refreshHud("e"); refreshHud("l"); paintCard("e"); paintCard("l");
+    leaveWalk(); held={};
     if (e.key===" ") e.preventDefault();
+    return;
+  }
+  if (e.key==="i"||e.key==="I"){
+    if (cam[activeWorld].mode==="walk") leaveWalk(); else enterWalk(activeWorld);
+    return;
+  }
+  if (WALK_KEYS[e.key]){
+    enterWalk(activeWorld); held[e.key]=1;
+    if (e.key.indexOf("Arrow")===0) e.preventDefault();
   }
 });
+document.addEventListener("keyup", function(e){ delete held[e.key]; });
+window.addEventListener("blur", function(){ held={}; });
 
 // =========================================================== god panel
 function sparkline(id, census, color){
   var cv=document.getElementById(id);
   if (!cv || !census || census.length<2) return;
-  var g=cv.getContext("2d"), W=cv.width=cv.clientWidth||200, H=cv.height=44;
-  g.fillStyle="#07070e"; g.fillRect(0,0,W,H);
+  var g=cv.getContext("2d"), W=cv.width=cv.clientWidth||120, H=cv.height=cv.clientHeight||22;
+  g.clearRect(0,0,W,H);
   var max=1; census.forEach(function(r){ if(r[1]>max)max=r[1]; });
   var n=census.length, bw=Math.max(1,Math.floor(W/n));
   g.fillStyle=color;
@@ -1174,44 +1600,60 @@ function doingHTML(people){
   for (var i=0;i<people.length;i++){ var act=people[i].length>5?people[i][5]:0; tally[act]=(tally[act]||0)+1; }
   var rows=Object.keys(tally).map(function(k){ return [ACT_LABEL[k]||"?", tally[k]]; });
   rows.sort(function(a,b){ return b[1]-a[1]; });
-  return "<span class='dim'>RIGHT NOW: "+rows.slice(0,5).map(function(r){ return r[1]+" "+r[0]; }).join(" · ")+"</span>\n";
+  return "<span class='now'>NOW "+rows.slice(0,4).map(function(r){ return r[1]+" "+r[0]; }).join(" · ")+"</span>";
 }
-function statHTML(u, kind){
-  var out="<h2>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</h2>";
-  out+="ITERATION "+u.iter+" · YEAR "+u.year+"\n";
-  out+="POP "+u.pop+" · PEAK "+u.peak+" · GEN "+u.gen+"\n";
-  out+=doingHTML(u.people);
-  out+="<canvas id='tr"+kind+"' class='trend'></canvas>";
+// The world's own facts, one dim line under its title: what a viewer needs to
+// read the picture, nothing a viewer would have to decode.
+function statLine(u, kind){
+  var b=kind==="e"?[]:["PEAK "+u.peak];             // EDEN's arc is in the corner graph
+  if (u.iter>1) b.push("ITERATION "+u.iter);
   if (kind==="e"){
-    out+="PHASE: "+u.phase.toUpperCase();
-    if (u.sink>45) out+="\n<span class='dim'>BEHAVIOURAL SINK: "+u.sink+"% FEED AT ONE HOPPER</span>";
-    if (u.homeless>0) out+="\n<span class='dim'>WITHOUT TERRITORY: "+u.homeless;
-    if (u.homeless>0 && u.box_free>0){
-      out+=" · "+u.box_free+" PLACES VACANT, NEVER REFILLED";
-    }
-    out+="</span>";
-    if (u.std) out+="\n<span class='dim'>OUTBREAK IN THE PEN</span>";
-    if (u.ennui>0.2) out+="\n<span class='dim'>ENNUI "+Math.round(u.ennui*100)+"%</span>";
+    if (u.roles) b.push("POSTS "+u.roles[0]+"/"+u.roles[1]);
+    if (u.sink>45) b.push("SINK "+u.sink+"% AT ONE BAR");
+    if (u.homeless>0) b.push(u.homeless+" PLACELESS");
+    if (u.std) b.push("OUTBREAK");
+    if (u.ennui>0.2) b.push("ENNUI "+Math.round(u.ennui*100)+"%");
   } else {
-    var age=u.tech&&u.tech.length?("AGE OF "+u.tech[u.tech.length-1].replace("_"," ").toUpperCase()):u.phase.toUpperCase();
-    out+=age+" · TRIBES "+((u.settlements||[]).length)+" · STORE "+Math.round(u.store||0);
-    if (u.season==="winter") out+="\n"+(u.harsh?"AN ICE-AGE WINTER":"WINTER");
-    else if (u.dry) out+="\nDROUGHT";
-    if (u.lessons&&u.lessons.length) out+="\n<span class='dim'>INSTINCTS: "+u.lessons.join(" · ").toUpperCase()+"</span>";
-    if (u.culture&&u.culture.length) out+="\n<span class='dim'>ARTS: "+u.culture.length+" — "+u.culture[u.culture.length-1].toUpperCase()+"</span>";
+    b.push("TRIBES "+((u.settlements||[]).length), "STORE "+Math.round(u.store||0));
+    b.push(u.season==="winter"&&u.harsh?"ICE-AGE WINTER":(u.season||"").toUpperCase());
+    if (u.dry) b.push("DROUGHT");
+    if (u.myths&&u.myths.length) b.push(u.myths.length+" MYTHS");
+    if (u.lessons&&u.lessons.length) b.push("INSTINCTS "+u.lessons.join(", ").toUpperCase());
+    if (u.culture&&u.culture.length) b.push(u.culture.length+" ARTS");
   }
-  // how they died, so far — the record of what the world did to its people
   var cod=u.cod||{}, ck=Object.keys(cod);
   if (ck.length){
-    ck.sort(function(a,b){return cod[b]-cod[a];});
-    out+="\n<span class='dim'>DIED: "+ck.slice(0,4).map(function(k){return k+" "+cod[k];}).join(" · ")+"</span>";
+    ck.sort(function(a,c){return cod[c]-cod[a];});
+    b.push("DEATHS "+ck.slice(0,2).map(function(k){return k+" "+cod[k];}).join(", "));
   }
-  if (kind==="e" && u.box_slots){
-    out+="\n<span class='dim'>PEN: "+u.boxes+" NEST BOXES · "+u.box_slots+" PLACES · CAP "+u.cap+"</span>";
-  }
-  return out;
+  return "<span class='dim'>"+b.join(" · ")+"</span>";
 }
-var hudExtra="";
+var hudExtra="", edenSize=0;
+// ---- the diary: what the person you follow has done since you started
+// watching — the Truman view. Kept by the viewer, one line per change.
+var diary={e:[], l:[]}, diaryWho={e:0, l:0}, diaryLast={e:"", l:""};
+function keepDiary(key, u){
+  var id=sel[key];
+  if (id!==diaryWho[key]){ diary[key]=[]; diaryWho[key]=id; diaryLast[key]=""; }
+  if (!id) return;
+  var map=key==="e"?actors6:actors9, a=map[id], d=u.detail&&u.detail[String(id)];
+  if (!a || !d){
+    if (diaryLast[key]!=="gone"){
+      var ev=(state.events||[]).slice().reverse().find(function(e){ return e.msg.indexOf(diary[key].name||"\u0000")>=0; });
+      diary[key].push("Y"+u.year+" · "+(ev?ev.msg:"is gone from the record — dead, with no line of their own."));
+      diaryLast[key]="gone";
+    }
+    return;
+  }
+  diary[key].name=d[0];
+  var what=ACT_LABEL[a.act]||"idle";
+  if (what!==diaryLast[key]){
+    diaryLast[key]=what;
+    var at=(u.day%360);
+    diary[key].push("Y"+u.year+" d"+at+" · "+what);
+    if (diary[key].length>6) diary[key].shift();
+  }
+}
 function whoInfo(key){
   var id=sel[key]; if(!id) return null;
   var map=key==="e"?actors6:actors9;
@@ -1224,15 +1666,18 @@ function whoInfo(key){
           act:a.moving?"walking":(ACT_LABEL[a.act]||"idle")};
 }
 function hudText(u, kind){
-  var l2 = kind==="e" ? u.phase.toUpperCase()
+  var l2 = kind==="e" ? u.phase.toUpperCase()+" · ALWAYS SPRING"
     : (u.tech&&u.tech.length?"AGE OF "+u.tech[u.tech.length-1].replace("_"," ").toUpperCase():u.phase.toUpperCase());
   var sh=shots[kind], cap = (sh && !sh.wide && sh.label) ? "<span class='shot'> · "+sh.label.toUpperCase()+"</span>" : "";
   var v=view[kind];
-  var sc = v ? "<span class='scale'> · "+Math.round(v.hx*2)+" TILES ACROSS</span>" : "";
+  var sc = "";
   var w=whoInfo(kind);
   var who = w ? "<span class='who'> · "+w.name.toUpperCase()+", "+w.act.toUpperCase()+"</span>" : "";
-  return "<b>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</b>  Y"+u.year+
-         " · POP "+u.pop+" · "+l2+(kind==="e"?hudExtra:"")+sc+cap+who;
+  var key = (kind==="e" && v && v.ts>5) ? "  <span class='key' style='border-color:#f8d848'></span>held "+
+            "<span class='key' style='border-color:#2f5a4c'></span>vacant" : "";
+  return "<div class='l1'><b>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</b>  Y"+u.year+
+         " · POP "+u.pop+" · "+l2+(kind==="e"?hudExtra:"")+sc+cap+who+"</div>"+
+         doingHTML(u.people)+key+"\n"+statLine(u, kind);
 }
 function refreshHud(kind){
   if (!state) return;
@@ -1246,10 +1691,18 @@ function refreshHud(kind){
 function paintCard(key){
   var el=document.getElementById(key==="e"?"card6":"card9");
   var w=whoInfo(key);
+  if(!w && sel[key] && diary[key].length && diaryLast[key]==="gone"){
+    el.className="card on";
+    el.innerHTML="<span class='nm'>"+(diary[key].name||"")+"</span><br><span class='dl'>"+diary[key].slice(-3).join("<br>")+"</span>";
+    return;
+  }
   if(!w){ el.className="card"; el.innerHTML=""; return; }
   el.className="card on";
   var bits=[];
-  if (w.flags&1)  bits.push("withdrawn — one of the beautiful ones");
+  var wa=(key==="e"?actors6:actors9)[w.id];
+  if (w.flags&1)  bits.push(["withdrawn","withdrawn — huddled on the floor with the others who gave up",
+                             "withdrawn — one of the beautiful ones: eats, sleeps, grooms, alone",
+                             "withdrawn — alone in an upper cabana"][(wa&&wa.wk)||0]);
   if (w.flags&2)  bits.push("incompetent — born into the sink");
   if (w.flags&4)  bits.push("pregnant");
   if (w.flags&8)  bits.push("minding an infant");
@@ -1261,12 +1714,16 @@ function paintCard(key){
     var pd=w.u.detail[String(w.pid)];
     if (pd) pname="partner: "+pd[0];
   }
+  var d=w.u.detail[String(w.id)]||[];
+  if (d[8]) bits.unshift(d[8]);
+  if (d.length>11) bits.push("purpose "+Math.round(d[9]*100)+"% · self-control "+Math.round(d[10]*100)+"% · temper "+Math.round(d[11]*100)+"%");
   el.innerHTML="<span class='nm'>"+w.name+"</span> · "+w.act+
     "<br><span class='dl'>"+w.age+" years · generation "+w.gen+
     " · "+w.hun+" hunger<br>"+
     (key==="e" ? "nest box at "+w.hx+","+w.hy : "hearth at "+w.hx+","+w.hy)+
     " · "+pname+
-    (bits.length?"<br>"+bits.join(" · "):"")+"</span>";
+    (bits.length?"<br>"+bits.join(" · "):"")+"</span>"+
+    (diary[key].length>1?"<br><span class='dl'>"+diary[key].slice(-4).join(" → ")+"</span>":"");
 }
 
 // ---------------------------------------------------------- the console
@@ -1279,6 +1736,12 @@ var KIND_GROUP={
   feud:"world", culture:"world", ennui:"world",
   extinction:"end", reseed:"end", lesson:"end", epidemic:"end"
 };
+// kinds that arrive one person at a time and read better as one line
+// [the line's verb, the pattern that finds who it happened to]
+var REPEATS={famine:["starved",/^(\S+) starves/], predator:["taken by predators",/^(\S+) is taken/],
+             violence:["killed in brawls",/^(\S+) is killed in a sudden brawl/],
+             childbirth:["died in childbirth",/^(\S+) dies bringing/]};
+function victimOf(e){ var r=REPEATS[e.t]; var m=r&&e.msg.match(r[1]); return m?m[1]:null; }
 var conFilter={u:"all",k:"all"};
 var conEvents=[];
 function eventClass(e){
@@ -1299,29 +1762,34 @@ function updateRecords(events){
     el.innerHTML="<div class='empty'>Nothing recorded under this filter.</div>";
     return;
   }
-  var html=rows.slice(-400).map(function(r){
-    var e=r.e;
+  var runs=[];
+  for (var k=0;k<rows.length;k++){
+    var last=runs[runs.length-1], e=rows[k].e;
+    if (last && last.e.y===e.y && last.e.u===e.u && last.e.t===e.t && victimOf(e) && victimOf(last.e)) last.more.push(e);
+    else runs.push({e:e, g:rows[k].g, more:[]});
+  }
+  var html=runs.slice(-300).map(function(r){
+    var e=r.e, msg=e.msg;
+    if (r.more.length){
+      var names=[e].concat(r.more).map(victimOf);
+      msg="<span class='n'>"+names.length+"</span> "+REPEATS[e.t][0]+": "+names.join(", ");
+    }
     return "<div class='row "+r.g+"'><span class='yr'>Y"+e.y+"</span> "+
       "<span class='"+(e.u==="EDEN"?"u6":"u9")+"'>"+(e.u==="EDEN"?"U6":"U9")+"</span> "+
-      "<span class='yr'>["+e.t+"]</span> "+e.msg+"</div>";
+      "<span class='yr'>["+e.t+"]</span> "+msg+"</div>";
   }).join("");
   if (el.innerHTML!==html){
     el.innerHTML=html;
     el.scrollTop=el.scrollHeight;
   }
 }
-function buildLegend(){
-  var cls=[[0,"#f8d848","child"],[1,"#3f6fd8","man"],[2,"#d45a8c","woman"],
-           [3,"#9a9a9a","elder"],[4,"#9ae8e0","withdrawn"]];
-  var h=cls.map(function(c){
-    return "<span class='chip'><span class='sw' style='background:"+c[1]+"'></span>"+c[2]+"</span>";
-  }).join("");
-  h+="<span class='chip' style='color:#5e5e7c'>poses: foraging · hunting · fishing · farming · "+
-     "eating · talking · making love · fighting · giving birth · withdrawn</span>";
-  h+="<span class='chip'><span class='sw' style='background:#f8d848'></span>nest box held</span>"+
-     "<span class='chip'><span class='sw' style='background:#2f5a4c'></span>vacant — roles are filled once</span>";
-  document.getElementById("legend").innerHTML=h;
-}
+document.getElementById("more").addEventListener("click", function(){
+  var god=document.getElementById("god");
+  god.className = god.className==="tall" ? "" : "tall";
+  this.className = god.className==="tall" ? "on" : "";
+  this.textContent = god.className==="tall" ? "LESS" : "MORE";
+  fit(); updateRecords(null);
+});
 document.getElementById("filters").addEventListener("click", function(e){
   var b=e.target; if(!b||b.tagName!=="BUTTON") return;
   if (b.dataset.u!==undefined){
@@ -1367,15 +1835,21 @@ function poll(){
   (SNAP?fetchJSON(SNAP):fetchJSON("/state")).then(function(st){
     state=st; pollSeq++;
     if (!SNAP&&worldInfo&&st.u.lagoon.iter!==lagoonIter) loadWorld().then(function(){ base9=null; });
-    syncActors(actors6, st.u.eden.people, EM);
-    syncActors(actors9, st.u.lagoon.people, 0);
+    var es=st.u.eden.size||48;
+    if (edenSize && es!==edenSize){                 // the resort grew: the engine moved
+      var k=(es-edenSize)/2;                         // everyone by k; so do we, at once
+      Object.keys(actors6).forEach(function(id){ var a=actors6[id]; a.x+=k; a.y+=k; a.tx+=k; a.ty+=k; a.ltx=a.tx; a.lty=a.ty; });
+      cam.e.x+=k; cam.e.y+=k; cam.e.tx+=k; cam.e.ty+=k;
+    }
+    edenSize=es;
+    syncActors(actors6, st.u.eden.people, EM, st.u.eden.detail);
+    keepDiary("e", st.u.eden); keepDiary("l", st.u.lagoon);
+    syncActors(actors9, st.u.lagoon.people, 0, st.u.lagoon.detail);
     if (heat9 && pollSeq%40===0){ for (var i=0;i<heat9.length;i++) heat9[i]=(heat9[i]*0.92)|0; }
     var e=st.u.eden,l=st.u.lagoon, extra="";
     if (st.status&&st.status.catching_up) extra="  ·  FAST-FORWARDING "+st.status.behind_days+" DAYS";
     else if (SNAP){ var age=Math.max(0,Math.round(Date.now()/1000-st.wall)); extra="  ·  OBSERVED "+(age<90?age+"S":Math.round(age/60)+" MIN")+" AGO"; }
     hudExtra=extra; refreshHud("e"); refreshHud("l");
-    document.getElementById("s6").innerHTML=statHTML(e,"e");
-    document.getElementById("s9").innerHTML=statHTML(l,"l");
     sparkline("tre", e.census, "#a8c0f0"); sparkline("trl", l.census, "#a0e898");
   }).catch(function(){});
 }
@@ -1387,6 +1861,7 @@ function frame(){
   tick++;
   try{
   if (state){
+    stepWalk();
     render(document.getElementById("c6"), compose6(state.u.eden), actors6, "e", state.u.eden);
     render(document.getElementById("c9"), compose9(state.u.lagoon, state), actors9, "l", state.u.lagoon);
     paintOverlay("e"); paintOverlay("l");
@@ -1400,7 +1875,6 @@ function frame(){
 }
 document.addEventListener("visibilitychange", function(){ if (!document.hidden){ fit(); frame(); } });
 fit();
-buildLegend();
 bindWorld("c6","e");
 bindWorld("c9","l");
 loadWorld().then(function(){

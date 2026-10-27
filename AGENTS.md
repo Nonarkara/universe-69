@@ -118,9 +118,13 @@ core is repeated inline below so an agent that skips the pointer still gets it.
 ### House style for this product
 
 - Chunky pixels, `image-rendering: pixelated`, flat 16-colour palettes, monospace
-  HUD. No gradients, no shadows, no decoration. This is deliberate: the visual
-  language is 8-bit honesty, and the renderer is already a 2026 pixel-art
-  renderer, not a web app.
+  HUD for the *worlds*. No gradients, no shadows, no decoration. This is
+  deliberate: the visual language is 8-bit honesty.
+- **People are the exception (owner's decision, 2026-10-27):** they are drawn
+  as life-drawing ink sketches with realistic proportion, so a viewer can see
+  whether someone is fat, starving, strong, weak or hurt. Never stick figures,
+  never blobs. Adults are drawn as bodies are; children never get genital
+  detail. See DESIGN.md, "Rendering".
 - The viewer is a *documentary camera*, not a surveillance map: it finds
   something worth watching (a birth, a brawl, a hunting party) and closes in on
   it, then pulls back to the whole world. Do not turn it into a dashboard of

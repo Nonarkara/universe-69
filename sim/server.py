@@ -8,6 +8,7 @@
 - Optionally mirrors a snapshot to the web (data/web.json: {"url", "token"}).
 
 Run:  python3 sim/server.py
+      python3 sim/server.py --genesis   # archive the old world, start over
 """
 
 import json
@@ -39,6 +40,20 @@ os.makedirs(DATA, exist_ok=True)
 lock = threading.Lock()
 recent_events = deque(maxlen=4000)
 status = {"catching_up": False, "behind_days": 0, "started": time.time()}
+
+# `--genesis` starts both worlds over from the shared founders. The old world
+# is archived, never deleted: its numbers belong to the engine that made them.
+if "--genesis" in sys.argv and os.path.exists(STATE_PATH):
+    old = engine.load_state(STATE_PATH)
+    archive = os.path.join(DATA, "archive")
+    os.makedirs(archive, exist_ok=True)
+    stamp = time.strftime("%Y%m%d-%H%M%S")
+    ver = old.get("eden", {}).get("engine", "unknown")
+    dest = os.path.join(archive, f"state-{ver}-{stamp}.json")
+    os.replace(STATE_PATH, dest)
+    if os.path.exists(EVENTS_PATH):
+        os.replace(EVENTS_PATH, os.path.join(archive, f"events-{ver}-{stamp}.ndjson"))
+    print(f"[universe69] archived the old world to {dest}")
 
 if os.path.exists(STATE_PATH):
     world = engine.load_state(STATE_PATH)
