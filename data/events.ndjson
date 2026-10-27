@@ -68,3 +68,40 @@
 {"d": 26544, "y": 73, "u": "LAGOON", "t": "famine", "msg": "Lura starves in the lean season.", "wall": 1793066828.366466}
 {"d": 26559, "y": 73, "u": "LAGOON", "t": "childbirth", "msg": "Niilo dies bringing new life into the world.", "wall": 1793066858.6689768}
 {"d": 26743, "y": 74, "u": "EDEN", "t": "violence", "msg": "E-0299 is killed in a sudden brawl near the hoppers.", "wall": 1793067224.552642}
+{"d": 27000, "y": 75, "u": "LAGOON", "t": "disaster", "msg": "Year 75: a brutal ice-age winter grips the lagoon.", "wall": 1793067740.252854}
+{"d": 27000, "y": 75, "u": "LAGOON", "t": "culture", "msg": "Year 75: with food enough and nothing to fear, cave paintings appears \u2014 first made by Mika.", "wall": 1793067740.2529159}
+{"d": 27095, "y": 75, "u": "EDEN", "t": "violence", "msg": "E-0431 is killed in a sudden brawl near the hoppers.", "wall": 1793067928.277898}
+{"d": 27360, "y": 76, "u": "LAGOON", "t": "disaster", "msg": "Year 76: drought \u2014 the groves wither.", "wall": 1793068460.432572}
+{"d": 27655, "y": 76, "u": "LAGOON", "t": "famine", "msg": "Niri starves in the lean season.", "wall": 1793069050.488653}
+{"d": 27661, "y": 76, "u": "LAGOON", "t": "famine", "msg": "Ritu starves in the lean season.", "wall": 1793069062.3298612}
+{"d": 27941, "y": 77, "u": "EDEN", "t": "violence", "msg": "E-0595 is killed in a sudden brawl near the hoppers.", "wall": 1793071369.679732}
+{"d": 28086, "y": 78, "u": "EDEN", "t": "violence", "msg": "E-0525 is killed in a sudden brawl near the hoppers.", "wall": 1793071369.6797829}
+{"d": 28663, "y": 79, "u": "EDEN", "t": "violence", "msg": "E-0058 is killed in a sudden brawl near the hoppers.", "wall": 1793071369.6798022}
+{"d": 29138, "y": 80, "u": "EDEN", "t": "violence", "msg": "E-0161 is killed in a sudden brawl near the hoppers.", "wall": 1793072384.02344}
+{"d": 29167, "y": 81, "u": "EDEN", "t": "disease", "msg": "A sickness spread by mating moves through the pen \u2014 the one cost free pleasure turned out to carry.", "wall": 1793072384.023485}
+{"d": 29520, "y": 82, "u": "LAGOON", "t": "disaster", "msg": "Year 82: a brutal ice-age winter grips the lagoon.", "wall": 1793076679.784003}
+{"d": 31327, "y": 87, "u": "EDEN", "t": "disease", "msg": "The outbreak burns out. The generation that watched it keeps its distance \u2014 desire now carries a memory of death.", "wall": 1793076679.784116}
+{"d": 31332, "y": 87, "u": "LAGOON", "t": "predator", "msg": "Komi is taken by a predator at the wood's edge.", "wall": 1793076679.784147}
+{"d": 31680, "y": 88, "u": "LAGOON", "t": "culture", "msg": "Year 88: with food enough and nothing to fear, drum songs appears \u2014 first made by Anan.", "wall": 1793081407.642303}
+{"d": 31684, "y": 88, "u": "EDEN", "t": "violence", "msg": "E-0076 is killed in a sudden brawl near the hoppers.", "wall": 1793081407.6424372}
+{"d": 32357, "y": 89, "u": "EDEN", "t": "violence", "msg": "E-0659 is killed in a sudden brawl near the hoppers.", "wall": 1793081407.6424809}
+{"d": 34560, "y": 96, "u": "EDEN", "t": "violence", "msg": "E-0586 is killed in a sudden brawl near the hoppers.", "wall": 1793084074.872978}
+{"d": 34912, "y": 96, "u": "EDEN", "t": "violence", "msg": "E-0901 is killed in a sudden brawl near the hoppers.", "wall": 1793084074.873035}
+{"d": 35280, "y": 98, "u": "LAGOON", "t": "disaster", "msg": "Year 98: a storm off the lagoon destroys most of the stores.", "wall": 1793088447.667417}
+{"d": 35571, "y": 98, "u": "LAGOON", "t": "predator", "msg": "Taba is taken by a predator at the wood's edge.", "wall": 1793088447.667472}
+{"d": 36000, "y": 100, "u": "LAGOON", "t": "culture", "msg": "Year 100: with food enough and nothing to fear, the dance of the tides appear \u2014 first made by Urilosha.", "wall": 1793088447.667496}
+{"d": 36227, "y": 100, "u": "EDEN", "t": "violence", "msg": "E-0514 is killed in a sudden brawl near the hoppers.", "wall": 1793088447.667517}
+{"d": 36360, "y": 101, "u": "LAGOON", "t": "discovery", "msg": "Year 101: boats brave the open water \u2014 first by Noveon.", "wall": 1793088447.6675332}
+{"d": 36795, "y": 102, "u": "EDEN", "t": "violence", "msg": "E-0751 is killed in a sudden brawl near the hoppers.", "wall": 1793088447.667549}
+{"d": 37080, "y": 103, "u": "LAGOON", "t": "discovery", "msg": "Year 103: animals are tamed \u2014 first by Onshaon.", "wall": 1793088447.667563}
+{"d": 37087, "y": 103, "u": "LAGOON", "t": "childbirth", "msg": "Nian dies bringing new life into the world.", "wall": 1793088447.667592}
+{"d": 37440, "y": 104, "u": "LAGOON", "t": "migration", "msg": "Year 104: the boats cross the strait. The Veshaka tribe lands on the greater shore \u2014 a land without end, the one all their children's children will call home.", "wall": 1793090451.914003}
+{"d": 37551, "y": 104, "u": "LAGOON", "t": "childbirth", "msg": "Baur dies bringing new life into the world.", "wall": 1793090451.914052}
+{"d": 37633, "y": 104, "u": "LAGOON", "t": "predator", "msg": "Kono is taken by a predator at the wood's edge.", "wall": 1793090451.914069}
+{"d": 37800, "y": 105, "u": "LAGOON", "t": "discovery", "msg": "Year 105: healing lore spreads \u2014 first by Rimi.", "wall": 1793090451.914081}
+{"d": 37800, "y": 105, "u": "LAGOON", "t": "culture", "msg": "Year 105: with food enough and nothing to fear, carved totems appears \u2014 first made by Noilo.", "wall": 1793090451.914091}
+{"d": 37979, "y": 105, "u": "EDEN", "t": "violence", "msg": "E-0040 is killed in a sudden brawl near the hoppers.", "wall": 1793090451.914101}
+{"d": 38217, "y": 106, "u": "EDEN", "t": "violence", "msg": "E-0849 is killed in a sudden brawl near the hoppers.", "wall": 1793090451.914109}
+{"d": 38418, "y": 106, "u": "LAGOON", "t": "predator", "msg": "Nini is taken by a predator at the wood's edge.", "wall": 1793090576.377023}
+{"d": 38520, "y": 107, "u": "LAGOON", "t": "culture", "msg": "Year 107: with food enough and nothing to fear, the story of the stars appear \u2014 first made by Lurailo.", "wall": 1793090780.577677}
+{"d": 38527, "y": 107, "u": "EDEN", "t": "disease", "msg": "The wary generation has aged out; the pen forgets.", "wall": 1793090792.421441}

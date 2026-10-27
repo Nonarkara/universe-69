@@ -341,46 +341,61 @@ def eden_assign(u, p, day, rng, crowd):
         p["a"], p["ad"] = A_BIRTH, 2
         p["tx"], p["ty"] = home_spot(0)
         return
-    if a < ADULT_AGE:                                # pups stay by the nest
-        p["a"] = A_TEND if a < 8 * DAYS_PER_YEAR else A_EAT
-        p["ad"] = rng.randint(3, 8)
-        p["tx"], p["ty"] = (home_spot(2) if p["a"] == A_TEND
-                            else eden_feed_spot(u, rng))
+    def clamp(x, y):
+        return (min(EDEN_SIZE - 3, max(2, x)), min(EDEN_SIZE - 3, max(2, y)))
+
+    if a < ADULT_AGE:
+        if a < 3 * DAYS_PER_YEAR:                    # infants: on the mother
+            p["a"], p["ad"] = A_TEND, 3
+            p["tx"], p["ty"] = home_spot(1)
+        elif a < 12 * DAYS_PER_YEAR:                 # children play in packs
+            play_with(u, p, kids_near(u["_ctx"], p), rng, clamp)
+        else:                                        # adolescents eat and loiter
+            p["a"] = A_EAT if rng.random() < 0.5 else A_TALK
+            p["ad"] = rng.randint(3, 8)
+            if p["a"] == A_EAT:
+                p["tx"], p["ty"] = eden_feed_spot(u, rng)
+            else:
+                join_circle(u, p, *home_spot(3))
+                p["tx"], p["ty"] = clamp(p["tx"], p["ty"])
         return
 
     homeless = (p.get("box") is None) or p["box"] < 0
-    w = [(A_EAT, 3.2), (A_TALK, 2.0), (A_REST, 2.2)]
-    if p["p"] is not None and a <= 45 * DAYS_PER_YEAR:
+    ctx = u["_ctx"]
+    w = [(A_EAT, 3.2), (A_TALK, 2.4), (A_REST, 1.8)]
+    if a <= 45 * DAYS_PER_YEAR:
+        # mating in the pen is free of bonds; anyone nearby will do
         w.append((A_MATE, 2.5 * max(0.2, 1.0 - u.get("ennui", 0.0))))
     if p["s"] == "m" and u["phase"] in ("stagnate", "death"):
         # the dispossessed are the violent ones; those with territory defend it
         w.append((A_FIGHT, (4.5 if homeless else 1.2) * (0.5 + crowd)))
+    if p["id"] in ctx["moms"]:
+        w.append((A_TEND, 2.5))                      # a mother with an infant
 
-    total = sum(x[1] for x in w)
-    r = rng.random() * total
-    act = w[-1][0]
-    for kind, weight in w:
-        r -= weight
-        if r <= 0:
-            act = kind
-            break
+    act = _weighted(w, rng)
     p["a"] = act
     p["ad"] = rng.randint(3, 8)
     if act == A_EAT:
         p["tx"], p["ty"] = eden_feed_spot(u, rng)
     elif act == A_MATE:
-        p["tx"], p["ty"] = home_spot(1)
-        p["ad"] = 2
-        for q in u["people"]:
-            if q["id"] == p["p"]:
-                q["a"], q["ad"] = A_MATE, 2
-                q["tx"], q["ty"] = p["tx"], p["ty"]
-                break
+        pool = ctx["af"] if p["s"] == "m" else ctx["am"]
+        near = [q for q in pool if q is not p and q.get("a") != A_MATE
+                and abs(q["x"] - p["x"]) <= 6 and abs(q["y"] - p["y"]) <= 6]
+        if near:
+            q = rng.choice(near)
+            couple_up(p, q, *clamp(q["x"], q["y"]))
+        else:
+            p["a"], (p["tx"], p["ty"]) = A_REST, home_spot(2)
     elif act == A_FIGHT:
-        # trouble happens where the crowd is, not in private
-        hx, hy = EDEN_HOPPERS[u.get("sink", 0)]
-        p["tx"] = hx + rng.randint(-3, 4)
-        p["ty"] = hy + rng.randint(-3, 4)
+        if not pick_fight(u, p, u["people"], rng):
+            # nobody near: drift to where the crowd is and brood
+            hx, hy = EDEN_HOPPERS[u.get("sink", 0)]
+            p["a"] = A_REST
+            p["tx"], p["ty"] = clamp(hx + rng.randint(-3, 4), hy + rng.randint(-3, 4))
+    elif act == A_TALK:
+        cx, cy = home_spot(3 if not homeless else 6)
+        join_circle(u, p, cx, cy)
+        p["tx"], p["ty"] = clamp(p["tx"], p["ty"])
     else:
         p["tx"], p["ty"] = home_spot(3 if not homeless else 6)
 
@@ -447,6 +462,8 @@ def tick_eden(u, rng, events):
         events.append((day, "EDEN", "phase",
                        f"Crowding passes {int(EDEN_STAGNATION*100)}%. Stagnation: the behavioral sink emerges."))
 
+    byid = {q["id"]: q for q in people}
+    u["_ctx"] = day_context(people, day)
     for p in people:
         if base_mortality(p, day, rng, events, u):
             dead.append(p)
@@ -484,6 +501,7 @@ def tick_eden(u, rng, events):
                        p["g"] + 1, p["x"], p["y"], competent)
             c["hx"], c["hy"] = p.get("hx", p["x"]), p.get("hy", p["y"])
             c["box"] = None                 # claims its own place at adulthood
+            c["mom"] = p["id"]
             u["next_id"] += 1
             born.append(c)
             if c["g"] > u["gen_max"] and c["g"] % 5 == 0:
@@ -494,6 +512,9 @@ def tick_eden(u, rng, events):
         if not p["c"] and not p["w"] and age_of(p, day) >= ADULT_AGE:
             p["w"] = True
         # the day in the pen: eat, court, brawl, or withdraw
+        if age_of(p, day) < 3 * DAYS_PER_YEAR:
+            follow_mother(p, byid, lambda x, y: (min(EDEN_SIZE - 3, max(2, x)),
+                                                 min(EDEN_SIZE - 3, max(2, y))))
         if p.get("ad", 0) <= 0 and p["x"] == p["tx"] and p["y"] == p["ty"]:
             eden_assign(u, p, day, rng, crowd)
         if step_toward(p):
@@ -698,9 +719,25 @@ def lagoon_assign(u, p, day, rng, shortfall):
         p["hy"] = st["y"] + rng.randint(-2, 2)
     home = (p["hx"], p["hy"])
 
+    terr = terrain_of(u)
+
+    def clamp(x, y):
+        """Inside the map and on dry land — snap to the nearest land tile."""
+        x = min(LAGOON_SIZE - 2, max(1, x))
+        y = min(LAGOON_SIZE - 2, max(1, y))
+        if terr[y][x] != 2:
+            return (x, y)
+        for r in (1, 2, 3):
+            for dx in range(-r, r + 1):
+                for dy in range(-r, r + 1):
+                    xx, yy = x + dx, y + dy
+                    if 1 <= xx < LAGOON_SIZE - 1 and 1 <= yy < LAGOON_SIZE - 1 \
+                            and terr[yy][xx] != 2:
+                        return (xx, yy)
+        return (p["hx"], p["hy"])
+
     def at_home(r=2):
-        return (min(LAGOON_SIZE - 2, max(1, p["hx"] + rng.randint(-r, r))),
-                min(LAGOON_SIZE - 2, max(1, p["hy"] + rng.randint(-r, r))))
+        return clamp(p["hx"] + rng.randint(-r, r), p["hy"] + rng.randint(-r, r))
 
     # needs that override everything
     if p["due"] and p["due"] - day <= 0:
@@ -711,9 +748,17 @@ def lagoon_assign(u, p, day, rng, shortfall):
         p["a"], p["ad"] = A_REST, 6
         p["tx"], p["ty"] = at_home(1)
         return
-    if a < 8 * DAYS_PER_YEAR:                  # small children never leave camp
-        p["a"], p["ad"] = A_TEND, rng.randint(3, 7)
-        p["tx"], p["ty"] = at_home(2)
+    if a < 3 * DAYS_PER_YEAR:                  # infants: wherever mother is
+        p["a"], p["ad"] = A_TEND, 3
+        p["tx"], p["ty"] = at_home(1)
+        return
+    if a < 12 * DAYS_PER_YEAR:                 # children: packs at play
+        if rng.random() < 0.7:
+            play_with(u, p, kids_near(u["_ctx"], p), rng, clamp)
+        else:                                  # or tag along foraging
+            pat = band_patches(u, si, rng)
+            p["a"], p["ad"] = A_FORAGE, rng.randint(3, 6)
+            p["tx"], p["ty"] = _patch_for(pat, "open", rng, home)
         return
 
     near_home = (abs(p["x"] - p["hx"]) <= 3 and abs(p["y"] - p["hy"]) <= 3)
@@ -724,34 +769,48 @@ def lagoon_assign(u, p, day, rng, shortfall):
 
     # home days: the band's social life happens at the hearths
     elder = a >= ELDER_AGE
-    if elder or rng.random() < 0.55:
-        w = [(A_TALK, 2.4 + (1.6 if has(u, "lore") else 0)), (A_REST, 1.8)]
+    has_infant = p["id"] in u["_ctx"]["moms"]
+    if elder or has_infant or rng.random() < 0.55:
+        w = [(A_TALK, 2.6 + (1.6 if has(u, "lore") else 0)), (A_REST, 1.6)]
         if has(u, "shelter") and not elder:
             w.append((A_BUILD, 1.0))
         if (p["p"] is not None and not u["innocent"] and shortfall < 0.25
                 and ADULT_AGE <= a <= 45 * DAYS_PER_YEAR):
             w.append((A_MATE, 2.2))
-        if any(age_of(q, day) < 8 * DAYS_PER_YEAR for q in u["people"][:40]):
-            w.append((A_TEND, 1.2))
+        if has_infant:
+            w.append((A_TEND, 4.0))
         act = _weighted(w, rng)
         p["a"], p["ad"] = act, rng.randint(4, 9)
         p["tx"], p["ty"] = at_home(2)
         if act == A_MATE:
-            p["ad"] = 2
-            for q in u["people"]:
-                if q["id"] == p["p"]:
-                    q["a"], q["ad"] = A_MATE, 2
-                    q["tx"], q["ty"] = p["tx"], p["ty"]
-                    break
+            q = next((q for q in u["people"] if q["id"] == p["p"]), None)
+            if q is not None:
+                couple_up(p, q, *at_home(1))
+            else:
+                p["a"] = A_REST
+        elif act in (A_TALK, A_REST):          # elders sit together, too
+            cx, cy = (st["x"] + rng.randint(-3, 3), st["y"] + rng.randint(-3, 3))
+            join_circle(u, p, cx, cy, size=5 if act == A_TALK else 4,
+                        radius=1.6 if act == A_TALK else 1.3)
+            p["tx"], p["ty"] = clamp(p["tx"], p["ty"])
         return
-    if a < ADULT_AGE:                          # older children work the patches
+    if a < ADULT_AGE:                          # adolescents work with the band
         pat = band_patches(u, si, rng)
         p["a"], p["ad"] = A_FORAGE, rng.randint(4, 9)
         p["tx"], p["ty"] = _patch_for(pat, "open", rng, home)
         return
 
-    # a working trip out to one of the band's patches
+    # a working trip. Nobody sets out alone: if a party left in the last
+    # few days, you go where they went and do what they are doing.
     pat = band_patches(u, si, rng)
+    party = st.get("party")
+    if party and day - party["d"] <= 3 and party["n"] < 14:
+        party["n"] += 1
+        p["a"] = party["a"]
+        p["ad"] = rng.randint(7, 15)
+        p["tx"], p["ty"] = clamp(party["x"] + rng.randint(-2, 2),
+                                 party["y"] + rng.randint(-2, 2))
+        return
     w = [(A_FORAGE, 3.0 + 6.0 * shortfall)]
     if has(u, "stone_tools"):
         w.append((A_HUNT, 2.0 + 4.0 * shortfall))
@@ -772,6 +831,7 @@ def lagoon_assign(u, p, day, rng, shortfall):
     else:
         kind = "woods" if (has(u, "stone_tools") and rng.random() < 0.35) else "open"
         p["tx"], p["ty"] = _patch_for(pat, kind, rng, home)
+    st["party"] = {"d": day, "a": act, "x": p["tx"], "y": p["ty"], "n": 1}
 
 
 def _weighted(w, rng):
@@ -782,6 +842,124 @@ def _weighted(w, rng):
         if r <= 0:
             return kind
     return w[-1][0]
+
+
+# ------------------------------------------------- how people are together
+# Humans do almost nothing alone. These helpers turn solitary activity codes
+# into dyads and circles: a conversation is a ring of people facing inward,
+# a fight is two people squaring off, a couple stands together, children
+# chase each other, infants stay on their mother.
+
+A_PLAY = 15
+
+
+def day_context(people, day):
+    """Computed once per tick so the social helpers don't rescan everyone.
+    Children are bucketed on an 8-tile grid so a playmate search is local."""
+    kids, moms, adults_m, adults_f = {}, set(), [], []
+    for q in people:
+        a = day - q["b"]
+        if 3 * DAYS_PER_YEAR <= a < 12 * DAYS_PER_YEAR:
+            kids.setdefault((q["x"] >> 3, q["y"] >> 3), []).append(q)
+        elif a < 3 * DAYS_PER_YEAR and q.get("mom") is not None:
+            moms.add(q["mom"])
+        elif ADULT_AGE <= a <= 45 * DAYS_PER_YEAR and not q["w"]:
+            (adults_m if q["s"] == "m" else adults_f).append(q)
+    return {"kids": kids, "moms": moms, "am": adults_m, "af": adults_f}
+
+
+def kids_near(ctx, p):
+    gx, gy = p["x"] >> 3, p["y"] >> 3
+    out = []
+    for dx in (-1, 0, 1):
+        for dy in (-1, 0, 1):
+            out.extend(ctx["kids"].get((gx + dx, gy + dy), ()))
+    return out
+
+
+def join_circle(u, p, cx, cy, size=5, radius=1.6):
+    """Stand in a ring with whoever is already talking nearby, facing in."""
+    day = u["day"]
+    circles = u.setdefault("circles", [])
+    if len(circles) > 300:
+        del circles[:150]
+    best = None
+    for c in circles:
+        if (c["n"] < size and day - c["d"] < 30
+                and abs(c["x"] - cx) <= 4 and abs(c["y"] - cy) <= 4):
+            best = c
+            break
+    if best is None:
+        best = {"x": cx, "y": cy, "n": 0, "d": day}
+        circles.append(best)
+    i = best["n"]
+    best["n"] += 1
+    ang = i * (2 * math.pi / size) + 0.5
+    p["tx"] = int(round(best["x"] + math.cos(ang) * radius))
+    p["ty"] = int(round(best["y"] + math.sin(ang) * radius))
+    p["f"] = -1 if p["tx"] > best["x"] else 1
+
+
+def square_off(p, q):
+    """Two people face each other, a pace apart."""
+    x, y = (p["x"] + q["x"]) // 2, (p["y"] + q["y"]) // 2
+    p["tx"], p["ty"], p["f"] = x, y, 1
+    q["tx"], q["ty"], q["f"] = x + 1, y, -1
+
+
+def pick_fight(u, p, people, rng, reach=9):
+    """Violence takes two. Find another man nearby, preferably one with
+    nothing to lose, and go at each other."""
+    pool = [q for q in people
+            if q is not p and q["s"] == "m" and not q["w"]
+            and q.get("a") != A_FIGHT
+            and abs(q["x"] - p["x"]) <= reach and abs(q["y"] - p["y"]) <= reach
+            and age_of(q, u["day"]) >= ADULT_AGE]
+    if not pool:
+        return False
+    pool.sort(key=lambda q: 0 if (q.get("box") is None or q["box"] < 0) else 1)
+    q = pool[0] if rng.random() < 0.7 else rng.choice(pool)
+    square_off(p, q)
+    p["a"] = q["a"] = A_FIGHT
+    p["ad"] = q["ad"] = 2
+    return True
+
+
+def couple_up(p, q, x, y):
+    p["tx"], p["ty"], p["f"] = x, y, 1
+    q["tx"], q["ty"], q["f"] = x + 1, y, -1
+    p["a"] = q["a"] = A_MATE
+    p["ad"] = q["ad"] = 2
+
+
+def follow_mother(p, byid, clamp):
+    """Infants are carried; toddlers trail. Either way the child is where
+    the mother is, not where the child's bed is."""
+    m = byid.get(p.get("mom"))
+    if m is None:
+        return False
+    ox = (p["id"] % 3) - 1
+    oy = (p["id"] // 3) % 2
+    tx, ty = clamp(m["x"] + ox, m["y"] + oy)
+    if abs(p["x"] - tx) > 1 or abs(p["y"] - ty) > 1:
+        p["tx"], p["ty"] = tx, ty
+    p["f"] = 1 if m["x"] >= p["x"] else -1
+    return True
+
+
+def play_with(u, p, kids, rng, clamp):
+    """Children chase each other: the target is another child, so the
+    group keeps re-forming and running. `kids` is the local grid bucket."""
+    near = [k for k in kids if k is not p
+            and abs(k["x"] - p["x"]) <= 7 and abs(k["y"] - p["y"]) <= 7]
+    p["a"] = A_PLAY
+    p["ad"] = rng.randint(1, 2)
+    if near:
+        k = rng.choice(near)
+        p["tx"], p["ty"] = clamp(k["x"] + rng.randint(-1, 1), k["y"] + rng.randint(-1, 1))
+        p["f"] = 1 if k["x"] >= p["x"] else -1
+    else:
+        p["tx"], p["ty"] = clamp(p["hx"] + rng.randint(-2, 2), p["hy"] + rng.randint(-2, 2))
 
 
 WALK_SPEED = 3          # tiles covered in a day's travel
@@ -798,15 +976,21 @@ def step_toward(p, terr=None, speed=WALK_SPEED):
             return True
         sx = (1 if dx > 0 else -1) if dx else 0
         sy = (1 if dy > 0 else -1) if dy else 0
+        if sx:
+            p["f"] = sx                                # face the way you walk
         nx, ny = p["x"] + sx, p["y"] + sy
         if terr is not None and terr[ny][nx] == 2:   # don't walk into the sea
-            if terr[p["y"]][nx] != 2:
+            if sx and terr[p["y"]][nx] != 2:
                 ny = p["y"]
-            elif terr[ny][p["x"]] != 2:
+            elif sy and terr[ny][p["x"]] != 2:
                 nx = p["x"]
             else:
-                p["tx"], p["ty"] = p["x"], p["y"]
-                return True
+                nx, ny = p["x"], p["y"]
+        if nx == p["x"] and ny == p["y"]:
+            # no way forward: the target is across water. Give it up, so the
+            # person chooses something reachable instead of standing forever.
+            p["tx"], p["ty"] = p["x"], p["y"]
+            return True
         p["x"], p["y"] = nx, ny
     return p["x"] == p["tx"] and p["y"] == p["ty"]
 
@@ -912,6 +1096,8 @@ def tick_lagoon(u, rng, events):
     weapons = has(u, "stone_tools")
     healing = has(u, "healing")
     terr_l = terrain_of(u)
+    byid = {q["id"]: q for q in people}
+    u["_ctx"] = day_context(people, day)
 
     for p in people:
         a = age_of(p, day)
@@ -966,6 +1152,7 @@ def tick_lagoon(u, rng, events):
                            p["g"] + 1, p["x"], p["y"])
                 c["st"] = p.get("st", 0)
                 c["hx"], c["hy"] = p.get("hx", p["x"]), p.get("hy", p["y"])
+                c["mom"] = p["id"]
                 u["next_id"] += 1
                 born.append(c)
                 if c["g"] > u["gen_max"] and c["g"] % 5 == 0:
@@ -976,6 +1163,9 @@ def tick_lagoon(u, rng, events):
                 u["deaths_y"] += 1
                 cod(u, "infant")
         # go about the day's work: travel to the site, then do the thing
+        if age_of(p, day) < 3 * DAYS_PER_YEAR:
+            follow_mother(p, byid, lambda x, y: (min(LAGOON_SIZE - 2, max(1, x)),
+                                                 min(LAGOON_SIZE - 2, max(1, y))))
         if p.get("ad", 0) <= 0 and p["x"] == p["tx"] and p["y"] == p["ty"]:
             lagoon_assign(u, p, day, rng, shortfall)
         arrived = step_toward(p, terr_l)
@@ -1223,7 +1413,7 @@ def summarize(world):
                    3 if a >= ELDER_AGE else
                    1 if p["s"] == "m" else 2)
             ppl.append([p["x"], p["y"], cls, 1 if p["s"] == "f" else 0,
-                        p["id"], p.get("a", 0)])
+                        p["id"], p.get("a", 0), p.get("f", 1)])
         info = {"day": day, "year": day // DAYS_PER_YEAR, "pop": len(u["people"]),
                 "gen": u["gen_max"], "peak": u["peak"], "phase": u["phase"],
                 "iter": u["iteration"], "people": ppl, "census": u["census"][-120:]}
@@ -1260,8 +1450,11 @@ def summarize(world):
 
 def save_state(world, path):
     tmp = path + ".tmp"
+    slim = {k: ({kk: vv for kk, vv in v.items() if not kk.startswith("_")}
+                if isinstance(v, dict) else v)
+            for k, v in world.items()}
     with open(tmp, "w") as f:
-        json.dump(world, f, separators=(",", ":"))
+        json.dump(slim, f, separators=(",", ":"))
     os.replace(tmp, path)
 
 
@@ -1300,6 +1493,8 @@ def migrate(world):
             p.setdefault("ty", p["y"])
             p.setdefault("hx", p["x"])
             p.setdefault("hy", p["y"])
+            p.setdefault("f", 1)
+            p.setdefault("mom", None)
             if u.get("kind") == "EDEN":
                 p.setdefault("box", None)   # claims a nest box on next move
     return world

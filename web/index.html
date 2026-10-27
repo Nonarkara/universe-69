@@ -17,6 +17,7 @@
          font-size:11px; line-height:1.5; white-space:pre-wrap;
          background:rgba(0,0,10,0.55); pointer-events:none; }
   .hud b { color:#f8d848; font-weight:bold; }
+  .hud .shot { color:#f0f0f8; letter-spacing:1px; }
   #god { flex:1; border-top:2px solid #3a3a55; display:flex; min-height:0;
          background:#07070e; }
   .stat { width:25%; padding:8px 12px; font-size:11px; line-height:1.7;
@@ -67,12 +68,12 @@ var EM = 12;          // EDEN resort margin (tiles) around the pen
 
 // ---- palette: muted, 3 tones per material, light from the north-west ----
 var P = {
-  waterD:"#1f4e8c", water:"#2a62a8", waterL:"#4a86c8", foam:"#cfe8f8",
+  waterD:"#1a4580", water:"#2559a3", waterS:"#3a78c8", waterL:"#5a94d8", foam:"#d4ecfa",
   sand:"#d4bc7a", sandL:"#e2cf96", sandD:"#b89c58", sandWet:"#b9a060",
-  grass:"#4e8a3a", grassD:"#3f7230", grassL:"#6aa84e",
-  floorF:"#2f5e28", canD:"#1e461e", can:"#2f6b2c", canL:"#4a8a3c",
+  grass:"#4e8a3a", grassD:"#3f7230", grassL:"#6aa84e", grassX:"#2f5d26",
+  floorF:"#2f5e28", canD:"#1b421b", can:"#2f6b2c", canL:"#4d8f3e", canX:"#6cab52",
   trunk:"#6b4226", trunkD:"#4e2f18",
-  soil:"#8a6530", soilD:"#6e4e1c", soilL:"#a07a3e",
+  soil:"#8a6530", soilD:"#6e4e1c", soilL:"#a07a3e", path:"#a8946a",
   thatch:"#9a7a3a", thatchD:"#7c6028", thatchL:"#b8955a",
   hutwall:"#7a5a34", hutdoor:"#2c1a0c",
   stone:"#b4ac9c", stoneB:"#bcb4a4", mortar:"#978f80", dust:"#a8a092",
@@ -80,41 +81,46 @@ var P = {
   hopper:"#e0b838", hopperD:"#b08a18", trough:"#4a90d9",
   lawn:"#55a04c", lawnD:"#4c9344", palm:"#2f7a38", palmL:"#3f9a48",
   pool:"#38b8e0", poolL:"#7cd8f0", rim:"#e8e8e0", deck:"#d8c9a0",
-  skin:"#eac898", shadow:"rgba(0,0,0,0.30)"
+  shadow:"rgba(0,0,0,0.30)"
 };
-// tunic colours + shade + hair, by class: child, man, woman, elder, withdrawn
-var TUN = ["#e8c94e", "#3f6fd8", "#d45a8c", "#9a9a9a", "#9ae8e0"];
-var TUS = ["#c0a132", "#2e52a8", "#aa4068", "#787878", "#74c2ba"];
-var HAIR= ["#6b4a26", "#2a1c10", "#3a2414", "#d8d8d8", "#bfeae6"];
 
 function hash2(x,y){ var h=(x*374761393+y*668265263)>>>0;
   h=(h^(h>>13))*1274126177>>>0; return (h^(h>>16))/4294967295; }
 function lerp(a,b,t){ return a+(b-a)*t; }
 function fetchJSON(u){ return fetch(u,{cache:"no-store"}).then(function(r){ return r.json(); }); }
-function mkCanvas(wpx){ var c=document.createElement("canvas"); c.width=c.height=wpx; return c; }
+function mkCanvas(w,h){ var c=document.createElement("canvas"); c.width=w; c.height=h===undefined?w:h; return c; }
 
 var worldInfo=null, lagoonIter=-1, state=null, tick=0, pollSeq=0;
 var cam={ e:{x:24+EM,y:24+EM,h:9}, l:{x:137,y:109,h:9} };
 
 // =========================================================== LAGOON layers
 var base9=null, semi9=null, frame9=null, semi9seq=-1, water9=[], terr9=null;
+var heat9=null, paths9=null, pathsSeq=-1;
 
 function nIs(terrain,x,y,k){ var S=terrain.length;
   return x>=0&&y>=0&&x<S&&y<S&&terrain[y][x]===k; }
+function nearLand(terrain,x,y,r){
+  for (var dy=-r;dy<=r;dy++) for (var dx=-r;dx<=r;dx++){
+    var k=terrain[y+dy]&&terrain[y+dy][x+dx];
+    if (k!==undefined&&k!==2) return true;
+  }
+  return false;
+}
 
 function buildBase9(terrain){
   var S=terrain.length;
   base9=mkCanvas(S*PX); semi9=mkCanvas(S*PX); frame9=mkCanvas(S*PX);
+  paths9=mkCanvas(S*PX); heat9=new Uint16Array(S*S);
   water9=[]; terr9=terrain;
   var g=base9.getContext("2d");
   for (var y=0;y<S;y++) for (var x=0;x<S;x++){
     var k=terrain[y][x], X=x*PX, Y=y*PX, h=hash2(x,y);
-    if (k===2){ // water: depth mottling + foam against every shore
-      g.fillStyle=P.water; g.fillRect(X,Y,PX,PX);
-      if (h>0.72){ g.fillStyle=P.waterD; g.fillRect(X+2,Y+5,8,4); }
+    if (k===2){ // water: shallows by the shore, deep blue beyond
+      var sh = nearLand(terrain,x,y,1) ? P.waterS : nearLand(terrain,x,y,3) ? P.water : P.waterD;
+      g.fillStyle=sh; g.fillRect(X,Y,PX,PX);
+      if (h>0.74){ g.fillStyle=sh===P.waterD?"#163a6c":(sh===P.water?P.waterD:P.water); g.fillRect(X+2,Y+5,8,3); }
       if (nIs(terrain,x,y-1,0)||nIs(terrain,x,y-1,1)||nIs(terrain,x,y-1,3)){
-        g.fillStyle=P.foam; g.fillRect(X,Y,PX,2);
-        g.fillStyle=P.waterL; g.fillRect(X,Y+2,PX,1); }
+        g.fillStyle=P.foam; g.fillRect(X,Y,PX,2); g.fillStyle=P.waterL; g.fillRect(X,Y+2,PX,1); }
       if (nIs(terrain,x,y+1,0)||nIs(terrain,x,y+1,1)||nIs(terrain,x,y+1,3)){
         g.fillStyle=P.foam; g.fillRect(X,Y+PX-2,PX,2); }
       if (nIs(terrain,x-1,y,0)||nIs(terrain,x-1,y,1)||nIs(terrain,x-1,y,3)){
@@ -122,37 +128,44 @@ function buildBase9(terrain){
       if (nIs(terrain,x+1,y,0)||nIs(terrain,x+1,y,1)||nIs(terrain,x+1,y,3)){
         g.fillStyle=P.foam; g.fillRect(X+PX-2,Y,2,PX); }
       if (h>0.55) water9.push([x,y]);
-    } else if (k===3){ // sand: grain + wet band along the waterline
+    } else if (k===3){ // sand: grain, shells, a wet band along the waterline
       g.fillStyle=P.sand; g.fillRect(X,Y,PX,PX);
       g.fillStyle=P.sandL; g.fillRect(X+(h*9|0),Y+(h*5|0),2,1);
       g.fillStyle=P.sandD;
       g.fillRect(X+(h*6|0)+2,Y+(h*8|0),1,1); g.fillRect(X+(h*11|0),Y+(h*3|0)+6,2,1);
+      if (hash2(x+5,y+9)>0.94){ g.fillStyle="#f0e6cc"; g.fillRect(X+4,Y+7,2,2); g.fillStyle="#c9b48a"; g.fillRect(X+5,Y+8,1,1); }
       g.fillStyle=P.sandWet;
       if (nIs(terrain,x,y-1,2)) g.fillRect(X,Y,PX,3);
       if (nIs(terrain,x,y+1,2)) g.fillRect(X,Y+PX-3,PX,3);
       if (nIs(terrain,x-1,y,2)) g.fillRect(X,Y,3,PX);
       if (nIs(terrain,x+1,y,2)) g.fillRect(X+PX-3,Y,3,PX);
-    } else if (k===1){ // forest floor
+    } else if (k===1){ // forest floor: leaf litter, shade
       g.fillStyle=P.floorF; g.fillRect(X,Y,PX,PX);
-      if (h>0.6){ g.fillStyle=P.grassD; g.fillRect(X+(h*7|0),Y+(h*9|0),3,2); }
-    } else { // grass: mottled patches + tufts
+      if (h>0.5){ g.fillStyle=P.grassD; g.fillRect(X+(h*7|0),Y+(h*9|0),3,2); }
+      if (hash2(x+3,y+11)>0.8){ g.fillStyle="#5c4a22"; g.fillRect(X+(h*8|0),Y+(h*6|0)+3,2,1); }
+    } else { // grass: mottled, tufts, flowers, the odd stone
       g.fillStyle=P.grass; g.fillRect(X,Y,PX,PX);
-      if (h>0.62){ g.fillStyle=P.grassD; g.fillRect(X+(h*6|0),Y+(h*8|0),5,3); }
-      if (h>0.84){ g.fillStyle=P.grassL;
-        g.fillRect(X+(h*9|0),Y+(h*5|0),1,2); g.fillRect(X+(h*9|0)+2,Y+(h*5|0)+1,1,2); }
-      if (hash2(x+9,y+4)>0.96){ g.fillStyle="#e8e060"; g.fillRect(X+5,Y+4,2,2); }
+      if (h>0.58){ g.fillStyle=P.grassD; g.fillRect(X+(h*6|0),Y+(h*8|0),5,3); }
+      var t=hash2(x+17,y+3);
+      if (t>0.80){ g.fillStyle=P.grassL;                      // a tuft
+        var tx=X+(t*8|0), ty=Y+(t*6|0)+3;
+        g.fillRect(tx,ty,1,3); g.fillRect(tx+2,ty-1,1,4); g.fillRect(tx+4,ty+1,1,2);
+        g.fillStyle=P.grassX; g.fillRect(tx+1,ty+2,1,1); }
+      if (hash2(x+9,y+4)>0.955){ g.fillStyle=(hash2(x,y+1)>0.5)?"#f0e070":"#f4f0f8"; g.fillRect(X+5,Y+4,2,2); g.fillStyle="#e0a040"; g.fillRect(X+6,Y+5,1,1); }
+      if (hash2(x+21,y+13)>0.975){ g.fillStyle="#8e8a7e"; g.fillRect(X+3,Y+6,4,3); g.fillStyle="#b4b0a4"; g.fillRect(X+3,Y+6,3,1); }
     }
   }
-  // trees: layered canopies on a sparse lattice, drawn after ground
+  // trees: a long soft shadow to the south-east, then layered canopy
   for (var y=1;y<S-1;y++) for (var x=1;x<S-1;x++){
     if (terrain[y][x]===1 && hash2(x*3,y*5)>0.80){
       var X=x*PX, Y=y*PX;
-      g.fillStyle=P.shadow; g.fillRect(X-2,Y+8,PX+6,3);
+      g.fillStyle="rgba(0,0,0,0.22)"; g.fillRect(X+1,Y+6,PX+10,6);
       g.fillStyle=P.trunkD; g.fillRect(X+5,Y+4,4,7);
       g.fillStyle=P.trunk;  g.fillRect(X+5,Y+4,2,7);
       g.fillStyle=P.canD;   g.fillRect(X-4,Y-6,PX+8,10);
       g.fillStyle=P.can;    g.fillRect(X-2,Y-8,PX+4,9);
-      g.fillStyle=P.canL;   g.fillRect(X,Y-9,8,4);
+      g.fillStyle=P.canL;   g.fillRect(X-1,Y-9,9,5);
+      g.fillStyle=P.canX;   g.fillRect(X,Y-9,4,2);
     }
   }
 }
@@ -163,12 +176,13 @@ function paintFarm9(g,x,y){
   g.fillStyle=P.soilD;
   g.fillRect(X,Y+2,PX,2); g.fillRect(X,Y+6,PX,2); g.fillRect(X,Y+10,PX,2);
   g.fillStyle=P.soilL; g.fillRect(X,Y,PX,1);
-  if (hash2(x,y)>0.5){ g.fillStyle=P.grassL; g.fillRect(X+3,Y+4,1,2); g.fillRect(X+8,Y+8,1,2); }
+  if (hash2(x,y)>0.4){ g.fillStyle=P.grassL; g.fillRect(X+3,Y+4,1,2); g.fillRect(X+8,Y+8,1,2); g.fillRect(X+6,Y+0,1,2); }
 }
 function paintHut9(g,x,y){
-  var X=x*PX, Y=y*PX;   // 2x2-tile hut with thatched roof
-  g.fillStyle=P.shadow; g.fillRect(X+2,Y+PX*2-3,PX*2-2,3);
+  var X=x*PX, Y=y*PX;
+  g.fillStyle="rgba(0,0,0,0.24)"; g.fillRect(X+3,Y+PX+6,PX*2+4,PX-2);
   g.fillStyle=P.hutwall; g.fillRect(X+2,Y+PX+2,PX*2-4,PX-4);
+  g.fillStyle="#5e4426"; g.fillRect(X+PX*2-6,Y+PX+2,4,PX-4);
   g.fillStyle=P.hutdoor; g.fillRect(X+PX-3,Y+PX+4,6,PX-6);
   g.fillStyle=P.thatch;  g.fillRect(X,Y+3,PX*2,PX);
   g.fillStyle=P.thatchD;
@@ -176,26 +190,38 @@ function paintHut9(g,x,y){
   g.fillStyle=P.thatchL; g.fillRect(X+2,Y+2,PX*2-4,2);
 }
 var boats9=[], snow9=null, snowKey="";
+function buildPaths9(){
+  // worn trails: where feet keep falling, the grass gives way to earth
+  var S=terr9.length, g=paths9.getContext("2d");
+  g.clearRect(0,0,S*PX,S*PX);
+  for (var i=0;i<S*S;i++){
+    var h=heat9[i]; if (h<30) continue;
+    var x=i%S, y=(i/S)|0; if (terr9[y][x]===2) continue;
+    var a=Math.min(0.85, (h-30)/260);
+    g.fillStyle="rgba(168,148,106,"+a.toFixed(2)+")";
+    g.fillRect(x*PX+1,y*PX+1,PX-2,PX-2);
+    if (a>0.5){ g.fillStyle="rgba(120,100,66,"+(a*0.5).toFixed(2)+")"; g.fillRect(x*PX+4,y*PX+6,4,2); }
+  }
+}
 function buildSemi9(u){
   var g=semi9.getContext("2d");
   g.drawImage(base9,0,0);
+  if (paths9) g.drawImage(paths9,0,0);
   var S=terr9.length;
   (u.farms||[]).forEach(function(f){
     if (f[0]>0&&f[0]<S-1&&f[1]>0&&f[1]<S-1) paintFarm9(g,f[0],f[1]); });
   var walled = (u.tech||[]).indexOf("metallurgy")>=0;
   (u.settlements||[]).forEach(function(s){
-    if (walled && s.r>=10){                      // city walls, with a gate
+    if (walled && s.r>=10){
       var r=s.r+1, X=(s.x-r)*PX, Y=(s.y-r)*PX, W=2*r*PX;
       g.fillStyle=P.wall;
       g.fillRect(X,Y,W,6); g.fillRect(X,Y+W-6,W,6);
       g.fillRect(X,Y,6,W); g.fillRect(X+W-6,Y,6,W);
-      g.fillStyle=P.wallTop;
-      g.fillRect(X,Y,W,2); g.fillRect(X,Y,2,W);
-      g.fillStyle=P.hutdoor; g.fillRect(X+W/2-8,Y+W-6,16,6);  // south gate
+      g.fillStyle=P.wallTop; g.fillRect(X,Y,W,2); g.fillRect(X,Y,2,W);
+      g.fillStyle=P.hutdoor; g.fillRect(X+W/2-8,Y+W-6,16,6);
     }
     paintHut9(g,s.x-1,s.y-1);
   });
-  // boats moored off every settlement once seacraft exists
   boats9=[];
   if ((u.tech||[]).indexOf("seacraft")>=0){
     (u.settlements||[]).forEach(function(s){
@@ -203,9 +229,7 @@ function buildSemi9(u){
         var cand=[[s.x-d,s.y],[s.x+d,s.y],[s.x,s.y-d],[s.x,s.y+d]];
         for (var i=0;i<cand.length;i++){
           var cx=cand[i][0], cy=cand[i][1];
-          if (cx>1&&cy>1&&cx<S-1&&cy<S-1&&terr9[cy][cx]===2){
-            boats9.push([cx,cy]); return;
-          }
+          if (cx>1&&cy>1&&cx<S-1&&cy<S-1&&terr9[cy][cx]===2){ boats9.push([cx,cy]); return; }
         }
       }
     });
@@ -232,16 +256,14 @@ function buildBase6(){
   var S=48, W=S+2*EM;
   base6=mkCanvas(W*PX); frame6=mkCanvas(W*PX);
   var g=base6.getContext("2d");
-  // resort lawn with mow stripes
   for (var y=0;y<W;y++) for (var x=0;x<W;x++){
     g.fillStyle=((x>>1)%2)?P.lawn:P.lawnD; g.fillRect(x*PX,y*PX,PX,PX);
     if (hash2(x,y)>0.9){ g.fillStyle=P.grassL; g.fillRect(x*PX+4,y*PX+6,2,1); }
   }
-  // palms around the margin
   for (var py=2;py<W-2;py+=4) for (var px=2;px<W-2;px+=4){
     if ((px<EM-2||px>W-EM||py<EM-2||py>W-EM) && hash2(px,py)>0.62){
       var X=px*PX, Y=py*PX;
-      g.fillStyle=P.shadow; g.fillRect(X-2,Y+6,16,3);
+      g.fillStyle="rgba(0,0,0,0.22)"; g.fillRect(X,Y+6,20,4);
       g.fillStyle=P.trunk; g.fillRect(X+2,Y-2,3,9);
       g.fillStyle=P.palm;
       g.fillRect(X-6,Y-4,9,2); g.fillRect(X+4,Y-4,9,2);
@@ -249,85 +271,82 @@ function buildBase6(){
       g.fillStyle=P.palmL; g.fillRect(X,Y-5,7,1);
     }
   }
-  // the pool nobody in the pen will ever swim in
   g.fillStyle=P.deck; g.fillRect(2*PX,2*PX,9*PX,7*PX);
   g.fillStyle=P.rim;  g.fillRect(3*PX-2,3*PX-2,7*PX+4,5*PX+4);
   g.fillStyle=P.pool; g.fillRect(3*PX,3*PX,7*PX,5*PX);
   g.fillStyle=P.poolL; g.fillRect(4*PX,4*PX,8,2); g.fillRect(6*PX,6*PX,10,2);
-  // resort fence
   g.fillStyle=P.rim;
   g.fillRect((EM-2)*PX,(EM-2)*PX,(S+4)*PX,3); g.fillRect((EM-2)*PX,(S+EM+2)*PX-3,(S+4)*PX,3);
   g.fillRect((EM-2)*PX,(EM-2)*PX,3,(S+4)*PX); g.fillRect((S+EM+2)*PX-3,(EM-2)*PX,3,(S+4)*PX);
-  // ---- the pen itself, translated inside the resort
   g.save(); g.translate(EM*PX, EM*PX);
-  for (var y=0;y<S;y++) for (var x=0;x<S;x++){        // stone floor
+  for (var y=0;y<S;y++) for (var x=0;x<S;x++){
     var X=x*PX, Y=y*PX;
     g.fillStyle=((x+y)%2)?P.stone:P.stoneB; g.fillRect(X,Y,PX,PX);
     g.fillStyle=P.mortar; g.fillRect(X,Y+PX-1,PX,1); g.fillRect(X+PX-1,Y,1,PX);
     if (hash2(x+31,y+7)>0.92){ g.fillStyle=P.dust; g.fillRect(X+3,Y+4,5,3); }
   }
-  g.fillStyle=P.wall;                                  // perimeter walls
+  g.fillStyle="rgba(0,0,0,0.18)"; g.fillRect(PX*2,PX*2,(S-4)*PX,5); g.fillRect(PX*2,PX*2,5,(S-4)*PX);
+  g.fillStyle=P.wall;
   g.fillRect(0,0,S*PX,PX*2); g.fillRect(0,(S-2)*PX,S*PX,PX*2);
   g.fillRect(0,0,PX*2,S*PX); g.fillRect((S-2)*PX,0,PX*2,S*PX);
-  g.fillStyle=P.wallTop;
-  g.fillRect(0,0,S*PX,4); g.fillRect(0,0,4,S*PX);
-  g.fillStyle=P.wallFace;                              // inner face: fake height
+  g.fillStyle=P.wallTop; g.fillRect(0,0,S*PX,4); g.fillRect(0,0,4,S*PX);
+  g.fillStyle=P.wallFace;
   g.fillRect(PX*2-3,PX*2-3,(S-4)*PX+6,3); g.fillRect(PX*2-3,PX*2-3,3,(S-4)*PX+6);
   g.fillRect(PX*2-3,(S-2)*PX,(S-4)*PX+6,3); g.fillRect((S-2)*PX,PX*2-3,3,(S-4)*PX+6);
-  for (var i=4;i<S-6;i+=5){                            // nest-box apartments
+  for (var i=4;i<S-6;i+=5){
     [[i,2],[i,S-4],[2,i],[S-4,i]].forEach(function(b){
       var X=b[0]*PX, Y=b[1]*PX;
+      g.fillStyle="rgba(0,0,0,0.2)"; g.fillRect(X+3,Y+3,PX*2,PX*2);
       g.fillStyle=P.wallTop; g.fillRect(X,Y,PX*2,PX*2);
       g.fillStyle=P.wall; g.fillRect(X+2,Y+2,PX*2-4,PX*2-4);
       g.fillStyle=P.alcove; g.fillRect(X+PX-4,Y+PX-4,8,8);
     });
   }
-  [[8,8],[S-10,8],[8,S-10],[S-10,S-10]].forEach(function(hp){  // hoppers
+  [[8,8],[S-10,8],[8,S-10],[S-10,S-10]].forEach(function(hp){
     var X=hp[0]*PX, Y=hp[1]*PX;
-    g.fillStyle=P.shadow; g.fillRect(X+2,Y+PX*2-2,PX*2-2,2);
+    g.fillStyle="rgba(0,0,0,0.22)"; g.fillRect(X+3,Y+4,PX*2,PX*2);
     g.fillStyle=P.hopper; g.fillRect(X,Y,PX*2,PX*2);
     g.fillStyle=P.hopperD;
     g.fillRect(X,Y+PX-1,PX*2,2); g.fillRect(X+PX-1,Y,2,PX*2);
     g.fillRect(X+4,Y+4,3,2); g.fillRect(X+PX+3,Y+PX+4,3,2);
+    g.fillStyle="#f0d060"; g.fillRect(X,Y,PX*2,2);
   });
-  g.fillStyle=P.trough; g.fillRect(((S>>1)-3)*PX,2*PX,6*PX,PX);  // water
+  g.fillStyle=P.trough; g.fillRect(((S>>1)-3)*PX,2*PX,6*PX,PX);
   g.fillStyle=P.poolL;  g.fillRect(((S>>1)-3)*PX+4,2*PX+3,10,2);
   g.restore();
 }
 
-// =========================================================== compose + blit
+// =========================================================== compose
 function compose9(u, st){
   var terrain=SNAP ? (st.world&&st.world.terrain) : (worldInfo&&worldInfo.terrain);
   if (!terrain) return null;
-  if (!base9 || terr9!==terrain) { buildBase9(terrain); semi9seq=-1; }
+  if (!base9 || terr9!==terrain) { buildBase9(terrain); semi9seq=-1; pathsSeq=-1; }
+  if (pollSeq-pathsSeq>=15){ buildPaths9(); pathsSeq=pollSeq; semi9seq=-1; }
   if (semi9seq!==pollSeq){ buildSemi9(u); semi9seq=pollSeq; }
   var g=frame9.getContext("2d");
   g.drawImage(semi9,0,0);
-  // winter buries the island; ice-age winters bury it deeper
   if (u.season==="winter"){
     var key=(u.harsh?"H":"W")+(u.iter||1);
     if (!snow9||snowKey!==key){ buildSnow9(u.harsh); snowKey=key; }
     g.drawImage(snow9,0,0);
   }
-  g.fillStyle=P.waterL;                                   // living water
+  g.fillStyle=P.waterL;
   for (var i=0;i<water9.length;i++){
     var w=water9[i];
-    if ((w[0]+w[1]+(tick>>2))%9===0) g.fillRect(w[0]*PX+((w[0]+tick)>>1)%6, w[1]*PX+5, 6, 1);
+    if ((w[0]+w[1]+(tick>>3))%9===0) g.fillRect(w[0]*PX+((w[0]+(tick>>1))>>1)%6, w[1]*PX+5, 6, 1);
   }
-  // moored boats, bobbing on the tide
   g.fillStyle=P.trunk;
   for (var i=0;i<boats9.length;i++){
-    var b=boats9[i], bob=((i+(tick>>3))%2);
+    var b=boats9[i], bob=((i+(tick>>4))%2);
     g.fillRect(b[0]*PX+1, b[1]*PX+5+bob, 10, 3);
     g.fillRect(b[0]*PX+5, b[1]*PX+bob, 1, 5);
   }
-  // campfires flicker beside every hut once fire is tamed
   if ((u.tech||[]).indexOf("fire")>=0){
     (u.settlements||[]).forEach(function(s,i){
-      var fx=(s.x+2)*PX, fy=(s.y+1)*PX, fl=((i+(tick>>1))%2);
+      var fx=(s.x+2)*PX, fy=(s.y+1)*PX, fl=((i+(tick>>2))%3);
       g.fillStyle=P.trunkD; g.fillRect(fx,fy+6,6,2);
-      g.fillStyle=fl?"#e86820":"#f8a030"; g.fillRect(fx+1,fy+2,4,4);
-      g.fillStyle=fl?"#f8d848":"#f8f0a0"; g.fillRect(fx+2,fy+ (fl?3:1),2,3);
+      g.fillStyle=fl===0?"#e86820":(fl===1?"#f8a030":"#f08028"); g.fillRect(fx+1,fy+2,4,4);
+      g.fillStyle=fl===1?"#f8d848":"#f8f0a0"; g.fillRect(fx+2,fy+(fl?3:1),2,3);
     });
   }
   return frame9;
@@ -340,439 +359,503 @@ function compose6(u){
 }
 
 // =========================================================== the people
-// Figures are drawn in SCREEN space (not baked into the world canvas), so
-// detail scales with the camera: zoom in and you see anatomy, tools and the
-// work itself; zoom out to a crowd of hundreds and they simplify.
-// Proportion is Vitruvian: 24 logical pixels tall, head exactly 1/8 of that,
-// arm span equal to height. Motion is procedural — every joint is computed
-// from a phase angle each frame, the way rotoscoped animation moves, never
-// toggled between two frames.
+// Figures are drawn in SCREEN space so detail follows the camera. Each one is
+// 32 logical pixels tall at Vitruvian proportion (head = 1/8, arm span =
+// height). Every joint comes from a phase angle each frame, so motion is
+// continuous; finished frames are cached per pose so a crowd of hundreds
+// costs one blit each. Nobody is a clone: skin, hair, build and dress vary
+// by individual.
 
 var ACT_LABEL = ["idle","walking","foraging","hunting","fishing","farming",
                  "building","talking","together","giving birth",
-                 "minding children","resting","eating","withdrawn","fighting"];
+                 "minding children","resting","eating","withdrawn","fighting",
+                 "playing"];
 var A_WALK=1, A_FORAGE=2, A_HUNT=3, A_FISH=4, A_FARM=5, A_BUILD=6, A_TALK=7,
     A_MATE=8, A_BIRTH=9, A_TEND=10, A_REST=11, A_EAT=12, A_WITHDRAW=13,
-    A_FIGHT=14;
+    A_FIGHT=14, A_PLAY=15;
+var PERIOD = [240,22,100,110,160,90,110,80,60,130,130,240,80,180,40,26];
 
-var SKIN="#e8c49a", SKIN_D="#c0956a", SKIN_L="#f6e0c0";
-var HAIRC=["#6b4a26","#2a1c10","#3a2414","#e2e2e2","#bfeae6"];
-var TUNIC=["#e8c94e","#3f6fd8","#d45a8c","#9a9a9a","#9ae8e0"];
-var TUNIC_D=["#bca031","#2e52a8","#a8406a","#787878","#74c2ba"];
-var WOOD="#6b4226", BLADE="#b8bcc4";
-
-var CXL=6;      // centre line of the 12-wide logical figure box
+var SKINS = [ ["#f1d2b0","#c9a079","#f9e4cf"], ["#e3b88c","#b98c5f","#f0cfa8"],
+              ["#b9814f","#8c5c34","#cf9a66"], ["#7a4a2a","#55311b","#935c38"] ];
+var HAIRS = ["#1d1510","#3b2416","#6b3a1e","#a8763a","#2a2a30"];
+var ELDER_HAIR="#d9d9d9", WITHDRAWN_HAIR="#bfeae6";
+var CLOTH = [ // per class: 3 variants [main, shade]
+  [["#e8c94e","#bca031"],["#d9a84a","#a97f2d"],["#c6c04e","#999335"]],
+  [["#3f6fd8","#2e52a8"],["#5a4e9a","#3e3570"],["#2f8a7a","#20635a"]],
+  [["#d45a8c","#a8406a"],["#c7643f","#95452a"],["#7f58b8","#5c3d8c"]],
+  [["#9a9a9a","#787878"],["#8f8674","#6c655a"],["#7f8c8a","#5e6a68"]],
+  [["#9ae8e0","#74c2ba"],["#b8e0f0","#88b4c8"],["#c8e8c0","#9ac49a"]]
+];
+var EDGE="#5a3f28", EDGE_D="#3a2616";
+var WOOD="#6b4226", BLADE="#b8bcc4", CXL=7;
 
 function lp(g,ox,oy,s,x,y,w,h){
   g.fillRect(ox+Math.round(x*s), oy+Math.round(y*s),
              Math.max(1,Math.round((w===undefined?1:w)*s)),
              Math.max(1,Math.round((h===undefined?1:h)*s)));
 }
-// a limb segment: stepped thick line between two joints
 function limb(g,ox,oy,s,x1,y1,x2,y2,w){
   var dx=x2-x1, dy=y2-y1;
-  var n=Math.max(2,Math.ceil(Math.max(Math.abs(dx),Math.abs(dy))*1.2));
-  for (var i=0;i<=n;i++){
-    lp(g,ox,oy,s, x1+dx*i/n-(w-1)/2, y1+dy*i/n, w, 1.1);
-  }
+  var n=Math.max(2,Math.ceil(Math.max(Math.abs(dx),Math.abs(dy))*1.3));
+  for (var i=0;i<=n;i++) lp(g,ox,oy,s, x1+dx*i/n-(w-1)/2, y1+dy*i/n, w, 1.1);
 }
-// limb with a dark edge, so arms read against the torso — Prince of Persia
-// kept its figures legible by silhouette, not by colour
-var EDGE="#8d6844";
-function limbE(g,ox,oy,s,x1,y1,x2,y2,w,color){
-  g.fillStyle=EDGE; limb(g,ox,oy,s,x1,y1,x2,y2,w+0.85);
+function limbE(g,ox,oy,s,x1,y1,x2,y2,w,color,edge){
+  g.fillStyle=edge||EDGE; limb(g,ox,oy,s,x1,y1,x2,y2,w+0.9);
   g.fillStyle=color; limb(g,ox,oy,s,x1,y1,x2,y2,w);
 }
 
-// The pose solver: given an activity and a phase, where is every joint?
-function solvePose(a, t){
-  var ph = t*0.16 + a.id*1.7;
-  var P = { shY:5, hipY:14, cx:0, lean:0, drop:0,     // body
-            footLx:-1.6, footLy:24, footRx:1.6, footRy:24,
-            kneeLx:-1.4, kneeLy:19.5, kneeRx:1.4, kneeRy:19.5,
-            handLx:-3.4, handLy:14, handRx:3.4, handRy:14,
-            elbLx:-3.6, elbLy:10, elbRx:3.6, elbRy:10,
-            headTilt:0, tool:0, toolAng:0, carry:0, sit:0 };
-  var act=a.act, sp=Math.sin(ph), cs=Math.cos(ph);
-
-  if (a.moving){                                      // the walk cycle
-    var stride=1.9, lift=1.7;
-    var fwdL=sp, fwdR=-sp;
-    P.footLx = fwdL*stride;    P.footLy = 24 - Math.max(0,fwdL)*lift;
-    P.footRx = fwdR*stride;    P.footRy = 24 - Math.max(0,fwdR)*lift;
-    // the lifting leg bends at the knee, the planted one stays straight
-    P.kneeLx = fwdL*stride*0.35 - 0.3 + Math.max(0,fwdL)*1.0;
-    P.kneeLy = 19.4 - Math.max(0,fwdL)*1.3;
-    P.kneeRx = fwdR*stride*0.35 + 0.3 + Math.max(0,fwdR)*1.0;
-    P.kneeRy = 19.4 - Math.max(0,fwdR)*1.3;
-    P.handLx = -2.6 - sp*1.5;  P.handLy = 13.6 - Math.abs(sp)*0.5;
-    P.handRx =  2.6 + sp*1.5;  P.handRy = 13.6 - Math.abs(sp)*0.5;
-    P.elbLx  = -3.2 - sp*0.7;  P.elbRx = 3.2 + sp*0.7;
-    P.elbLy  = 10 + Math.abs(sp)*0.4; P.elbRy = P.elbLy;
-    P.drop   = -Math.abs(sp)*0.5;                     // body rises mid-stride
-    P.lean   = 0.9;
+// pose solver: every joint from one phase angle, per activity
+function solvePose(act, c, moving, v){
+  var ph=c*Math.PI*2, sp=Math.sin(ph), cs=Math.cos(ph);
+  var P={ shY:6.5, hipY:19, cx:0, lean:0, drop:0,
+          footLx:-2.0, footLy:32, footRx:2.0, footRy:32,
+          kneeLx:-1.8, kneeLy:26, kneeRx:1.8, kneeRy:26,
+          handLx:-4.6, handLy:19, handRx:4.6, handRy:19,
+          elbLx:-4.8, elbLy:13, elbRx:4.8, elbRy:13,
+          headTilt:0, tool:0, toolAng:0, carry:0, sit:0, basket:0 };
+  if (moving){
+    var stride=2.6, lift=2.3, fL=sp, fR=-sp;
+    P.footLx=fL*stride; P.footLy=32-Math.max(0,fL)*lift;
+    P.footRx=fR*stride; P.footRy=32-Math.max(0,fR)*lift;
+    P.kneeLx=fL*stride*0.35-0.4+Math.max(0,fL)*1.3; P.kneeLy=25.8-Math.max(0,fL)*1.7;
+    P.kneeRx=fR*stride*0.35+0.4+Math.max(0,fR)*1.3; P.kneeRy=25.8-Math.max(0,fR)*1.7;
+    P.handLx=-3.6-sp*2.0; P.handLy=18.2-Math.abs(sp)*0.7;
+    P.handRx= 3.6+sp*2.0; P.handRy=18.2-Math.abs(sp)*0.7;
+    P.elbLx=-4.4-sp*0.9; P.elbRx=4.4+sp*0.9;
+    P.elbLy=13+Math.abs(sp)*0.5; P.elbRy=P.elbLy;
+    P.drop=-Math.abs(sp)*0.7; P.lean=1.2;
+    if (act===A_HUNT){ P.tool=1; P.toolAng=-0.3; P.handRx=4.2; P.handRy=14; P.elbRy=11; P.drop+=0.8; P.lean=2; }
+    if (act===A_FORAGE||act===A_PLAY) P.basket=(act===A_FORAGE)?1:0;
+    if (act===A_PLAY){ P.lean=2.4; P.drop-=0.6; P.handLy=14; P.handRy=14; }
     return P;
   }
-
   switch(act){
-    case A_FORAGE: {                                  // bend, gather, rise
-      var r=(Math.sin(ph*0.55)+1)/2;
-      P.lean=2.2+r*1.1; P.drop=r*1.2;
-      P.handLx=-2.0; P.handRx=2.6;
-      P.handLy=18+r*3.4; P.handRy=18.5+r*3.6;
-      P.elbLy=14; P.elbRy=14.4; P.headTilt=1.4;
-      P.kneeLy=19.2; P.kneeRy=19.2;
-      break;
-    }
-    case A_HUNT: {                                    // crouched, spear ready
-      var th=Math.max(0,Math.sin(ph*0.5));            // thrust
-      P.drop=1.3; P.lean=1.6;
-      P.footLx=-2.4; P.footRx=2.2;
-      P.kneeLx=-2.2; P.kneeLy=19.0; P.kneeRx=2.0; P.kneeRy=19.0;
-      P.handRx=3.4+th*3.2; P.handRy=10.5;
-      P.handLx=0.6+th*2.0; P.handLy=11.5;
-      P.elbRx=3.0; P.elbRy=9.5; P.elbLx=1.4; P.elbLy=10;
-      P.tool=1; P.toolAng=-0.15;
-      break;
-    }
-    case A_FISH: {                                    // spear poised over water
-      var st=Math.max(0,Math.sin(ph*0.35)-0.6)*2.5;
-      P.lean=1.2;
-      P.handRx=3.2; P.handRy=9.5+st*3;
-      P.handLx=1.2; P.handLy=11+st*2;
-      P.elbRx=3.4; P.elbRy=8.5; P.elbLx=2.0; P.elbLy=10;
-      P.tool=1; P.toolAng=0.85;                       // angled down
-      P.headTilt=1;
-      break;
-    }
-    case A_FARM: {                                    // hoe: overhead to earth
-      var sw=Math.sin(ph*0.6);
-      var up=Math.max(0,sw), dn=Math.max(0,-sw);
-      P.lean=1.0+dn*1.8; P.drop=dn*0.8;
-      P.handRx=2.6+dn*2.2; P.handRy=7.5-up*3.5+dn*10;
-      P.handLx=1.4+dn*1.6; P.handLy=9.5-up*2.5+dn*8;
-      P.elbRx=3.4; P.elbRy=9-up*1.5; P.elbLx=2.2; P.elbLy=10.5;
-      P.tool=2; P.toolAng=-1.1+dn*2.2;
-      P.headTilt=dn*1.6;
-      break;
-    }
-    case A_BUILD: {                                   // lift and set the beam
-      var l=Math.max(0,Math.sin(ph*0.5));
-      P.lean=0.8; P.drop=(1-l)*1.0;
-      P.handLx=-2.4; P.handRx=2.4;
-      P.handLy=12-l*5; P.handRy=12-l*5;
-      P.elbLx=-3.2; P.elbRx=3.2; P.elbLy=10-l*3; P.elbRy=10-l*3;
-      P.carry=1;
-      break;
-    }
-    case A_TALK: {                                    // gesturing conversation
-      var gse=Math.sin(ph*0.8);
-      P.handRx=3.6+gse*0.8; P.handRy=11.5+gse*2.2;
-      P.elbRx=3.6; P.elbRy=10;
-      P.handLx=-3.0; P.handLy=14;
-      P.headTilt=gse*0.5;
-      break;
-    }
-    case A_MATE: {                                    // an embrace, and rhythm
-      var r=Math.sin(ph*1.1);
-      P.lean=1.6; P.drop=Math.abs(r)*0.5;
-      P.handLx=-1.0; P.handLy=10; P.elbLx=-3.0; P.elbLy=9;
-      P.handRx=4.2; P.handRy=10.5; P.elbRx=4.0; P.elbRy=9;
-      P.footLx=-1.2; P.footRx=1.2;
-      break;
-    }
-    case A_BIRTH: {                                   // kneeling, braced
-      P.sit=1; P.shY=10; P.hipY=19.5;
-      P.kneeLx=-2.4; P.kneeLy=23.2; P.kneeRx=2.4; P.kneeRy=23.2;
-      P.footLx=-3.4; P.footLy=23.8; P.footRx=3.4; P.footRy=23.8;
-      P.handLx=-2.4; P.handLy=17.5; P.handRx=2.4; P.handRy=17.5;
-      P.elbLx=-3.6; P.elbLy=14; P.elbRx=3.6; P.elbRy=14;
-      P.headTilt=1.8;
-      break;
-    }
-    case A_TEND: {                                    // stooped to a child
-      var r=(Math.sin(ph*0.4)+1)/2;
-      P.lean=2.6; P.drop=1.6; P.headTilt=1.8;
-      P.handLx=-1.2; P.handLy=18.5+r*1.2;
-      P.handRx=2.8;  P.handRy=18.0+r*1.2;
-      P.elbLy=14.5; P.elbRy=14.5;
-      break;
-    }
-    case A_REST: {                                    // sitting on the ground
-      var brz=Math.sin(ph*0.22)*0.3;
-      P.sit=1; P.shY=11.5+brz; P.hipY=21.5;
-      P.kneeLx=3.6; P.kneeLy=21.0; P.kneeRx=4.0; P.kneeRy=21.6;
-      P.footLx=5.4; P.footLy=23.8; P.footRx=5.8; P.footRy=24;
-      P.handLx=-2.8; P.handLy=21.5; P.handRx=1.4; P.handRy=21.8;
-      P.elbLx=-3.4; P.elbLy=16.5; P.elbRx=3.0; P.elbRy=17;
-      break;
-    }
-    case A_EAT: {                                     // hand to mouth
-      var b=Math.max(0,Math.sin(ph*0.7));
-      P.handRx=2.4-b*1.2; P.handRy=13-b*8.5;
-      P.elbRx=3.6; P.elbRy=10.5;
-      P.handLx=-3.0; P.handLy=14;
-      P.headTilt=b*0.8;
-      break;
-    }
-    case A_WITHDRAW: {                                // alone, grooming
-      var gr=Math.sin(ph*0.3);
-      P.handRx=1.4; P.handRy=10.5+gr*2.5;
-      P.elbRx=3.2; P.elbRy=10.5;
-      P.handLx=-2.6; P.handLy=13.5;
-      P.headTilt=1.2;
-      break;
-    }
-    case A_FIGHT: {                                   // lunge and recoil
-      var l=Math.sin(ph*1.5);
-      P.cx=l*1.8; P.lean=1.8+l*0.8;
-      P.handRx=3.4+Math.max(0,l)*3.0; P.handRy=8.5;
-      P.handLx=-1.6; P.handLy=9.5;
-      P.elbRx=3.6; P.elbRy=8; P.elbLx=-3.2; P.elbLy=9;
-      P.footLx=-2.6; P.footRx=2.4;
-      break;
-    }
-    default: {                                        // standing, breathing
-      var br=Math.sin(ph*0.25)*0.35;
-      P.drop=br; P.handLy=14+br; P.handRy=14+br;
-    }
+    case A_FORAGE: { var r=(Math.sin(ph)+1)/2;
+      P.lean=3.0+r*1.4; P.drop=r*1.6; P.headTilt=1.8;
+      P.handLx=-2.6; P.handRx=3.4; P.handLy=24+r*4.5; P.handRy=24.6+r*4.8;
+      P.elbLy=18.5; P.elbRy=19; P.kneeLy=25.6; P.kneeRy=25.6; P.basket=1; break; }
+    case A_HUNT: { var th=Math.max(0,Math.sin(ph));
+      P.drop=1.8; P.lean=2.2; P.footLx=-3.2; P.footRx=2.9;
+      P.kneeLx=-3.0; P.kneeLy=25.3; P.kneeRx=2.7; P.kneeRy=25.3;
+      P.handRx=4.6+th*4.3; P.handRy=14; P.handLx=0.8+th*2.7; P.handLy=15.3;
+      P.elbRx=4.0; P.elbRy=12.6; P.elbLx=1.9; P.elbLy=13.3; P.tool=1; P.toolAng=-0.15; break; }
+    case A_FISH: { var stk=Math.max(0,Math.sin(ph)-0.6)*3.3;
+      P.lean=1.6; P.handRx=4.3; P.handRy=12.6+stk*4; P.handLx=1.6; P.handLy=14.6+stk*2.6;
+      P.elbRx=4.5; P.elbRy=11.3; P.elbLx=2.6; P.elbLy=13.3; P.tool=1; P.toolAng=0.85; P.headTilt=1.3; break; }
+    case A_FARM: { var sw=Math.sin(ph), up=Math.max(0,sw), dn=Math.max(0,-sw);
+      P.lean=1.3+dn*2.4; P.drop=dn*1.0;
+      P.handRx=3.4+dn*3.0; P.handRy=10-up*4.6+dn*13.3; P.handLx=1.8+dn*2.2; P.handLy=12.6-up*3.3+dn*10.6;
+      P.elbRx=4.5; P.elbRy=12-up*2; P.elbLx=2.9; P.elbLy=14; P.tool=2; P.toolAng=-1.1+dn*2.2; P.headTilt=dn*2.1; break; }
+    case A_BUILD: { var l=Math.max(0,Math.sin(ph));
+      P.lean=1.0; P.drop=(1-l)*1.3; P.handLx=-3.2; P.handRx=3.2;
+      P.handLy=16-l*6.6; P.handRy=16-l*6.6; P.elbLx=-4.2; P.elbRx=4.2; P.elbLy=13.3-l*4; P.elbRy=13.3-l*4; P.carry=1; break; }
+    case A_TALK: { var gse=Math.sin(ph), nod=Math.sin(ph*2.0+1.1);
+      P.handRx=4.8+gse*1.1; P.handRy=15.3+gse*2.9; P.elbRx=4.8; P.elbRy=13.3;
+      P.handLx=-4.0; P.handLy=18.6; P.headTilt=0.4+nod*0.5; P.drop=Math.max(0,nod)*0.2; break; }
+    case A_MATE: { var r2=Math.sin(ph);
+      P.lean=2.2; P.drop=Math.abs(r2)*0.6; P.handLx=-1.3; P.handLy=13.3; P.elbLx=-4.0; P.elbLy=12;
+      P.handRx=5.6; P.handRy=14; P.elbRx=5.3; P.elbRy=12; P.footLx=-1.6; P.footRx=1.6; P.headTilt=0.8; break; }
+    case A_BIRTH: { P.sit=1; P.shY=13.3; P.hipY=26;
+      P.kneeLx=-3.2; P.kneeLy=31; P.kneeRx=3.2; P.kneeRy=31; P.footLx=-4.5; P.footLy=31.7; P.footRx=4.5; P.footRy=31.7;
+      P.handLx=-3.2; P.handLy=23.3; P.handRx=3.2; P.handRy=23.3; P.elbLx=-4.8; P.elbLy=18.6; P.elbRx=4.8; P.elbRy=18.6;
+      P.headTilt=2.2+Math.max(0,Math.sin(ph))*0.8; break; }
+    case A_TEND: { var r3=(Math.sin(ph)+1)/2;
+      P.lean=3.4; P.drop=2.1; P.headTilt=2.3; P.handLx=-1.6; P.handLy=24.6+r3*1.6; P.handRx=3.7; P.handRy=24+r3*1.6;
+      P.elbLy=19.3; P.elbRy=19.3; break; }
+    case A_REST: { var brz=Math.sin(ph)*0.4;
+      P.sit=1; P.shY=15.3+brz; P.hipY=28.6; P.kneeLx=4.8; P.kneeLy=28; P.kneeRx=5.3; P.kneeRy=28.8;
+      P.footLx=7.2; P.footLy=31.7; P.footRx=7.7; P.footRy=32; P.handLx=-3.7; P.handLy=28.6; P.handRx=1.9; P.handRy=29;
+      P.elbLx=-4.5; P.elbLy=22; P.elbRx=4.0; P.elbRy=22.6; break; }
+    case A_EAT: { var b=Math.max(0,Math.sin(ph));
+      P.handRx=3.2-b*1.6; P.handRy=17.3-b*11.3; P.elbRx=4.8; P.elbRy=14; P.handLx=-4.0; P.handLy=18.6; P.headTilt=b*1.0; break; }
+    case A_WITHDRAW: { var gr=Math.sin(ph);
+      P.handRx=1.9; P.handRy=14+gr*3.3; P.elbRx=4.2; P.elbRy=14; P.handLx=-3.4; P.handLy=18; P.headTilt=1.6; P.lean=0.6; break; }
+    case A_FIGHT: { var l2=Math.sin(ph);
+      P.cx=l2*2.4; P.lean=2.4+l2*1.0; P.handRx=4.5+Math.max(0,l2)*4.0; P.handRy=11.3; P.handLx=-2.1; P.handLy=12.6;
+      P.elbRx=4.8; P.elbRy=10.6; P.elbLx=-4.2; P.elbLy=12; P.footLx=-3.4; P.footRx=3.2; break; }
+    case A_PLAY: { var j=Math.max(0,Math.sin(ph));
+      P.drop=-j*2.4; P.handLx=-4.2; P.handRx=4.2; P.handLy=12-j*4; P.handRy=12-j*4; P.footLy=32-j*1.5; P.footRy=32-j*1.5; break; }
+    default: { var br=Math.sin(ph)*0.45; P.drop=br; P.handLy=19+br; P.handRy=19+br; P.headTilt=Math.sin(ph*0.5)*0.3; }
   }
   return P;
 }
 
-function drawFigure(g, cxScreen, footScreen, s, a, clothed, t){
-  var cls=a.cls, kid=(cls===0), eld=(cls===3), fem=(a.sex===1);
-  var H=kid?16:24;
-  var face=a.face||1;
-  var P=solvePose(a,t);
-  var ox=Math.round(cxScreen-CXL*s), oy=Math.round(footScreen-H*s+P.drop*s);
-  var scaleY=H/24;
-  function X(x){ return CXL + (P.cx + x)*face; }       // mirror about centre
+// draw one figure facing right at logical scale s, feet at (cx, footY)
+function drawFigureRaw(g, cx, footY, s, cls, sex, clothed, act, c, moving, v, t){
+  var kid=(cls===0), eld=(cls===3), fem=(sex===1);
+  var H=kid?21:32, scaleY=H/32;
+  var P=solvePose(act, c, moving, v);
+  var ox=Math.round(cx-CXL*s), oy=Math.round(footY-H*s+P.drop*s*scaleY);
+  function X(x){ return CXL+P.cx+x; }
   function Y(y){ return y*scaleY; }
+  var skin=SKINS[v%4], SK=skin[0], SKD=skin[1], SKL=skin[2];
+  var hairc=eld?ELDER_HAIR:(cls===4?WITHDRAWN_HAIR:HAIRS[(v*7+3)%HAIRS.length]);
+  var hairStyle=(v*3+1)%3;                          // 0 cropped 1 shaggy 2 long/tied
+  var cl=CLOTH[cls][v%3], tun=cl[0], tunD=cl[1];
+  var shW=kid?2.4:(fem?3.2:4.0), hpW=kid?2.4:(fem?4.1:3.0);
+  var leanX=P.lean*1.0;
+  var jitter=(v%5)*0.15-0.3;                       // build varies a touch
+  shW+=jitter*0.5; hpW+=jitter*0.3;
 
-  // ---- ground shadow
-  g.fillStyle="rgba(0,0,0,0.26)";
-  g.fillRect(ox+Math.round((CXL-2.5)*s), Math.round(footScreen-0.8*s),
-             Math.max(2,Math.round(5*s)), Math.max(1,Math.round(1.2*s)));
-
-  if (s<1.6){                    // a crowd seen from far off: compact, legible
-    var bw=(fem?4.2:4.6), bx=CXL-bw/2;
-    g.fillStyle=clothed?TUNIC[cls]:SKIN;
-    lp(g,ox,oy,s, bx, Y(5.5), bw, Y(8.5));              // torso
-    g.fillStyle=clothed?TUNIC_D[cls]:SKIN_D;
-    lp(g,ox,oy,s, bx+bw-1.2, Y(5.5), 1.2, Y(8.5));      // shaded side
-    lp(g,ox,oy,s, X(P.footLx*0.7)-0.9, Y(14), 1.8, Y(10));
-    lp(g,ox,oy,s, X(P.footRx*0.7)-0.9, Y(14), 1.8, Y(10));
-    g.fillStyle=SKIN;
-    lp(g,ox,oy,s, CXL-1.6, Y(1.2), 3.2, Y(4.3));        // head
-    g.fillStyle=eld?HAIRC[3]:(cls===4?HAIRC[4]:(fem?HAIRC[2]:HAIRC[1]));
-    lp(g,ox,oy,s, CXL-1.8, Y(0.6), 3.6, Y(1.6));
+  if (s<1.25){                                       // far: compact but human
+    var bw=(fem?4.6:5.2);
+    g.fillStyle=clothed?tun:SK; lp(g,ox,oy,s, CXL-bw/2, Y(7), bw, Y(11.5));
+    g.fillStyle=clothed?tunD:SKD; lp(g,ox,oy,s, CXL+bw/2-1.3, Y(7), 1.3, Y(11.5));
+    lp(g,ox,oy,s, X(P.footLx*0.7)-1.0, Y(18.5), 2.0, Y(13.5));
+    lp(g,ox,oy,s, X(P.footRx*0.7)-1.0, Y(18.5), 2.0, Y(13.5));
+    g.fillStyle=SK; lp(g,ox,oy,s, CXL-1.8, Y(1.6), 3.6, Y(5.2));
+    g.fillStyle=hairc; lp(g,ox,oy,s, CXL-2.0, Y(0.8), 4.0, Y(2.0));
     return;
   }
 
-  var shW=kid?2.0:(fem?2.5:3.2);                       // half-widths
-  var hpW=kid?2.0:(fem?3.2:2.4);
-  var tun=TUNIC[cls], tunD=TUNIC_D[cls];
-  var leanX=P.lean*face*0.85;
+  // legs
+  var legC=clothed&&!kid&&!fem?tunD:SKD, legR=clothed&&!kid&&!fem?tun:SK;
+  limbE(g,ox,oy,s, X(-hpW*0.55), Y(P.hipY), X(P.kneeLx), Y(P.kneeLy), 2.0, SKD);
+  limbE(g,ox,oy,s, X(P.kneeLx), Y(P.kneeLy), X(P.footLx), Y(P.footLy), 1.7, SKD);
+  limbE(g,ox,oy,s, X(hpW*0.55), Y(P.hipY), X(P.kneeRx), Y(P.kneeRy), 2.1, SK);
+  limbE(g,ox,oy,s, X(P.kneeRx), Y(P.kneeRy), X(P.footRx), Y(P.footRy), 1.8, SK);
+  g.fillStyle=SKD; lp(g,ox,oy,s, X(P.footLx)-1.2, Y(P.footLy)-0.9, 2.8, 1.0);   // feet
+  g.fillStyle=SK;  lp(g,ox,oy,s, X(P.footRx)-1.0, Y(P.footRy)-0.9, 3.0, 1.0);
 
-  // ---- legs (hip -> knee -> foot), far leg first
-  limbE(g,ox,oy,s, X(-hpW*0.55), Y(P.hipY), X(P.kneeLx), Y(P.kneeLy), 1.5, SKIN_D);
-  limbE(g,ox,oy,s, X(P.kneeLx), Y(P.kneeLy), X(P.footLx), Y(P.footLy), 1.3, SKIN_D);
-  limbE(g,ox,oy,s, X(hpW*0.55), Y(P.hipY), X(P.kneeRx), Y(P.kneeRy), 1.6, SKIN);
-  limbE(g,ox,oy,s, X(P.kneeRx), Y(P.kneeRy), X(P.footRx), Y(P.footRy), 1.4, SKIN);
-
-  // ---- torso: shoulders taper to waist, flare to hips
-  var tTop=Y(P.shY), tBot=Y(P.hipY);
-  var rows=Math.max(3,Math.round((P.hipY-P.shY)*scaleY*1.1));
+  // torso: shoulders taper to the waist, flare to the hips
+  var tTop=Y(P.shY), tBot=Y(P.hipY+1.2);
+  var rows=Math.max(4,Math.round((P.hipY+1.2-P.shY)*scaleY*1.15));
   for (var i=0;i<rows;i++){
     var f=i/(rows-1);
-    var w = shW + (hpW-shW)*Math.pow(f,1.6);
-    if (f<0.55) w = shW - (shW-Math.min(shW,hpW)*0.78)*(f/0.55)*0.42;  // waist
-    var yy = tTop + (tBot-tTop)*f;
-    var xx = X(-w) + leanX*(1-f);
-    var ww = w*2;
-    if (clothed && f>0.08){
-      g.fillStyle = (fem && f>0.62) ? tun : tun;
-      g.fillRect(ox+Math.round(xx*s), oy+Math.round(yy*s),
-                 Math.max(1,Math.round(ww*s)), Math.max(1,Math.round(1.15*s)));
-      g.fillStyle = tunD;                              // shaded side
-      g.fillRect(ox+Math.round((xx+ww-0.9)*s), oy+Math.round(yy*s),
-                 Math.max(1,Math.round(0.9*s)), Math.max(1,Math.round(1.15*s)));
-    } else {
-      g.fillStyle = SKIN;
-      g.fillRect(ox+Math.round(xx*s), oy+Math.round(yy*s),
-                 Math.max(1,Math.round(ww*s)), Math.max(1,Math.round(1.15*s)));
-      g.fillStyle = SKIN_D;
-      g.fillRect(ox+Math.round((xx+ww-0.8)*s), oy+Math.round(yy*s),
-                 Math.max(1,Math.round(0.8*s)), Math.max(1,Math.round(1.15*s)));
-    }
+    var w;
+    if (f<0.55) w = shW - (shW-Math.min(shW,hpW)*0.76)*(f/0.55)*0.45;
+    else        w = Math.min(shW,hpW)*0.76*(1-(f-0.55)/0.45) + hpW*((f-0.55)/0.45);
+    var yy=tTop+(tBot-tTop)*f, xx=X(-w)+leanX*(1-f), ww=w*2;
+    var main = clothed ? tun : SK, shade = clothed ? tunD : SKD, light = clothed ? tun : SKL;
+    g.fillStyle=EDGE; lp(g,ox,oy,s, xx-0.45, yy, ww+0.9, 1.15);
+    g.fillStyle=main; lp(g,ox,oy,s, xx, yy, ww, 1.15);
+    g.fillStyle=shade; lp(g,ox,oy,s, xx+ww-1.1, yy, 1.1, 1.15);
+    g.fillStyle=light; lp(g,ox,oy,s, xx+0.2, yy, 0.8, 1.15);
+    if (clothed && !kid && f>0.5 && f<0.58){ g.fillStyle=EDGE_D; lp(g,ox,oy,s, xx, yy, ww, 0.7); } // belt
+    if (clothed && !kid && Math.abs(f-0.3)<0.05){ g.fillStyle=tunD; lp(g,ox,oy,s, xx+ww*0.45, yy, 0.6, 1.1); } // fold
   }
-
-  // ---- the body as it is, before anyone thought to cover it
-  if (!clothed && !kid && s>=3){
-    g.fillStyle=SKIN_D;
+  if (clothed && !kid){                               // skirt / tunic hem
+    var hemY=Y(fem?26:23.5), hw2=hpW+0.9;
+    g.fillStyle=EDGE; lp(g,ox,oy,s, X(-hw2)-0.4, Y(P.hipY+1.2), hw2*2+0.8, hemY-Y(P.hipY+1.2)+0.4);
+    g.fillStyle=tun;  lp(g,ox,oy,s, X(-hw2), Y(P.hipY+1.2), hw2*2, hemY-Y(P.hipY+1.2));
+    g.fillStyle=tunD; lp(g,ox,oy,s, X(hw2)-1.2, Y(P.hipY+1.2), 1.2, hemY-Y(P.hipY+1.2));
+    lp(g,ox,oy,s, X(-hw2*0.3), Y(P.hipY+3), 0.6, hemY-Y(P.hipY+3));
+  }
+  // the body as it is, before anyone thought to cover it
+  if (!clothed && !kid && s>=2.4){
+    g.fillStyle=SKD;
     if (fem){
-      lp(g,ox,oy,s, X(-shW+0.2)+leanX*0.6, Y(7.2), 1.0, Y(1.2));
-      lp(g,ox,oy,s, X(shW-1.2)+leanX*0.6,  Y(7.2), 1.0, Y(1.2));
-      lp(g,ox,oy,s, X(-0.5), Y(14.6), 1.0, Y(1.0));
+      lp(g,ox,oy,s, X(-shW+0.4)+leanX*0.65, Y(9.6), 1.6, Y(1.8));
+      lp(g,ox,oy,s, X(shW-2.0)+leanX*0.65,  Y(9.6), 1.6, Y(1.8));
+      g.fillStyle=SKL; lp(g,ox,oy,s, X(-shW+0.6)+leanX*0.65, Y(9.6), 0.8, 0.8);
+      lp(g,ox,oy,s, X(shW-1.8)+leanX*0.65, Y(9.6), 0.8, 0.8);
+      g.fillStyle="#6a4428"; lp(g,ox,oy,s, X(-0.9), Y(19.4), 1.8, Y(1.0));
+      g.fillStyle=SKD; lp(g,ox,oy,s, X(-0.45), Y(20.2), 0.9, Y(0.9));
     } else {
-      lp(g,ox,oy,s, X(-0.4), Y(14.4), 0.9, Y(1.8));
+      g.fillStyle=SKD; lp(g,ox,oy,s, X(-0.3), Y(8.8), 0.6, Y(4.0));      // sternum line
+      lp(g,ox,oy,s, X(-shW+1.4)+leanX*0.6, Y(9.4), 0.8, 0.8);              // nipples
+      lp(g,ox,oy,s, X(shW-2.2)+leanX*0.6, Y(9.4), 0.8, 0.8);
+      g.fillStyle="#6a4428"; lp(g,ox,oy,s, X(-0.9), Y(19.6), 1.8, Y(0.9));
+      g.fillStyle=SKD; lp(g,ox,oy,s, X(-0.5), Y(20.3), 1.1, Y(2.4));
+      g.fillStyle=SK;  lp(g,ox,oy,s, X(-0.9), Y(20.6), 0.8, Y(1.6));
     }
-    g.fillStyle="rgba(120,86,56,0.55)";                // navel
-    lp(g,ox,oy,s, X(-0.3)+leanX*0.3, Y(11.5), 0.7, Y(0.7));
+    g.fillStyle="rgba(90,62,40,0.6)"; lp(g,ox,oy,s, X(-0.4)+leanX*0.35, Y(15.4), 0.9, Y(0.9));  // navel
   }
+  // arms
+  limbE(g,ox,oy,s, X(-shW+0.4)+leanX, Y(P.shY+0.8), X(P.elbLx), Y(P.elbLy), 1.6, SKD);
+  limbE(g,ox,oy,s, X(P.elbLx), Y(P.elbLy), X(P.handLx), Y(P.handLy), 1.45, SKD);
+  limbE(g,ox,oy,s, X(shW-0.4)+leanX, Y(P.shY+0.8), X(P.elbRx), Y(P.elbRy), 1.75, SK);
+  limbE(g,ox,oy,s, X(P.elbRx), Y(P.elbRy), X(P.handRx), Y(P.handRy), 1.55, SK);
+  g.fillStyle=SKD; lp(g,ox,oy,s, X(P.handLx)-1.0, Y(P.handLy)-0.4, 1.9, 1.7);       // hands
+  g.fillStyle=SK;  lp(g,ox,oy,s, X(P.handRx)-1.0, Y(P.handRy)-0.4, 2.0, 1.8);
+  // tools and burdens
+  if (P.tool===1){
+    var ang=P.toolAng, L=14, hx=X(P.handRx), hy=Y(P.handRy);
+    var tx2=hx+Math.cos(ang)*L, ty2=hy+Math.sin(ang)*L;
+    g.fillStyle=EDGE_D; limb(g,ox,oy,s, hx-Math.cos(ang)*4, hy-Math.sin(ang)*4, tx2, ty2, 1.9);
+    g.fillStyle=WOOD;   limb(g,ox,oy,s, hx-Math.cos(ang)*4, hy-Math.sin(ang)*4, tx2, ty2, 1.1);
+    g.fillStyle="#6d7078"; limb(g,ox,oy,s, tx2-Math.cos(ang)*2.4, ty2-Math.sin(ang)*2.4, tx2, ty2, 2.0);
+    g.fillStyle=BLADE;  limb(g,ox,oy,s, tx2-Math.cos(ang)*2.2, ty2-Math.sin(ang)*2.2, tx2, ty2, 1.2);
+  } else if (P.tool===2){
+    var ang2=P.toolAng, L2=12, hx2=X(P.handRx), hy2=Y(P.handRy);
+    var ex=hx2+Math.cos(ang2)*L2, ey=hy2+Math.sin(ang2)*L2;
+    g.fillStyle=EDGE_D; limb(g,ox,oy,s, hx2, hy2, ex, ey, 1.9);
+    g.fillStyle=WOOD; limb(g,ox,oy,s, hx2, hy2, ex, ey, 1.1);
+    g.fillStyle="#6d7078"; lp(g,ox,oy,s, ex-1.6, ey-0.8, 3.4, 2.0);
+    g.fillStyle=BLADE; lp(g,ox,oy,s, ex-1.3, ey-0.5, 2.8, 1.4);
+  }
+  if (P.carry){
+    var bx0=X(P.handLx)-0.6;
+    g.fillStyle=EDGE_D; lp(g,ox,oy,s, bx0-0.5, Y(P.handRy)-1.9, X(P.handRx)-bx0+1.6, 3.4);
+    g.fillStyle=WOOD;   lp(g,ox,oy,s, bx0, Y(P.handRy)-1.4, X(P.handRx)-bx0+0.6, 2.4);
+    g.fillStyle="#52321c"; lp(g,ox,oy,s, bx0, Y(P.handRy)+0.4, X(P.handRx)-bx0+0.6, 0.6);
+  }
+  if (P.basket){                                        // a woven basket on the hip
+    g.fillStyle=EDGE_D; lp(g,ox,oy,s, X(hpW)-0.2, Y(17.5), 3.6, 4.4);
+    g.fillStyle="#b8924e"; lp(g,ox,oy,s, X(hpW)+0.2, Y(18), 2.8, 3.6);
+    g.fillStyle="#8d6a30"; lp(g,ox,oy,s, X(hpW)+0.2, Y(19.2), 2.8, 0.5); lp(g,ox,oy,s, X(hpW)+0.2, Y(20.6), 2.8, 0.5);
+    g.fillStyle="#d6433f"; lp(g,ox,oy,s, X(hpW)+0.9, Y(17.6), 0.8, 0.8); g.fillStyle="#5f9a3a"; lp(g,ox,oy,s, X(hpW)+1.9, Y(17.4), 0.9, 0.9);
+  }
+  // neck, head, face, hair
+  var hw=kid?3.0:3.6, hh=Y(4.0);
+  var hx3=X(-hw/2)+leanX*1.2+P.headTilt*0.5, hy3=Y(P.shY-5.3)+P.headTilt*0.4;
+  g.fillStyle=SKD; lp(g,ox,oy,s, hx3+hw*0.3, hy3+hh*0.85, hw*0.4, Y(1.6));          // neck
+  g.fillStyle=EDGE; lp(g,ox,oy,s, hx3-0.4, hy3-0.4, hw+0.8, hh+0.8);                // skull edge
+  g.fillStyle=SK;  lp(g,ox,oy,s, hx3, hy3, hw, hh);
+  g.fillStyle=SKD; lp(g,ox,oy,s, hx3+hw-0.9, hy3+0.5, 0.9, hh-0.5);                 // cheek shadow
+  g.fillStyle=SKL; lp(g,ox,oy,s, hx3+0.3, hy3+0.6, 0.7, hh*0.5);                    // light on the brow
+  if (s>=2.2){                                                                         // a face
+    g.fillStyle="#2a1a10"; lp(g,ox,oy,s, hx3+hw-1.55, hy3+1.5, 0.75, 0.75);         // eye
+    g.fillStyle="rgba(42,26,16,0.55)"; lp(g,ox,oy,s, hx3+hw-1.9, hy3+0.9, 1.2, 0.35); // brow
+    g.fillStyle="rgba(120,70,60,0.8)"; lp(g,ox,oy,s, hx3+hw-1.5, hy3+2.9, 0.9, 0.35);  // mouth
+    g.fillStyle=SKD; lp(g,ox,oy,s, hx3+hw-0.6, hy3+2.0, 0.5, 0.6);                   // nose
+  }
+  g.fillStyle=hairc;
+  lp(g,ox,oy,s, hx3-0.3, hy3-0.5, hw+0.6, Y(1.2));                                   // crown
+  if (hairStyle===1||fem){ lp(g,ox,oy,s, hx3-0.3, hy3-0.2, hw*0.55, Y(2.2)); }        // shaggy / fringe
+  if (fem && !kid){ lp(g,ox,oy,s, hx3-0.7, hy3-0.1, 0.9, hh*1.25);                   // long hair
+    if (hairStyle===2) lp(g,ox,oy,s, hx3+hw*0.2, hy3+hh*0.9, hw*0.5, Y(2.2)); }      // tied back
+  else if (!kid && !eld && hairStyle===2){ lp(g,ox,oy,s, hx3-0.5, hy3-0.1, 0.7, hh*0.9); }
+}
 
-  // ---- arms (shoulder -> elbow -> hand), outlined so they read on the body
-  limbE(g,ox,oy,s, X(-shW+0.3)+leanX, Y(P.shY+0.6), X(P.elbLx), Y(P.elbLy), 1.2, SKIN_D);
-  limbE(g,ox,oy,s, X(P.elbLx), Y(P.elbLy), X(P.handLx), Y(P.handLy), 1.1, SKIN_D);
-  limbE(g,ox,oy,s, X(shW-0.3)+leanX, Y(P.shY+0.6), X(P.elbRx), Y(P.elbRy), 1.3, SKIN);
-  limbE(g,ox,oy,s, X(P.elbRx), Y(P.elbRy), X(P.handRx), Y(P.handRy), 1.2, SKIN);
+// ---- sprite cache: one render per (pose, zoom), then a blit per person -----
+var spriteCache={}, spriteCount=0;
+function figureSprite(cls, sex, clothed, act, bucket, moving, v, s){
+  // Individual variation is only visible close up, so it only enters the
+  // cache key when zoomed in; crowds share sprites and stay cheap.
+  var sq = s>=2 ? Math.round(s) : Math.round(s*8)/8;
+  var vk = s>=2 ? (v%6) : (s>=1.25 ? (v%2) : 0);
+  var bk = s>=1.25 ? bucket : (bucket>>2);
+  var key=act+"|"+cls+"|"+sex+"|"+(clothed?1:0)+"|"+bk+"|"+(moving?1:0)+"|"+vk+"|"+sq;
+  var sp=spriteCache[key];
+  if (sp) return sp;
+  var cap = sq>=3 ? 420 : 1400;
+  if (spriteCount>cap){ spriteCache={}; spriteCount=0; }
+  var W=Math.ceil(36*sq), H=Math.ceil(38*sq);
+  var c=mkCanvas(W,H), g=c.getContext("2d");
+  drawFigureRaw(g, W/2, H-2*sq, sq, cls, sex, clothed, act, bucket/12+0.02, moving, v, 0);
+  sp={c:c, w:W, h:H, s:sq}; spriteCache[key]=sp; spriteCount++;
+  return sp;
+}
 
-  // ---- tools and burdens
-  if (P.tool===1){                                     // spear
-    var ang=P.toolAng, L=11;
-    var hx=X(P.handRx), hy=Y(P.handRy);
-    var tx2=hx+Math.cos(ang)*L*face, ty2=hy+Math.sin(ang)*L;
-    g.fillStyle=WOOD; limb(g,ox,oy,s, hx-Math.cos(ang)*3*face, hy-Math.sin(ang)*3,
-                           tx2, ty2, 1.0);
-    g.fillStyle=BLADE; limb(g,ox,oy,s, tx2-Math.cos(ang)*1.6*face,
-                            ty2-Math.sin(ang)*1.6, tx2, ty2, 1.4);
-  } else if (P.tool===2){                              // hoe
-    var ang2=P.toolAng, L2=9;
-    var hx2=X(P.handRx), hy2=Y(P.handRy);
-    var ex=hx2+Math.cos(ang2)*L2*face, ey=hy2+Math.sin(ang2)*L2;
-    g.fillStyle=WOOD; limb(g,ox,oy,s, hx2, hy2, ex, ey, 1.0);
-    g.fillStyle=BLADE; lp(g,ox,oy,s, ex-1, ey-0.5, 2.4, 1.4);
-  }
-  if (P.carry){                                        // a beam, held out front
-    var bx0=Math.min(X(P.handRx),X(P.handRx+5.5*face))-0.4;
-    g.fillStyle=EDGE; lp(g,ox,oy,s, bx0-0.4, Y(P.handRy)-1.4, 6.4, 2.6);
-    g.fillStyle=WOOD; lp(g,ox,oy,s, bx0, Y(P.handRy)-1.0, 5.6, 1.8);
-    g.fillStyle="#52321c"; lp(g,ox,oy,s, bx0, Y(P.handRy)+0.4, 5.6, 0.5);
-  }
-
-  // ---- neck, head, hair — the head is exactly one eighth of the figure
-  var hw=kid?2.3:2.7, hh=Y(3.0);
-  var hx3=X(-hw/2)+leanX*1.15+P.headTilt*face*0.45;
-  var hy3=Y(P.shY-4.0)+P.headTilt*0.35;
-  g.fillStyle=SKIN_D;                                  // neck
-  lp(g,ox,oy,s, hx3+hw*0.25, hy3+hh*0.85, hw*0.5, Y(1.3));
-  g.fillStyle=EDGE;                                    // skull outline
-  lp(g,ox,oy,s, hx3-0.35, hy3-0.35, hw+0.7, hh+0.7);
-  g.fillStyle=SKIN;
-  lp(g,ox,oy,s, hx3, hy3, hw, hh);
-  g.fillStyle=SKIN_D;                                  // cheek shadow
-  lp(g,ox,oy,s, hx3+hw-0.7, hy3+0.4, 0.7, hh-0.4);
-  g.fillStyle=eld?HAIRC[3]:(cls===4?HAIRC[4]:(fem?HAIRC[2]:HAIRC[1]));
-  lp(g,ox,oy,s, hx3-0.25, hy3-0.4, hw+0.5, Y(1.0));    // crown
-  if (fem && !kid){                                    // hair past the jaw
-    lp(g,ox,oy,s, hx3-0.5, hy3-0.1, 0.75, hh*0.95);
-    lp(g,ox,oy,s, hx3+hw-0.25, hy3-0.1, 0.75, hh*0.95);
-  } else if (!kid && !eld){
-    lp(g,ox,oy,s, hx3-0.25, hy3-0.1, hw+0.5, Y(0.5));
-  }
-  if (s>=3){                                           // an eye, facing forward
-    g.fillStyle="#3a2a1c";
-    lp(g,ox,oy,s, hx3+(face>0?hw-1.15:0.45), hy3+1.1, 0.65, 0.65);
-  }
+var shadowCache={};
+function shadowSprite(ts){                      // one soft ellipse per zoom level
+  var k=Math.round(ts*2); var s=shadowCache[k]; if (s) return s;
+  var w=Math.max(3,Math.round(ts*0.9)), h=Math.max(2,Math.round(ts*0.36));
+  var c=mkCanvas(w,h), g=c.getContext("2d");
+  g.fillStyle="rgba(0,0,0,0.26)"; g.beginPath(); g.ellipse(w/2,h/2,w/2,h/2,0,0,6.283); g.fill();
+  return (shadowCache[k]={c:c,w:w,h:h});
 }
 
 // ---- actors: the people keep living between observations ----------------
-// The engine reports where each person is and what they are doing; snapshots
-// arrive every 2s locally and every few minutes on the mirror. Actors tween
-// toward each new observation and keep performing their activity in between,
-// so the world is continuous rather than a slideshow.
 var actors6={}, actors9={};
 function syncActors(map, people, ox){
   var seen={};
   (people||[]).forEach(function(p,i){
     var id=p.length>4?p[4]:i, sex=p.length>3?p[3]:(p[2]===2?1:0);
-    var act=p.length>5?p[5]:0;
+    var act=p.length>5?p[5]:0, face=p.length>6?p[6]:1;
     seen[id]=1;
     var nx=p[0]+ox, ny=p[1]+ox;
     var a=map[id];
-    if (!a){ map[id]=a={x:nx,y:ny,id:id,face:1,moving:false}; }
-    a.cls=p[2]; a.sex=sex; a.act=act;
-    a.tx=nx; a.ty=ny;                      // where the engine says they are
+    if (!a){ map[id]=a={x:nx,y:ny,id:id,face:face,moving:false,v:(id*2654435761>>>0)%997}; }
+    a.cls=p[2]; a.sex=sex; a.act=act; a.eface=face;
+    a.tx=nx; a.ty=ny;
   });
   Object.keys(map).forEach(function(id){ if(!seen[id]) delete map[id]; });
 }
-function updateActors(map){
+function updateActors(map, heat, S){
   Object.keys(map).forEach(function(id){
     var a=map[id];
     var dx=a.tx-a.x, dy=a.ty-a.y, d=Math.hypot(dx,dy);
-    if (d>0.06){
-      // fast enough to finish a day's travel inside the day, so they are
-      // seen arriving and then working, not perpetually mid-stride
-      var sp=Math.min(0.24, 0.07+d*0.30);
-      a.x+=dx/d*sp; a.y+=dy/d*sp;
-      a.moving=true;
-      if (Math.abs(dx)>0.12) a.face = dx>0?1:-1;
-    } else {
-      a.x=a.tx; a.y=a.ty; a.moving=false;
-    }
-  });
-}
-// Two people doing something together should face each other.
-function pairFacing(list){
-  var cell={};
-  for (var i=0;i<list.length;i++){
-    var a=list[i];
-    if (a.act!==A_MATE && a.act!==A_TALK && a.act!==A_FIGHT) continue;
-    var k=Math.round(a.x)+","+Math.round(a.y);
-    (cell[k]||(cell[k]=[])).push(a);
-  }
-  Object.keys(cell).forEach(function(k){
-    var pair=cell[k];
-    if (pair.length<2) return;
-    pair.sort(function(p,q){return p.id-q.id;});
-    pair[0].face=1;  pair[0].nudge=-0.22;
-    pair[1].face=-1; pair[1].nudge=0.22;
-    for (var j=2;j<pair.length;j++){ pair[j].nudge=(j%2?0.4:-0.4); }
+    if (d>0.05){
+      var sp=Math.min(0.09, 0.025+d*0.11);     // 30fps: a day's walk in ~1.5s
+      a.x+=dx/d*sp; a.y+=dy/d*sp; a.moving=true;
+      if (Math.abs(dx)>0.1) a.face = dx>0?1:-1;
+      if (heat && (tick%6===0)){ var ix=Math.round(a.x), iy=Math.round(a.y);
+        if (ix>=0&&iy>=0&&ix<S&&iy<S) heat[iy*S+ix]=Math.min(65000, heat[iy*S+ix]+2); }
+    } else { a.x=a.tx; a.y=a.ty; a.moving=false; a.face=a.eface||a.face; }
   });
 }
 
+// ---- particles: smoke, leaves, birds, sparks — in world coordinates -------
+var parts9=[], parts6=[], birds9=null;
+function spawnParticles(u, key, sx, sy, hx, hy){
+  var list = key==="l"?parts9:parts6;
+  if (key==="l"){
+    if ((u.tech||[]).indexOf("fire")>=0 && tick%5===0){
+      (u.settlements||[]).forEach(function(s){
+        if (s.x<sx-2||s.x>sx+2*hx+2||s.y<sy-2||s.y>sy+2*hy+2) return;
+        list.push({t:0, x:s.x+2.3+Math.random()*0.3, y:s.y+1.1, vx:(Math.random()-0.5)*0.01+0.006, vy:-0.02-Math.random()*0.012, life:0, max:70+Math.random()*40});
+      });
+    }
+    if (tick%9===0 && terr9){                                            // leaves in the woods
+      for (var k=0;k<2;k++){
+        var x=Math.floor(sx+Math.random()*2*hx), y=Math.floor(sy+Math.random()*2*hy);
+        if (terr9[y]&&terr9[y][x]===1) list.push({t:1, x:x+Math.random(), y:y-0.6, vx:0.012+Math.random()*0.01, vy:0.016+Math.random()*0.01, life:0, max:80+Math.random()*50, r:Math.random()*6});
+      }
+    }
+    if (!birds9 && Math.random()<0.0025){ birds9={x:sx-3, y:sy+Math.random()*hy*0.8, vx:0.07, n:5, life:0}; }
+    if (birds9){ birds9.x+=birds9.vx; birds9.life++; if (birds9.x>sx+2*hx+6||birds9.life>900) birds9=null; }
+  } else {
+    if (tick%7===0 && Math.random()<0.3){                                 // dust from the floor
+      var x2=sx+Math.random()*2*hx, y2=sy+Math.random()*2*hy;
+      list.push({t:2, x:x2, y:y2, vx:(Math.random()-0.5)*0.01, vy:-0.004, life:0, max:50});
+    }
+  }
+  for (var i=list.length-1;i>=0;i--){
+    var p=list[i]; p.x+=p.vx; p.y+=p.vy; p.life++;
+    if (p.t===0){ p.vx+=0.0008; p.vy*=0.985; }
+    if (p.t===1){ p.vx=0.012+Math.sin(p.life*0.15+p.r)*0.012; }
+    if (p.life>p.max) list.splice(i,1);
+  }
+  if (list.length>320) list.splice(0, list.length-320);
+}
+function drawParticles(g, key, sx, sy, ts, W){
+  var list = key==="l"?parts9:parts6;
+  for (var i=0;i<list.length;i++){
+    var p=list[i], f=p.life/p.max, X=(p.x-sx)*ts, Y=(p.y-sy)*ts;
+    if (p.t===0){ var r=ts*(0.12+f*0.35); g.fillStyle="rgba(210,205,200,"+(0.38*(1-f)).toFixed(2)+")"; g.beginPath(); g.arc(X,Y,r,0,6.283); g.fill(); }
+    else if (p.t===1){ var sw=ts*0.18, k=Math.abs(Math.sin(p.life*0.2+p.r)); g.fillStyle=(p.r>3)?"#c9a23a":"#8fb04a"; g.fillRect(X,Y,sw*(0.4+k),sw*0.55); }
+    else { g.fillStyle="rgba(230,225,210,"+(0.18*(1-f)).toFixed(2)+")"; g.fillRect(X,Y,ts*0.2,ts*0.12); }
+  }
+  if (key==="l" && birds9){
+    g.fillStyle="#1c1c22";
+    for (var b=0;b<birds9.n;b++){
+      var bx=(birds9.x-sx-b*0.9)*ts, by=(birds9.y-sy+Math.abs(b-2)*0.35)*ts, fl=Math.sin(tick*0.5+b)*ts*0.12;
+      g.fillRect(bx-ts*0.18, by+fl, ts*0.18, 1.5); g.fillRect(bx, by, ts*0.18, 1.5);
+    }
+  }
+}
+
+// ---- the camera: a documentary eye, not a surveillance map ---------------
+// Every so often it finds something worth watching — a circle of talk, a
+// hunting party in the woods, a birth, a brawl at the hopper, children at
+// play — closes in on it for a while, then pulls back to the whole world.
+var shots={ e:{until:0, x:0, y:0, h:9, label:"", wide:true},
+            l:{until:0, x:0, y:0, h:9, label:"", wide:true} };
+function clusters(list, pred, r){
+  var out=[], used={};
+  for (var i=0;i<list.length;i++){
+    var a=list[i]; if (!pred(a)||used[a.id]) continue;
+    var grp=[a];
+    for (var j=0;j<list.length;j++){ var b=list[j]; if (b===a||!pred(b)||used[b.id]) continue;
+      if (Math.abs(b.x-a.x)<=r && Math.abs(b.y-a.y)<=r){ grp.push(b); } }
+    if (grp.length>=2){ grp.forEach(function(q){ used[q.id]=1; }); out.push(grp); }
+  }
+  return out;
+}
+function pickShot(key, list, u, S){
+  var sh=shots[key], cands=[];
+  function add(grp, label, w){ var cx=0, cy=0; grp.forEach(function(a){cx+=a.x;cy+=a.y;});
+    cands.push({x:cx/grp.length, y:cy/grp.length, n:grp.length, label:label, w:w}); }
+  clusters(list, function(a){return a.act===A_BIRTH;}, 3).forEach(function(g){ add(g, "a birth", 6); });
+  list.forEach(function(a){ if (a.act===A_BIRTH) cands.push({x:a.x,y:a.y,n:1,label:"a birth",w:6}); });
+  clusters(list, function(a){return a.act===A_FIGHT;}, 2).forEach(function(g){ add(g, key==="e"?"a brawl in the pen":"a fight", 4); });
+  clusters(list, function(a){return a.act===A_MATE;}, 1).forEach(function(g){ add(g, "a couple", 2.5); });
+  clusters(list, function(a){return a.act===A_TALK;}, 3).forEach(function(g){ if (g.length>=3) add(g, key==="e"?"a huddle by the boxes":"talk at the hearths", 3); });
+  clusters(list, function(a){return a.act===A_PLAY;}, 4).forEach(function(g){ if (g.length>=3) add(g, "children at play", 3); });
+  clusters(list, function(a){return a.act===A_HUNT;}, 4).forEach(function(g){ if (g.length>=2) add(g, "a hunting party in the woods", 3); });
+  clusters(list, function(a){return a.act===A_FISH;}, 4).forEach(function(g){ if (g.length>=2) add(g, "fishing from the shore", 3); });
+  clusters(list, function(a){return a.act===A_FORAGE;}, 4).forEach(function(g){ if (g.length>=3) add(g, "a foraging party", 2.5); });
+  clusters(list, function(a){return a.act===A_FARM;}, 4).forEach(function(g){ if (g.length>=3) add(g, "work in the fields", 2.5); });
+  clusters(list, function(a){return a.act===A_EAT;}, 4).forEach(function(g){ if (g.length>=6) add(g, "the crowd at the hopper", 2); });
+  clusters(list, function(a){return a.act===A_WITHDRAW;}, 4).forEach(function(g){ if (g.length>=4) add(g, "the beautiful ones, apart", 2); });
+  clusters(list, function(a){return a.act===A_REST;}, 3).forEach(function(g){ if (g.length>=3) add(g, "resting together", 1.5); });
+  if (!sh.wide || !cands.length){                   // the wide shot of the whole world
+    sh.wide=true; sh.label=""; sh.until=tick+ (cands.length? 300 : 900);
+    return;
+  }
+  var tot=0; cands.forEach(function(c){ c.wt=c.w*Math.sqrt(c.n); tot+=c.wt; });
+  var r=Math.random()*tot, pick=cands[cands.length-1];
+  for (var i=0;i<cands.length;i++){ r-=cands[i].wt; if (r<=0){ pick=cands[i]; break; } }
+  sh.wide=false; sh.x=pick.x; sh.y=pick.y; sh.h=Math.max(5, Math.min(9, 4+pick.n*0.6));
+  sh.label=pick.label; sh.until=tick+ 520 + Math.random()*300;
+}
+
+// ---- the frame: world, light, people, weather ---------------------------
 function render(canvas, composed, map, key, u){
   if (!composed) return;
   var S=composed.width/PX, c=cam[key];
-  updateActors(map);
+  updateActors(map, key==="l"?heat9:null, S);
   var list=[], minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
   Object.keys(map).forEach(function(id){
     var a=map[id]; list.push(a); a.nudge=0;
     if(a.x<minx)minx=a.x; if(a.x>maxx)maxx=a.x;
     if(a.y<miny)miny=a.y; if(a.y>maxy)maxy=a.y;
   });
+  var sh=shots[key];
+  if (tick>=sh.until) pickShot(key, list, u, S);
   var tx,ty,th;
-  if (list.length){
+  if (!sh.wide){ tx=sh.x; ty=sh.y; th=sh.h; }
+  else if (list.length){
     tx=(minx+maxx)/2; ty=(miny+maxy)/2;
     th=Math.max(7, Math.min(S/2, Math.max(maxx-minx,maxy-miny)/2+6));
   } else { tx=S/2; ty=S/2; th=S/2; }
-  c.x=lerp(c.x,tx,0.04); c.y=lerp(c.y,ty,0.04); c.h=lerp(c.h,th,0.04);
+  var ease = sh.wide ? 0.02 : 0.035;
+  c.x=lerp(c.x,tx,ease); c.y=lerp(c.y,ty,ease); c.h=lerp(c.h,th,ease);
+  if (sh.shown!==sh.label){ sh.shown=sh.label; refreshHud(key); }
   var aspect=canvas.width/canvas.height;
   var hy=c.h, hx=Math.min(S/2, c.h*aspect);
   if (hx/aspect<hy) hy=hx/aspect;
   var sx=Math.max(0,Math.min(S-2*hx,c.x-hx)), sy=Math.max(0,Math.min(S-2*hy,c.y-hy));
-
   var g=canvas.getContext("2d");
   g.imageSmoothingEnabled=false;
   g.fillStyle="#000"; g.fillRect(0,0,canvas.width,canvas.height);
   g.drawImage(composed, sx*PX, sy*PX, 2*hx*PX, 2*hy*PX, 0, 0, canvas.width, canvas.height);
+  var ts=canvas.width/(2*hx);
 
-  // people are drawn here, in screen space, so detail follows the zoom
-  // a person stands about 1.35 tiles tall; crisp integer pixels when zoomed in
-  var tileScreen=canvas.width/(2*hx);
-  var sRaw=tileScreen*1.35/24;
-  var s=sRaw>=2 ? Math.round(sRaw) : Math.max(0.42, sRaw);
-  var clothed = key==="e" ? true
-              : !!(u && u.tech && u.tech.indexOf("shelter")>=0);
-  pairFacing(list);
+  // light: the season grades the whole scene; fires warm their circle
+  if (key==="l"){
+    if (u.season==="winter"){ g.fillStyle="rgba(186,202,236,0.16)"; g.fillRect(0,0,canvas.width,canvas.height); }
+    else if (u.season==="summer"){ g.fillStyle="rgba(255,214,140,0.07)"; g.fillRect(0,0,canvas.width,canvas.height); }
+    else { g.fillStyle="rgba(230,255,200,0.04)"; g.fillRect(0,0,canvas.width,canvas.height); }
+    if ((u.tech||[]).indexOf("fire")>=0){
+      g.save(); g.globalCompositeOperation="lighter";
+      (u.settlements||[]).forEach(function(s){
+        var fx=(s.x+2.25-sx)*ts, fy=(s.y+1.5-sy)*ts, r=ts*2.6;
+        if (fx<-r||fy<-r||fx>canvas.width+r||fy>canvas.height+r) return;
+        var gr=g.createRadialGradient(fx,fy,0,fx,fy,r);
+        var fl=0.16+Math.sin(tick*0.4)*0.03;
+        gr.addColorStop(0,"rgba(255,150,60,"+fl.toFixed(2)+")"); gr.addColorStop(1,"rgba(255,120,40,0)");
+        g.fillStyle=gr; g.fillRect(fx-r,fy-r,2*r,2*r);
+      });
+      g.restore();
+    }
+  }
+  spawnParticles(u, key, sx, sy, hx, hy);
+
+  // people
+  var sRaw=ts*1.45/32;
+  var s = sRaw>=2 ? Math.round(sRaw) : Math.max(0.5, sRaw);
+  var clothed = key==="e" ? true : !!(u && u.tech && u.tech.indexOf("shelter")>=0);
+  var cell={};
+  for (var i=0;i<list.length;i++){               // pairs face each other
+    var a=list[i];
+    if (a.act!==A_MATE && a.act!==A_FIGHT) continue;
+    var k=Math.round(a.x)+","+Math.round(a.y);
+    (cell[k]||(cell[k]=[])).push(a);
+  }
+  Object.keys(cell).forEach(function(k){ var pr=cell[k]; if (pr.length<2) return;
+    pr.sort(function(p,q){return p.id-q.id;}); pr[0].face=1; pr[0].nudge=-0.3; pr[1].face=-1; pr[1].nudge=0.3; });
   list.sort(function(a,b){ return a.y-b.y; });
+  var sh=shadowSprite(ts);
   for (var i=0;i<list.length;i++){
     var a=list[i];
-    var px=(a.x+(a.nudge||0)-sx)*tileScreen, py=(a.y-sy)*tileScreen;
-    if (px<-60||py<-80||px>canvas.width+60||py>canvas.height+60) continue;
-    drawFigure(g, px+tileScreen/2, py+tileScreen*0.95, s, a, clothed, tick);
+    var px=(a.x+(a.nudge||0)-sx)*ts+ts/2, py=(a.y-sy)*ts+ts*0.95;
+    if (px<-60||py<-90||px>canvas.width+60||py>canvas.height+60) continue;
+    g.drawImage(sh.c, Math.round(px+ts*0.12-sh.w/2), Math.round(py-ts*0.02-sh.h/2));
+    var period=PERIOD[a.act]||200, c0=((tick+a.v*7)%period)/period;
+    var bucket=Math.floor(c0*12)%12;
+    var moving=a.moving;
+    var sp=figureSprite(a.cls, a.sex, clothed, moving?A_WALK:a.act, bucket, moving, a.v, s);
+    if (moving) sp=figureSprite(a.cls, a.sex, clothed, a.act, bucket, true, a.v, s);
+    var scale=s/sp.s;
+    var dw=sp.w*scale, dh=sp.h*scale;
+    if (a.face>=0){ g.drawImage(sp.c, Math.round(px-dw/2), Math.round(py-dh+2*sp.s*scale), Math.round(dw), Math.round(dh)); }
+    else { g.save(); g.translate(Math.round(px), Math.round(py-dh+2*sp.s*scale)); g.scale(-1,1);
+           g.drawImage(sp.c, Math.round(-dw/2), 0, Math.round(dw), Math.round(dh)); g.restore(); }
   }
+  drawParticles(g, key, sx, sy, ts, canvas.width);
 }
 
 // =========================================================== god panel
@@ -791,16 +874,11 @@ function sparkline(id, census, color){
 }
 function doingHTML(people){
   if (!people||!people.length) return "";
-  var tally={}, n=0;
-  for (var i=0;i<people.length;i++){
-    var act=people[i].length>5?people[i][5]:0;
-    tally[act]=(tally[act]||0)+1; n++;
-  }
+  var tally={};
+  for (var i=0;i<people.length;i++){ var act=people[i].length>5?people[i][5]:0; tally[act]=(tally[act]||0)+1; }
   var rows=Object.keys(tally).map(function(k){ return [ACT_LABEL[k]||"?", tally[k]]; });
   rows.sort(function(a,b){ return b[1]-a[1]; });
-  return "<span class='dim'>RIGHT NOW: "
-    + rows.slice(0,5).map(function(r){ return r[1]+" "+r[0]; }).join(" · ")
-    + "</span>\n";
+  return "<span class='dim'>RIGHT NOW: "+rows.slice(0,5).map(function(r){ return r[1]+" "+r[0]; }).join(" · ")+"</span>\n";
 }
 function statHTML(u, kind){
   var out="<h2>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</h2>";
@@ -810,10 +888,8 @@ function statHTML(u, kind){
   out+="<canvas id='tr"+kind+"' class='trend'></canvas>";
   if (kind==="e"){
     out+="PHASE: "+u.phase.toUpperCase();
-    if (u.sink>45) out+="\n<span class='dim'>BEHAVIOURAL SINK: "+u.sink
-                      +"% FEED AT ONE HOPPER</span>";
-    if (u.homeless>0) out+="\n<span class='dim'>WITHOUT TERRITORY: "+u.homeless
-                      +" (ONLY "+u.boxes+" NEST BOXES)</span>";
+    if (u.sink>45) out+="\n<span class='dim'>BEHAVIOURAL SINK: "+u.sink+"% FEED AT ONE HOPPER</span>";
+    if (u.homeless>0) out+="\n<span class='dim'>WITHOUT TERRITORY: "+u.homeless+" (ONLY "+u.boxes+" NEST BOXES)</span>";
     if (u.std) out+="\n<span class='dim'>OUTBREAK IN THE PEN</span>";
     if (u.ennui>0.2) out+="\n<span class='dim'>ENNUI "+Math.round(u.ennui*100)+"%</span>";
   } else {
@@ -826,10 +902,16 @@ function statHTML(u, kind){
   }
   return out;
 }
+var hudExtra="";
 function hudText(u, kind){
   var l2 = kind==="e" ? u.phase.toUpperCase()
     : (u.tech&&u.tech.length?"AGE OF "+u.tech[u.tech.length-1].replace("_"," ").toUpperCase():u.phase.toUpperCase());
-  return "<b>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</b>  Y"+u.year+" · POP "+u.pop+" · "+l2;
+  var sh=shots[kind], cap = (sh && !sh.wide && sh.label) ? "\n<span class='shot'>WATCHING: "+sh.label.toUpperCase()+"</span>" : "";
+  return "<b>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</b>  Y"+u.year+" · POP "+u.pop+" · "+l2+(kind==="e"?hudExtra:"")+cap;
+}
+function refreshHud(kind){
+  if (!state) return;
+  document.getElementById(kind==="e"?"hud6":"hud9").innerHTML=hudText(state.u[kind==="e"?"eden":"lagoon"], kind);
 }
 var typeFull="", typePos=0, shown=[];
 function updateRecords(events){
@@ -848,15 +930,14 @@ function updateRecords(events){
 
 // =========================================================== loops
 function fit(){
-  var dpr=Math.min(window.devicePixelRatio||1, 3);
+  var dpr=Math.min(window.devicePixelRatio||1, 2.5);
   ["c6","c9"].forEach(function(id){
     var cv=document.getElementById(id);
-    cv.width=Math.round(cv.clientWidth*dpr);
-    cv.height=Math.round(cv.clientHeight*dpr);
+    cv.width=Math.round(cv.clientWidth*dpr); cv.height=Math.round(cv.clientHeight*dpr);
   });
+  spriteCache={}; spriteCount=0;
 }
 window.addEventListener("resize", fit);
-
 function loadWorld(){
   if (SNAP) return Promise.resolve();
   return fetchJSON("/world").then(function(w){ worldInfo=w; lagoonIter=w.lagoon_iter; });
@@ -867,40 +948,36 @@ function poll(){
     if (!SNAP&&worldInfo&&st.u.lagoon.iter!==lagoonIter) loadWorld().then(function(){ base9=null; });
     syncActors(actors6, st.u.eden.people, EM);
     syncActors(actors9, st.u.lagoon.people, 0);
-    var e=st.u.eden,l=st.u.lagoon;
-    var extra="";
+    if (heat9 && pollSeq%40===0){ for (var i=0;i<heat9.length;i++) heat9[i]=(heat9[i]*0.92)|0; }
+    var e=st.u.eden,l=st.u.lagoon, extra="";
     if (st.status&&st.status.catching_up) extra="  ·  FAST-FORWARDING "+st.status.behind_days+" DAYS";
-    else if (SNAP){
-      var age=Math.max(0,Math.round(Date.now()/1000-st.wall));
-      extra="  ·  OBSERVED "+(age<90?age+"S":Math.round(age/60)+" MIN")+" AGO";
-    }
-    document.getElementById("hud6").innerHTML=hudText(e,"e")+extra;
-    document.getElementById("hud9").innerHTML=hudText(l,"l");
+    else if (SNAP){ var age=Math.max(0,Math.round(Date.now()/1000-st.wall)); extra="  ·  OBSERVED "+(age<90?age+"S":Math.round(age/60)+" MIN")+" AGO"; }
+    hudExtra=extra; refreshHud("e"); refreshHud("l");
     document.getElementById("s6").innerHTML=statHTML(e,"e");
     document.getElementById("s9").innerHTML=statHTML(l,"l");
-    sparkline("tre", e.census, "#a8c0f0");
-    sparkline("trl", l.census, "#a0e898");
+    sparkline("tre", e.census, "#a8c0f0"); sparkline("trl", l.census, "#a0e898");
   }).catch(function(){});
 }
+// 30 frames a second, backing off to 15 if the machine is struggling
+var frameMs=33, loopTimer=null, costAvg=10;
 function frame(){
-  // Driven by setInterval, not requestAnimationFrame: rAF is suspended in a
-  // hidden tab and never re-arms a chained loop, which would leave the world
-  // frozen on return. We simply skip the work while nobody is looking.
   if (document.hidden) return;
+  var t0=performance.now();
   tick++;
   if (state){
     render(document.getElementById("c6"), compose6(state.u.eden), actors6, "e", state.u.eden);
     render(document.getElementById("c9"), compose9(state.u.lagoon, state), actors9, "l", state.u.lagoon);
-    if (tick%3===0) updateRecords(state.events);
+    if (tick%8===0) updateRecords(state.events);
   }
+  costAvg=costAvg*0.9+(performance.now()-t0)*0.1;
+  var want = costAvg>26 ? 66 : (costAvg<14 ? 33 : frameMs);
+  if (want!==frameMs){ frameMs=want; clearInterval(loopTimer); loopTimer=setInterval(frame, frameMs); }
 }
-document.addEventListener("visibilitychange", function(){
-  if (!document.hidden){ fit(); frame(); }      // repaint the moment they return
-});
+document.addEventListener("visibilitychange", function(){ if (!document.hidden){ fit(); frame(); } });
 fit();
 loadWorld().then(function(){
   poll(); setInterval(poll,2000);
-  frame(); setInterval(frame,100);
+  frame(); loopTimer=setInterval(frame, frameMs);
 });
 </script>
 </body>
