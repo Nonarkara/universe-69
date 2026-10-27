@@ -23,6 +23,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import engine
 import research
+import historian
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # The live run keeps its state in ./data. A development instance can be pointed
@@ -148,6 +149,8 @@ def engine_loop():
             log_events(evts)
             if any(e[2] in ("extinction", "lesson") for e in evts):
                 dump_postmortems()
+                with lock:
+                    historian.compile_book(world, ROOT)
             if status["catching_up"]:
                 print(f"[universe69] fast-forwarding, {behind - batch} parts to go")
         if time.time() - last_save > 60:
@@ -267,6 +270,10 @@ def shutdown(*_):
 
 signal.signal(signal.SIGTERM, shutdown)
 signal.signal(signal.SIGINT, shutdown)
+
+# If the run was already over when we booted, make sure the book exists.
+with lock:
+    historian.compile_book(world, ROOT)
 
 threading.Thread(target=engine_loop, daemon=True).start()
 threading.Thread(target=uploader_loop, daemon=True).start()
