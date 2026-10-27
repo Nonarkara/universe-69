@@ -5,7 +5,7 @@
   <key>Label</key><string>com.universe69.sim</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/usr/local/bin/python3</string>
+    <string>/usr/bin/python3</string>
     <string>/Users/admin/repos/Universe 69/sim/server.py</string>
   </array>
   <key>WorkingDirectory</key><string>/Users/admin/repos/Universe 69</string>

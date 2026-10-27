@@ -24,6 +24,12 @@ GESTATION = 270
 EDEN_SIZE = 48
 EDEN_CAP = 900          # nominal capacity of the pen
 EDEN_STAGNATION = 0.35  # crowding level where the behavioral sink begins
+EDEN_HOPPERS = ((8, 8), (EDEN_SIZE - 10, 8),
+                (8, EDEN_SIZE - 10), (EDEN_SIZE - 10, EDEN_SIZE - 10))
+EDEN_ALCOVES = ((4, 4), (EDEN_SIZE - 6, 4),
+                (4, EDEN_SIZE - 6), (EDEN_SIZE - 6, EDEN_SIZE - 6))
+ACT_I = {"rest": 0, "walk": 1, "talk": 2, "hunt": 3, "fish": 4,
+         "farm": 5, "build": 6, "play": 7, "eat": 8}
 
 LAGOON_SIZE = 160   # an island off the coast of a greater land
 RESEED_YEARS = 30       # quiet years before the Observers reseed (Ice Age cycle)
@@ -70,7 +76,7 @@ def make_name(rng):
 def person(uid, name, sex, born, gen, x, y, competent=True):
     return {"id": uid, "n": name, "s": sex, "b": born, "g": gen,
             "p": None, "x": x, "y": y, "c": competent, "w": False,
-            "due": 0, "hun": 0.0}
+            "due": 0, "hun": 0.0, "act": "walk", "fx": 0, "fy": 1}
 
 
 def age_of(p, day):
@@ -273,6 +279,285 @@ def record_census(u):
         u["census"] = u["census"][-400:]
 
 
+def step_toward(p, x, y, terr=None):
+    """One tile along the longer axis. On the island, step around water."""
+    x, y = int(x), int(y)
+    dx = (x > p["x"]) - (x < p["x"])
+    dy = (y > p["y"]) - (y < p["y"])
+    if dx == 0 and dy == 0:
+        return False
+    if abs(x - p["x"]) >= abs(y - p["y"]):
+        order = ((dx, 0), (0, dy))
+    else:
+        order = ((0, dy), (dx, 0))
+    s = len(terr) if terr is not None else 0
+    for sx, sy in order:
+        if sx == 0 and sy == 0:
+            continue
+        nx, ny = p["x"] + sx, p["y"] + sy
+        if terr is not None and not (0 <= nx < s and 0 <= ny < s and terr[ny][nx] != 2):
+            continue
+        p["x"], p["y"] = nx, ny
+        p["fx"], p["fy"] = sx, sy
+        return True
+    return False
+
+
+def approach(p, x, y, terr=None):
+    """Cover ground when the work is far, then arrive at a walk."""
+    dist = abs(p["x"] - int(x)) + abs(p["y"] - int(y))
+    n = 3 if dist > 8 else (2 if dist > 3 else 1)
+    for _ in range(n):
+        if not step_toward(p, x, y, terr):
+            break
+
+
+def face_toward(p, x, y):
+    dx = int(x) - p["x"]
+    dy = int(y) - p["y"]
+    if dx == 0 and dy == 0:
+        return
+    if abs(dx) >= abs(dy):
+        p["fx"], p["fy"] = (1 if dx > 0 else -1), 0
+    else:
+        p["fx"], p["fy"] = 0, (1 if dy > 0 else -1)
+
+
+def face_code(p):
+    fx, fy = p.get("fx", 0), p.get("fy", 1)
+    if abs(fx) >= abs(fy):
+        return 1 if fx >= 0 else 3
+    return 2 if fy >= 0 else 0
+
+
+def finish_act(p, gx, gy, act):
+    if abs(p["x"] - int(gx)) + abs(p["y"] - int(gy)) > 2:
+        p["act"] = "walk"
+    else:
+        p["act"] = act
+
+
+def famine_line(names):
+    if len(names) == 1:
+        return f"{names[0]} starves in the lean season."
+    head = ", ".join(names[:3])
+    more = f" and {len(names) - 3} others" if len(names) > 3 else ""
+    return f"{len(names)} starve in the lean season: {head}{more}."
+
+
+def nearest_kind(terr, x, y, kind, rad):
+    best, bestd = None, 10 ** 9
+    s = len(terr)
+    for yy in range(max(1, y - rad), min(s - 1, y + rad + 1)):
+        row = terr[yy]
+        for xx in range(max(1, x - rad), min(s - 1, x + rad + 1)):
+            if row[xx] == kind:
+                d = abs(xx - x) + abs(yy - y)
+                if d < bestd:
+                    bestd, best = d, (xx, yy)
+    return best
+
+
+def camp_spots(u, terr):
+    """Shared places a camp walks to together: a grove, a beach."""
+    out = []
+    for st in u["settlements"]:
+        out.append({
+            "hunt": nearest_kind(terr, st["x"], st["y"], 1, 18) or (st["x"], st["y"]),
+            "fish": nearest_kind(terr, st["x"], st["y"], 3, 18) or (st["x"], st["y"]),
+        })
+    return out
+
+
+def place_farm(u, rng, st):
+    """Till a dry tile near camp. Never the water."""
+    terr = terrain_of(u)
+    for _ in range(20):
+        x = int(st["x"] + rng.randint(-8, 8))
+        y = int(st["y"] + rng.randint(-8, 8))
+        if (1 <= x < LAGOON_SIZE - 1 and 1 <= y < LAGOON_SIZE - 1
+                and terr[y][x] != 2):
+            u["farms"].append([x, y])
+            return True
+    return False
+
+
+def dry_stand(terr, x, y, home):
+    """A place to stand: the tile itself, or the nearest dry ground."""
+    s = len(terr)
+
+    def ok(xx, yy):
+        return 1 <= xx < s - 1 and 1 <= yy < s - 1 and terr[yy][xx] != 2
+
+    x, y = int(x), int(y)
+    if ok(x, y):
+        return x, y
+    hx, hy = int(home[0]), int(home[1])
+    best, bestd = (hx, hy), 10 ** 9
+    for rad in range(1, 5):
+        for dy in range(-rad, rad + 1):
+            for dx in range(-rad, rad + 1):
+                xx, yy = x + dx, y + dy
+                if not ok(xx, yy):
+                    continue
+                d = abs(xx - hx) + abs(yy - hy)
+                if d < bestd:
+                    bestd, best = d, (xx, yy)
+        if bestd < 10 ** 9:
+            return best
+    return hx, hy
+
+
+def pen_plaza(morning, adult_ids):
+    """The hopper the band is already living around."""
+    pts = [morning[i] for i in adult_ids if i in morning] or list(morning.values())
+    if not pts:
+        return EDEN_HOPPERS[0]
+    cx = sum(p[0] for p in pts) // len(pts)
+    cy = sum(p[1] for p in pts) // len(pts)
+    return min(EDEN_HOPPERS, key=lambda q: abs(q[0] - cx) + abs(q[1] - cy))
+
+
+def meet(morning, a, b, pull):
+    """Where two people agree to stand, pulled toward the place they share."""
+    ax, ay = morning.get(a, pull)
+    bx, by = morning.get(b, pull)
+    return ((ax + bx) // 2 + pull[0]) // 2, ((ay + by) // 2 + pull[1]) // 2
+
+
+def live_eden(u, p, adult_ids, morning, plaza):
+    """The pen keeps one rhythm: a shared meal, a long talk, a short stroll."""
+    day = u["day"]
+    if p.get("w"):
+        goal = EDEN_ALCOVES[p["id"] % 4]
+        approach(p, goal[0], goal[1])
+        p["x"] = min(EDEN_SIZE - 3, max(2, p["x"]))
+        p["y"] = min(EDEN_SIZE - 3, max(2, p["y"]))
+        finish_act(p, goal[0], goal[1], "rest")
+        face_toward(p, plaza[0], plaza[1])
+        return
+    beat = (day // 24) % 3
+    hopper = plaza
+    # the hopper is a 2x2 machine; people stand on the floor just south of it
+    apron = (hopper[0], hopper[1] + 3)
+    look = hopper
+    if age_of(p, day) < ADULT_AGE:
+        slot = p["id"] % 4
+        gx = apron[0] + (slot % 2) * 3 - 1
+        gy = apron[1] + 2
+        act = "play"
+    else:
+        loner = adult_ids and (p["id"] % 5) == (day // 24) % 5
+        if loner or beat == 2 or not adult_ids:
+            gx = apron[0] + ((p["id"] * 3) % 5) - 1
+            gy = apron[1] + 2 + (p["id"] % 2)
+            act = "walk"
+            look = (gx + (1 if p["id"] % 2 == 0 else -1), gy)
+        elif beat == 0:
+            slot = adult_ids.index(p["id"]) if p["id"] in adult_ids else p["id"]
+            gx = apron[0] + (slot % 4) - 1
+            gy = apron[1]
+            act = "eat"
+        else:
+            i = adult_ids.index(p["id"]) if p["id"] in adult_ids else 0
+            mate = adult_ids[i ^ 1] if (i ^ 1) < len(adult_ids) else adult_ids[0]
+            if mate == p["id"] and len(adult_ids) > 1:
+                mate = adult_ids[(i + 1) % len(adult_ids)]
+            cx, _cy = meet(morning, p["id"], mate, apron)
+            cx = min(apron[0] + 2, max(apron[0] - 1, cx))
+            gx, gy = (cx, apron[1]) if p["id"] <= mate else (cx + 1, apron[1])
+            look = (gx + (1 if p["id"] <= mate else -1), gy)
+            act = "talk"
+    hx, hy = hopper
+    if hx <= gx <= hx + 1 and hy <= gy <= hy + 1:
+        gy = hy + 3
+    gx = min(EDEN_SIZE - 3, max(2, gx))
+    gy = min(EDEN_SIZE - 3, max(2, gy))
+    approach(p, gx, gy)
+    p["x"] = min(EDEN_SIZE - 3, max(2, p["x"]))
+    p["y"] = min(EDEN_SIZE - 3, max(2, p["y"]))
+    finish_act(p, gx, gy, act)
+    face_toward(p, look[0], look[1])
+
+
+def live_lagoon(u, p, terr, spots, morning):
+    """One camp, one day's work, done shoulder to shoulder."""
+    day = u["day"]
+    si = min(p.get("st", 0), len(u["settlements"]) - 1)
+    st = u["settlements"][si]
+    home = (st["x"], st["y"])
+    spot = spots[si] if si < len(spots) else {"hunt": home, "fish": home}
+    a = age_of(p, day)
+    beat = (day // 18) % 6
+    slot = p["id"] % 5
+    gx, gy = home
+    look = home
+    act = "rest"
+    if a >= ELDER_AGE:
+        gx = st["x"] + (slot % 3) - 1
+        gy = st["y"] + 1
+        look = (st["x"], st["y"] + 3)
+        act = "rest"
+    elif a < ADULT_AGE:
+        ang = (p["id"] % 6) / 6 * 2 * math.pi
+        gx = int(st["x"] + round(math.cos(ang) * 2))
+        gy = int(st["y"] + round(math.sin(ang) * 2))
+        act = "play"
+        look = home
+    elif (p["id"] % 7) == (beat % 7):
+        # someone stays with the children
+        gx = st["x"] + (1 if p["id"] % 2 == 0 else -1)
+        gy = st["y"]
+        act = "talk"
+        look = home
+    elif beat in (0, 1):
+        hx, hy = spot["hunt"]
+        col = (p["id"] * 2) % 5 - 2
+        gx, gy = dry_stand(terr, hx + col, hy, home)
+        act = "hunt"
+        look = (hx, hy)
+    elif beat == 2:
+        fx, fy = spot["fish"]
+        gx, gy = dry_stand(terr, fx + (slot % 3) - 1, fy, home)
+        act = "fish" if has(u, "fishing") else "eat"
+        look = (fx, fy + 1)
+    elif beat == 3 and u.get("farms"):
+        f = u["farms"][p["id"] % len(u["farms"])]
+        gx, gy = dry_stand(terr, f[0], f[1], home)
+        act = "farm"
+        look = (gx, gy + 1)
+    elif beat == 4 and has(u, "shelter"):
+        gx = st["x"] + (1 if slot % 2 == 0 else -1)
+        gy = st["y"] + (slot % 3) - 1
+        gx, gy = dry_stand(terr, gx, gy, home)
+        act = "build"
+        look = home
+    elif p.get("p") in morning:
+        cx, cy = meet(morning, p["id"], p["p"], home)
+        cx, cy = dry_stand(terr, cx, cy, home)
+        gx, gy = (cx, cy) if p["id"] < p["p"] else (cx + 1, cy)
+        gx, gy = dry_stand(terr, gx, gy, home)
+        act = "talk"
+        look = (cx + 1, cy) if p["id"] < p["p"] else (cx, cy)
+    else:
+        gx = st["x"] + (slot % 3) - 1
+        gy = st["y"]
+        act = "eat" if p.get("hun", 0) > 4 else "talk"
+        look = home
+    approach(p, gx, gy, terr)
+    p["x"] = min(LAGOON_SIZE - 2, max(1, p["x"]))
+    p["y"] = min(LAGOON_SIZE - 2, max(1, p["y"]))
+    if terr[p["y"]][p["x"]] == 2:
+        approach(p, st["x"], st["y"], terr)
+        p["x"] = min(LAGOON_SIZE - 2, max(1, p["x"]))
+        p["y"] = min(LAGOON_SIZE - 2, max(1, p["y"]))
+        if terr[p["y"]][p["x"]] == 2:
+            p["x"], p["y"] = st["x"], st["y"]
+        act = "walk"
+    finish_act(p, gx, gy, act)
+    face_toward(p, look[0], look[1])
+
+
 # ---------------------------------------------------------------- EDEN
 
 def tick_eden(u, rng, events):
@@ -297,6 +582,10 @@ def tick_eden(u, rng, events):
 
     crowd = pop / EDEN_CAP
     dead, born = [], []
+    morning = {q["id"]: (q["x"], q["y"]) for q in people}
+    adult_ids = [q["id"] for q in people
+                 if not q.get("w") and age_of(q, day) >= ADULT_AGE]
+    plaza = pen_plaza(morning, adult_ids)
 
     # phase transitions
     if u["phase"] == "strive" and any(age_of(p, day) < ADULT_AGE for p in people):
@@ -351,9 +640,7 @@ def tick_eden(u, rng, events):
         # the beautiful ones: incompetent adults withdraw for good
         if not p["c"] and not p["w"] and age_of(p, day) >= ADULT_AGE:
             p["w"] = True
-        # wander the pen (walls are 2 tiles thick)
-        p["x"] = min(EDEN_SIZE - 3, max(2, p["x"] + rng.choice([-1, 0, 1])))
-        p["y"] = min(EDEN_SIZE - 3, max(2, p["y"] + rng.choice([-1, 0, 1])))
+        live_eden(u, p, adult_ids, morning, plaza)
 
     for p in dead:
         people.remove(p)
@@ -557,9 +844,12 @@ def tick_lagoon(u, rng, events):
         u["store"] = 0.0
         shortfall = (need - total) / max(1.0, need)  # 0..1 fraction unfed
 
-    dead, born = [], []
+    dead, born, starved = [], [], []
     weapons = has(u, "stone_tools")
     healing = has(u, "healing")
+    terr = terrain_of(u)
+    morning = {q["id"]: (q["x"], q["y"]) for q in people}
+    spots = camp_spots(u, terr)
 
     for p in people:
         a = age_of(p, day)
@@ -573,9 +863,7 @@ def tick_lagoon(u, rng, events):
         if p["hun"] > 40:
             dead.append(p)
             cod(u, "starvation")
-            if rng.random() < 0.1:
-                events.append((day, "LAGOON", "famine",
-                               f"{p['n']} starves in the lean season."))
+            starved.append(p["n"])
             continue
         # predation
         pr = 3e-5 * (stocks["pred"] / 48.0)
@@ -592,8 +880,12 @@ def tick_lagoon(u, rng, events):
                 events.append((day, "LAGOON", "predator",
                                f"{p['n']} is taken by a predator at the wood's edge."))
             continue
-        # accidents + senescence
-        if rng.random() < 6e-6 or base_mortality(p, day, rng, events, u):
+        # accidents, then senescence — a fall is not old age
+        if rng.random() < 6e-6:
+            dead.append(p)
+            cod(u, "accident")
+            continue
+        if base_mortality(p, day, rng, events, u):
             dead.append(p)
             cod(u, "age")
             continue
@@ -622,18 +914,10 @@ def tick_lagoon(u, rng, events):
             else:
                 u["deaths_y"] += 1
                 cod(u, "infant")
-        # drift around home settlement, keeping to dry land
-        st = u["settlements"][min(p.get("st", 0), len(u["settlements"]) - 1)]
-        p["x"] += rng.choice([-1, 0, 1])
-        p["y"] += rng.choice([-1, 0, 1])
-        if math.hypot(p["x"] - st["x"], p["y"] - st["y"]) > st["r"]:
-            p["x"] += 1 if st["x"] > p["x"] else -1
-            p["y"] += 1 if st["y"] > p["y"] else -1
-        p["x"] = min(LAGOON_SIZE - 2, max(1, p["x"]))
-        p["y"] = min(LAGOON_SIZE - 2, max(1, p["y"]))
-        if terrain_of(u)[p["y"]][p["x"]] == 2:  # waded in: back toward camp
-            p["x"] += 1 if st["x"] > p["x"] else -1 if st["x"] < p["x"] else 0
-            p["y"] += 1 if st["y"] > p["y"] else -1 if st["y"] < p["y"] else 0
+        live_lagoon(u, p, terr, spots, morning)
+
+    if starved:
+        events.append((day, "LAGOON", "famine", famine_line(starved)))
 
     for p in dead:
         if p in people:
@@ -714,8 +998,7 @@ def tick_lagoon(u, rng, events):
                 if name == "agriculture":
                     st = u["settlements"][0]
                     for _ in range(6):
-                        u["farms"].append([st["x"] + rng.randint(-7, 7),
-                                           st["y"] + rng.randint(-7, 7)])
+                        place_farm(u, rng, st)
                 break  # at most one discovery a year
 
         # once boats exist and the island feels small, pioneers cross on
@@ -748,15 +1031,14 @@ def tick_lagoon(u, rng, events):
             art = next(a for a in ARTS if a not in u["culture"])
             u.setdefault("culture", []).append(art)
             maker = rng.choice(adults)["n"]
+            verb = ("appear" if art.endswith("s") and not art.startswith("the")
+                    else "appears")
             events.append((day, "LAGOON", "culture",
                            f"Year {year}: with food enough and nothing to fear, "
-                           f"{art} appear{'s' if not art.startswith('the') else ''} — "
-                           f"first made by {maker}."))
+                           f"{art} {verb} — first made by {maker}."))
 
         if has(u, "agriculture") and len(u["farms"]) < pop // 3:
-            st = rng.choice(u["settlements"])
-            u["farms"].append([st["x"] + rng.randint(-8, 8),
-                               st["y"] + rng.randint(-8, 8)])
+            place_farm(u, rng, rng.choice(u["settlements"]))
 
         # Dunbar / fission: settlements over their social limit split
         limit = 500 if has(u, "granary") else 220 if has(u, "lore") else 80
@@ -865,10 +1147,14 @@ def summarize(world):
                    4 if p["w"] else
                    3 if a >= ELDER_AGE else
                    1 if p["s"] == "m" else 2)
-            ppl.append([p["x"], p["y"], cls, 1 if p["s"] == "f" else 0])
+            ppl.append([p["x"], p["y"], cls, 1 if p["s"] == "f" else 0,
+                        ACT_I.get(p.get("act"), 1), face_code(p), p["id"]])
         info = {"day": day, "year": day // DAYS_PER_YEAR, "pop": len(u["people"]),
                 "gen": u["gen_max"], "peak": u["peak"], "phase": u["phase"],
-                "iter": u["iteration"], "people": ppl, "census": u["census"][-120:]}
+                "iter": u["iteration"], "people": ppl, "census": u["census"][-120:],
+                "rounds": [{"i": pm["iteration"], "cause": pm.get("dominant_cause"),
+                            "peak": pm.get("peak")}
+                           for pm in u.get("postmortems", [])[-8:]]}
         if u["kind"] == "LAGOON":
             info["tech"] = u["tech"]
             info["settlements"] = u["settlements"]
