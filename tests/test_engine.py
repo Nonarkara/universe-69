@@ -381,5 +381,30 @@ class TestExtinctionAndPostmortems(unittest.TestCase):
         self.assertGreater(u["store"], 0)
 
 
+class TestRecord(unittest.TestCase):
+    def test_famine_is_one_line_for_the_day(self):
+        self.assertEqual(engine.famine_line(["Nami"]),
+                         "Nami starves in the lean season.")
+        line = engine.famine_line(["A", "B", "C", "D", "E"])
+        self.assertTrue(line.startswith("5 starve"))
+        self.assertIn("and 2 others", line)
+
+    def test_culture_verb_agrees_with_number(self):
+        self.assertEqual(engine.culture_verb("cave paintings"), "appear")
+        self.assertEqual(engine.culture_verb("drum songs"), "appear")
+        self.assertEqual(engine.culture_verb("the dance of the tides"), "appears")
+        self.assertEqual(engine.culture_verb("shell jewelry"), "appears")
+
+    def test_new_fields_are_not_dug_in_the_water(self):
+        import random
+        u = engine.genesis_universe("LAGOON", 99)
+        terr = engine.terrain_of(u)
+        rng = random.Random(1)
+        for _ in range(40):
+            self.assertTrue(engine.till_near(u, rng, u["settlements"][0], 8))
+        for x, y in u["farms"]:
+            self.assertNotEqual(terr[y][x], 2, (x, y))
+
+
 if __name__ == "__main__":
     unittest.main()
