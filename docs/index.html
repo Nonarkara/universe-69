@@ -702,10 +702,12 @@ function updateActors(map){
     var a=map[id];
     var dx=a.tx-a.x, dy=a.ty-a.y, d=Math.hypot(dx,dy);
     if (d>0.06){
-      var sp=Math.min(0.10, d*0.35);       // walk, don't teleport
+      // fast enough to finish a day's travel inside the day, so they are
+      // seen arriving and then working, not perpetually mid-stride
+      var sp=Math.min(0.24, 0.07+d*0.30);
       a.x+=dx/d*sp; a.y+=dy/d*sp;
       a.moving=true;
-      if (Math.abs(dx)>0.15) a.face = dx>0?1:-1;
+      if (Math.abs(dx)>0.12) a.face = dx>0?1:-1;
     } else {
       a.x=a.tx; a.y=a.ty; a.moving=false;
     }
@@ -808,6 +810,10 @@ function statHTML(u, kind){
   out+="<canvas id='tr"+kind+"' class='trend'></canvas>";
   if (kind==="e"){
     out+="PHASE: "+u.phase.toUpperCase();
+    if (u.sink>45) out+="\n<span class='dim'>BEHAVIOURAL SINK: "+u.sink
+                      +"% FEED AT ONE HOPPER</span>";
+    if (u.homeless>0) out+="\n<span class='dim'>WITHOUT TERRITORY: "+u.homeless
+                      +" (ONLY "+u.boxes+" NEST BOXES)</span>";
     if (u.std) out+="\n<span class='dim'>OUTBREAK IN THE PEN</span>";
     if (u.ennui>0.2) out+="\n<span class='dim'>ENNUI "+Math.round(u.ennui*100)+"%</span>";
   } else {
