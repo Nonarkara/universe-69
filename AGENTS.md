@@ -139,6 +139,29 @@ core is repeated inline below so an agent that skips the pointer still gets it.
 
 ---
 
+## Where this is going
+
+The user's brief, in their order:
+
+1. **The 2D screen, perfected.** The viewer must make the inhabitants legible
+   — what they are doing, who they are, where they belong, and what the
+   record says. This round.
+2. **Immersive 3D worlds**, with real zoom, and the ability to **go inside a
+   universe as one of the people in it.**
+3. **Meta Quest.** The next build target after (2) — WebXR, in a headset.
+
+The framing to hold on to: a *fridge*. In *Love, Death & Robots* "Ice Age",
+a couple finds a whole civilisation growing inside their freezer and can only
+watch. Universe 69 is two sealed worlds observed through a window — never
+helped, never entered by the Observers. The rendering should feel like
+looking into a lit terrarium, not like playing a game.
+
+Two rules that follow from the framing, and that the current viewer already
+honours: **the camera is a documentary eye, not a game camera** (it finds
+something worth watching and closes in, and the viewer may take it over); and
+**sex is not a dirty thing that needs a guardrail here** — the dirtiness is
+social, and in these universes it may or may not be so at all.
+
 ## Layout
 
 ```
