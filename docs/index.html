@@ -301,8 +301,9 @@ function buildBase6(){
 // apart the way nature does it; once shelter is mastered, the first garments
 // appear. EDEN is clothed from day one — the resort provides everything.
 var SKIN="#eac898", SKIND="#c9a271", LEG="#d8b586";
-function drawPerson(g, tx, ty, cls, sex, clothed, t){
-  var X=tx*PX, Y=ty*PX, f=((tx*29+ty*13+(t>>3))%2);
+function drawPerson(g, fx, fy, cls, sex, clothed, t, moving, id){
+  var X=Math.round(fx*PX), Y=Math.round(fy*PX);
+  var f = moving ? ((id+(t>>2))%2) : 0;   // legs swing only when walking
   var kid=(cls===0), eld=(cls===3), fem=(sex===1);
   g.fillStyle=P.shadow; g.fillRect(X+2,Y+PX-2,PX-4,2);
   if (kid){                                             // children: small, alike
@@ -386,34 +387,84 @@ function compose9(u, st){
     });
   }
   var clothed = !!(u.tech && u.tech.indexOf("shelter")>=0);
-  u.people.slice().sort(function(a,b){return a[1]-b[1];})
-    .forEach(function(p){
-      var sex = p.length>3 ? p[3] : (p[2]===2?1:0);
-      drawPerson(g,p[0],p[1],p[2],sex,clothed,tick); });
+  drawActors(g, actors9, clothed, function(x,y){   // keep amblers on dry land
+    var T=terr9; return T && T[Math.round(y)] && T[Math.round(y)][Math.round(x)]!==2;
+  });
   return frame9;
 }
 function compose6(u){
   if (!base6) buildBase6();
   var g=frame6.getContext("2d");
   g.drawImage(base6,0,0);
-  u.people.slice().sort(function(a,b){return a[1]-b[1];})
-    .forEach(function(p){
-      var sex = p.length>3 ? p[3] : (p[2]===2?1:0);
-      drawPerson(g,p[0]+EM,p[1]+EM,p[2],sex,true,tick); });  // the resort clothes them
+  drawActors(g, actors6, true, null);              // the resort clothes them
   return frame6;
 }
 
-function render(canvas, composed, u, key, ox){
+// ---- actors: the people keep living between snapshots -------------------
+// Each poll gives authoritative tile positions; actors tween toward them,
+// and while a snapshot is stale (the web mirror updates every few minutes)
+// they amble in short arcs near their spot — walking, pausing, walking —
+// exactly the wandering the engine does between observations.
+var actors6={}, actors9={};
+function syncActors(map, people, ox){
+  var seen={};
+  (people||[]).forEach(function(p,i){
+    var id=p.length>4?p[4]:i, sex=p.length>3?p[3]:(p[2]===2?1:0);
+    seen[id]=1;
+    var a=map[id];
+    if (!a){ map[id]=a={x:p[0]+ox,y:p[1]+ox,cls:p[2],sex:sex,id:id,
+                        gx:p[0]+ox,gy:p[1]+ox,pause:0}; }
+    a.cls=p[2]; a.sex=sex;
+    var nx=p[0]+ox, ny=p[1]+ox;
+    if (a.hx!==nx || a.hy!==ny){        // home moved: walk there first
+      a.hx=nx; a.hy=ny; a.gx=nx; a.gy=ny;
+    }
+  });
+  Object.keys(map).forEach(function(id){ if(!seen[id]) delete map[id]; });
+}
+function updateActors(map, landOK){
+  Object.keys(map).forEach(function(id){
+    var a=map[id];
+    var dx=a.gx-a.x, dy=a.gy-a.y, d=Math.hypot(dx,dy);
+    if (d>0.08){
+      var sp=Math.min(0.09, d);         // ~0.9 tiles/sec at 10fps
+      a.x+=dx/d*sp; a.y+=dy/d*sp; a.moving=true;
+    } else {
+      a.moving=false;
+      if (a.pause>0){ a.pause--; }
+      else {
+        // pick a new stroll goal near home, or stand a while
+        var h=hash2(a.id*7+(tick>>4), a.id*13);
+        if (h<0.45){ a.pause=8+((a.id+tick)%30); }
+        else {
+          var gx=a.hx+(h*2.4-1.2)*1.6, gy=a.hy+(hash2(a.id*3,tick>>4)*2.4-1.2)*1.6;
+          if (!landOK || landOK(gx,gy)){ a.gx=gx; a.gy=gy; }
+          a.pause=4;
+        }
+      }
+    }
+  });
+}
+function drawActors(g, map, clothed, landOK){
+  updateActors(map, landOK);
+  var list=Object.keys(map).map(function(k){return map[k];});
+  list.sort(function(a,b){return a.y-b.y;});
+  list.forEach(function(a){
+    drawPerson(g,a.x,a.y,a.cls,a.sex,clothed,tick,a.moving,a.id);
+  });
+}
+
+function render(canvas, composed, map, key){
   if (!composed) return;
   var S=composed.width/PX, c=cam[key];
-  var minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
-  u.people.forEach(function(p){
-    var px=p[0]+ox, py=p[1]+ox;
-    if(px<minx)minx=px; if(px>maxx)maxx=px;
-    if(py<miny)miny=py; if(py>maxy)maxy=py;
+  var minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9, n=0;
+  Object.keys(map).forEach(function(id){
+    var a=map[id]; n++;
+    if(a.x<minx)minx=a.x; if(a.x>maxx)maxx=a.x;
+    if(a.y<miny)miny=a.y; if(a.y>maxy)maxy=a.y;
   });
   var tx,ty,th;
-  if (u.people.length){
+  if (n){
     tx=(minx+maxx)/2; ty=(miny+maxy)/2;
     th=Math.max(8, Math.min(S/2, Math.max(maxx-minx,maxy-miny)/2+7));
   } else { tx=S/2; ty=S/2; th=S/2; }
@@ -500,10 +551,15 @@ function poll(){
   (SNAP?fetchJSON(SNAP):fetchJSON("/state")).then(function(st){
     state=st; pollSeq++;
     if (!SNAP&&worldInfo&&st.u.lagoon.iter!==lagoonIter) loadWorld().then(function(){ base9=null; });
+    syncActors(actors6, st.u.eden.people, EM);
+    syncActors(actors9, st.u.lagoon.people, 0);
     var e=st.u.eden,l=st.u.lagoon;
     var extra="";
     if (st.status&&st.status.catching_up) extra="  ·  FAST-FORWARDING "+st.status.behind_days+" DAYS";
-    else if (SNAP) extra="  ·  MIRROR "+new Date(st.wall*1000).toLocaleTimeString();
+    else if (SNAP){
+      var age=Math.max(0,Math.round(Date.now()/1000-st.wall));
+      extra="  ·  OBSERVED "+(age<90?age+"S":Math.round(age/60)+" MIN")+" AGO";
+    }
     document.getElementById("hud6").innerHTML=hudText(e,"e")+extra;
     document.getElementById("hud9").innerHTML=hudText(l,"l");
     document.getElementById("s6").innerHTML=statHTML(e,"e");
@@ -515,8 +571,8 @@ function poll(){
 function frame(){
   tick++;
   if (state){
-    render(document.getElementById("c6"), compose6(state.u.eden), state.u.eden, "e", EM);
-    render(document.getElementById("c9"), compose9(state.u.lagoon, state), state.u.lagoon, "l", 0);
+    render(document.getElementById("c6"), compose6(state.u.eden), actors6, "e");
+    render(document.getElementById("c9"), compose9(state.u.lagoon, state), actors9, "l");
     if (tick%3===0) updateRecords(state.events);
   }
   setTimeout(function(){ requestAnimationFrame(frame); }, 100);

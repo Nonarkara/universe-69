@@ -865,7 +865,7 @@ def summarize(world):
                    4 if p["w"] else
                    3 if a >= ELDER_AGE else
                    1 if p["s"] == "m" else 2)
-            ppl.append([p["x"], p["y"], cls, 1 if p["s"] == "f" else 0])
+            ppl.append([p["x"], p["y"], cls, 1 if p["s"] == "f" else 0, p["id"]])
         info = {"day": day, "year": day // DAYS_PER_YEAR, "pop": len(u["people"]),
                 "gen": u["gen_max"], "peak": u["peak"], "phase": u["phase"],
                 "iter": u["iteration"], "people": ppl, "census": u["census"][-120:]}
