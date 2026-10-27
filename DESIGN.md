@@ -13,7 +13,7 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
   `target_day = (now − epoch) / 2s` and fast-forwards. The universes age even
   while the process is dead — Tamagotchi semantics, no drift.
 
-## The founders (engine 2026.10.27.2)
+## The founders (engine 2026.10.27.3)
 
 Both universes receive **the same people**: same names, same heritable
 temperaments, generated from one shared founder seed. The world is the only
@@ -78,6 +78,32 @@ years): LAGOON died out at least once in 3 of 8 runs, against 6 of 8 on
 the previous engine; peaks ran 39–406, highest where a boat landed. LAGOON time budget after year 60 (seed 69): foraging 24%, walking
 20%, minding children 13%, play 13%, sleep 8%, talk 7%, sex 3.5%,
 grooming 3%.
+
+## Engine 2026.10.27.3, the merge: one record a day
+
+This engine is the merge of two lines of work — the routines/biology/boats
+pass above and the record-keeping pass from the other branch. Both are kept.
+Three model changes, none of them a new mechanism:
+
+| Change | Why | What it does to the numbers |
+|---|---|---|
+| Famine is **one line a day**, not one line per death | A lean season is one event. Ten deaths in a day are one sentence, not ten | The event log's famine lines change wording and count. Cause-of-death totals do not |
+| A fall is a separate cause, `accident`, from old age | The two were collapsed into one bucket, so a world of young people dying of falls reported as "age" | `cod` gains an `accident` bucket. Any figure that summed `cod` across causes changes; re-derive it |
+| Farm fields are dug only on **dry land** | Water is not a field | LAGOON's farm tiles move off the shoreline. Farm count is unchanged; farm *positions* are not |
+
+The engine also records its own version in every postmortem, so a published
+figure can be traced to the code that produced it.
+
+**Rolls are preserved.** The old per-death famine coin flip is still drawn
+and discarded, so every later random draw in the day lands in the same
+place it did before. The trajectories differ only where the three changes
+above change an outcome.
+
+**Figures that changed.** Any number derived from the 2026.10.27.2 engine
+is not reproducible from this one. The 150-year seeds (69, 7, 123, 5, 11,
+42, 300, 8) quoted above were re-derived on 2026.10.27.2 and have **not**
+been re-derived on 2026.10.27.3 — treat them as stale until
+`tools/lab.py` re-runs them.
 
 ## Universe 6 — EDEN (after Calhoun's Universe 25)
 

@@ -28,7 +28,7 @@ GESTATION = 270
 # The version of the model. Determinism holds per (seed, day) only *within* one
 # version, so every published figure and every postmortem must say which
 # version produced it.
-ENGINE_VERSION = "2026.10.27.2"
+ENGINE_VERSION = "2026.10.27.3"
 
 EDEN_SIZE = 48
 EDEN_CAP = 900          # nominal capacity of the pen
@@ -127,6 +127,22 @@ CALHOUN_SERIES = [
     {"what": "Husbandry", "his": "pen cleaned every four to eight weeks",
      "we": "no", "note": "no cleaning, no disease pressure"},
 ]
+
+
+def culture_verb(art):
+    """Plural arts 'appear'; a singular art, and anything called 'the …', 'appears'."""
+    if art.endswith("s") and not art.startswith("the"):
+        return "appear"
+    return "appears"
+
+
+def famine_line(names):
+    """One line for the day, however many the lean season takes."""
+    if len(names) == 1:
+        return f"{names[0]} starves in the lean season."
+    head = ", ".join(names[:3])
+    more = f" and {len(names) - 3} others" if len(names) > 3 else ""
+    return f"{len(names)} starve in the lean season: {head}{more}."
 
 TECH_LABEL = {
     "fire": "fire is tamed", "stone_tools": "stone tools are knapped",
@@ -281,6 +297,7 @@ def write_postmortem(u, events):
     pm = {"iteration": u["iteration"], "day": u["day"], "peak": u["peak"],
           "gen_max": u["gen_max"], "cod": dict(u["cod"]),
           "dominant_cause": dominant,
+          "engine": ENGINE_VERSION,
           "tech": list(u.get("tech", [])),
           "census_tail": u["census"][-40:],
           "lessons_held": list(u["lessons"])}
@@ -1082,6 +1099,19 @@ def terrain_of(u):
     if seed not in _TERRAIN_CACHE:
         _TERRAIN_CACHE[seed] = make_lagoon_terrain(seed)
     return _TERRAIN_CACHE[seed]
+
+
+def till_near(u, rng, st, span):
+    """Till one dry tile near camp. Water is not a field."""
+    terr = terrain_of(u)
+    for _ in range(12):
+        x = int(st["x"] + rng.randint(-span, span))
+        y = int(st["y"] + rng.randint(-span, span))
+        if (1 <= x < LAGOON_SIZE - 1 and 1 <= y < LAGOON_SIZE - 1
+                and terr[y][x] != 2):
+            u["farms"].append([x, y])
+            return True
+    return False
 
 
 # ------------------------------------------------- where work happens
@@ -1917,12 +1947,12 @@ def tick_lagoon(u, rng, events):
         u["store"] = 0.0
         shortfall = (need - total) / max(1.0, need)  # 0..1 fraction unfed
 
-    dead, born = [], []
     weapons = has(u, "stone_tools")
     healing = has(u, "healing")
     terr_l = terrain_of(u)
     byid = {q["id"]: q for q in people}
     u["_ctx"] = day_context(people, day)
+    dead, born, starved = [], [], []
     moms = u["_ctx"]["moms"]
     gone = {}                     # ids killed by someone else earlier this tick
 
@@ -1943,9 +1973,8 @@ def tick_lagoon(u, rng, events):
         if p["hun"] > 40:
             dead.append(p)
             cod(u, "starvation")
-            if rng.random() < 0.1:
-                events.append((day, "LAGOON", "famine",
-                               f"{p['n']} starves in the lean season."))
+            rng.random()  # the old per-death coin flip; kept so later rolls stay put
+            starved.append(p["n"])
             continue
         # predation
         pr = 3e-5 * (stocks["pred"] / 48.0)
@@ -1970,8 +1999,12 @@ def tick_lagoon(u, rng, events):
                 events.append((day, "LAGOON", "predator",
                                f"{p['n']} is taken by a predator at the wood's edge."))
             continue
-        # accidents + senescence
-        if rng.random() < 6e-6 or base_mortality(p, day, rng, events, u):
+        # a fall is not old age — same rolls as before, different names
+        if rng.random() < 6e-6:
+            dead.append(p)
+            cod(u, "accident")
+            continue
+        if base_mortality(p, day, rng, events, u):
             dead.append(p)
             cod(u, "age")
             continue
@@ -2027,6 +2060,9 @@ def tick_lagoon(u, rng, events):
                 lagoon_assign(u, p, day, rng, shortfall)
         p["x"] = min(LAGOON_SIZE - 2, max(1, p["x"]))
         p["y"] = min(LAGOON_SIZE - 2, max(1, p["y"]))
+
+    if starved:
+        events.append((day, "LAGOON", "famine", famine_line(starved)))
 
     if dead:
         dead_ids = {q["id"] for q in dead}
@@ -2123,8 +2159,7 @@ def tick_lagoon(u, rng, events):
                 if name == "agriculture":
                     st = u["settlements"][0]
                     for _ in range(6):
-                        u["farms"].append([st["x"] + rng.randint(-7, 7),
-                                           st["y"] + rng.randint(-7, 7)])
+                        till_near(u, rng, st, 7)
                 break  # at most one discovery a year
 
         # Crowding, not chance, puts people in boats. When the island holds
@@ -2165,13 +2200,11 @@ def tick_lagoon(u, rng, events):
             maker = rng.choice(adults)["n"]
             events.append((day, "LAGOON", "culture",
                            f"Year {year}: with food enough and nothing to fear, "
-                           f"{art} appear{'s' if not art.startswith('the') else ''} — "
+                           f"{art} {culture_verb(art)} — "
                            f"first made by {maker}."))
 
         if has(u, "agriculture") and len(u["farms"]) < pop // 3:
-            st = rng.choice(u["settlements"])
-            u["farms"].append([st["x"] + rng.randint(-8, 8),
-                               st["y"] + rng.randint(-8, 8)])
+            till_near(u, rng, rng.choice(u["settlements"]), 8)
 
         # Dunbar / fission: settlements over their social limit split
         limit = 500 if has(u, "granary") else 220 if has(u, "lore") else 80

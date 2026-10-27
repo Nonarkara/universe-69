@@ -62,14 +62,23 @@ else:
     world = engine.genesis(seed=69)
     print("[universe69] GENESIS — two universes created")
 
-# preload the tail of the event log so the ticker survives restarts
+# preload the tail of the event log so the ticker survives restarts.
+# A hard kill replays the days since the last save; those lines are already
+# in the file, so remember them and do not write them twice.
+seen_events = set()
 if os.path.exists(EVENTS_PATH):
     with open(EVENTS_PATH) as f:
-        for line in f.readlines()[-EVENTS_IN_VIEW:]:
-            try:
-                recent_events.append(json.loads(line))
-            except ValueError:
-                pass
+        tail = f.readlines()[-4000:]
+    parsed = []
+    for line in tail:
+        try:
+            parsed.append(json.loads(line))
+        except ValueError:
+            pass
+    for rec in parsed:
+        seen_events.add((rec.get("d"), rec.get("u"), rec.get("msg")))
+    for rec in parsed[-EVENTS_IN_VIEW:]:
+        recent_events.append(rec)
 
 
 def log_events(evts):
@@ -77,6 +86,10 @@ def log_events(evts):
         return
     with open(EVENTS_PATH, "a") as f:
         for (day, uni, kind, msg) in evts:
+            key = (day, uni, msg)
+            if key in seen_events:
+                continue
+            seen_events.add(key)
             rec = {"d": day, "y": day // engine.DAYS_PER_YEAR, "u": uni,
                    "t": kind, "msg": msg, "wall": time.time()}
             recent_events.append(rec)

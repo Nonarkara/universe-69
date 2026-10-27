@@ -107,6 +107,32 @@
     #filters button, #more { font-size:9px; padding:1px 4px; }
     #records h2 .long { display:none; }
   }
+  [hidden] { display:none !important; }
+  #banner { flex:0 0 auto; padding:4px 12px; font-size:11px; letter-spacing:1px;
+            color:#1a1404; background:#f8d848; }
+  #banner.bad { color:#f8d8d0; background:#6a2030; }
+  #veilbtn { margin-left:8px; font:inherit; font-size:12px; font-weight:bold;
+             color:#f8d848; background:#12121e; border:1px solid #5a5a3a;
+             width:22px; height:22px; cursor:pointer; flex:0 0 auto; }
+  #veil, #fail { position:fixed; inset:0; z-index:40; display:flex;
+                 align-items:center; justify-content:center;
+                 background:rgba(0,0,0,0.78); padding:16px; }
+  #fail { z-index:50; background:#000; }
+  .intro, .failcard { max-width:440px; width:100%; background:#0c0c16;
+                      border:1px solid #3a3a55; padding:16px 18px;
+                      font-size:12px; line-height:1.55; color:#d8d8e8; }
+  .intro h2, .failcard h2 { color:#f8d848; letter-spacing:2px; font-size:13px;
+                            margin-bottom:8px; }
+  .intro p, .failcard p { margin:0 0 8px; }
+  .intro .eden { color:#a8c0f0; } .intro .lagoon { color:#a0e898; }
+  .intro button, .failcard button { font:inherit; letter-spacing:2px;
+    color:#1a1404; background:#f8d848; border:none; padding:6px 16px;
+    cursor:pointer; margin-top:4px; }
+  @media (max-height: 520px) and (orientation: landscape) {
+    #masthead .sub, #masthead .hint { display:none; }
+    #reclines { height:calc(3 * 18px + 4px); }
+    .intro, .failcard { font-size:11px; padding:10px 12px; max-height:92vh; overflow:auto; }
+  }
 </style>
 </head>
 <body>
@@ -115,7 +141,9 @@
   <span class="sub">two sealed worlds — observed, never helped</span>
   <span class="hint">wheel zoom · drag pan · click to follow · WASD walk in · esc</span>
   <button id="walkbtn" title="Walk into the world you last touched">WALK</button>
+  <button type="button" id="veilbtn" title="What you are watching">?</button>
 </div>
+<div id="banner" class="banner" hidden></div>
 <div id="worlds">
   <div class="world" id="w6"><canvas id="c6" class="view"></canvas>
     <canvas id="o6" class="overlay"></canvas>
@@ -146,6 +174,24 @@
     <div id="reclines"></div>
   </div>
 </div>
+<div id="veil" hidden>
+  <div class="intro">
+    <h2>UNIVERSE 69</h2>
+    <p><b class="eden">EDEN</b> is universe 6: a sealed resort where it is always spring. Food, water, and a bed are free. The only scarce things are room and a place to be needed.</p>
+    <p><b class="lagoon">LAGOON</b> is universe 9: an island of woods, fish, winters, and predators. Nothing is given.</p>
+    <p>Watch only. You cannot feed them or step in. They keep living while you are away — one sim-day every 2 seconds, about 118 sim-years in a real day.</p>
+    <p class="dim">Come back. An hour away is about five years in there. Wheel to look closer, drag to pan, click a person to follow, WASD to walk in among them.</p>
+    <button type="button" id="veilok">WATCH</button>
+  </div>
+</div>
+<div id="fail" hidden>
+  <div class="failcard">
+    <h2 id="failtitle">THE MIRROR IS DARK</h2>
+    <p id="failmsg">Could not read the snapshot.</p>
+    <p class="dim">This page only watches. It will keep trying.</p>
+    <button type="button" id="retry">RETRY</button>
+  </div>
+</div>
 
 <script src="config.js"></script>
 <script>
@@ -174,7 +220,12 @@ var P = {
 function hash2(x,y){ var h=(x*374761393+y*668265263)>>>0;
   h=(h^(h>>13))*1274126177>>>0; return (h^(h>>16))/4294967295; }
 function lerp(a,b,t){ return a+(b-a)*t; }
-function fetchJSON(u){ return fetch(u,{cache:"no-store"}).then(function(r){ return r.json(); }); }
+function fetchJSON(u){
+  return fetch(u,{cache:"no-store"}).then(function(r){
+    if (!r.ok) throw new Error("HTTP "+r.status);
+    return r.json();
+  });
+}
 function mkCanvas(w,h){ var c=document.createElement("canvas"); c.width=w; c.height=h===undefined?w:h; return c; }
 
 var worldInfo=null, lagoonIter=-1, state=null, tick=0, pollSeq=0;
@@ -1676,7 +1727,7 @@ function hudText(u, kind){
   var key = (kind==="e" && v && v.ts>5) ? "  <span class='key' style='border-color:#f8d848'></span>held "+
             "<span class='key' style='border-color:#2f5a4c'></span>vacant" : "";
   return "<div class='l1'><b>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</b>  Y"+u.year+
-         " · POP "+u.pop+" · "+l2+(kind==="e"?hudExtra:"")+sc+cap+who+"</div>"+
+         " · POP "+u.pop+" · "+l2+hudExtra+sc+cap+who+"</div>"+
          doingHTML(u.people)+key+"\n"+statLine(u, kind);
 }
 function refreshHud(kind){
@@ -1831,10 +1882,72 @@ function loadWorld(){
   if (SNAP) return Promise.resolve();
   return fetchJSON("/world").then(function(w){ worldInfo=w; lagoonIter=w.lagoon_iter; });
 }
+var STALE_SEC=15*60; // gist uploads about every 10 min; warn after a missed one
+var snapWall=0, snapBad=false, snapReady=false, polling=false;
+function agoLabel(sec){
+  sec=Math.max(0, Math.floor(sec));
+  if (sec<45) return "JUST NOW";
+  if (sec<90) return "1 MIN AGO";
+  if (sec<3600) return Math.floor(sec/60)+" MIN AGO";
+  if (sec<5400) return "1 HR AGO";
+  if (sec<86400) return Math.floor(sec/3600)+" HR AGO";
+  var d=Math.floor(sec/86400);
+  return d+(d===1?" DAY AGO":" DAYS AGO");
+}
+function mirrorNote(){
+  var age=snapWall?(Date.now()/1000-snapWall):0;
+  if (!SNAP) return snapBad?"  ·  LINK DOWN · RETRYING":"";
+  if (snapBad) return "  ·  MIRROR UNREACHABLE"+(snapWall?" · LAST SEEN "+agoLabel(age):"");
+  if (!snapReady) return "";
+  if (!snapWall) return "  ·  LAST SEEN UNKNOWN";
+  if (age>STALE_SEC) return "  ·  LAST SEEN "+agoLabel(age);
+  return "  ·  "+agoLabel(age);
+}
+function freshness(){
+  hudExtra=(state&&state.status&&state.status.catching_up)
+    ?"  ·  FAST-FORWARDING "+state.status.behind_days+" DAYS":mirrorNote();
+  if (state){ refreshHud("e"); refreshHud("l"); }
+  var banner=document.getElementById("banner");
+  var age=snapWall?(Date.now()/1000-snapWall):0;
+  if (!SNAP){
+    banner.hidden=!(snapBad&&state);
+    banner.className="banner bad";
+    banner.textContent="LINK DOWN · RETRYING";
+    return;
+  }
+  if (snapBad&&!state){ banner.hidden=true; return; }
+  if (snapBad){
+    banner.hidden=false; banner.className="banner bad";
+    banner.textContent=(snapWall?"LAST SEEN "+agoLabel(age)+" · ":"")+"MIRROR UNREACHABLE · RETRYING";
+    return;
+  }
+  if (!snapReady){ banner.hidden=true; return; }
+  if (!snapWall){
+    banner.hidden=false; banner.className="banner";
+    banner.textContent="LAST SEEN UNKNOWN";
+    return;
+  }
+  if (age>STALE_SEC){
+    banner.hidden=false; banner.className="banner";
+    banner.textContent="LAST SEEN "+agoLabel(age);
+  } else banner.hidden=true;
+}
+function showFail(msg){
+  document.getElementById("failtitle").textContent=SNAP?"THE MIRROR IS DARK":"THE WORLDS ARE DARK";
+  document.getElementById("failmsg").textContent=msg;
+  document.getElementById("fail").hidden=false;
+}
+function hideFail(){ document.getElementById("fail").hidden=true; }
 function poll(){
+  if (polling) return;
+  polling=true;
   (SNAP?fetchJSON(SNAP):fetchJSON("/state")).then(function(st){
-    state=st; pollSeq++;
-    if (!SNAP&&worldInfo&&st.u.lagoon.iter!==lagoonIter) loadWorld().then(function(){ base9=null; });
+    if (!st||!st.u||!st.u.eden||!st.u.lagoon) throw new Error("snapshot has no worlds");
+    state=st; pollSeq++; snapBad=false; snapReady=true;
+    if (SNAP) snapWall=+st.wall||0;
+    hideFail();
+    if (!SNAP&&!worldInfo) loadWorld().then(function(){ base9=null; });
+    else if (!SNAP&&worldInfo&&st.u.lagoon.iter!==lagoonIter) loadWorld().then(function(){ base9=null; });
     var es=st.u.eden.size||48;
     if (edenSize && es!==edenSize){                 // the resort grew: the engine moved
       var k=(es-edenSize)/2;                         // everyone by k; so do we, at once
@@ -1843,15 +1956,19 @@ function poll(){
     }
     edenSize=es;
     syncActors(actors6, st.u.eden.people, EM, st.u.eden.detail);
-    keepDiary("e", st.u.eden); keepDiary("l", st.u.lagoon);
     syncActors(actors9, st.u.lagoon.people, 0, st.u.lagoon.detail);
+    keepDiary("e", st.u.eden); keepDiary("l", st.u.lagoon);
     if (heat9 && pollSeq%40===0){ for (var i=0;i<heat9.length;i++) heat9[i]=(heat9[i]*0.92)|0; }
-    var e=st.u.eden,l=st.u.lagoon, extra="";
-    if (st.status&&st.status.catching_up) extra="  ·  FAST-FORWARDING "+st.status.behind_days+" DAYS";
-    else if (SNAP){ var age=Math.max(0,Math.round(Date.now()/1000-st.wall)); extra="  ·  OBSERVED "+(age<90?age+"S":Math.round(age/60)+" MIN")+" AGO"; }
-    hudExtra=extra; refreshHud("e"); refreshHud("l");
+    freshness();
+    var e=st.u.eden,l=st.u.lagoon;
     sparkline("tre", e.census, "#a8c0f0"); sparkline("trl", l.census, "#a0e898");
-  }).catch(function(){});
+  }).catch(function(err){
+    snapBad=true;
+    var why=(err&&err.message)?err.message:"the snapshot could not be read";
+    if (!state) showFail("Could not read the snapshot ("+why+"). Retrying.");
+    else hideFail();
+    freshness();
+  }).then(function(){ polling=false; });
 }
 // 30 frames a second, backing off to 15 if the machine is struggling
 var frameMs=33, loopTimer=null, costAvg=10;
@@ -1866,6 +1983,7 @@ function frame(){
     render(document.getElementById("c9"), compose9(state.u.lagoon, state), actors9, "l", state.u.lagoon);
     paintOverlay("e"); paintOverlay("l");
     if (tick%4===0){ refreshHud("e"); refreshHud("l"); }
+    if (tick%30===0) freshness();
     if (tick%8===0){ updateRecords(state.events); paintCard("e"); paintCard("l"); }
   }
   }catch(err){ reportError("frame", err); }
@@ -1877,7 +1995,30 @@ document.addEventListener("visibilitychange", function(){ if (!document.hidden){
 fit();
 bindWorld("c6","e");
 bindWorld("c9","l");
+function seenIntro(){
+  try { return localStorage.getItem("u69-watch-intro")==="1"; }
+  catch(e){ return false; }
+}
+function markIntro(){
+  try { localStorage.setItem("u69-watch-intro","1"); }
+  catch(e){}
+}
+document.getElementById("veilok").onclick=function(){
+  document.getElementById("veil").hidden=true;
+  markIntro();
+};
+document.getElementById("veilbtn").onclick=function(){
+  document.getElementById("veil").hidden=false;
+};
+document.getElementById("retry").onclick=function(){ poll(); };
+if (!seenIntro()) document.getElementById("veil").hidden=false;
 loadWorld().then(function(){
+  poll(); setInterval(poll,2000);
+  frame(); loopTimer=setInterval(frame, frameMs);
+}, function(err){
+  snapBad=true;
+  showFail("Could not read the world ("+(err&&err.message?err.message:"network error")+"). Retrying.");
+  freshness();
   poll(); setInterval(poll,2000);
   frame(); loopTimer=setInterval(frame, frameMs);
 });

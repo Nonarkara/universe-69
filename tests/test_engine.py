@@ -380,6 +380,16 @@ class TestExtinctionAndPostmortems(unittest.TestCase):
         for cause, lesson in engine.LESSON_OF.items():
             self.assertIn(lesson, ("preserve", "vigilance", "cleanliness", "unity"))
 
+    def test_a_postmortem_says_which_engine_wrote_it(self):
+        # A published figure must be traceable to the code that produced it.
+        w = engine.genesis(seed=69)
+        u = w["eden"]
+        u["people"] = []
+        engine.tick_eden(u, __import__("random").Random(1), [])
+        pm = u["postmortems"][0]
+        self.assertEqual(pm["engine"], engine.ENGINE_VERSION)
+        self.assertRegex(pm["engine"], r"^\d{4}\.\d{2}\.\d{2}\.\d+$")
+
     def test_a_reseed_carries_the_lesson_forward(self):
         w = engine.genesis(seed=69)
         u = w["lagoon"]
@@ -396,8 +406,47 @@ class TestExtinctionAndPostmortems(unittest.TestCase):
         self.assertGreater(u["store"], 0)
 
 
-if __name__ == "__main__":
-    unittest.main()
+class TestRecord(unittest.TestCase):
+    def test_famine_is_one_line_for_the_day(self):
+        self.assertEqual(engine.famine_line(["Nami"]),
+                         "Nami starves in the lean season.")
+        line = engine.famine_line(["A", "B", "C", "D", "E"])
+        self.assertTrue(line.startswith("5 starve"))
+        self.assertIn("and 2 others", line)
+
+    def test_culture_verb_agrees_with_number(self):
+        self.assertEqual(engine.culture_verb("cave paintings"), "appear")
+        self.assertEqual(engine.culture_verb("drum songs"), "appear")
+        self.assertEqual(engine.culture_verb("the dance of the tides"), "appears")
+        self.assertEqual(engine.culture_verb("shell jewelry"), "appears")
+
+    def test_new_fields_are_not_dug_in_the_water(self):
+        import random
+        u = engine.genesis_universe("LAGOON", 99)
+        terr = engine.terrain_of(u)
+        rng = random.Random(1)
+        for _ in range(40):
+            self.assertTrue(engine.till_near(u, rng, u["settlements"][0], 8))
+        for x, y in u["farms"]:
+            self.assertNotEqual(terr[y][x], 2, (x, y))
+
+    def test_a_fall_is_not_reported_as_old_age(self):
+        # 6e-6 a person a day, so this takes a few decades of sim time.
+        # The point is the bucket: a fall must not also be booked as old age.
+        import random
+        u = engine.genesis_universe("LAGOON", 69)
+        rng = random.Random(69)
+        before = {}
+        for _ in range(40000):
+            before = dict(u["cod"])
+            engine.tick_lagoon(u, rng, [])
+            if u["cod"].get("accident", 0) > before.get("accident", 0):
+                break
+        else:
+            self.fail("no accident in 40000 days; the branch may be dead")
+        self.assertEqual(u["cod"].get("age", 0), before.get("age", 0),
+                         "a fall was also counted as old age")
+        self.assertGreater(u["cod"]["accident"], before.get("accident", 0))
 
 
 class TestMinds(unittest.TestCase):
@@ -512,3 +561,7 @@ class TestResortAndIsland(unittest.TestCase):
         p["bmi"] = 22.0
         p["nurse"], p["nurse_len"] = 1000, 1000
         self.assertLess(engine.minds.fertility(p, 25 * Y, 10), 0.1)
+
+
+if __name__ == "__main__":
+    unittest.main()
