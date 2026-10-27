@@ -11,4 +11,4 @@ else
   echo "python3 not found" >&2
   exit 1
 fi
-exec "$PY" sim/server.py
+exec "$PY" -u sim/server.py

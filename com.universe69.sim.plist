@@ -6,6 +6,7 @@
   <key>ProgramArguments</key>
   <array>
     <string>/usr/bin/python3</string>
+    <string>-u</string>
     <string>/Users/admin/repos/Universe 69/sim/server.py</string>
   </array>
   <key>WorkingDirectory</key><string>/Users/admin/repos/Universe 69</string>
