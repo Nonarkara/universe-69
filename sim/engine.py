@@ -1,6 +1,6 @@
 """UNIVERSE 69 — simulation engine.
 
-Two universes, one tick function each. 1 tick = 1 simulated day.
+Two universes, one tick function each. 1 tick = one quarter of a simulated day.
 Pure stdlib. State is a plain dict so it round-trips through JSON.
 
 EDEN   (Universe 6): Calhoun's Universe 25 with humans. Unlimited provisioned
@@ -25,10 +25,24 @@ from minds import (DAYS_PER_YEAR, ADULT_AGE, ELDER_AGE, make_name,  # noqa: F401
 
 GESTATION = 270
 
-# The version of the model. Determinism holds per (seed, day) only *within* one
+# The version of the model. Determinism holds per (seed, day, part) only *within* one
 # version, so every published figure and every postmortem must say which
 # version produced it.
-ENGINE_VERSION = "2026.10.27.3"
+ENGINE_VERSION = "2026.10.28.1"
+
+# A day is four parts. The calendar still counts days, but a world now has a
+# dark half and a light one, and the things people do at night are not the
+# things they do at noon. The tick is a part, not a day.
+PARTS_PER_DAY = 4
+
+# How long a part of a day takes in real seconds. A day is four parts, so a
+# sim-day is four times this. The value is here so the server and the engine
+# agree; the server may override the pace with UNIVERSE69_SEC_PER_PART.
+SEC_PER_PART = 3.0
+SEC_PER_DAY = SEC_PER_PART * PARTS_PER_DAY
+
+PART_NAMES = ("dawn", "day", "dusk", "night")
+PART_NIGHT = 3
 
 EDEN_SIZE = 48
 EDEN_CAP = 900          # nominal capacity of the pen
@@ -45,6 +59,7 @@ TECH_LADDER = [
     ("fire",          None,            0.50,  2),
     ("stone_tools",   None,            0.40,  2),
     ("fishing",       "stone_tools",   0.35,  6),
+    ("predator_hunt", "fishing",       0.08,  25),  # the big cat becomes meat
     ("shelter",       "fire",          0.35,  6),
     ("preservation",  "fire",          0.20, 12),
     ("lore",          "shelter",       0.15, 40),   # shared fiction -> >150 coop
@@ -147,6 +162,7 @@ def famine_line(names):
 TECH_LABEL = {
     "fire": "fire is tamed", "stone_tools": "stone tools are knapped",
     "fishing": "fishing is learned", "shelter": "shelters are raised",
+    "predator_hunt": "the hunters learn to kill the big cat",
     "preservation": "food can be kept", "lore": "shared stories bind the bands",
     "agriculture": "seeds are sown on purpose", "domestication": "animals are tamed",
     "granary": "granaries hold the surplus",
@@ -234,6 +250,7 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None,
          "extinct_day": None, "census": [], "year_flags": {},
          "cod": {}, "cod_y": {}, "postmortems": postmortems or [],
          "lessons": lessons or [], "phases": [[0, "strive"]], "engine": ENGINE_VERSION,
+         "part": 0, "parts": 0, "engine_history": [], "founded_day": 0,
          "fseed": fseed, "innocent": True, "modesty": 0.0, "mind": []}
     if kind == "EDEN":
         u["ennui"] = 0.0      # hedonic adaptation: easy pleasure dulls appetite
@@ -249,6 +266,7 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None,
                        "fish": 50000.0, "pred": 48.0}
         u["tech"] = []
         u["store"] = 0.0
+        u["meat"], u["kills"] = 0.0, 0
         u["farms"] = []            # [x, y] tilled tiles
         u["settlements"] = [{"x": 137, "y": 109, "r": 5, "n": make_name(rng)}]
         u["culture"] = []          # arts appear when bellies stay full
@@ -276,7 +294,9 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None,
 
 
 def genesis(seed=69):
-    return {"epoch": time.time(), "sec_per_day": 2.0, "seed": seed,
+    now = time.time()
+    return {"epoch": now, "sec_per_day": SEC_PER_DAY, "seed": seed,
+            "clock": {"epoch": now, "parts": 0, "seconds": SEC_PER_PART},
             "eden": genesis_universe("EDEN", seed * 7 + 6, fseed=seed),
             "lagoon": genesis_universe("LAGOON", seed * 7 + 9, fseed=seed)}
 
@@ -297,7 +317,7 @@ def write_postmortem(u, events):
     pm = {"iteration": u["iteration"], "day": u["day"], "peak": u["peak"],
           "gen_max": u["gen_max"], "cod": dict(u["cod"]),
           "dominant_cause": dominant,
-          "engine": ENGINE_VERSION,
+          "engine": ENGINE_VERSION, "engine_history": list(u.get("engine_history", [])),
           "tech": list(u.get("tech", [])),
           "census_tail": u["census"][-40:],
           "lessons_held": list(u["lessons"])}
@@ -827,7 +847,8 @@ def expand_pen(u, rng, events):
 
 
 def tick_eden(u, rng, events):
-    day = u["day"] = u["day"] + 1
+    part = u.get("part", 0)
+    day = u["day"]
     people = u["people"]
     pop = len(people)
 
@@ -840,6 +861,9 @@ def tick_eden(u, rng, events):
                                      postmortems=u["postmortems"],
                                      fseed=u.get("fseed"))
             fresh["day"] = day
+            fresh["founded_day"] = day
+            fresh["part"], fresh["parts"] = part, u.get("parts", day * PARTS_PER_DAY + part)
+            fresh["engine_history"] = list(u.get("engine_history", []))
             for p in fresh["people"]:
                 p["b"] = day - 18 * DAYS_PER_YEAR  # young again
             u.clear()
@@ -847,18 +871,19 @@ def tick_eden(u, rng, events):
             events.append((day, "EDEN", "reseed",
                            f"The Observers reseed the pen. Iteration {u['iteration']} begins "
                            f"under the same perfect, fatal conditions."))
+        advance_part(u)
         return
 
     crowd = pop / eden_design(u)["cap"]
     if crowd >= 0.8 * eden_design(u)["stagnation"] and u["phase"] in ("strive", "exploit"):
         if expand_pen(u, rng, events):
             crowd = pop / eden_design(u)["cap"]
-    if day % 30 == 0:
+    if part == 0 and day % 30 == 0:
         fill_roles(u, rng, events)
     dead, born = [], []
 
     # how many are at each hopper today — the sink feeds on its own crowd
-    if day % 3 == 0:
+    if part == 0 and day % 3 == 0:
         counts = [0, 0, 0, 0]
         for q in people:
             if q.get("a") == A_EAT:
@@ -881,21 +906,35 @@ def tick_eden(u, rng, events):
                        f"Crowding passes {int(eden_design(u)['stagnation']*100)}%. "
                        f"Stagnation: the behavioral sink emerges."))
 
+    # Night in the resort. The doors never close and the food never runs
+    # out — that is the experiment — but the pen still has a dark half, and
+    # in the dark the adults go to their own beds. The placeless sleep on
+    # the mats in the open hall, where they have always slept.
+    if part == PART_NIGHT:
+        for p in people:
+            if age_of(p, day) < 3 * DAYS_PER_YEAR:
+                continue                      # children stay with their mothers
+            if p["w"]:
+                continue                      # the withdrawn keep apart
+            p["a"], p["ad"] = A_SLEEP, 2
+            p["tx"], p["ty"] = p.get("hx", p["x"]), p.get("hy", p["y"])
+
     byid = {q["id"]: q for q in people}
     u["_ctx"] = day_context(people, day)
     moms = u["_ctx"]["moms"]
     for p in people:
-        if base_mortality(p, day, rng, events, u):
+        if part == 0 and base_mortality(p, day, rng, events, u):
             dead.append(p)
             cod(u, "age")
             continue
         a = age_of(p, day)
-        minds.tend_body(p, a, True, 0.0)
-        minds.tend_purpose(p, a, 0.0, p["p"] is not None, p["id"] in moms,
-                           p.get("box") is not None and p["box"] >= 0)
-        if p.get("wk") == WK_HUDDLE and rng.random() < 0.004:
+        if part == 0:
+            minds.tend_body(p, a, True, 0.0)
+            minds.tend_purpose(p, a, 0.0, p["p"] is not None, p["id"] in moms,
+                               p.get("box") is not None and p["box"] >= 0)
+        if p.get("wk") == WK_HUDDLE and rng.random() < 0.004 / PARTS_PER_DAY:
             minds.hurt(p, 0.3)         # attacked on the floor, and does not resist
-        if p.get("a") == A_FIGHT and rng.random() < 0.25:
+        if p.get("a") == A_FIGHT and rng.random() < 0.25 / PARTS_PER_DAY:
             minds.hurt(p, 0.15)
             if (p["s"] == "m" and p["inj"] > 0.5 and not p["w"]
                     and (p.get("box") is None or p["box"] < 0) and rng.random() < 0.3):
@@ -904,7 +943,7 @@ def tick_eden(u, rng, events):
         # give up on it — the brakes are self-control and a place of one's own
         # (Durkheim, Suicide: low regulation; Frankl's existential vacuum)
         if (p["c"] and not p["w"] and a >= ADULT_AGE and p["pu"] < 0.25
-                and rng.random() < 4e-5 * (1.2 - p.get("ef", 0.5))):
+                and rng.random() < 4e-5 * (1.2 - p.get("ef", 0.5)) / PARTS_PER_DAY):
             withdraw(u, p, rng)
             if rng.random() < 0.05:
                 events.append((day, "EDEN", "ennui",
@@ -912,7 +951,7 @@ def tick_eden(u, rng, events):
                                f"{'her' if p['s'] == 'f' else 'him'} here, and nothing is offered back."))
         # violence appears only in the sink
         if (u["phase"] in ("stagnate", "death") and age_of(p, day) >= ADULT_AGE
-                and rng.random() < 4.5e-5 * crowd):
+                and rng.random() < 4.5e-5 * crowd / PARTS_PER_DAY):
             dead.append(p)
             cod(u, "violence")
             if rng.random() < 0.08:
@@ -983,7 +1022,7 @@ def tick_eden(u, rng, events):
     # as any socially competent adult male remains
     male_ok = any(p["s"] == "m" and p["c"] and not p["w"]
                   and age_of(p, day) >= ADULT_AGE for p in people)
-    fertility = 1.0 / 180
+    fertility = 1.0 / 180 / PARTS_PER_DAY
     if u["phase"] in ("stagnate", "death"):
         fertility *= max(0.25, 1.0 - crowd)
     fertility *= 1.0 - 0.5 * u.get("ennui", 0.0)   # boredom with easy pleasure
@@ -991,7 +1030,7 @@ def tick_eden(u, rng, events):
         fertility *= 0.4
         # the outbreak also takes adults directly
         victims = [p for p in people
-                   if age_of(p, day) >= ADULT_AGE and rng.random() < 2e-5]
+                   if age_of(p, day) >= ADULT_AGE and rng.random() < 2e-5 / PARTS_PER_DAY]
         for p in victims:
             people.remove(p)
         u["deaths_y"] += len(victims)
@@ -1001,14 +1040,14 @@ def tick_eden(u, rng, events):
     if male_ok and not u.get("innocent"):
         try_conceive(u, rng, people, fertility, require_pair=False,
                      males=u["_ctx"]["am"])
-    elif u.get("innocent") and day > 60 and rng.random() < 1 / 200:
+    elif u.get("innocent") and day > 60 and rng.random() < 1 / (200 * PARTS_PER_DAY):
         # the same discovery as the lagoon's, sooner: there is nothing else to do
         u["innocent"] = False
         events.append((day, "EDEN", "discovery",
                        "With every hour free, the pairs discover how new life begins."))
 
     # yearly: ennui creep and disease rolls in a world of free mating
-    if day % DAYS_PER_YEAR == 7:
+    if part == 0 and day % DAYS_PER_YEAR == 7:
         old = u["ennui"]
         u["ennui"] = min(0.7, u["ennui"] + 0.004)
         for threshold, msg in ((0.25, "Easy pleasure begins to dull — the pen "
@@ -1036,7 +1075,7 @@ def tick_eden(u, rng, events):
                            "A sickness spread by mating moves through the pen — "
                            "the one cost free pleasure turned out to carry."))
 
-    if day % DAYS_PER_YEAR == 0:
+    if part == 0 and day > u.get("founded_day", 0) and day % DAYS_PER_YEAR == 0:
         if (u["phase"] == "stagnate" and u["deaths_y"] > u["births_y"]
                 and len(people) > 0):
             u["bad_years"] += 1
@@ -1056,6 +1095,7 @@ def tick_eden(u, rng, events):
 
     if not people:
         record_extinction(u, events)
+    advance_part(u)
 
 
 def record_mind(u):
@@ -1280,7 +1320,7 @@ def lagoon_assign(u, p, day, rng, shortfall):
         # the boat: weeks of work now for a shore nobody has seen
         p["a"], p["ad"] = A_BUILD, rng.randint(5, 10)
         p["tx"], p["ty"] = clamp(boat["x"] + rng.randint(-2, 2), boat["y"] + rng.randint(-1, 1))
-        boat["work"] += p["ad"]
+        boat["work"] += p["ad"] / PARTS_PER_DAY
         return
     if elder or has_infant or rng.random() < 0.45 + 0.3 * (1 - hunger):
         w = [(A_TALK, 2.6 + (1.6 if has(u, "lore") else 0)), (A_REST, 1.2)]
@@ -1631,7 +1671,7 @@ def sail(u, people, rng, events, day):
                    f"children will call home."))
 
 
-def keep_watch(u, people, day, events):
+def keep_watch(u, people, day, events, part=0, rng=None):
     """Fire, a sentry, and the stories told around both.
 
     Once a band can keep a fire, the night is spent together at it: one
@@ -1639,9 +1679,20 @@ def keep_watch(u, people, day, events):
     turns — and the rest talk. That shared night is where stories come
     from, and stories are where shared lore comes from (BOOKS.md: Harari,
     gossip and fiction; Nexus ch.2). A day of talk at a fire adds to the
-    store of stories; lore is discovered sooner the more there are."""
+    store of stories; lore is discovered sooner the more there are.
+
+    The watch is a turn taken in rotation, not a job one person keeps: the
+    turn goes round the watchable ones, so the whole band learns to sit
+    up in the dark. The watcher does not sleep that night and is hungrier
+    for it in the morning.
+
+    At night the band also *comes in*: the hunters who are still out stay
+    out, but everyone else converges on the fire. A camp that has a fire
+    is a camp that spends its dark hours together, which is the thing that
+    turns a band into a society."""
     if not has(u, "fire"):
         return
+    night = (part == PART_NIGHT)
     by_st = {}
     for q in people:
         if q.get("ab") or not (ADULT_AGE <= age_of(q, day) < ELDER_AGE):
@@ -1654,16 +1705,29 @@ def keep_watch(u, people, day, events):
             continue
         band.sort(key=lambda q: -q.get("vg", 0.5))
         half = band[:max(1, len(band) // 2)]
-        w = half[day % len(half)]
+        w = half[u.get("day", 0) % len(half)]
         if w.get("a") in (A_BIRTH, A_RITE) or w.get("due"):
             continue
         w["a"], w["ad"] = A_WATCH, 1
-        w["tx"], w["ty"] = st["x"] + 3, st["y"] + 1
+        fx, fy = st["x"] + 2, st["y"] + 1          # where the fire is
+        w["tx"], w["ty"] = fx - 3, fy
         w["f"] = 1
         st["watch"] = w["id"]
+        if night:
+            w["hun"] = w.get("hun", 0.0) + 0.5     # a night on watch is a hungry one
+            if rng is not None:
+                for q in band:
+                    if q is w or q.get("w"):
+                        continue
+                    if q.get("a") in (A_HUNT, A_FISH, A_FARM, A_BUILD):
+                        continue                  # a hunter out in the woods stays out
+                    q["tx"], q["ty"] = fx + rng.randint(-2, 2), fy + rng.randint(-1, 2)
+                    if q.get("a") in (A_IDLE, A_WALK, A_TALK):
+                        q["a"] = A_TALK if rng.random() < 0.6 else A_SLEEP
+                        q["ad"] = 2
         talkers = sum(1 for q in band if q.get("a") == A_TALK)
         before = u.get("stories", 0.0)
-        u["stories"] = before + talkers * 0.02
+        u["stories"] = before + talkers * (0.02 if night else 0.01) / PARTS_PER_DAY
         if before < 1.0 <= u["stories"]:
             events.append((day, "LAGOON", "culture",
                            f"Around the fire, with {w['n']} watching the dark, someone tells "
@@ -1849,7 +1913,8 @@ def hold_rites(u, people, shortfall, rng, events):
 
 
 def tick_lagoon(u, rng, events):
-    day = u["day"] = u["day"] + 1
+    part = u.get("part", 0)
+    day = u["day"]
     people = u["people"]
 
     if not people:
@@ -1865,6 +1930,9 @@ def tick_lagoon(u, rng, events):
                                      postmortems=u["postmortems"],
                                      lessons=lessons, fseed=u.get("fseed"))
             fresh["day"] = day
+            fresh["founded_day"] = day
+            fresh["part"], fresh["parts"] = part, u.get("parts", day * PARTS_PER_DAY + part)
+            fresh["engine_history"] = list(u.get("engine_history", []))
             for p in fresh["people"]:
                 p["b"] = day - 18 * DAYS_PER_YEAR  # young again
             if "preserve" in lessons:
@@ -1876,6 +1944,7 @@ def tick_lagoon(u, rng, events):
             events.append((day, "LAGOON", "reseed",
                            f"New castaways reach the lagoon. Iteration {u['iteration']} "
                            f"begins.{carried}"))
+        advance_part(u)
         return
 
     stocks = u["stocks"]
@@ -1891,9 +1960,9 @@ def tick_lagoon(u, rng, events):
     for key, cap, r in (("plants", 60000 * cont, 0.9), ("game", 2500 * cont, 0.5),
                         ("fish", 50000 * cont, 0.6)):
         x = stocks[key]
-        stocks[key] = max(1.0, x + (r / DAYS_PER_YEAR) * x * (1 - x / cap))
+        stocks[key] = max(1.0, x + (r / DAYS_PER_YEAR / PARTS_PER_DAY) * x * (1 - x / cap))
     g = stocks["pred"]
-    stocks["pred"] = max(2.0, g + (0.3 / DAYS_PER_YEAR) * g *
+    stocks["pred"] = max(2.0, g + (0.3 / DAYS_PER_YEAR / PARTS_PER_DAY) * g *
                          (1 - g / (20 + 30 * stocks["game"] / 2500)))
 
     # --- demography groups
@@ -1911,41 +1980,52 @@ def tick_lagoon(u, rng, events):
     avg_hun = sum(p["hun"] for p in people) / len(people)
     effort = 1.0 + min(0.6, avg_hun / 30.0)
     yield_plants = min(foragers * 1.5 * plant_mult * tool_mult * effort,
-                       stocks["plants"] * 0.004)
+                       stocks["plants"] * 0.004) / PARTS_PER_DAY
     stocks["plants"] -= yield_plants * 0.8
     yield_fish = 0.0
     if has(u, "fishing"):
-        yield_fish = min(foragers * 0.5 * fish_mult, stocks["fish"] * 0.003)
+        yield_fish = min(foragers * 0.5 * fish_mult, stocks["fish"] * 0.003) / PARTS_PER_DAY
         stocks["fish"] -= yield_fish * 0.7
     # trapping/scavenging works even before stone tools, just poorly
     hunt_eff = 0.4 if has(u, "stone_tools") else 0.25
     yield_game = min(foragers * hunt_eff * (stocks["game"] / 2500) * effort,
-                     stocks["game"] * 0.002)
+                     stocks["game"] * 0.002) / PARTS_PER_DAY
     stocks["game"] -= yield_game * 1.1
     # the shore always gives something: shellfish and tidal gathering,
     # winter-proof and the reason the lagoon was a good place to wash up
-    yield_shore = foragers * 0.35 * effort
+    yield_shore = foragers * 0.35 * effort / PARTS_PER_DAY
     yield_farm = 0.0
     if has(u, "agriculture"):
         season_farm = 0.25 if winter else 1.0
         if u["drought"] > 0:
             season_farm *= 0.3
-        yield_farm = len(u["farms"]) * 2.1 * season_farm
+        yield_farm = len(u["farms"]) * 2.1 * season_farm / PARTS_PER_DAY
     if has(u, "domestication"):
-        yield_farm += len(u["farms"]) * 0.5
+        yield_farm += len(u["farms"]) * 0.5 / PARTS_PER_DAY
 
-    need = len(adults) * 1.0 + len(kids) * 0.6 + len(elders) * 0.8
+    daily_need = len(adults) * 1.0 + len(kids) * 0.6 + len(elders) * 0.8
+    need = daily_need / PARTS_PER_DAY
+    # the carcass of a hunted predator: fresh meat, eaten or spoiled over the
+    # days that follow. Without preservation it is gone in a couple of days.
+    meat = u.get("meat", 0.0)
+    if meat > 0:
+        meat *= (0.85 if has(u, "preservation") else 0.55) ** (1 / PARTS_PER_DAY)
+        u["meat"] = meat
     total = (yield_plants + yield_fish + yield_game + yield_shore
-             + yield_farm + u["store"])
+             + yield_farm + u.get("meat", 0.0) + u["store"])
     if total >= need:
         surplus = total - need
-        cap_store = (need * 60 if has(u, "granary")
-                     else need * 14 if has(u, "preservation") else 0)
+        cap_store = (daily_need * 60 if has(u, "granary")
+                     else daily_need * 14 if has(u, "preservation") else 0)
         u["store"] = min(surplus, cap_store)
         shortfall = 0.0
     else:
         u["store"] = 0.0
-        shortfall = (need - total) / max(1.0, need)  # 0..1 fraction unfed
+        shortfall = (need - total) / max(1e-9, need)  # 0..1 fraction unfed
+
+    # Carry only uneaten meat, never the portion already transferred into
+    # the store. Without preservation the remaining carcass keeps spoiling.
+    u["meat"] = max(0.0, min(meat, total - need - u["store"]))
 
     weapons = has(u, "stone_tools")
     healing = has(u, "healing")
@@ -1958,7 +2038,7 @@ def tick_lagoon(u, rng, events):
 
     if u.get("voyage"):
         sail(u, people, rng, events, day)
-    keep_watch(u, people, day, events)
+    keep_watch(u, people, day, events, part, rng)
     for p in people:
         if p["id"] in gone or p.get("ab"):
             continue
@@ -1967,9 +2047,9 @@ def tick_lagoon(u, rng, events):
         # instead of the whole band at once
         if shortfall > 0:
             frail = 1.6 if (a < ADULT_AGE or a >= ELDER_AGE) else 1.0
-            p["hun"] += shortfall * frail * rng.uniform(0.5, 1.5)
+            p["hun"] += shortfall * frail * rng.uniform(0.5, 1.5) / PARTS_PER_DAY
         else:
-            p["hun"] = max(0.0, p["hun"] - 1.0)
+            p["hun"] = max(0.0, p["hun"] - 1.0 / PARTS_PER_DAY)
         if p["hun"] > 40:
             dead.append(p)
             cod(u, "starvation")
@@ -1977,7 +2057,7 @@ def tick_lagoon(u, rng, events):
             starved.append(p["n"])
             continue
         # predation
-        pr = 3e-5 * (stocks["pred"] / 48.0)
+        pr = 3e-5 * (stocks["pred"] / 48.0) / PARTS_PER_DAY
         if weapons:
             pr *= 0.3
         # the watchful notice the stalk; a camp with a fire and a sentry on
@@ -1992,6 +2072,8 @@ def tick_lagoon(u, rng, events):
             pr *= 0.6          # a lesson paid for in a previous iteration
         if a < ADULT_AGE:
             pr *= 2.0
+        if part == PART_NIGHT:
+            pr *= 1.8                       # the big cat is bolder in the dark
         if rng.random() < pr:
             dead.append(p)
             cod(u, "predator")
@@ -2000,20 +2082,21 @@ def tick_lagoon(u, rng, events):
                                f"{p['n']} is taken by a predator at the wood's edge."))
             continue
         # a fall is not old age — same rolls as before, different names
-        if rng.random() < 6e-6:
+        if rng.random() < 6e-6 / PARTS_PER_DAY:
             dead.append(p)
             cod(u, "accident")
             continue
-        if base_mortality(p, day, rng, events, u):
+        if part == 0 and base_mortality(p, day, rng, events, u):
             dead.append(p)
             cod(u, "age")
             continue
-        minds.tend_body(p, a, False, shortfall, healing)
-        # everything here must be earned, so the world itself asks something
-        minds.tend_purpose(p, a, 0.35, p["p"] is not None, p["id"] in moms, True)
-        if p.get("a") == A_HUNT and rng.random() < 0.0015:
+        if part == 0:
+            minds.tend_body(p, a, False, shortfall, healing)
+            # Everything here must be earned. Physiology remains daily.
+            minds.tend_purpose(p, a, 0.35, p["p"] is not None, p["id"] in moms, True)
+        if p.get("a") == A_HUNT and rng.random() < 0.0015 / PARTS_PER_DAY:
             minds.hurt(p, rng.uniform(0.2, 0.6))     # gored, fallen, cut
-        if lagoon_violence(u, p, a, people, byid, gone, dead, rng, events):
+        if part == 0 and lagoon_violence(u, p, a, people, byid, gone, dead, rng, events):
             continue
         # births
         if p["due"] and day >= p["due"]:
@@ -2073,22 +2156,22 @@ def tick_lagoon(u, rng, events):
     people.extend(born)
     u["peak"] = max(u["peak"], len(people))
 
-    if day % DAYS_PER_YEAR == 90:
+    if part == 0 and day % DAYS_PER_YEAR == 90:
         hold_rites(u, people, shortfall, rng, events)
 
     # Blue Lagoon: the founders discover how life begins
     if u["innocent"]:
-        if day > 60 and rng.random() < 1 / 300:
+        if day > 60 and rng.random() < 1 / (300 * PARTS_PER_DAY):
             u["innocent"] = False
             events.append((day, "LAGOON", "discovery",
                            "The pairs discover, as all life does, how new life begins."))
     else:
-        if day % 30 == 0:
+        if part == 0 and day % 30 == 0:
             living_adults = [p for p in people
                              if ADULT_AGE <= age_of(p, day) < ELDER_AGE]
             pair_singles(u, rng, living_adults)
-        fert = 1.0 / 200
-        if u["store"] > need * 20:
+        fert = 1.0 / 200 / PARTS_PER_DAY
+        if u["store"] > daily_need * 20:
             fert *= 1.3
         if shortfall > 0.3:
             fert *= 0.3
@@ -2097,7 +2180,20 @@ def tick_lagoon(u, rng, events):
         try_conceive(u, rng, people, fert, byid=byid)
 
     # --- yearly rolls: tech, disasters, settlement dynamics
-    if day % DAYS_PER_YEAR == 0 and people:
+    # Once they have learned to kill the big cat, the predator is meat.
+    # The kill is the point: a technology turns a terror into a larder.
+    if has(u, "predator_hunt") and people and stocks["pred"] > 2:
+        hunters = sum(1 for q in people if q.get("a") == A_HUNT
+                      and ADULT_AGE <= age_of(q, day) < ELDER_AGE)
+        if hunters and rng.random() < min(1.0, 0.02 * hunters / PARTS_PER_DAY):
+            stocks["pred"] = max(2.0, stocks["pred"] - 1.0)
+            u["meat"] = u.get("meat", 0.0) + 40.0
+            u["kills"] = u.get("kills", 0) + 1
+            events.append((day, "LAGOON", "hunt",
+                           "The hunters bring down a big cat. It is meat now, and "
+                           "the carcass is brought back to camp."))
+
+    if part == 0 and day > u.get("founded_day", 0) and day % DAYS_PER_YEAR == 0 and people:
         pop = len(people)
         year = day // DAYS_PER_YEAR
         if u["drought"] > 0:
@@ -2192,10 +2288,12 @@ def tick_lagoon(u, rng, events):
             launch(u, people, boat, rng, events, day, year)
 
         # full bellies and long evenings: surplus turns into art and pleasure
-        if (has(u, "lore") and u["store"] > need * 20 and adults
+        if (has(u, "lore") and u["store"] > daily_need * 20 and adults
                 and len(u.get("culture", [])) < len(ARTS)
                 and rng.random() < 0.2):
             art = next(a for a in ARTS if a not in u["culture"])
+            u.setdefault("meat", 0.0)
+            u.setdefault("kills", 0)
             u.setdefault("culture", []).append(art)
             maker = rng.choice(adults)["n"]
             events.append((day, "LAGOON", "culture",
@@ -2295,16 +2393,60 @@ def tick_lagoon(u, rng, events):
 
     if not people:
         record_extinction(u, events)
+    advance_part(u)
 
 
 # ---------------------------------------------------------------- top level
 
 def tick_world(world, events):
-    """Advance both universes one day. Deterministic per (seed, day)."""
+    """Advance both universes one part of a day.
+
+    Deterministic per (seed, day, part) within one engine version. A day is four
+    parts — dawn, day, dusk, night — and the day's counter turns when the
+    night ends.
+    """
     for key in ("eden", "lagoon"):
         u = world[key]
-        rng = random.Random((u["seed"] << 20) ^ (u["day"] + 1) ^ u["iteration"])
+        if u.get("engine") != ENGINE_VERSION:
+            u.setdefault("engine_history", []).append(
+                {"from": u.get("engine", "unknown"), "to": ENGINE_VERSION,
+                 "day": u["day"], "part": u.get("part", 0)})
+            u["engine"] = ENGINE_VERSION
+        part = u.get("part", 0)
+        rng = random.Random((u["seed"] << 20) ^ (u["day"] + 1) ^ u["iteration"]
+                            ^ (part * 7919))
         (tick_eden if u["kind"] == "EDEN" else tick_lagoon)(u, rng, events)
+
+
+def advance_part(u):
+    """Turn the clock one part. Returns the part that was just lived."""
+    part = u.get("part", 0)
+    u["parts"] = u.get("parts", 0) + 1
+    if part >= PARTS_PER_DAY - 1:
+        u["part"] = 0
+        u["day"] = u.get("day", 0) + 1
+    else:
+        u["part"] = part + 1
+    return part
+
+
+def target_parts(world, now=None):
+    """Cumulative ticks due, anchored independently of the calendar/reseeds."""
+    c = world["clock"]
+    now = time.time() if now is None else now
+    return int(c["parts"] + (now - c["epoch"]) / c["seconds"])
+
+
+def set_clock_pace(world, seconds, now=None):
+    """Change pace without replaying elapsed history or losing pending ticks."""
+    if seconds <= 0 or not math.isfinite(seconds):
+        raise ValueError("seconds per part must be positive and finite")
+    now = time.time() if now is None else now
+    c = world["clock"]
+    if c["seconds"] != seconds:
+        pending = c["parts"] + (now - c["epoch"]) / c["seconds"]
+        world["clock"] = {"epoch": now, "parts": pending, "seconds": seconds}
+    world["sec_per_day"] = seconds * PARTS_PER_DAY
 
 
 # Detail flags — what the viewer needs to say about one person.
@@ -2374,7 +2516,12 @@ def summarize(world):
                         min(9, int(p.get("sn", 0.5) * 10)),
                         min(9, int(p.get("inj", 0.0) * 10)), p.get("wk", 0)])
             detail[str(p["id"])] = person_detail(u, p, day, ctx)
+        # u.part is the next tick. Show the light of the activity we just
+        # simulated, so a night on watch is seen at night rather than dawn.
+        part = (u.get("part", 0) - 1) % PARTS_PER_DAY if u.get("parts", 0) else 0
         info = {"day": day, "year": day // DAYS_PER_YEAR, "pop": len(u["people"]),
+                "part": part, "tod": PART_NAMES[part % len(PART_NAMES)],
+                "night": part == PART_NIGHT,
                 "gen": u["gen_max"], "peak": u["peak"], "phase": u["phase"],
                 "iter": u["iteration"], "people": ppl, "detail": detail,
                 "cod": dict(u.get("cod", {})),
@@ -2396,6 +2543,7 @@ def summarize(world):
             info["pred"] = round(u["stocks"]["pred"], 1)
             info["myths"] = u.get("myths", [])
             info["stories"] = round(u.get("stories", 0.0), 1)
+            info["kills"] = u.get("kills", 0)
             info["boat"] = u.get("boat")
             v = u.get("voyage")
             if v:
@@ -2485,6 +2633,12 @@ def load_state(path):
 def migrate(world):
     """Bring a saved world up to the current schema. The universes have been
     running since before some fields existed; they must not die of it."""
+    old_day = (world.get("eden") or {}).get("day", 0)
+    old_seconds = world.get("sec_per_day", SEC_PER_DAY)
+    world.setdefault("clock", {"epoch": world.get("epoch", time.time()) + old_day * old_seconds,
+                               "parts": old_day * PARTS_PER_DAY,
+                               "seconds": SEC_PER_PART})
+    world["sec_per_day"] = world["clock"]["seconds"] * PARTS_PER_DAY
     for key in ("eden", "lagoon"):
         u = world.get(key)
         if not u:
@@ -2495,6 +2649,12 @@ def migrate(world):
         u.setdefault("lessons", [])
         u.setdefault("phases", [[0, u.get("phase", "strive")]])
         u.setdefault("engine", ENGINE_VERSION)
+        # a day is four parts now; a run that predates that has no part of
+        # the day to speak of yet, so it starts at dawn
+        u.setdefault("part", 0)
+        u.setdefault("parts", u.get("day", 0) * PARTS_PER_DAY + u["part"])
+        u.setdefault("engine_history", [])
+        u.setdefault("founded_day", 0)
         # a run that predates the shared founders has long since stopped
         # being innocent, and keeps its own seed for any reseed
         u.setdefault("innocent", False)
@@ -2502,6 +2662,8 @@ def migrate(world):
         u.setdefault("mind", [])
         u.setdefault("fseed", u.get("seed", 69))
         if u.get("kind") == "LAGOON":
+            u.setdefault("meat", 0.0)
+            u.setdefault("kills", 0)
             u.setdefault("culture", [])
             u.setdefault("continent", False)
         else:
@@ -2532,4 +2694,8 @@ def migrate(world):
             p.setdefault("wk", (WK_UPSTAIRS if p["s"] == "f" else WK_BEAUTIFUL) if p.get("w") else 0)
             if u.get("kind") == "EDEN":
                 p.setdefault("box", None)   # claims a nest box on next move
+    # the record of what the literature's hypotheses have been measured
+    # against, in this world, so far. A run that predates the research
+    # layer simply has no verdicts yet.
+    world.setdefault("research", {"tested": 0, "h": {}})
     return world

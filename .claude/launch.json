@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "u69-dev",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["-c", "UNIVERSE69_PORT=6972 UNIVERSE69_DATA=/Volumes/Data/agent-scratch/u69dev2/data exec python3 sim/server.py"],
+      "port": 6972
+    }
+  ]
+}

@@ -18,10 +18,18 @@ sys.path.insert(0, os.path.join(ROOT, "sim"))
 
 import engine  # noqa: E402
 
+SCRATCH = "/Volumes/Data/agent-scratch/universe69-audit-tests"
+os.makedirs(SCRATCH, exist_ok=True)
+
 
 def run(world, days):
+    """Advance a world by whole days.
+
+    The tick is a part of a day — dawn, day, dusk, night — and the day's
+    counter turns when the night ends, so four ticks make a day.
+    """
     events = []
-    for _ in range(days):
+    for _ in range(days * engine.PARTS_PER_DAY):
         engine.tick_world(world, events)
     return events
 
@@ -41,7 +49,8 @@ class TestGenesis(unittest.TestCase):
     def test_two_universes_are_created(self):
         w = engine.genesis(seed=69)
         self.assertEqual(w["seed"], 69)
-        self.assertEqual(w["sec_per_day"], 2.0)
+        self.assertEqual(w["sec_per_day"],
+                         engine.SEC_PER_PART * engine.PARTS_PER_DAY)
         self.assertIn("epoch", w)
         for key, kind in (("eden", "EDEN"), ("lagoon", "LAGOON")):
             u = w[key]
@@ -107,11 +116,21 @@ class TestDeterminism(unittest.TestCase):
         run(b, 500)
         self.assertNotEqual(canon(a), canon(b))
 
-    def test_day_advance_is_exactly_one_per_tick(self):
+    def test_a_day_is_four_parts_and_turns_at_the_dawn(self):
         w = engine.genesis(seed=69)
         run(w, 37)
         self.assertEqual(w["eden"]["day"], 37)
         self.assertEqual(w["lagoon"]["day"], 37)
+        self.assertEqual(w["eden"]["parts"], 37 * engine.PARTS_PER_DAY)
+
+    def test_the_parts_run_dawn_day_dusk_night(self):
+        w = engine.genesis(seed=69)
+        seen = []
+        for _ in range(engine.PARTS_PER_DAY):
+            seen.append(w["eden"]["part"])
+            engine.tick_world(w, [])
+        self.assertEqual(seen, list(range(engine.PARTS_PER_DAY)))
+        self.assertEqual(engine.PART_NAMES[w["eden"]["part"]], "dawn")
 
 
 class TestPersistence(unittest.TestCase):
@@ -126,7 +145,7 @@ class TestPersistence(unittest.TestCase):
         """
         w = engine.genesis(seed=69)
         run(w, 400)
-        with tempfile.TemporaryDirectory() as d:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as d:
             p1 = os.path.join(d, "state.json")
             p2 = os.path.join(d, "state2.json")
             p3 = os.path.join(d, "state3.json")
@@ -189,7 +208,7 @@ class TestPersistence(unittest.TestCase):
     def test_internal_context_is_not_persisted(self):
         w = engine.genesis(seed=69)
         run(w, 50)
-        with tempfile.TemporaryDirectory() as d:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as d:
             path = os.path.join(d, "state.json")
             engine.save_state(w, path)
             with open(path) as f:
@@ -437,7 +456,7 @@ class TestRecord(unittest.TestCase):
         u = engine.genesis_universe("LAGOON", 69)
         rng = random.Random(69)
         before = {}
-        for _ in range(40000):
+        for _ in range(40000 * engine.PARTS_PER_DAY):
             before = dict(u["cod"])
             engine.tick_lagoon(u, rng, [])
             if u["cod"].get("accident", 0) > before.get("accident", 0):
@@ -538,7 +557,7 @@ class TestResortAndIsland(unittest.TestCase):
         u = engine.genesis(seed=69)["lagoon"]
         events = []
         crossed_with_boat = False
-        for _ in range(130 * engine.DAYS_PER_YEAR):
+        for _ in range(130 * engine.DAYS_PER_YEAR * engine.PARTS_PER_DAY):
             rng = engine.random.Random((u["seed"] << 20) ^ (u["day"] + 1) ^ u["iteration"])
             engine.tick_lagoon(u, rng, events)
             if u.get("voyage"):
@@ -561,6 +580,251 @@ class TestResortAndIsland(unittest.TestCase):
         p["bmi"] = 22.0
         p["nurse"], p["nurse_len"] = 1000, 1000
         self.assertLess(engine.minds.fertility(p, 25 * Y, 10), 0.1)
+
+
+class TestDayAndNight(unittest.TestCase):
+    """A day has four parts, and the dark is a different place.
+
+    Engine 2026.10.27.4: the tick is a part, not a day. See DESIGN.md,
+    "Engine 2026.10.27.4: the day has four parts".
+    """
+
+    def _lagoon(self, seed=69):
+        u = engine.genesis_universe("LAGOON", seed)
+        u["tech"] = list(u.get("tech") or []) + ["fire", "stone_tools"]
+        return u
+
+    def test_a_day_is_four_parts_and_turns_at_the_dawn(self):
+        w = engine.genesis(seed=69)
+        run(w, 3)
+        self.assertEqual(w["eden"]["day"], 3)
+        self.assertEqual(w["eden"]["parts"], 3 * engine.PARTS_PER_DAY)
+        self.assertEqual(w["eden"]["part"], 0)      # a day begins in the dawn
+
+    def test_the_parts_run_dawn_day_dusk_night(self):
+        u = engine.genesis_universe("LAGOON", 69)
+        seen = []
+        rng = __import__("random").Random(1)
+        for _ in range(engine.PARTS_PER_DAY):
+            seen.append(u.get("part", 0))
+            engine.tick_lagoon(u, rng, [])
+        self.assertEqual(seen, list(range(engine.PARTS_PER_DAY)))
+        self.assertEqual([engine.PART_NAMES[i] for i in seen],
+                         ["dawn", "day", "dusk", "night"])
+
+    def test_the_snapshot_says_which_part_of_the_day_it_is(self):
+        w = engine.genesis(seed=69)
+        snap = engine.summarize(w)
+        for key in ("eden", "lagoon"):
+            self.assertIn(snap["u"][key]["tod"], engine.PART_NAMES)
+            self.assertEqual(snap["u"][key]["night"],
+                             snap["u"][key]["tod"] == "night")
+
+    def test_at_night_the_band_comes_in_to_the_fire(self):
+        import random
+        u = self._lagoon()
+        st = u["settlements"][0]
+        fx, fy = st["x"] + 2, st["y"] + 1
+        rng = random.Random(1)
+        night = False
+        for _ in range(engine.PARTS_PER_DAY * 4):
+            part = u.get("part", 0)
+            engine.tick_lagoon(u, rng, [])
+            if part == engine.PART_NIGHT:
+                night = True
+                break
+        self.assertTrue(night, "the night never came round")
+        adults = [p for p in u["people"]
+                  if engine.age_of(p, u["day"]) >= engine.ADULT_AGE and not p["w"]]
+        near = [p for p in adults
+                if abs(p["tx"] - fx) <= 3 and abs(p["ty"] - fy) <= 3]
+        self.assertTrue(near, "nobody came in to the fire")
+
+    def test_the_watch_turns_over(self):
+        import random
+        u = self._lagoon()
+        rng = random.Random(1)
+        watchers = []
+        for _ in range(engine.PARTS_PER_DAY * 10):
+            part = u.get("part", 0)
+            engine.tick_lagoon(u, rng, [])
+            if part == engine.PART_NIGHT:
+                watchers.append(u["settlements"][0].get("watch"))
+        self.assertTrue(any(w for w in watchers), "nobody ever stood watch")
+        self.assertGreater(len(set(watchers)), 1,
+                           "the watch never turned over — one person kept it")
+
+    def test_the_watcher_pays_for_the_night(self):
+        import random
+        u = self._lagoon()
+        rng = random.Random(1)
+        for _ in range(engine.PARTS_PER_DAY * 10):
+            part = u.get("part", 0)
+            before = {p["id"]: p.get("hun", 0.0) for p in u["people"]}
+            engine.tick_lagoon(u, rng, [])
+            if part == engine.PART_NIGHT:
+                wid = u["settlements"][0].get("watch")
+                if not wid:
+                    continue
+                w = next((p for p in u["people"] if p["id"] == wid), None)
+                self.assertIsNotNone(w, "the watcher was not in the band")
+                self.assertGreater(w.get("hun", 0.0), before.get(wid, 0.0),
+                                   "the watcher paid nothing for the night")
+                return
+        self.fail("nobody stood watch")
+
+    def test_a_predator_becomes_food_once_they_can_hunt_it(self):
+        import random
+        u = self._lagoon()
+        u["tech"] = list(u["tech"]) + ["predator_hunt"]
+        rng = random.Random(3)
+        kills = 0
+        for _ in range(engine.PARTS_PER_DAY * 60):
+            for p in u["people"]:
+                p["a"] = engine.A_HUNT          # they stay out in the woods
+            before = u.get("kills", 0)
+            engine.tick_lagoon(u, rng, [])
+            kills += u.get("kills", 0) - before
+        self.assertGreater(kills, 0, "the big cat was never brought down")
+        self.assertGreater(u.get("meat", 0.0), 0.0, "the carcass was not food")
+
+    def test_without_the_technology_the_predator_is_only_a_death(self):
+        import random
+        u = self._lagoon()
+        rng = random.Random(3)
+        for _ in range(engine.PARTS_PER_DAY * 60):
+            for p in u["people"]:
+                p["a"] = engine.A_HUNT
+            engine.tick_lagoon(u, rng, [])
+        self.assertEqual(u.get("kills", 0), 0,
+                         "they hunted the big cat without knowing how")
+
+    def test_eden_sleeps_at_night(self):
+        w = engine.genesis(seed=69)
+        run(w, 30)
+        u = w["eden"]
+        rng = __import__("random").Random(1)
+        slept = False
+        for _ in range(engine.PARTS_PER_DAY * 3):
+            part = u.get("part", 0)
+            engine.tick_eden(u, rng, [])
+            if part == engine.PART_NIGHT:
+                asleep = [p for p in u["people"]
+                          if p.get("a") == engine.A_SLEEP
+                          and engine.age_of(p, u["day"]) >= engine.ADULT_AGE]
+                self.assertTrue(asleep, "nobody slept in the pen at night")
+                slept = True
+                break
+        self.assertTrue(slept, "the night never came round")
+
+    def test_an_old_state_file_knows_what_part_of_the_day_it_is(self):
+        w = engine.genesis(seed=69)
+        w["eden"].pop("part", None)
+        w["eden"].pop("parts", None)
+        back = engine.migrate(w)
+        self.assertEqual(back["eden"]["part"], 0)
+        self.assertEqual(back["eden"]["parts"], 0)
+
+
+class TestQuarterDayAudit(unittest.TestCase):
+    def test_empty_worlds_keep_time_and_reseed_without_resetting_the_clock(self):
+        w = engine.genesis(seed=69)
+        day = engine.RESEED_YEARS * engine.DAYS_PER_YEAR + 1
+        for u in (w["eden"], w["lagoon"]):
+            u["people"] = []
+            u["extinct_day"] = 0
+            u["day"], u["part"], u["parts"] = day, 3, day * 4 + 3
+        engine.tick_world(w, [])
+        for u in (w["eden"], w["lagoon"]):
+            self.assertEqual(u["iteration"], 2)
+            self.assertEqual((u["day"], u["part"], u["parts"]), (day + 1, 0, (day + 1) * 4))
+            self.assertEqual(u["founded_day"], day)
+
+    def test_extinction_wait_advances_in_both_worlds(self):
+        w = engine.genesis(seed=69)
+        for u in (w["eden"], w["lagoon"]):
+            u["people"] = []
+        run(w, 2)
+        for u in (w["eden"], w["lagoon"]):
+            self.assertEqual(u["day"], 2)
+            self.assertEqual(u["parts"], 8)
+            self.assertIsNotNone(u["extinct_day"])
+
+    def test_legacy_clock_does_not_replay_existing_calendar_days(self):
+        w = engine.genesis(seed=69)
+        w.pop("clock")
+        w["epoch"], w["sec_per_day"] = 1000, 2
+        for u in (w["eden"], w["lagoon"]):
+            u["day"] = 40000
+            u.pop("part")
+            u.pop("parts")
+        engine.migrate(w)
+        self.assertEqual(w["eden"]["parts"], 160000)
+        self.assertEqual(engine.target_parts(w, now=81000), 160000)
+        self.assertEqual(engine.target_parts(w, now=81012), 160004)
+        self.assertEqual(w["sec_per_day"], 12)
+
+    def test_pace_change_preserves_due_ticks_and_restart_anchor(self):
+        w = engine.genesis(seed=69)
+        w["clock"] = {"epoch": 1000, "parts": 400, "seconds": 3}
+        engine.set_clock_pace(w, 1, now=1030)
+        self.assertEqual(engine.target_parts(w, now=1030), 410)
+        self.assertEqual(engine.target_parts(w, now=1034), 414)
+        c = dict(w["clock"])
+        engine.set_clock_pace(w, 1, now=1040)
+        self.assertEqual(c, w["clock"])
+        for seconds in (0, -1, float("inf"), float("nan")):
+            with self.assertRaises(ValueError):
+                engine.set_clock_pace(w, seconds)
+
+    def test_resumed_engine_stamp_records_the_transition_once(self):
+        w = engine.genesis(seed=69)
+        for u in (w["eden"], w["lagoon"]):
+            u["engine"] = "2026.10.27.3"
+        engine.tick_world(w, [])
+        engine.tick_world(w, [])
+        for u in (w["eden"], w["lagoon"]):
+            self.assertEqual(u["engine"], engine.ENGINE_VERSION)
+            self.assertEqual(u["engine_history"], [{"from": "2026.10.27.3", "to": engine.ENGINE_VERSION, "day": 0, "part": 0}])
+        engine.write_postmortem(w["eden"], [])
+        self.assertEqual(w["eden"]["postmortems"][-1]["engine_history"], w["eden"]["engine_history"])
+
+    def test_snapshot_light_matches_the_part_just_simulated(self):
+        w = engine.genesis(seed=69)
+        for part in range(4):
+            engine.tick_world(w, [])
+            for u in engine.summarize(w)["u"].values():
+                self.assertEqual(u["part"], part)
+                self.assertEqual(u["tod"], engine.PART_NAMES[part])
+                self.assertEqual(u["night"], part == engine.PART_NIGHT)
+
+    def test_body_and_mortality_are_updated_once_per_calendar_day(self):
+        from unittest.mock import patch
+        w = engine.genesis(seed=69)
+        with patch.object(engine.minds, "tend_body") as body, patch.object(engine, "base_mortality", return_value=False) as mortality:
+            run(w, 1)
+        self.assertEqual(body.call_count, 8)
+        self.assertEqual(mortality.call_count, 8)
+
+    def test_predator_meat_is_not_also_kept_after_transfer_to_store(self):
+        import random
+        u = engine.genesis_universe("LAGOON", 69)
+        u["tech"] = ["preservation"]
+        u["meat"] = 40.0
+        engine.tick_lagoon(u, random.Random(2), [])
+        self.assertGreater(u["store"], 0)
+        self.assertEqual(u["meat"], 0)
+
+    def test_new_persistent_fields_have_migration_defaults(self):
+        w = engine.genesis(seed=69)
+        u = w["lagoon"]
+        for field in ("meat", "kills", "founded_day", "engine_history"):
+            u.pop(field)
+        engine.migrate(w)
+        self.assertEqual(u["meat"], 0.0)
+        self.assertEqual(u["kills"], 0)
+        self.assertEqual(u["founded_day"], 0)
+        self.assertEqual(u["engine_history"], [])
 
 
 if __name__ == "__main__":

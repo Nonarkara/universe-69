@@ -119,6 +119,15 @@ class TestSummarizeShape(unittest.TestCase):
     def test_snapshot_is_json_serialisable(self):
         json.dumps(self.snap)
 
+    def test_the_snapshot_says_which_part_of_the_day_it_is(self):
+        """The renderer lights the world by the hour, so it must be told."""
+        for key in ("eden", "lagoon"):
+            u = self.snap["u"][key]
+            self.assertIn(u["part"], range(4))
+            self.assertIn(u["tod"], ("dawn", "day", "dusk", "night"))
+            self.assertIsInstance(u["night"], bool)
+            self.assertEqual(u["night"], u["tod"] == "night")
+
     def test_census_rows_are_year_pop_births_deaths(self):
         for key in ("eden", "lagoon"):
             for row in self.snap["u"][key]["census"]:

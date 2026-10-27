@@ -116,3 +116,66 @@ which files were indexed fully and which sampled.
 | Routine is built from meals, sleep and recurring contacts; a bedroom needs a purpose elsewhere (Peterson) | Every EDEN activity has a place | Self-help lecture |
 | Boredom is a cost of minds with nothing asked of them (Durkheim, via commentary) | Purpose drains in EDEN | Commentary, not Durkheim's text |
 | *Fiction (Spares):* captives fed on a timer, never spoken to, collapse to eat–wander–sleep | The placeless in EDEN wander; their days have no shape | Fiction |
+
+## Third pass: the three books that were not on the shelf list (28 October 2026)
+
+The following are the prior agent's reading notes. This code audit retained
+them as source notes; it did not independently re-read the seventeen books.
+
+Every file in `~/Downloads/books` was extracted to plain text (epub → zip +
+html, pdf → `pdftotext -layout`, fb2 → XML) and indexed. Three files are
+**not readable** — they are libgen stubs, not books: *A History of the World in
+100 Objects* (557 bytes of HTML), *Embracing defeat* (557 bytes of HTML) and
+*Sapiens* (0 bytes). They need re-downloading; nothing below claims to have
+read them. Seventeen books were read. The three below were the gaps: nobody
+had read them, and they turn out to matter.
+
+### Slingerland, *Drunk: How We Sipped, Danced, and Stumbled Our Way to Civilization* (2021)
+
+Intoxication as a **technology for binding people** — and the book that makes
+the model's night watch legible.
+
+| Finding | Mechanic | World | Caveat |
+|---|---|---|---|
+| Alcohol suppresses prefrontal control, and a less-controlled person is *more* trusted and more open (ch.2) | Lower `ef` raises the chance a person confides, is taken in, and is paired | both | Laboratory findings, not ethnography |
+| Alcohol raises group-level positive affect and self-reported bonding, and the effect is pharmacological, not expectancy (Sayette 2012, ch.3) | A shared activity that lowers control raises the cohesion of the group doing it | LAGOON | One study, social drinkers |
+| Smiles spread further in drinking groups; the contagion was strongest in male-dominated groups (ch.3) | Cohesion spreads from the people who have it, not evenly | LAGOON | |
+| **Drinking in a group protects against the risk alcohol creates**: the group watches one another's backs, and a solitary drinker is the one in trouble (ch.4) | **This is the model's watch**: the turn taken on watch is what makes the night safe for everyone else | LAGOON | The book says the group moderates the drinker, not that it watches for predators |
+| Alcohol is the only drug but pure stimulants that reliably *increases* physical aggression, and it does so in those already predisposed (ch.5) | A low-`ef` band that gathers is a band whose fights are worse | both | |
+| Distillation is a quantum leap in alcohol content: 9,000 years of weak beer, then brandy (ch.3) | A technology with a threshold changes the world, not just the drinker | LAGOON | |
+
+### Malinowski, *Argonauts of the Western Pacific* (1922)
+
+The founding text of how a working anthropology actually looks at work, magic
+and obligation.
+
+| Finding | Mechanic | World | Caveat |
+|---|---|---|---|
+| The **kula** is a long-distance ceremonial exchange: shell necklaces travel one way, armbands the other, forever. The gifts are not useful; the obligation is the point | A `kula` mechanic: bands exchange a surplus good in opposite directions, and the exchange itself raises the standing of both | LAGOON, late | Not on the ladder yet |
+| Magic is practical, not superstitious: gardening magic, war magic, healing magic, each answering a real worry with a ritual | Every disaster the model already has gets a myth; magic is the **response** to a fear, not a cause | LAGOON | The model has the response, not the worry |
+| The same people hold two principles at once — the *competitive* and the *tolerant* — and switch between them by context | A band is competitive with strangers and tolerant inside; the violence model needs both, not one | LAGOON | |
+| The division of labour and the apprenticeship system exist to serve the kula's demands: skill is taught because the exchange needs it | Crafts and trades emerge from what a band must have, not from a tech list | LAGOON | |
+| The ethnographer works among people who do not know they are being studied, and the observer's "rational" explanations are often theirs too | A model's hypotheses should be testable by the world, which is what the RESEARCH panel now does | both | |
+
+### Dower, *War without Mercy* (1992)
+
+The violence chapter's missing half: how a group comes to treat people as
+things.
+
+| Finding | Mechanic | World | Caveat |
+|---|---|---|---|
+| **Dehumanisation is a mechanism, not a metaphor**: it widens the psychological distance that makes killing possible, and it reaches the planners, not only the soldiers | Being treated as *the other* lowers the threshold for lethal violence, for the band as well as for the observer | LAGOON | War, not a forager band |
+| Nonhuman metaphors — vermin, insects, herd — become routine idioms, and once routine they are hard to dislodge | A name that turns into a category: once a kind of person is a *kind*, the violence against them becomes administration | LAGOON, EDEN | |
+| Atrocity and hate feed each other in a vicious circle, each making the next easier to justify | A feud that escalates is not a sum of grievances but a loop; the grudge decay rate may be too kind | LAGOON | The model's grudge decays ~8%/yr |
+| Most combatants who survived chose not to remember, and buried it; the past resurfaces only years later | Unresolved violence has a long fuse | LAGOON | |
+
+### What these change
+
+No alcohol, kula or dehumanisation mechanic is implemented. The night watch
+uses the group-vigilance analogy with the caveat recorded above and in
+`DESIGN.md`; it is a model choice rather than a measured result from the book.
+Two rows remain candidates for future work: the **kula** (an exchange ring between LAGOON's bands,
+which would give the tribes a reason to stay in contact rather than only to
+fissile), and the **dehumanisation** mechanic (a kind of person that the
+record turns into a category, so that killing them becomes routine). Both
+need to be calibrated in `tools/lab.py` before they go near `DESIGN.md`.

@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <title>UNIVERSE 69</title>
@@ -7,7 +7,8 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='8' height='16' fill='%23a8c0f0'/><rect x='8' width='8' height='16' fill='%23a0e898'/></svg>">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  html, body { height:100%; overflow:hidden; }
+  html, body { min-height:100%; }
+  body { height:100dvh; }
   body { background:#000; color:#d8d8e8; font-family:Menlo,Monaco,monospace;
          display:flex; flex-direction:column; }
 
@@ -18,7 +19,7 @@
               border-bottom:1px solid #26263c; }
   #masthead .ttl { color:#f8d848; letter-spacing:3px; font-weight:bold; }
   #masthead .sub { color:#8a8aa8; }
-  #masthead .hint { margin-left:auto; color:#5e5e7c; letter-spacing:1px; white-space:nowrap;
+  #masthead .hint { margin-left:auto; color:#9b9bb7; letter-spacing:1px; white-space:nowrap;
                     overflow:hidden; text-overflow:ellipsis; min-width:0; }
   #masthead .ttl, #masthead .sub { white-space:nowrap; }
   #walkbtn { font:inherit; font-size:10px; letter-spacing:1px; color:#9fe8c0;
@@ -26,15 +27,19 @@
   #walkbtn.on { color:#f8d848; border-color:#5a5a3a; }
 
   #worlds { flex:3 1 0; display:flex; min-height:0; }
-  .world { flex:1; position:relative; min-width:0; overflow:hidden; }
+  #worlds > .world { flex:1; display:flex; flex-direction:column; position:relative; min-width:0; }
+  .worldhead { position:relative; flex:none; background:#0b0b14; }
+  .scene { position:relative; flex:1; min-height:180px; }
   #divider { width:2px; background:#3a3a55; }
   canvas.view { width:100%; height:100%; display:block; image-rendering:pixelated; }
   canvas.overlay { position:absolute; inset:0; width:100%; height:100%;
                    pointer-events:none; }
-  .hud { position:absolute; top:0; left:0; right:0; padding:6px 10px;
+  .hud { padding:6px 10px;
          font-size:11px; line-height:1.5; white-space:pre-wrap;
-         background:rgba(0,0,10,0.55); pointer-events:none; }
-  .hud b { color:#f8d848; font-weight:bold; }
+         pointer-events:none; }
+  .hud b { color:#f8d848; font-weight:bold; font-size:16px; }
+  .hud .identity { display:block; }
+  .hud .clock { display:block; color:#d8d8e8; }
   .hud .shot { color:#f0f0f8; letter-spacing:1px; }
   .hud .scale { color:#7a7a9c; }
   .hud .who { color:#9fe8c0; }
@@ -55,25 +60,25 @@
   .hud .dim { color:#8888aa; }
   .trend { position:absolute; top:6px; right:10px; width:120px; height:14px;
            image-rendering:pixelated; pointer-events:none; }
-  .hud .l1 { padding-right:130px; }
+  .hud .identity { padding-right:130px; }
   .key { display:inline-block; width:7px; height:7px; border:2px solid;
          vertical-align:-1px; margin-right:3px; }
 
   /* the record: one strip, sized to five lines, taller only on request */
   #god { flex:0 0 auto; border-top:2px solid #3a3a55; background:#07070e; }
   #records { display:flex; flex-direction:column; min-width:0; }
-  #rechead { flex:0 0 auto; padding:4px 12px 2px; display:flex; align-items:baseline; }
+  #rechead { flex:0 0 auto; padding:4px 12px 2px; display:flex; flex-wrap:wrap; gap:4px; align-items:center; }
   #more { margin-left:auto; }
   #records h2 { font-size:11px; color:#f8d848; letter-spacing:2px;
                 display:inline-block; }
-  #filters { display:inline-flex; gap:4px; margin-left:10px; vertical-align:baseline; }
+  #filters { display:inline-flex; flex-wrap:wrap; gap:4px; margin-left:6px; vertical-align:baseline; }
   #filters button, #more { font:inherit; font-size:10px; letter-spacing:1px;
-                    color:#6a6a8a; background:#12121e; border:1px solid #26263c;
+                    color:#9b9bb7; background:#12121e; border:1px solid #26263c;
                     padding:1px 6px; cursor:pointer; }
   #filters button.on, #more.on { color:#f8d848; border-color:#5a5a3a; background:#1a1a16; }
-  #reclines { height:calc(5 * 18px + 6px); overflow-y:auto; padding:0 12px 6px;
+  #reclines { max-height:calc(5 * 18px + 6px); overflow-y:auto; padding:0 12px 6px;
               font-size:11px; line-height:18px; }
-  #god.tall #reclines { height:42vh; }
+  #god.tall #reclines { max-height:42vh; }
   #reclines::-webkit-scrollbar { width:8px; }
   #reclines::-webkit-scrollbar-thumb { background:#2c2c46; }
   #reclines .row { color:#b8b8d0; }
@@ -88,7 +93,7 @@
   .ev6 { color:#a8c0f0; } .ev9 { color:#a0e898; } .evy { color:#666a88; }
   .dim { color:#8888aa; }
 
-  @media (max-width: 1200px) { .hud { font-size:10px; line-height:1.4; } }
+  @media (max-width: 1200px) { .hud { font-size:11px; line-height:1.4; } }
   @media (max-width: 760px), (max-aspect-ratio: 4/5) {
     #masthead { flex-wrap:wrap; padding:4px 8px; gap:3px 8px; }
     #masthead .ttl { white-space:nowrap; }
@@ -97,12 +102,13 @@
     #masthead .hint { order:2; margin-left:0; flex:1 1 100%; font-size:9px;
                       letter-spacing:0; white-space:nowrap;
                       overflow:hidden; text-overflow:ellipsis; }
-    #worlds { flex-direction:column; flex:3 1 0; }
-    #divider { width:auto; height:2px; }
-    #reclines { font-size:10px; height:calc(4 * 18px + 6px); }
-    .hud { font-size:9px; padding:3px 6px; }
-    .hud .l1 { padding-right:70px; }
-    .trend { width:60px; height:11px; top:4px; right:6px; }
+    #worlds { flex-direction:row; flex:3 1 0; }
+    #divider { width:2px; height:auto; flex:none; }
+    #reclines { font-size:10px; max-height:calc(4 * 18px + 6px); }
+    .hud { font-size:11px; padding:5px 6px; line-height:1.4; }
+    .hud .identity { padding-right:0; }
+    .hud b { font-size:15px; }
+    .trend { position:static; display:block; width:100%; height:14px; padding:0 6px; }
     .card { font-size:10px; padding:4px 8px; max-width:100%; }
     #filters button, #more { font-size:9px; padding:1px 4px; }
     #records h2 .long { display:none; }
@@ -130,8 +136,109 @@
     cursor:pointer; margin-top:4px; }
   @media (max-height: 520px) and (orientation: landscape) {
     #masthead .sub, #masthead .hint { display:none; }
-    #reclines { height:calc(3 * 18px + 4px); }
+    #reclines { max-height:calc(3 * 18px + 4px); }
     .intro, .failcard { font-size:11px; padding:10px 12px; max-height:92vh; overflow:auto; }
+  }
+
+  /* The research panel: what the books say, and what this world says.
+     It is a reading surface, not a dashboard — one claim, one number. */
+  #resbtn { font:inherit; font-size:10px; letter-spacing:1px; color:#c8b0f0;
+            background:#12121e; border:1px solid #3a3050; padding:1px 6px;
+            cursor:pointer; flex:0 0 auto; }
+  #resbtn.on { color:#f8d848; border-color:#5a5a3a; }
+  #research { position:fixed; inset:0; z-index:45; display:flex;
+              align-items:flex-start; justify-content:center;
+              background:rgba(0,0,0,0.88); padding:16px; }
+  .rescard { max-width:780px; width:100%; max-height:92vh; background:#0c0c16;
+             border:1px solid #3a3a55; display:flex; flex-direction:column; }
+  .reshead { flex:0 0 auto; display:flex; align-items:baseline; gap:10px;
+             padding:9px 14px 7px; border-bottom:1px solid #26263c; }
+  .reshead h2 { color:#f8d848; letter-spacing:3px; font-size:12px; }
+  .reshead .dim { font-size:10px; }
+  #resclose { margin-left:auto; font:inherit; font-size:10px; letter-spacing:1px;
+              color:#8a8aa8; background:#12121e; border:1px solid #26263c;
+              padding:2px 8px; cursor:pointer; flex:0 0 auto; }
+  #reslist { overflow-y:auto; padding:4px 14px 12px; font-size:11px; line-height:1.5; }
+  #reslist::-webkit-scrollbar { width:8px; }
+  #reslist::-webkit-scrollbar-thumb { background:#2c2c46; }
+  .res { padding:9px 0 8px; border-bottom:1px solid #1c1c2e; }
+  .res:last-child { border-bottom:none; }
+  .res .hd { display:flex; gap:8px; align-items:baseline; }
+  .res .mark { flex:0 0 auto; width:30px; font-weight:bold; letter-spacing:1px; }
+  .res .mark.yes { color:#9fe8c0; }
+  .res .mark.no { color:#f0a0a0; }
+  .res .mark.und { color:#666a88; }
+  .res .id { color:#f8d848; letter-spacing:1px; }
+  .res .w6 { color:#a8c0f0; letter-spacing:1px; }
+  .res .w9 { color:#a0e898; letter-spacing:1px; }
+  .res .num { margin-left:auto; color:#c8c8e0; white-space:nowrap; }
+  .res .claim { color:#d8d8e8; margin:2px 0 0 38px; }
+  .res .src { color:#8a8aa8; margin:2px 0 0 38px; font-size:10px; }
+  .res .cnt { color:#666a88; margin:2px 0 0 38px; font-size:10px; }
+  .res.no .claim { color:#f0d0d0; }
+  /* the long story: what the shelf says happened, before the tests */
+  #resstory { flex:0 0 auto; padding:8px 14px 6px; border-bottom:1px solid #26263c;
+              background:#0a0a12; max-height:34vh; overflow-y:auto; }
+  #resstory::-webkit-scrollbar { width:8px; }
+  #resstory::-webkit-scrollbar-thumb { background:#2c2c46; }
+  #resstory h3 { font-size:10px; letter-spacing:2px; color:#c8b0f0;
+                 margin:0 0 5px; font-weight:normal; }
+  .story { padding:5px 0; border-bottom:1px dotted #1c1c2e; }
+  .story:last-child { border-bottom:none; }
+  .story .st { color:#e0d0f8; letter-spacing:1px; }
+  .story .wh { color:#6a6a8a; font-size:10px; margin-left:6px; }
+  .story .cl { color:#b8b8d0; margin:2px 0 0; }
+  .story .sr { color:#7a7a9c; font-size:10px; margin:2px 0 0; }
+  .story .hl { color:#f8d848; }
+  @media (max-width: 760px) {
+    #research { padding:0; }
+    .rescard { max-height:100vh; border:none; }
+    .res .claim, .res .src, .res .cnt { margin-left:0; }
+    .res .hd { flex-wrap:wrap; }
+    .res .num { margin-left:38px; }
+    #resbtn { order:0; }
+  }
+  button:focus-visible, [tabindex]:focus-visible { outline:2px solid #f8d848; outline-offset:2px; }
+  button { min-height:28px; }
+  #masthead { align-items:center; }
+  #veilbtn { width:28px; height:28px; }
+  #masthead .hint { white-space:normal; overflow:visible; }
+  #research { padding:16px; }
+  .rescard { max-width:760px; max-height:calc(100dvh - 32px); }
+  .reshead { align-items:center; flex-wrap:wrap; padding:10px 16px; gap:4px 12px; }
+  .reshead h2 { font-size:22px; letter-spacing:0; }
+  #resclose { order:1; }
+  #ressum { order:2; flex-basis:100%; font-size:12px; line-height:1.5; }
+  .resnav { display:flex; gap:8px; padding:0 16px 10px; flex:none; }
+  .resnav button { font:inherit; font-size:12px; padding:4px 8px; color:#b8b8d0; background:#12121e; border:1px solid #3a3a55; cursor:pointer; }
+  .resnav button[aria-pressed="true"] { color:#f8d848; border-color:#f8d848; }
+  #resbody { overflow-y:auto; min-height:0; padding:0 16px 16px; font-size:13px; line-height:1.55; }
+  #reslist, #resstory { overflow:visible; max-height:none; padding:0; font-size:inherit; line-height:inherit; background:none; }
+  #resstory h3 { font-size:16px; letter-spacing:0; margin:8px 0; }
+  .story { padding:12px 0; }
+  .story .st { font-size:18px; letter-spacing:0; }
+  .story .wh, .story .sr, .res .src, .res .cnt { font-size:12px; color:#9b9bb7; }
+  .story .wh { display:block; margin:0; }
+  .res { padding:12px 0; }
+  .res .hd { flex-wrap:wrap; gap:4px 8px; }
+  .res .id { font-size:11px; letter-spacing:0; overflow-wrap:anywhere; }
+  .res .mark { width:auto; font-size:12px; }
+  .res .num { flex-basis:100%; margin:0; white-space:normal; color:#c8c8e0; font-size:12px; }
+  .res .claim { margin:6px 0; font-size:16px; color:#eeeef6; }
+  .res .src, .res .cnt { margin:3px 0; }
+  .resnote { color:#b8b8d0; margin:6px 0; max-width:65ch; }
+  .story .cl, .story .sr, .res .src { max-width:65ch; }
+  @media (max-width:760px) {
+    #research { padding:0; }
+    .rescard { max-height:100dvh; }
+    #masthead .hint { font-size:11px; line-height:1.4; }
+    #walkbtn { order:0; }
+    #masthead .ttl { letter-spacing:1px; }
+    #rechead { padding:4px 6px; }
+    #filters { margin-left:0; }
+    #filters button, #more { font-size:10px; }
+    #reclines { font-size:11px; }
+    .card { pointer-events:auto; font-size:11px; }
   }
 </style>
 </head>
@@ -141,21 +248,24 @@
   <span class="sub">two sealed worlds — observed, never helped</span>
   <span class="hint">wheel zoom · drag pan · click to follow · WASD walk in · esc</span>
   <button id="walkbtn" title="Walk into the world you last touched">WALK</button>
+  <button type="button" id="resbtn" title="What the books say, and what this world says">RESEARCH</button>
   <button type="button" id="veilbtn" title="What you are watching">?</button>
 </div>
 <div id="banner" class="banner" hidden></div>
 <div id="worlds">
-  <div class="world" id="w6"><canvas id="c6" class="view"></canvas>
-    <canvas id="o6" class="overlay"></canvas>
-    <div class="hud" id="hud6"><b>UNIVERSE 6 · EDEN</b></div>
-    <canvas id="tre" class="trend"></canvas>
-    <div class="card" id="card6"></div></div>
+  <div class="world" id="w6">
+    <div class="worldhead"><div class="hud" id="hud6"><b>EDEN · U6</b></div>
+      <canvas id="tre" class="trend" aria-label="Population history"></canvas></div>
+    <div class="scene"><canvas id="c6" class="view" aria-label="EDEN documentary camera"></canvas>
+      <canvas id="o6" class="overlay"></canvas>
+      <div class="card" id="card6"></div></div></div>
   <div id="divider"></div>
-  <div class="world" id="w9"><canvas id="c9" class="view"></canvas>
-    <canvas id="o9" class="overlay"></canvas>
-    <div class="hud" id="hud9"><b>UNIVERSE 9 · LAGOON</b></div>
-    <canvas id="trl" class="trend"></canvas>
-    <div class="card" id="card9"></div></div>
+  <div class="world" id="w9">
+    <div class="worldhead"><div class="hud" id="hud9"><b>LAGOON · U9</b></div>
+      <canvas id="trl" class="trend" aria-label="Population history"></canvas></div>
+    <div class="scene"><canvas id="c9" class="view" aria-label="LAGOON documentary camera"></canvas>
+      <canvas id="o9" class="overlay"></canvas>
+      <div class="card" id="card9"></div></div></div>
 </div>
 <div id="god">
   <div id="records">
@@ -174,22 +284,37 @@
     <div id="reclines"></div>
   </div>
 </div>
-<div id="veil" hidden>
+<div id="veil" role="dialog" aria-modal="true" aria-labelledby="introtitle" hidden>
   <div class="intro">
-    <h2>UNIVERSE 69</h2>
+    <h2 id="introtitle">UNIVERSE 69</h2>
     <p><b class="eden">EDEN</b> is universe 6: a sealed resort where it is always spring. Food, water, and a bed are free. The only scarce things are room and a place to be needed.</p>
     <p><b class="lagoon">LAGOON</b> is universe 9: an island of woods, fish, winters, and predators. Nothing is given.</p>
-    <p>Watch only. You cannot feed them or step in. They keep living while you are away — one sim-day every 2 seconds, about 118 sim-years in a real day.</p>
-    <p class="dim">Come back. An hour away is about five years in there. Wheel to look closer, drag to pan, click a person to follow, WASD to walk in among them.</p>
+    <p>Watch only. You cannot feed them or step in. They keep living while you are away — a whole day and a night every 12 seconds, about 20 sim-years in a real day.</p>
+    <p>The light turns: dawn, day, dusk, night. In LAGOON the band comes in to the fire after dark and takes turns keeping watch. EDEN never closes, but it goes to bed.</p>
+    <p class="dim">Come back. An hour away is most of a year in there. Wheel to look closer, drag to pan, click a person to follow, WASD to walk in among them.</p>
     <button type="button" id="veilok">WATCH</button>
   </div>
 </div>
-<div id="fail" hidden>
+<div id="fail" role="dialog" aria-modal="true" aria-labelledby="failtitle" hidden>
   <div class="failcard">
     <h2 id="failtitle">THE MIRROR IS DARK</h2>
     <p id="failmsg">Could not read the snapshot.</p>
     <p class="dim">This page only watches. It will keep trying.</p>
     <button type="button" id="retry">RETRY</button>
+  </div>
+</div>
+<div id="research" role="dialog" aria-modal="true" aria-labelledby="restitle" hidden>
+  <div class="rescard">
+    <div class="reshead">
+      <h2 id="restitle">Research</h2>
+      <span id="ressum" class="dim"></span>
+      <button type="button" id="resclose">CLOSE</button>
+    </div>
+    <div class="resnav" role="group" aria-label="Research view">
+      <button id="restests" aria-pressed="true">Model tests</button>
+      <button id="resbooks" aria-pressed="false">The books</button>
+    </div>
+    <div id="resbody" tabindex="0" aria-label="Research reading area"><div id="resstory" hidden></div><div id="reslist"></div></div>
   </div>
 </div>
 
@@ -598,18 +723,37 @@ function solvePose(act, c, moving, v){
           kneeLx:-1.8, kneeLy:26, kneeRx:1.8, kneeRy:26,
           handLx:-4.6, handLy:19, handRx:4.6, handRy:19,
           elbLx:-4.8, elbLy:13, elbRx:4.8, elbRy:13,
-          headTilt:0, tool:0, toolAng:0, carry:0, sit:0, basket:0 };
+          headTilt:0, tool:0, toolAng:0, carry:0, sit:0, basket:0,
+          hipDx:0, shDx:0, twist:0 };
   if (moving){
-    var stride=2.6, lift=2.3, fL=sp, fR=-sp;
-    P.footLx=fL*stride; P.footLy=32-Math.max(0,fL)*lift;
-    P.footRx=fR*stride; P.footRy=32-Math.max(0,fR)*lift;
-    P.kneeLx=fL*stride*0.35-0.4+Math.max(0,fL)*1.3; P.kneeLy=25.8-Math.max(0,fL)*1.7;
-    P.kneeRx=fR*stride*0.35+0.4+Math.max(0,fR)*1.3; P.kneeRy=25.8-Math.max(0,fR)*1.7;
-    P.handLx=-3.6-sp*2.0; P.handLy=18.2-Math.abs(sp)*0.7;
-    P.handRx= 3.6+sp*2.0; P.handRy=18.2-Math.abs(sp)*0.7;
-    P.elbLx=-4.4-sp*0.9; P.elbRx=4.4+sp*0.9;
-    P.elbLy=13+Math.abs(sp)*0.5; P.elbRy=P.elbLy;
-    P.drop=-Math.abs(sp)*0.7; P.lean=1.2;
+    // A walk is not a sine wave. The foot that is on the ground stays on the
+    // ground while the body passes over it; the other foot arcs forward and
+    // plants. The body rises as each leg straightens and falls as each lands,
+    // and the hips travel toward the leg that is carrying the weight.
+    var A=3.1, ST=0.62;                       // stride half-length, stance share
+    function leg(p){                          // p in [0,1): stance then swing
+      if (p<ST){ var t=p/ST; return {x:A-2*A*t, y:32, bend:0.5*(1-t)}; }
+      var t=(p-ST)/(1-ST);
+      return {x:-A+2*A*t, y:32-Math.sin(Math.PI*t)*2.7, bend:1.0+Math.sin(Math.PI*t)};
+    }
+    var lL=leg(ph/(Math.PI*2)), lR=leg((ph/(Math.PI*2)+0.5)%1);
+    P.footLx=lL.x; P.footLy=lL.y; P.footRx=lR.x; P.footRy=lR.y;
+    // the knee bends when the leg takes the weight and swings when it does not
+    P.kneeLx=lL.x*0.42+ (lL.bend>0.9?1.1:0.2); P.kneeLy=26-lL.bend*1.5;
+    P.kneeRx=lR.x*0.42+ (lR.bend>0.9?1.1:0.2); P.kneeRy=26-lR.bend*1.5;
+    // the body rises over each planted leg and drops as the next one lands
+    var bob=-0.55*Math.cos(4*Math.PI*(ph/(Math.PI*2)));
+    P.drop=bob;
+    // the hips lean over the standing leg; the shoulders lean the other way
+    var stance = lL.bend>lR.bend ? 1 : -1;
+    P.hipDx=stance*0.55; P.shDx=-stance*0.35;
+    P.lean=1.1+stance*0.25; P.twist=stance*0.5;
+    // the arms swing against the leg on the same side
+    var sw=Math.sin(ph)*2.3;
+    P.handLx=-3.9-sw; P.handLy=18.4-Math.abs(sw)*0.35;
+    P.handRx= 3.9+sw; P.handRy=18.4-Math.abs(sw)*0.35;
+    P.elbLx=-4.6-sw*0.42; P.elbRx=4.6+sw*0.42;
+    P.elbLy=13.1+Math.abs(sw)*0.3; P.elbRy=P.elbLy;
     if (act===A_HUNT){ P.tool=1; P.toolAng=-0.3; P.handRx=4.2; P.handRy=14; P.elbRy=11; P.drop+=0.8; P.lean=2; }
     if (act===A_SCOUT){ P.handRx=3.0; P.handRy=4.2; P.elbRx=4.8; P.elbRy=8.6; P.headTilt=-0.5; P.lean=1.6; }  // shading the eyes
     if (act===A_FORAGE||act===A_PLAY) P.basket=(act===A_FORAGE)?1:0;
@@ -713,7 +857,8 @@ var DRESS = { swim:["#e8584a","#3f8fd0","#f2c84a","#3fa58a","#d86aa8"],
               hide:"#8a6238", hideD:"#5e3f20", fur:"#a07850", furD:"#6e4e2c" };
 function bodyOf(a){
   var b=a.bmi||22, age=(a.age===undefined)?30:a.age;
-  return { stage: age<3?0: age<12?1: age<16?2: age<58?3:4,
+  return { adult: typeof a.age==="number" && a.age>=18,
+           stage: age<3?0: age<12?1: age<16?2: age<58?3:4,
            fat: b<15?0: b<18.5?1: b<25?2: b<30?3:4,
            strong: (a.sn||5)>=7?1:0,
            hurt: (a.inj||0)>=5?2:((a.inj||0)>=2?1:0),
@@ -724,7 +869,7 @@ var STAGE_HEAD=[1.55,1.28,1.08,1.0,1.0];     // head size against an adult's
 var FAT_W=[0.66,0.8,1.0,1.24,1.55];           // torso width by BMI band
 
 function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view){
-  var fem=(sex===1), adult=B.stage>=3, kid=B.stage<=1;
+  var fem=(sex===1), adult=B.adult, kid=B.stage<=1;
   // Sleeping, an infant, and two people making love are drawn lying down —
   // but only once they are there: nobody slides across the ground lying.
   // Lovemaking is shown as two adults lying together, nothing more explicit.
@@ -825,43 +970,85 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
     }
     g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.7;   // the loose second pass
     g.beginPath(); g.moveTo(ax+n1[0]*w1*0.62,ay+n1[1]*w1*0.62); g.quadraticCurveTo(bx+nk[0]*wk*0.7,by+nk[1]*wk*0.7,cx2+n2[0]*w2*0.6,cy2+n2[1]*w2*0.6); g.stroke();
-    // the extremity: a foot pointing the way they face, or a hand
+    // the extremity: a foot that is a foot, or a hand that is a hand
     g.fillStyle=col; g.strokeStyle=INK; g.lineWidth=ink;
     g.beginPath();
-    if (leg) g.ellipse(cx2+0.75, cy2-0.15, 1.15*Math.sqrt(Hs), 0.42, 0, 0, 6.283);
-    else g.ellipse(cx2+0.1, cy2+0.45, w2*0.62, w2*0.85, 0.2, 0, 6.283);
+    if (leg){
+      // heel, arch, toe: a wedge that meets the ground, not an oval on it
+      g.moveTo(cx2-0.85, cy2-0.55);
+      g.quadraticCurveTo(cx2-1.05, cy2+0.35, cx2-0.45, cy2+0.5);
+      g.lineTo(cx2+1.25, cy2+0.5);
+      g.quadraticCurveTo(cx2+1.5, cy2+0.1, cx2+0.75, cy2-0.5);
+      g.closePath();
+    } else {
+      // a palm, with the thumb alongside it
+      g.moveTo(cx2-0.55, cy2-0.2);
+      g.quadraticCurveTo(cx2+0.05, cy2-0.55, cx2+0.55, cy2-0.1);
+      g.quadraticCurveTo(cx2+0.7, cy2+0.7, cx2+0.15, cy2+0.95);
+      g.quadraticCurveTo(cx2-0.45, cy2+0.95, cx2-0.55, cy2-0.2);
+      g.closePath();
+    }
     g.fill(); g.stroke();
     if (!leg && s>=4){                            // fingers, as three quick strokes
       g.lineWidth=ink*0.6;
-      for (var fi=-1;fi<=1;fi++){ g.beginPath(); g.moveTo(cx2+fi*w2*0.3, cy2+w2*0.9); g.lineTo(cx2+fi*w2*0.36, cy2+w2*1.45); g.stroke(); }
+      for (var fi=-1;fi<=1;fi++){ g.beginPath(); g.moveTo(cx2+fi*w2*0.22, cy2+0.75); g.lineTo(cx2+fi*w2*0.26, cy2+1.35); g.stroke(); }
+    }
+    if (!leg && s>=3){                            // the thumb
+      g.lineWidth=ink*0.7;
+      g.beginPath(); g.moveTo(cx2-0.5, cy2+0.35); g.lineTo(cx2-0.95, cy2-0.15); g.stroke();
     }
   }
-  var shX=X(lean), hipX=X(lean*0.25);
+  var shX=X(lean)+P.shDx, hipX=X(lean*0.25)+P.hipDx;
   var legDress = dress==="fur" ? DRESS.furD : null;
 
-  // the far arm and leg first
-  bone(hipX-hpW*0.45,P.hipY, X(P.kneeLx),P.kneeLy, X(P.footLx),P.footLy, limbW*1.6, SKD, true);
-  bone(shX-shW+0.6,P.shY+0.7, X(P.elbLx),P.elbLy, X(P.handLx),P.handLy, limbW*1.05, SKD);
+  // the far arm and leg first — behind the trunk, so the joints read as joints
+  bone(hipX-hpW*0.42,P.hipY+0.3, X(P.kneeLx),P.kneeLy, X(P.footLx),P.footLy, limbW*1.6, SKD, true);
+  bone(shX-shW+limbW*0.34,P.shY+0.9, X(P.elbLx),P.elbLy, X(P.handLx),P.handLy, limbW*1.05, SKD);
 
-  // torso: shoulders to waist to hips, one closed silhouette over a wash
-  var waY=P.shY+(P.hipY-P.shY)*0.62, wx=X(lean*0.55);
+  // torso: a real trunk, not a slab. The neck's root at the top, the
+  // trapezius sloping out to the shoulders, the ribcage narrowing to the
+  // waist, the iliac crest flaring to the pelvis, and the crotch closing it.
+  var waY=P.shY+(P.hipY-P.shY)*0.62, wx=X(lean*0.55+P.hipDx*0.5);
   var belly=(B.fat>=3?(B.fat-2)*1.3:0)+(B.preg?3.6:0)+(B.fat===0&&kid?1.4:0);
   if (view){ waW+=belly*0.45; belly=0; }
+  var nkx=X(lean*1.02+P.shDx*0.4), nky=P.shY-0.3;       // where the neck roots
   g.beginPath();
-  g.moveTo(shX-shW, P.shY+0.6);
-  g.quadraticCurveTo(wx-waW-0.6, waY-2, wx-waW, waY);
-  g.quadraticCurveTo(hipX-hpW-0.4, P.hipY-1, hipX-hpW, P.hipY+0.6);
-  g.lineTo(hipX+hpW, P.hipY+0.6);
-  g.quadraticCurveTo(wx+waW+belly*1.1, P.hipY-1.5, wx+waW+belly, waY+0.6);
-  g.quadraticCurveTo(wx+waW+0.6, waY-2.6, shX+shW, P.shY+0.6);
-  g.quadraticCurveTo(shX, P.shY-0.6, shX-shW, P.shY+0.6);
+  g.moveTo(nkx, nky);
+  g.quadraticCurveTo(shX-shW*0.64, P.shY-0.6, shX-shW, P.shY+1.2);   // left trapezius
+  g.quadraticCurveTo(shX-shW-0.5, P.shY+3.6, wx-waW, waY);           // left ribs
+  g.quadraticCurveTo(hipX-hpW-0.2, P.hipY-2.4, hipX-hpW, P.hipY+0.5);// left ilium
+  g.quadraticCurveTo(hipX, P.hipY+2.1, hipX+hpW, P.hipY+0.5);        // the crotch
+  g.quadraticCurveTo(hipX+hpW+0.2, P.hipY-2.4, wx+waW+belly*0.5, waY);
+  g.quadraticCurveTo(shX+shW+0.5, P.shY+3.6, shX+shW, P.shY+1.2);
+  g.quadraticCurveTo(shX+shW*0.64, P.shY-0.6, nkx, nky);
   g.closePath();
   g.fillStyle=SK; g.fill();
   g.strokeStyle=INK; g.lineWidth=ink*1.3; g.stroke();
+  // the light comes from the north-west, so the far side of the trunk is in
+  // shadow: one soft pass down the right edge gives the body its volume
+  g.save();
+  g.beginPath();
+  g.moveTo(nkx, nky);
+  g.quadraticCurveTo(shX-shW*0.64, P.shY-0.6, shX-shW, P.shY+1.2);
+  g.quadraticCurveTo(shX-shW-0.5, P.shY+3.6, wx-waW, waY);
+  g.quadraticCurveTo(hipX-hpW-0.2, P.hipY-2.4, hipX-hpW, P.hipY+0.5);
+  g.quadraticCurveTo(hipX, P.hipY+2.1, hipX+hpW, P.hipY+0.5);
+  g.quadraticCurveTo(hipX+hpW+0.2, P.hipY-2.4, wx+waW+belly*0.5, waY);
+  g.quadraticCurveTo(shX+shW+0.5, P.shY+3.6, shX+shW, P.shY+1.2);
+  g.quadraticCurveTo(shX+shW*0.64, P.shY-0.6, nkx, nky);
+  g.closePath();
+  g.clip();
+  g.fillStyle="rgba(60,40,26,0.16)";
+  g.beginPath();
+  g.moveTo(shX+shW*0.30, nky);
+  g.quadraticCurveTo(shX+shW*0.95, P.shY+4, shX+shW*0.55, P.hipY+2);
+  g.lineTo(shX+shW*1.4, P.hipY+4); g.lineTo(shX+shW*1.4, nky);
+  g.closePath(); g.fill();
+  g.restore();
   // construction ovals, left in the drawing the way a study leaves them
   g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.7;
-  g.beginPath(); g.ellipse(X(lean*0.75), P.shY+3.6, shW*0.86, 3.6, 0, 0, 6.283); g.stroke();
-  g.beginPath(); g.ellipse(hipX, P.hipY-0.4, hpW*0.92, 2.1, 0, 0, 6.283); g.stroke();
+  g.beginPath(); g.ellipse(shX+P.twist*0.5, P.shY+3.4, shW*0.8, 3.5, 0, 0, 6.283); g.stroke();
+  g.beginPath(); g.ellipse(hipX, P.hipY-0.6, hpW*0.9, 2.0, 0, 0, 6.283); g.stroke();
 
   var bare = !dress || dress==="swim";
   if (s>=2 && B.stage>=2){
@@ -918,10 +1105,23 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
   if (dress){
     if (dress==="swim"){
       var sc=DRESS.swim[v%DRESS.swim.length];
+      // a brief that follows the pelvis rather than hanging beside it
       g.fillStyle=sc; g.strokeStyle=INK; g.lineWidth=ink;
-      g.beginPath(); g.moveTo(hipX-hpW,P.hipY-0.6); g.lineTo(hipX+hpW+belly*0.3,P.hipY-0.6);
-      g.lineTo(hipX+hpW*0.4,P.hipY+2.3); g.lineTo(hipX-hpW*0.4,P.hipY+2.3); g.closePath(); g.fill(); g.stroke();
-      if (fem && B.stage>=2){ g.beginPath(); g.rect(shX-shW*0.8, P.shY+2.6, shW*1.7, 1.7); g.fill(); g.stroke(); }
+      g.beginPath();
+      g.moveTo(hipX-hpW*0.98, P.hipY-1.0);
+      g.quadraticCurveTo(hipX, P.hipY-1.7, hipX+hpW*0.98+belly*0.3, P.hipY-1.0);
+      g.lineTo(hipX+hpW*0.70+belly*0.3, P.hipY+2.0);
+      g.quadraticCurveTo(hipX, P.hipY+2.8, hipX-hpW*0.70, P.hipY+2.0);
+      g.closePath(); g.fill(); g.stroke();
+      if (fem && B.stage>=2){
+        // a band across the chest, following the ribcage
+        g.beginPath();
+        g.moveTo(shX-shW*0.82, P.shY+3.0);
+        g.quadraticCurveTo(shX, P.shY+3.9, shX+shW*0.82, P.shY+3.0);
+        g.lineTo(shX+shW*0.82, P.shY+4.5);
+        g.quadraticCurveTo(shX, P.shY+5.4, shX-shW*0.82, P.shY+4.5);
+        g.closePath(); g.fill(); g.stroke();
+      }
     } else {
       var col=dress==="fur"?DRESS.fur:DRESS.hide, colD=dress==="fur"?DRESS.furD:DRESS.hideD;
       var top=dress==="fur"?P.shY+0.4:P.hipY-1.2, bot=dress==="fur"?P.hipY+4.5:P.hipY+3;
@@ -935,9 +1135,9 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
     }
   }
 
-  // the near leg and arm
-  bone(hipX+hpW*0.45,P.hipY, X(P.kneeRx),P.kneeRy, X(P.footRx),P.footRy, limbW*1.65, legDress||SK, true);
-  bone(shX+shW-0.6,P.shY+0.7, X(P.elbRx),P.elbRy, X(P.handRx),P.handRy, limbW*1.1, SK);
+  // the near leg and arm, rooted inside the trunk so the joints read as joints
+  bone(hipX+hpW*0.42,P.hipY+0.3, X(P.kneeRx),P.kneeRy, X(P.footRx),P.footRy, limbW*1.65, legDress||SK, true);
+  bone(shX+shW-limbW*0.34,P.shY+0.9, X(P.elbRx),P.elbRy, X(P.handRx),P.handRy, limbW*1.1, SK);
   if (mus && s>=2){                                       // the biceps' curve
     g.strokeStyle=INK; g.lineWidth=ink*0.8; g.beginPath();
     g.arc((shX+shW+X(P.elbRx))/2, (P.shY+P.elbRy)/2+0.3, limbW*0.7, -1.2, 1.2); g.stroke();
@@ -964,8 +1164,17 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
     g.beginPath(); g.moveTo(hx2,hy2); g.lineTo(ex,ey); g.lineTo(ex+1.4,ey+1.2); g.stroke();
   }
   if (P.basket){
-    g.fillStyle="#c9a160"; g.beginPath(); g.rect(hipX+hpW, 17.4, 3, 3.4); g.fill(); g.stroke();
-    g.strokeStyle=INK_SOFT; g.beginPath(); g.moveTo(hipX+hpW,18.6); g.lineTo(hipX+hpW+3,18.6); g.stroke();
+    // a basket is carried, not levitating: it hangs from the near hand
+    var bxh=X(P.handRx)+0.35, byh=P.handRy+0.55;
+    g.strokeStyle=INK; g.lineWidth=ink*0.9;
+    g.beginPath(); g.moveTo(bxh-0.7,byh-0.5); g.lineTo(bxh+0.7,byh-0.5); g.stroke();
+    g.fillStyle="#c9a160";
+    g.beginPath();
+    g.moveTo(bxh-1.05,byh-0.4); g.lineTo(bxh+1.05,byh-0.4);
+    g.lineTo(bxh+0.75,byh+1.7); g.lineTo(bxh-0.75,byh+1.7); g.closePath();
+    g.fill(); g.stroke();
+    g.strokeStyle="rgba(90,66,34,0.55)"; g.lineWidth=ink*0.6;
+    g.beginPath(); g.moveTo(bxh-0.9,byh+0.35); g.lineTo(bxh+0.9,byh+0.35); g.stroke();
   }
   if (P.carry){
     g.fillStyle="#7a5a34"; g.beginPath(); g.rect(X(P.handLx)-0.6, P.handRy-1.6, X(P.handRx)-X(P.handLx)+1.2, 2.4); g.fill(); g.stroke();
@@ -973,9 +1182,21 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
 
   // neck and head
   var hr=2.05*STAGE_HEAD[B.stage]*(B.fat>=4?1.06:1), hcx=X(lean*1.2+P.headTilt*0.5), hcy=P.shY-hr*1.05+P.headTilt*0.35;
-  limb(X(lean*1.05), P.shY+0.4, hcx-0.2, hcy+hr*0.7, hr*0.55, SK);
+  // the neck roots in the trapezius and widens into the jaw
+  limb(nkx, nky+0.5, hcx-0.15, hcy+hr*0.72, hr*0.52, SK);
+  g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.6;      // the shadow under the jaw
+  g.beginPath(); g.moveTo(hcx-hr*0.45, hcy+hr*0.78); g.lineTo(hcx+hr*0.5, hcy+hr*0.72); g.stroke();
   g.fillStyle=SK; g.strokeStyle=INK; g.lineWidth=ink*1.2;
-  g.beginPath(); g.ellipse(hcx, hcy, hr*0.88, hr, 0.08, 0, 6.283); g.fill(); g.stroke();
+  g.beginPath();
+  // a skull and a jaw: an egg is not a head
+  g.moveTo(hcx-hr*0.88, hcy-hr*0.05);
+  g.quadraticCurveTo(hcx-hr*0.92, hcy-hr*1.0, hcx+hr*0.05, hcy-hr*1.0);
+  g.quadraticCurveTo(hcx+hr*0.86, hcy-hr*0.92, hcx+hr*0.90, hcy+hr*0.02);
+  g.quadraticCurveTo(hcx+hr*0.86, hcy+hr*0.62, hcx+hr*0.50, hcy+hr*0.92);
+  g.quadraticCurveTo(hcx+hr*0.15, hcy+hr*1.12, hcx-hr*0.18, hcy+hr*0.95);
+  g.quadraticCurveTo(hcx-hr*0.78, hcy+hr*0.72, hcx-hr*0.88, hcy-hr*0.05);
+  g.closePath();
+  g.fill(); g.stroke();
   if (B.fat>=3){ g.beginPath(); g.arc(hcx+0.2, hcy+hr*0.6, hr*0.6, 0.3, 2.6); g.stroke(); }   // a soft jaw
   if (B.fat===0){ g.strokeStyle=INK_SOFT; g.beginPath(); g.moveTo(hcx+hr*0.25,hcy+0.1); g.lineTo(hcx+hr*0.35,hcy+hr*0.55); g.stroke(); }  // hollow cheek
   // hair: a few strokes, longer for most women, white for the old
@@ -1029,7 +1250,7 @@ function figureSprite(a, act, bucket, moving, s, dress){
   var bk = s>=1.25 ? bucket : (bucket>>2);
   var B=bodyOf(a), wk=(act===A_WITHDRAW)?(a.wk||0):0;
   var view = !moving ? 0 : (Math.abs(a.vy||0)>1.2*Math.abs(a.vx||0) ? ((a.vy>0)?1:2) : 0);
-  var key=act+"|"+B.stage+B.fat+B.strong+B.hurt+B.preg+"|"+a.sex+"|"+(dress||"")+"|"+wk+"|"+
+  var key=act+"|"+B.stage+B.fat+B.strong+B.hurt+B.preg+"|"+B.adult+"|"+a.sex+"|"+(dress||"")+"|"+wk+"|"+
           bk+"|"+(moving?1:0)+view+"|"+vk+"|"+sq;
   var sp=spriteCache[key];
   if (sp) return sp;
@@ -1044,10 +1265,12 @@ function figureSprite(a, act, bucket, moving, s, dress){
 
 var shadowCache={};
 function shadowSprite(ts){                      // one soft ellipse per zoom level
+  // A shadow is the size of the body that casts it, not the size of the
+  // ground. It used to grow with the zoom until it swallowed the figure.
   var k=Math.round(ts*2); var s=shadowCache[k]; if (s) return s;
-  var w=Math.max(3,Math.round(ts*0.9)), h=Math.max(2,Math.round(ts*0.36));
+  var w=Math.max(3,Math.round(ts*0.52)), h=Math.max(2,Math.round(ts*0.19));
   var c=mkCanvas(w,h), g=c.getContext("2d");
-  g.fillStyle="rgba(0,0,0,0.26)"; g.beginPath(); g.ellipse(w/2,h/2,w/2,h/2,0,0,6.283); g.fill();
+  g.fillStyle="rgba(0,0,0,0.20)"; g.beginPath(); g.ellipse(w/2,h/2,w/2,h/2,0,0,6.283); g.fill();
   return (shadowCache[k]={c:c,w:w,h:h});
 }
 
@@ -1064,7 +1287,7 @@ function syncActors(map, people, ox, detail){
     if (!a){ map[id]=a={x:nx,y:ny,id:id,face:face,moving:false,v:(id*2654435761>>>0)%997}; }
     a.cls=p[2]; a.sex=sex; a.act=act; a.eface=face;
     if (p.length>11){ a.age=p[7]; a.bmi=p[8]; a.sn=p[9]; a.inj=p[10]; a.wk=p[11]; }
-    var d=detail&&detail[String(id)]; a.preg=d?((d[3]&4)?1:0):0;
+    var d=detail&&detail[String(id)]; a.pid=d?d[6]:0; a.preg=d?((d[3]&4)?1:0):0;
     a.tx=nx; a.ty=ny;
   });
   Object.keys(map).forEach(function(id){ if(!seen[id]) delete map[id]; });
@@ -1178,9 +1401,9 @@ function clusters(list, pred, r){
 function pickShot(key, list, u, S){
   var sh=shots[key], cands=[];
   function add(grp, label, w){ var cx=0, cy=0; grp.forEach(function(a){cx+=a.x;cy+=a.y;});
-    cands.push({x:cx/grp.length, y:cy/grp.length, n:grp.length, label:label, w:w}); }
+    cands.push({x:cx/grp.length, y:cy/grp.length, n:grp.length, label:label, w:w, ids:grp.map(function(a){return a.id;})}); }
   clusters(list, function(a){return a.act===A_BIRTH;}, 3).forEach(function(g){ add(g, "a birth", 6); });
-  list.forEach(function(a){ if (a.act===A_BIRTH) cands.push({x:a.x,y:a.y,n:1,label:"a birth",w:6}); });
+  list.forEach(function(a){ if (a.act===A_BIRTH) cands.push({x:a.x,y:a.y,n:1,label:"a birth",w:6,ids:[a.id]}); });
   clusters(list, function(a){return a.act===A_FIGHT;}, 2).forEach(function(g){ add(g, key==="e"?"a brawl in the pen":"a fight", 4); });
   clusters(list, function(a){return a.act===A_MATE;}, 1).forEach(function(g){ add(g, "a couple", 2.5); });
   clusters(list, function(a){return a.act===A_TALK;}, 3).forEach(function(g){ if (g.length>=3) add(g, key==="e"?"a huddle by the boxes":"talk at the hearths", 3); });
@@ -1192,6 +1415,10 @@ function pickShot(key, list, u, S){
   clusters(list, function(a){return a.act===A_EAT;}, 4).forEach(function(g){ if (g.length>=6) add(g, "the crowd at the hopper", 2); });
   clusters(list, function(a){return a.act===A_WITHDRAW;}, 4).forEach(function(g){ if (g.length>=4) add(g, "the beautiful ones, apart", 2); });
   clusters(list, function(a){return a.act===A_REST;}, 3).forEach(function(g){ if (g.length>=3) add(g, "resting together", 1.5); });
+  if (!cands.length && list.length){
+    var subject=list[Math.floor(tick/900)%list.length];
+    add([subject], ACT_LABEL[subject.act]||"a life in the world", 1);
+  }
   if (!sh.wide || !cands.length){                   // the wide shot of the whole world
     sh.wide=true; sh.label=""; sh.until=tick+ (cands.length? 300 : 900);
     return;
@@ -1200,7 +1427,7 @@ function pickShot(key, list, u, S){
   var r=Math.random()*tot, pick=cands[cands.length-1];
   for (var i=0;i<cands.length;i++){ r-=cands[i].wt; if (r<=0){ pick=cands[i]; break; } }
   sh.wide=false; sh.x=pick.x; sh.y=pick.y; sh.h=Math.max(5, Math.min(9, 4+pick.n*0.6));
-  sh.label=pick.label; sh.until=tick+ 520 + Math.random()*300;
+  sh.ids=pick.ids; sh.label=pick.label; sh.until=tick+ 520 + Math.random()*300;
 }
 
 // ---- the frame: world, light, people, weather ---------------------------
@@ -1275,7 +1502,7 @@ function drawWild(g, u, sx, sy, ts){
 }
 function render(canvas, composed, map, key, u){
   if (!composed) return;
-  var S=composed.width/PX, c=cam[key];
+  var S=composed.width/PX, c=cam[key], aspect=canvas.width/canvas.height;
   updateActors(map, key==="l"?heat9:null, S);
   var list=[], minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
   Object.keys(map).forEach(function(id){
@@ -1293,18 +1520,26 @@ function render(canvas, composed, map, key, u){
     tx=who.x; ty=who.y; th=c.th;
   } else if (c.mode==="manual"){
     tx=c.tx; ty=c.ty; th=c.th;
-  } else if (!sh.wide){ tx=sh.x; ty=sh.y; th=sh.h; }
+  } else if (!sh.wide){
+    var subjects=(sh.ids||[]).map(function(id){return map[id];}).filter(Boolean);
+    if (!subjects.length && list.length) subjects=[list[0]];
+    if (subjects.length){
+      tx=subjects.reduce(function(n,a){return n+a.x;},0)/subjects.length;
+      ty=subjects.reduce(function(n,a){return n+a.y;},0)/subjects.length;
+      var spreadX=Math.max.apply(null,subjects.map(function(a){return Math.abs(a.x-tx);})) + 1.5;
+      var spreadY=Math.max.apply(null,subjects.map(function(a){return Math.abs(a.y-ty);})) + 2;
+      th=Math.max(sh.h,spreadY,spreadX/aspect);
+    } else { tx=sh.x; ty=sh.y; th=sh.h; }
+  }
   else if (list.length){
-    // The eye stays close enough to read the people. A map of coloured dots
-    // is not an observation — at this scale a figure is a face, a basket, a
-    // spear, two people facing each other.
-    tx=(minx+maxx)/2; ty=(miny+maxy)/2;
-    th=Math.max(7, Math.min(10, Math.max(maxx-minx,maxy-miny)/2+6));
+    // The establishing shot includes the living population at this aspect.
+    // Close shots supply the portraits; centering an empty crop hides people.
+    tx=(minx+maxx)/2+0.5; ty=(miny+maxy)/2;
+    th=Math.max(7, (maxy-miny)/2+3, ((maxx-minx)/2+3)/aspect);
   } else { tx=S/2; ty=S/2; th=10; }
   var ease = (c.mode==="manual"||c.mode==="walk") ? 0.3 : (sh.wide ? 0.02 : 0.035);
   c.x=lerp(c.x,tx,ease); c.y=lerp(c.y,ty,ease); c.h=lerp(c.h,th,ease);
   if (sh.shown!==sh.label){ sh.shown=sh.label; refreshHud(key); }
-  var aspect=canvas.width/canvas.height;
   var hy=c.h, hx=Math.min(S/2, c.h*aspect);
   if (hx/aspect<hy) hy=hx/aspect;
   var sx=Math.max(0,Math.min(S-2*hx,c.x-hx)), sy=Math.max(0,Math.min(S-2*hy,c.y-hy));
@@ -1315,24 +1550,50 @@ function render(canvas, composed, map, key, u){
   g.drawImage(composed, sx*PX, sy*PX, 2*hx*PX, 2*hy*PX, 0, 0, canvas.width, canvas.height);
   var ts=canvas.width/(2*hx);
 
-  // light: the season grades the whole scene; fires warm their circle
+  // light: the hour grades the whole scene, and the season grades it again
+  var tod=u.tod||"day", night=!!u.night;
+  if (tod==="dawn"){ g.fillStyle="rgba(255,168,120,0.11)"; g.fillRect(0,0,canvas.width,canvas.height); }
+  else if (tod==="dusk"){ g.fillStyle="rgba(228,118,64,0.17)"; g.fillRect(0,0,canvas.width,canvas.height); }
+  else if (night){ g.fillStyle="rgba(22,32,70,0.46)"; g.fillRect(0,0,canvas.width,canvas.height); }
   if (key==="l"){
     if (u.season==="winter"){ g.fillStyle="rgba(186,202,236,0.16)"; g.fillRect(0,0,canvas.width,canvas.height); }
     else if (u.season==="summer"){ g.fillStyle="rgba(255,214,140,0.07)"; g.fillRect(0,0,canvas.width,canvas.height); }
     else if (u.season==="autumn"){ g.fillStyle="rgba(214,140,60,0.10)"; g.fillRect(0,0,canvas.width,canvas.height); }
     else { g.fillStyle="rgba(230,255,200,0.04)"; g.fillRect(0,0,canvas.width,canvas.height); }
+    // The fire: the heart of the camp, and at night the only warm light
+    // there is. The band sits in its circle; the watch sits on its edge.
     if ((u.tech||[]).indexOf("fire")>=0){
       g.save(); g.globalCompositeOperation="lighter";
       (u.settlements||[]).forEach(function(s){
-        var fx=(s.x+2.25-sx)*ts, fy=(s.y+1.5-sy)*ts, r=ts*2.6;
+        var fx=(s.x+2.25-sx)*ts, fy=(s.y+1.5-sy)*ts, r=ts*(night?4.4:2.6);
         if (fx<-r||fy<-r||fx>canvas.width+r||fy>canvas.height+r) return;
         var gr=g.createRadialGradient(fx,fy,0,fx,fy,r);
-        var fl=0.16+Math.sin(tick*0.4)*0.03;
+        var fl=(night?0.34:0.16)+Math.sin(tick*0.4)*0.03;
         gr.addColorStop(0,"rgba(255,150,60,"+fl.toFixed(2)+")"); gr.addColorStop(1,"rgba(255,120,40,0)");
         g.fillStyle=gr; g.fillRect(fx-r,fy-r,2*r,2*r);
       });
       g.restore();
+      (u.settlements||[]).forEach(function(s){
+        var fx=(s.x+2.25-sx)*ts+ts/2, fy=(s.y+1.5-sy)*ts+ts*0.78;
+        if (fx<-ts||fy<-ts||fx>canvas.width+ts||fy>canvas.height+ts) return;
+        var fl=Math.min(1, (night?0.95:0.55)+Math.sin(tick*0.9+s.x)*0.16);
+        g.fillStyle="rgba(255,"+Math.round(120+90*fl)+",50,0.85)";
+        g.beginPath(); g.ellipse(fx,fy,ts*0.20,ts*0.30,0,0,6.283); g.fill();
+        g.fillStyle="rgba(255,232,150,0.95)";
+        g.beginPath(); g.ellipse(fx,fy+ts*0.07,ts*0.10,ts*0.16,0,0,6.283); g.fill();
+      });
     }
+  }
+  if (key==="e" && night){
+    // the resort's own lights: the pen is lit from inside, and the beach
+    // outside it is not
+    g.save(); g.globalCompositeOperation="lighter";
+    var Sw=composed.width/PX;
+    var cxw=(Sw/2-sx)*ts+ts/2, cyw=(Sw/2-sy)*ts+ts/2, rr=ts*15;
+    var gr=g.createRadialGradient(cxw,cyw,0,cxw,cyw,rr);
+    gr.addColorStop(0,"rgba(255,196,110,0.17)"); gr.addColorStop(1,"rgba(255,170,80,0)");
+    g.fillStyle=gr; g.fillRect(cxw-rr,cyw-rr,2*rr,2*rr);
+    g.restore();
   }
   spawnParticles(u, key, sx, sy, hx, hy);
   if (key==="l"){ drawWild(g, u, sx, sy, ts); drawBoats(g, u, sx, sy, ts); }
@@ -1354,10 +1615,12 @@ function render(canvas, composed, map, key, u){
     var k=Math.round(a.x)+","+Math.round(a.y);
     (cell[k]||(cell[k]=[])).push(a);
   }
-  Object.keys(cell).forEach(function(k){ var pr=cell[k]; if (pr.length<2) return;
+  Object.keys(cell).forEach(function(k){
+    var pr=cell[k].filter(function(a){return a.act!==A_MATE;});
+    if (pr.length<2) return;
     pr.sort(function(p,q){return p.id-q.id;});
-    if (pr[0].act===A_MATE){ pr[0].face=pr[1].face=1; pr[0].nudge=0; pr[1].nudge=0; pr[1].lift=0.3; return; }
-    pr[0].face=1; pr[0].nudge=-0.3; pr[1].face=-1; pr[1].nudge=0.3; });
+    pr[0].face=1; pr[0].nudge=-0.3; pr[1].face=-1; pr[1].nudge=0.3;
+  });
   list.sort(function(a,b){ return a.y-b.y; });
   var sh=shadowSprite(ts);
   for (var i=0;i<list.length;i++){
@@ -1440,7 +1703,9 @@ function paintOverlay(key){
     var lbl=(a.moving?"walking":(ACT_LABEL[a.act]||"idle"));
     var wpx=g.measureText(lbl).width;
     var top=py-ts*1.55-13*dpr;
-    var bx=px-wpx/2-3*dpr, by=top, bw=wpx+6*dpr, bh=12*dpr;
+    var bw=wpx+6*dpr, bh=12*dpr;
+    var bx=Math.max(0,Math.min(ov.width-bw,px-wpx/2-3*dpr)), by=top;
+    if (bw>ov.width || by<0 || by+bh>ov.height) continue;
     var clash=false;
     for (var j=0;j<placed.length;j++){
       var q=placed[j];
@@ -1453,7 +1718,7 @@ function paintOverlay(key){
     g.fillStyle=(a.act===A_FIGHT)?"#ff9a9a":
                  (a.act===A_BIRTH)?"#ffc2e2":
                  (a.act===A_WITHDRAW)?"#9ae8e0":"#d8d8e8";
-    g.fillText(lbl, Math.round(px), Math.round(by+9*dpr));
+    g.fillText(lbl, Math.round(bx+bw/2), Math.round(by+9*dpr));
   }
   // walking: everyone within reach is introduced — name, what they are
   // doing, and what their body says
@@ -1473,12 +1738,21 @@ function paintOverlay(key){
       var px=(a.x-sx)*ts+ts/2, feet=(a.y-sy)*ts+ts*0.95;
       var top=feet-ts*1.45*STAGE_H[bodyOf(a).stage]-2*dpr;
       var l1=d[0]+", "+Math.floor(d[1]), l2=(a.moving?"walking":(ACT_LABEL[a.act]||"idle"))+(d[8]?" · "+d[8]:"");
-      var wpx=Math.max(g.measureText(l1).width,g.measureText(l2).width)+8*dpr, hpx=24*dpr;
+      var lines=[l1], line="", maxWidth=ov.width-8*dpr;
+      l2.split(" ").forEach(function(word){
+        var next=line?line+" "+word:word;
+        if (line && g.measureText(next).width>maxWidth){ lines.push(line); line=word; }
+        else line=next;
+      });
+      if (line) lines.push(line);
+      var wpx=Math.max.apply(null,lines.map(function(text){return g.measureText(text).width;}))+8*dpr;
+      var hpx=lines.length*12*dpr;
+      if (wpx>ov.width) return;
       // over the head if there is room, else under the feet, else not at all:
       // a label that drifts away from its person introduces no one
-      var bx=px-wpx/2, spots=[top-hpx, feet+4*dpr], by=null;
+      var bx=Math.max(0,Math.min(ov.width-wpx,px-wpx/2)), spots=[top-hpx, feet+4*dpr], by=null;
       for (var t=0;t<spots.length&&by===null;t++){
-        var ok=true;
+        var ok=spots[t]>=0 && spots[t]+hpx<=ov.height;
         for (var j=0;j<placedW.length;j++){ var q=placedW[j];
           if (bx<q.x+q.w && bx+wpx>q.x && spots[t]<q.y+q.h && spots[t]+hpx>q.y){ ok=false; break; } }
         if (ok) by=spots[t];
@@ -1486,8 +1760,11 @@ function paintOverlay(key){
       if (by===null) return;
       placedW.push({x:bx,y:by,w:wpx,h:hpx});
       g.fillStyle="rgba(4,4,10,0.72)"; g.fillRect(Math.round(bx),Math.round(by),Math.round(wpx),Math.round(hpx));
-      g.fillStyle="#f8d848"; g.textAlign="left"; g.fillText(l1, Math.round(bx+4*dpr), Math.round(by+10*dpr));
-      g.fillStyle="#d8d8e8"; g.fillText(l2, Math.round(bx+4*dpr), Math.round(by+21*dpr));
+      g.textAlign="left";
+      lines.forEach(function(text,i){
+        g.fillStyle=i===0?"#f8d848":"#d8d8e8";
+        g.fillText(text, Math.round(bx+4*dpr), Math.round(by+(10+i*12)*dpr));
+      });
     });
     g.textAlign="center";
   }
@@ -1614,6 +1891,8 @@ document.getElementById("walkbtn").addEventListener("click", function(){
   if (cam[activeWorld].mode==="walk") leaveWalk(); else enterWalk(activeWorld);
 });
 document.addEventListener("keydown", function(e){
+  if (document.querySelector('#research:not([hidden]), #veil:not([hidden]), #fail:not([hidden])')) return;
+  if (e.target.closest('button') && (e.key===" " || e.key==="Enter")) return;
   if (e.key==="Escape"||e.key===" "){
     leaveWalk(); held={};
     if (e.key===" ") e.preventDefault();
@@ -1726,8 +2005,10 @@ function hudText(u, kind){
   var who = w ? "<span class='who'> · "+w.name.toUpperCase()+", "+w.act.toUpperCase()+"</span>" : "";
   var key = (kind==="e" && v && v.ts>5) ? "  <span class='key' style='border-color:#f8d848'></span>held "+
             "<span class='key' style='border-color:#2f5a4c'></span>vacant" : "";
-  return "<div class='l1'><b>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</b>  Y"+u.year+
-         " · POP "+u.pop+" · "+l2+hudExtra+sc+cap+who+"</div>"+
+  var clock = u.tod ? " · "+u.tod.toUpperCase() : "";
+  return "<div class='l1'><span class='identity'><b>"+(kind==="e"?"EDEN · U6":"LAGOON · U9")+"</b></span>"+
+         "<span class='clock'>Y"+u.year+clock+" · POP "+u.pop+"</span>"+
+         l2+hudExtra+sc+cap+who+"</div>"+
          doingHTML(u.people)+key+"\n"+statLine(u, kind);
 }
 function refreshHud(kind){
@@ -1736,6 +2017,7 @@ function refreshHud(kind){
   if (hudCache[kind]!==h){
     hudCache[kind]=h;
     document.getElementById(kind==="e"?"hud6":"hud9").innerHTML=h;
+    alignWorldHeads();
   }
 }
 // the lower third: who you are watching
@@ -1845,6 +2127,10 @@ document.getElementById("filters").addEventListener("click", function(e){
   var b=e.target; if(!b||b.tagName!=="BUTTON") return;
   if (b.dataset.u!==undefined){
     conFilter.u=b.dataset.u;
+    if (conFilter.u==="all"){
+      conFilter.k="all";
+      this.querySelectorAll("button[data-k]").forEach(function(x){x.className="";});
+    }
     Array.prototype.forEach.call(this.querySelectorAll("button[data-u]"), function(x){
       x.className=(x.dataset.u===conFilter.u)?"on":"";
     });
@@ -1867,6 +2153,12 @@ function reportError(where, ev){
 window.addEventListener("error", function(ev){
   reportError("page", (ev && ev.message) ? ev : {message:String(ev)});
 });
+function alignWorldHeads(){
+  var heads=Array.from(document.querySelectorAll('.worldhead'));
+  heads.forEach(function(el){ el.style.minHeight=""; });
+  var height=Math.max.apply(null, heads.map(function(el){return el.offsetHeight;}));
+  heads.forEach(function(el){ el.style.minHeight=height+"px"; });
+}
 function fit(){
   var dpr=Math.min(window.devicePixelRatio||1, 2.5);
   ["c6","c9"].forEach(function(id){
@@ -1877,7 +2169,12 @@ function fit(){
   });
   spriteCache={}; spriteCount=0;
 }
-window.addEventListener("resize", fit);
+window.addEventListener("resize", function(){ alignWorldHeads(); fit(); });
+// HUD wrapping and record expansion change the canvas aspect as well.
+if (window.ResizeObserver){
+  var sceneObserver=new ResizeObserver(fit);
+  document.querySelectorAll('.scene').forEach(function(el){sceneObserver.observe(el);});
+}
 function loadWorld(){
   if (SNAP) return Promise.resolve();
   return fetchJSON("/world").then(function(w){ worldInfo=w; lagoonIter=w.lagoon_iter; });
@@ -1935,9 +2232,17 @@ function freshness(){
 function showFail(msg){
   document.getElementById("failtitle").textContent=SNAP?"THE MIRROR IS DARK":"THE WORLDS ARE DARK";
   document.getElementById("failmsg").textContent=msg;
-  document.getElementById("fail").hidden=false;
+  var fail=document.getElementById("fail");
+  if (fail.hidden){ fail.hidden=false; document.getElementById("retry").focus(); }
 }
-function hideFail(){ document.getElementById("fail").hidden=true; }
+function hideFail(){
+  var fail=document.getElementById("fail"), wasOpen=!fail.hidden;
+  fail.hidden=true;
+  if (wasOpen){
+    var next=document.querySelector('#research:not([hidden]) button, #veil:not([hidden]) button');
+    (next||document.getElementById("veilbtn")).focus();
+  }
+}
 function poll(){
   if (polling) return;
   polling=true;
@@ -1962,6 +2267,7 @@ function poll(){
     freshness();
     var e=st.u.eden,l=st.u.lagoon;
     sparkline("tre", e.census, "#a8c0f0"); sparkline("trl", l.census, "#a0e898");
+    if (!document.getElementById("research").hidden) renderResearch();
   }).catch(function(err){
     snapBad=true;
     var why=(err&&err.message)?err.message:"the snapshot could not be read";
@@ -2006,12 +2312,135 @@ function markIntro(){
 document.getElementById("veilok").onclick=function(){
   document.getElementById("veil").hidden=true;
   markIntro();
+  document.getElementById("veilbtn").focus();
 };
 document.getElementById("veilbtn").onclick=function(){
   document.getElementById("veil").hidden=false;
+  document.getElementById("veilok").focus();
 };
 document.getElementById("retry").onclick=function(){ poll(); };
-if (!seenIntro()) document.getElementById("veil").hidden=false;
+
+// ---- the research panel: the claims the shelf makes, and this world's answer
+function escapeHTML(v){
+  return String(v == null ? "" : v).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"}[c];
+  });
+}
+function resThreshold(r){
+  if (r.test === "between") return "needs " + r.threshold[0] + "–" + r.threshold[1];
+  var op = {gte:"needs ≥", lte:"needs ≤", eq:"needs ="}[r.test] || "needs";
+  return op + " " + r.threshold;
+}
+function resValue(r){
+  var v = r.value;
+  if (v === null || v === undefined) return "not yet";
+  if (typeof v === "number"){
+    v = Math.round(v*1000)/1000;
+    return (v === Math.floor(v)) ? String(v) : v.toFixed(3);
+  }
+  return String(v);
+}
+function resRow(r){
+  var mark = {supported:["yes","SUPPORTED"], contradicted:["no","CONTRADICTED"]}[r.verdict] || ["und","UNDECIDED"];
+  var wc = r.world === "EDEN" ? "w6" : "w9";
+  var counts = [];
+  if (r.tested) counts.push("tested " + r.tested + "×");
+  if (r.supported) counts.push("supported " + r.supported);
+  if (r.contradicted) counts.push("contradicted " + r.contradicted);
+  if (!counts.length) counts.push("not yet tested");
+  return '<div class="res ' + (mark[0] === "no" ? "no" : "") + '">'
+    + '<div class="hd"><span class="mark ' + mark[0] + '">' + mark[1] + '</span>'
+    + '<span class="id">' + escapeHTML(r.id) + '</span>'
+    + '<span class="' + wc + '">' + escapeHTML(r.world) + '</span>'
+    + '<span class="num">' + escapeHTML(resValue(r)) + ' · ' + escapeHTML(resThreshold(r)) + '</span></div>'
+    + '<div class="claim">' + escapeHTML(r.statement) + '</div>'
+    + '<div class="src">' + escapeHTML(r.source) + '</div>'
+    + '<div class="cnt">Saved across iterations / versions: ' + escapeHTML(counts.join(' · ')) + '</div>'
+    + '</div>';
+}
+function renderStory(rep){
+  var el = document.getElementById("resstory");
+  var hs = rep.history || [];
+  if (!hs.length){ el.innerHTML = ""; return; }
+  var byId = {};
+  (rep.hypotheses||[]).forEach(function(h){ byId[h.id]=h; });
+  el.innerHTML = "<h3>THE LONG STORY · what the books say happened</h3>" + hs.map(function(e){
+    var links = (e.hypos||[]).map(function(id){
+      var h = byId[id];
+      if (!h) return "";
+      var mark = {supported:"yes", contradicted:"no"}[h.verdict] || "";
+      return (mark ? '<span class="mark ' + mark + '">·</span> ' : "") + escapeHTML(id);
+    }).join(" ");
+    return '<div class="story"><span class="st">' + escapeHTML(e.t) + '</span>'
+      + '<span class="wh">' + escapeHTML(e.when) + '</span>'
+      + '<div class="cl">' + escapeHTML(e.claim) + '</div>'
+      + '<div class="sr">' + escapeHTML(e.source) + (links ? " → " + links : "") + '</div></div>';
+  }).join("");
+}
+function renderResearch(){
+  var el = document.getElementById("reslist");
+  var rep = state && state.research;
+  if (!rep || !rep.hypotheses || !rep.hypotheses.length){
+    document.getElementById("resstory").textContent="The books are unavailable in this snapshot.";
+    el.innerHTML = '<div class="dim" style="padding:12px 0">'
+      + 'No hypotheses yet. The engine tests them as the world runs; '
+      + 'this build predates the research layer.</div>';
+    document.getElementById("ressum").textContent = "";
+    return;
+  }
+  // the interesting rows first: the ones the world argues with
+  var rank = {contradicted:0, undecided:1, supported:2};
+  var hs = rep.hypotheses.slice().sort(function(a,b){
+    var d = (rank[a.verdict] === undefined ? 3 : rank[a.verdict]) - (rank[b.verdict] === undefined ? 3 : rank[b.verdict]);
+    if (d) return d;
+    if (a.world !== b.world) return a.world === "EDEN" ? -1 : 1;
+    return a.id < b.id ? -1 : 1;
+  });
+  renderStory(rep);
+  el.innerHTML = '<p class="resnote">Tests of this simulation against its stated hypotheses. Thresholds are model choices; these results do not validate claims about people.</p>' + hs.map(resRow).join("");
+  var c = rep.counts || {};
+  document.getElementById("ressum").textContent =
+    (c.supported||0) + " supported · " + (c.contradicted||0) + " contradicted · "
+    + (c.undecided||0) + " undecided · engine " + (rep.engine || "?");
+}
+function researchView(books){
+  document.getElementById("resstory").hidden=!books;
+  document.getElementById("reslist").hidden=books;
+  document.getElementById("resbooks").setAttribute("aria-pressed", String(books));
+  document.getElementById("restests").setAttribute("aria-pressed", String(!books));
+  document.getElementById("resbody").scrollTop=0;
+}
+document.getElementById("restests").onclick=function(){ researchView(false); };
+document.getElementById("resbooks").onclick=function(){ researchView(true); };
+function openResearch(){
+  held={};
+  document.getElementById("research").hidden=false;
+  document.getElementById("resbtn").classList.add("on");
+  renderResearch();
+  document.getElementById("resclose").focus();
+}
+function closeResearch(){
+  document.getElementById("research").hidden=true;
+  document.getElementById("resbtn").classList.remove("on");
+  document.getElementById("resbtn").focus();
+}
+document.getElementById("resbtn").onclick=function(){
+  if (document.getElementById("research").hidden) openResearch(); else closeResearch();
+};
+document.getElementById("resclose").onclick=closeResearch;
+document.addEventListener("keydown", function(ev){
+  var panel=["fail","research","veil"].map(function(id){return document.getElementById(id);})
+    .find(function(el){return !el.hidden;});
+  if (panel && ev.key==="Tab"){
+    var controls=Array.from(panel.querySelectorAll('button, a[href], [tabindex="0"]'));
+    var first=controls[0], last=controls[controls.length-1];
+    if (ev.shiftKey && document.activeElement===first){ ev.preventDefault(); last.focus(); }
+    else if (!ev.shiftKey && document.activeElement===last){ ev.preventDefault(); first.focus(); }
+  }
+  if (ev.key === "Escape" && panel && panel.id==="research") closeResearch();
+  if (ev.key === "Escape" && panel && panel.id==="veil") document.getElementById("veilok").click();
+});
+if (!seenIntro()){ document.getElementById("veil").hidden=false; document.getElementById("veilok").focus(); }
 loadWorld().then(function(){
   poll(); setInterval(poll,2000);
   frame(); loopTimer=setInterval(frame, frameMs);

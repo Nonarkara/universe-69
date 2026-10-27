@@ -1,0 +1,35 @@
+[
+  {
+    "width": 390,
+    "height": 844,
+    "geometry": {
+      "footer": 62,
+      "lines": 24,
+      "content": 18,
+      "text": "Nothing recorded under this filter."
+    },
+    "passed": true
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "geometry": {
+      "footer": 60,
+      "lines": 24,
+      "content": 18,
+      "text": "Nothing recorded under this filter."
+    },
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "geometry": {
+      "footer": 60,
+      "lines": 24,
+      "content": 18,
+      "text": "Nothing recorded under this filter."
+    },
+    "passed": true
+  }
+]

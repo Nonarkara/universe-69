@@ -59,7 +59,7 @@ def run_pen(label, days, cap, stagnation, boxes, box_cap, seed=69,
     last_phase = None
     t0 = time.time()
 
-    for _ in range(days):
+    for _ in range(days * engine.PARTS_PER_DAY):
         engine.tick_world(world, [])
         n = len(u["people"])
         if n > peak:

@@ -1,8 +1,7 @@
 """UNIVERSE 69 — runtime.
 
-- Ticks both universes, anchored to the wall clock: day N always corresponds to
-  epoch + N * sec_per_day. If the laptop sleeps or the process dies, the engine
-  fast-forwards the missed days on the next start (Tamagotchi semantics).
+- Ticks both universes by quarter-days, anchored to a persistent wall clock.
+  If the laptop sleeps or the process dies, the engine catches up on restart.
 - Serves the pixel viewer + JSON state on http://localhost:6969
 - Appends notable events to data/events.ndjson
 - Optionally mirrors a snapshot to the web (data/web.json: {"url", "token"}).
@@ -23,6 +22,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import engine
+import research
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # The live run keeps its state in ./data. A development instance can be pointed
@@ -33,6 +33,11 @@ STATE_PATH = os.path.join(DATA, "state.json")
 EVENTS_PATH = os.path.join(DATA, "events.ndjson")
 WEBCFG_PATH = os.path.join(DATA, "web.json")
 PORT = int(os.environ.get("UNIVERSE69_PORT", "6969"))
+# How long one part of a day takes in real seconds. A day is four parts, so
+# this sets how fast the year goes by. The default is deliberately slower
+# than the old one-day-per-two-seconds: a day and a night have to be
+# watchable, and a cycle that passes in two seconds is not a cycle.
+SEC_PER_PART = float(os.environ.get("UNIVERSE69_SEC_PER_PART", engine.SEC_PER_PART))
 EVENTS_IN_VIEW = 500          # how much of the record the console is given
 
 os.makedirs(DATA, exist_ok=True)
@@ -61,6 +66,8 @@ if os.path.exists(STATE_PATH):
 else:
     world = engine.genesis(seed=69)
     print("[universe69] GENESIS — two universes created")
+
+engine.set_clock_pace(world, SEC_PER_PART)
 
 # preload the tail of the event log so the ticker survives restarts.
 # A hard kill replays the days since the last save; those lines are already
@@ -96,8 +103,12 @@ def log_events(evts):
             f.write(json.dumps(rec) + "\n")
 
 
-def target_day():
-    return int((time.time() - world["epoch"]) / world["sec_per_day"])
+def target_part():
+    """How many parts of the day the wall clock says we should be at.
+
+    The world advances one part per tick, so this is the clock the engine
+    is caught up to, not the calendar day."""
+    return engine.target_parts(world)
 
 
 def dump_postmortems():
@@ -117,21 +128,28 @@ def dump_postmortems():
 
 def engine_loop():
     last_save = time.time()
+    last_test = world.get("research", {}).get("last_day", -research.CADENCE) // research.CADENCE
     while True:
-        behind = target_day() - world["eden"]["day"]
-        status["behind_days"] = max(0, behind)
-        status["catching_up"] = behind > 60
+        behind = target_part() - world["eden"].get("parts", 0)
+        status["behind_days"] = max(0, behind) // engine.PARTS_PER_DAY
+        status["catching_up"] = behind > 60 * engine.PARTS_PER_DAY
         if behind > 0:
             batch = min(behind, 8000)
             evts = []
             with lock:
                 for _ in range(batch):
                     engine.tick_world(world, evts)
+                    # Record at the same calendar boundaries during catch-up
+                    # and normal operation, including across process restarts.
+                    day = world["eden"]["day"]
+                    if day // research.CADENCE > last_test:
+                        last_test = day // research.CADENCE
+                        research.record(world, research.evaluate(world))
             log_events(evts)
             if any(e[2] in ("extinction", "lesson") for e in evts):
                 dump_postmortems()
             if status["catching_up"]:
-                print(f"[universe69] fast-forwarding, {behind - batch} days to go")
+                print(f"[universe69] fast-forwarding, {behind - batch} parts to go")
         if time.time() - last_save > 60:
             with lock:
                 engine.save_state(world, STATE_PATH)
@@ -154,10 +172,7 @@ def uploader_loop():
                 with open(WEBCFG_PATH) as f:
                     cfg = json.load(f)
                 interval = int(cfg.get("interval", 600))
-                with lock:
-                    snap = engine.summarize(world)
-                snap["events"] = list(recent_events)[-EVENTS_IN_VIEW:]
-                snap["world"] = world_payload()
+                snap = snapshot(with_world=True)
                 body = json.dumps(snap, separators=(",", ":"))
                 if cfg.get("mode") == "gist":
                     gh = next((g for g in ("/usr/local/bin/gh",
@@ -192,6 +207,23 @@ def world_payload():
             "lagoon_iter": lag["iteration"], "terrain": terrain}
 
 
+def snapshot(with_world=False):
+    """The whole payload the viewer and the web mirror read.
+
+    One place, so the local page and the published page can never disagree
+    about what the record says. The terrain map is big, so it is only
+    carried for the mirror, which has no other way to fetch it.
+    """
+    with lock:
+        snap = engine.summarize(world)
+        snap["events"] = list(recent_events)[-EVENTS_IN_VIEW:]
+        snap["status"] = dict(status)
+        snap["research"] = research.report(world)
+        if with_world:
+            snap["world"] = world_payload()
+    return snap
+
+
 class Handler(BaseHTTPRequestHandler):
     def _send(self, code, body, ctype="application/json"):
         data = body if isinstance(body, bytes) else body.encode()
@@ -210,14 +242,14 @@ class Handler(BaseHTTPRequestHandler):
         elif path == "/config.js":
             self._send(200, "// local mode\n", "text/javascript")
         elif path == "/state":
-            with lock:
-                snap = engine.summarize(world)
-            snap["events"] = list(recent_events)[-EVENTS_IN_VIEW:]
-            snap["status"] = status
-            self._send(200, json.dumps(snap, separators=(",", ":")))
+            self._send(200, json.dumps(snapshot(), separators=(",", ":")))
         elif path == "/world":
             with lock:
                 payload = world_payload()
+            self._send(200, json.dumps(payload, separators=(",", ":")))
+        elif path == "/research":
+            with lock:
+                payload = research.report(world)
             self._send(200, json.dumps(payload, separators=(",", ":")))
         else:
             self._send(404, '{"err":"not found"}')

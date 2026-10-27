@@ -1,16 +1,16 @@
 """Universe 69 — the lab bench.
 
-Runs a whole arc in seconds instead of waiting on the 2016 MacBook, and prints
+Runs a bounded arc locally instead of waiting on the 2016 MacBook, and prints
 the one thing that matters: did the experiment actually produce its result?
 
     python3 tools/lab.py --days 60000
     python3 tools/lab.py --days 120000 --every 720 --json arc.json
     python3 tools/lab.py --from data/state.json --days 5000
 
-Why this exists: the engine ticks roughly 1,000 sim-days per second, but the
-live run advances one sim-day every two real seconds. Tuning the model against
-the live run means a one-week feedback loop. This harness turns that into a
-one-second one, and it is the tool to reach for before touching a live run.
+Why this exists: a bounded local arc is faster than tuning against the live
+run, which advances one sim-day every twelve real seconds. Arc runtime depends
+on population and hardware; a century can take minutes. Use this harness
+before touching the instrument.
 """
 
 import argparse
@@ -24,6 +24,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "sim"))
 
 import engine  # noqa: E402
+import research  # noqa: E402
 
 
 # ------------------------------------------------------------------ sampling
@@ -81,8 +82,14 @@ def verdict(u, key):
         out["phase"] = u["phase"]
         out["extinct_day"] = u["extinct_day"]
         out["postmortems"] = len(u["postmortems"])
-        out["completed"] = u["extinct_day"] is not None
-        if not out["completed"]:
+        out["completed"] = bool(u["postmortems"]) or u["extinct_day"] is not None
+        if u["extinct_day"] is None and u["postmortems"]:
+            last = u["postmortems"][-1]
+            out["verdict"] = (
+                f"Pen emptied on day {last['day']} in iteration {last['iteration']}; "
+                f"reseeded as iteration {u['iteration']} with {len(u['people'])} people. "
+                f"{len(u['postmortems'])} postmortem(s) written.")
+        elif not out["completed"]:
             out["verdict"] = (
                 f"NEVER EMPTIED — still in phase '{u['phase']}' with "
                 f"{len(u['people'])} people after {out['year']} years. "
@@ -144,16 +151,19 @@ def main():
     milestones = []
     t0 = time.time()
     step = max(1, args.every)
-    nxt = step
+    nxt = (world["eden"]["day"] // step + 1) * step
     events = []
 
-    for d in range(args.days):
+    for d in range(args.days * engine.PARTS_PER_DAY):
         engine.tick_world(world, events)
         day = world["eden"]["day"]
         if day >= nxt:
             for key in ("eden", "lagoon"):
                 arc[key].append(sample(world[key], day))
             nxt += step
+
+    # the literature's hypotheses, tested against the arc just run
+    research.record(world, research.evaluate(world))
 
     for key in ("eden", "lagoon"):
         arc[key].append(sample(world[key], world[key]["day"]))
@@ -203,11 +213,25 @@ def main():
         for m in milestones:
             print(f"  Y{m['year']:<4} {m['u']:<7} [{m['t']}] {m['msg'][:96]}")
 
+    # ---- the hypotheses the literature makes, and what this arc said
+    rep = research.report(world)
+    print("\n--- hypotheses ---")
+    for r in rep["hypotheses"]:
+        mark = {research.SUPPORTED: "yes", research.CONTRADICTED: "NO",
+                research.UNDECIDED: ".."}[r["verdict"]]
+        val = r["value"]
+        val = ("%.3f" % val) if isinstance(val, float) else str(val)
+        print(f"  {mark:>3} {r['id']:<26} {val:>10}  {r['statement'][:58]}")
+    c = rep["counts"]
+    print(f"  {c['supported']} supported, {c['contradicted']} contradicted, "
+          f"{c['undecided']} undecided")
+
     if args.json_out:
         payload = {
-            "seed": args.seed,
+            "seed": world["seed"],
             "days": args.days,
-            "engine": "current",
+            "engine": engine.ENGINE_VERSION,
+            "research": rep,
             "arc": arc,
             "milestones": milestones,
             "verdicts": verdicts,

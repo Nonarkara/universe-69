@@ -48,12 +48,12 @@ This repo is the workbench; the 2016 Mac is the instrument.
 
 ## Working on the model
 
-The engine ticks roughly 1,000 sim-days per second, but the live run advances
-one sim-day every two real seconds. Do not tune the model against the live
-run — use the lab bench:
+The live run advances through dawn, day, dusk and night: one part every
+three real seconds, twelve seconds per simulated day. Test changes with the
+lab bench; century runs can take minutes, depending on population:
 
 ```sh
-python3 tools/lab.py --days 60000          # a whole arc, in about a minute
+python3 tools/lab.py --days 60000          # a whole arc
 python3 tools/lab.py --days 60000 --quiet  # just the verdict
 python3 tools/lab.py --days 60000 --json arc.json
 ```

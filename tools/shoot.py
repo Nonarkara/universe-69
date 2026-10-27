@@ -1,175 +1,255 @@
-"""Capture the viewer at the three widths the design law requires.
+"""Capture and verify the viewer at the three widths required by MSH.
 
-    python3 tools/shoot.py [url] [--out DIR] [--tag NAME]
+    python3 tools/shoot.py [url] --out DIR --tag audit --interact
 
-Reports what the page actually did — console errors, whether the canvases
-contain pixels, and whether the document was considered hidden — alongside
-the screenshots. A screenshot of a black canvas is not evidence of a render.
+Requires Playwright and Chrome on the workbench, never on the instrument.
+Screenshots and measured geometry are evidence for human visual review, not a
+claim that automated checks can judge the composition.
 """
 import argparse
+import json
 import os
-import sys
-import time
+from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
 WIDTHS = [(390, 844), (1024, 768), (1440, 900)]
+DEFAULT_OUT = "/Volumes/Data/agent-scratch/universe69-shots"
+
+
+def geometry(page):
+    return page.evaluate("""() => {
+      function rect(sel){
+        var e=document.querySelector(sel), r=e.getBoundingClientRect();
+        return {x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom,
+                scrollWidth:e.scrollWidth,clientWidth:e.clientWidth};
+      }
+      var top=rect('#masthead'), bottom=rect('#god');
+      var scenes=['#w6 .scene','#w9 .scene'].map(rect);
+      return {hidden:document.hidden, width:innerWidth,height:innerHeight,
+        documentWidth:document.documentElement.scrollWidth,
+        documentHeight:document.documentElement.scrollHeight,
+        top:top,bottom:bottom,scenes:scenes,
+        worldHeads:['#w6 .worldhead','#w9 .worldhead'].map(rect),
+        chrome:{top:top.height,bottom:bottom.height,
+          topPercent:100*top.height/innerHeight,
+          bottomPercent:100*bottom.height/innerHeight,
+          combinedTop:Math.max(scenes[0].y,scenes[1].y),
+          combinedTopPercent:100*Math.max(scenes[0].y,scenes[1].y)/innerHeight},
+        canvases:['c6','c9'].map(function(id){
+          var cv=document.getElementById(id), d=cv.getContext('2d')
+            .getImageData(0,0,cv.width,cv.height).data, lit=0,n=0;
+          for(var i=0;i<d.length;i+=4*97){
+            if(d[i+3]>0 && (d[i]>8||d[i+1]>8||d[i+2]>8))lit++;
+            n++;
+          }
+          return {id:id,width:cv.width,height:cv.height,lit:lit,samples:n};
+        })};
+    }""")
+
+
+def capture(page, out, stem, state):
+    path = out / f"{stem}-{state}.png"
+    page.screenshot(path=str(path))
+    return path.name
+
+
+def drive(page, out, stem, check):
+    """Exercise real controls; state reads verify their observed effect."""
+    page.locator('#resbtn').click()
+    check(page.locator('#research').is_visible(), 'Research opens')
+    check(page.evaluate("document.activeElement.id==='resclose'"),
+          'Research receives keyboard focus')
+    check(page.evaluate("document.getElementById('resbody').scrollWidth <= document.getElementById('resbody').clientWidth"),
+          'Research tests have no horizontal overflow')
+    capture(page, out, stem, 'research-tests')
+    page.locator('#resbooks').click()
+    check(page.locator('#resstory').is_visible(), 'Books view opens')
+    check(page.evaluate("document.getElementById('resbody').scrollWidth <= document.getElementById('resbody').clientWidth"),
+          'Books have no horizontal overflow')
+    capture(page, out, stem, 'research-books')
+    page.locator('#resclose').focus()
+    page.keyboard.press('Shift+Tab')
+    check(page.evaluate("document.getElementById('research').contains(document.activeElement)"),
+          'Research reverse Tab remains inside dialog')
+    page.evaluate("Array.from(document.querySelectorAll('#research button, #research a[href], #research [tabindex=\"0\"]')).at(-1).focus()")
+    page.keyboard.press('Tab')
+    check(page.evaluate("document.activeElement.id==='resclose'"),
+          'Research Tab wraps inside dialog')
+    before = page.evaluate('[cam.e.mode,cam.l.mode]')
+    page.keyboard.press('w')
+    check(page.evaluate('[cam.e.mode,cam.l.mode]') == before,
+          'Reading dialog does not enter walk mode')
+    page.keyboard.press('Escape')
+    check(page.locator('#research').is_hidden(), 'Escape closes Research')
+    check(page.evaluate("document.activeElement.id==='resbtn'"),
+          'Research restores trigger focus')
+    page.locator('#resbtn').click()
+    page.locator('#resclose').click()
+    check(page.locator('#research').is_hidden(), 'CLOSE button closes Research')
+
+    page.locator('#more').click()
+    check(page.locator('#god').get_attribute('class') == 'tall', 'Record expands')
+    capture(page, out, stem, 'record-expanded')
+    page.locator('#filters [data-u="EDEN"]').click()
+    check(page.evaluate("conFilter.u==='EDEN'"), 'World filter changes')
+    page.locator('#filters [data-k="life"]').click()
+    check(page.evaluate("conFilter.k==='life'"), 'Life filter changes')
+    page.locator('#filters [data-u="all"]').click()
+    check(page.evaluate("conFilter.u==='all' && conFilter.k==='all'"),
+          'ALL restores every world and event kind')
+    page.locator('#more').click()
+
+    # Use the actor's current rendered position, rather than fixed pixels.
+    selected = page.evaluate("""() => {
+      var cv=document.getElementById('c6'), r=cv.getBoundingClientRect(), v=view.e;
+      var dpr=cv.width/cv.clientWidth;
+      for(var a of Object.values(actors6)){
+        var x=(a.x-v.sx)*v.ts/dpr, y=(a.y-0.5-v.sy)*v.ts/dpr;
+        if(x>8 && y>8 && x<r.width-8 && y<r.height-8){
+          // Dispatch in this same frame: the live eye and walkers keep moving.
+          var init={bubbles:true,clientX:r.x+x,clientY:r.y+y,pointerId:1};
+          cv.dispatchEvent(new PointerEvent('pointerdown',init));
+          cv.dispatchEvent(new PointerEvent('pointerup',init));
+          return cam.e.mode==='follow' && sel.e>0;
+        }
+      }
+      return false;
+    }""")
+    check(selected, 'Selecting a visible person through pointer handlers follows them')
+    if selected:
+        capture(page, out, stem, 'follow')
+    cv = page.locator('#c6').bounding_box()
+    page.mouse.move(cv['x'] + cv['width']/2, cv['y'] + cv['height']/2)
+    before = page.evaluate('cam.e.h')
+    page.mouse.wheel(0, -400)
+    page.wait_for_timeout(200)
+    check(page.evaluate("cam.e.mode==='manual'") and page.evaluate("cam.e.h") < before,
+          'Wheel zoom changes camera scale')
+    page.keyboard.press('Escape')
+    check(page.evaluate("cam.e.mode==='auto'"), 'Escape restores documentary eye')
+    page.locator('#walkbtn').click()
+    check(page.evaluate("cam[activeWorld].mode==='walk'"), 'Walk button enters world')
+    page.keyboard.press('Escape')
+    check(page.evaluate("cam.e.mode==='auto' && cam.l.mode==='auto'"),
+          'Escape exits walk mode')
+    page.locator('#veilbtn').click()
+    check(page.locator('#veil').is_visible(), 'Help opens')
+    capture(page, out, stem, 'help')
+    page.locator('#veilok').click()
+    check(page.locator('#veil').is_hidden(), 'WATCH closes Help')
+
+    # A valid response with missing worlds exercises the actual failure path.
+    def bad_state(route):
+        route.fulfill(status=200, content_type='application/json', body='{}')
+
+    page.route('**/state', bad_state)
+    page.reload(wait_until='load')
+    page.wait_for_function("!document.getElementById('fail').hidden")
+    check(page.locator('#retry').is_visible(), 'Failed snapshot offers RETRY')
+    capture(page, out, stem, 'error')
+    page.unroute('**/state', bad_state)
+    page.locator('#retry').click()
+    page.wait_for_function("document.getElementById('fail').hidden")
+    check(page.locator('#fail').is_hidden(), 'RETRY recovers from snapshot failure')
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("url", nargs="?", default="http://127.0.0.1:6971/")
-    ap.add_argument("--out", default="/tmp/u69shots")
-    ap.add_argument("--tag", default="viewer")
-    ap.add_argument("--wait", type=float, default=6.0)
-    ap.add_argument("--interact", action="store_true",
-                    help="also drive the viewer: click a person, zoom, escape")
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('url', nargs='?', default='http://127.0.0.1:6971/')
+    ap.add_argument('--out', default=DEFAULT_OUT)
+    ap.add_argument('--tag', default='viewer')
+    ap.add_argument('--wait', type=float, default=6.0)
+    ap.add_argument('--fixture', type=Path, help='engine-derived JSON with state and world payloads')
+    ap.add_argument('--interact', action='store_true',
+                    help='also capture and verify dialogs, record, camera and error recovery')
     args = ap.parse_args()
-
-    os.makedirs(args.out, exist_ok=True)
-    errors = []
-
+    out = Path(args.out).expanduser().resolve()
+    out.mkdir(parents=True, exist_ok=True)
+    temp = out / 'browser-temp'
+    temp.mkdir(exist_ok=True)
+    os.environ['TMPDIR'] = str(temp)
+    fixture = json.loads(args.fixture.read_text()) if args.fixture else None
+    report = {'url': args.url, 'fixture': str(args.fixture) if args.fixture else None,
+              'viewports': [], 'failures': []}
     with sync_playwright() as pw:
-        browser = pw.chromium.launch(
-            channel="chrome",
-            args=["--disable-dev-shm-usage", "--no-sandbox",
-                  "--disable-background-timer-throttling",
-                  "--disable-renderer-backgrounding"])
+        browser = pw.chromium.launch(channel='chrome', args=[
+            '--disable-dev-shm-usage', '--disable-background-timer-throttling',
+            '--disable-renderer-backgrounding'])
         try:
-            for (w, h) in WIDTHS:
-                ctx = browser.new_context(viewport={"width": w, "height": h},
+            for w, h in WIDTHS:
+                ctx = browser.new_context(viewport={'width': w, 'height': h},
                                           device_scale_factor=1)
+                ctx.add_init_script("localStorage.setItem('u69-watch-intro','1')")
+                if fixture:
+                    ctx.route('**/state', lambda r: r.fulfill(
+                        status=200, content_type='application/json', body=json.dumps(fixture['state'])))
+                    ctx.route('**/world', lambda r: r.fulfill(
+                        status=200, content_type='application/json', body=json.dumps(fixture['world'])))
                 page = ctx.new_page()
-                page.on("console", lambda m: errors.append(
-                    f"[console.{m.type}] {m.text}") if m.type in ("error", "warning")
-                    else None)
-                page.on("pageerror", lambda e: errors.append(f"[pageerror] {e}"))
-                page.goto(args.url, wait_until="load", timeout=30000)
-                page.wait_for_timeout(int(args.wait * 1000))
+                errors = []
+                page.on('pageerror', lambda e: errors.append(str(e)))
+                page.on('console', lambda m: errors.append(m.text) if m.type == 'error' else None)
+                checks = []
 
-                info = page.evaluate("""() => {
-                  var out = {hidden: document.hidden, canvases: []};
-                  ['c6','c9'].forEach(function(id){
-                    var cv=document.getElementById(id);
-                    if(!cv){ out.canvases.push({id:id, missing:true}); return; }
-                    var g=cv.getContext('2d');
-                    var d=g.getImageData(0,0,cv.width,cv.height).data;
-                    var nonblack=0, lit=0;
-                    for(var i=0;i<d.length;i+=4*97){
-                      if(d[i+3]>0 && (d[i]>8||d[i+1]>8||d[i+2]>8)) nonblack++;
-                      lit++;
-                    }
-                    out.canvases.push({id:id, w:cv.width, h:cv.height,
-                                       sampled:lit, nonblack:nonblack});
-                  });
-                  out.hud = (document.getElementById('hud6')||{}).innerHTML||'';
-                  out.records = ((document.getElementById('reclines')||{}).innerHTML||'').length;
-                  out.legend = ((document.getElementById('legend')||{}).innerHTML||'').length;
-                  return out;
-                }""")
-                name = f"{args.tag}-{w}x{h}.png"
-                path = os.path.join(args.out, name)
-                page.screenshot(path=path)
-                print(f"\n=== {w}x{h} -> {path}")
-                print(f"    document.hidden = {info['hidden']}")
-                for c in info["canvases"]:
-                    if c.get("missing"):
-                        print(f"    canvas {c['id']}: MISSING")
-                    else:
-                        pct = (100.0 * c["nonblack"] / max(1, c["sampled"]))
-                        print(f"    canvas {c['id']}: {c['w']}x{c['h']} "
-                              f"nonblack {pct:.1f}% of samples")
-                print(f"    hud: {info['hud'][:120]}")
-                print(f"    console rows: {info['records']}, legend chars: {info['legend']}")
-                ctx.close()
+                def check(ok, label):
+                    checks.append({'check': label, 'passed': bool(ok)})
+                    if not ok:
+                        report['failures'].append(f'{w}x{h}: {label}')
+
+                item = {'width': w, 'height': h, 'checks': checks, 'errors': errors}
+                report['viewports'].append(item)
+                stem = f'{args.tag}-{w}x{h}'
+                try:
+                    page.goto(args.url, wait_until='load', timeout=30000)
+                    page.wait_for_function('state && view.e && view.l')
+                    page.wait_for_timeout(int(args.wait*1000))
+                    info = item['geometry'] = geometry(page)
+                    item['screenshot'] = capture(page, out, stem, 'world')
+                    check(not info['hidden'], 'Document renders in foreground')
+                    check(info['documentWidth'] <= w, 'No document horizontal overflow')
+                    a, b = info['scenes']
+                    check(abs(a['y']-b['y']) <= 1, 'World scenes align')
+                    check(b['x'] >= a['x']+a['width'], 'Worlds stay side by side')
+                    check(page.evaluate("""() => {
+                      var row=document.querySelector('#reclines .row');
+                      if(!row)return true;
+                      var labels=Array.from(row.children).slice(0,3);
+                      return labels.length<3 || labels.every(e=>Math.abs(e.getBoundingClientRect().y-labels[0].getBoundingClientRect().y)<2);
+                    }"""), 'Record metadata stays on one line')
+                    check(all(c['lit'] > 0 for c in info['canvases']),
+                          'Both canvases contain visible pixels')
+                    check(page.evaluate("""() => {
+                      var original=drawSketch, cache=spriteCache, count=spriteCount;
+                      try {
+                        drawSketch=function(){}; spriteCache={}; spriteCount=0;
+                        var a={age:17,v:7,sex:0}, b={age:18,v:7,sex:0};
+                        return !bodyOf(a).adult && bodyOf(b).adult &&
+                          !bodyOf({}).adult &&
+                          figureSprite(a,0,0,false,1,"") !== figureSprite(b,0,0,false,1,"");
+                      } finally {drawSketch=original; spriteCache=cache; spriteCount=count;}
+                    }"""), 'Adult detail requires known age 18 and a distinct cache entry')
+                    if args.interact:
+                        drive(page, out, stem, check)
+                    check(not errors, 'No browser exceptions')
+                except Exception as exc:
+                    report['failures'].append(f'{w}x{h}: {exc}')
+                    item['exception'] = str(exc)
+                    capture(page, out, stem, 'failure')
+                finally:
+                    print(f'{w}x{h}: {sum(c["passed"] for c in checks)}/{len(checks)} checks')
+                    ctx.close()
         finally:
+            # Persist observations before external browser shutdown: a Chrome
+            # cleanup stall must not discard completed verification evidence.
+            path = out / f'{args.tag}-report.json'
+            path.write_text(json.dumps(report, indent=2)+'\n')
             browser.close()
-
-    if errors:
-        print("\n--- page errors ---")
-        for e in errors[:30]:
-            print("  " + e)
-    else:
-        print("\n--- no page errors ---")
+    print(f'Report: {path}')
+    for failure in report['failures']:
+        print(f'FAIL: {failure}')
+    return 1 if report['failures'] else 0
 
 
-def interact(url, out):
-    """Prove the viewer answers to the hand: click a person, follow them."""
-    os.makedirs(out, exist_ok=True)
-    with sync_playwright() as pw:
-        browser = pw.chromium.launch(channel="chrome",
-                                     args=["--disable-dev-shm-usage", "--no-sandbox"])
-        try:
-            ctx = browser.new_context(viewport={"width": 1440, "height": 900})
-            page = ctx.new_page()
-            errors = []
-            page.on("pageerror", lambda e: errors.append(str(e)))
-            page.goto(url, wait_until="load", timeout=30000)
-            page.wait_for_timeout(5000)
-
-            target = page.evaluate("""() => {
-              var v=view.e; if(!v) return null;
-              var cv=document.getElementById('c6');
-              var r=cv.getBoundingClientRect();
-              var dpr=cv.width/cv.clientWidth;
-              var ids=Object.keys(actors6);
-              for (var i=0;i<ids.length;i++){
-                var a=actors6[ids[i]];
-                // aim at the middle of the body, not at the feet
-                var px=(a.x-v.sx)*v.ts+ v.ts/2, py=(a.y-0.7-v.sy)*v.ts;
-                if (px<20||py<20||px>cv.width-20||py>cv.height-20) continue;
-                return {id:a.id, x:r.left+px/dpr, y:r.top+py/dpr,
-                        name:(state.u.eden.detail[String(a.id)]||[])[0],
-                        act:a.act};
-              }
-              return null;
-            }""")
-            if not target:
-                print("no person found to click")
-                return
-            print(f"\nclicking {target['name']} (id {target['id']}) at "
-                  f"{target['x']:.0f},{target['y']:.0f}")
-            page.mouse.click(target["x"], target["y"])
-            page.wait_for_timeout(900)
-
-            card = page.evaluate("""() => {
-              var c=document.getElementById('card6');
-              return {on: c.className.indexOf('on')>=0, text: c.innerText,
-                      hud: document.getElementById('hud6').innerText,
-                      mode: cam.e.mode, follow: cam.e.follow};
-            }""")
-            print(f"  camera mode : {card['mode']}  following id {card['follow']}")
-            print(f"  card shown  : {card['on']}")
-            print(f"  card text   : {card['text']!r}")
-            print(f"  hud         : {card['hud']}")
-            page.screenshot(path=os.path.join(out, "interact-follow.png"))
-
-            # zoom with the wheel, then read the scale back
-            before = page.evaluate("() => cam.e.h")
-            page.mouse.move(700, 250)
-            page.mouse.wheel(0, -600)
-            page.wait_for_timeout(700)
-            after = page.evaluate("() => cam.e.h")
-            print(f"  wheel zoom  : half-height {before:.2f} -> {after:.2f}")
-            page.screenshot(path=os.path.join(out, "interact-zoom.png"))
-
-            # escape returns the eye to the documentary camera
-            page.keyboard.press("Escape")
-            page.wait_for_timeout(500)
-            mode = page.evaluate("() => cam.e.mode")
-            print(f"  escape      : camera mode {mode}")
-            if errors:
-                print("  page errors: " + "; ".join(errors[:5]))
-        finally:
-            browser.close()
-
-
-if __name__ == "__main__":
-    import argparse as _a
-    _p = _a.ArgumentParser(add_help=False)
-    _p.add_argument("--interact", action="store_true")
-    _p.add_argument("url", nargs="?", default="http://127.0.0.1:6971/")
-    _known, _rest = _p.parse_known_args()
-    if _known.interact:
-        interact(_known.url, "/tmp/u69shots")
-    main()
+if __name__ == '__main__':
+    raise SystemExit(main())

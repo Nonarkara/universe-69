@@ -7,11 +7,16 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
 
 ## Time
 
-- 1 tick = 1 simulated day. 1 tick every **2.0 real seconds**.
-- → 1 real day ≈ 43,200 sim-days ≈ **118 sim-years ≈ 5–6 generations**.
-- Day 0 is anchored to a wall-clock epoch. On restart/wake the engine computes
-  `target_day = (now − epoch) / 2s` and fast-forwards. The universes age even
-  while the process is dead — Tamagotchi semantics, no drift.
+- 1 tick = **one part of a day** (dawn, day, dusk, night). A part is
+  **3.0 real seconds**, so a sim-day is **12.0 real seconds**.
+- → 1 real day ≈ 7,200 sim-days ≈ **20 sim-years ≈ 1 generation**.
+- The pace is set by `UNIVERSE69_SEC_PER_PART`. It was one day per two
+  seconds before the day and the night were modelled; a cycle that passes
+  in two seconds is not a cycle.
+- A persistent clock anchors cumulative parts to elapsed real time. On restart
+  or wake the engine computes `target_parts = clock.parts +
+  (now − clock.epoch) / clock.seconds` and catches up. Pace changes preserve
+  ticks already due. The universes age while the process is dead.
 
 ## The founders (engine 2026.10.27.3)
 
@@ -104,6 +109,58 @@ is not reproducible from this one. The 150-year seeds (69, 7, 123, 5, 11,
 42, 300, 8) quoted above were re-derived on 2026.10.27.2 and have **not**
 been re-derived on 2026.10.27.3 — treat them as stale until
 `tools/lab.py` re-runs them.
+
+## Engine 2026.10.28.1: the day has four parts
+
+**The tick is a part of a day, not a day.** Dawn, day, dusk, night; the day's
+counter turns when the night ends. Everything that happens in a world happens
+inside one of those parts. This changes the trajectory of the live run — the
+run is over a century old — so the engine version moves and every figure
+derived from 2026.10.27.3 is stale until it is re-derived.
+
+The unfinished 2026.10.27.4 draft advanced daily hazards, food and bodies four
+times per calendar day. The audited engine keeps daily mortality, physiology
+and purpose to one update; apportions fertility, hazards, harvest, stock
+regrowth, hunger and story accumulation across four parts; and preserves
+daily storage horizons. These corrections change trajectories again. Prior
+engine figures remain historical, not measurements of this version.
+
+The pace follows: a part is 3 real seconds, so a day is 12 and a sim-year
+(360 days) is 72 minutes. The old rate was one day per two seconds, so the
+year now goes by about six times more slowly in real time. That is the price
+of a day and a night being watchable; a cycle that passes in two seconds is
+not a cycle. `UNIVERSE69_SEC_PER_PART` sets the pace.
+
+**Movement is now four steps a day, not one.** A part is a quarter of a day,
+and people walk when they are awake. The world's tiles are therefore a
+quarter-day of travel each. This is a calibration shift, not a design one:
+it changes how far a foraging party goes in a day.
+
+| Finding | Mechanic | Where |
+|---|---|---|
+| Fire makes a group; the night around it is where a band becomes a society (Slingerland *Drunk* ch.3; Harari *Nexus* ch.2) | At night a band converges on the camp fire, and the talk there is where stories are told | `keep_watch` |
+| A group that watches one another's backs is safer than one that does not (Slingerland *Drunk* ch.4) | One adult per camp stands watch each night, and the turn goes round the watchable ones — the most vigilant take the most turns | `keep_watch` |
+| A watch is paid for (model calibration) | The watcher gains 0.5 hunger for a night on watch, against recovery of 1 hunger per fed day. The unfinished draft added 6 nightly and would starve a fed watch rotation | `keep_watch` |
+| The dark is bolder (model calibration, not a measured coefficient) | Predation risk is 1.8× at night; a camp with a watcher on roughly halves it | `tick_lagoon` |
+| Tools change the food web (Diamond’s technology/ecology framing; predator hunting is a model choice, not his domestication filter) | New step on the ladder: `predator_hunt`, needing fishing and 25 people. With it, hunters bring down a big cat, the carcass feeds the band (with surplus stored when preservation exists) and the predator population falls | `tick_lagoon`, `TECH_LADDER` |
+| A resort that never closes is not the same as a world with no nights (Calhoun: the pen's geometry, not its hours) | EDEN at night: the adults go to their own beds, the placeless sleep on the mats, children stay with their mothers. The food stays free and the posts stay filled — night is not a new pathology | `tick_eden` |
+
+
+**Resuming the instrument.** Migration retains its calendar and anchors the new
+clock at the last completed old-rate day. Any unsimulated wall time after that
+anchor is caught up at the new part rate; completed days are never replayed.
+Both empty worlds continue through the reseed wait, and reseeding preserves
+cumulative ticks. Pace changes preserve pending ticks and survive restarts.
+Every resumed universe records the old/new engine and transition day/part;
+postmortems carry that history. Pre-reseed dates with no recorded founding date
+remain historical absolute dates; new iterations record their founding day.
+
+**Observation only.** Research tests use the current iteration's age, with
+verdicts on each 30-day calendar boundary even during server catch-up. They
+read the universes and write only the separate research record. Their numeric
+thresholds are model checks inspired by the books; agreement cannot validate
+a historical or human claim. Fresh predator meat is consumed or transferred
+into storage once, with only the uneaten remainder retained to spoil.
 
 ## Universe 6 — EDEN (after Calhoun's Universe 25)
 
@@ -214,7 +271,7 @@ tribes*: peacefully after lore exists, as a deadly feud before it.
   valid result (it happened to real founder populations); reseeding is logged,
   never hidden.
 - This is a model of *dynamics from the literature*, not a claim about people.
-- Determinism holds per `(seed, day)` **within one engine version**. Editing
+- Determinism holds per `(seed, day, part)` **within one engine version**. Editing
   `sim/engine.py` changes every number derived from the previous version, and
   the live run's history becomes irreproducible from that point on. Re-derive
   figures from the shipped code; never quote one from an old log.
@@ -224,7 +281,8 @@ tribes*: peacefully after lore exists, as a deadly feud before it.
 
 ## Verifying the model
 
-`tools/lab.py` runs an arc locally in seconds and prints a verdict:
+`tools/lab.py` runs a bounded arc locally and prints a verdict. Runtime
+depends on population and hardware; a century can take minutes:
 
 - did EDEN's pen actually empty (and therefore write a postmortem and reseed),
 - did LAGOON survive, and which technologies and lessons it reached.

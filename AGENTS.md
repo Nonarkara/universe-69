@@ -62,7 +62,7 @@ A schema change without a `migrate()` default is a bug that kills a live run.
 
 ### 4. Determinism is a promise, and engine edits break it
 
-`tick_world` is deterministic per `(seed, day)` *within one engine version*.
+`tick_world` is deterministic per `(seed, day, part)` *within one engine version*.
 Change the engine and every number derived from the previous version becomes
 unreproducible. When you change behaviour:
 
@@ -78,12 +78,17 @@ There is a `tests/` suite run with `python3 -m unittest discover -s tests`.
 Any change to `sim/engine.py` must keep it green and should add a case that
 pins the new behaviour. The renderer reads a specific field contract from
 `engine.summarize()`; `tests/test_contract.py` pins that contract, so breaking
-the viewer fails the tests rather than the browser.
+the viewer fails the tests rather than the browser. The **RESEARCH** button in
+the viewer is the reading of the shelf: the long story of mankind the books
+agree on, then every hypothesis they imply as a number the model can be caught
+out on. `sim/research.py` holds that table and only ever *reads* — a new
+hypothesis must not be able to move a world.
 
 ### 6. Iterate with `tools/lab.py`, not with the live machine
 
-The engine runs ~1,000 sim-days per second. `tools/lab.py` runs a full
-multi-century arc in seconds and prints the arc table. Use it to test a change.
+`tools/lab.py` runs a full multi-century arc without the wall-clock delay
+and prints the arc table. Runtime depends on population; allow minutes.
+Use it to test a change.
 Never wait on the 2016 MacBook to discover what a model change did.
 
 ---
@@ -131,6 +136,8 @@ core is repeated inline below so an agent that skips the pointer still gets it.
   charts that a human was never going to read.
 - The two universes are always shown **side by side**. The comparison *is* the
   product; splitting them across pages destroys the experiment.
+- A day is **four parts** — dawn, day, dusk, night — and the light turns with
+  them. The tick is a part, not a day.
 
 ### Anti-regression
 
@@ -169,7 +176,9 @@ social, and in these universes it may or may not be so at all.
 ## Layout
 
 ```
-sim/engine.py      the model — pure stdlib, deterministic per seed+day
+sim/engine.py      the model — pure stdlib, deterministic per seed+part
+sim/minds.py       the people: bodies, minds, fertility, names
+sim/research.py    the hypotheses the books imply, and the run that tests them
 sim/server.py      tick loop, HTTP viewer, snapshot uploader
 web/index.html     chunky-pixel renderer (identical to docs/index.html)
 docs/              GitHub Pages mirror + the canonical design law
@@ -178,6 +187,10 @@ tools/sweep.py     vary the pen's design and report what each one does
 tools/shoot.py     capture the viewer at 390/1024/1440 and drive it
 tools/chronicle.py mechanical event digest
 tests/             unittest suite (engine behaviour + viewer data contract)
+DESIGN.md          the research finding → mechanic table
+BOOKS.md           the owner's shelf, read
+RESEARCH.md        the verified secondary literature
+GRAPHICS.md        how the drawing works, what it does not, and what changed
 STUDY.md           what the running universes did, and how to re-derive it
 data/              state, events.ndjson, chronicles, postmortems (local)
 ```
@@ -186,7 +199,7 @@ data/              state, events.ndjson, chronicles, postmortems (local)
 
 ```sh
 python3 -m unittest discover -s tests     # the suite
-python3 tools/lab.py --days 60000          # a whole arc, in seconds
+python3 tools/lab.py --days 60000          # a whole arc
 python3 tools/lab.py --days 60000 --json out.json
 python3 tools/sweep.py --study calhoun     # vary the pen
 python3 tools/shoot.py http://127.0.0.1:6969/ --tag shot   # the viewer

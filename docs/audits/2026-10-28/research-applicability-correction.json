@@ -1,0 +1,39 @@
+{
+  "engine": "2026.10.28.1",
+  "seed": 69,
+  "days": 60000,
+  "raw_arc": "arc-60000.json",
+  "raw_log": "lab-60000.log",
+  "scope": "Read-only observer applicability correction after the bounded trajectory run; engine and trajectory unchanged; original outputs preserved.",
+  "hypothesis": "H-LAGOON-DUNBAR",
+  "terminal_tech": [
+    "fire",
+    "preservation",
+    "stone_tools",
+    "fishing",
+    "shelter",
+    "predator_hunt",
+    "lore",
+    "seacraft",
+    "agriculture",
+    "domestication",
+    "granary",
+    "healing",
+    "metallurgy"
+  ],
+  "raw": {
+    "value": 254.0,
+    "ready": true,
+    "verdict": "contradicted"
+  },
+  "corrected": {
+    "value": null,
+    "ready": false,
+    "verdict": "undecided"
+  },
+  "corrected_counts": {
+    "supported": 15,
+    "contradicted": 1,
+    "undecided": 1
+  }
+}

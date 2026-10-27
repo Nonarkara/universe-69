@@ -1,0 +1,682 @@
+{
+  "url": "http://127.0.0.1:6973/",
+  "fixture": null,
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "checks": [
+        {
+          "check": "Document renders in foreground",
+          "passed": true
+        },
+        {
+          "check": "No document horizontal overflow",
+          "passed": true
+        },
+        {
+          "check": "World scenes align",
+          "passed": true
+        },
+        {
+          "check": "Worlds stay side by side",
+          "passed": true
+        },
+        {
+          "check": "Record metadata stays on one line",
+          "passed": true
+        },
+        {
+          "check": "Both canvases contain visible pixels",
+          "passed": true
+        },
+        {
+          "check": "Adult detail requires known age 18 and a distinct cache entry",
+          "passed": true
+        },
+        {
+          "check": "Research opens",
+          "passed": true
+        },
+        {
+          "check": "Research receives keyboard focus",
+          "passed": true
+        },
+        {
+          "check": "Research tests have no horizontal overflow",
+          "passed": true
+        },
+        {
+          "check": "Books view opens",
+          "passed": true
+        },
+        {
+          "check": "Books have no horizontal overflow",
+          "passed": true
+        },
+        {
+          "check": "Research reverse Tab remains inside dialog",
+          "passed": true
+        },
+        {
+          "check": "Research Tab wraps inside dialog",
+          "passed": true
+        },
+        {
+          "check": "Reading dialog does not enter walk mode",
+          "passed": true
+        },
+        {
+          "check": "Escape closes Research",
+          "passed": true
+        },
+        {
+          "check": "Research restores trigger focus",
+          "passed": true
+        },
+        {
+          "check": "CLOSE button closes Research",
+          "passed": true
+        },
+        {
+          "check": "Record expands",
+          "passed": true
+        },
+        {
+          "check": "World filter changes",
+          "passed": true
+        },
+        {
+          "check": "Life filter changes",
+          "passed": true
+        },
+        {
+          "check": "ALL restores every world and event kind",
+          "passed": true
+        },
+        {
+          "check": "Selecting a visible person through pointer handlers follows them",
+          "passed": true
+        },
+        {
+          "check": "Wheel zoom changes camera scale",
+          "passed": true
+        },
+        {
+          "check": "Escape restores documentary eye",
+          "passed": true
+        },
+        {
+          "check": "Walk button enters world",
+          "passed": true
+        },
+        {
+          "check": "Escape exits walk mode",
+          "passed": true
+        },
+        {
+          "check": "Help opens",
+          "passed": true
+        },
+        {
+          "check": "WATCH closes Help",
+          "passed": true
+        },
+        {
+          "check": "Failed snapshot offers RETRY",
+          "passed": true
+        },
+        {
+          "check": "RETRY recovers from snapshot failure",
+          "passed": true
+        },
+        {
+          "check": "No browser exceptions",
+          "passed": true
+        }
+      ],
+      "errors": [],
+      "geometry": {
+        "hidden": false,
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "documentHeight": 844,
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 70.78125,
+          "bottom": 70.78125,
+          "scrollWidth": 390,
+          "clientWidth": 390
+        },
+        "bottom": {
+          "x": 0,
+          "y": 728,
+          "width": 390,
+          "height": 116,
+          "bottom": 844,
+          "scrollWidth": 390,
+          "clientWidth": 390
+        },
+        "scenes": [
+          {
+            "x": 0,
+            "y": 208.125,
+            "width": 194,
+            "height": 519.875,
+            "bottom": 728,
+            "scrollWidth": 194,
+            "clientWidth": 194
+          },
+          {
+            "x": 196,
+            "y": 207.78125,
+            "width": 194,
+            "height": 520.21875,
+            "bottom": 728,
+            "scrollWidth": 194,
+            "clientWidth": 194
+          }
+        ],
+        "worldHeads": [
+          {
+            "x": 0,
+            "y": 70.78125,
+            "width": 194,
+            "height": 137.34375,
+            "bottom": 208.125,
+            "scrollWidth": 194,
+            "clientWidth": 194
+          },
+          {
+            "x": 196,
+            "y": 70.78125,
+            "width": 194,
+            "height": 137,
+            "bottom": 207.78125,
+            "scrollWidth": 194,
+            "clientWidth": 194
+          }
+        ],
+        "chrome": {
+          "top": 70.78125,
+          "bottom": 116,
+          "topPercent": 8.386404028436019,
+          "bottomPercent": 13.744075829383887,
+          "combinedTop": 208.125,
+          "combinedTopPercent": 24.65936018957346
+        },
+        "canvases": [
+          {
+            "id": "c6",
+            "width": 194,
+            "height": 520,
+            "lit": 1040,
+            "samples": 1040
+          },
+          {
+            "id": "c9",
+            "width": 194,
+            "height": 520,
+            "lit": 1040,
+            "samples": 1040
+          }
+        ]
+      },
+      "screenshot": "final-390x844-world.png"
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "checks": [
+        {
+          "check": "Document renders in foreground",
+          "passed": true
+        },
+        {
+          "check": "No document horizontal overflow",
+          "passed": true
+        },
+        {
+          "check": "World scenes align",
+          "passed": true
+        },
+        {
+          "check": "Worlds stay side by side",
+          "passed": true
+        },
+        {
+          "check": "Record metadata stays on one line",
+          "passed": true
+        },
+        {
+          "check": "Both canvases contain visible pixels",
+          "passed": true
+        },
+        {
+          "check": "Adult detail requires known age 18 and a distinct cache entry",
+          "passed": true
+        },
+        {
+          "check": "Research opens",
+          "passed": true
+        },
+        {
+          "check": "Research receives keyboard focus",
+          "passed": true
+        },
+        {
+          "check": "Research tests have no horizontal overflow",
+          "passed": true
+        },
+        {
+          "check": "Books view opens",
+          "passed": true
+        },
+        {
+          "check": "Books have no horizontal overflow",
+          "passed": true
+        },
+        {
+          "check": "Research reverse Tab remains inside dialog",
+          "passed": true
+        },
+        {
+          "check": "Research Tab wraps inside dialog",
+          "passed": true
+        },
+        {
+          "check": "Reading dialog does not enter walk mode",
+          "passed": true
+        },
+        {
+          "check": "Escape closes Research",
+          "passed": true
+        },
+        {
+          "check": "Research restores trigger focus",
+          "passed": true
+        },
+        {
+          "check": "CLOSE button closes Research",
+          "passed": true
+        },
+        {
+          "check": "Record expands",
+          "passed": true
+        },
+        {
+          "check": "World filter changes",
+          "passed": true
+        },
+        {
+          "check": "Life filter changes",
+          "passed": true
+        },
+        {
+          "check": "ALL restores every world and event kind",
+          "passed": true
+        },
+        {
+          "check": "Selecting a visible person through pointer handlers follows them",
+          "passed": true
+        },
+        {
+          "check": "Wheel zoom changes camera scale",
+          "passed": true
+        },
+        {
+          "check": "Escape restores documentary eye",
+          "passed": true
+        },
+        {
+          "check": "Walk button enters world",
+          "passed": true
+        },
+        {
+          "check": "Escape exits walk mode",
+          "passed": true
+        },
+        {
+          "check": "Help opens",
+          "passed": true
+        },
+        {
+          "check": "WATCH closes Help",
+          "passed": true
+        },
+        {
+          "check": "Failed snapshot offers RETRY",
+          "passed": true
+        },
+        {
+          "check": "RETRY recovers from snapshot failure",
+          "passed": true
+        },
+        {
+          "check": "No browser exceptions",
+          "passed": true
+        }
+      ],
+      "errors": [],
+      "geometry": {
+        "hidden": false,
+        "width": 1024,
+        "height": 768,
+        "documentWidth": 1024,
+        "documentHeight": 768,
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 39,
+          "bottom": 39,
+          "scrollWidth": 1024,
+          "clientWidth": 1024
+        },
+        "bottom": {
+          "x": 0,
+          "y": 690,
+          "width": 1024,
+          "height": 78,
+          "bottom": 768,
+          "scrollWidth": 1024,
+          "clientWidth": 1024
+        },
+        "scenes": [
+          {
+            "x": 0,
+            "y": 135,
+            "width": 511,
+            "height": 555,
+            "bottom": 690,
+            "scrollWidth": 511,
+            "clientWidth": 511
+          },
+          {
+            "x": 513,
+            "y": 135,
+            "width": 511,
+            "height": 555,
+            "bottom": 690,
+            "scrollWidth": 511,
+            "clientWidth": 511
+          }
+        ],
+        "worldHeads": [
+          {
+            "x": 0,
+            "y": 39,
+            "width": 511,
+            "height": 96,
+            "bottom": 135,
+            "scrollWidth": 511,
+            "clientWidth": 511
+          },
+          {
+            "x": 513,
+            "y": 39,
+            "width": 511,
+            "height": 96,
+            "bottom": 135,
+            "scrollWidth": 511,
+            "clientWidth": 511
+          }
+        ],
+        "chrome": {
+          "top": 39,
+          "bottom": 78,
+          "topPercent": 5.078125,
+          "bottomPercent": 10.15625,
+          "combinedTop": 135,
+          "combinedTopPercent": 17.578125
+        },
+        "canvases": [
+          {
+            "id": "c6",
+            "width": 511,
+            "height": 555,
+            "lit": 2924,
+            "samples": 2924
+          },
+          {
+            "id": "c9",
+            "width": 511,
+            "height": 555,
+            "lit": 2924,
+            "samples": 2924
+          }
+        ]
+      },
+      "screenshot": "final-1024x768-world.png"
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "checks": [
+        {
+          "check": "Document renders in foreground",
+          "passed": true
+        },
+        {
+          "check": "No document horizontal overflow",
+          "passed": true
+        },
+        {
+          "check": "World scenes align",
+          "passed": true
+        },
+        {
+          "check": "Worlds stay side by side",
+          "passed": true
+        },
+        {
+          "check": "Record metadata stays on one line",
+          "passed": true
+        },
+        {
+          "check": "Both canvases contain visible pixels",
+          "passed": true
+        },
+        {
+          "check": "Adult detail requires known age 18 and a distinct cache entry",
+          "passed": true
+        },
+        {
+          "check": "Research opens",
+          "passed": true
+        },
+        {
+          "check": "Research receives keyboard focus",
+          "passed": true
+        },
+        {
+          "check": "Research tests have no horizontal overflow",
+          "passed": true
+        },
+        {
+          "check": "Books view opens",
+          "passed": true
+        },
+        {
+          "check": "Books have no horizontal overflow",
+          "passed": true
+        },
+        {
+          "check": "Research reverse Tab remains inside dialog",
+          "passed": true
+        },
+        {
+          "check": "Research Tab wraps inside dialog",
+          "passed": true
+        },
+        {
+          "check": "Reading dialog does not enter walk mode",
+          "passed": true
+        },
+        {
+          "check": "Escape closes Research",
+          "passed": true
+        },
+        {
+          "check": "Research restores trigger focus",
+          "passed": true
+        },
+        {
+          "check": "CLOSE button closes Research",
+          "passed": true
+        },
+        {
+          "check": "Record expands",
+          "passed": true
+        },
+        {
+          "check": "World filter changes",
+          "passed": true
+        },
+        {
+          "check": "Life filter changes",
+          "passed": true
+        },
+        {
+          "check": "ALL restores every world and event kind",
+          "passed": true
+        },
+        {
+          "check": "Selecting a visible person through pointer handlers follows them",
+          "passed": true
+        },
+        {
+          "check": "Wheel zoom changes camera scale",
+          "passed": true
+        },
+        {
+          "check": "Escape restores documentary eye",
+          "passed": true
+        },
+        {
+          "check": "Walk button enters world",
+          "passed": true
+        },
+        {
+          "check": "Escape exits walk mode",
+          "passed": true
+        },
+        {
+          "check": "Help opens",
+          "passed": true
+        },
+        {
+          "check": "WATCH closes Help",
+          "passed": true
+        },
+        {
+          "check": "Failed snapshot offers RETRY",
+          "passed": true
+        },
+        {
+          "check": "RETRY recovers from snapshot failure",
+          "passed": true
+        },
+        {
+          "check": "No browser exceptions",
+          "passed": true
+        }
+      ],
+      "errors": [],
+      "geometry": {
+        "hidden": false,
+        "width": 1440,
+        "height": 900,
+        "documentWidth": 1440,
+        "documentHeight": 900,
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 39,
+          "bottom": 39,
+          "scrollWidth": 1440,
+          "clientWidth": 1440
+        },
+        "bottom": {
+          "x": 0,
+          "y": 822,
+          "width": 1440,
+          "height": 78,
+          "bottom": 900,
+          "scrollWidth": 1440,
+          "clientWidth": 1440
+        },
+        "scenes": [
+          {
+            "x": 0,
+            "y": 141,
+            "width": 719,
+            "height": 681,
+            "bottom": 822,
+            "scrollWidth": 719,
+            "clientWidth": 719
+          },
+          {
+            "x": 721,
+            "y": 141,
+            "width": 719,
+            "height": 681,
+            "bottom": 822,
+            "scrollWidth": 719,
+            "clientWidth": 719
+          }
+        ],
+        "worldHeads": [
+          {
+            "x": 0,
+            "y": 39,
+            "width": 719,
+            "height": 102,
+            "bottom": 141,
+            "scrollWidth": 719,
+            "clientWidth": 719
+          },
+          {
+            "x": 721,
+            "y": 39,
+            "width": 719,
+            "height": 102,
+            "bottom": 141,
+            "scrollWidth": 719,
+            "clientWidth": 719
+          }
+        ],
+        "chrome": {
+          "top": 39,
+          "bottom": 78,
+          "topPercent": 4.333333333333333,
+          "bottomPercent": 8.666666666666666,
+          "combinedTop": 141,
+          "combinedTopPercent": 15.666666666666666
+        },
+        "canvases": [
+          {
+            "id": "c6",
+            "width": 719,
+            "height": 681,
+            "lit": 5048,
+            "samples": 5048
+          },
+          {
+            "id": "c9",
+            "width": 719,
+            "height": 681,
+            "lit": 5048,
+            "samples": 5048
+          }
+        ]
+      },
+      "screenshot": "final-1440x900-world.png"
+    }
+  ],
+  "failures": []
+}

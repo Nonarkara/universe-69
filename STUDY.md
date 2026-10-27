@@ -1,11 +1,48 @@
 # STUDY — measurements from the running universes
 
-Every number below was produced by running the **shipped** engine in this
-repository, not quoted from a log, a paper, or an earlier bake. Each section
-names the command that reproduces it. If the engine changes, re-derive: a
-figure that no longer comes out of the code is no longer a finding.
+**Historical results.** The numbered historical sections below predate engine `2026.10.28.1` and
+have not been re-derived for this release. They describe the earlier engine
+used when each study was written, whose exact version is not consistently
+recorded. Treat those results as stale until rerun with the named commands;
+they are not current measurements or evidence of current behavior.
 
-Engine state at the time of writing: seed 69, `DAYS_PER_YEAR = 360`,
+The 2026.10.28.1 release adds four parts per day and corrects the unfinished
+conversion's daily rates, wall-clock migration and reseed timing. Its figures
+must be derived afresh. New reports include the actual engine version.
+
+## Current release baseline — 2026.10.28.1
+
+Re-derived from the shipped engine, seed 69, for 60,000 full simulated days
+(240,000 parts; calendar year 166):
+
+```sh
+python3 tools/lab.py --seed 69 --days 60000 --every 3600 --quiet
+```
+
+| World | Final population | Peak | Iteration | Outcome |
+|---|---:|---:|---:|---|
+| EDEN | 926 | 1,802 | 1 | Death phase; no extinction or reseed yet |
+| LAGOON | 463 | 470 | 2 | Survived after one extinction; 13 technologies, two tribes, greater shore reached |
+
+EDEN's sink began in year 86 and its death phase in year 104. This run does
+**not** establish when EDEN will empty. LAGOON carried two lessons at the end.
+These are model outcomes, not measurements of human societies.
+
+The raw observer report returned 15 supported checks and two contradictions.
+One was a reporting defect: the Dunbar check says *without shared lore*, yet
+it judged a terminal society that already had lore. The read-only research
+layer was corrected after the trajectory run; the engine was unchanged.
+Re-evaluating applicability from the terminal technology list yields
+**15 supported, one contradicted, one undecided**. The remaining contradiction
+is EDEN's posts: 89.7% held against the implementation's 99% threshold. It
+remains reported; the model was not tuned to turn it into a pass.
+
+The raw arc/log and the separate observer correction are retained with the
+release audit evidence. Earlier studies below are historical and stale.
+
+---
+
+Earlier-study engine state at the time of writing: seed 69, `DAYS_PER_YEAR = 360`,
 `ADULT_AGE = 16 years`, `GESTATION = 270 days`.
 
 ---
@@ -137,15 +174,15 @@ extinction by 1973: roughly thirteen mouse-generations. The long, slow
 collapse in this model is not a bug in the demography; it is the correct
 human-scaled analogue of a mouse-scaled event.
 
-**The live run is about to complete its first cycle.** The 2016 MacBook's
-universe stands at year 115. The pen empties at year 234 — about 43,000
-sim-days away, which at one sim-day every two seconds is roughly **one day
-of real time**. The first EDEN postmortem and the first reseeding are close.
+**Retired forecast.** The earlier study forecast a first extinction near
+year 234 from a run then near year 115, using the former two-second day.
+That forecast is stale under `2026.10.28.1`; it makes no claim about the
+instrument's present state or when its first postmortem will occur.
 
 ## 4. The two universes diverge, and the reason is worth knowing
 
-Running the current engine from genesis does **not** reproduce the live run's
-history, even though the engine is deterministic per `(seed, day)`.
+The earlier study's engine from genesis did **not** reproduce the live run's
+history, even though it was deterministic per `(seed, day)` within its version.
 
 | | EDEN | LAGOON |
 |---|---|---|
