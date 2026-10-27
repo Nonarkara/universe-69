@@ -24,17 +24,20 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import engine
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA = os.path.join(ROOT, "data")
+# The live run keeps its state in ./data. A development instance can be pointed
+# somewhere else with UNIVERSE69_DATA so it can never touch the live world.
+DATA = os.environ.get("UNIVERSE69_DATA") or os.path.join(ROOT, "data")
 WEB = os.path.join(ROOT, "web")
 STATE_PATH = os.path.join(DATA, "state.json")
 EVENTS_PATH = os.path.join(DATA, "events.ndjson")
 WEBCFG_PATH = os.path.join(DATA, "web.json")
-PORT = 6969
+PORT = int(os.environ.get("UNIVERSE69_PORT", "6969"))
+EVENTS_IN_VIEW = 500          # how much of the record the console is given
 
 os.makedirs(DATA, exist_ok=True)
 
 lock = threading.Lock()
-recent_events = deque(maxlen=120)
+recent_events = deque(maxlen=4000)
 status = {"catching_up": False, "behind_days": 0, "started": time.time()}
 
 if os.path.exists(STATE_PATH):
@@ -45,8 +48,8 @@ else:
     print("[universe69] GENESIS — two universes created")
 
 # preload the tail of the event log so the ticker survives restarts.
-# A hard kill can replay the days since the last state save; those lines
-# are already in the file, so remember them and do not write them twice.
+# A hard kill replays the days since the last save; those lines are already
+# in the file, so remember them and do not write them twice.
 seen_events = set()
 if os.path.exists(EVENTS_PATH):
     with open(EVENTS_PATH) as f:
@@ -59,7 +62,7 @@ if os.path.exists(EVENTS_PATH):
             pass
     for rec in parsed:
         seen_events.add((rec.get("d"), rec.get("u"), rec.get("msg")))
-    for rec in parsed[-120:]:
+    for rec in parsed[-EVENTS_IN_VIEW:]:
         recent_events.append(rec)
 
 
@@ -138,7 +141,7 @@ def uploader_loop():
                 interval = int(cfg.get("interval", 600))
                 with lock:
                     snap = engine.summarize(world)
-                snap["events"] = list(recent_events)[-60:]
+                snap["events"] = list(recent_events)[-EVENTS_IN_VIEW:]
                 snap["world"] = world_payload()
                 body = json.dumps(snap, separators=(",", ":"))
                 if cfg.get("mode") == "gist":
@@ -194,7 +197,7 @@ class Handler(BaseHTTPRequestHandler):
         elif path == "/state":
             with lock:
                 snap = engine.summarize(world)
-            snap["events"] = list(recent_events)[-60:]
+            snap["events"] = list(recent_events)[-EVENTS_IN_VIEW:]
             snap["status"] = status
             self._send(200, json.dumps(snap, separators=(",", ":")))
         elif path == "/world":
