@@ -14,7 +14,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 WIDTHS = [(390, 844), (1024, 768), (1440, 900)]
-DEFAULT_OUT = "/Volumes/Data/agent-scratch/universe69-shots"
+DEFAULT_OUT = os.path.join(os.path.expanduser("~"), "universe69-shots")
 
 
 def geometry(page):

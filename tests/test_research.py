@@ -186,9 +186,7 @@ class TestTheRecordSurvives(unittest.TestCase):
         """The universes have been running since before this layer existed."""
         w = engine.genesis(seed=69)
         w.pop("research", None)
-        scratch = "/Volumes/Data/agent-scratch/universe69-audit-tests"
-        os.makedirs(scratch, exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+        with tempfile.TemporaryDirectory() as directory:
             path = os.path.join(directory, "state.json")
             engine.save_state(w, path)
             back = engine.load_state(path)

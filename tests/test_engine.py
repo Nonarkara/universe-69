@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.join(ROOT, "sim"))
 
 import engine  # noqa: E402
 
-SCRATCH = "/Volumes/Data/agent-scratch/universe69-audit-tests"
+SCRATCH = os.path.join(tempfile.gettempdir(), "universe69-audit-tests")
 os.makedirs(SCRATCH, exist_ok=True)
 
 
