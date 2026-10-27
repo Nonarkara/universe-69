@@ -9,8 +9,13 @@ seasons — nothing given, everything earned.
 - **Research basis:** [RESEARCH.md](RESEARCH.md) (Calhoun 1968–73; Love, Death
   & Robots "Ice Age"; Harari's *Sapiens*; Diamond's *Guns, Germs, and Steel*)
 - **Model mapping:** [DESIGN.md](DESIGN.md)
+- **Measurements:** [STUDY.md](STUDY.md) — what the running universes actually
+  did, and the commands that re-derive every number in it
 - **Live local view:** http://localhost:6969
-- **Live web mirror:** https://universe.nonarkara.org (snapshot every 10 min)
+- **Live web mirror:** https://nonarkara.github.io/universe-69/ (snapshot every
+  10 min). The vanity name `universe.nonarkara.org` has **no DNS record** —
+  it needs a CNAME to `nonarkara.github.io` in Cloudflare, plus the custom
+  domain set in the repo's Pages settings.
 
 ## Time
 
@@ -57,9 +62,28 @@ python3 tools/lab.py --days 60000 --json arc.json
 actually empty the pen, did LAGOON learn its lesson, which technologies were
 reached. That verdict is the thing to check after any change to the engine.
 
+`tools/sweep.py` varies the pen itself — the number of nest boxes, their
+size, the pen's capacity, where the behavioural sink begins — because
+Calhoun's conclusion is that the outcome tracks the *design* of the pen:
+
+```sh
+python3 tools/sweep.py --study calhoun     # Universe 25 as Calhoun built it
+python3 tools/sweep.py --study boxes       # vary the number of nest boxes
+python3 tools/sweep.py --study crowding    # vary where the sink begins
+```
+
 ```sh
 python3 -m unittest discover -s tests   # the suite
 ```
+
+## Watching
+
+The viewer is a camera you can take: **wheel** zooms, **drag** pans, **click a
+person** follows them, **escape** gives the camera back to the documentary
+eye. The lower-third card names whoever you picked — age, generation, their
+nest box, their partner, and why they are the way they are. `THE OBSERVER'S
+RECORD` is a console: every event, filterable by universe and by
+LIFE / WORLD / END.
 
 24/7 via launchd:
 

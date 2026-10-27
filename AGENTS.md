@@ -147,8 +147,11 @@ sim/server.py      tick loop, HTTP viewer, snapshot uploader
 web/index.html     chunky-pixel renderer (identical to docs/index.html)
 docs/              GitHub Pages mirror + the canonical design law
 tools/lab.py       fast local harness: run a century in seconds
+tools/sweep.py     vary the pen's design and report what each one does
+tools/shoot.py     capture the viewer at 390/1024/1440 and drive it
 tools/chronicle.py mechanical event digest
 tests/             unittest suite (engine behaviour + viewer data contract)
+STUDY.md           what the running universes did, and how to re-derive it
 data/              state, events.ndjson, chronicles, postmortems (local)
 ```
 
@@ -158,9 +161,15 @@ data/              state, events.ndjson, chronicles, postmortems (local)
 python3 -m unittest discover -s tests     # the suite
 python3 tools/lab.py --days 60000          # a whole arc, in seconds
 python3 tools/lab.py --days 60000 --json out.json
+python3 tools/sweep.py --study calhoun     # vary the pen
+python3 tools/shoot.py http://127.0.0.1:6969/ --tag shot   # the viewer
 ./run.sh                                  # foreground server on :6969
 python3 tools/chronicle.py                # digest new events
 ```
+
+`UNIVERSE69_PORT` and `UNIVERSE69_DATA` move a development instance off the
+live port and out of the live data directory. Use them: never point a
+development server at `data/`.
 
 ## Honesty rules
 
