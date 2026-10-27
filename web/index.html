@@ -4,59 +4,142 @@
 <meta charset="utf-8">
 <title>UNIVERSE 69</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='8' height='16' fill='%23a8c0f0'/><rect x='8' width='8' height='16' fill='%23a0e898'/></svg>">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { height:100%; overflow:hidden; }
   body { background:#000; color:#d8d8e8; font-family:Menlo,Monaco,monospace;
          display:flex; flex-direction:column; }
-  #worlds { flex:2; display:flex; min-height:0; }
-  .world { flex:1; position:relative; min-width:0; }
+
+  /* The instrument's own name and the only instruction the viewer needs.
+     One line: a brand name does not earn a giant top bar. */
+  #masthead { flex:0 0 auto; display:flex; align-items:baseline; gap:10px;
+              padding:5px 12px; background:#0b0b14; font-size:11px;
+              border-bottom:1px solid #26263c; }
+  #masthead .ttl { color:#f8d848; letter-spacing:3px; font-weight:bold; }
+  #masthead .sub { color:#8a8aa8; }
+  #masthead .hint { margin-left:auto; color:#5e5e7c; letter-spacing:1px; }
+
+  #worlds { flex:3 1 0; display:flex; min-height:0; }
+  .world { flex:1; position:relative; min-width:0; overflow:hidden; }
   #divider { width:2px; background:#3a3a55; }
   canvas.view { width:100%; height:100%; display:block; image-rendering:pixelated; }
+  canvas.overlay { position:absolute; inset:0; width:100%; height:100%;
+                   pointer-events:none; }
   .hud { position:absolute; top:0; left:0; right:0; padding:6px 10px;
          font-size:11px; line-height:1.5; white-space:pre-wrap;
          background:rgba(0,0,10,0.55); pointer-events:none; }
   .hud b { color:#f8d848; font-weight:bold; }
   .hud .shot { color:#f0f0f8; letter-spacing:1px; }
-  #god { flex:1; border-top:2px solid #3a3a55; display:flex; min-height:0;
+  .hud .scale { color:#7a7a9c; }
+  .hud .who { color:#9fe8c0; }
+
+  /* the lower third: who you are watching */
+  .card { position:absolute; left:0; bottom:0; max-width:70%;
+          padding:6px 10px; font-size:11px; line-height:1.55;
+          background:rgba(0,0,10,0.72); border-top:1px solid #2c2c46;
+          pointer-events:none; display:none; }
+  .card.on { display:block; }
+  .card .nm { color:#f8d848; }
+  .card .dl { color:#8a8aa8; }
+  .card .dl b { color:#c8c8e0; font-weight:normal; }
+
+  #god { flex:2 1 0; border-top:2px solid #3a3a55; display:flex; min-height:0;
          background:#07070e; }
-  .stat { width:25%; padding:8px 12px; font-size:11px; line-height:1.7;
+  .stat { width:24%; padding:8px 12px; font-size:11px; line-height:1.7;
           overflow:hidden; white-space:pre-wrap; }
   .stat h2 { font-size:11px; margin-bottom:2px; letter-spacing:1px; }
   #s6 h2 { color:#a8c0f0; } #s9 h2 { color:#a0e898; }
   .trend { width:100%; height:44px; image-rendering:pixelated; display:block;
            margin:4px 0; }
-  #records { flex:1; padding:8px 14px; font-size:11px; line-height:1.85;
-             overflow:hidden; border-left:2px solid #3a3a55;
-             border-right:2px solid #3a3a55; }
-  #records h2 { font-size:11px; color:#f8d848; letter-spacing:2px; margin-bottom:2px; }
-  #records .cur::after { content:"▼"; color:#f8d848; margin-left:6px;
-                         animation:blink 1s steps(1) infinite; }
-  @keyframes blink { 50% { opacity:0; } }
+
+  /* the console: the record, and the only scrolling region in the page */
+  #records { flex:1; display:flex; flex-direction:column; min-width:0;
+             border-left:2px solid #3a3a55; border-right:2px solid #3a3a55; }
+  #rechead { flex:0 0 auto; padding:6px 12px 4px; border-bottom:1px solid #1e1e32; }
+  #records h2 { font-size:11px; color:#f8d848; letter-spacing:2px;
+                display:inline-block; }
+  #filters { display:inline-flex; gap:4px; margin-left:10px; vertical-align:baseline; }
+  #filters button { font:inherit; font-size:10px; letter-spacing:1px;
+                    color:#6a6a8a; background:#12121e; border:1px solid #26263c;
+                    padding:1px 6px; cursor:pointer; }
+  #filters button.on { color:#f8d848; border-color:#5a5a3a; background:#1a1a16; }
+  #legend { flex:0 0 auto; padding:3px 12px; font-size:10px; color:#6a6a8a;
+            border-bottom:1px solid #1e1e32; display:flex; gap:10px;
+            flex-wrap:wrap; align-items:center; }
+  #legend .chip { display:inline-flex; align-items:center; gap:4px; }
+  #legend .sw { width:8px; height:8px; display:inline-block; }
+  #reclines { flex:1 1 auto; overflow-y:auto; padding:4px 12px 10px;
+              font-size:11px; line-height:1.7; }
+  #reclines::-webkit-scrollbar { width:8px; }
+  #reclines::-webkit-scrollbar-thumb { background:#2c2c46; }
+  #reclines .row { color:#b8b8d0; }
+  #reclines .row .yr { color:#666a88; }
+  #reclines .row .u6 { color:#a8c0f0; } #reclines .row .u9 { color:#a0e898; }
+  #reclines .row.life { color:#c8c8e0; }
+  #reclines .row.world { color:#a0a0c0; }
+  #reclines .row.end { color:#f0b0b0; }
+  #reclines .empty { color:#666a88; }
+
   .ev6 { color:#a8c0f0; } .ev9 { color:#a0e898; } .evy { color:#666a88; }
   .dim { color:#8888aa; }
+
   @media (max-width: 760px), (max-aspect-ratio: 4/5) {
-    #worlds { flex-direction:column; }
+    #masthead { flex-wrap:wrap; padding:4px 8px; gap:3px 8px; }
+    #masthead .ttl { white-space:nowrap; }
+    #masthead .sub { display:none; }
+    #masthead .hint { margin-left:0; flex:1 1 100%; font-size:9px;
+                      letter-spacing:0; white-space:nowrap;
+                      overflow:hidden; text-overflow:ellipsis; }
+    #worlds { flex-direction:column; flex:3 1 0; }
     #divider { width:auto; height:2px; }
-    #god { flex-direction:row; flex-wrap:wrap; overflow-y:auto; }
-    #records { flex:1 1 100%; order:0; border-left:none; border-right:none;
-               border-bottom:2px solid #3a3a55; min-height:120px; }
-    .stat { width:50%; order:1; font-size:10px; line-height:1.6; }
-    .hud { font-size:10px; padding:4px 8px; }
+    #god { flex-direction:row; flex-wrap:wrap; overflow-y:auto; flex:2 1 0; }
+    /* the numbers first on a narrow screen, then the record: what is
+       happening, then how it got there */
+    .stat { width:50%; order:0; font-size:10px; line-height:1.6; overflow:visible; }
+    #records { flex:1 1 100%; order:1; border-left:none; border-right:none;
+               border-bottom:2px solid #3a3a55; height:230px; min-height:150px; }
+    .hud { font-size:9px; padding:3px 6px; }
+    .card { font-size:10px; padding:4px 8px; max-width:100%; }
+    #legend { font-size:9px; gap:6px; }
+    #filters button { font-size:9px; padding:1px 4px; }
   }
 </style>
 </head>
 <body>
+<div id="masthead">
+  <span class="ttl">UNIVERSE 69</span>
+  <span class="sub">two sealed worlds — observed, never helped</span>
+  <span class="hint">wheel zoom · drag to pan · click a person to follow · esc to resume</span>
+</div>
 <div id="worlds">
-  <div class="world"><canvas id="c6" class="view"></canvas>
-    <div class="hud" id="hud6"><b>UNIVERSE 6 · EDEN</b></div></div>
+  <div class="world" id="w6"><canvas id="c6" class="view"></canvas>
+    <canvas id="o6" class="overlay"></canvas>
+    <div class="hud" id="hud6"><b>UNIVERSE 6 · EDEN</b></div>
+    <div class="card" id="card6"></div></div>
   <div id="divider"></div>
-  <div class="world"><canvas id="c9" class="view"></canvas>
-    <div class="hud" id="hud9"><b>UNIVERSE 9 · LAGOON</b></div></div>
+  <div class="world" id="w9"><canvas id="c9" class="view"></canvas>
+    <canvas id="o9" class="overlay"></canvas>
+    <div class="hud" id="hud9"><b>UNIVERSE 9 · LAGOON</b></div>
+    <div class="card" id="card9"></div></div>
 </div>
 <div id="god">
   <div class="stat" id="s6"></div>
-  <div id="records"><h2>THE OBSERVER'S RECORD</h2><div id="reclines"></div></div>
+  <div id="records">
+    <div id="rechead">
+      <h2>THE OBSERVER'S RECORD</h2>
+      <span id="filters">
+        <button data-u="all" class="on">ALL</button>
+        <button data-u="EDEN">U6</button>
+        <button data-u="LAGOON">U9</button>
+        <button data-k="life">LIFE</button>
+        <button data-k="world">WORLD</button>
+        <button data-k="end">END</button>
+      </span>
+    </div>
+    <div id="legend"></div>
+    <div id="reclines"></div>
+  </div>
   <div class="stat" id="s9"></div>
 </div>
 
@@ -91,7 +174,16 @@ function fetchJSON(u){ return fetch(u,{cache:"no-store"}).then(function(r){ retu
 function mkCanvas(w,h){ var c=document.createElement("canvas"); c.width=w; c.height=h===undefined?w:h; return c; }
 
 var worldInfo=null, lagoonIter=-1, state=null, tick=0, pollSeq=0;
-var cam={ e:{x:24+EM,y:24+EM,h:9}, l:{x:137,y:109,h:9} };
+// The camera is a documentary eye by default — but the viewer may take it.
+//   auto   the eye chooses where to look and how close
+//   manual you moved it: wheel to zoom, drag to pan
+//   follow you picked a person and the camera stays with them
+var cam={ e:{x:24+EM,y:24+EM,h:10,tx:24+EM,ty:24+EM,th:10,mode:"auto",follow:0},
+          l:{x:137,y:109,h:10,tx:137,ty:109,th:10,mode:"auto",follow:0} };
+var view={ e:null, l:null };      // the viewport each frame drew, for input maths
+var sel={ e:0, l:0 };             // the person the viewer picked
+var MIN_H=2.2, MAX_H=90;         // half-height in tiles: 2.2 is face-close
+var hudCache={ e:"", l:"" };
 
 // =========================================================== LAGOON layers
 var base9=null, semi9=null, frame9=null, semi9seq=-1, water9=[], terr9=null;
@@ -235,17 +327,28 @@ function buildSemi9(u){
     });
   }
 }
+function snowAmount(x,y){
+  // drifts are patchy: a coarse field decides where snow lies at all, a
+  // finer one decides the ragged edge of each drift
+  var coarse=hash2((x>>2)+17,(y>>2)+29);
+  var fine=hash2(x*13+3,y*17+5);
+  return coarse*0.72+fine*0.28;
+}
 function buildSnow9(harsh){
   var S=terr9.length;
   snow9=mkCanvas(S*PX);
   var g=snow9.getContext("2d");
-  var cover=harsh?0.15:0.42;
+  var reach=harsh?0.62:0.86;
   for (var y=0;y<S;y++) for (var x=0;x<S;x++){
-    if (terr9[y][x]!==2 && hash2(x*7,y*11)>cover){
-      g.fillStyle="rgba(236,242,250,0.88)";
-      g.fillRect(x*PX+1,y*PX+1,PX-2,PX-3);
-      g.fillStyle="rgba(200,214,232,0.7)";
-      g.fillRect(x*PX+2,y*PX+PX-3,PX-4,1);
+    if (terr9[y][x]===2) continue;
+    var amount=snowAmount(x,y)*reach;
+    if (amount<=0.04) continue;
+    // dither the tile in 3-pixel cells so the edge of a drift is ragged
+    // rather than a square stamped on the grass
+    for (var sy=0;sy<4;sy++) for (var sx=0;sx<4;sx++){
+      if (hash2(x*4+sx+1, y*4+sy+1) >= amount) continue;
+      g.fillStyle="rgba(238,244,252,0.82)";
+      g.fillRect(x*PX+sx*3, y*PX+sy*3, 3, 3);
     }
   }
 }
@@ -786,18 +889,27 @@ function render(canvas, composed, map, key, u){
   var sh=shots[key];
   if (tick>=sh.until) pickShot(key, list, u, S);
   var tx,ty,th;
-  if (!sh.wide){ tx=sh.x; ty=sh.y; th=sh.h; }
+  if (c.mode==="follow" && map[c.follow]){
+    var who=map[c.follow];
+    tx=who.x; ty=who.y; th=c.th;
+  } else if (c.mode==="manual"){
+    tx=c.tx; ty=c.ty; th=c.th;
+  } else if (!sh.wide){ tx=sh.x; ty=sh.y; th=sh.h; }
   else if (list.length){
+    // The eye stays close enough to read the people. A map of coloured dots
+    // is not an observation — at this scale a figure is a face, a basket, a
+    // spear, two people facing each other.
     tx=(minx+maxx)/2; ty=(miny+maxy)/2;
-    th=Math.max(7, Math.min(S/2, Math.max(maxx-minx,maxy-miny)/2+6));
-  } else { tx=S/2; ty=S/2; th=S/2; }
-  var ease = sh.wide ? 0.02 : 0.035;
+    th=Math.max(7, Math.min(10, Math.max(maxx-minx,maxy-miny)/2+6));
+  } else { tx=S/2; ty=S/2; th=10; }
+  var ease = (c.mode==="manual") ? 0.3 : (sh.wide ? 0.02 : 0.035);
   c.x=lerp(c.x,tx,ease); c.y=lerp(c.y,ty,ease); c.h=lerp(c.h,th,ease);
   if (sh.shown!==sh.label){ sh.shown=sh.label; refreshHud(key); }
   var aspect=canvas.width/canvas.height;
   var hy=c.h, hx=Math.min(S/2, c.h*aspect);
   if (hx/aspect<hy) hy=hx/aspect;
   var sx=Math.max(0,Math.min(S-2*hx,c.x-hx)), sy=Math.max(0,Math.min(S-2*hy,c.y-hy));
+  view[key]={sx:sx,sy:sy,hx:hx,hy:hy,S:S,canvas:canvas,ts:canvas.width/(2*hx)};
   var g=canvas.getContext("2d");
   g.imageSmoothingEnabled=false;
   g.fillStyle="#000"; g.fillRect(0,0,canvas.width,canvas.height);
@@ -858,6 +970,140 @@ function render(canvas, composed, map, key, u){
   drawParticles(g, key, sx, sy, ts, canvas.width);
 }
 
+// ---- the overlay: captions and the person you are watching ---------------
+// Drawn on its own canvas at device resolution so the type stays readable.
+// The world canvas is deliberately chunky; the annotation layer is not.
+function paintOverlay(key){
+  var ov=document.getElementById(key==="e"?"o6":"o9");
+  var v=view[key]; if(!ov||!v) return;
+  var g=ov.getContext("2d");
+  g.clearRect(0,0,ov.width,ov.height);
+  var map=key==="e"?actors6:actors9;
+  var ts=v.ts, sx=v.sx, sy=v.sy;
+  var dpr=ov.width/(ov.clientWidth||ov.width)||1;
+  var s=ts*1.45/32;                        // figure scale, as in render()
+  var caption = s>=1.6;                   // only caption when few enough to read
+  g.textAlign="center"; g.textBaseline="alphabetic";
+  g.font=Math.round(11*dpr)+"px Menlo,Monaco,monospace";
+  var placed=[];                          // captions already drawn, to avoid collisions
+  var list=[]; Object.keys(map).forEach(function(id){ list.push(map[id]); });
+  list.sort(function(a,b){ return a.y-b.y; });
+  for (var i=0;i<list.length;i++){
+    var a=list[i];
+    var px=(a.x-sx)*ts+ts/2, py=(a.y-sy)*ts+ts*0.95;
+    if (px<-60||py<-60||px>ov.width+60||py>ov.height+60) continue;
+    if (!caption) continue;
+    var lbl=(a.moving?"walking":(ACT_LABEL[a.act]||"idle"));
+    var wpx=g.measureText(lbl).width;
+    var top=py-ts*1.55-13*dpr;
+    var bx=px-wpx/2-3*dpr, by=top, bw=wpx+6*dpr, bh=12*dpr;
+    var clash=false;
+    for (var j=0;j<placed.length;j++){
+      var q=placed[j];
+      if (bx<q.x+q.w && bx+bw>q.x && by<q.y+q.h && by+bh>q.y){ clash=true; break; }
+    }
+    if (clash) continue;                  // an unreadable pile of labels helps nobody
+    placed.push({x:bx,y:by,w:bw,h:bh});
+    g.fillStyle="rgba(4,4,10,0.62)";
+    g.fillRect(Math.round(bx), Math.round(by), Math.round(bw), Math.round(bh));
+    g.fillStyle=(a.act===A_FIGHT)?"#ff9a9a":
+                 (a.act===A_BIRTH)?"#ffc2e2":
+                 (a.act===A_WITHDRAW)?"#9ae8e0":"#d8d8e8";
+    g.fillText(lbl, Math.round(px), Math.round(by+9*dpr));
+  }
+  // the person you are watching
+  var f=sel[key]?map[sel[key]]:null;
+  if (f){
+    var fx=(f.x-sx)*ts+ts/2, fy=(f.y-sy)*ts+ts*0.95;
+    g.strokeStyle="#f8d848"; g.lineWidth=Math.max(1,Math.round(1.5*dpr));
+    g.beginPath(); g.ellipse(fx,fy,ts*0.85,ts*0.36,0,0,6.283); g.stroke();
+    g.beginPath(); g.arc(fx, fy-ts*2.3, ts*1.4, 0, 6.283); g.stroke();
+  }
+}
+
+// ---- taking the camera: zoom, pan, pick a person -------------------------
+function worldAt(key,mx,my){
+  var v=view[key]; if(!v) return null;
+  var dpr=v.canvas.width/(v.canvas.clientWidth||v.canvas.width)||1;
+  return {x: v.sx+(mx*dpr)/v.ts, y: v.sy+(my*dpr)/v.ts};
+}
+function zoomAt(key,mx,my,factor){
+  var c=cam[key], v=view[key]; if(!v) return;
+  var before=worldAt(key,mx,my); if(!before) return;
+  var nh=Math.max(MIN_H, Math.min(MAX_H, c.h*factor));
+  var aspect=v.canvas.width/v.canvas.height;
+  var hy=nh, hx=Math.min(v.S/2, nh*aspect);
+  if (hx/aspect<hy) hy=hx/aspect;
+  var fx=(before.x-(c.x-v.hx))/(2*v.hx);
+  var fy=(before.y-(c.y-v.hy))/(2*v.hy);
+  c.x=before.x-(2*fx-1)*hx;
+  c.y=before.y-(2*fy-1)*hy;
+  c.h=nh; c.th=nh; c.tx=c.x; c.ty=c.y; c.mode="manual"; c.follow=0;
+  sel[key]=0; refreshHud(key); paintCard(key);
+}
+function pickPerson(key,mx,my){
+  var v=view[key]; if(!v) return 0;
+  var w=worldAt(key,mx,my); if(!w) return 0;
+  var map=key==="e"?actors6:actors9;
+  var best=0, bestD=1e9;
+  Object.keys(map).forEach(function(id){
+    var a=map[id];
+    // a figure stands on its feet and reaches about 1.5 tiles up
+    var top=a.y-1.5, bot=a.y;
+    var dy=0;
+    if (w.y>bot) dy=w.y-bot;
+    else if (w.y<top) dy=top-w.y;
+    var d=Math.hypot(Math.abs(a.x-w.x), dy);
+    if(d<bestD){ bestD=d; best=a.id; }
+  });
+  return bestD<1.0 ? best : 0;
+}
+function bindWorld(canvasId, key){
+  var cv=document.getElementById(canvasId);
+  var drag=null;
+  cv.addEventListener("wheel", function(e){
+    e.preventDefault();
+    var r=cv.getBoundingClientRect();
+    zoomAt(key, e.clientX-r.left, e.clientY-r.top, e.deltaY<0?0.82:1.22);
+  }, {passive:false });
+  cv.addEventListener("pointerdown", function(e){
+    var r=cv.getBoundingClientRect();
+    drag={x:e.clientX,y:e.clientY,mx:e.clientX-r.left,my:e.clientY-r.top,moved:false};
+    try{ cv.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  cv.addEventListener("pointermove", function(e){
+    if(!drag) return;
+    var dx=e.clientX-drag.x, dy=e.clientY-drag.y;
+    if (Math.abs(dx)+Math.abs(dy)>3) drag.moved=true;
+    var v=view[key]; if(!v) return;
+    var dpr=v.canvas.width/(v.canvas.clientWidth||v.canvas.width)||1;
+    var c=cam[key];
+    c.x-=dx*dpr/v.ts; c.y-=dy*dpr/v.ts;
+    c.x=Math.max(v.hx, Math.min(v.S-v.hx, c.x));
+    c.y=Math.max(v.hy, Math.min(v.S-v.hy, c.y));
+    c.tx=c.x; c.ty=c.y; c.mode="manual"; c.follow=0;
+    drag.x=e.clientX; drag.y=e.clientY;
+  });
+  cv.addEventListener("pointerup", function(e){
+    if (drag && !drag.moved){
+      var id=pickPerson(key, drag.mx, drag.my);
+      sel[key]=id;
+      if (id){ cam[key].mode="follow"; cam[key].follow=id; }
+      else { cam[key].mode="auto"; cam[key].follow=0; }
+      refreshHud(key); paintCard(key);
+    }
+    drag=null;
+  });
+  cv.addEventListener("pointercancel", function(){ drag=null; });
+}
+document.addEventListener("keydown", function(e){
+  if (e.key==="Escape"||e.key===" "){
+    ["e","l"].forEach(function(k){ cam[k].mode="auto"; cam[k].follow=0; sel[k]=0; });
+    refreshHud("e"); refreshHud("l"); paintCard("e"); paintCard("l");
+    if (e.key===" ") e.preventDefault();
+  }
+});
+
 // =========================================================== god panel
 function sparkline(id, census, color){
   var cv=document.getElementById(id);
@@ -900,40 +1146,159 @@ function statHTML(u, kind){
     if (u.lessons&&u.lessons.length) out+="\n<span class='dim'>INSTINCTS: "+u.lessons.join(" · ").toUpperCase()+"</span>";
     if (u.culture&&u.culture.length) out+="\n<span class='dim'>ARTS: "+u.culture.length+" — "+u.culture[u.culture.length-1].toUpperCase()+"</span>";
   }
+  // how they died, so far — the record of what the world did to its people
+  var cod=u.cod||{}, ck=Object.keys(cod);
+  if (ck.length){
+    ck.sort(function(a,b){return cod[b]-cod[a];});
+    out+="\n<span class='dim'>DIED: "+ck.slice(0,4).map(function(k){return k+" "+cod[k];}).join(" · ")+"</span>";
+  }
+  if (kind==="e" && u.box_slots){
+    out+="\n<span class='dim'>PEN: "+u.boxes+" NEST BOXES · "+u.box_slots+" PLACES · CAP "+u.cap+"</span>";
+  }
   return out;
 }
 var hudExtra="";
+function whoInfo(key){
+  var id=sel[key]; if(!id) return null;
+  var map=key==="e"?actors6:actors9;
+  var a=map[id]; if(!a) return null;
+  var u=state && state.u[key==="e"?"eden":"lagoon"];
+  var d=(u && u.detail) ? u.detail[String(id)] : null;
+  if (!d) return null;
+  return {id:id, name:d[0], age:d[1], gen:d[2], flags:d[3],
+          hx:d[4], hy:d[5], pid:d[6], hun:d[7], u:u,
+          act:a.moving?"walking":(ACT_LABEL[a.act]||"idle")};
+}
 function hudText(u, kind){
   var l2 = kind==="e" ? u.phase.toUpperCase()
     : (u.tech&&u.tech.length?"AGE OF "+u.tech[u.tech.length-1].replace("_"," ").toUpperCase():u.phase.toUpperCase());
-  var sh=shots[kind], cap = (sh && !sh.wide && sh.label) ? "\n<span class='shot'>WATCHING: "+sh.label.toUpperCase()+"</span>" : "";
-  return "<b>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</b>  Y"+u.year+" · POP "+u.pop+" · "+l2+(kind==="e"?hudExtra:"")+cap;
+  var sh=shots[kind], cap = (sh && !sh.wide && sh.label) ? "<span class='shot'> · "+sh.label.toUpperCase()+"</span>" : "";
+  var v=view[kind];
+  var sc = v ? "<span class='scale'> · "+Math.round(v.hx*2)+" TILES ACROSS</span>" : "";
+  var w=whoInfo(kind);
+  var who = w ? "<span class='who'> · "+w.name.toUpperCase()+", "+w.act.toUpperCase()+"</span>" : "";
+  return "<b>UNIVERSE "+(kind==="e"?"6 · EDEN":"9 · LAGOON")+"</b>  Y"+u.year+
+         " · POP "+u.pop+" · "+l2+(kind==="e"?hudExtra:"")+sc+cap+who;
 }
 function refreshHud(kind){
   if (!state) return;
-  document.getElementById(kind==="e"?"hud6":"hud9").innerHTML=hudText(state.u[kind==="e"?"eden":"lagoon"], kind);
-}
-var typeFull="", typePos=0, shown=[];
-function updateRecords(events){
-  var el=document.getElementById("reclines");
-  if (!events||!events.length){ el.innerHTML="<span class='dim'>Nothing yet. The worlds are young.</span>"; return; }
-  var last=events[events.length-1], key=last.d+last.msg;
-  if (typeFull!==key){ typeFull=key; typePos=0; shown=events.slice(-7,-1); }
-  typePos=Math.min(last.msg.length, typePos+2);
-  function row(e,cur){
-    var cls=e.u==="EDEN"?"ev6":"ev9";
-    return "<div class='"+cls+(cur?" cur":"")+"'><span class='evy'>Y"+e.y+" "
-      +(e.u==="EDEN"?"U6":"U9")+"</span> "+(cur?last.msg.slice(0,typePos):e.msg)+"</div>";
+  var h=hudText(state.u[kind==="e"?"eden":"lagoon"], kind);
+  if (hudCache[kind]!==h){
+    hudCache[kind]=h;
+    document.getElementById(kind==="e"?"hud6":"hud9").innerHTML=h;
   }
-  el.innerHTML=shown.map(function(e){return row(e,false);}).join("")+row(last,true);
+}
+// the lower third: who you are watching
+function paintCard(key){
+  var el=document.getElementById(key==="e"?"card6":"card9");
+  var w=whoInfo(key);
+  if(!w){ el.className="card"; el.innerHTML=""; return; }
+  el.className="card on";
+  var bits=[];
+  if (w.flags&1)  bits.push("withdrawn — one of the beautiful ones");
+  if (w.flags&2)  bits.push("incompetent — born into the sink");
+  if (w.flags&4)  bits.push("pregnant");
+  if (w.flags&8)  bits.push("minding an infant");
+  if (w.flags&16) bits.push("no territory — every nest box is full");
+  if (w.flags&32) bits.push("hungry");
+  if (w.flags&64) bits.push("elder");
+  var pname="no partner";
+  if (w.pid && w.u.detail){
+    var pd=w.u.detail[String(w.pid)];
+    if (pd) pname="partner: "+pd[0];
+  }
+  el.innerHTML="<span class='nm'>"+w.name+"</span> · "+w.act+
+    "<br><span class='dl'>"+w.age+" years · generation "+w.gen+
+    " · "+w.hun+" hunger<br>"+
+    (key==="e" ? "nest box at "+w.hx+","+w.hy : "hearth at "+w.hx+","+w.hy)+
+    " · "+pname+
+    (bits.length?"<br>"+bits.join(" · "):"")+"</span>";
 }
 
+// ---------------------------------------------------------- the console
+// The record of what happened, kept as a record: filterable, scrollable, and
+// never overwritten by the next thing that happens.
+var KIND_GROUP={
+  generation:"life", childbirth:"life", famine:"life", predator:"life",
+  violence:"life", disease:"life",
+  discovery:"world", disaster:"world", phase:"world", migration:"world",
+  feud:"world", culture:"world", ennui:"world",
+  extinction:"end", reseed:"end", lesson:"end", epidemic:"end"
+};
+var conFilter={u:"all",k:"all"};
+var conEvents=[];
+function eventClass(e){
+  if (conFilter.u!=="all" && e.u!==conFilter.u) return null;
+  var g=KIND_GROUP[e.t]||"world";
+  if (conFilter.k!=="all" && g!==conFilter.k) return null;
+  return g;
+}
+function updateRecords(events){
+  if (events && events.length) conEvents=events;
+  var el=document.getElementById("reclines");
+  var rows=[];
+  for (var i=0;i<conEvents.length;i++){
+    var g=eventClass(conEvents[i]);
+    if (g) rows.push({e:conEvents[i], g:g});
+  }
+  if (!rows.length){
+    el.innerHTML="<div class='empty'>Nothing recorded under this filter.</div>";
+    return;
+  }
+  var html=rows.slice(-400).map(function(r){
+    var e=r.e;
+    return "<div class='row "+r.g+"'><span class='yr'>Y"+e.y+"</span> "+
+      "<span class='"+(e.u==="EDEN"?"u6":"u9")+"'>"+(e.u==="EDEN"?"U6":"U9")+"</span> "+
+      "<span class='yr'>["+e.t+"]</span> "+e.msg+"</div>";
+  }).join("");
+  if (el.innerHTML!==html){
+    el.innerHTML=html;
+    el.scrollTop=el.scrollHeight;
+  }
+}
+function buildLegend(){
+  var cls=[[0,"#f8d848","child"],[1,"#3f6fd8","man"],[2,"#d45a8c","woman"],
+           [3,"#9a9a9a","elder"],[4,"#9ae8e0","withdrawn"]];
+  var h=cls.map(function(c){
+    return "<span class='chip'><span class='sw' style='background:"+c[1]+"'></span>"+c[2]+"</span>";
+  }).join("");
+  h+="<span class='chip' style='color:#5e5e7c'>poses: foraging · hunting · fishing · farming · "+
+     "eating · talking · fighting · giving birth · withdrawn</span>";
+  document.getElementById("legend").innerHTML=h;
+}
+document.getElementById("filters").addEventListener("click", function(e){
+  var b=e.target; if(!b||b.tagName!=="BUTTON") return;
+  if (b.dataset.u!==undefined){
+    conFilter.u=b.dataset.u;
+    Array.prototype.forEach.call(this.querySelectorAll("button[data-u]"), function(x){
+      x.className=(x.dataset.u===conFilter.u)?"on":"";
+    });
+  } else {
+    conFilter.k=b.dataset.k;
+    Array.prototype.forEach.call(this.querySelectorAll("button[data-k]"), function(x){
+      x.className=(x.dataset.k===conFilter.k)?"on":"";
+    });
+  }
+  updateRecords(null);
+});
+
 // =========================================================== loops
+function reportError(where, ev){
+  var msg=(ev && ev.message) ? ev.message : String(ev);
+  try{ console.error("UNIVERSE69 "+where+": "+msg); }catch(e){}
+  var el=document.getElementById("reclines");
+  if (el) el.innerHTML="<div class='row end'>VIEWER ERROR in "+where+": "+msg+"</div>";
+}
+window.addEventListener("error", function(ev){
+  reportError("page", (ev && ev.message) ? ev : {message:String(ev)});
+});
 function fit(){
   var dpr=Math.min(window.devicePixelRatio||1, 2.5);
   ["c6","c9"].forEach(function(id){
     var cv=document.getElementById(id);
     cv.width=Math.round(cv.clientWidth*dpr); cv.height=Math.round(cv.clientHeight*dpr);
+    var ov=document.getElementById(id==="c6"?"o6":"o9");
+    ov.width=cv.width; ov.height=cv.height;
   });
   spriteCache={}; spriteCount=0;
 }
@@ -964,17 +1329,24 @@ function frame(){
   if (document.hidden) return;
   var t0=performance.now();
   tick++;
+  try{
   if (state){
     render(document.getElementById("c6"), compose6(state.u.eden), actors6, "e", state.u.eden);
     render(document.getElementById("c9"), compose9(state.u.lagoon, state), actors9, "l", state.u.lagoon);
-    if (tick%8===0) updateRecords(state.events);
+    paintOverlay("e"); paintOverlay("l");
+    if (tick%4===0){ refreshHud("e"); refreshHud("l"); }
+    if (tick%8===0){ updateRecords(state.events); paintCard("e"); paintCard("l"); }
   }
+  }catch(err){ reportError("frame", err); }
   costAvg=costAvg*0.9+(performance.now()-t0)*0.1;
   var want = costAvg>26 ? 66 : (costAvg<14 ? 33 : frameMs);
   if (want!==frameMs){ frameMs=want; clearInterval(loopTimer); loopTimer=setInterval(frame, frameMs); }
 }
 document.addEventListener("visibilitychange", function(){ if (!document.hidden){ fit(); frame(); } });
 fit();
+buildLegend();
+bindWorld("c6","e");
+bindWorld("c9","l");
 loadWorld().then(function(){
   poll(); setInterval(poll,2000);
   frame(); loopTimer=setInterval(frame, frameMs);

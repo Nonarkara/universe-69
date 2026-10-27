@@ -24,6 +24,7 @@ GESTATION = 270
 EDEN_SIZE = 48
 EDEN_CAP = 900          # nominal capacity of the pen
 EDEN_STAGNATION = 0.35  # crowding level where the behavioral sink begins
+EDEN_BOX_CAP = 7        # how many may share one nest box
 
 LAGOON_SIZE = 160   # an island off the coast of a greater land
 RESEED_YEARS = 30       # quiet years before the Observers reseed (Ice Age cycle)
@@ -232,6 +233,31 @@ def write_postmortem(u, events):
     u["postmortems"] = (u["postmortems"] + [pm])[-20:]
 
 
+def record_extinction(u, events):
+    """Note the death of a universe and write its postmortem.
+
+    Two paths reach this and both must count. The usual one: the tick in which
+    the last person dies. The other: a tick that begins with an empty
+    population and no recorded death — a state saved mid-way through the end,
+    or a hand-edited world. Without the second path an extinction can go
+    unrecorded, and an unrecorded extinction loses the postmortem and the
+    reseed that the whole experiment depends on.
+    """
+    if u["extinct_day"] is not None:
+        return
+    day = u["day"]
+    u["extinct_day"] = day
+    if u["kind"] == "EDEN":
+        events.append((day, "EDEN", "extinction",
+                       f"UNIVERSE 6 HAS DIED. The pen is empty. Peak population was {u['peak']}, "
+                       f"generation {u['gen_max']}. The food hoppers are still full."))
+    else:
+        events.append((day, "LAGOON", "extinction",
+                       f"UNIVERSE 9 HAS DIED. The lagoon is quiet again. Peak population {u['peak']}, "
+                       f"generation {u['gen_max']}."))
+    write_postmortem(u, events)
+
+
 def base_mortality(p, day, rng, events, u, label_extra=""):
     """Senescence. Returns True if the person dies of old age."""
     age_y = age_of(p, day) / DAYS_PER_YEAR
@@ -293,7 +319,66 @@ for _i in range(4, EDEN_SIZE - 6, 5):
     EDEN_BOXES.append((_i + 1, EDEN_SIZE - 5))      # south
     EDEN_BOXES.append((4, _i + 1))                  # west
     EDEN_BOXES.append((EDEN_SIZE - 5, _i + 1))      # east
-BOX_CAPACITY = 7
+BOX_CAPACITY = EDEN_BOX_CAP
+
+
+def make_boxes(count, size=EDEN_SIZE):
+    """Nest boxes around the four walls of the pen, as evenly as the walls allow.
+
+    Calhoun's Universe 25 had 256 boxes, each holding about 15 mice. The
+    number and the arrangement are the experiment: change them and you are
+    running a different universe, which is the whole point of being able to
+    vary the pen.
+    """
+    per = max(1, count // 4)
+    if per == 1:
+        mid = size // 2
+        return [(mid, 4), (mid, size - 5), (4, mid), (size - 5, mid)]
+    step = (size - 13) / (per - 1)
+    boxes = []
+    for k in range(per):
+        i = int(round(5 + step * k))
+        boxes.append((i, 4))                      # north wall
+        boxes.append((i, size - 5))              # south
+        boxes.append((4, i))                      # west
+        boxes.append((size - 5, i))              # east
+    return boxes
+
+
+def set_pen_design(u, cap=None, stagnation=None, boxes=None, box_cap=None):
+    """Re-dress a universe's pen. Used by the study tools, never by the
+    live run — the Observers provision the pen once and then do not touch it."""
+    if cap is not None:
+        u["cap"] = cap
+    if stagnation is not None:
+        u["stagnation"] = stagnation
+    if boxes is not None:
+        u["boxes"] = list(boxes) if not isinstance(boxes, int) else make_boxes(boxes)
+        u["box_occ"] = {}
+    if box_cap is not None:
+        u["box_cap"] = box_cap
+    return u
+
+
+def eden_design(u):
+    """The architecture of the pen, as numbers the experiment can vary.
+
+    Calhoun's own conclusion — and the Ramsden & Adams critique recorded in
+    RESEARCH.md — is that the outcome tracks the *distribution* of space,
+    roles and resources, not crowding alone. So the architecture cannot live
+    as a constant in the source: a study of Universe 25 has to be able to
+    change the pen and watch what happens.
+
+    A live world that predates these fields carries none of them; the
+    defaults below are exactly the pen it was already running.
+    """
+    boxes = u.get("boxes")
+    return {
+        "cap": u.get("cap", EDEN_CAP),
+        "stagnation": u.get("stagnation", EDEN_STAGNATION),
+        "boxes": boxes if boxes else EDEN_BOXES,
+        "box_cap": u.get("box_cap", EDEN_BOX_CAP),
+    }
 
 
 def eden_claim_home(u, p, rng):
@@ -301,18 +386,20 @@ def eden_claim_home(u, p, rng):
     nowhere to emigrate to: when every box is held, they end up milling in
     the open centre of the floor, which is where the pathology pools."""
     occ = u.setdefault("box_occ", {})
+    boxes = eden_design(u)["boxes"]
     if p["w"]:
         # the beautiful ones keep to a quiet box and never come down
-        i = p["id"] % len(EDEN_BOXES)
-        p["hx"], p["hy"] = EDEN_BOXES[i]
+        i = p["id"] % len(boxes)
+        p["hx"], p["hy"] = boxes[i]
         return
-    order = list(range(len(EDEN_BOXES)))
+    order = list(range(len(boxes)))
     rng.shuffle(order)
+    cap = eden_design(u)["box_cap"]
     for i in order:
-        if occ.get(str(i), 0) < BOX_CAPACITY:
+        if occ.get(str(i), 0) < cap:
             occ[str(i)] = occ.get(str(i), 0) + 1
             p["box"] = i
-            p["hx"], p["hy"] = EDEN_BOXES[i]
+            p["hx"], p["hy"] = boxes[i]
             return
     p["box"] = -1                                   # no territory, no role
     c = EDEN_SIZE // 2
@@ -424,7 +511,9 @@ def tick_eden(u, rng, events):
     pop = len(people)
 
     if not people:
-        if u["extinct_day"] and day - u["extinct_day"] > RESEED_YEARS * DAYS_PER_YEAR:
+        if u["extinct_day"] is None:
+            record_extinction(u, events)
+        elif day - u["extinct_day"] > RESEED_YEARS * DAYS_PER_YEAR:
             fresh = genesis_universe("EDEN", u["seed"] + u["iteration"],
                                      u["iteration"] + 1,
                                      postmortems=u["postmortems"])
@@ -438,7 +527,7 @@ def tick_eden(u, rng, events):
                            f"under the same perfect, fatal conditions."))
         return
 
-    crowd = pop / EDEN_CAP
+    crowd = pop / eden_design(u)["cap"]
     dead, born = [], []
 
     # how many are at each hopper today — the sink feeds on its own crowd
@@ -457,10 +546,11 @@ def tick_eden(u, rng, events):
     if u["phase"] == "strive" and any(age_of(p, day) < ADULT_AGE for p in people):
         u["phase"] = "exploit"
         events.append((day, "EDEN", "phase", "First child born in the pen. The exploit phase begins."))
-    if u["phase"] == "exploit" and crowd >= EDEN_STAGNATION:
+    if u["phase"] == "exploit" and crowd >= eden_design(u)["stagnation"]:
         u["phase"] = "stagnate"
         events.append((day, "EDEN", "phase",
-                       f"Crowding passes {int(EDEN_STAGNATION*100)}%. Stagnation: the behavioral sink emerges."))
+                       f"Crowding passes {int(eden_design(u)['stagnation']*100)}%. "
+                       f"Stagnation: the behavioral sink emerges."))
 
     byid = {q["id"]: q for q in people}
     u["_ctx"] = day_context(people, day)
@@ -599,12 +689,8 @@ def tick_eden(u, rng, events):
         record_census(u)
         u["births_y"] = u["deaths_y"] = 0
 
-    if not people and u["extinct_day"] is None:
-        u["extinct_day"] = day
-        events.append((day, "EDEN", "extinction",
-                       f"UNIVERSE 6 HAS DIED. The pen is empty. Peak population was {u['peak']}, "
-                       f"generation {u['gen_max']}. The food hoppers are still full."))
-        write_postmortem(u, events)
+    if not people:
+        record_extinction(u, events)
 
 
 # ---------------------------------------------------------------- LAGOON
@@ -856,13 +942,17 @@ A_PLAY = 15
 def day_context(people, day):
     """Computed once per tick so the social helpers don't rescan everyone.
     Children are bucketed on an 8-tile grid so a playmate search is local."""
-    kids, moms, adults_m, adults_f = {}, set(), [], []
+    # `moms` is a dict used as an ordered set: O(1) membership for
+    # `p["id"] in ctx["moms"]`, and JSON-safe so the whole world stays
+    # serialisable. A python set here silently breaks any tool that dumps
+    # the world — the engine must never hold a value JSON cannot carry.
+    kids, moms, adults_m, adults_f = {}, {}, [], []
     for q in people:
         a = day - q["b"]
         if 3 * DAYS_PER_YEAR <= a < 12 * DAYS_PER_YEAR:
             kids.setdefault((q["x"] >> 3, q["y"] >> 3), []).append(q)
         elif a < 3 * DAYS_PER_YEAR and q.get("mom") is not None:
-            moms.add(q["mom"])
+            moms[q["mom"]] = True
         elif ADULT_AGE <= a <= 45 * DAYS_PER_YEAR and not q["w"]:
             (adults_m if q["s"] == "m" else adults_f).append(q)
     return {"kids": kids, "moms": moms, "am": adults_m, "af": adults_f}
@@ -1000,7 +1090,9 @@ def tick_lagoon(u, rng, events):
     people = u["people"]
 
     if not people:
-        if u["extinct_day"] and day - u["extinct_day"] > RESEED_YEARS * DAYS_PER_YEAR:
+        if u["extinct_day"] is None:
+            record_extinction(u, events)
+        elif day - u["extinct_day"] > RESEED_YEARS * DAYS_PER_YEAR:
             lessons = list(u["lessons"])
             for pm in u["postmortems"]:
                 if pm.get("lesson") and pm["lesson"] not in lessons:
@@ -1381,12 +1473,8 @@ def tick_lagoon(u, rng, events):
         record_census(u)
         u["births_y"] = u["deaths_y"] = 0
 
-    if not people and u["extinct_day"] is None:
-        u["extinct_day"] = day
-        events.append((day, "LAGOON", "extinction",
-                       f"UNIVERSE 9 HAS DIED. The lagoon is quiet again. Peak population {u['peak']}, "
-                       f"generation {u['gen_max']}."))
-        write_postmortem(u, events)
+    if not people:
+        record_extinction(u, events)
 
 
 # ---------------------------------------------------------------- top level
@@ -1399,6 +1487,46 @@ def tick_world(world, events):
         (tick_eden if u["kind"] == "EDEN" else tick_lagoon)(u, rng, events)
 
 
+# Detail flags — what the viewer needs to say about one person.
+F_WITHDRAWN = 1     # one of the beautiful ones: never pairs, never works
+F_INCOMPETENT = 2   # born into the sink, cannot learn the roles
+F_PREGNANT = 4
+F_MOTHER = 8        # has an infant
+F_HOMELESS = 16     # no nest box: no territory, no role
+F_HUNGRY = 32
+F_ELDER = 64
+
+
+def person_detail(u, p, day, ctx):
+    """Everything the viewer needs to say *who* this is and *what they are doing*.
+
+    The renderer draws a person as a handful of pixels; without this it can
+    only show anonymous dots. The record of what actually happened to these
+    people is the point of the experiment, so it has to reach the screen.
+    """
+    a = age_of(p, day)
+    flags = 0
+    if p["w"]:
+        flags |= F_WITHDRAWN
+    if not p["c"]:
+        flags |= F_INCOMPETENT
+    if p.get("due"):
+        flags |= F_PREGNANT
+    if p["id"] in ctx["moms"]:
+        flags |= F_MOTHER
+    if u["kind"] == "EDEN":
+        b = p.get("box")
+        if b is None or b < 0:
+            flags |= F_HOMELESS
+    if p.get("hun", 0) > 25:
+        flags |= F_HUNGRY
+    if a >= ELDER_AGE:
+        flags |= F_ELDER
+    return [p["n"], round(a / DAYS_PER_YEAR, 1), p["g"], flags,
+            p.get("hx", p["x"]), p.get("hy", p["y"]),
+            p.get("p") or 0, round(p.get("hun", 0.0), 1)]
+
+
 def summarize(world):
     """Compact snapshot for the renderer / web mirror."""
     out = {"wall": time.time(), "sec_per_day": world["sec_per_day"], "u": {}}
@@ -1406,6 +1534,8 @@ def summarize(world):
         u = world[key]
         day = u["day"]
         ppl = []
+        detail = {}
+        ctx = u.get("_ctx") or {"moms": {}}
         for p in u["people"][:2400]:
             a = age_of(p, day)
             cls = (0 if a < ADULT_AGE else
@@ -1414,9 +1544,12 @@ def summarize(world):
                    1 if p["s"] == "m" else 2)
             ppl.append([p["x"], p["y"], cls, 1 if p["s"] == "f" else 0,
                         p["id"], p.get("a", 0), p.get("f", 1)])
+            detail[str(p["id"])] = person_detail(u, p, day, ctx)
         info = {"day": day, "year": day // DAYS_PER_YEAR, "pop": len(u["people"]),
                 "gen": u["gen_max"], "peak": u["peak"], "phase": u["phase"],
-                "iter": u["iteration"], "people": ppl, "census": u["census"][-120:]}
+                "iter": u["iteration"], "people": ppl, "detail": detail,
+                "cod": dict(u.get("cod", {})),
+                "census": u["census"][-120:]}
         if u["kind"] == "LAGOON":
             info["tech"] = u["tech"]
             info["settlements"] = u["settlements"]
@@ -1441,7 +1574,12 @@ def summarize(world):
                 1 for q in u["people"]
                 if (q.get("box") is None or q["box"] < 0) and not q["w"]
                 and age_of(q, day) >= ADULT_AGE)
-            info["boxes"] = len(EDEN_BOXES)
+            info["boxes"] = len(eden_design(u)["boxes"])
+            design = eden_design(u)
+            info["cap"] = design["cap"]
+            info["stagnation"] = design["stagnation"]
+            info["box_cap"] = design["box_cap"]
+            info["box_slots"] = len(design["boxes"]) * design["box_cap"]
         out["u"][key] = info
     return out
 
@@ -1486,6 +1624,11 @@ def migrate(world):
             u.setdefault("box_occ", {})
             u.setdefault("hop_n", [1, 1, 1, 1])
             u.setdefault("sink", 0)
+            # the pen's architecture: a live world carries the pen it was
+            # already running, and a study can carry a different one
+            u.setdefault("cap", EDEN_CAP)
+            u.setdefault("stagnation", EDEN_STAGNATION)
+            u.setdefault("box_cap", EDEN_BOX_CAP)
         for p in u.get("people", []):
             p.setdefault("a", 0)
             p.setdefault("ad", 0)

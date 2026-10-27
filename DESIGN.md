@@ -112,3 +112,21 @@ tribes*: peacefully after lore exists, as a deadly feud before it.
   valid result (it happened to real founder populations); reseeding is logged,
   never hidden.
 - This is a model of *dynamics from the literature*, not a claim about people.
+- Determinism holds per `(seed, day)` **within one engine version**. Editing
+  `sim/engine.py` changes every number derived from the previous version, and
+  the live run's history becomes irreproducible from that point on. Re-derive
+  figures from the shipped code; never quote one from an old log.
+- The renderer reads a flat, positional payload from `engine.summarize()` with
+  no type protection. `tests/test_contract.py` pins that contract from both
+  sides so a rename fails the suite instead of the browser.
+
+## Verifying the model
+
+`tools/lab.py` runs an arc locally in seconds and prints a verdict:
+
+- did EDEN's pen actually empty (and therefore write a postmortem and reseed),
+- did LAGOON survive, and which technologies and lessons it reached.
+
+The verdict, not the eye, is the acceptance test for a change to the engine.
+Run it before and after any model change, and treat a change in the verdict as
+a change in the experiment.
