@@ -162,6 +162,38 @@ thresholds are model checks inspired by the books; agreement cannot validate
 a historical or human claim. Fresh predator meat is consumed or transferred
 into storage once, with only the uneaten remainder retained to spoil.
 
+## Engine 2026.10.28.2: every rate in the model is in days
+
+**The law.** Every quantity in this model is denominated in days: an
+activity's remaining time, a band's daily food need, the chance a woman
+conceives in a day, the stories told around a fire in a day. When the tick
+became a quarter of a day, every one of those had to be converted, because
+a rate that is tried four times a day is four times the rate it claims to
+be.
+
+**What went wrong when it was missed.** The first four-part day (2026.10.28.1)
+converted the food yields and the hunger, but not the *activity durations*,
+the *conception rate* or the *stories*. So LAGOON's adults changed jobs four
+times a day, the women conceived four times as often, and the band was full
+of children it could not feed: it starved to death in its ninth year. The
+arc recorded in `docs/audits/2026-10-28/` does not reproduce on that engine
+and should not be quoted.
+
+**The fix.** `engine.days(n)` converts a duration in days into ticks, in one
+place, and every duration in the model goes through it. Rates that are tried
+per part are divided by `PARTS_PER_DAY` where they are drawn. The engine
+version moves to **2026.10.28.2**.
+
+**The reference.** The pre-day engine (2026.10.27.3) was run for 166 years
+from genesis on seed 69 as the calibration: LAGOON survived with eleven
+technologies and a peak of 221, and EDEN reached its death phase with a peak
+of 1,738. The four-part engine now gives the same shape of arc. Any figure
+from 2026.10.28.1 is stale, and so is every figure from before it.
+
+**The guard.** `tests/test_engine.py` pins two things that this bug would
+have broken: the lagoon is still a lagoon in the fifteenth year, and a
+person keeps the same job for the length of a day.
+
 ## Universe 6 — EDEN (after Calhoun's Universe 25)
 
 A 48×48 sealed pen. Food hoppers and water are always full. Climate is perfect.

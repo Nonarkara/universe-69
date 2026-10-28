@@ -125,6 +125,12 @@ core is repeated inline below so an agent that skips the pointer still gets it.
 - Chunky pixels, `image-rendering: pixelated`, flat 16-colour palettes, monospace
   HUD for the *worlds*. No gradients, no shadows, no decoration. This is
   deliberate: the visual language is 8-bit honesty.
+- **The house style is executable, not advisory.** `tests/test_style.py` pins
+  the palette, the pixel grid, the head-to-body ratio of an adult, the couple
+  drawn as one picture, and the walk with a planted foot. A renderer change
+  that breaks the style fails the suite, not the owner's eye. If you mean to
+  change the style, change that file in the same commit, where it will be
+  read.
 - **People are the exception (owner's decision, 2026-10-27):** they are drawn
   as life-drawing ink sketches with realistic proportion, so a viewer can see
   whether someone is fat, starving, strong, weak or hurt. Never stick figures,

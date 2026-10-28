@@ -324,24 +324,23 @@ var SNAP = window.SNAPSHOT_URL || null;
 var PX = 12;          // offscreen pixels per world tile
 var EM = 12;          // EDEN resort margin (tiles) around the pen
 
-// ---- palette: Ghibli watercolor: soft, warm, pale and clear ----
+// ---- palette: muted, 3 tones per material, light from the north-west ----
 var P = {
-  waterD:"#2a5f86", water:"#4a86a8", waterS:"#6fa8bc", waterL:"#8fc4c8", foam:"#eef6fa",
-  sand:"#dcc790", sandL:"#ebe1ab", sandD:"#c0a874", sandWet:"#c8b074",
-  grass:"#679a4a", grassD:"#548236", grassL:"#7fae5c", grassX:"#3f6b2f",
-  floorF:"#4a7f34", canD:"#2b5a2f", can:"#3f7a3c", canL:"#5f9c4a", canX:"#7bb06a",
-  trunk:"#7a4a2a", trunkD:"#5a3620",
-  soil:"#a37b40", soilD:"#7d5c24", soilL:"#bb9348", path:"#c0a878",
-  thatch:"#b08d4a", thatchD:"#8e6c30", thatchL:"#cba764",
-  hutwall:"#8a6a42", hutdoor:"#4a3320",
-  stone:"#c4bca8", stoneB:"#cec6b2", mortar:"#a49c88", dust:"#b8b0a0",
-  wallTop:"#9a8f7c", wall:"#7a7060", wallFace:"#57503f", alcove:"#38301f",
-  hopper:"#e8b84a", hopperD:"#c0912a", trough:"#4a90c8",
-  lawn:"#78b45c", lawnD:"#6aa54e", palm:"#3a8a44", palmL:"#4fa254",
-  pool:"#58c4dc", poolL:"#88dcf0", rim:"#f2f2e8", deck:"#e4d6ae",
-  shadow:"rgba(40,30,20,0.18)"
+  waterD:"#1a4580", water:"#2559a3", waterS:"#3a78c8", waterL:"#5a94d8", foam:"#d4ecfa",
+  sand:"#d4bc7a", sandL:"#e2cf96", sandD:"#b89c58", sandWet:"#b9a060",
+  grass:"#4e8a3a", grassD:"#3f7230", grassL:"#6aa84e", grassX:"#2f5d26",
+  floorF:"#2f5e28", canD:"#1b421b", can:"#2f6b2c", canL:"#4d8f3e", canX:"#6cab52",
+  trunk:"#6b4226", trunkD:"#4e2f18",
+  soil:"#8a6530", soilD:"#6e4e1c", soilL:"#a07a3e", path:"#a8946a",
+  thatch:"#9a7a3a", thatchD:"#7c6028", thatchL:"#b8955a",
+  hutwall:"#7a5a34", hutdoor:"#2c1a0c",
+  stone:"#b4ac9c", stoneB:"#bcb4a4", mortar:"#978f80", dust:"#a8a092",
+  wallTop:"#8a7f6c", wall:"#6a5f4e", wallFace:"#473d30", alcove:"#2e2619",
+  hopper:"#e0b838", hopperD:"#b08a18", trough:"#4a90d9",
+  lawn:"#55a04c", lawnD:"#4c9344", palm:"#2f7a38", palmL:"#3f9a48",
+  pool:"#38b8e0", poolL:"#7cd8f0", rim:"#e8e8e0", deck:"#d8c9a0",
+  shadow:"rgba(0,0,0,0.30)"
 };
-
 
 function hash2(x,y){ var h=(x*374761393+y*668265263)>>>0;
   h=(h^(h>>13))*1274126177>>>0; return (h^(h>>16))/4294967295; }
@@ -710,11 +709,10 @@ var A_WALK=1, A_FORAGE=2, A_HUNT=3, A_FISH=4, A_FARM=5, A_BUILD=6, A_TALK=7,
     A_FIGHT=14, A_PLAY=15, A_RITE=16, A_SLEEP=17, A_WORK=18, A_SCOUT=19, A_WATCH=20, A_GROOM=21;
 var PERIOD = [240,22,100,110,160,90,110,80,60,130,130,240,80,180,40,26,34,300,70,22,260,90];
 
-// Ghibli: warm, soft skin tones; hair in warm browns and black.
-var SKINS = [ ["#f2d6bc","#d8b496","#f8e6d4"], ["#e8c4a4","#c8a280","#f0d6b8"],
-              ["#d4a87c","#b98a5c","#e2bd94"], ["#b9885c","#916640","#d09e72"] ];
-var HAIRS = ["#2a1f14","#3a2a1a","#5a4230","#7a5a3a","#2a2a2a"];
-var ELDER_HAIR="#d8d0c4";
+var SKINS = [ ["#f1d2b0","#c9a079","#f9e4cf"], ["#e3b88c","#b98c5f","#f0cfa8"],
+              ["#b9814f","#8c5c34","#cf9a66"], ["#7a4a2a","#55311b","#935c38"] ];
+var HAIRS = ["#1d1510","#3b2416","#6b3a1e","#a8763a","#2a2a30"];
+var ELDER_HAIR="#d9d9d9";
 var CXL=0;
 
 // pose solver: every joint from one phase angle, per activity
@@ -854,10 +852,9 @@ function solvePose(act, c, moving, v){
 // show in famine, a belly shows obesity or pregnancy, a bandage and a limp
 // mark an injury. Adults are drawn as bodies are; children are never given
 // genital detail at any zoom.
-// Ghibli: warm dark ink on cream paper, washes instead of color.
-var INK="#3a3028", INK_SOFT="rgba(58,48,40,0.20)", PAPER="#fdf6e3";
-var DRESS = { swim:["#d98a9e","#6fa8d4","#e5c46a","#6cb99a","#c98ab8"],
-              hide:"#8a6238", hideD:"#5e4322", fur:"#a07850", furD:"#6e4e2c" };
+var INK="#1d1812", INK_SOFT="rgba(29,24,18,0.32)", PAPER="#f4ead2";
+var DRESS = { swim:["#e8584a","#3f8fd0","#f2c84a","#3fa58a","#d86aa8"],
+              hide:"#8a6238", hideD:"#5e3f20", fur:"#a07850", furD:"#6e4e2c" };
 function bodyOf(a){
   var b=a.bmi||22, age=(a.age===undefined)?30:a.age;
   return { adult: typeof a.age==="number" && a.age>=18,
@@ -867,8 +864,8 @@ function bodyOf(a){
            hurt: (a.inj||0)>=5?2:((a.inj||0)>=2?1:0),
            preg: a.preg?1:0 };
 }
-var STAGE_H=[0.4,0.62,0.84,0.95,0.92];       // height against an adult (Ghibli: shorter bodies)
-var STAGE_HEAD=[2.05,1.8,1.5,1.3,1.15];      // head size against an adult's (big round Ghibli heads)
+var STAGE_H=[0.42,0.64,0.88,1.0,0.97];       // height against an adult
+var STAGE_HEAD=[1.55,1.28,1.08,1.0,1.0];     // head size against an adult's
 var FAT_W=[0.66,0.8,1.0,1.24,1.55];           // torso width by BMI band
 
 function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view){
@@ -922,7 +919,7 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
   }
   g.scale(k,k);
   g.lineCap="round"; g.lineJoin="round";
-  var ink=Math.max(0.22, 0.7/k);             // Ghibli: soft whisper of ink
+  var ink=Math.max(0.32, 0.95/k);             // a fine pen: about one device pixel
   function X(x){ return P.cx+x; }
 
   if (s<0.8){                                   // far away: a body's mass, not a stick
@@ -992,11 +989,11 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
       g.closePath();
     }
     g.fill(); g.stroke();
-    if (!leg && s>=3){                            // fingers, as three quick strokes
+    if (!leg && s>=4){                            // fingers, as three quick strokes
       g.lineWidth=ink*0.6;
       for (var fi=-1;fi<=1;fi++){ g.beginPath(); g.moveTo(cx2+fi*w2*0.22, cy2+0.75); g.lineTo(cx2+fi*w2*0.26, cy2+1.35); g.stroke(); }
     }
-    if (!leg && s>=2.5){                          // the thumb
+    if (!leg && s>=3){                            // the thumb
       g.lineWidth=ink*0.7;
       g.beginPath(); g.moveTo(cx2-0.5, cy2+0.35); g.lineTo(cx2-0.95, cy2-0.15); g.stroke();
     }
@@ -1027,8 +1024,8 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
   g.closePath();
   g.fillStyle=SK; g.fill();
   g.strokeStyle=INK; g.lineWidth=ink*1.3; g.stroke();
-  // collarbones: from the neck root out to the shoulder tops, defines the
-  // shoulder line and stops the head from looking like it's floating
+  // collarbones: from the neck root out to the shoulder tops. They define the
+  // shoulder line and stop the head from looking like it is floating.
   g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.9;
   g.beginPath(); g.moveTo(nkx, nky+0.4); g.lineTo(shX-shW*0.55, P.shY+0.9); g.stroke();
   g.beginPath(); g.moveTo(nkx, nky+0.4); g.lineTo(shX+shW*0.55, P.shY+0.9); g.stroke();
@@ -1046,7 +1043,7 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
   g.quadraticCurveTo(shX+shW*0.64, P.shY-0.6, nkx, nky);
   g.closePath();
   g.clip();
-  g.fillStyle="rgba(90,70,50,0.12)";
+  g.fillStyle="rgba(60,40,26,0.16)";
   g.beginPath();
   g.moveTo(shX+shW*0.30, nky);
   g.quadraticCurveTo(shX+shW*0.95, P.shY+4, shX+shW*0.55, P.hipY+2);
@@ -1192,49 +1189,200 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
   var hr=2.05*STAGE_HEAD[B.stage]*(B.fat>=4?1.06:1), hcx=X(lean*1.2+P.headTilt*0.5), hcy=P.shY-hr*1.05+P.headTilt*0.35;
   // the neck roots in the trapezius and widens into the jaw
   limb(nkx, nky+0.5, hcx-0.15, hcy+hr*0.72, hr*0.52, SK);
-  // Ghibli face: a big round head, soft cheeks, huge eyes, a tiny nose and mouth.
+  g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.6;      // the shadow under the jaw
+  g.beginPath(); g.moveTo(hcx-hr*0.45, hcy+hr*0.78); g.lineTo(hcx+hr*0.5, hcy+hr*0.72); g.stroke();
   g.fillStyle=SK; g.strokeStyle=INK; g.lineWidth=ink*1.2;
   g.beginPath();
-  g.arc(hcx, hcy, hr*1.0, 0, 6.283);
-  g.closePath(); g.fill(); g.stroke();
-  // blush on both cheeks
-  g.fillStyle="rgba(240,140,130,0.45)";
-  g.beginPath(); g.arc(hcx-hr*0.5, hcy+hr*0.35, hr*0.35, 0, 6.283); g.fill();
-  g.beginPath(); g.arc(hcx+hr*0.5, hcy+hr*0.35, hr*0.35, 0, 6.283); g.fill();
-  // eyes: very big, white sclera, dark iris, one bright highlight
-  g.strokeStyle=INK; g.lineWidth=ink*0.9;
-  for (var ei=-1; ei<=1; ei+=2){
-    var ex=hcx+ei*hr*0.30, ey=hcy-hr*0.05, er=hr*0.34;
-    g.fillStyle="#fffdf4"; g.beginPath(); g.ellipse(ex, ey, er*1.5, er*0.85, 0, 0, 6.283); g.fill();
-    g.strokeStyle=INK; g.lineWidth=ink*0.9; g.beginPath(); g.ellipse(ex, ey, er*1.5, er*0.85, 0, 0, 6.283); g.stroke();
-    g.fillStyle=INK; g.beginPath(); g.arc(ex+ei*0.08, ey, er*0.5, 0, 6.283); g.fill();
-    g.fillStyle="#fff"; g.beginPath(); g.arc(ex+ei*0.22, ey-0.1, er*0.22, 0, 6.283); g.fill();
-    // thick upper lash line
-    g.lineWidth=ink*1.3;
-    g.beginPath(); g.moveTo(ex-er*1.2, ey-er*0.05); g.lineTo(ex+er*1.2, ey-er*0.1); g.stroke();
-  }
-  // tiny nose: a small dot or a soft L
-  g.strokeStyle=INK; g.lineWidth=ink*0.9;
-  g.beginPath(); g.moveTo(hcx+hr*0.12, hcy+hr*0.15); g.lineTo(hcx+hr*0.12, hcy+hr*0.5); g.lineTo(hcx+hr*0.35, hcy+hr*0.5); g.stroke();
-  // tiny mouth, simple curve
-  g.beginPath(); g.moveTo(hcx-hr*0.22, hcy+hr*0.95); g.quadraticCurveTo(hcx, hcy+hr*1.15, hcx+hr*0.22, hcy+hr*0.95); g.stroke();
-  // hair: a big soft silhouette around the head, with a side tail
-  g.fillStyle=hair; g.beginPath();
-  g.arc(hcx-hr*1.05, hcy-hr*0.1, hr*1.05, 0, 6.283); g.arc(hcx+hr*1.05, hcy-hr*0.1, hr*1.05, 0, 6.283);
-  g.arc(hcx, hcy-hr*1.5, hr*1.15, 0, Math.PI); g.closePath(); g.fill();
-  g.strokeStyle=hair; g.lineWidth=ink*1.0;
-  g.beginPath(); g.moveTo(hcx-hr*0.9, hcy-hr*0.5); g.quadraticCurveTo(hcx-hr*1.7, hcy-hr*1.3, hcx-hr*0.9, hcy+hr*0.5); g.stroke();
+  // a skull and a jaw: an egg is not a head
+  g.moveTo(hcx-hr*0.88, hcy-hr*0.05);
+  g.quadraticCurveTo(hcx-hr*0.92, hcy-hr*1.0, hcx+hr*0.05, hcy-hr*1.0);
+  g.quadraticCurveTo(hcx+hr*0.86, hcy-hr*0.92, hcx+hr*0.90, hcy+hr*0.02);
+  g.quadraticCurveTo(hcx+hr*0.86, hcy+hr*0.62, hcx+hr*0.50, hcy+hr*0.92);
+  g.quadraticCurveTo(hcx+hr*0.15, hcy+hr*1.12, hcx-hr*0.18, hcy+hr*0.95);
+  g.quadraticCurveTo(hcx-hr*0.78, hcy+hr*0.72, hcx-hr*0.88, hcy-hr*0.05);
+  g.closePath();
+  g.fill(); g.stroke();
+  if (B.fat>=3){ g.beginPath(); g.arc(hcx+0.2, hcy+hr*0.6, hr*0.6, 0.3, 2.6); g.stroke(); }   // a soft jaw
+  if (B.fat===0){ g.strokeStyle=INK_SOFT; g.beginPath(); g.moveTo(hcx+hr*0.25,hcy+0.1); g.lineTo(hcx+hr*0.35,hcy+hr*0.55); g.stroke(); }  // hollow cheek
+  // hair: a few strokes, longer for most women, white for the old
+  g.strokeStyle=hair; g.lineWidth=ink*1.6;
+  g.beginPath(); g.ellipse(hcx-0.25, hcy-hr*0.35, hr*0.92, hr*0.72, 0.1, 3.3, 6.1); g.stroke();
   if (fem && B.stage>=2){
-    g.beginPath(); g.moveTo(hcx+hr*1.05, hcy-hr*0.15); g.quadraticCurveTo(hcx+hr*2.0, hcy+hr*0.8, hcx+hr*1.1, hcy+hr*1.9); g.stroke();
-    g.beginPath(); g.moveTo(hcx+hr*1.15, hcy-hr*0.05); g.quadraticCurveTo(hcx+hr*2.1, hcy+hr*0.6, hcx+hr*1.25, hcy+hr*1.6); g.stroke();
+    g.lineWidth=ink*1.3;
+    for (var hs=0;hs<3;hs++){ g.beginPath(); g.moveTo(hcx-hr*0.6+hs*0.3,hcy-hr*0.5);
+      g.quadraticCurveTo(hcx-hr*1.2,hcy+hr*0.4,hcx-hr*0.9+hs*0.25,hcy+hr*1.6+hs*0.3); g.stroke(); }
+  } else if ((v*3+1)%3===1){
+    g.beginPath(); g.moveTo(hcx-hr*0.8,hcy-hr*0.2); g.lineTo(hcx-hr*1.05,hcy+hr*0.35); g.stroke();
   }
-  if (view===2){                                 // the back of the head: a hair bun
+  if (view===2){                                 // the back of the head: hair, an ear
     g.fillStyle=hair; g.beginPath(); g.ellipse(hcx, hcy-0.2, hr*0.86, hr*0.94, 0, 0, 6.283); g.fill();
-    g.beginPath(); g.ellipse(hcx+hr*0.75, hcy-hr*0.2, hr*0.45, hr*0.55, 0, 0, 6.283); g.fill();
-  } else if (view===1 && s>=1.3){                // toward us: big eyes already drawn above
+  } else if (view===1 && s>=2.2){                // a face, toward us
+    g.fillStyle=INK;
+    g.beginPath(); g.arc(hcx-hr*0.32, hcy-0.1, 0.26, 0, 6.283); g.fill();
+    g.beginPath(); g.arc(hcx+hr*0.32, hcy-0.1, 0.26, 0, 6.283); g.fill();
+    g.strokeStyle=INK; g.lineWidth=ink*0.8;
+    g.beginPath(); g.moveTo(hcx,hcy+0.2); g.lineTo(hcx+0.15,hcy+0.75); g.stroke();
+    g.beginPath(); g.moveTo(hcx-0.4,hcy+1.2); g.lineTo(hcx+0.4,hcy+1.2); g.stroke();
   }
   if (view){ g.restore(); return; }
+  if (s>=4){                                     // close enough for a real face
+    g.fillStyle="#fbf8f0"; g.beginPath(); g.ellipse(hcx+hr*0.44, hcy-0.1, 0.55, 0.3, 0, 0, 6.283); g.fill();
+    g.strokeStyle=INK; g.lineWidth=ink*0.6;
+    g.beginPath(); g.arc(hcx-hr*0.05, hcy+0.1, hr*0.22, -1.2, 1.4); g.stroke();             // ear
+    g.beginPath(); g.moveTo(hcx+hr*0.5,hcy+1.4); g.quadraticCurveTo(hcx+hr*0.62,hcy+1.6,hcx+hr*0.74,hcy+1.35); g.stroke();  // lower lip
+    if (B.stage===4){ g.beginPath(); g.moveTo(hcx+hr*0.2,hcy+0.5); g.lineTo(hcx+hr*0.5,hcy+0.75); g.stroke(); }  // a line of age
+  }
+  if (s>=2.2){                                   // a face, looking where they face
+    g.fillStyle=INK; g.beginPath(); g.arc(hcx+hr*0.42, hcy-0.1, s>=4?0.2:0.3, 0, 6.283); g.fill();
+    g.strokeStyle=INK; g.lineWidth=ink*0.8;
+    g.beginPath(); g.moveTo(hcx+hr*0.2,hcy-0.75); g.lineTo(hcx+hr*0.65,hcy-0.65); g.stroke();       // brow
+    g.beginPath(); g.moveTo(hcx+hr*0.85,hcy+0.1); g.lineTo(hcx+hr*0.98,hcy+0.65); g.lineTo(hcx+hr*0.78,hcy+0.7); g.stroke();  // nose
+    var sad = (act===A_WITHDRAW) ? 0.25 : 0;
+    g.beginPath(); g.moveTo(hcx+hr*0.45,hcy+1.15); g.lineTo(hcx+hr*0.72,hcy+1.1+sad); g.stroke();  // mouth
+  }
   g.restore();
+}
+
+// ---- the mating pair ------------------------------------------------------
+// Two people making love, drawn as one picture rather than two people who
+// happen to be on the same tile. Anthropologists have drawn this posture for a
+// century: the mammalian one, ventral to dorsal, and the face-to-face one
+// that humans also use. Nothing is hidden and nothing is added — the drawing
+// says what the record says, and the record says two adults are coupling.
+//
+// The local space is one adult's scale: a standing body is 32 units tall, the
+// ground is y=0, and +x is the way she is facing.
+function drawMating(g, cx, footY, s, m, f, view){
+  var SM=SKINS[m.v%4], SF=SKINS[f.v%4];
+  var Bm=bodyOf(m), Bf=bodyOf(f);
+  // the bodies are the record: a fat person is fat here too, and a strong
+  // one carries it in the shoulders
+  var wm=FAT_W[Bm.fat]*(Bm.strong?1.12:1), wf=FAT_W[Bf.fat]*(Bf.strong?1.12:1);
+  var ink=Math.max(0.32, 0.95/s);
+  g.save();
+  g.translate(cx, footY);
+  g.scale(s,s);
+  g.lineCap="round"; g.lineJoin="round";
+
+  function mass(pts, col, wide, about){   // a closed body mass, inked
+    g.beginPath();
+    for (var i=0;i<pts.length;i++){
+      var q=pts[i], x=(wide||1)==1 ? q[0] : about+(q[0]-about)*(wide||1);
+      if (i===0) g.moveTo(x,q[1]); else g.lineTo(x,q[1]);
+    }
+    g.closePath(); g.fillStyle=col; g.fill();
+    g.strokeStyle=INK; g.lineWidth=ink*1.2; g.stroke();
+  }
+  function seg(x1,y1,x2,y2,w,col){        // a limb segment: ink, then fill
+    g.strokeStyle=INK; g.lineWidth=w+ink*2;
+    g.beginPath(); g.moveTo(x1,y1); g.lineTo(x2,y2); g.stroke();
+    g.strokeStyle=col; g.lineWidth=w;
+    g.beginPath(); g.moveTo(x1,y1); g.lineTo(x2,y2); g.stroke();
+  }
+  function limb(a,j,b,w,col){              // two segments and the joint between
+    seg(a[0],a[1],j[0],j[1],w,col);
+    seg(j[0],j[1],b[0],b[1],w*0.86,col);
+  }
+  function skull(hx,hy,hr,col,hair,front){
+    g.beginPath();
+    g.moveTo(hx-hr*0.88,hy-hr*0.05);
+    g.quadraticCurveTo(hx-hr*0.92,hy-hr*1.0,hx+hr*0.05,hy-hr*1.0);
+    g.quadraticCurveTo(hx+hr*0.86,hy-hr*0.92,hx+hr*0.9,hy+hr*0.02);
+    g.quadraticCurveTo(hx+hr*0.86,hy+hr*0.62,hx+hr*0.5,hy+hr*0.92);
+    g.quadraticCurveTo(hx+hr*0.15,hy+hr*1.12,hx-hr*0.18,hy+hr*0.95);
+    g.quadraticCurveTo(hx-hr*0.78,hy+hr*0.72,hx-hr*0.88,hy-hr*0.05);
+    g.closePath(); g.fillStyle=col; g.fill();
+    g.strokeStyle=INK; g.lineWidth=ink*1.2; g.stroke();
+    g.strokeStyle=hair; g.lineWidth=ink*1.5;
+    g.beginPath(); g.ellipse(hx-0.22,hy-hr*0.38,hr*0.9,hr*0.7,0.1,3.3,6.1); g.stroke();
+    if (front){
+      g.fillStyle=INK;
+      g.beginPath(); g.arc(hx+hr*0.34,hy-hr*0.1,0.24,0,6.283); g.fill();
+      g.beginPath(); g.arc(hx-hr*0.3,hy-hr*0.1,0.24,0,6.283); g.fill();
+    }
+  }
+
+  var fHair=HAIRS[(f.v*7+3)%HAIRS.length], mHair=HAIRS[(m.v*5+1)%HAIRS.length];
+
+  if (view===0){
+    // ---- the side: she is prone with her hips raised, he is kneeling behind
+    // her. The mammalian posture, and the one an anthropologist would draw.
+    var fHip=[8,-7], fSh=[22,-9.6], fHead=[26.6,-12.2];
+    limb([3.4,-1.4],[0.6,-0.6],[8.4,0], 2.5*wf, SF[1]);     // her far leg, folded
+    limb([10.4,-6.2],[5.6,-1.0],[10.2,0], 2.6*wf, SF[0]);    // her near leg
+    mass([[fSh[0],fSh[1]],[16,-11.6],[11.6,-9.4],[fHip[0],fHip[1]],
+          [4.6,-5.4],[8.6,-3.0],[14,-4.2],[21,-7.0]], SF[0], wf, fHip[0]);
+    limb([22.6,-10.2],[26.2,-5.2],[23.0,-0.8], 1.7*wf, SF[1]); // her arms, bearing her
+    limb([21.4,-10.6],[24.8,-5.8],[21.6,-1.4], 1.7*wf, SF[0]);
+    seg(fHead[0]-1.4, fHead[1]+1.8, fSh[0]+0.4, fSh[1]+0.6, 2.0, SF[0]);   // her neck
+    skull(fHead[0], fHead[1], 2.3, SF[0], fHair, false);
+
+    var mHip=[5,-5.6], mSh=[13,-13.4], mHead=[16.4,-15.2];
+    limb([4.6,-5.2],[0.8,-0.6],[-2.4,0], 2.6*wm, SM[1]);     // his legs, kneeling
+    limb([6.0,-5.4],[2.6,-0.4],[-0.6,0], 2.7*wm, SM[0]);
+    mass([[mSh[0],mSh[1]],[9.4,-13.0],[mHip[0],mHip[1]],
+          [1.0,-3.2],[5.4,-1.8],[10.0,-5.6],[15.4,-10.8]], SM[0], wm, mHip[0]);
+    limb([13.4,-12.4],[10.6,-8.0],[8.4,-6.2], 1.9*wm, SM[1]); // his arms, round her
+    limb([12.4,-13.0],[9.4,-8.6],[7.0,-7.0], 1.9*wm, SM[0]);
+    seg(mHead[0]-1.4, mHead[1]+1.9, mSh[0]+0.6, mSh[1]+0.6, 2.2, SM[0]);
+    skull(mHead[0], mHead[1], 2.4, SM[0], mHair, false);
+
+  } else if (view===1){
+    // ---- the front: she is on her knees facing us, he is behind her
+    var fH=[0,-19], fS=[0,-14.5], fP=[0,-5];
+    limb([-2.0,-4.4],[-4.6,-0.6],[-7.0,0], 2.4, SF[1]);     // her legs
+    limb([2.0,-4.4],[4.6,-0.6],[7.0,0], 2.4, SF[0]);
+    mass([[-3.6,-13.4],[3.6,-13.4],[4.4,-9.0],[3.6,-4.4],
+          [-3.6,-4.4],[-4.4,-9.0]], SF[0]);
+    limb([-3.4,-12.8],[-6.2,-8.6],[-8.4,-3.6], 1.7, SF[1]);  // her arms
+    limb([3.4,-12.8],[6.2,-8.6],[8.4,-3.6], 1.7, SF[0]);
+    seg(fH[0], fH[1]+2.2, fS[0], fS[1], 2.0, SF[0]);
+    skull(fH[0], fH[1], 2.3, SF[0], fHair, true);
+
+    var mH=[0,-24.5], mS=[0,-20.0];
+    mass([[-4.8,-19.0],[4.8,-19.0],[5.2,-14.0],[-5.2,-14.0]], SM[0]);
+    limb([-4.6,-18.6],[-7.4,-14.0],[-6.6,-9.6], 2.0, SM[1]);  // his arms around her
+    limb([4.6,-18.6],[7.4,-14.0],[6.6,-9.6], 2.0, SM[0]);
+    seg(mH[0], mH[1]+2.2, mS[0], mS[1], 2.2, SM[0]);
+    skull(mH[0], mH[1], 2.4, SM[0], mHair, true);
+
+  } else {
+    // ---- the back: his back fills the frame; she is bent in front of him
+    var mH2=[0,-22], mS2=[0,-17.5], mP2=[0,-5];
+    limb([-2.6,-4.6],[-5.4,-0.6],[-8.0,0], 2.7, SM[1]);      // his knees
+    limb([2.6,-4.6],[5.4,-0.6],[8.0,0], 2.7, SM[0]);
+    mass([[-5.2,-16.6],[5.2,-16.6],[4.6,-4.2],[-4.6,-4.2]], SM[0]);
+    seg(mH2[0], mH2[1]+2.2, mS2[0], mS2[1], 2.2, SM[0]);
+    skull(mH2[0], mH2[1], 2.4, SM[0], mHair, false);
+
+    var fH3=[0,-12.5], fP3=[0,-5.5];
+    limb([-2.2,-4.8],[-5.0,-0.8],[-7.6,0], 2.5, SF[1]);      // her legs, apart
+    limb([2.2,-4.8],[5.0,-0.8],[7.6,0], 2.5, SF[0]);
+    mass([[-4.4,-11.4],[4.4,-11.4],[4.0,-5.2],[-4.0,-5.2]], SF[0]);
+    limb([-4.0,-11.0],[-7.4,-8.0],[-9.2,-3.6], 1.7, SF[1]);  // her arms down
+    limb([4.0,-11.0],[7.4,-8.0],[9.2,-3.6], 1.7, SF[0]);
+    seg(fH3[0], fH3[1]+2.0, 0, -11.0, 2.0, SF[0]);
+    skull(fH3[0], fH3[1], 2.2, SF[0], fHair, false);
+  }
+  g.restore();
+}
+
+var pairCache={}, pairCount=0;
+function matingSprite(m, f, view, s){
+  var Bm=bodyOf(m), Bf=bodyOf(f);
+  var sq=Math.max(1,Math.round(s));
+  var key=[Bm.stage,Bm.fat,Bm.strong,Bm.hurt,Bm.preg,m.sex,
+           Bf.stage,Bf.fat,Bf.strong,Bf.hurt,Bf.preg,f.sex,
+           view,sq].join("|");
+  var sp=pairCache[key];
+  if (sp) return sp;
+  var W=Math.ceil(62*sq), H=Math.ceil(30*sq);
+  var c=mkCanvas(W,H), g=c.getContext("2d");
+  drawMating(g, W/2, H-4*sq, sq, m, f, view);
+  sp={c:c,w:W,h:H,s:sq,view:view};
+  if (pairCount>200){ pairCache={}; pairCount=0; }
+  pairCache[key]=sp; pairCount++;
+  return sp;
 }
 
 // ---- sprite cache: one render per (pose, zoom), then a blit per person -----
@@ -1253,16 +1401,12 @@ function figureSprite(a, act, bucket, moving, s, dress){
           bk+"|"+(moving?1:0)+view+"|"+vk+"|"+sq;
   var sp=spriteCache[key];
   if (sp) return sp;
-  var cap = sq>=3 ? 300 : 900;
+  var cap = sq>=3 ? 420 : 1400;
   if (spriteCount>cap){ spriteCache={}; spriteCount=0; }
-  // Always render figures at high internal resolution so they stay smooth
-  // and detailed when scaled up — Ghibli figures are soft, never chunky.
-  var sqHi = Math.max(1, sq);
-  var W=Math.ceil(70*sqHi), H=Math.ceil(70*sqHi);
+  var W=Math.ceil(40*sq), H=Math.ceil(40*sq);
   var c=mkCanvas(W,H), g=c.getContext("2d");
-  g.imageSmoothingEnabled=true;
-  drawSketch(g, W/2, H-2*sqHi, sqHi, act, bucket/12+0.02, moving, vk, B, a.sex, dress, wk, view);
-  sp={c:c, w:W, h:H, s:sqHi, view:view}; spriteCache[key]=sp; spriteCount++;
+  drawSketch(g, W/2, H-2*sq, sq, act, bucket/12+0.02, moving, vk, B, a.sex, dress, wk, view);
+  sp={c:c, w:W, h:H, s:sq, view:view}; spriteCache[key]=sp; spriteCount++;
   return sp;
 }
 
@@ -1618,22 +1762,53 @@ function render(canvas, composed, map, key, u){
     var k=Math.round(a.x)+","+Math.round(a.y);
     (cell[k]||(cell[k]=[])).push(a);
   }
+  // A couple is one picture — but only the two who are actually partners.
+  // Two unrelated people who happen to be on the same tile are not a scene.
+  var byId={};
+  list.forEach(function(a){ byId[a.id]=a; });
+  var coupled={};
+  list.forEach(function(a){
+    if (a.act!==A_MATE || !a.pid || coupled[a.id]) return;
+    var other=byId[a.pid];
+    if (!other || other.act!==A_MATE || other.pid!==a.id) return;
+    coupled[a.id]=1; coupled[other.id]=1;
+    a.mate=other; other.mate=a;
+  });
   Object.keys(cell).forEach(function(k){
-    var pr=cell[k].filter(function(a){return a.act!==A_MATE;});
+    var pr=cell[k].filter(function(a){return !coupled[a.id];});
     if (pr.length<2) return;
     pr.sort(function(p,q){return p.id-q.id;});
     pr[0].face=1; pr[0].nudge=-0.3; pr[1].face=-1; pr[1].nudge=0.3;
   });
   list.sort(function(a,b){ return a.y-b.y; });
   var sh=shadowSprite(ts);
-  // Figures are drawn smooth and high-resolution; the world layer behind them
-  // stays deliberately chunky. Flip smoothing on just for the people.
-  g.imageSmoothingEnabled=true;
+  var drawnPair={};
   for (var i=0;i<list.length;i++){
     var a=list[i];
     var px=(a.x+(a.nudge||0)-sx)*ts+ts/2, py=(a.y-sy-(a.lift||0))*ts+ts*0.95; a.lift=0;
     if (px<-60||py<-90||px>canvas.width+60||py>canvas.height+60) continue;
     if (a.moving && a.age!==undefined && a.age<1) continue;  // carried in arms, not drawn gliding
+    if (coupled[a.id]){
+      var other=a.mate;
+      if (other && !drawnPair[a.id]){
+        drawnPair[a.id]=1; drawnPair[other.id]=1;
+        var male=(a.sex===0)?a:((other.sex===0)?other:a);
+        var female=(male===a)?other:a;
+        var dx=female.x-male.x, dy=female.y-male.y;
+        var ax=(a.x+other.x)/2, ay=(a.y+other.y)/2;
+        var pairPx=(ax-sx)*ts+ts/2, pairPy=(ay-sy)*ts+ts*0.95;
+        var pv=(Math.abs(dy)>Math.abs(dx)) ? 1 : 0;
+        var msp=matingSprite(male, female, pv, s);
+        var pscale=s/msp.s, pw=msp.w*pscale, ph=msp.h*pscale;
+        var flip=(pv===0 && dx<0);
+        var ox=Math.round(pairPx-pw/2), oy=Math.round(pairPy-ph+2*msp.s*pscale);
+        if (flip){ g.save(); g.translate(Math.round(pairPx), oy+ph);
+                   g.scale(-1,1); g.drawImage(msp.c, Math.round(-pw/2), 0, Math.round(pw), Math.round(ph));
+                   g.restore(); }
+        else g.drawImage(msp.c, ox, oy, Math.round(pw), Math.round(ph));
+      }
+      continue;
+    }
     g.drawImage(sh.c, Math.round(px+ts*0.12-sh.w/2), Math.round(py-ts*0.02-sh.h/2));
     var period=PERIOD[a.act]||200, c0=moving0(a)?a.walkc:((tick+a.v*7)%period)/period;
     var bucket=Math.floor(c0*12)%12;

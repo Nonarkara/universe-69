@@ -28,7 +28,7 @@ GESTATION = 270
 # The version of the model. Determinism holds per (seed, day, part) only *within* one
 # version, so every published figure and every postmortem must say which
 # version produced it.
-ENGINE_VERSION = "2026.10.28.1"
+ENGINE_VERSION = "2026.10.28.2"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -374,6 +374,19 @@ def base_mortality(p, day, rng, events, u, label_extra=""):
     return False
 
 
+def days(n):
+    """An activity's remaining time, in days, expressed in ticks.
+
+    The tick is a quarter of a day, so a stint written down as seven days
+    has to last twenty-eight ticks. Every duration in the model is in days;
+    this helper is where that is converted once, so that no rate is quietly
+    four times too fast because the day is now four parts.
+    """
+    if not n:
+        return 0
+    return max(1, int(round(n * PARTS_PER_DAY)))
+
+
 def try_conceive(u, rng, females, p_daily, require_pair=True, byid=None, males=None):
     """Reproduction is free and pedestrian — until the world makes it not so.
     EDEN mates without pair-bonds (require_pair=False); LAGOON pairs up.
@@ -387,7 +400,8 @@ def try_conceive(u, rng, females, p_daily, require_pair=True, byid=None, males=N
         a = age_of(p, day)
         if not (ADULT_AGE <= a <= 45 * DAYS_PER_YEAR):
             continue
-        if rng.random() < p_daily * minds.fertility(p, a, day):
+        # p_daily is a rate per day, and this is tried once per part
+        if rng.random() < (p_daily / PARTS_PER_DAY) * minds.fertility(p, a, day):
             lost = rng.random() < minds.MISCARRIAGE
             p["due"] = day + (rng.randint(50, 90) if lost else GESTATION)
             p["mc"] = lost
@@ -577,7 +591,7 @@ def withdraw(u, p, rng):
                WK_HUDDLE if homeless else WK_BEAUTIFUL)
     p["p"] = None
     withdrawn_home(u, p, rng)
-    p["a"], p["ad"] = A_WITHDRAW, 0
+    p["a"], p["ad"] = A_WITHDRAW, days(0)
     p["tx"], p["ty"] = p["hx"], p["hy"]
 
 
@@ -636,30 +650,30 @@ def eden_assign(u, p, day, rng, crowd):
         # one else is using, and straight back. Never a circle, a partner or
         # a fight of their own making.
         if p.get("a") in (A_WITHDRAW, A_SLEEP) and rng.random() < 0.35:
-            p["a"], p["ad"] = A_EAT, rng.randint(1, 2)
+            p["a"], p["ad"] = A_EAT, days(rng.randint(1, 2))
             p["tx"], p["ty"] = quiet_hopper(u, rng)
         else:
             p["a"] = A_SLEEP if rng.random() < 0.3 else A_WITHDRAW
-            p["ad"] = rng.randint(18, 40)
+            p["ad"] = days(rng.randint(18, 40))
             p["tx"], p["ty"] = p["hx"], p["hy"]
         return
     if p["due"] and p["due"] - day <= 0:
-        p["a"], p["ad"] = A_BIRTH, 2
+        p["a"], p["ad"] = A_BIRTH, days(2)
         p["tx"], p["ty"] = bed()
         return
     if a < ADULT_AGE:
         if a < 3 * DAYS_PER_YEAR:                    # infants: on the mother
-            p["a"], p["ad"] = A_TEND, 3
+            p["a"], p["ad"] = A_TEND, days(3)
             p["tx"], p["ty"] = bed()
         elif a < 12 * DAYS_PER_YEAR:                 # children play in packs, and sleep
             if rng.random() < 0.25:
-                p["a"], p["ad"] = A_SLEEP, rng.randint(2, 4)
+                p["a"], p["ad"] = A_SLEEP, days(rng.randint(2, 4))
                 p["tx"], p["ty"] = bed()
             else:
                 play_with(u, p, kids_near(u["_ctx"], p), rng, clamp)
         else:                                        # adolescents eat, loiter, sleep
             r = rng.random()
-            p["ad"] = rng.randint(3, 8)
+            p["ad"] = days(rng.randint(3, 8))
             if r < 0.35:
                 p["a"] = A_EAT
                 p["tx"], p["ty"] = eden_feed_spot(u, rng)
@@ -702,7 +716,7 @@ def eden_assign(u, p, day, rng, crowd):
 
     act = _weighted(w, rng)
     p["a"] = act
-    p["ad"] = rng.randint(1, 4)
+    p["ad"] = days(rng.randint(1, 4))
     if act == A_EAT:
         p["tx"], p["ty"] = eden_feed_spot(u, rng)
     elif act == A_GROOM:
@@ -714,11 +728,11 @@ def eden_assign(u, p, day, rng, crowd):
         else:
             p["a"], (p["tx"], p["ty"]) = A_REST, bed()
     elif act == A_SLEEP:
-        p["ad"] = rng.randint(2, 4)
+        p["ad"] = days(rng.randint(2, 4))
         p["tx"], p["ty"] = bed()
     elif act == A_WORK:
         post = u["roles"][role]
-        p["ad"] = rng.randint(4, 8)
+        p["ad"] = days(rng.randint(4, 8))
         p["tx"], p["ty"] = clamp(post["x"] + rng.randint(-1, 1), post["y"] + rng.randint(0, 1))
     elif act == A_MATE:
         pool = ctx["af"] if p["s"] == "m" else ctx["am"]
@@ -744,7 +758,7 @@ def eden_assign(u, p, day, rng, crowd):
         # a lounger on the sand along the south wall, facing the painted sea
         p["tx"], p["ty"] = clamp(rng.randint(5, S - 6), S - 6 + rng.randint(0, 2))
     elif act == A_WALK:
-        p["ad"] = rng.randint(1, 2)
+        p["ad"] = days(rng.randint(1, 2))
         p["tx"], p["ty"] = clamp(c + rng.randint(-9, 9), c + rng.randint(-9, 9))
     else:
         p["tx"], p["ty"] = bed()
@@ -916,7 +930,7 @@ def tick_eden(u, rng, events):
                 continue                      # children stay with their mothers
             if p["w"]:
                 continue                      # the withdrawn keep apart
-            p["a"], p["ad"] = A_SLEEP, 2
+            p["a"], p["ad"] = A_SLEEP, days(2)
             p["tx"], p["ty"] = p.get("hx", p["x"]), p.get("hy", p["y"])
 
     byid = {q["id"]: q for q in people}
@@ -1069,7 +1083,7 @@ def tick_eden(u, rng, events):
             if u["wary_years"] == 0:
                 events.append((day, "EDEN", "disease",
                                "The wary generation has aged out; the pen forgets."))
-        elif len(people) > 100 and rng.random() < 0.025:
+        elif len(people) > 100 and rng.random() < 0.025 / PARTS_PER_DAY:
             u["std_years"] = rng.randint(3, 8)
             events.append((day, "EDEN", "disease",
                            "A sickness spread by mating moves through the pen — "
@@ -1262,7 +1276,7 @@ def lagoon_assign(u, p, day, rng, shortfall):
 
     # needs that override everything
     if p["due"] and p["due"] - day <= 0 and not p.get("mc"):
-        p["a"], p["ad"] = A_BIRTH, 2
+        p["a"], p["ad"] = A_BIRTH, days(2)
         p["tx"], p["ty"] = at_home(0)
         # Human birth is hard: the head is large, the pelvis narrow, the baby
         # emerges facing away — so women almost never deliver alone. Her
@@ -1272,16 +1286,16 @@ def lagoon_assign(u, p, day, rng, shortfall):
         mom = next((q for q in helpers if q["id"] == p.get("mom")), None)
         h = mom or (helpers[0] if helpers else None)
         if h is not None and h.get("a") != A_BIRTH:
-            h["a"], h["ad"] = A_TEND, 2
+            h["a"], h["ad"] = A_TEND, days(2)
             h["tx"], h["ty"] = clamp(p["tx"] + 1, p["ty"])
             h["f"], p["f"] = -1, 1
         return
     if p["due"] and 0 < p["due"] - day < 21:
-        p["a"], p["ad"] = A_REST, 6
+        p["a"], p["ad"] = A_REST, days(6)
         p["tx"], p["ty"] = at_home(1)
         return
     if a < 3 * DAYS_PER_YEAR:                  # infants: wherever mother is
-        p["a"], p["ad"] = A_TEND, 3
+        p["a"], p["ad"] = A_TEND, days(3)
         p["tx"], p["ty"] = at_home(1)
         return
     if a < 12 * DAYS_PER_YEAR:                 # children: packs at play
@@ -1289,13 +1303,13 @@ def lagoon_assign(u, p, day, rng, shortfall):
             play_with(u, p, kids_near(u["_ctx"], p), rng, clamp)
         else:                                  # or tag along foraging
             pat = band_patches(u, si, rng)
-            p["a"], p["ad"] = A_FORAGE, rng.randint(3, 6)
+            p["a"], p["ad"] = A_FORAGE, days(rng.randint(3, 6))
             p["tx"], p["ty"] = _patch_for(pat, "open", rng, home)
         return
 
     near_home = (abs(p["x"] - p["hx"]) <= 3 and abs(p["y"] - p["hy"]) <= 3)
     if not near_home:
-        p["a"], p["ad"] = A_WALK, 0            # the work is done: go home
+        p["a"], p["ad"] = A_WALK, days(0)            # the work is done: go home
         p["tx"], p["ty"] = home
         return
 
@@ -1308,7 +1322,7 @@ def lagoon_assign(u, p, day, rng, shortfall):
         # sleep at the hearth, or lie up with a wound until it closes
         p["a"], p["ad"], p["sl"] = A_SLEEP, rng.randint(1, 2), day
         if p.get("inj", 0) > 0.45:
-            p["a"], p["ad"] = A_REST, rng.randint(3, 6)
+            p["a"], p["ad"] = A_REST, days(rng.randint(3, 6))
         p["tx"], p["ty"] = at_home(1)
         return
 
@@ -1318,7 +1332,7 @@ def lagoon_assign(u, p, day, rng, shortfall):
     boat = u.get("boat")
     if boat and not elder and not has_infant and rng.random() < 0.5 * (0.4 + efx):
         # the boat: weeks of work now for a shore nobody has seen
-        p["a"], p["ad"] = A_BUILD, rng.randint(5, 10)
+        p["a"], p["ad"] = A_BUILD, days(rng.randint(5, 10))
         p["tx"], p["ty"] = clamp(boat["x"] + rng.randint(-2, 2), boat["y"] + rng.randint(-1, 1))
         boat["work"] += p["ad"] / PARTS_PER_DAY
         return
@@ -1335,7 +1349,7 @@ def lagoon_assign(u, p, day, rng, shortfall):
         if has_infant:
             w.append((A_TEND, 4.0))
         act = _weighted(w, rng)
-        p["a"], p["ad"] = act, rng.randint(2, 5)
+        p["a"], p["ad"] = act, days(rng.randint(2, 5))
         p["tx"], p["ty"] = at_home(2)
         if act == A_GROOM:
             kin = [q for q in u["people"] if q is not p and q.get("st", 0) == p.get("st", 0)
@@ -1360,7 +1374,7 @@ def lagoon_assign(u, p, day, rng, shortfall):
         return
     if a < ADULT_AGE:                          # adolescents work with the band
         pat = band_patches(u, si, rng)
-        p["a"], p["ad"] = A_FORAGE, rng.randint(4, 9)
+        p["a"], p["ad"] = A_FORAGE, days(rng.randint(4, 9))
         p["tx"], p["ty"] = _patch_for(pat, "open", rng, home)
         return
 
@@ -1371,7 +1385,7 @@ def lagoon_assign(u, p, day, rng, shortfall):
     if party and day - party["d"] <= 3 and party["n"] < 14:
         party["n"] += 1
         p["a"] = party["a"]
-        p["ad"] = rng.randint(7, 15)
+        p["ad"] = days(rng.randint(7, 15))
         p["tx"], p["ty"] = clamp(party["x"] + rng.randint(-2, 2),
                                  party["y"] + rng.randint(-2, 2))
         return
@@ -1387,12 +1401,12 @@ def lagoon_assign(u, p, day, rng, shortfall):
         w.append((A_SCOUT, 0.8 * efx))                   # curiosity, when bellies allow
     act = _weighted(w, rng)
     if act == A_SCOUT:
-        p["a"], p["ad"] = A_SCOUT, rng.randint(3, 6)
+        p["a"], p["ad"] = A_SCOUT, days(rng.randint(3, 6))
         p["tx"], p["ty"] = clamp(p["hx"] + rng.randint(-18, 18), p["hy"] + rng.randint(-18, 18))
         u["scouted"] = u.get("scouted", 0) + 1
         return
     p["a"] = act
-    p["ad"] = rng.randint(7, 15)          # a proper stint at the patch
+    p["ad"] = days(rng.randint(7, 15))          # a proper stint at the patch
     if act == A_HUNT:
         p["tx"], p["ty"] = _patch_for(pat, "woods", rng, home)
     elif act == A_FISH:
@@ -1495,7 +1509,7 @@ def pick_fight(u, p, people, rng, reach=9):
     q = pool[0] if rng.random() < 0.7 else rng.choice(pool)
     square_off(p, q)
     p["a"] = q["a"] = A_FIGHT
-    p["ad"] = q["ad"] = 2
+    p["ad"] = q["ad"] = days(2)
     return True
 
 
@@ -1506,14 +1520,14 @@ def groom_with(p, q, x, y):
     p["tx"], p["ty"], p["f"] = x, y, 1
     q["tx"], q["ty"], q["f"] = x + 1, y, -1
     p["a"] = q["a"] = A_GROOM
-    p["ad"] = q["ad"] = 2
+    p["ad"] = q["ad"] = days(2)
 
 
 def couple_up(p, q, x, y):
     p["tx"], p["ty"], p["f"] = x, y, 1
     q["tx"], q["ty"], q["f"] = x + 1, y, -1
     p["a"] = q["a"] = A_MATE
-    p["ad"] = q["ad"] = 2
+    p["ad"] = q["ad"] = days(2)
 
 
 def follow_mother(p, byid, clamp):
@@ -1537,7 +1551,7 @@ def play_with(u, p, kids, rng, clamp):
     near = [k for k in kids if k is not p
             and abs(k["x"] - p["x"]) <= 7 and abs(k["y"] - p["y"]) <= 7]
     p["a"] = A_PLAY
-    p["ad"] = rng.randint(1, 2)
+    p["ad"] = days(rng.randint(1, 2))
     if near:
         k = rng.choice(near)
         p["tx"], p["ty"] = clamp(k["x"] + rng.randint(-1, 1), k["y"] + rng.randint(-1, 1))
@@ -1625,7 +1639,7 @@ def launch(u, people, boat, rng, events, day, year):
     for q in people:
         if q["id"] in go:
             q["ab"] = 1
-            q["a"], q["ad"] = A_REST, 99
+            q["a"], q["ad"] = A_REST, days(99)
     u["voyage"] = {"x0": yard, "x1": land, "y": boat["y"], "d0": day,
                    "days": max(4, (yard - land) // 3), "n": len(go)}
     events.append((day, "LAGOON", "migration",
@@ -1708,7 +1722,7 @@ def keep_watch(u, people, day, events, part=0, rng=None):
         w = half[u.get("day", 0) % len(half)]
         if w.get("a") in (A_BIRTH, A_RITE) or w.get("due"):
             continue
-        w["a"], w["ad"] = A_WATCH, 1
+        w["a"], w["ad"] = A_WATCH, days(1)
         fx, fy = st["x"] + 2, st["y"] + 1          # where the fire is
         w["tx"], w["ty"] = fx - 3, fy
         w["f"] = 1
@@ -1724,10 +1738,10 @@ def keep_watch(u, people, day, events, part=0, rng=None):
                     q["tx"], q["ty"] = fx + rng.randint(-2, 2), fy + rng.randint(-1, 2)
                     if q.get("a") in (A_IDLE, A_WALK, A_TALK):
                         q["a"] = A_TALK if rng.random() < 0.6 else A_SLEEP
-                        q["ad"] = 2
+                        q["ad"] = days(2)
         talkers = sum(1 for q in band if q.get("a") == A_TALK)
         before = u.get("stories", 0.0)
-        u["stories"] = before + talkers * (0.02 if night else 0.01) / PARTS_PER_DAY
+        u["stories"] = before + talkers * (0.02 if night else 0.01) / PARTS_PER_DAY / PARTS_PER_DAY
         if before < 1.0 <= u["stories"]:
             events.append((day, "LAGOON", "culture",
                            f"Around the fire, with {w['n']} watching the dark, someone tells "
@@ -1902,7 +1916,7 @@ def hold_rites(u, people, shortfall, rng, events):
             if age_of(q, u["day"]) < 3 * DAYS_PER_YEAR or (q.get("due") and q["due"] - u["day"] < 3):
                 continue
             ang = k * 2 * math.pi / ring
-            q["a"], q["ad"] = A_RITE, 3
+            q["a"], q["ad"] = A_RITE, days(3)
             q["tx"] = int(round(st["x"] + math.cos(ang) * rad))
             q["ty"] = int(round(st["y"] + math.sin(ang) * rad))
         if first:

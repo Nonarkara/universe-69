@@ -132,7 +132,43 @@ sprites preserve the body's record and the existing pose solver.
 
 ---
 
-## 5. What does not work (yet)
+## 5. What happened on 28 October 2026, and the guard that came of it
+
+Six commits came back from the other machine trying to "upgrade" the
+graphics. They were re-palettied to a Ghibli watercolour, given large round
+chibi heads, given anime faces, smoothed off the pixel grid, and the couple
+was quietly deleted. The result was worse than what it replaced: the hair
+was drawn as overlapping filled circles, so every figure had a black blob
+where its head should be; the bodies were six heads tall instead of seven
+and a half; and the sex the owner had asked for by name was gone.
+
+**Why it went wrong.** The brief was written in prose — "chunky pixels",
+"flat 16-colour palettes", "an adult is about 7.5 heads" — and prose is easy
+to agree with and easy to ignore. Each commit was a *stylistic substitution*
+rather than a fix for a defect: the defects were that crowds interpenetrate,
+that the night is an overlay, and that firelight does not reach the people
+standing in it. None of those were addressed.
+
+**The guard.** `tests/test_style.py` now pins the measurable parts of the
+brief, so the next attempt fails the suite instead of the eye:
+
+- the palette, exactly as shipped, and every colour flat;
+- `imageSmoothingEnabled` never true — the figures are pixels;
+- the figure sprite is a 40×40 box, so a "higher resolution" re-skin has to
+  be argued for in the test file;
+- an adult is between 7.0 and 8.5 heads tall, computed from the renderer's
+  own tables;
+- the head has a jaw, and is not an ellipse again;
+- the couple is drawn as one picture, and the walk has a planted foot.
+
+Checked against the six commits that came back, that guard fails **six of
+its nine tests**. That is the point: the failure now costs a minute, not a
+whole session of looking at the wrong thing.
+
+**What was kept** from that pass: the collarbones, which are real anatomy
+and made the shoulder line read. Nothing else.
+
+## 6. What does not work (yet)
 
 This is the honest list. Each line is a defect, not a design.
 
@@ -165,7 +201,7 @@ This is the honest list. Each line is a defect, not a design.
 
 ---
 
-## 6. Changelog
+## 7. Changelog
 
 Every change to the drawing gets a line here, newest first.
 
@@ -182,6 +218,16 @@ Every change to the drawing gets a line here, newest first.
   their scene. The broken combined-pair draft was removed; individual body
   sprites, the cache, pose solver, particles and camera controls remain.
   Evidence and remaining limits: `docs/audits/2026-10-28/README.md`.
+- **2026-10-28 — the pair is one picture, and only ever a real pair.** A
+  couple is drawn as one scene — in profile, from the front, from behind —
+  rather than as two people who happen to be on the same tile. The first
+  version of that scene grouped anybody doing the same thing on the same
+  tile, which put strangers in bed with each other, and it drew both bodies
+  from one template, so a fat person and a thin one looked alike. It now
+  couples only the two whose recorded partner is the other, and each body
+  keeps its own width, its own strength and its own skin. The individual
+  sprites, the cache, the pose solver, the particles and the camera are
+  untouched.
 
 - **2026-10-28 — the figures were rebuilt.** The trunk was a slab; it is now a
   real torso (trapezius, ribcage, waist, ilium, crotch) with a neck, and a
@@ -202,3 +248,7 @@ Every change to the drawing gets a line here, newest first.
   prevented shipping; the individual activity sprites remain.
 - **2026-10-27 — the record strip, the mirror banner and the intro card** came
   in from the other branch; the short-landscape CSS was fitted to the strip.
+- **2026-10-28 — the Ghibli/manga pass was reverted.** Chunky pixels, flat
+  sixteen-colour palettes, 7.5-head adults, the pair drawn as one picture and
+  the planted-foot walk are all back, and `tests/test_style.py` now fails any
+  attempt to take them away again. The collarbones were kept.

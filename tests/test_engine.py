@@ -247,9 +247,11 @@ class TestBounds(unittest.TestCase):
 
 class TestEden(unittest.TestCase):
     def test_phase_progression_reaches_stagnation(self):
-        # two resort expansions postpone the sink; it still comes
+        # Two resort expansions postpone the sink; it still comes. On the
+        # four-part day the sink arrives in year 133 rather than 83, so the
+        # horizon has to be longer than it was (DESIGN.md, 2026.10.28.2).
         w = engine.genesis(seed=69)
-        events = run(w, 100 * engine.DAYS_PER_YEAR)
+        events = run(w, 160 * engine.DAYS_PER_YEAR)
         kinds = [e[3].lower() for e in events if e[2] == "phase"]
         self.assertTrue(any("exploit" in k for k in kinds))
         self.assertTrue(any("stagnation" in k for k in kinds))
@@ -473,8 +475,23 @@ class TestMinds(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        # LAGOON's first iteration dies in its fifth year and the world is
+        # reseeded; its second lives to about year 140. So the two worlds
+        # are compared in year 125, when both of them are alive, and the
+        # pen is run on to year 160 so that the withdrawal has begun.
         cls.world = engine.genesis(seed=69)
-        run(cls.world, 100 * engine.DAYS_PER_YEAR)
+        run(cls.world, 125 * engine.DAYS_PER_YEAR)
+        cls.compared = {k: cls.means_of(k) for k in ("eden", "lagoon")}
+        run(cls.world, 35 * engine.DAYS_PER_YEAR)
+
+    @classmethod
+    def means_of(cls, key):
+        u = cls.world[key]
+        a = [p for p in u["people"] if engine.age_of(p, u["day"]) >= engine.ADULT_AGE]
+        if not a:
+            return {}
+        return {f: sum(p[f] for p in a) / len(a)
+                for f in ("bmi", "sn", "pu")}
 
     def adults(self, key):
         u = self.world[key]
@@ -485,11 +502,17 @@ class TestMinds(unittest.TestCase):
         return sum(p[field] for p in a) / len(a)
 
     def test_the_resort_fattens_and_weakens_its_people(self):
-        self.assertGreater(self.mean("eden", "bmi"), self.mean("lagoon", "bmi") + 4)
-        self.assertLess(self.mean("eden", "sn"), self.mean("lagoon", "sn"))
+        eden, lagoon = self.compared["eden"], self.compared["lagoon"]
+        self.assertTrue(eden and lagoon,
+                        "both worlds must have adults in year 125 to compare")
+        self.assertGreater(eden["bmi"], lagoon["bmi"] + 4)
+        self.assertLess(eden["sn"], lagoon["sn"])
 
     def test_purpose_drains_where_nothing_is_asked(self):
-        self.assertLess(self.mean("eden", "pu"), self.mean("lagoon", "pu") - 0.3)
+        eden, lagoon = self.compared["eden"], self.compared["lagoon"]
+        self.assertTrue(eden and lagoon,
+                        "both worlds must have adults in year 125 to compare")
+        self.assertLess(eden["pu"], lagoon["pu"] - 0.3)
 
     def test_the_withdrawn_keep_apart_from_the_living_pen(self):
         """Huddled men pool on the floor, women go to the top row of boxes,
@@ -619,6 +642,46 @@ class TestDayAndNight(unittest.TestCase):
             self.assertIn(snap["u"][key]["tod"], engine.PART_NAMES)
             self.assertEqual(snap["u"][key]["night"],
                              snap["u"][key]["tod"] == "night")
+
+    def test_the_first_winter_does_not_starve_the_lagoon(self):
+        """A day that is four parts must not make every rate four times
+        faster.
+
+        This is the regression test for the worst bug of the four-part day:
+        the band's food, its activities and its conceptions were all
+        written in days and were left running once a part, so LAGOON
+        starved to death in its ninth year. The world has to still be a
+        world in the fifteenth year.
+        """
+        import random
+        u = engine.genesis_universe("LAGOON", 69)
+        rng = random.Random(69)
+        for _ in range(5000 * engine.PARTS_PER_DAY):
+            engine.tick_lagoon(u, rng, [])
+        if u["extinct_day"] is not None:
+            self.fail("LAGOON died in year %d" % (u["extinct_day"] // 360))
+        self.assertGreaterEqual(len(u["people"]), 3,
+                                "the lagoon is empty in the fifteenth year")
+
+    def test_a_person_keeps_the_same_job_for_the_length_of_a_day(self):
+        """A stint of seven days is seven days, not seven ticks.
+
+        If the durations are not converted, everybody changes what they
+        are doing four times a day, and no activity means anything.
+        """
+        import random
+        u = engine.genesis_universe("LAGOON", 69)
+        rng = random.Random(69)
+        for _ in range(60 * engine.PARTS_PER_DAY):
+            engine.tick_lagoon(u, rng, [])
+        before = {p["id"]: p.get("a") for p in u["people"]}
+        for _ in range(engine.PARTS_PER_DAY):
+            engine.tick_lagoon(u, rng, [])
+        changed = sum(1 for p in u["people"]
+                      if before.get(p["id"]) not in (None, p.get("a")))
+        self.assertLessEqual(changed, max(1, len(u["people"]) // 4),
+                              "%d of %d people changed their job inside one "
+                              "day" % (changed, len(u["people"])))
 
     def test_at_night_the_band_comes_in_to_the_fire(self):
         import random
