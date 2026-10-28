@@ -1,0 +1,157 @@
+{
+ "title": "From Universe 25 to Here",
+ "subtitle": "A preface for the RESEARCH tab",
+ "author": "Dr Non",
+ "chapters": [
+  {
+   "id": "under-the-bed",
+   "title": "The Colony Under My Bed",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "When I was small, I had a dream, or something like a dream, about a colony of people who lived under my bed."
+    },
+    {
+     "t": "p",
+     "text": "I am still not sure it was a dream. It did not feel like one. They were tiny, far too small to hear, so we did not speak. We communicated by looking. I would lie on the floor with my cheek against the boards and watch them going about their lives in the dim space beneath the mattress, and somehow they knew I was there, and somehow I understood them. I never helped them and I never harmed them. I only watched, and they let me."
+    },
+    {
+     "t": "p",
+     "text": "Then I grew up, and they disappeared. Not all at once. They faded, the way the things of childhood fade, until one day I looked and there was only dust and a lost sock. They had not had time to build anything: no cities, no stories I could read, no civilisation. I grew up too fast for my own imagination, and the colony under my bed never got the chance to become a world."
+    },
+    {
+     "t": "p",
+     "text": "Universe 69 is my return to that moment."
+    },
+    {
+     "t": "p",
+     "text": "On an old laptop in my house, two small worlds now run day and night, and I watch them the way I watched the floor under my bed. The difference is that this time I have tried to give the people in them a real chance to live: to find food or be given it, to pair and raise children, to quarrel and make peace, to invent and to forget, to grow old, and to build, if they can, the civilisation my childhood colony never reached. The more realistically, humanely and socially the first eight pairs of founders live in these two universes, the more real the simulations become, and the more I can learn from them."
+    },
+    {
+     "t": "h2",
+     "text": "Why it has to be pixels"
+    },
+    {
+     "t": "p",
+     "text": "People sometimes ask me why I do this. My honest answer is that it is the only harmless way I know to ask the questions I want to ask."
+    },
+    {
+     "t": "p",
+     "text": "I cannot lock real people in a perfect resort and watch what happens to them, as the producers do to the hero of The Truman Show. I cannot divide students into guards and prisoners and watch how quickly cruelty grows, as Philip Zimbardo claimed to show at Stanford in 1971. I would not want to, and I should add that the Stanford Prison Experiment is itself now doubted: later investigations, especially by Thibault Le Texier, found that the guards had been coached, which is one more reason to be humble about what any experiment on people shows. Human beings are not material for an experiment they did not choose."
+    },
+    {
+     "t": "p",
+     "text": "But I can build two worlds out of numbers, fill them with people made from what the best books I know say about human beings, and let them live. No one in them suffers, because no one in them feels. And if they behave the way the books say people behave, closely enough, then watching them may teach me something about us."
+    },
+    {
+     "t": "h2",
+     "text": "The two pairs of eyes"
+    },
+    {
+     "t": "p",
+     "text": "I am not the only observer. The project is built with an AI collaborator, and together we have a rule we call the Observers' rule: we watch and we record, and we never intervene. We provision EDEN, because that is the experiment, and we reseed a world when it has been empty for thirty years. Otherwise we keep our hands out of the box. I do not feed the starving or give the idle something to do. That is the hardest part, and it is the most important. A world you rescue is not a world. It is a puppet show."
+    }
+   ]
+  },
+  {
+   "id": "from-universe-25",
+   "title": "From Universe 25 to Here",
+   "epigraph": {
+    "text": "better design of the built environment",
+    "by": "John B. Calhoun, 1979"
+   },
+   "blocks": [
+    {
+     "t": "p",
+     "text": "The colony under my bed gave me the feeling. A scientist named John B. Calhoun gave me the question."
+    },
+    {
+     "t": "figure",
+     "src": "img/calhoun.jpg",
+     "alt": "A black-and-white photograph of a man crouching inside a large enclosure built for rodents",
+     "caption": "John B. Calhoun inside one of his rodent universes, 1970. Photograph by Yoichi Okamoto, White House photographer.",
+     "credit": "Yoichi R. Okamoto, White House photographer",
+     "license": "Public domain",
+     "source": "https://commons.wikimedia.org/wiki/File:CalhounJ.JPG"
+    },
+    {
+     "t": "p",
+     "text": "On 9 July 1968, at the National Institute of Mental Health in Maryland, Calhoun put four pairs of mice into a sealed pen he called Universe 25. It had room for more than three thousand mice in 256 nesting boxes, unlimited food and water, a perfect climate, no predators and as little disease as he could manage. Paradise, in other words, except for two things: the walls were the edge of the world, and once every nest and territory had an owner, there was nothing left for a newcomer to do or become."
+    },
+    {
+     "t": "p",
+     "text": "The mice multiplied quickly at first. Then, while there was still plenty of food and plenty of physical room, their society came apart. Males who had found no place withdrew into listless huddles on the open floor, or turned violent. Mothers abandoned their young. A generation grew up that never courted, never fought and never raised young; Calhoun called them the beautiful ones, because with no one to fight their coats stayed perfect. The population peaked at about 2,200, around day 560, and then births almost stopped. By the summer of 1972 only 122 old mice were left. The colony died out the following year. Even when Calhoun moved some of the last mice into fresh, empty pens, they did not recover."
+    },
+    {
+     "t": "figure",
+     "src": "img/universe25-chart.jpg",
+     "alt": "A line chart of the mouse population rising, levelling and falling",
+     "caption": "The population of Universe 25, from Calhoun's 1973 paper \"Death Squared.\"",
+     "credit": "John B. Calhoun, \"Death Squared\" (1973), republished by the NIH",
+     "license": "Public domain",
+     "source": "https://commons.wikimedia.org/wiki/File:Mice_population_Universe_25.jpg"
+    },
+    {
+     "t": "h2",
+     "text": "What people heard, and what Calhoun meant"
+    },
+    {
+     "t": "p",
+     "text": "The world took a simple message from Universe 25: crowding drives animals mad, and it will drive us mad too. In the anxious years around 1970, with fears about overpopulation and violent cities, the experiment was quoted everywhere, and it still circulates online today as a prophecy about whatever its teller already fears."
+    },
+    {
+     "t": "p",
+     "text": "The historians Edmund Ramsden and Jon Adams traced that story in a 2009 article, \"Escaping the Laboratory.\" They show that the popular reading was not Calhoun's own. He did not think density as such was the cause. He thought the cause was design: a space that forced animals into constant, unwanted contact with one another, and that offered no meaningful roles to the animals who arrived after every role was filled. In other experiments he found that adding rooms and corridors, so that animals could choose their contacts, let dense populations live without collapse, and that some animals under pressure invented new ways of living. He wanted architects and planners to learn from him. Near the end of his career he wrote that nothing could do more for human welfare than better design of the places we build."
+    },
+    {
+     "t": "p",
+     "text": "I should also be honest about the limits. The mice were an inbred laboratory strain; the pen was not always clean; the experiment was an observation, not a controlled test; it has never been replicated; and it would not be allowed today. Mice are not people. People tell stories, invent roles, leave, rebuild, and change the design of their spaces, and the densest cities on earth are full of healthy, long-lived people. Universe 25 does not prove anything about humans."
+    },
+    {
+     "t": "h2",
+     "text": "Why two worlds"
+    },
+    {
+     "t": "p",
+     "text": "What it does is ask a question. If you gave a group of social animals everything they need except a place and a purpose, what would happen to them? Calhoun could ask it of mice. I wanted to ask it of people, carefully, without hurting anyone."
+    },
+    {
+     "t": "p",
+     "text": "So Universe 69 is two universes. EDEN, Universe 6, is Calhoun's question translated for humans: a resort where food is free, the weather is always spring, a few people hold fixed posts, and everyone else has nothing asked of them. LAGOON, Universe 9, is its opposite: an island where nothing is given, where people must forage, hunt, build, keep watch and earn every meal, the world our Stone Age brains were made for. The same eight pairs of founders, with the same names and the same inherited temperaments, start in both. The world is the only difference."
+    },
+    {
+     "t": "p",
+     "text": "There is one more difference, and it is the heart of the experiment. When LAGOON dies, its next founders inherit a lesson from what killed it, as if by instinct. When EDEN dies, its next founders arrive to exactly the same conditions, because nothing inside its walls could have saved them. One world can learn from its deaths. The other cannot."
+    },
+    {
+     "t": "p",
+     "text": "Calhoun's mice could not tell stories, so they could not reorganise themselves when their roles ran out. My people cannot really tell stories either; they are numbers. But the model gives them the things the books say let humans escape the mouse's fate: lore, rites, work that matters, a place to belong. EDEN withholds most of them. LAGOON makes its people earn them. I watch both, and I keep my hands out of the box."
+    },
+    {
+     "t": "p",
+     "text": "This is my colony under the bed, given a second chance. I hope that this time I can stay long enough to see whether it builds a world."
+    },
+    {
+     "t": "h2",
+     "text": "Sources"
+    },
+    {
+     "t": "p",
+     "text": "Calhoun, John B. \"Death Squared: The Explosive Growth and Demise of a Mouse Population.\" Proceedings of the Royal Society of Medicine 66 (1973): 80–88."
+    },
+    {
+     "t": "p",
+     "text": "Ramsden, Edmund, and Jon Adams. \"Escaping the Laboratory: The Rodent Experiments of John B. Calhoun and Their Cultural Influence.\" Journal of Social History 42, no. 3 (2009): 761–92."
+    },
+    {
+     "t": "p",
+     "text": "Melchor, Annie. \"Universe 25 Experiment.\" The Scientist, 28 May 2024."
+    },
+    {
+     "t": "p",
+     "text": "Le Texier, Thibault. \"Debunking the Stanford Prison Experiment.\" American Psychologist 74, no. 7 (2019): 823–39."
+    }
+   ]
+  }
+ ]
+}

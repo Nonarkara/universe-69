@@ -254,6 +254,21 @@ class Handler(BaseHTTPRequestHandler):
             with lock:
                 payload = research.report(world)
             self._send(200, json.dumps(payload, separators=(",", ":")))
+        elif path.startswith("/book/") or path.startswith("/archive/"):
+            # the Book, the first run's archive, and their pictures: static
+            # files under web/book and web/archive only
+            top = "book" if path.startswith("/book/") else "archive"
+            base = os.path.realpath(os.path.join(WEB, top))
+            target = os.path.realpath(os.path.join(base, path[len(top) + 2:]))
+            kinds = {".json": "application/json", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+                     ".png": "image/png", ".svg": "image/svg+xml", ".html": "text/html; charset=utf-8",
+                     ".md": "text/plain; charset=utf-8"}
+            kind = kinds.get(os.path.splitext(target)[1].lower())
+            if kind and target.startswith(base + os.sep) and os.path.isfile(target):
+                with open(target, "rb") as f:
+                    self._send(200, f.read(), kind)
+            else:
+                self._send(404, '{"err":"not found"}')
         else:
             self._send(404, '{"err":"not found"}')
 

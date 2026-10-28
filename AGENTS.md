@@ -122,12 +122,21 @@ core is repeated inline below so an agent that skips the pointer still gets it.
 
 ### House style for this product
 
-- Chunky pixels, `image-rendering: pixelated`, flat 16-colour palettes, monospace
-  HUD for the *worlds*. No gradients, no shadows, no decoration. This is
-  deliberate: the visual language is 8-bit honesty.
+- **Full resolution, one palette (owner's decision, 2026-10-28, superseding
+  the 8-bit lock).** The worlds are painted at the screen's own resolution —
+  naturalistic but restrained, a lit terrarium, not a game; no
+  `image-rendering: pixelated`, no tile blow-up. Colours come from one
+  designed palette, TERRARIUM, as tokens on `:root` that the canvas reads;
+  text clears WCAG AA. Type: Jost (console) and Source Serif 4 (reading).
+  No Inter/Poppins, no decorative gradients, no emoji icons, no
+  glassmorphism. **One screen, no scroll:** long content (record, research,
+  help, the book) is read in pages with Prev / Next. See GRAPHICS.md §1.
 - **The house style is executable, not advisory.** `tests/test_style.py` pins
-  the palette, the pixel grid, the head-to-body ratio of an adult, the couple
-  drawn as one picture, and the walk with a planted foot. A renderer change
+  the palette and its contrast, the full-resolution ground, the one-screen
+  page and its pagers, the age table (heads to height), the sex
+  differences in width and stature, the anatomy rig, the body fields in the
+  sprite key, the adult-only gate, the couple drawn as one picture, and the
+  walk with a planted foot. A renderer change
   that breaks the style fails the suite, not the owner's eye. If you mean to
   change the style, change that file in the same commit, where it will be
   read.
@@ -135,13 +144,21 @@ core is repeated inline below so an agent that skips the pointer still gets it.
   as life-drawing ink sketches with realistic proportion, so a viewer can see
   whether someone is fat, starving, strong, weak or hurt. Never stick figures,
   never blobs. Adults are drawn as bodies are; children never get genital
-  detail. See DESIGN.md, "Rendering".
+  detail. Since 2026-10-28 every figure is **skeleton-driven**: the pose
+  solver places hands and feet, an anatomy rig (`buildRig`, two-bone `ik2`
+  per limb) with proportions by age and sex keeps the bones their length, and
+  the skin — capsule limbs with muscle bellies, a torso from shoulders to
+  waist to hips, hands, feet, a skull with a jaw and a hair silhouette — is
+  painted around it. See DESIGN.md, "Rendering", and GRAPHICS.md §2.
 - The viewer is a *documentary camera*, not a surveillance map: it finds
   something worth watching (a birth, a brawl, a hunting party) and closes in on
-  it, then pulls back to the whole world. Do not turn it into a dashboard of
+  it, then pulls back to the largest camp. Its zoom ladder is three rungs —
+  island, camp, hearth — at about 6, 18 and 48 CSS px of adult height. Do not turn it into a dashboard of
   charts that a human was never going to read.
-- The two universes are always shown **side by side**. The comparison *is* the
-  product; splitting them across pages destroys the experiment.
+- The two universes are always shown **together on the first screen**: side
+  by side on a wide screen, stacked one above the other under ~700 px. The
+  comparison *is* the product; splitting them across pages or behind a tab
+  destroys the experiment.
 - A day is **four parts** — dawn, day, dusk, night — and the light turns with
   them. The tick is a part, not a day.
 

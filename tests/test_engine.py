@@ -57,7 +57,7 @@ class TestGenesis(unittest.TestCase):
             self.assertEqual(u["kind"], kind)
             self.assertEqual(u["day"], 0)
             self.assertEqual(u["iteration"], 1)
-            self.assertEqual(len(u["people"]), 4)
+            self.assertEqual(len(u["people"]), 2 * engine.FOUNDER_PAIRS)
             self.assertEqual(u["phase"], "strive")
             self.assertIsNone(u["extinct_day"])
 
@@ -254,7 +254,12 @@ class TestEden(unittest.TestCase):
         events = run(w, 160 * engine.DAYS_PER_YEAR)
         kinds = [e[3].lower() for e in events if e[2] == "phase"]
         self.assertTrue(any("exploit" in k for k in kinds))
-        self.assertTrue(any("stagnation" in k for k in kinds))
+        # Since 2026.10.28.3 the sink is not a phase reached but a thing
+        # that happens: withdrawal and infant loss rise out of crowding.
+        # The 35% label is the pen's design and may come later or not at all.
+        u = w["eden"]
+        self.assertTrue(any(p["w"] for p in u["people"]), "nobody withdrew")
+        self.assertGreater(u["cod"].get("infant", 0), 0, "no infant was lost")
 
     def test_children_are_born_with_a_sequential_id(self):
         w = engine.genesis(seed=69)
@@ -424,7 +429,11 @@ class TestExtinctionAndPostmortems(unittest.TestCase):
         engine.tick_lagoon(u, __import__("random").Random(2), events)
         self.assertEqual(u["iteration"], 2)
         self.assertIn("preserve", u["lessons"])
-        self.assertGreater(u["store"], 0)
+        # the lesson is a habit, not free food: their stores rot slower
+        import needs
+        u["settlements"][0]["store"] = 100.0
+        needs.keep_stores(u)
+        self.assertGreater(u["settlements"][0]["store"], 100.0 * (1 - needs.SPOIL["none"]))
 
 
 class TestRecord(unittest.TestCase):
@@ -737,19 +746,34 @@ class TestDayAndNight(unittest.TestCase):
         self.fail("nobody stood watch")
 
     def test_a_predator_becomes_food_once_they_can_hunt_it(self):
+        # Since 2026.10.28.4 the cat is an animal with a place (animals.py):
+        # a party of armed hunters next to it can bring it down, and it
+        # comes home as a load of meat.
         import random
+        import animals
         u = self._lagoon()
-        u["tech"] = list(u["tech"]) + ["predator_hunt"]
+        u["tech"] = list(u["tech"]) + ["stone_tools", "predator_hunt"]
+        terr = engine.terrain_of(u)
+        animals.ensure(u, random.Random(1), terr)
+        st = u["settlements"][0]
+        cat = {"i": 9999, "k": animals.CAT, "x": st["x"], "y": st["y"],
+               "tx": st["x"], "ty": st["y"], "hx": st["x"], "hy": st["y"], "fed": 0.0}
+        u["animals"] = [cat]
+        party = [p for p in u["people"] if engine.age_of(p, u["day"]) >= engine.ADULT_AGE][:4]
+        for p in party:
+            p["a"], p["x"], p["y"], p["carry"] = engine.A_HUNT, st["x"] + 1, st["y"], 0.0
+        ctx = {"day": u["day"], "part": 1, "night": False, "events": [],
+               "adult": lambda q: True, "has": lambda t: t in u["tech"], "armed": True,
+               "lessons": [], "A_HUNT": engine.A_HUNT}
         rng = random.Random(3)
-        kills = 0
-        for _ in range(engine.PARTS_PER_DAY * 60):
-            for p in u["people"]:
-                p["a"] = engine.A_HUNT          # they stay out in the woods
-            before = u.get("kills", 0)
-            engine.tick_lagoon(u, rng, [])
-            kills += u.get("kills", 0) - before
-        self.assertGreater(kills, 0, "the big cat was never brought down")
-        self.assertGreater(u.get("meat", 0.0), 0.0, "the carcass was not food")
+        for _ in range(40):
+            animals.tick(u, rng, terr, party, ctx)
+            for p in party:
+                engine.step_toward(p, terr, engine.LAGOON_WALK)
+            if not any(q["k"] == animals.CAT for q in u["animals"]):
+                break
+        self.assertGreater(u.get("kills", 0), 0, "the big cat was never brought down")
+        self.assertGreater(sum(p["carry"] for p in party), 0, "the carcass was not food")
 
     def test_without_the_technology_the_predator_is_only_a_death(self):
         import random
@@ -866,8 +890,9 @@ class TestQuarterDayAudit(unittest.TestCase):
         w = engine.genesis(seed=69)
         with patch.object(engine.minds, "tend_body") as body, patch.object(engine, "base_mortality", return_value=False) as mortality:
             run(w, 1)
-        self.assertEqual(body.call_count, 8)
-        self.assertEqual(mortality.call_count, 8)
+        founders = len(w["eden"]["people"]) + len(w["lagoon"]["people"])
+        self.assertEqual(body.call_count, founders)
+        self.assertEqual(mortality.call_count, founders)
 
     def test_predator_meat_is_not_also_kept_after_transfer_to_store(self):
         import random

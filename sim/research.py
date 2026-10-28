@@ -233,7 +233,7 @@ def m_lagoon_births_per_100(u):
     census = u.get("census") or []
     if not census:
         return None
-    year, pop, births, _deaths = census[-1]
+    year, pop, births, _deaths = census[-1][:4]   # rows grew gauges in 2026.10.28.3
     adults = len(_adults(u))
     if not adults:
         return None

@@ -10,6 +10,64 @@ The 2026.10.28.1 release adds four parts per day and corrects the unfinished
 conversion's daily rates, wall-clock migration and reseed timing. Its figures
 must be derived afresh. New reports include the actual engine version.
 
+## The live run restarts (owner's decision, 2026-10-28)
+
+With engine 2026.10.28.4 the live run on the 2016 MacBook starts again from
+genesis: eight pairs in each world. The previous world (114+ years, earlier
+engines, headcount food, phase-scripted EDEN) is archived, not migrated:
+its history could not have come from this model, so no figure from it is
+carried into this one. On the MacBook, after `git pull`:
+
+```sh
+launchctl unload ~/Library/LaunchAgents/com.universe69.sim.plist
+python3 sim/server.py --genesis   # archives state + events to data/archive, starts over; Ctrl-C once it is up
+launchctl load ~/Library/LaunchAgents/com.universe69.sim.plist
+```
+
+The first run's record is kept in the viewer (help card → ABOUT → *The First Run*).
+
+## Engine 2026.10.28.4 — eight pairs, real needs, animals with places (re-derived 2026-10-28)
+
+Both worlds start from the same eight pairs. Food is gathered, carried and
+eaten by persons; EDEN and LAGOON decide with one function (DESIGN.md).
+Every earlier figure in this file is from an engine whose food was a
+headcount formula and whose EDEN collapse was a phase script — none of them
+carries over. Re-derived with:
+
+```sh
+python3 tools/lab.py --days 36000 --seed 69 --every 1800   # and seeds 123, 5
+```
+
+| Seed | EDEN y20 | y40 | y60 | y80 | y100 | withdrawn at y100 | LAGOON y20 | y40 | y60 | y80 | y100 | LAGOON peak | tech |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 69 | 78 | 207 | 419 | 650 | 683 | 277 | 46 | 95 | 101 | 164 | 288 | 322 | 12 |
+| 123 | 82 | 194 | 386 | 632 | 741 | 299 | 34 | 58 | 88 | 169 | 320 | 348 | 13 |
+| 5 | 70 | 156 | 361 | 584 | 739 | 264 | 32 | 62 | 108 | 181 | 222 | 275 | 12 |
+
+What the three seeds agree on, in the first century:
+
+- **EDEN expands and hollows.** Growth is steady (~5%/yr early) and
+  flattens after year 80. From year ~50 the withdrawn rise from a handful
+  to ~36–40% of the pen, and competent breeding men fall to 4–14. By year
+  30 there are already ~2 competent adults per post: Calhoun's role
+  saturation. Withdrawal comes from crowding wearing company down at the
+  beds and bars, and incompetence from being reared in a crowded nest — the
+  sink appears at ~20–30% of the pen's capacity, before the `stagnate`
+  label (35%) ever fires. Calhoun's own stagnation began near 16%. No seed
+  collapsed within 100 years: whether this pen dies, and when, is the next
+  arc to run (`--days 60000`).
+- **LAGOON lives, alongside its animals.** No extinction in any seed.
+  Bands grow to 222–320 by year 100 (peaks 275–348), split into two or
+  three tribes and reach 12–13 technologies; famines still cut them back
+  (seed 5 fell from 263 to 181 in the decade before year 80).
+  Deer hold at roughly 420–590 and big cats at 0–4, recolonising
+  when they die out (animals.py). Predation is real but bounded: in 50-year
+  traces (taken before hunters learned to track the nearer cat) it took 0–12 people, mostly before fire and stone tools, and
+  people killed 2–4 of the cats that came for them.
+- **Calibration flags:** LAGOON's growth (~3%/yr over the century) is above
+  the ≤1%/yr the forager literature gives (Howell; Marlowe), so fertility
+  or child survival is too generous.
+
 ## Current release baseline — 2026.10.28.1
 
 Re-derived from the shipped engine, seed 69, for 60,000 full simulated days

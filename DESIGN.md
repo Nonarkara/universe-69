@@ -194,6 +194,60 @@ from 2026.10.28.1 is stale, and so is every figure from before it.
 have broken: the lagoon is still a lagoon in the fifteenth year, and a
 person keeps the same job for the length of a day.
 
+## Engine 2026.10.28.3: needs, places, one mind (the handoff's milestone N)
+
+The activity labels used to be theatre: LAGOON's food came from a headcount
+formula, EDEN's collapse from a phase script, and the two worlds had two
+different assigners. This engine retires that layer. **It changes the
+trajectory of any run started under an earlier engine; the live run should
+be reseeded, and no figure from an earlier engine carries over.**
+
+| Finding | Mechanic | Where |
+|---|---|---|
+| Foragers eat what somebody gathered (Lee & DeVore, *Man the Hunter*) | Food is in **sites** on the map (berry groves, shallows, game, tilled fields). A worker at a site eats there and carries a day's load home; a camp eats only from its own **store**. No food arrives because there are adults. If everybody sleeps, the store stays empty and the band starves (`tests/test_needs.py`, A1) | `needs.fulfil`, `needs.eat`, `needs.deposit` |
+| Hunger, energy and company are a person's own | Personal meters `hun`, `ene`, `sol`. Eating lowers the eater's hunger and empties the pantry it came from (A2). An infant is fed by its mother, and the mother pays 0.6 of it in her own hunger | `needs.meters`, `needs.eat` |
+| Starvation takes weeks (hunger-strike literature: ~45–70 days at normal weight) | Hunger 0→40 (death) at ~1.4/day for a working adult: about four weeks with nothing at all, longer with scraps | `needs.HUNGER_MAX`, `HUNGER_PER_DAY` |
+| Foragers anticipate: they go out because the larder is low, not only when their own belly is | `want_food` is the larger of this belly's hunger and the camp's shortfall against four days' food | `needs.assign`, `larder_short` |
+| Food does not keep without the craft to keep it | Camp stores rot 4%/day; 0.8% with preservation (or a "preserve" lesson); 0.2% with a granary | `needs.keep_stores` |
+| A field gives food only if it is worked (Diamond ch.6) | Tilled fields are sites that grow only when tended in the last 30 days, a quarter as fast in winter, a third in drought | `needs.ensure_sites`, `regrow_sites` |
+| Night is slept (A3) | At night everyone not on watch, in labour, nursing, withdrawn or on the way to dinner sleeps where they are — at the hearth, or out at the patch. At dawn everybody decides again. Sleep restores energy | `needs.night` |
+| One mind, two conditions (A5) | Both worlds' adults decide with `needs.assign`. The worlds differ only in `needs.CONDITIONS` (same keys): EDEN's food is provisioned, its mating free of bonds, its posts the only work; LAGOON must work to eat, works in parties, mates in bonds | `needs.CONDITIONS` |
+| Crowding wears company instead of mending it (Calhoun 1962) | Past eight faces within five paces, company stops restoring `sol` and drains it. A fed, purposeless adult whose `sol` falls below 0.25 withdraws | `needs.meters`, `needs.assign` |
+| Violence needs a crowd and a grievance (Pinker, *Better Angels* ch.9; Calhoun's placeless males) | EDEN fights are chosen in `needs.assign` from local crowding × temper × placelessness (men ×1, women ×0.15). A violent death is a fight's wounds reaching 1.0. There is no phase-gated death roll | `needs.assign`, `tick_eden` |
+| Rearing decides a pup's fate (Calhoun 1962, 1973) | Abandonment and social incompetence at birth are read from the mother's nest crowding, purpose, wounds and own competence (`rearing`), not from a phase label | `rearing` |
+| Phases describe; they do not decide | EDEN's phase names stay as a reading of the census, but the death phase can reverse if births come back | `tick_eden` |
+| Walking round water | Blocked walkers follow a breadth-first land distance field (a cache, never state), so nobody strands on the far side of the inner lagoon | `land_field`, `step_toward` |
+| Eight pairs (owner's decision, 2026-10-28) | Both worlds start with the same eight pairs, as every reseed already did | `FOUNDER_PAIRS` |
+
+**Animals have places (handoff A4, owner's brief 2026-10-28: "we are God
+creating the ecosystem that won't kill the population instantly if the
+population could naturally learn how to fight back").** `sim/animals.py`.
+
+| Finding | Mechanic | Where |
+|---|---|---|
+| Big cats kill people mostly when prey fails them, and mostly people alone (Packer et al. 2005, *Nature*; Treves & Naughton-Treves 1999) | Every deer and cat has a position. A cat kills deer every ~3.5 days; only after 12 days without a kill does it look at people, and then only at someone with fewer than three adults within three paces, outside a lit or watched camp. Children and the night make prey easier; vigilance (`vg`) harder | `animals.tick`, `_choose_person` |
+| People fight back | An attacked adult with stone tools kills the cat 25% of the time (5% unarmed), +20% per adult defender, +10% with the "vigilance" lesson; otherwise the victim is taken (adult 55%, child 85%, halved if armed) or mauled | `_attack` |
+| The hunt follows the herd (Hadza: big kills are rare per hunter — Hawkes et al. 1991) | Hunters with stone tools track the nearest deer; deer bolt from people within four paces; a strike succeeds 5% + 5% per partner (max 30%) per part; the carcass is carried home as a shared load. Hunts last a day or two, and a hungry hunter gives up to eat | `animals.tick`, `needs.assign` |
+| Predator hunting | With `predator_hunt`, three armed hunters within four paces of a cat may kill it (25% per part); the cat is meat | `animals.tick` |
+| Herds and cats live on the land | Deer grow logistically to 0.035 per tile of grass or wood; cats are capped at one per 18 deer and starve after 45 days unfed. An empty island is recolonised: a small herd, or a single cat, arrives a few times a year (model calibration — the Observers' one act of design) | `animals._daily` |
+
+| Shelter is built, pair by pair | With `shelter` known, each bonded pair raises its own hut at the camp: ten person-days of work (`needs.HUT_WORK`), scaled by body capacity. A finished hut is where the pair sleeps, and a cat does not take someone asleep under their own roof. Huts and their progress go to the viewer (`huts`) | `needs.hut_of`, `animals._sheltered` |
+| The drama is recorded where it happened | Each deer killed, cat hunted, cat fought off, person mauled or taken is kept for three days as an encounter with its place (`encounters`), for the documentary camera | `animals._seen` |
+
+All numbers in this table are model calibration, not measured coefficients.
+The viewer draws exactly the animals in the summary (`animals`), where
+they are; it invents none.
+
+**Changed figures.** Conception in `try_conceive` was divided by the
+parts of the day twice; it is now divided once, so conception per part is
+four times what engine 2026.10.28.2 used. Together with eight founding
+pairs, every trajectory differs from earlier engines; STUDY.md's
+2026.10.28.3 baseline is the first figure from this model.
+
+The day-counter fatigue is gone from LAGOON's assigner and the old
+phase-gated scripts are gone from EDEN. **Not yet done:** LAGOON's homicide
+model (`lagoon_violence`) is still a per-person hazard, unchanged.
+
 ## Universe 6 — EDEN (after Calhoun's Universe 25)
 
 A 48×48 sealed pen. Food hoppers and water are always full. Climate is perfect.
@@ -204,11 +258,11 @@ The only scarce resource is **social space** (Calhoun's actual variable):
 | Research finding (Universe 25)            | Mechanic                                                    |
 |-------------------------------------------|-------------------------------------------------------------|
 | Phase A "strive" → B "exploit"             | Normal pairing + conception while crowding < 35% of nominal capacity (900) |
-| Phase C "stagnation", behavioral sink      | Above 35%: conception scales down, violent deaths appear     |
-| Maternal neglect                           | Infant abandonment probability ∝ crowding                    |
-| "Beautiful ones"                           | Children born during stagnation can be *socially incompetent*; on adulthood they withdraw and never pair |
-| Phase D "death", no recovery               | Once yearly deaths > births for 3 years, the competent cohort ages out; incompetence is fixed at birth, so collapse is irreversible even as space frees |
-| Extinction (day ~1588 for the mice)        | Pen empties; event logged                                    |
+| Phase C "stagnation", behavioral sink      | Above 35% of the pen's capacity: conception scales down. (Universe 25's stagnation began near 620 of 3,840, about 16%; 35% is this pen's design, not Calhoun's number.) Violence comes from crowded fights, not the phase |
+| Maternal neglect                           | Abandonment read from the mother's nest crowding and state (`rearing`) |
+| "Beautiful ones"                           | Children reared in a crowded nest can be *socially incompetent*; on adulthood they withdraw and never pair |
+| Phase D "death"                            | Named when yearly deaths > births for 3 years; incompetence is fixed at birth, so recovery is hard — but the label reverses if births return, because whether it can is the test |
+| Extinction (the mice: 122 left on 22 June 1972, about day 1,444; probably extinct in 1973) | Pen empties; event logged |
 | LD&R "Ice Age" cyclicality                 | 30 sim-years after extinction the Observers reseed the pen; `iteration += 1` |
 
 ## Universe 9 — LAGOON (Blue Lagoon / first Sapiens world)
@@ -265,23 +319,77 @@ tribes*: peacefully after lore exists, as a deadly feud before it.
 
 ## Rendering (web/index.html)
 
-- Two canvas panels side by side, `image-rendering: pixelated`, flat 16-color
-  palettes, monospace HUD. No gradients, no shadows, no decoration.
-- Camera per universe starts tight on the founding pairs and widens with the
-  population's bounding radius. The viewer may take it, follow a person, or
-  **walk in** (arrows/WASD, `I`, or WALK): a person-height camera that
-  introduces everyone nearby by name, activity and body.
-- People are drawn as **life-drawing sketches** (owner's brief, 2026-10-27):
-  ink line over a flat skin wash, realistic proportion (~7.5 heads), body
-  from the model — width from BMI, muscle from strength, ribs in famine, a
-  belly for obesity or pregnancy, a bandage and limp for injury. Adults are
-  drawn as bodies are; children never get genital detail. Far away a figure
-  is a body's mass, never a stick.
+- **Full resolution, one palette, one screen** (owner, 2026-10-28; the
+  8-bit lock is retired). The worlds are painted at device resolution —
+  smooth coasts and wood edges over the model's grid, forms lit from the top
+  left — cached per view and zoom step so a 2016 MacBook keeps up. One
+  palette, TERRARIUM, on `:root`; the canvas reads it. The page never
+  scrolls: the record, the research, help and the BOOK are read in pages.
+  Reading order: the worlds, the instrument strip, the record, the chrome.
+- Two canvas panels, always on the first screen together: side by side on a
+  wide screen, stacked under ~700 px with each heading collapsed to one line
+  (tap a heading to open it).
+- **The BOOK** (`book/book.json`, schema in GRAPHICS.md) opens over the
+  console as a reading page: table of contents, chapters, figures with
+  caption, credit and licence, set in a serif at a 66-character measure,
+  paginated. The RESEARCH dialog opens on "From Universe 25 to here"
+  (`book/origin.json`) before the hypotheses.
+- **The camera** is a documentary eye on a three-rung ladder — island, camp,
+  hearth (~6, 18, 48 CSS px of adult height). The establishing shot is the
+  camp rung on the densest cluster of people; EDEN's eye stays inside the
+  pen. Close shots (a birth, a fight, a hunting party, or where most people
+  are) use the hearth rung; a shot far from the last one is a cut, not a
+  glide. The viewer may take the camera, follow a person, jump between rungs
+  with 1/2/3, or **walk in** (arrows/WASD, `I`, or WALK): a person-height
+  camera that introduces everyone nearby by name, activity and body.
+- **People** (owner's brief, 2026-10-27) are life-drawing sketches with a
+  skeleton under them. The pose solver says where hands and feet go; an
+  anatomy rig (pelvis, spine, chest, neck, head, clavicles,
+  shoulders/elbows/wrists, hips/knees/ankles) with proportions by age and sex
+  solves each limb as two bones of fixed length. Proportion follows the
+  anthropometric canon: 4 heads at birth, ~5 at two or three, ~6 at six, ~7
+  at twelve, 7.5–8 adult; men's shoulders outgrow their hips, women's hips
+  are about their shoulders' width, women stand ~7% shorter. The skin is
+  painted around the bones: capsule limbs with muscle bellies, a torso from
+  shoulders to waist to hips, hands, feet, a skull with a jaw, a hair
+  silhouette. Standing is a straight-legged stance with a little
+  contrapposto; the trunk is a ribcage and a pelvis joined at a visible
+  waist, lit from the top left in two tones of the person's skin; at camp
+  size a figure is a silhouette (head, shoulders, arms apart, two legs),
+  under ~10 px an upright mark. Garments follow the modesty share: resort
+  wear in EDEN, a hide wrap in LAGOON, fur in a hard winter. The body is the record — width from BMI, muscle or a stoop
+  from strength, bone-thin limbs and ribs in famine, a stoop and hollow
+  cheeks when hungry, a belly for obesity or pregnancy, a bandage and limp
+  for injury. Adults are drawn as bodies are; children never get genital
+  detail. Far away a figure is a body's mass, never a stick.
+- **Light** is painted after the people: at night a figure is as dark as its
+  ground, and the fire lights the ones in its circle.
+- **Food places**, when the summary carries `sites` ({x, y, k, f}): berries on
+  a bush, fish in the shallows, game tracks, standing rows in a field, a
+  hopper's level — each as full as `f` says.
+- **The instrument strip** under the worlds: eight gauges — population (log,
+  against founding doublings, Universe 25 laid under it), births−deaths per
+  100 adults, infant survival, breeders and the withdrawn share, claimants
+  per place, the sink, food in store, violent deaths per 100k — each with
+  EDEN above LAGOON on one scale and a reference tick where the literature
+  gives one (Calhoun 1962/1973; Gurven & Kaplan 2007; Pinker 2011). Colour
+  marks only a reading outside its band. A click opens the sources, which
+  say these are model readings, not findings. Each world's heading is one
+  line; the rest of its facts open on a click.
+- **The worlds at work.** LAGOON's huts are the record's (`u.huts`), drawn in
+  construction stages; encounters with deer and big cats (`u.encounters`)
+  are drawn where they happened and are what the camera looks for first; a
+  load or a carcass, hunger, an infant in the arms, a birth with a helper,
+  the watch with a spear and the couple on a mat are all drawn from the rig.
+  EDEN reads as a Truman-Show resort island: painted sea, beach, lawn, pool,
+  loungers, the dome's edge, bars with stools.
+- **Labels** only for the person you chose and, at most two at a time, a birth
+  or a fight.
 - EDEN is dressed as the Truman Show's resort: beach floor, buffet bars for
   hoppers, striped cabanas for nest boxes, a horizon painted on the dome
   wall, and the real sea just outside it.
-- Bottom ticker: the shared event log (discoveries, disasters, phases, deaths
-  of note, extinctions, reseedings).
+- Bottom record: the shared event log (discoveries, disasters, phases, deaths
+  of note, extinctions, reseedings); a line that repeats is shown once, ×N.
 
 ## Processes
 

@@ -17,6 +17,8 @@ import random
 import time
 
 import minds
+import needs
+import animals
 from minds import (DAYS_PER_YEAR, ADULT_AGE, ELDER_AGE, make_name,  # noqa: F401
                    A_IDLE, A_WALK, A_FORAGE, A_HUNT, A_FISH, A_FARM, A_BUILD,
                    A_TALK, A_MATE, A_BIRTH, A_TEND, A_REST, A_EAT, A_WITHDRAW,
@@ -28,7 +30,7 @@ GESTATION = 270
 # The version of the model. Determinism holds per (seed, day, part) only *within* one
 # version, so every published figure and every postmortem must say which
 # version produced it.
-ENGINE_VERSION = "2026.10.28.2"
+ENGINE_VERSION = "2026.10.28.4"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -51,7 +53,7 @@ EDEN_BOX_CAP = 7        # how many may share one nest box
 
 LAGOON_SIZE = 160   # an island off the coast of a greater land
 RESEED_YEARS = 30       # quiet years before the Observers reseed (Ice Age cycle)
-FOUNDER_PAIRS = 2       # the first iteration: Adam and Eve, twice
+FOUNDER_PAIRS = 8       # eight pairs in both worlds, like the reseed: one experiment, one start
 RESEED_PAIRS = 8        # after an extinction the Observers send eight pairs
 
 TECH_LADDER = [
@@ -175,6 +177,9 @@ def person(uid, name, sex, born, gen, x, y, competent=True):
     return minds.new_mind({"id": uid, "n": name, "s": sex, "b": born, "g": gen,
                            "p": None, "x": x, "y": y, "c": competent, "w": False,
                            "due": 0, "hun": 0.0,
+                           # the personal meters: energy, company, and what
+                           # this person is carrying home
+                           "ene": 1.0, "sol": 0.7, "carry": 0.0,
                            "a": 0, "tx": x, "ty": y, "ad": 0,   # activity, target, days left
                            "hx": x, "hy": y})                   # home: the place they return to
 
@@ -265,10 +270,11 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None,
         u["stocks"] = {"plants": 60000.0, "game": 2500.0,
                        "fish": 50000.0, "pred": 48.0}
         u["tech"] = []
-        u["store"] = 0.0
+        u["store"] = 0.0           # the sum of the camps' stores
         u["meat"], u["kills"] = 0.0, 0
         u["farms"] = []            # [x, y] tilled tiles
-        u["settlements"] = [{"x": 137, "y": 109, "r": 5, "n": make_name(rng)}]
+        u["settlements"] = [{"x": 137, "y": 109, "r": 5, "n": make_name(rng),
+                             "store": 0.0}]
         u["culture"] = []          # arts appear when bellies stay full
         u["continent"] = False     # the greater land, waiting across the strait
         u["drought"] = 0           # years remaining
@@ -303,9 +309,14 @@ def genesis(seed=69):
 
 # ---------------------------------------------------------------- shared
 
+VIOLENT_CAUSES = ("violence", "feud")
+
+
 def cod(u, cause, n=1):
     u["cod"][cause] = u["cod"].get(cause, 0) + n
     u["cod_y"][cause] = u["cod_y"].get(cause, 0) + n
+    if cause in VIOLENT_CAUSES:
+        u["viol_y"] = u.get("viol_y", 0) + n
 
 
 def write_postmortem(u, events):
@@ -400,8 +411,9 @@ def try_conceive(u, rng, females, p_daily, require_pair=True, byid=None, males=N
         a = age_of(p, day)
         if not (ADULT_AGE <= a <= 45 * DAYS_PER_YEAR):
             continue
-        # p_daily is a rate per day, and this is tried once per part
-        if rng.random() < (p_daily / PARTS_PER_DAY) * minds.fertility(p, a, day):
+        # p_daily is already a per-part rate: the caller divides it once,
+        # for the number of parts in a day, and this is tried once a part
+        if rng.random() < p_daily * minds.fertility(p, a, day):
             lost = rng.random() < minds.MISCARRIAGE
             p["due"] = day + (rng.randint(50, 90) if lost else GESTATION)
             p["mc"] = lost
@@ -426,9 +438,65 @@ def pair_singles(u, rng, adults):
         m["p"], f["p"] = f["id"], m["id"]
 
 
+# A census row, once a year. The first four are the old contract; the rest
+# are the instrument's gauges (the researcher's console, web/index.html):
+CENSUS_FIELDS = ("year", "pop", "births", "deaths", "adults", "withdrawn",
+                 "breeders", "infant_survival", "claimants", "sink",
+                 "food_days", "violent")
+
+
+def gauges(u):
+    """The measures Calhoun read his pen by, for either world, now.
+
+    adults, withdrawn, breeders (competent, not withdrawn, 16-45);
+    infant_survival: of last year's births, the share alive past age one
+    (None until there were births); claimants: adults per place (EDEN:
+    competent adults per post; LAGOON: adults per paired adult); sink:
+    percent of eaters at the busiest food point; food_days: days of food
+    in store per head (None in EDEN, where it is unlimited by design).
+    """
+    day = u["day"]
+    people = u["people"]
+    adults = [p for p in people if age_of(p, day) >= ADULT_AGE]
+    withdrawn = sum(1 for p in adults if p.get("w"))
+    breeders = sum(1 for p in adults if p.get("c", True) and not p.get("w")
+                   and age_of(p, day) <= 45 * DAYS_PER_YEAR)
+    last = u["census"][-1] if u["census"] else None
+    infant = None
+    if last and last[2] > 0:
+        yearlings = sum(1 for p in people
+                        if DAYS_PER_YEAR <= age_of(p, day) < 2 * DAYS_PER_YEAR)
+        infant = round(min(1.0, yearlings / last[2]), 3)
+    if u["kind"] == "EDEN":
+        posts = len(u.get("roles") or []) or 1
+        competent = sum(1 for p in adults if p.get("c", True) and not p.get("w"))
+        claimants = round(competent / posts, 2)
+        hop = u.get("hop_n") or [0]
+        sink = round(100.0 * max(hop) / sum(hop)) if sum(hop) else 0
+        food_days = None
+    else:
+        paired = sum(1 for p in adults if p.get("p") is not None)
+        claimants = round(len(adults) / paired, 2) if paired else float(len(adults))
+        at = {}
+        for p in people:
+            if p.get("a") in (A_FORAGE, A_HUNT, A_FISH, A_FARM):
+                k = p.get("site") and tuple(p["site"])
+                if k:
+                    at[k] = at.get(k, 0) + 1
+        sink = round(100.0 * max(at.values()) / sum(at.values())) if at else 0
+        mouths = max(1, len(people))
+        food_days = round(u.get("store", 0.0) / (mouths * needs.HUNGER_PER_DAY * 1.5), 1)
+    return {"adults": len(adults), "withdrawn": withdrawn, "breeders": breeders,
+            "infant_survival": infant, "claimants": claimants, "sink": sink,
+            "food_days": food_days}
+
+
 def record_census(u):
     year = u["day"] // DAYS_PER_YEAR
-    u["census"].append([year, len(u["people"]), u["births_y"], u["deaths_y"]])
+    g = gauges(u)
+    u["census"].append([year, len(u["people"]), u["births_y"], u["deaths_y"]]
+                       + [g[k] for k in CENSUS_FIELDS[4:11]] + [u.get("viol_y", 0)])
+    u["viol_y"] = 0
     if len(u["census"]) > 400:
         u["census"] = u["census"][-400:]
 
@@ -649,12 +717,14 @@ def eden_assign(u, p, day, rng, crowd):
         # Withdrawn: stay put for weeks, then a short trip to the hopper no
         # one else is using, and straight back. Never a circle, a partner or
         # a fight of their own making.
-        if p.get("a") in (A_WITHDRAW, A_SLEEP) and rng.random() < 0.35:
-            p["a"], p["ad"] = A_EAT, days(rng.randint(1, 2))
+        # Calhoun's beautiful ones were sleek and well fed: they eat alone,
+        # at whatever hour the bar is empty, whenever they are hungry
+        if p.get("hun", 0.0) > needs.EAT_AT:
+            p["a"], p["ad"] = A_EAT, days(1)
             p["tx"], p["ty"] = quiet_hopper(u, rng)
         else:
             p["a"] = A_SLEEP if rng.random() < 0.3 else A_WITHDRAW
-            p["ad"] = days(rng.randint(18, 40))
+            p["ad"] = days(rng.randint(2, 5))
             p["tx"], p["ty"] = p["hx"], p["hy"]
         return
     if p["due"] and p["due"] - day <= 0:
@@ -665,6 +735,9 @@ def eden_assign(u, p, day, rng, crowd):
         if a < 3 * DAYS_PER_YEAR:                    # infants: on the mother
             p["a"], p["ad"] = A_TEND, days(3)
             p["tx"], p["ty"] = bed()
+        elif p.get("hun", 0.0) > needs.EAT_AT:      # a hungry child goes to the bar
+            p["a"], p["ad"] = A_EAT, days(1)
+            p["tx"], p["ty"] = eden_feed_spot(u, rng)
         elif a < 12 * DAYS_PER_YEAR:                 # children play in packs, and sleep
             if rng.random() < 0.25:
                 p["a"], p["ad"] = A_SLEEP, days(rng.randint(2, 4))
@@ -686,37 +759,17 @@ def eden_assign(u, p, day, rng, crowd):
                 p["tx"], p["ty"] = clamp(p["tx"], p["ty"])
         return
 
-    homeless = (p.get("box") is None) or p["box"] < 0
     ctx = u["_ctx"]
-    pu = p.get("pu", 0.5)
     role = p.get("role")
-    # A forager's brain in a resort: with nothing asked of it, appetite fills
-    # the day (more eating as purpose falls), desire dulls, and the status
-    # drive finds no outlet but a fight (BOOKS.md: Frankl, Freud §III).
-    w = [(A_SLEEP, 2.2), (A_EAT, 3.2 * (1.5 - pu)), (A_TALK, 2.4), (A_REST, 1.4),
-         (A_GROOM, 1.4 * (0.3 + pu))]                 # bonds kept by touch, while they last
-    if role is not None:
-        w.append((A_WORK, 4.0))                      # a post to keep
-    if a <= 45 * DAYS_PER_YEAR and not u.get("innocent"):
-        # mating in the pen is free of bonds; anyone nearby will do
-        w.append((A_MATE, 2.5 * max(0.2, 1.0 - u.get("ennui", 0.0)) * (0.4 + pu)))
-    if p["s"] == "m" and u["phase"] in ("stagnate", "death"):
-        # the dispossessed are the violent ones; those with territory defend it
-        temper = minds.aggression(p) * 2 * (1.3 - minds.self_control(p, a))
-        w.append((A_FIGHT, (4.5 if homeless else 1.2) * (0.5 + crowd) * temper))
-    if homeless and role is None:
-        w.append((A_WALK, 2.5))                      # milling: the symptom
-        if p["s"] == "m" and u["phase"] in ("stagnate", "death"):
-            # Calhoun's restless males: placeless, roaming the floor, pressing
-            # themselves on whoever is near (RESEARCH.md §1: "pansexual" mounting)
-            w.append((A_WALK, 3.0 * minds.aggression(p)))
-            w.append((A_MATE, 1.5 * minds.aggression(p)))
-    if p["id"] in ctx["moms"]:
-        w.append((A_TEND, 2.5))                      # a mother with an infant
-
-    act = _weighted(w, rng)
-    p["a"] = act
-    p["ad"] = days(rng.randint(1, 4))
+    if p["id"] in ctx["moms"] and rng.random() < 0.35:
+        # a mother with an infant: the child is not a choice among others
+        p["a"], p["ad"] = A_TEND, days(1)
+        p["tx"], p["ty"] = bed()
+        return
+    # The same decision LAGOON's people make, under the resort's condition:
+    # the body's meters against what the pen offers. Where each act then
+    # happens — the bar, the bed, the boardwalk, the post — is the place's.
+    act = needs.assign(u, p, day, rng, needs.CONDITIONS["EDEN"])
     if act == A_EAT:
         p["tx"], p["ty"] = eden_feed_spot(u, rng)
     elif act == A_GROOM:
@@ -728,9 +781,8 @@ def eden_assign(u, p, day, rng, crowd):
         else:
             p["a"], (p["tx"], p["ty"]) = A_REST, bed()
     elif act == A_SLEEP:
-        p["ad"] = days(rng.randint(2, 4))
         p["tx"], p["ty"] = bed()
-    elif act == A_WORK:
+    elif act == A_WORK and role is not None:
         post = u["roles"][role]
         p["ad"] = days(rng.randint(4, 8))
         p["tx"], p["ty"] = clamp(post["x"] + rng.randint(-1, 1), post["y"] + rng.randint(0, 1))
@@ -760,8 +812,39 @@ def eden_assign(u, p, day, rng, crowd):
     elif act == A_WALK:
         p["ad"] = days(rng.randint(1, 2))
         p["tx"], p["ty"] = clamp(c + rng.randint(-9, 9), c + rng.randint(-9, 9))
+    elif act == A_WITHDRAW:
+        # worn out by the crowd and wanting nothing: one of the withdrawn
+        withdraw(u, p, rng)
     else:
         p["tx"], p["ty"] = bed()
+
+
+def near_hopper(u, p, reach=4):
+    return any(abs(p["x"] - hx) <= reach and abs(p["y"] - hy) <= reach
+               for hx, hy in hoppers(u))
+
+
+def rearing(u, mom):
+    """What a birth in the pen comes to: (p_abandon, p_incompetent).
+
+    Calhoun's finding was that the rearing environment, not the density of
+    the day, decided a pup's fate: mothers harried at the nest abandoned
+    litters, and young reared amid constant intrusion never learned the
+    social repertoire (Calhoun 1962, 1973). So these are read from the
+    mother's own nest and state — the crowd around her bed, how much of a
+    life she has, whether she was herself reared to one — not from a
+    phase label.
+    """
+    near = needs.near_count(u, mom)
+    stress = max(0.0, near - needs.CROWD_FACES) / (2 * needs.CROWD_FACES)
+    stress *= 1.3 - mom.get("pu", 0.5)
+    if mom.get("inj", 0.0) > 0.3:
+        stress *= 1.4
+    if mom.get("w"):
+        return 0.9, 0.95
+    p_abandon = min(0.8, 0.9 * stress)
+    p_incompetent = min(0.95, 1.1 * stress + (0.4 if not mom.get("c", True) else 0.0))
+    return p_abandon, p_incompetent
 
 
 def eden_feed_spot(u, rng):
@@ -924,14 +1007,8 @@ def tick_eden(u, rng, events):
     # out — that is the experiment — but the pen still has a dark half, and
     # in the dark the adults go to their own beds. The placeless sleep on
     # the mats in the open hall, where they have always slept.
-    if part == PART_NIGHT:
-        for p in people:
-            if age_of(p, day) < 3 * DAYS_PER_YEAR:
-                continue                      # children stay with their mothers
-            if p["w"]:
-                continue                      # the withdrawn keep apart
-            p["a"], p["ad"] = A_SLEEP, days(2)
-            p["tx"], p["ty"] = p.get("hx", p["x"]), p.get("hy", p["y"])
+    # (needs.night, below, puts each of them to bed: the same rule as the
+    # lagoon's, so the two worlds keep one clock.)
 
     byid = {q["id"]: q for q in people}
     u["_ctx"] = day_context(people, day)
@@ -949,28 +1026,27 @@ def tick_eden(u, rng, events):
         if p.get("wk") == WK_HUDDLE and rng.random() < 0.004 / PARTS_PER_DAY:
             minds.hurt(p, 0.3)         # attacked on the floor, and does not resist
         if p.get("a") == A_FIGHT and rng.random() < 0.25 / PARTS_PER_DAY:
-            minds.hurt(p, 0.15)
+            minds.hurt(p, rng.uniform(0.08, 0.3))
             if (p["s"] == "m" and p["inj"] > 0.5 and not p["w"]
                     and (p.get("box") is None or p["box"] < 0) and rng.random() < 0.3):
                 withdraw(u, p, rng)     # the loser with no place stops getting up
-        # anomie: a competent adult whom the world asks nothing of may still
-        # give up on it — the brakes are self-control and a place of one's own
-        # (Durkheim, Suicide: low regulation; Frankl's existential vacuum)
-        if (p["c"] and not p["w"] and a >= ADULT_AGE and p["pu"] < 0.25
-                and rng.random() < 4e-5 * (1.2 - p.get("ef", 0.5)) / PARTS_PER_DAY):
-            withdraw(u, p, rng)
-            if rng.random() < 0.05:
-                events.append((day, "EDEN", "ennui",
-                               f"{p['n']} stops seeking anyone out. Nothing is asked of "
-                               f"{'her' if p['s'] == 'f' else 'him'} here, and nothing is offered back."))
-        # violence appears only in the sink
-        if (u["phase"] in ("stagnate", "death") and age_of(p, day) >= ADULT_AGE
-                and rng.random() < 4.5e-5 * crowd / PARTS_PER_DAY):
+        # A killing is a fight that went too far: violence deaths come from
+        # the fights people actually had, and the fights come from crowding
+        # and temper in needs.assign — not from a phase having been reached.
+        if p.get("inj", 0.0) >= 1.0:
             dead.append(p)
             cod(u, "violence")
-            if rng.random() < 0.08:
+            if rng.random() < 0.15:
                 events.append((day, "EDEN", "violence",
-                               f"{p['n']} is killed in a sudden brawl near the hoppers."))
+                               f"{p['n']} does not get up from a brawl near the hoppers."))
+            continue
+        # the body: hunger, energy and company, as in the lagoon
+        needs.night(u, p, rng, part)
+        needs.meters(u, p, day, rng, needs.CONDITIONS["EDEN"])
+        needs.eat(u, p, a / DAYS_PER_YEAR)
+        if p["hun"] > needs.HUNGER_MAX:
+            dead.append(p)
+            cod(u, "starvation")      # in a resort with full hoppers: the withdrawn
             continue
         # births — the rearing environment, not current density, decides the
         # child's fate: once the sink has broken social roles it stays broken
@@ -980,13 +1056,7 @@ def tick_eden(u, rng, events):
             p["due"] = 0
             if p.pop("mc", False):
                 continue          # lost early; nobody but she ever knew
-            p_abandon = p_incompetent = 0.0
-            if u["phase"] == "stagnate":
-                p_abandon = min(0.8, crowd * 0.9)
-                p_incompetent = min(0.9, crowd * 1.2)
-            elif u["phase"] == "death":
-                p_abandon = max(0.5, min(0.8, crowd * 0.9))
-                p_incompetent = 0.95
+            p_abandon, p_incompetent = rearing(u, p)
             if rng.random() < p_abandon:
                 u["deaths_y"] += 1  # the infant
                 cod(u, "infant")
@@ -1015,7 +1085,12 @@ def tick_eden(u, rng, events):
             follow_mother(p, byid, lambda x, y: pen_clamp(u, x, y))
         if p.get("ad", 0) <= 0 and p["x"] == p["tx"] and p["y"] == p["ty"]:
             eden_assign(u, p, day, rng, crowd)
-        if step_toward(p):
+        arrived = step_toward(p)
+        if (p.get("a") == A_EAT and u["day"] != p.get("day_done")
+                and near_hopper(u, p)):
+            p["day_done"] = u["day"]
+            needs.fulfil(u, p, day, rng, A_EAT)       # a meal at the hopper
+        if arrived:
             p["ad"] = p.get("ad", 0) - 1
             if p["ad"] <= 0:
                 eden_assign(u, p, day, rng, crowd)
@@ -1024,6 +1099,9 @@ def tick_eden(u, rng, events):
     occ = u.setdefault("box_occ", {})
     for p in dead:
         people.remove(p)
+        r = p.get("role")
+        if r is not None and r < len(u.get("roles", [])) and u["roles"][r]["who"] == p["id"]:
+            u["roles"][r]["who"] = 0         # the post falls vacant at the death
         b = p.get("box")
         if b is not None and b >= 0:        # the box falls vacant
             occ[str(b)] = max(0, occ.get(str(b), 0) - 1)
@@ -1037,7 +1115,8 @@ def tick_eden(u, rng, events):
     male_ok = any(p["s"] == "m" and p["c"] and not p["w"]
                   and age_of(p, day) >= ADULT_AGE for p in people)
     fertility = 1.0 / 180 / PARTS_PER_DAY
-    if u["phase"] in ("stagnate", "death"):
+    if crowd >= eden_design(u)["stagnation"]:
+        # density suppresses conception (Christian 1950s; Calhoun 1962)
         fertility *= max(0.25, 1.0 - crowd)
     fertility *= 1.0 - 0.5 * u.get("ennui", 0.0)   # boredom with easy pleasure
     if u.get("std_years", 0) > 0:
@@ -1047,6 +1126,9 @@ def tick_eden(u, rng, events):
                    if age_of(p, day) >= ADULT_AGE and rng.random() < 2e-5 / PARTS_PER_DAY]
         for p in victims:
             people.remove(p)
+            r = p.get("role")
+            if r is not None and r < len(u.get("roles", [])) and u["roles"][r]["who"] == p["id"]:
+                u["roles"][r]["who"] = 0
         u["deaths_y"] += len(victims)
         cod(u, "plague", len(victims))
     if u.get("wary_years", 0) > 0:
@@ -1097,9 +1179,17 @@ def tick_eden(u, rng, events):
                 u["phase"] = "death"
                 u["phases"].append([day // DAYS_PER_YEAR, "death"])
                 events.append((day, "EDEN", "phase",
-                               "Deaths outnumber births for the third year. The death phase begins — and it will not reverse."))
+                               "Deaths outnumber births for the third year. The death phase begins."))
         elif u["phase"] == "stagnate":
             u["bad_years"] = 0
+        elif u["phase"] == "death" and u["births_y"] > u["deaths_y"]:
+            # The label describes; it does not decide. If births come back,
+            # the pen is said to have come back — whether it does is the test.
+            u["bad_years"] = 0
+            u["phase"] = "stagnate"
+            u["phases"].append([day // DAYS_PER_YEAR, "stagnate"])
+            events.append((day, "EDEN", "phase",
+                           "Births outnumber deaths again. The pen climbs back out of the death phase."))
         # being seen by strangers all day: covering begins as the pen fills
         if not u.get("innocent"):
             u["modesty"] = min(0.5, u.get("modesty", 0.0) + 0.01 * (0.3 + crowd))
@@ -1249,7 +1339,8 @@ def lagoon_assign(u, p, day, rng, shortfall):
     si = min(p.get("st", 0), len(u["settlements"]) - 1)
     st = u["settlements"][si]
     a = age_of(p, day)
-    if "hx" not in p or abs(p["hx"] - st["x"]) > st["r"] + 14:
+    if ("hx" not in p or abs(p["hx"] - st["x"]) > st["r"] + 2
+            or abs(p["hy"] - st["y"]) > st["r"] + 2):
         p["hx"] = st["x"] + rng.randint(-2, 2)       # a hearth of their own
         p["hy"] = st["y"] + rng.randint(-2, 2)
     home = (p["hx"], p["hy"])
@@ -1299,125 +1390,72 @@ def lagoon_assign(u, p, day, rng, shortfall):
         p["tx"], p["ty"] = at_home(1)
         return
     if a < 12 * DAYS_PER_YEAR:                 # children: packs at play
-        if rng.random() < 0.7:
+        if p.get("hun", 0.0) > needs.EAT_AT and needs.camp_store(u, p) > 0:
+            # hungry children go to the camp and eat, like everyone else
+            p["a"], p["ad"] = A_EAT, days(1)
+            p["tx"], p["ty"] = at_home(1)
+        elif rng.random() < 0.7:
             play_with(u, p, kids_near(u["_ctx"], p), rng, clamp)
-        else:                                  # or tag along foraging
-            pat = band_patches(u, si, rng)
-            p["a"], p["ad"] = A_FORAGE, days(rng.randint(3, 6))
-            p["tx"], p["ty"] = _patch_for(pat, "open", rng, home)
+        else:                                  # or tag along with mother
+            m = next((q for q in u["people"] if q["id"] == p.get("mom")), None)
+            if m is not None and m.get("a") == A_FORAGE:
+                p["a"], p["ad"] = A_FORAGE, days(rng.randint(2, 4))
+                p["tx"], p["ty"] = clamp(m["tx"] + rng.randint(-1, 1), m["ty"] + rng.randint(-1, 1))
+            else:
+                play_with(u, p, kids_near(u["_ctx"], p), rng, clamp)
         return
 
     near_home = (abs(p["x"] - p["hx"]) <= 3 and abs(p["y"] - p["hy"]) <= 3)
-    if not near_home:
-        p["a"], p["ad"] = A_WALK, days(0)            # the work is done: go home
+    if not near_home and p.get("carry", 0.0) > 0:
+        p["a"], p["ad"] = A_WALK, days(0)            # a load to bring home
         p["tx"], p["ty"] = home
         return
 
-    # Drives, as a primate has them; the prefrontal cortex decides how far
-    # the future gets a vote (BOOKS.md: Bloom; Pinker ch.3).
-    efx = minds.self_control(p, a)
-    fatigue = min(1.0, (day - p.get("sl", day - 3)) / 6.0)
-    hunger = min(1.0, p.get("hun", 0.0) / 20.0 + shortfall)
-    if fatigue >= 1.0 or rng.random() < 0.3 * fatigue or p.get("inj", 0) > 0.45:
-        # sleep at the hearth, or lie up with a wound until it closes
-        p["a"], p["ad"], p["sl"] = A_SLEEP, rng.randint(1, 2), day
-        if p.get("inj", 0) > 0.45:
-            p["a"], p["ad"] = A_REST, days(rng.randint(3, 6))
+    # A wound lies up until it closes. Tiredness is no longer a day-counter
+    # here: it is the energy meter, and needs.assign reads it.
+    if p.get("inj", 0) > 0.45:
+        p["a"], p["ad"] = A_REST, days(rng.randint(3, 6))
         p["tx"], p["ty"] = at_home(1)
         return
 
-    # home days: the band's social life happens at the hearths
-    elder = a >= ELDER_AGE
-    has_infant = p["id"] in u["_ctx"]["moms"]
-    boat = u.get("boat")
-    if boat and not elder and not has_infant and rng.random() < 0.5 * (0.4 + efx):
-        # the boat: weeks of work now for a shore nobody has seen
-        p["a"], p["ad"] = A_BUILD, days(rng.randint(5, 10))
-        p["tx"], p["ty"] = clamp(boat["x"] + rng.randint(-2, 2), boat["y"] + rng.randint(-1, 1))
-        boat["work"] += p["ad"] / PARTS_PER_DAY
-        return
-    if elder or has_infant or rng.random() < 0.45 + 0.3 * (1 - hunger):
-        w = [(A_TALK, 2.6 + (1.6 if has(u, "lore") else 0)), (A_REST, 1.2)]
-        if has(u, "shelter") and not elder:
-            w.append((A_BUILD, 1.0 * (0.4 + 1.2 * efx)))   # building pays later
-        if u["store"] > 0 and hunger > 0.3:
-            w.append((A_EAT, 2.0 * hunger * (1.4 - efx)))  # eating the store pays now
-        w.append((A_GROOM, 1.8 * (1 - hunger * 0.6)))     # kin and partners tend each other
-        if (p["p"] is not None and not u["innocent"] and shortfall < 0.25
-                and ADULT_AGE <= a <= 45 * DAYS_PER_YEAR):
-            w.append((A_MATE, 2.2))
-        if has_infant:
-            w.append((A_TEND, 4.0))
-        act = _weighted(w, rng)
-        p["a"], p["ad"] = act, days(rng.randint(2, 5))
-        p["tx"], p["ty"] = at_home(2)
-        if act == A_GROOM:
-            kin = [q for q in u["people"] if q is not p and q.get("st", 0) == p.get("st", 0)
-                   and (q["id"] in (p.get("p"), p.get("mom")) or q.get("mom") == p["id"])
-                   and abs(q["x"] - p["x"]) <= 6 and abs(q["y"] - p["y"]) <= 6
-                   and q.get("a") not in (A_MATE, A_BIRTH, A_GROOM)]
-            if kin:
-                groom_with(p, kin[0], *at_home(1))
-            else:
-                p["a"] = A_TALK
-        if act == A_MATE:
-            q = next((q for q in u["people"] if q["id"] == p["p"]), None)
-            if q is not None:
-                couple_up(p, q, *at_home(1))
-            else:
-                p["a"] = A_REST
-        elif act in (A_TALK, A_REST):          # elders sit together, too
-            cx, cy = (st["x"] + rng.randint(-3, 3), st["y"] + rng.randint(-3, 3))
-            join_circle(u, p, cx, cy, size=5 if act == A_TALK else 4,
-                        radius=1.6 if act == A_TALK else 1.3)
-            p["tx"], p["ty"] = clamp(p["tx"], p["ty"])
-        return
-    if a < ADULT_AGE:                          # adolescents work with the band
-        pat = band_patches(u, si, rng)
-        p["a"], p["ad"] = A_FORAGE, days(rng.randint(4, 9))
-        p["tx"], p["ty"] = _patch_for(pat, "open", rng, home)
-        return
+    # The decision itself is shared with EDEN: read the body, perceive the
+    # places that hold food, score them against the need and the cost, and
+    # commit. What differs between the worlds is the condition, not the
+    # mind. (needs.py)
+    act = needs.assign(u, p, day, rng, needs.CONDITIONS["LAGOON"])
 
-    # a working trip. Nobody sets out alone: if a party left in the last
-    # few days, you go where they went and do what they are doing.
-    pat = band_patches(u, si, rng)
-    party = st.get("party")
-    if party and day - party["d"] <= 3 and party["n"] < 14:
-        party["n"] += 1
-        p["a"] = party["a"]
-        p["ad"] = days(rng.randint(7, 15))
-        p["tx"], p["ty"] = clamp(party["x"] + rng.randint(-2, 2),
-                                 party["y"] + rng.randint(-2, 2))
-        return
-    w = [(A_FORAGE, 3.0 + 6.0 * shortfall + 2.0 * hunger)]
-    if has(u, "stone_tools"):
-        # the hunt: young men's prestige as much as meat
-        w.append((A_HUNT, (2.0 + 4.0 * shortfall) * (1.4 if p["s"] == "m" and a < 35 * DAYS_PER_YEAR else 0.8)))
-    if has(u, "fishing"):
-        w.append((A_FISH, 2.5 + 3.0 * shortfall))
-    if has(u, "agriculture") and u["farms"]:
-        w.append((A_FARM, 6.0 * (0.5 + efx)))            # sow now, eat in a season
-    if a < 35 * DAYS_PER_YEAR and shortfall < 0.2:
-        w.append((A_SCOUT, 0.8 * efx))                   # curiosity, when bellies allow
-    act = _weighted(w, rng)
-    if act == A_SCOUT:
-        p["a"], p["ad"] = A_SCOUT, days(rng.randint(3, 6))
-        p["tx"], p["ty"] = clamp(p["hx"] + rng.randint(-18, 18), p["hy"] + rng.randint(-18, 18))
-        u["scouted"] = u.get("scouted", 0) + 1
-        return
-    p["a"] = act
-    p["ad"] = days(rng.randint(7, 15))          # a proper stint at the patch
-    if act == A_HUNT:
-        p["tx"], p["ty"] = _patch_for(pat, "woods", rng, home)
-    elif act == A_FISH:
-        p["tx"], p["ty"] = _patch_for(pat, "shore", rng, home)
-    elif act == A_FARM:
-        f = rng.choice(u["farms"])
-        p["tx"], p["ty"] = f[0], f[1]
-    else:
-        kind = "woods" if (has(u, "stone_tools") and rng.random() < 0.35) else "open"
-        p["tx"], p["ty"] = _patch_for(pat, kind, rng, home)
-    st["party"] = {"d": day, "a": act, "x": p["tx"], "y": p["ty"], "n": 1}
+    if act == A_GROOM:
+        kin = [q for q in u["people"] if q is not p and q.get("st", 0) == p.get("st", 0)
+               and (q["id"] in (p.get("p"), p.get("mom")) or q.get("mom") == p["id"])
+               and abs(q["x"] - p["x"]) <= 6 and abs(q["y"] - p["y"]) <= 6
+               and q.get("a") not in (A_MATE, A_BIRTH, A_GROOM)]
+        if kin:
+            groom_with(p, kin[0], *at_home(1))
+        else:
+            p["a"] = A_TALK
+    elif act == A_MATE:
+        q = next((q for q in u["people"] if q["id"] == p.get("p")), None)
+        if q is not None:
+            couple_up(p, q, *at_home(1))
+        else:
+            p["a"] = A_REST
+    elif act in (A_TALK, A_REST):
+        # elders sit together, too
+        cx, cy = (st["x"] + rng.randint(-3, 3), st["y"] + rng.randint(-3, 3))
+        join_circle(u, p, cx, cy, size=5 if act == A_TALK else 4,
+                    radius=1.6 if act == A_TALK else 1.3)
+        p["tx"], p["ty"] = clamp(p["tx"], p["ty"])
+    elif act == A_BUILD:
+        # their own hut, if that is what they set out to raise; otherwise
+        # the boat: weeks of work at the yard for a shore nobody has seen
+        h = needs.hut_of(u, p)
+        boat = u.get("boat")
+        if h is not None and not h["done"] and (p["tx"], p["ty"]) == (h["x"], h["y"]):
+            pass
+        elif boat is not None:
+            p["tx"], p["ty"] = clamp(boat["x"] + rng.randint(-2, 2),
+                                     boat["y"] + rng.randint(-1, 1))
+    return
 
 
 def _weighted(w, rng):
@@ -1453,7 +1491,12 @@ def day_context(people, day):
             moms[q["mom"]] = True
         elif ADULT_AGE <= a <= 45 * DAYS_PER_YEAR and not q["w"]:
             (adults_m if q["s"] == "m" else adults_f).append(q)
-    return {"kids": kids, "moms": moms, "am": adults_m, "af": adults_f}
+    dens = {}                     # heads per 4-tile cell: crowding, cheaply
+    for q in people:
+        k = (q["x"] >> 2) * 4096 + (q["y"] >> 2)    # an int key: JSON-safe
+        dens[k] = dens.get(k, 0) + 1
+    return {"kids": kids, "moms": moms, "am": adults_m, "af": adults_f, "dens": dens,
+            "byid": {q["id"]: q for q in people}}
 
 
 def kids_near(ctx, p):
@@ -1527,7 +1570,7 @@ def couple_up(p, q, x, y):
     p["tx"], p["ty"], p["f"] = x, y, 1
     q["tx"], q["ty"], q["f"] = x + 1, y, -1
     p["a"] = q["a"] = A_MATE
-    p["ad"] = q["ad"] = days(2)
+    p["ad"] = q["ad"] = 2       # half a day together, not two
 
 
 def follow_mother(p, byid, clamp):
@@ -1565,6 +1608,37 @@ LAGOON_WALK = 6         # foragers range farther in a day than resort guests
                         # stroll: travel should be a share of the day, not all of it
 
 
+_FIELDS = {}          # (id of terrain, target) -> distance field; a cache, never saved
+_FIELDS_MAX = 96
+
+
+def land_field(terr, tx, ty):
+    """Walking distance over land to (tx, ty) from every tile: a breadth-first
+    flood, so a walk around the inner lagoon is a walk, not a dead end.
+    Cached per target and rebuilt freely; it is derived, never state."""
+    key = (id(terr), tx, ty)
+    f = _FIELDS.get(key)
+    if f is not None:
+        return f
+    n = len(terr)
+    far = n * n
+    f = [far] * (n * n)
+    if terr[ty][tx] != 2:
+        f[ty * n + tx] = 0
+        q = [(tx, ty)]
+        for x, y in q:
+            d = f[y * n + x] + 1
+            for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1),
+                           (x + 1, y + 1), (x - 1, y - 1), (x + 1, y - 1), (x - 1, y + 1)):
+                if 0 <= nx < n and 0 <= ny < n and terr[ny][nx] != 2 and f[ny * n + nx] > d:
+                    f[ny * n + nx] = d
+                    q.append((nx, ny))
+    if len(_FIELDS) >= _FIELDS_MAX:
+        _FIELDS.pop(next(iter(_FIELDS)))
+    _FIELDS[key] = f
+    return f
+
+
 def step_toward(p, terr=None, speed=WALK_SPEED):
     """Travel toward the target; True once standing on it. A day is a long
     time to walk — covering only one tile per day would leave everyone
@@ -1579,20 +1653,47 @@ def step_toward(p, terr=None, speed=WALK_SPEED):
         if sx:
             p["f"] = sx                                # face the way you walk
         nx, ny = p["x"] + sx, p["y"] + sy
-        if terr is not None and terr[ny][nx] == 2:   # don't walk into the sea
+        if terr is not None:
+            # a target off the map is walked to its nearest edge, never past it
+            n = len(terr)
+            if not (1 <= p["tx"] < n - 1 and 1 <= p["ty"] < n - 1):
+                p["tx"] = min(n - 2, max(1, p["tx"]))
+                p["ty"] = min(n - 2, max(1, p["ty"]))
+                continue
+        if p.get("detour") and terr is not None:
+            nx, ny = p["x"], p["y"]                    # already going round
+        elif terr is not None and terr[ny][nx] == 2:   # don't walk into the sea
             if sx and terr[p["y"]][nx] != 2:
                 ny = p["y"]
             elif sy and terr[ny][p["x"]] != 2:
                 nx = p["x"]
             else:
                 nx, ny = p["x"], p["y"]
+        if nx == p["x"] and ny == p["y"] and terr is not None:
+            # water in the way: walk round it, by the shortest way on land
+            n = len(terr)
+            f = land_field(terr, p["tx"], p["ty"])
+            here = f[p["y"] * n + p["x"]]
+            best = None
+            for ax, ay in ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)):
+                xx, yy = p["x"] + ax, p["y"] + ay
+                if 0 <= xx < n and 0 <= yy < n and f[yy * n + xx] < here:
+                    if best is None or f[yy * n + xx] < f[best[1] * n + best[0]]:
+                        best = (xx, yy)
+            if best is not None:
+                nx, ny = best
+                p["detour"] = 1        # keep going round until arrival
         if nx == p["x"] and ny == p["y"]:
-            # no way forward: the target is across water. Give it up, so the
-            # person chooses something reachable instead of standing forever.
+            p.pop("detour", None)
+            # no way forward at all: the target is across the sea. Give it
+            # up, so the person chooses something reachable instead.
             p["tx"], p["ty"] = p["x"], p["y"]
             return True
         p["x"], p["y"] = nx, ny
-    return p["x"] == p["tx"] and p["y"] == p["ty"]
+    if p["x"] == p["tx"] and p["y"] == p["ty"]:
+        p.pop("detour", None)
+        return True
+    return False
 
 
 TOTEMS = {"plants": "the fig", "game": "the boar", "fish": "the great fish"}
@@ -1733,8 +1834,8 @@ def keep_watch(u, people, day, events, part=0, rng=None):
                 for q in band:
                     if q is w or q.get("w"):
                         continue
-                    if q.get("a") in (A_HUNT, A_FISH, A_FARM, A_BUILD):
-                        continue                  # a hunter out in the woods stays out
+                    if q.get("a") in minds.WORK_ACTS:
+                        continue                  # anyone out at work: needs.night beds them there
                     q["tx"], q["ty"] = fx + rng.randint(-2, 2), fy + rng.randint(-1, 2)
                     if q.get("a") in (A_IDLE, A_WALK, A_TALK):
                         q["a"] = A_TALK if rng.random() < 0.6 else A_SLEEP
@@ -1949,8 +2050,8 @@ def tick_lagoon(u, rng, events):
             fresh["engine_history"] = list(u.get("engine_history", []))
             for p in fresh["people"]:
                 p["b"] = day - 18 * DAYS_PER_YEAR  # young again
-            if "preserve" in lessons:
-                fresh["store"] = 30.0   # they cache food without being told why
+            # a "preserve" lesson is kept as a habit: their stores rot
+            # slower (needs.keep_stores), not as food from nowhere
             u.clear()
             u.update(fresh)
             carried = (" They carry the old lessons: " + ", ".join(lessons) + "."
@@ -1971,13 +2072,12 @@ def tick_lagoon(u, rng, events):
 
     # --- stocks regrow (logistic, daily rate)
     cont = 3.0 if u.get("continent") else 1.0   # a continent's bounty
-    for key, cap, r in (("plants", 60000 * cont, 0.9), ("game", 2500 * cont, 0.5),
-                        ("fish", 50000 * cont, 0.6)):
+    for key, cap, r in (("plants", 60000 * cont, 0.9), ("fish", 50000 * cont, 0.6)):
         x = stocks[key]
         stocks[key] = max(1.0, x + (r / DAYS_PER_YEAR / PARTS_PER_DAY) * x * (1 - x / cap))
-    g = stocks["pred"]
-    stocks["pred"] = max(2.0, g + (0.3 / DAYS_PER_YEAR / PARTS_PER_DAY) * g *
-                         (1 - g / (20 + 30 * stocks["game"] / 2500)))
+    # game and predators are animals with places now (animals.py); the
+    # stocks only mirror their counts, for the record
+    stocks["game"], stocks["pred"] = (float(n) for n in animals.counts(u))
 
     # --- demography groups
     adults, kids, elders = [], [], []
@@ -1986,60 +2086,33 @@ def tick_lagoon(u, rng, events):
         (kids if a < ADULT_AGE else elders if a >= ELDER_AGE else adults).append(p)
 
     # --- food
-    juveniles = sum(1 for p in kids
-                    if age_of(p, day) >= 8 * DAYS_PER_YEAR)
-    foragers = len(adults) + 0.3 * len(elders) + 0.35 * juveniles
-    tool_mult = 1.25 if has(u, "stone_tools") else 1.0
-    # desperation: a hungry band forages harder and ranges farther
-    avg_hun = sum(p["hun"] for p in people) / len(people)
-    effort = 1.0 + min(0.6, avg_hun / 30.0)
-    yield_plants = min(foragers * 1.5 * plant_mult * tool_mult * effort,
-                       stocks["plants"] * 0.004) / PARTS_PER_DAY
-    stocks["plants"] -= yield_plants * 0.8
-    yield_fish = 0.0
-    if has(u, "fishing"):
-        yield_fish = min(foragers * 0.5 * fish_mult, stocks["fish"] * 0.003) / PARTS_PER_DAY
-        stocks["fish"] -= yield_fish * 0.7
-    # trapping/scavenging works even before stone tools, just poorly
-    hunt_eff = 0.4 if has(u, "stone_tools") else 0.25
-    yield_game = min(foragers * hunt_eff * (stocks["game"] / 2500) * effort,
-                     stocks["game"] * 0.002) / PARTS_PER_DAY
-    stocks["game"] -= yield_game * 1.1
-    # the shore always gives something: shellfish and tidal gathering,
-    # winter-proof and the reason the lagoon was a good place to wash up
-    yield_shore = foragers * 0.35 * effort / PARTS_PER_DAY
-    yield_farm = 0.0
-    if has(u, "agriculture"):
-        season_farm = 0.25 if winter else 1.0
-        if u["drought"] > 0:
-            season_farm *= 0.3
-        yield_farm = len(u["farms"]) * 2.1 * season_farm / PARTS_PER_DAY
-    if has(u, "domestication"):
-        yield_farm += len(u["farms"]) * 0.5 / PARTS_PER_DAY
-
+    #
+    # There is no food in this world that nobody went and got. The places
+    # that hold it are the sites; a person who works one takes what is
+    # there and carries it home, and a camp eats what its people brought
+    # back. If everybody sleeps, the camps empty and the band starves:
+    # that is the point, and it used to be false.
     daily_need = len(adults) * 1.0 + len(kids) * 0.6 + len(elders) * 0.8
-    need = daily_need / PARTS_PER_DAY
+    needs.ensure_sites(u, rng)
+    # how much of the band is hungry — a fact about people, not about a ratio
+    hungry = sum(1 for p in people if p.get("hun", 0.0) > 12)
+    shortfall = hungry / max(1, len(people))
     # the carcass of a hunted predator: fresh meat, eaten or spoiled over the
     # days that follow. Without preservation it is gone in a couple of days.
     meat = u.get("meat", 0.0)
     if meat > 0:
         meat *= (0.85 if has(u, "preservation") else 0.55) ** (1 / PARTS_PER_DAY)
         u["meat"] = meat
-    total = (yield_plants + yield_fish + yield_game + yield_shore
-             + yield_farm + u.get("meat", 0.0) + u["store"])
-    if total >= need:
-        surplus = total - need
-        cap_store = (daily_need * 60 if has(u, "granary")
-                     else daily_need * 14 if has(u, "preservation") else 0)
-        u["store"] = min(surplus, cap_store)
-        shortfall = 0.0
-    else:
-        u["store"] = 0.0
-        shortfall = (need - total) / max(1e-9, need)  # 0..1 fraction unfed
-
-    # Carry only uneaten meat, never the portion already transferred into
-    # the store. Without preservation the remaining carcass keeps spoiling.
-    u["meat"] = max(0.0, min(meat, total - need - u["store"]))
+    # The hunters carry the carcass home: it goes into the camp's store,
+    # where it is eaten like anything else, and rots like anything else.
+    if u.get("meat", 0.0) > 0 and u.get("settlements"):
+        st0 = u["settlements"][0]
+        st0["store"] = st0.get("store", 0.0) + u["meat"]
+    u["meat"] = 0.0
+    # the camps' stores, and their total
+    for st in u.get("settlements") or []:
+        st["store"] = max(0.0, st.get("store", 0.0))
+    u["store"] = sum(st.get("store", 0.0) for st in u.get("settlements") or [])
 
     weapons = has(u, "stone_tools")
     healing = has(u, "healing")
@@ -2053,47 +2126,34 @@ def tick_lagoon(u, rng, events):
     if u.get("voyage"):
         sail(u, people, rng, events, day)
     keep_watch(u, people, day, events, part, rng)
+    # the animals' part: herds graze and flee, cats hunt deer — and people,
+    # when the deer fail them and someone is alone in the dark
+    taken = animals.tick(u, rng, terr_l, people, {
+        "day": day, "part": part, "night": part == PART_NIGHT, "events": events,
+        "adult": lambda q: age_of(q, day) >= ADULT_AGE, "has": lambda t: has(u, t),
+        "armed": weapons, "lessons": u.get("lessons", []), "A_HUNT": A_HUNT})
+    taken_ids = {q["id"] for q, _ in taken}
     for p in people:
         if p["id"] in gone or p.get("ab"):
             continue
         a = age_of(p, day)
-        # hunger — unevenly shared, so famine takes the weakest first
-        # instead of the whole band at once
-        if shortfall > 0:
-            frail = 1.6 if (a < ADULT_AGE or a >= ELDER_AGE) else 1.0
-            p["hun"] += shortfall * frail * rng.uniform(0.5, 1.5) / PARTS_PER_DAY
-        else:
-            p["hun"] = max(0.0, p["hun"] - 1.0 / PARTS_PER_DAY)
-        if p["hun"] > 40:
+        # the body: hunger, energy and company, and they are this person's
+        # own. Nobody else's dinner fills your belly, and nobody else's
+        # tiredness makes you lie down.
+        needs.night(u, p, rng, part)
+        needs.meters(u, p, day, rng, needs.CONDITIONS["LAGOON"])
+        needs.deposit(u, p, day)
+        needs.eat(u, p, a / DAYS_PER_YEAR)
+        if p["hun"] > needs.HUNGER_MAX:
             dead.append(p)
             cod(u, "starvation")
             rng.random()  # the old per-death coin flip; kept so later rolls stay put
             starved.append(p["n"])
             continue
-        # predation
-        pr = 3e-5 * (stocks["pred"] / 48.0) / PARTS_PER_DAY
-        if weapons:
-            pr *= 0.3
-        # the watchful notice the stalk; a camp with a fire and a sentry on
-        # watch is a hard place to take anyone from
-        pr *= 1.3 - 0.6 * p.get("vg", 0.5)
-        stp = u["settlements"][min(p.get("st", 0), len(u["settlements"]) - 1)]
-        if stp.get("watch"):
-            pr *= 0.5
-        if has(u, "fire"):
-            pr *= 0.7
-        if "vigilance" in u["lessons"]:
-            pr *= 0.6          # a lesson paid for in a previous iteration
-        if a < ADULT_AGE:
-            pr *= 2.0
-        if part == PART_NIGHT:
-            pr *= 1.8                       # the big cat is bolder in the dark
-        if rng.random() < pr:
+        # predation: only a cat that was there, and only the one it took
+        if p["id"] in taken_ids:
             dead.append(p)
             cod(u, "predator")
-            if rng.random() < 0.25:
-                events.append((day, "LAGOON", "predator",
-                               f"{p['n']} is taken by a predator at the wood's edge."))
             continue
         # a fall is not old age — same rolls as before, different names
         if rng.random() < 6e-6 / PARTS_PER_DAY:
@@ -2149,12 +2209,22 @@ def tick_lagoon(u, rng, events):
             follow_mother(p, byid, lambda x, y: (min(LAGOON_SIZE - 2, max(1, x)),
                                                  min(LAGOON_SIZE - 2, max(1, y))))
         if p.get("ad", 0) <= 0 and p["x"] == p["tx"] and p["y"] == p["ty"]:
+            p["did"] = 0
             lagoon_assign(u, p, day, rng, shortfall)
         arrived = step_toward(p, terr_l, LAGOON_WALK)
         if arrived:
+            # The work happens here and now, and it happens every day they
+            # are here: they reach the place, they take what is there, they
+            # eat what they need and carry the rest home.
+            if u["day"] != p.get("day_done"):
+                p["day_done"] = u["day"]
+                needs.fulfil(u, p, day, rng, p.get("a"))
             p["ad"] = p.get("ad", 0) - 1
             if p["ad"] <= 0:
+                p["did"] = 0
                 lagoon_assign(u, p, day, rng, shortfall)
+        # what you gathered, you carry home and put down
+        needs.deposit(u, p, day)
         p["x"] = min(LAGOON_SIZE - 2, max(1, p["x"]))
         p["y"] = min(LAGOON_SIZE - 2, max(1, p["y"]))
 
@@ -2162,6 +2232,11 @@ def tick_lagoon(u, rng, events):
         events.append((day, "LAGOON", "famine", famine_line(starved)))
 
     if dead:
+        for q in dead:
+            if q.get("carry", 0.0) > 0:
+                # what the dead were carrying is found and brought home
+                needs.add_to_store(u, q, q["carry"])
+                q["carry"] = 0.0
         dead_ids = {q["id"] for q in dead}
         people[:] = [q for q in people if q["id"] not in dead_ids]
     clear_widows(people, dead)   # widows re-pair at the next monthly gathering
@@ -2193,19 +2268,13 @@ def tick_lagoon(u, rng, events):
             fert *= 1.25  # the luxury trap: more mouths, more hands, more work
         try_conceive(u, rng, people, fert, byid=byid)
 
+    # the wild places come back, slowly
+    if part == 0:
+        needs.regrow_sites(u, 1)
+        needs.keep_stores(u)
+
     # --- yearly rolls: tech, disasters, settlement dynamics
-    # Once they have learned to kill the big cat, the predator is meat.
-    # The kill is the point: a technology turns a terror into a larder.
-    if has(u, "predator_hunt") and people and stocks["pred"] > 2:
-        hunters = sum(1 for q in people if q.get("a") == A_HUNT
-                      and ADULT_AGE <= age_of(q, day) < ELDER_AGE)
-        if hunters and rng.random() < min(1.0, 0.02 * hunters / PARTS_PER_DAY):
-            stocks["pred"] = max(2.0, stocks["pred"] - 1.0)
-            u["meat"] = u.get("meat", 0.0) + 40.0
-            u["kills"] = u.get("kills", 0) + 1
-            events.append((day, "LAGOON", "hunt",
-                           "The hunters bring down a big cat. It is meat now, and "
-                           "the carcass is brought back to camp."))
+    # (the cat hunt lives in animals.tick: a party with spears, near a cat)
 
     if part == 0 and day > u.get("founded_day", 0) and day % DAYS_PER_YEAR == 0 and people:
         pop = len(people)
@@ -2223,6 +2292,8 @@ def tick_lagoon(u, rng, events):
                            f"Year {year}: drought — the groves wither."))
             tell_myth(u, "drought", events, day)
         if rng.random() < 0.02 and u["store"] > 0:
+            for st in u["settlements"]:
+                st["store"] = st.get("store", 0.0) * 0.4
             u["store"] *= 0.4
             events.append((day, "LAGOON", "disaster",
                            f"Year {year}: a storm off the lagoon destroys most of the stores."))
@@ -2528,7 +2599,11 @@ def summarize(world):
                         p["id"], p.get("a", 0), p.get("f", 1),
                         a // DAYS_PER_YEAR, int(round(p.get("bmi", 22.0))),
                         min(9, int(p.get("sn", 0.5) * 10)),
-                        min(9, int(p.get("inj", 0.0) * 10)), p.get("wk", 0)])
+                        min(9, int(p.get("inj", 0.0) * 10)), p.get("wk", 0),
+                        # 12: carrying food home (0 none, 1 a load, 2 a carcass)
+                        0 if p.get("carry", 0.0) <= 0 else 2 if p["carry"] >= 9 else 1,
+                        # 13: hunger in tenths of the way to starving
+                        min(9, int(p.get("hun", 0.0) / needs.HUNGER_MAX * 10))])
             detail[str(p["id"])] = person_detail(u, p, day, ctx)
         # u.part is the next tick. Show the light of the activity we just
         # simulated, so a night on watch is seen at night rather than dawn.
@@ -2541,6 +2616,7 @@ def summarize(world):
                 "cod": dict(u.get("cod", {})),
                 "phases": u.get("phases", []),
                 "census": u["census"][-120:],
+                "gauges": gauges(u),
                 "modesty": round(u.get("modesty", 0.0), 3),
                 "innocent": bool(u.get("innocent")),
                 "mind": u.get("mind", [])[-120:],
@@ -2550,11 +2626,24 @@ def summarize(world):
             info["settlements"] = u["settlements"]
             info["farms"] = u["farms"]
             info["store"] = round(u["store"], 1)
+            # the places that hold food, and how full: what the canvas may
+            # draw because the model has it (handoff N3)
+            info["sites"] = [{"x": q["x"], "y": q["y"], "k": q["kind"],
+                              "f": round(q["left"] / max(1.0, q["max"]), 2)}
+                             for q in u.get("sites") or []]
             info["lessons"] = u.get("lessons", [])
             info["culture"] = u.get("culture", [])
             info["boats"] = u.get("boats", [])
-            info["game"] = round(u["stocks"]["game"])
-            info["pred"] = round(u["stocks"]["pred"], 1)
+            deer, cats = animals.counts(u)
+            info["game"], info["pred"] = deer, cats
+            # every animal where it is: the canvas draws only what the model has
+            info["animals"] = [[q["x"], q["y"], q["k"], q["i"]] for q in u.get("animals") or []]
+            # what just happened between people and animals: [x, y, kind, day, part]
+            # kind: deer_kill, cat_hunt, fought_off, taken, mauled
+            info["encounters"] = [e for e in u.get("encounters") or [] if u["day"] - e[3] <= 3]
+            # each pair's hut: [x, y, share of the work done 0..1]
+            info["huts"] = [[h["x"], h["y"], round(min(1.0, h["w"] / needs.HUT_WORK), 2)]
+                            for st in u["settlements"] for h in st.get("huts") or ()]
             info["myths"] = u.get("myths", [])
             info["stories"] = round(u.get("stories", 0.0), 1)
             info["kills"] = u.get("kills", 0)
@@ -2604,6 +2693,7 @@ def summarize(world):
         out["u"][key] = info
     out["calhoun"] = {
         "census": [[d, p, n] for d, p, n in CALHOUN_CENSUS],
+        "census_fields": list(CENSUS_FIELDS),
         "events": [[d, n] for d, n in CALHOUN_EVENTS],
         "phases": [[a, b, c, nm] for a, b, c, nm in CALHOUN_PHASES],
         "series": CALHOUN_SERIES,
@@ -2693,9 +2783,21 @@ def migrate(world):
             u.setdefault("cap", EDEN_CAP)
             u.setdefault("stagnation", EDEN_STAGNATION)
             u.setdefault("box_cap", EDEN_BOX_CAP)
+        if u.get("kind") == "LAGOON":
+            for st in u.get("settlements", []):
+                st.setdefault("store", 0.0)   # camps keep their own stores now
+            u.setdefault("animals", None)     # None: animals.ensure seeds them on the next tick
+            u.setdefault("animal_id", 1)
+            u.setdefault("encounters", [])
+            for st in u.get("settlements", []):
+                st.setdefault("huts", [])     # each pair's hut, raised by work
         for p in u.get("people", []):
             p.setdefault("a", 0)
             p.setdefault("ad", 0)
+            p.setdefault("hun", 0.0)
+            p.setdefault("ene", 1.0)          # the personal meters (needs.py)
+            p.setdefault("sol", 0.7)
+            p.setdefault("carry", 0.0)
             p.setdefault("tx", p["x"])
             p.setdefault("ty", p["y"])
             p.setdefault("hx", p["x"])

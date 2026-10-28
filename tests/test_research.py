@@ -220,7 +220,7 @@ class TestTheViewerShowsIt(unittest.TestCase):
 
     def test_the_panel_shows_the_long_story(self):
         """The story is the summary of the shelf the reader asked for."""
-        self.assertIn("renderStory", self.src)
+        self.assertIn("storyBlocks", self.src)     # paged since the 2026-10-28 redesign
         self.assertIn('id="resstory"', self.src)
         self.assertTrue(research.HISTORY, "the story is empty")
         seen = set()
@@ -238,6 +238,20 @@ class TestTheViewerShowsIt(unittest.TestCase):
         with open(MIRROR) as f:
             self.assertEqual(self.src, f.read(),
                              "web/index.html and docs/index.html have diverged")
+
+
+class TestCensusRowsGrew(unittest.TestCase):
+    def test_the_report_reads_census_rows_that_carry_gauges(self):
+        # engine 2026.10.28.3 widened the yearly census row; the reading
+        # of the shelf must not crash on it (it would 500 the /state page)
+        import random
+        import research
+        w = engine.genesis(seed=69)
+        for i in range(engine.DAYS_PER_YEAR * engine.PARTS_PER_DAY + 4):
+            engine.tick_lagoon(w["lagoon"], random.Random(i), [])
+            engine.tick_eden(w["eden"], random.Random(i), [])
+        self.assertEqual(len(w["lagoon"]["census"][-1]), len(engine.CENSUS_FIELDS))
+        research.report(w)       # must not raise
 
 
 if __name__ == "__main__":

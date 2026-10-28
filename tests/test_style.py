@@ -1,18 +1,15 @@
 """The house style, as law.
 
-The owner wrote the style down: chunky pixels, `image-rendering: pixelated`,
-flat palettes with three tones per material, a monospace HUD, and people
-drawn as bodies with real proportion — an adult about 7.5 heads. It is in
-`AGENTS.md` and in `GRAPHICS.md`.
+The owner's brief of 2026-10-28 retired the 8-bit world: the worlds are now
+painted at the screen's own resolution on one designed palette, TERRARIUM,
+whose tokens live on `:root` and are the only source of colour for the
+canvas. The people keep their anatomy rig and the canon it is checked
+against; the page is one screen that never scrolls, and anything long is
+read in pages. GRAPHICS.md §1 is the prose version of what is pinned here.
 
-Those words did not stop a renderer from being re-palettied into something
-else, from being given round chibi heads, and from quietly losing the two
-things the owner asked for by name: a couple drawn as one picture, and a
-walk with a planted foot. Style written only in prose is style that gets
-lost at the end of a long session.
-
-This file is the guard. It pins the measurable parts of the brief, so a
-change that breaks them fails the suite instead of the eye.
+Style written only in prose is style that gets lost at the end of a long
+session. This file pins the measurable parts of the brief, so a change that
+breaks them fails the suite instead of the eye.
 
 **Change one of these on purpose and you must change it here too, in the
 same commit, where the owner will see it.**
@@ -26,26 +23,19 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RENDERER = os.path.join(ROOT, "web", "index.html")
 MIRROR = os.path.join(ROOT, "docs", "index.html")
 
-# The house palette, as shipped. Flat, three tones per material, one alpha
-# for the shadow. GRAPHICS.md §1 is the prose version of this table.
-HOUSE_PALETTE = {
-    "waterD": "#1a4580", "water": "#2559a3", "waterS": "#3a78c8",
-    "waterL": "#5a94d8", "foam": "#d4ecfa",
-    "sand": "#d4bc7a", "sandL": "#e2cf96", "sandD": "#b89c58", "sandWet": "#b9a060",
-    "grass": "#4e8a3a", "grassD": "#3f7230", "grassL": "#6aa84e", "grassX": "#2f5d26",
-    "floorF": "#2f5e28", "canD": "#1b421b", "can": "#2f6b2c", "canL": "#4d8f3e",
-    "canX": "#6cab52",
-    "trunk": "#6b4226", "trunkD": "#4e2f18",
-    "soil": "#8a6530", "soilD": "#6e4e1c", "soilL": "#a07a3e", "path": "#a8946a",
-    "thatch": "#9a7a3a", "thatchD": "#7c6028", "thatchL": "#b8955a",
-    "hutwall": "#7a5a34", "hutdoor": "#2c1a0c",
-    "stone": "#b4ac9c", "stoneB": "#bcb4a4", "mortar": "#978f80", "dust": "#a8a092",
-    "wallTop": "#8a7f6c", "wall": "#6a5f4e", "wallFace": "#473d30", "alcove": "#2e2619",
-    "hopper": "#e0b838", "hopperD": "#b08a18", "trough": "#4a90d9",
-    "lawn": "#55a04c", "lawnD": "#4c9344", "palm": "#2f7a38", "palmL": "#3f9a48",
-    "pool": "#38b8e0", "poolL": "#7cd8f0", "rim": "#e8e8e0", "deck": "#d8c9a0",
-    "shadow": "rgba(0,0,0,0.30)",
+# TERRARIUM, as shipped: the console tokens and the world tokens on :root.
+# GRAPHICS.md §1 names the palette and gives the contrast table.
+TERRARIUM = {
+    "--surface": "#14130f", "--surface-2": "#1c1a15", "--ink": "#ede6d6",
+    "--muted": "#a39b88", "--dim": "#8a8372", "--line": "#37332a",
+    "--accent": "#e4b456", "--eden": "#8ec5d6", "--lagoon": "#a6c98a",
+    "--warn": "#ec8f74",
+    "--w-deep": "#2b5770", "--w-shallow": "#6fa1ac", "--w-sand": "#d6c294",
+    "--w-grass": "#6d8a4b", "--w-floor": "#4a6436", "--w-can": "#3f6236",
+    "--w-night": "rgba(14,20,44,0.50)", "--w-fire": "#ffae5a",
 }
+TEXT_TOKENS = ("--ink", "--muted", "--dim", "--accent", "--eden", "--lagoon", "--warn")
+SURFACES = ("--surface", "--surface-2")
 
 
 def read_renderer():
@@ -53,14 +43,22 @@ def read_renderer():
         return f.read()
 
 
-def palette_of(src):
-    """The `P` object in the renderer, as a dict of name -> colour."""
-    m = re.search(r"var P = \{(.*?)\};", src, re.S)
-    assert m, "the renderer has no palette object"
-    out = {}
-    for name, val in re.findall(r'(\w+):\s*"([^"]+)"', m.group(1)):
-        out[name] = val
-    return out
+def root_tokens(src):
+    m = re.search(r":root \{(.*?)\n  \}", src, re.S)
+    assert m, "the palette has no :root block"
+    return dict(re.findall(r"(--[\w-]+):\s*([^;]+);", m.group(1)))
+
+
+def luminance(hexcol):
+    h = hexcol.lstrip("#")
+    c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    c = [x / 12.92 if x <= 0.03928 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+
+
+def contrast(a, b):
+    la, lb = luminance(a), luminance(b)
+    return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
 
 
 def numbers_in(src, name):
@@ -71,56 +69,156 @@ def numbers_in(src, name):
 
 
 class TestThePalette(unittest.TestCase):
-    def test_the_palette_is_the_house_palette(self):
-        """Flat, three tones per material, and the colours the owner chose."""
-        self.assertEqual(palette_of(read_renderer()), HOUSE_PALETTE)
+    def test_the_palette_is_terrarium(self):
+        """One designed palette, on :root, as named in GRAPHICS.md."""
+        toks = root_tokens(read_renderer())
+        for k, v in TERRARIUM.items():
+            self.assertEqual(toks.get(k), v, f"{k} changed")
 
-    def test_every_colour_is_flat(self):
-        """No gradients in the palette, and only the shadow may be see-through."""
-        for name, col in palette_of(read_renderer()).items():
-            if name == "shadow":
-                self.assertTrue(col.startswith("rgba("), col)
-                continue
-            self.assertRegex(col, r"^#[0-9a-fA-F]{6}$",
-                             f"{name} is not a flat hex colour: {col}")
+    def test_text_clears_wcag_aa(self):
+        """Every text colour reads on every console surface at 4.5:1."""
+        toks = root_tokens(read_renderer())
+        for t in TEXT_TOKENS:
+            for s in SURFACES:
+                self.assertGreaterEqual(contrast(toks[t], toks[s]), 4.5, f"{t} on {s}")
 
-
-class TestThePixelGrid(unittest.TestCase):
-    def test_nothing_is_smoothed(self):
-        """The house style is chunky pixels. Smoothing is how it was lost."""
+    def test_the_canvas_takes_its_colours_from_the_tokens(self):
+        """The painters read P, and P is read from :root — no second palette."""
         src = read_renderer()
-        self.assertNotIn("imageSmoothingEnabled=true", src,
-                         "figures are being smoothed; the house style is pixelated")
-        self.assertIn("image-rendering:pixelated", src)
+        self.assertIn("var PALETTE_TOKENS={", src)
+        self.assertIn("getComputedStyle(document.documentElement)", src)
+        self.assertNotRegex(src, r"var P = \{", "a literal palette object is back")
 
-    def test_a_sprite_is_forty_tiles_wide(self):
-        """The figure sprite is a fixed box. A bigger one is a re-skin."""
+    def test_no_slop_faces(self):
+        """No Inter / Poppins / Roboto as the design face (anti-slop rule 4)."""
+        src = read_renderer()
+        for face in ("Inter", "Poppins", "Roboto", "Montserrat", "Open Sans"):
+            self.assertNotRegex(src, r"family=%s\b|\"%s\"" % (face.replace(" ", "\\+"), face))
+
+
+class TestTheResolution(unittest.TestCase):
+    def test_the_world_is_not_pixelated(self):
+        """The 8-bit world is retired: no pixelated canvas, no tile blow-up."""
+        src = read_renderer()
+        self.assertNotIn("image-rendering:pixelated", src)
+        self.assertNotRegex(src, r"var PX\s*=")
+
+    def test_the_ground_is_painted_at_device_resolution_and_cached(self):
+        src = read_renderer()
+        self.assertIn("function drawGround(", src)
+        self.assertIn("function groundStep(", src)        # cached per quarter-octave zoom
+        self.assertIn("function fillField(", src)         # smooth coasts, not tile steps
+        self.assertIn("devicePixelRatio", src)
+
+    def test_a_sprite_is_forty_units_wide(self):
+        """The figure sprite is a fixed box in figure units."""
         src = read_renderer()
         body = src.split("function figureSprite(")[-1].split("function ")[0]
         m = re.search(r"Math\.ceil\((\d+)\*sq\)", body)
-        self.assertIsNotNone(m, "the figure sprite is no longer a fixed box")
-        self.assertEqual(int(m.group(1)), 40,
-                         "the sprite box changed; that is a change of house style")
+        self.assertIsNotNone(m)
+        self.assertEqual(int(m.group(1)), 40)
+
+
+class TestOneScreen(unittest.TestCase):
+    def test_the_page_never_scrolls(self):
+        src = read_renderer()
+        self.assertIn("html, body { height:100dvh; overflow:hidden; }", src)
+        css = src.split("<style>")[1].split("</style>")[0]
+        self.assertNotIn("overflow-y:auto", css, "a scrolling region is back")
+        self.assertNotIn("overflow:auto", css)
+
+    def test_long_content_is_read_in_pages(self):
+        src = read_renderer()
+        self.assertIn("function paginate(", src)
+        for bar in ('id="recpager"', 'id="respager"', 'id="bookpager"'):
+            self.assertIn(bar, src)
+        self.assertIn('openBook("book/book.json")', src)
+        self.assertIn("loadJSONOnce(src)", src)
+        self.assertIn('loadJSONOnce("book/origin.json")', src)
 
 
 class TestTheBody(unittest.TestCase):
+    def table(self, name):
+        return numbers_in(read_renderer(), name)
+
+    def heads_at(self, age):
+        bands, heads = self.table("AGE_BAND"), self.table("HEADS")
+        self.assertEqual(len(bands), len(heads), "the age table changed shape")
+        i = max(j for j, a in enumerate(bands) if age >= a)
+        return heads[i]
+
     def test_an_adult_is_about_seven_and_a_half_heads(self):
         """The proportions are the brief: an adult is not a chibi."""
-        src = read_renderer()
-        head = numbers_in(src, "STAGE_HEAD")
-        self.assertEqual(len(head), 5, "the stage table changed shape")
-        adult_head = head[3]
-        # the head radius in the figure's 32-unit space, and the body height
-        m = re.search(r"var hr\s*=\s*([\d.]+)\*STAGE_HEAD", src)
-        self.assertIsNotNone(m, "the head radius formula moved")
-        radius = float(m.group(1)) * adult_head
-        height = 32.0
-        heads = height / (2 * radius)
+        heads = self.heads_at(30)
         self.assertGreater(heads, 7.0,
                            f"an adult is only {heads:.1f} heads tall — that is a "
                            f"stylisation, not a body")
         self.assertLess(heads, 8.5,
                         f"an adult is {heads:.1f} heads tall — too stretched")
+
+    def test_children_have_the_proportions_of_children(self):
+        """Head to height by age, from the anthropometric canon: 1/4 at
+        birth, ~1/5 at two or three, ~1/6 at six, ~1/7 at twelve. A child is
+        not a small adult."""
+        for age, want in ((0, 4.0), (3, 5.0), (6, 6.0), (12, 7.0)):
+            got = self.heads_at(age)
+            self.assertAlmostEqual(got, want, delta=0.35,
+                                   msg=f"at {age} a body is {got} heads, not ~{want}")
+
+    def test_the_head_is_sized_from_the_table(self):
+        """The drawn head is the table's head: stature / heads, and the
+        skull is drawn 2.12 radii tall."""
+        src = read_renderer()
+        self.assertRegex(src, r"headH=H/HEADS\[i\]")
+        self.assertRegex(src, r"hr:headH/2\.12")
+
+    def test_a_man_is_wider_at_the_shoulder_a_woman_at_the_hip(self):
+        """Adult widths, as fractions of stature: a man's shoulders outgrow
+        his hips; a woman's hips are about as wide as her shoulders."""
+        src = read_renderer()
+        m = re.search(r"var sh=lerp\(SH_FRAC\[ci\], fem\?([\d.]+):([\d.]+), dm\)\*H, "
+                      r"hp=lerp\(HP_FRAC\[ci\], fem\?([\d.]+):([\d.]+), dm\)\*H", src)
+        self.assertIsNotNone(m, "the shoulder and hip widths moved")
+        f_sh, m_sh, f_hp, m_hp = map(float, m.groups())
+        self.assertGreater(m_sh / m_hp, 1.15, "a man's shoulders are not wider than his hips")
+        self.assertLess(abs(f_hp / f_sh - 1.0), 0.12, "a woman's hips are not about her shoulders")
+
+    def test_the_figure_is_a_skeleton_with_a_skin(self):
+        """Every joint of the rig has a parent, and the drawing is solved
+        through it: the pose solver places hands and feet, the skeleton keeps
+        the bones their length, the skin is painted around the bones."""
+        src = read_renderer()
+        m = re.search(r"var RIG_PARENT=\{(.*?)\};", src, re.S)
+        self.assertIsNotNone(m, "the rig is gone")
+        joints = set(re.findall(r"(\w+):", m.group(1)))
+        for j in ("pelvis", "spine", "chest", "neck", "head", "clavL", "clavR",
+                  "shL", "shR", "elbL", "elbR", "wriL", "wriR",
+                  "hipL", "hipR", "kneeL", "kneeR", "ankL", "ankR"):
+            self.assertIn(j, joints, f"the rig has no {j}")
+        body = src.split("function drawSketch(")[1].split("\nfunction ")[0]
+        self.assertIn("buildRig(", body, "the figure is not drawn from the rig")
+        self.assertIn("function ik2(", src, "limbs are no longer solved")
+        self.assertIn("paintForm(", body, "the skin is no longer painted")
+
+    def test_a_woman_stands_shorter_than_a_man(self):
+        """Adult men are about 7% taller than women; the drawing says so."""
+        self.assertIn("STATURE[B.ab]*(fem?1-0.07*D.dm:1)", read_renderer())
+
+    def test_the_body_reads_from_the_record(self):
+        """BMI, strength, injury, pregnancy and hunger all reach the drawing
+        and the sprite key, so a cached figure is never someone else's body."""
+        src = read_renderer()
+        key = src.split("function figureSprite(")[1].split("var sp=")[0]
+        for field in ("B.fat", "B.mus", "B.hurt", "B.preg", "B.hungry", "B.ab"):
+            self.assertIn(field, key, f"{field} is not in the sprite key")
+
+    def test_children_never_get_genital_detail(self):
+        """Every genital stroke sits behind the adult gate."""
+        src = read_renderer()
+        body = src.split("function drawSketch(")[1].split("\nfunction ")[0]
+        self.assertEqual(body.count("pubic hair") + body.count("h1<5"), 2)
+        self.assertEqual(body.count("adult && s>=2 && bare && !private_"), 2,
+                         "anatomical detail is drawn outside the adult gate")
 
     def test_the_head_has_a_jaw(self):
         """A plain oval is an egg, not a head."""
@@ -145,6 +243,166 @@ class TestTheBody(unittest.TestCase):
                       "the stance/swing walk cycle is gone")
         self.assertIn("stance", src)
         self.assertIn("swing", src.lower())
+
+
+class TestTheStandingBody(unittest.TestCase):
+    """The canon a figure drawer checks a standing adult against (Loomis 1943):
+    crotch at half height, knee a quarter of the way up, elbow at the waist,
+    wrist at the crotch. Computed from the renderer's own tables, so a change
+    to the rig that breaks the canon fails here."""
+
+    def setUp(self):
+        self.src = read_renderer()
+
+    def num(self, pattern):
+        m = re.search(pattern, self.src)
+        self.assertIsNotNone(m, f"the rig moved: {pattern}")
+        return float(m.group(1))
+
+    def landmarks(self):
+        H = 32.0
+        heads = numbers_in(self.src, "HEADS")[7]
+        leg_frac = numbers_in(self.src, "LEG_FRAC")[7]
+        arm_frac = numbers_in(self.src, "ARM_FRAC")[7]
+        head_h = H / heads
+        sh_y = head_h * (1 + self.num(r"shY=headH\*\(1\+\(i<=1\?[\d.]+:([\d.]+)\)\)"))
+        hip_y = H * (1 - leg_frac)
+        leg = 31.2 - hip_y - 0.3
+        thigh = leg * self.num(r"thigh:leg\*([\d.]+)")
+        upper = arm_frac * H * self.num(r"upper:arm\*([\d.]+)")
+        crotch = hip_y + head_h * self.num(r"crotch:headH\*([\d.]+)") * self.num(r"crotchY=hipY\+D\.crotch\*([\d.]+)")
+        waist = sh_y + (hip_y - sh_y) * self.num(r"waY=shY\+\(hipY-shY\)\*([\d.]+)")
+        shoulder = sh_y + 0.9
+        return dict(H=H, crotch=crotch, knee=hip_y + 0.3 + thigh, elbow=shoulder + upper,
+                    wrist=shoulder + arm_frac * H * 0.99, waist=waist)
+
+    def test_crotch_at_half_height(self):
+        L = self.landmarks()
+        self.assertAlmostEqual(L["crotch"] / L["H"], 0.5, delta=0.04)
+
+    def test_knee_a_quarter_from_the_ground(self):
+        L = self.landmarks()
+        self.assertAlmostEqual((L["H"] - L["knee"]) / L["H"], 0.25, delta=0.03)
+
+    def test_elbow_at_the_waist_and_wrist_at_the_crotch(self):
+        L = self.landmarks()
+        self.assertLess(abs(L["elbow"] - L["waist"]), 1.5)
+        self.assertLess(abs(L["wrist"] - L["crotch"]), 1.0)
+
+    def test_standing_is_not_a_crouch(self):
+        """The leg is exactly as long as hip to ankle, so a standing leg is
+        straight; standing sets the rest pose (level pelvis, contrapposto)."""
+        self.assertIn("leg=(31.2-hipY-0.3);", self.src)
+        self.assertIn("P.rest=1; P.lean=0;", self.src)
+        self.assertIn("var tilt=P.rest?", self.src)
+
+    def test_hands_are_mittens_and_small_figures_have_their_own_drawing(self):
+        body = self.src.split("function drawSketch(")[1].split("\nfunction ")[0]
+        self.assertNotIn("fingers", body, "hands grew spikes again")
+        self.assertIn("function drawFar(", self.src)      # 10-26 px: silhouette first
+        self.assertIn("function drawTiny(", self.src)     # under 10 px: an upright mark
+
+
+class TestTheInstrumentStrip(unittest.TestCase):
+    """The researcher's strip: eight gauges, both worlds on one scale, ticks
+    where the literature gives one, and a note that says these are model
+    readings. Its references are pinned so a tick cannot drift silently."""
+
+    def gauges(self):
+        src = read_renderer()
+        block = src.split("var GAUGES=[")[1].split("\n];")[0]
+        return re.findall(r'\{ key:"(\w+)", label:"([^"]+)"(?:, ticks:\[([^\]]*)\])?', block)
+
+    def test_eight_gauges_in_order(self):
+        keys = [k for k, _, _ in self.gauges()]
+        self.assertEqual(keys, ["pop", "net", "inf", "brd", "clm", "snk", "food", "vio"])
+
+    def test_reference_ticks_are_the_cited_ones(self):
+        ticks = {k: [float(x) for x in t.split(",")] if t else [] for k, _, t in self.gauges()}
+        self.assertEqual(ticks["net"], [0])
+        self.assertEqual(ticks["inf"], [0.04, 0.80])     # Calhoun 1962; Gurven & Kaplan 2007
+        self.assertEqual(ticks["clm"], [1])
+        self.assertEqual(ticks["snk"], [25, 60])         # even over four hoppers; Calhoun 1962
+        self.assertEqual(ticks["vio"], [1, 524])         # Pinker 2011
+        self.assertEqual(ticks["brd"], [])               # the extinction clock has no tick
+
+    def test_every_note_says_it_is_a_model_reading(self):
+        src = read_renderer()
+        self.assertIn('var NOT_FINDINGS=" Model readings, not findings about people.";', src)
+        self.assertIn("GAUGES[i].note+NOT_FINDINGS", src)
+
+    def test_old_census_rows_are_tolerated(self):
+        """Live saves carry 4-field rows; a missing column reads as null."""
+        self.assertIn("r.length>i", read_renderer())
+
+    def test_no_gradient_in_the_strip(self):
+        src = read_renderer()
+        block = src.split("// =========================================================== the instrument strip")[1].split("// =========================================================== god panel")[0]
+        self.assertNotIn("Gradient(", block)
+
+
+class TestTheWorldsAtWork(unittest.TestCase):
+    """The owner's brief: we must SEE them survive — build, hunt, fish, farm,
+    court, give birth, defend themselves — and see EDEN as a resort island."""
+
+    def setUp(self):
+        self.src = read_renderer()
+
+    def test_huts_come_from_the_record_in_stages(self):
+        self.assertIn("(u.huts||[]).forEach", self.src)
+        body = self.src.split("function drawHut(")[1].split("\nfunction ")[0]
+        self.assertIn("if (p<1){", body, "no construction stages")
+        self.assertIn("P.hutdoor", body, "a finished hut has a door")
+        self.assertNotIn("paintHut9", self.src, "the decorative camp hut is back")
+
+    def test_encounters_are_drawn_and_filmed(self):
+        for kind in ("deer_kill", "cat_hunt", "fought_off", "taken", "mauled"):
+            self.assertIn(kind, self.src)
+        self.assertIn("function drawEncounters(", self.src)
+        self.assertIn("(u.encounters||[]).forEach", self.src.split("function pickShot(")[1])
+
+    def test_carry_and_hunger_reach_the_body(self):
+        self.assertIn("a.carry = p.length>12 ? (p[12]|0) : 0;", self.src)
+        self.assertIn("a.hun = p.length>13 ? (p[13]|0) : -1;", self.src)
+        key = self.src.split("function figureSprite(")[1].split("var sp=")[0]
+        for f in ("B.carry", "B.gaunt", "B.infant"):
+            self.assertIn(f, key)
+        self.assertIn("function drawHeld(", self.src)
+
+    def test_the_couple_is_drawn_from_the_rig(self):
+        body = self.src.split("function drawMating(")[1].split("\nfunction ")[0]
+        self.assertEqual(body.count("drawSketch("), 2, "the pair is not two rigged bodies")
+
+    def test_watch_stands_with_a_spear(self):
+        case = self.src.split("case A_WATCH:")[1].split("break; }")[0]
+        self.assertNotIn("P.sit=1", case)
+        self.assertIn("P.tool=1", case)
+
+    def test_eden_is_a_resort_island(self):
+        body = self.src.split("var EDEN_WORLD={")[1].split("\n};")[0]
+        for part in ("a resort island in a calm, painted sea", "the dome's edge",
+                     "stools along the counter", "loungers", "the pool"):
+            self.assertIn(part, body)
+
+
+class TestTheReader(unittest.TestCase):
+    """The Book, its timeline, and the archive of the first run, in one reader."""
+
+    def setUp(self):
+        self.src = read_renderer()
+
+    def test_the_timeline_is_a_log_scale_of_years_ago(self):
+        self.assertIn('id="tltrack"', self.src)
+        self.assertIn('role="slider"', self.src)
+        self.assertIn("function tlX(at){ var ago=Math.max(0,-at); return 1-Math.log(1+ago)/Math.log(1+TL.max); }", self.src)
+        self.assertIn("function tlChapterAt(", self.src)
+
+    def test_the_first_run_opens_in_the_same_reader(self):
+        self.assertIn('"archive/archive.json"', self.src)
+        self.assertIn('id="archivebtn"', self.src)
+
+    def test_a_page_never_cuts_its_last_block(self):
+        self.assertIn("this.target.scrollHeight>this.target.clientHeight+1", self.src)
 
 
 class TestTheMirror(unittest.TestCase):

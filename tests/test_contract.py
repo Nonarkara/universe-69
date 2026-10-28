@@ -96,13 +96,16 @@ class TestSummarizeShape(unittest.TestCase):
                 for i in (9, 10, 11, 12):                 # purpose, ef, aggression, bmi
                     self.assertIsInstance(d[i], float)
 
-    def test_people_rows_have_twelve_positional_fields(self):
-        """[x, y, cls, sex, id, act, face, age, bmi, strength, injury, wk] —
-        the renderer indexes these; the last five draw the body."""
+    def test_people_rows_have_fourteen_positional_fields(self):
+        """[x, y, cls, sex, id, act, face, age, bmi, strength, injury, wk,
+        carry, hunger] — the renderer indexes these; the body fields draw the
+        figure, carry draws the load coming home, hunger the thin face."""
         for key in ("eden", "lagoon"):
             for p in self.snap["u"][key]["people"]:
-                self.assertEqual(len(p), 12)
-                x, y, cls, sex, pid, act, face, age, bmi, sn, inj, wk = p
+                self.assertEqual(len(p), 14)
+                x, y, cls, sex, pid, act, face, age, bmi, sn, inj, wk, carry, hun = p
+                self.assertIn(carry, (0, 1, 2))
+                self.assertTrue(0 <= hun <= 9)
                 for v in (age, bmi, sn, inj, wk):
                     self.assertIsInstance(v, int)
                 self.assertTrue(10 <= bmi <= 50)
@@ -131,9 +134,29 @@ class TestSummarizeShape(unittest.TestCase):
     def test_census_rows_are_year_pop_births_deaths(self):
         for key in ("eden", "lagoon"):
             for row in self.snap["u"][key]["census"]:
-                self.assertEqual(len(row), 4)
+                # rows written before engine 2026.10.28.3 have only the
+                # first four; newer rows carry every gauge (CENSUS_FIELDS)
+                self.assertIn(len(row), (4, len(engine.CENSUS_FIELDS)))
                 self.assertIsInstance(row[0], int)
                 self.assertIsInstance(row[1], int)
+
+    def test_the_instrument_reads_the_same_gauges_in_both_worlds(self):
+        for key in ("eden", "lagoon"):
+            g = self.snap["u"][key]["gauges"]
+            for k in ("adults", "withdrawn", "breeders", "infant_survival",
+                      "claimants", "sink", "food_days"):
+                self.assertIn(k, g)
+        # EDEN's food is unlimited by design; LAGOON's is counted in days
+        self.assertIsNone(self.snap["u"]["eden"]["gauges"]["food_days"])
+        self.assertIsNotNone(self.snap["u"]["lagoon"]["gauges"]["food_days"])
+
+    def test_census_rows_carry_every_gauge_after_a_year(self):
+        import random
+        w = engine.genesis(seed=69)
+        for i in range(engine.DAYS_PER_YEAR * engine.PARTS_PER_DAY + 4):
+            engine.tick_lagoon(w["lagoon"], random.Random(i), [])
+        row = w["lagoon"]["census"][-1]
+        self.assertEqual(len(row), len(engine.CENSUS_FIELDS))
 
 
 class TestActivityCodes(unittest.TestCase):

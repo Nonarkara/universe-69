@@ -1,0 +1,75 @@
+{
+  "title": "The First Run",
+  "subtitle": "Universes 6 and 9, 26–28 October 2026 · 175 years · engine 2026.10.27–2026.10.28.1",
+  "author": "The Observers",
+  "chapters": [
+    {
+      "id": "what-it-was",
+      "title": "What the first run was",
+      "era": {"from": 0, "to": 175, "label": "Years 0–175 of the first run"},
+      "blocks": [
+        {"t": "p", "text": "The first two universes began on the evening of 26 October 2026 on the old MacBook and ran, unhelped, until the evening of 28 October. In those two real days they lived 175 years. Each began with two pairs — young, and not yet knowing what their bodies were for. They were the same four people, sent into two different worlds."},
+        {"t": "p", "text": "EDEN, Universe 6, was Calhoun's Universe 25 rebuilt for humans: a resort under a dome where food, water and a bed cost nothing, and the only scarce things were room and something to do. LAGOON, Universe 9, was an island off a continent: woods, fish, winters, big cats, and nothing given."},
+        {"t": "figure", "src": "img/first-run-1440.png", "alt": "The original viewer on the last day of the first run: EDEN on the left with a few figures on the sand, LAGOON on the right crowded with foragers on a pixelated green island.", "caption": "The viewer in year 173, two years before the end: EDEN with 51 people left, 49 of them withdrawn; LAGOON at 674, its peak, in its age of writing, weeks before the great famine.", "credit": "Universe 69 viewer, captured 28 October 2026", "license": "Project screenshot"},
+        {"t": "figure", "src": "img/population.svg", "alt": "Line chart of population from year 54 to 173. EDEN rises to about 750 near year 79 and falls to about 50; LAGOON stays under 100 until year 100, then climbs steadily to about 660.", "caption": "The two curves cross once and never again. EDEN peaked at 749 in year 79; LAGOON passed it for good around year 130, peaked at 675, and lost more than half its people in the famine of year 173.", "credit": "Drawn from the run's own census", "license": "Project chart"},
+        {"t": "note", "text": "Everything on these pages comes from the live run's last snapshot (kept beside this archive as first-run-snapshot.json). The census kept only the last 120 years, so the curves start at year 56."}
+      ]
+    },
+    {
+      "id": "eden",
+      "title": "EDEN: the pen that did what Calhoun's did",
+      "era": {"from": 0, "to": 173, "label": "Universe 6"},
+      "blocks": [
+        {"t": "p", "text": "The first child was born in the pen before the first year was out, and the exploit phase began. For forty years EDEN grew the way a well-fed population grows. In year 34 a sickness spread by mating moved through it, and burned out three years later; the generation that watched it kept its distance from one another for twenty years, and then aged out, and the pen forgot."},
+        {"t": "p", "text": "In year 45 crowding passed a third of the pen's nominal room and the behavioural sink appeared: more and more people crowding the one bar where others already ate, fights near the hoppers, mothers losing infants. Fifteen years later deaths outnumbered births for the third year running. The record said the death phase had begun and would not reverse. It did not reverse."},
+        {"t": "figure", "src": "img/eden-births-deaths.svg", "alt": "Line chart of EDEN's yearly births and deaths. Births fall towards zero after year 100; deaths stay higher than births from year 60 onward.", "caption": "Births against deaths. The last child was born in year 144; for the final 31 years nobody was.", "credit": "Drawn from the run's own census", "license": "Project chart"},
+        {"t": "p", "text": "By year 62 easy pleasure had begun to dull: the pen grew bored of what cost nothing. By the end, ennui stood at 70 per cent. When the run ended in year 175, 47 people were left and 45 of them had withdrawn — the beautiful ones, apart — and only 2 of the resort's 22 posts still had a holder. 1,102 infants had died in a resort where food never ran out, and 401 people had been killed by others."},
+        {"t": "figure", "src": "img/eden-causes.svg", "alt": "Bar chart of EDEN's causes of death: infant 1102, age 556, violence 401, plague 31.", "caption": "How EDEN's people died. More infants were lost than adults died of every other cause together.", "credit": "Drawn from the run's own record", "license": "Project chart"},
+        {"t": "note", "text": "EDEN was not extinct when the run was stopped. With 47 ageing people and no births for 31 years, extinction was a matter of decades. The Observers chose to begin again rather than wait for it."}
+      ]
+    },
+    {
+      "id": "lagoon",
+      "title": "LAGOON: fire, hunger, boats and writing",
+      "era": {"from": 0, "to": 173, "label": "Universe 9"},
+      "blocks": [
+        {"t": "p", "text": "The two pairs on the island learned how new life begins in their first months. In year 1 an ice-age winter came down on them, and in year 3 a drought. That same year Selu tamed fire; in year 4 Raka knapped the first stone tool; in year 5 Selu learned to fish; in year 8 Raka raised the first shelter. In year 10 starvation took five of them, and the survivors carried a new instinct, to preserve, passed on without a single word."},
+        {"t": "p", "text": "In year 46 Rimailo's shared stories began to bind the bands. In year 60 Raess sowed seed on purpose; by year 64 Setaba's granaries held a surplus. Then, with food enough and nothing to fear, came the arts: cave paintings in year 75, drum songs in 88, the dance of the tides in 100, and later carved totems, the story of the stars, spirit masks, tattoo rites, the great feast, shell jewellery and a long game."},
+        {"t": "p", "text": "In year 101 Noveon built boats that could face open water, and in year 104 the Veshaka tribe crossed the strait and landed on the greater shore — a land without end. Healing lore spread in 105. In year 163 Baur's hunters learned to kill the big cat. In year 164 Tashari, 310 strong, became a chiefdom with Kata to speak for it, and in year 166 Mita made marks that remembered. LAGOON had begun to write."},
+        {"t": "figure", "src": "img/lagoon-causes.svg", "alt": "Bar chart of LAGOON's causes of death: starvation 1512, infant 172, epidemic 97, age 97, predator 53, childbirth 23, accident 23, violence 7.", "caption": "How LAGOON's people died. Hunger killed nearly nine times as many as anything else, a quarter of them in a single winter.", "credit": "Drawn from the run's own record", "license": "Project chart"},
+        {"t": "p", "text": "They explained what hurt them with will: the cold comes down when the sky-hunter goes hungry; the rain has a keeper, and the keeper is angry; the groves withhold their fruit from the greedy. In year 173 there were 658 of them in two tribes, with fourteen technologies, ten arts and three myths. Then an ice-age winter came down on the lagoon, and the granaries were not enough. In the lean season 362 people starved — more than half the island — among them Kata, who spoke for Tashari. The record names them in batches: Bari, Nika, Tama and twenty-four others; Urur, Tatalu, Kove and twenty-nine others. By year 175 the survivors were 373 and having children again. That is where the first run ends."}
+      ]
+    },
+    {
+      "id": "what-failed",
+      "title": "What failed, and what we missed",
+      "era": {"from": 0, "to": 173, "label": "The audit"},
+      "blocks": [
+        {"t": "p", "text": "The first run told a true-sounding story, and much of that story was theatre. An audit on 28 October checked each claim against the code. These are the things it found."},
+        {"t": "h2", "text": "The food was not earned"},
+        {"t": "p", "text": "LAGOON's food came from a formula on the number of adults, not from anyone going out to get it. When the audit made everyone sleep at home for fifty years, the store kept filling and nobody starved. The labels on the canvas — foraging, hunting, eating — were chosen by a weighted roulette and did not change anyone's hunger."},
+        {"t": "h2", "text": "EDEN's collapse was a script"},
+        {"t": "p", "text": "EDEN's phases were switches, not consequences. Violent deaths were a dice roll that only began once the phase said stagnation. Socially incompetent infants were a 95 per cent roll once the phase said death. The death phase was written never to reverse. The pen did what Calhoun's did because it was told to."},
+        {"t": "h2", "text": "Two minds, two rulebooks"},
+        {"t": "p", "text": "The two worlds did not share a decision. EDEN and LAGOON each had their own assigner, so the comparison was between two programs as much as two conditions."},
+        {"t": "h2", "text": "Animals without places"},
+        {"t": "p", "text": "Game and big cats were two numbers. Predation was a roll against every person wherever they stood; the big-cat hunt was a roll against every hunter, which is why the record repeated the same kill line dozens of times. The deer on screen were invented by the viewer to have something to show."},
+        {"t": "h2", "text": "A picture you could not read"},
+        {"t": "p", "text": "The world was drawn as 12-pixel tiles blown up; at the default zoom people were either a smudge or a doll on giant squares. Labels covered the crowd. Night was a colour wash painted under the people, so they glowed in the dark. The phone layout squeezed both worlds into half-width strips."},
+        {"t": "h2", "text": "Numbers we had wrong"},
+        {"t": "p", "text": "The pen's sink began at 35 per cent of its room because that was the design; in Calhoun's Universe 25 stagnation began near 16 per cent. The literature notes also had the onset and the peak confused, and gave Freedman a thesis that was Calhoun's. Starting from two pairs made every run hostage to the luck of four people."},
+        {"t": "h2", "text": "What we missed entirely"},
+        {"t": "p", "text": "Nobody could see a person be hungry, tired or lonely. Nobody built a hut of their own. Nobody walked round the inner lagoon; they gave up at the water. EDEN's people were never hungry at all — the resort fed them without their going to the bar. And EDEN never reached its end on screen: it was stopped with 51 people left."}
+      ]
+    },
+    {
+      "id": "second-run",
+      "title": "What the second run changes",
+      "era": {"from": 0, "to": 0, "label": "28 October 2026"},
+      "blocks": [
+        {"t": "p", "text": "The second run begins with eight pairs in each world, the same sixteen people in both. People have bodies with hunger, energy and a need for company, and both worlds decide with the same function; only the conditions differ. In LAGOON food sits in groves and shallows and fields and comes home only in someone's arms; huts are raised pair by pair, by days of work; deer move in herds and big cats hunt them, and turn on people only when the herds fail them and someone is alone in the dark — and people fight back. In EDEN the crowd wears company down instead of mending it, fights come from crowding and temper, and a mother's nest decides what her child becomes."},
+        {"t": "p", "text": "The first run's state and events are archived on the MacBook, not migrated: their history could not have come from the new model, and no number from them is carried into it. This archive is what we keep instead."}
+      ]
+    }
+  ]
+}

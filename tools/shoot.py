@@ -154,6 +154,20 @@ def drive(page, out, stem, check):
     check(page.locator('#fail').is_hidden(), 'RETRY recovers from snapshot failure')
 
 
+BOOK_DIR = Path(__file__).resolve().parent.parent / 'web' / 'book'
+
+
+def serve_book(route):
+    rel = route.request.url.split('/book/', 1)[1].split('?')[0]
+    f = (BOOK_DIR / rel).resolve()
+    if BOOK_DIR in f.parents and f.is_file():
+        import mimetypes
+        route.fulfill(status=200, body=f.read_bytes(),
+                      content_type=mimetypes.guess_type(str(f))[0] or 'application/octet-stream')
+    else:
+        route.fulfill(status=404, body='not found')
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('url', nargs='?', default='http://127.0.0.1:6971/')
@@ -186,6 +200,9 @@ def main():
                         status=200, content_type='application/json', body=json.dumps(fixture['state'])))
                     ctx.route('**/world', lambda r: r.fulfill(
                         status=200, content_type='application/json', body=json.dumps(fixture['world'])))
+                # the book lives beside the page (docs/book on Pages); the dev
+                # server does not serve it, so the harness does
+                ctx.route('**/book/**', serve_book)
                 page = ctx.new_page()
                 errors = []
                 page.on('pageerror', lambda e: errors.append(str(e)))
@@ -208,9 +225,20 @@ def main():
                     item['screenshot'] = capture(page, out, stem, 'world')
                     check(not info['hidden'], 'Document renders in foreground')
                     check(info['documentWidth'] <= w, 'No document horizontal overflow')
+                    check(page.evaluate('document.documentElement.scrollHeight') <= h
+                          and page.evaluate('document.body.scrollHeight') <= h,
+                          'One screen: the page does not scroll')
                     a, b = info['scenes']
-                    check(abs(a['y']-b['y']) <= 1, 'World scenes align')
-                    check(b['x'] >= a['x']+a['width'], 'Worlds stay side by side')
+                    # Both worlds stay on the first screen together: side by
+                    # side on a wide screen, stacked under 700px (GRAPHICS.md §1).
+                    if w < 700:
+                        check(abs(a['x']-b['x']) <= 1 and abs(a['width']-b['width']) <= 1,
+                              'Stacked world scenes align')
+                        check(b['y'] >= a['y']+a['height'] and b['y']+b['height'] <= h,
+                              'Worlds stack, both on the first screen')
+                    else:
+                        check(abs(a['y']-b['y']) <= 1, 'World scenes align')
+                        check(b['x'] >= a['x']+a['width'], 'Worlds stay side by side')
                     check(page.evaluate("""() => {
                       var row=document.querySelector('#reclines .row');
                       if(!row)return true;
