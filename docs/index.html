@@ -867,8 +867,8 @@ function bodyOf(a){
            hurt: (a.inj||0)>=5?2:((a.inj||0)>=2?1:0),
            preg: a.preg?1:0 };
 }
-var STAGE_H=[0.42,0.64,0.88,1.0,0.97];       // height against an adult
-var STAGE_HEAD=[1.55,1.28,1.08,1.0,1.0];     // head size against an adult's
+var STAGE_H=[0.4,0.62,0.84,0.95,0.92];       // height against an adult (Ghibli: shorter bodies)
+var STAGE_HEAD=[2.05,1.8,1.5,1.3,1.15];      // head size against an adult's (big round Ghibli heads)
 var FAT_W=[0.66,0.8,1.0,1.24,1.55];           // torso width by BMI band
 
 function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view){
@@ -1187,75 +1187,48 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
   var hr=2.05*STAGE_HEAD[B.stage]*(B.fat>=4?1.06:1), hcx=X(lean*1.2+P.headTilt*0.5), hcy=P.shY-hr*1.05+P.headTilt*0.35;
   // the neck roots in the trapezius and widens into the jaw
   limb(nkx, nky+0.5, hcx-0.15, hcy+hr*0.72, hr*0.52, SK);
-  g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.6;      // the shadow under the jaw
-  g.beginPath(); g.moveTo(hcx-hr*0.45, hcy+hr*0.78); g.lineTo(hcx+hr*0.5, hcy+hr*0.72); g.stroke();
+  // Ghibli face: a big round head, soft cheeks, huge eyes, a tiny nose and mouth.
   g.fillStyle=SK; g.strokeStyle=INK; g.lineWidth=ink*1.2;
   g.beginPath();
-  // a skull and a jaw: an egg is not a head
-  g.moveTo(hcx-hr*0.88, hcy-hr*0.05);
-  g.quadraticCurveTo(hcx-hr*0.92, hcy-hr*1.0, hcx+hr*0.05, hcy-hr*1.0);
-  g.quadraticCurveTo(hcx+hr*0.86, hcy-hr*0.92, hcx+hr*0.90, hcy+hr*0.02);
-  g.quadraticCurveTo(hcx+hr*0.86, hcy+hr*0.62, hcx+hr*0.50, hcy+hr*0.92);
-  g.quadraticCurveTo(hcx+hr*0.15, hcy+hr*1.12, hcx-hr*0.18, hcy+hr*0.95);
-  g.quadraticCurveTo(hcx-hr*0.78, hcy+hr*0.72, hcx-hr*0.88, hcy-hr*0.05);
-  g.closePath();
-  g.fill(); g.stroke();
-  if (B.fat>=3){ g.beginPath(); g.arc(hcx+0.2, hcy+hr*0.6, hr*0.6, 0.3, 2.6); g.stroke(); }   // a soft jaw
-  if (B.fat===0){ g.strokeStyle=INK_SOFT; g.beginPath(); g.moveTo(hcx+hr*0.25,hcy+0.1); g.lineTo(hcx+hr*0.35,hcy+hr*0.55); g.stroke(); }  // hollow cheek
-  // hair: a filled silhouette cap over the skull, strokes for a tail
-  g.fillStyle=hair; g.beginPath(); g.ellipse(hcx-0.15, hcy-hr*0.22, hr*0.93, hr*0.88, -0.05, Math.PI*1.02, Math.PI*2.02); g.closePath(); g.fill();
-  g.strokeStyle=hair; g.lineWidth=ink*1.2;
-  if (fem && B.stage>=2){
-    for (var hs=0;hs<3;hs++){ g.beginPath(); g.moveTo(hcx-hr*0.6+hs*0.3,hcy-hr*0.5);
-      g.quadraticCurveTo(hcx-hr*1.2,hcy+hr*0.4,hcx-hr*0.9+hs*0.25,hcy+hr*1.6+hs*0.3); g.stroke(); }
-  } else {
-    g.beginPath(); g.moveTo(hcx-hr*0.8,hcy-hr*0.2); g.lineTo(hcx-hr*1.05,hcy+hr*0.35); g.stroke();
+  g.arc(hcx, hcy, hr*1.0, 0, 6.283);
+  g.closePath(); g.fill(); g.stroke();
+  // blush on both cheeks
+  g.fillStyle="rgba(240,140,130,0.45)";
+  g.beginPath(); g.arc(hcx-hr*0.5, hcy+hr*0.35, hr*0.35, 0, 6.283); g.fill();
+  g.beginPath(); g.arc(hcx+hr*0.5, hcy+hr*0.35, hr*0.35, 0, 6.283); g.fill();
+  // eyes: very big, white sclera, dark iris, one bright highlight
+  g.strokeStyle=INK; g.lineWidth=ink*0.9;
+  for (var ei=-1; ei<=1; ei+=2){
+    var ex=hcx+ei*hr*0.30, ey=hcy-hr*0.05, er=hr*0.34;
+    g.fillStyle="#fffdf4"; g.beginPath(); g.ellipse(ex, ey, er*1.5, er*0.85, 0, 0, 6.283); g.fill();
+    g.strokeStyle=INK; g.lineWidth=ink*0.9; g.beginPath(); g.ellipse(ex, ey, er*1.5, er*0.85, 0, 0, 6.283); g.stroke();
+    g.fillStyle=INK; g.beginPath(); g.arc(ex+ei*0.08, ey, er*0.5, 0, 6.283); g.fill();
+    g.fillStyle="#fff"; g.beginPath(); g.arc(ex+ei*0.22, ey-0.1, er*0.22, 0, 6.283); g.fill();
+    // thick upper lash line
+    g.lineWidth=ink*1.3;
+    g.beginPath(); g.moveTo(ex-er*1.2, ey-er*0.05); g.lineTo(ex+er*1.2, ey-er*0.1); g.stroke();
   }
-  if (view===2){                                 // the back of the head: hair, an ear
+  // tiny nose: a small dot or a soft L
+  g.strokeStyle=INK; g.lineWidth=ink*0.9;
+  g.beginPath(); g.moveTo(hcx+hr*0.12, hcy+hr*0.15); g.lineTo(hcx+hr*0.12, hcy+hr*0.5); g.lineTo(hcx+hr*0.35, hcy+hr*0.5); g.stroke();
+  // tiny mouth, simple curve
+  g.beginPath(); g.moveTo(hcx-hr*0.22, hcy+hr*0.95); g.quadraticCurveTo(hcx, hcy+hr*1.15, hcx+hr*0.22, hcy+hr*0.95); g.stroke();
+  // hair: a big soft silhouette around the head, with a side tail
+  g.fillStyle=hair; g.beginPath();
+  g.arc(hcx-hr*1.05, hcy-hr*0.1, hr*1.05, 0, 6.283); g.arc(hcx+hr*1.05, hcy-hr*0.1, hr*1.05, 0, 6.283);
+  g.arc(hcx, hcy-hr*1.5, hr*1.15, 0, Math.PI); g.closePath(); g.fill();
+  g.strokeStyle=hair; g.lineWidth=ink*1.0;
+  g.beginPath(); g.moveTo(hcx-hr*0.9, hcy-hr*0.5); g.quadraticCurveTo(hcx-hr*1.7, hcy-hr*1.3, hcx-hr*0.9, hcy+hr*0.5); g.stroke();
+  if (fem && B.stage>=2){
+    g.beginPath(); g.moveTo(hcx+hr*1.05, hcy-hr*0.15); g.quadraticCurveTo(hcx+hr*2.0, hcy+hr*0.8, hcx+hr*1.1, hcy+hr*1.9); g.stroke();
+    g.beginPath(); g.moveTo(hcx+hr*1.15, hcy-hr*0.05); g.quadraticCurveTo(hcx+hr*2.1, hcy+hr*0.6, hcx+hr*1.25, hcy+hr*1.6); g.stroke();
+  }
+  if (view===2){                                 // the back of the head: a hair bun
     g.fillStyle=hair; g.beginPath(); g.ellipse(hcx, hcy-0.2, hr*0.86, hr*0.94, 0, 0, 6.283); g.fill();
-  } else if (view===1 && s>=2.2){                // a face, toward us (manga)
-    for (var ei=-1; ei<=1; ei+=2){
-      var ex=hcx+ei*hr*0.32, ey=hcy-0.1;
-      g.fillStyle="#fbf8f0"; g.beginPath(); g.ellipse(ex, ey, 0.42, 0.26, 0, 0, 6.283); g.fill();
-      g.strokeStyle=INK; g.lineWidth=ink*0.6; g.beginPath(); g.ellipse(ex, ey, 0.42, 0.26, 0, 0, 6.283); g.stroke();
-      g.fillStyle=INK; g.beginPath(); g.arc(ex+ei*0.06, ey, 0.16, 0, 6.283); g.fill();
-      g.fillStyle="#fbf8f0"; g.beginPath(); g.arc(ex+ei*0.1, ey-0.06, 0.06, 0, 6.283); g.fill();
-    }
-    g.strokeStyle=INK; g.lineWidth=ink*0.8;
-    g.beginPath(); g.moveTo(hcx,hcy+0.2); g.lineTo(hcx+0.15,hcy+0.75); g.stroke();
-    g.beginPath(); g.moveTo(hcx-0.5,hcy+1.2); g.quadraticCurveTo(hcx,hcy+1.35,hcx+0.5,hcy+1.2); g.stroke();
+    g.beginPath(); g.ellipse(hcx+hr*0.75, hcy-hr*0.2, hr*0.45, hr*0.55, 0, 0, 6.283); g.fill();
+  } else if (view===1 && s>=1.3){                // toward us: big eyes already drawn above
   }
   if (view){ g.restore(); return; }
-  if (s>=3){                                     // close enough for a real face
-    g.fillStyle="#fbf8f0"; g.beginPath(); g.ellipse(hcx+hr*0.44, hcy-0.1, 0.55, 0.3, 0, 0, 6.283); g.fill();
-    g.strokeStyle=INK; g.lineWidth=ink*0.6;
-    g.beginPath(); g.arc(hcx-hr*0.05, hcy+0.1, hr*0.22, -1.2, 1.4); g.stroke();             // ear
-    g.beginPath(); g.moveTo(hcx+hr*0.5,hcy+1.4); g.quadraticCurveTo(hcx+hr*0.62,hcy+1.6,hcx+hr*0.74,hcy+1.35); g.stroke();  // lower lip
-    if (B.stage===4){ g.beginPath(); g.moveTo(hcx+hr*0.2,hcy+0.5); g.lineTo(hcx+hr*0.5,hcy+0.75); g.stroke(); }  // a line of age
-  }
-  if (s>=1.3){                                   // a face, looking where they face (Vagabond profile)
-    var eyeX=hcx+hr*0.42, eyeY=hcy-0.1, eyeR=s>=3?0.34:0.42;
-    // eye: almond with iris and a single highlight
-    g.fillStyle="#fbf8f0"; g.beginPath(); g.ellipse(eyeX, eyeY, eyeR*1.35, eyeR*0.75, 0, 0, 6.283); g.fill();
-    g.strokeStyle=INK; g.lineWidth=ink*0.7; g.beginPath(); g.ellipse(eyeX, eyeY, eyeR*1.35, eyeR*0.75, 0, 0, 6.283); g.stroke();
-    g.fillStyle=INK; g.beginPath(); g.arc(eyeX+0.06, eyeY, eyeR*0.55, 0, 6.283); g.fill();
-    g.fillStyle="#fbf8f0"; g.beginPath(); g.arc(eyeX+0.18, eyeY-0.08, eyeR*0.18, 0, 6.283); g.fill();
-    // brow: heavy, angled
-    g.strokeStyle=INK; g.lineWidth=ink*1.4;
-    g.beginPath(); g.moveTo(hcx+hr*0.18,hcy-0.82); g.quadraticCurveTo(hcx+hr*0.42,hcy-0.95,hcx+hr*0.72,hcy-0.72); g.stroke();
-    // nose: bridge + tip
-    g.lineWidth=ink*0.9;
-    g.beginPath(); g.moveTo(hcx+hr*0.82,hcy-0.05); g.quadraticCurveTo(hcx+hr*0.95,hcy+0.35,hcx+hr*0.9,hcy+0.75);
-    g.lineTo(hcx+hr*0.78,hcy+0.72); g.stroke();
-    // mouth: defined lips
-    var sad = (act===A_WITHDRAW) ? 0.25 : 0;
-    g.lineWidth=ink*0.8;
-    g.beginPath(); g.moveTo(hcx+hr*0.42,hcy+1.12); g.quadraticCurveTo(hcx+hr*0.58,hcy+1.05+sad,hcx+hr*0.74,hcy+1.12+sad); g.stroke();
-    g.beginPath(); g.moveTo(hcx+hr*0.42,hcy+1.12); g.lineTo(hcx+hr*0.42,hcy+1.18); g.stroke();
-    // jaw shadow for depth
-    g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.9;
-    g.beginPath(); g.moveTo(hcx+hr*0.55,hcy+hr*0.55); g.quadraticCurveTo(hcx+hr*0.7,hcy+hr*0.85,hcx+hr*0.45,hcy+hr*1.0); g.stroke();
-  }
   g.restore();
 }
 
