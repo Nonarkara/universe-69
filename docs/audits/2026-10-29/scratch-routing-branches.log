@@ -1,0 +1,3 @@
+PASS other-machine/no-volume -> None -> tempfile honors TMPDIR/default
+PASS explicit UNIVERSE69_TEST_SCRATCH override
+PASS mounted external Data volume preferred

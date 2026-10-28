@@ -79,23 +79,56 @@ owner can walk through the worlds himself. What replaces it:
 
 ## 2. How the picture is made
 
-Five layers per universe, drawn in this order every frame.
+The model's grid supplies locations; drawing happens at the canvas's device
+resolution. No low-resolution world canvas is enlarged. The camera's `h` is
+half the visible height in world tiles; its aspect determines the width.
 
-| Layer | What it is | How often it is rebuilt |
+| Layer | What it is | Update |
 |---|---|---|
-| `base` | The terrain: water, shallows, foam, sand, grass, woods, canopy, the painted sky and beach in EDEN | Once per terrain (LAGOON), once per pen size (EDEN) |
-| `semi` | The things the world changes: worn paths, farm fields, huts, walls, the snow of a hard winter | Once per poll |
-| `frame` | The seasonal grade (snow, ice) | Once per poll |
-| sites | The food places, if the summary carries `sites` ({x,y,k,f}): berries on a bush, fish shimmer, game tracks, a hopper's level | Every frame (absent: nothing) |
-| people | One sprite per person, blitted from the sprite cache | Every frame |
-| light | The hour and season grade, then the fire and EDEN's lamps (additive) — painted **after** the people, so a figure at night is as dark as its ground and firelight lands on the ones in its circle | Every frame |
-| strip | The eight gauges (below the worlds, DOM + small canvases) | Once per poll, or on resize |
-| `overlay` | Type, captions, the card of the person you are watching, drawn on a separate canvas at device resolution | Every frame |
+| Ground | Smooth coast/wood contours and structures, painted from the model's terrain | Cached by view margin, zoom step and world geometry |
+| Live ground | Water movement | Every visible frame |
+| Sites and encounters | Food places, recorded wildlife encounters, actual animals and boats | From each snapshot, animated between observations |
+| People | Rigged bodies from the sprite cache, ordered by drawn depth | Every visible frame |
+| Light | Day-part/season grade, then firelight and EDEN's actual windows/pool | After people, so the same light reaches bodies and ground |
+| Overlay | Occupancy outlines, contained captions, selection marks | At device resolution |
+| Reading surfaces | World headings, instrument strip, selected-person card, paged record and dialogs | When their data or available geometry changes |
 
-The world canvas is `S × PX` pixels for an `S × S` tile map, `PX = 12`. The
-camera crops a rectangle of that canvas and stretches it to the panel. Because
-the panel is wider than it is tall, the crop is rectangular; the camera's
-`h` is in world tiles and `hx` is derived from the panel's aspect.
+### Audit corrections — 29 October 2026
+
+- The combined-pair sprite uses both complete body records and each person's
+  variation in its key. Batching requires reciprocal, known-adult partners
+  who are stationary and within one and a half tiles. Others retain their
+  individual activity drawing. The reflected sprite shares the unreflected
+  image's baseline. The pair remains two bodies drawn from the existing rig.
+- The documentary drawing no longer invents a midwife or moves a nearby woman
+  into a birth. Recent encounters may turn an already armed participant toward
+  the event; they never replace a sleeper's or bystander's recorded activity.
+- Iteration changes clear actor interpolation, selection, diaries and camera
+  targets. Injuries, ageing and body changes refresh locomotion. An identical
+  mirror terrain payload retains its heat/ground cache; content comparison
+  happens once per incoming terrain object, never every animation frame.
+- EDEN's window light uses the same pen offset and window coordinates as the
+  day painter, and its outdoor pool light uses the actual pool location. The
+  grade is applied first; lamplight follows, using TERRARIUM tokens.
+- Personal records use measured pages when their facts or diary would cover
+  the person. Name and activity remain visible; short cards fit their content.
+  Arrow keys and Prev/Next expose every fact without an internal scroll.
+- Follow framing reserves the selected card's measured height and keeps the
+  hearth scale after resizing. Phone MORE uses up to 30% of the viewport so
+  a portrait and its card can remain visible together. At map edges only the
+  portion covered by the card can extend beyond the world.
+- On phones, one expanded main-page region is read at a time: a world's
+  details, instruments, or the longer record. Opening another closes the
+  previous expansion. Both live scenes remain visible; every control remains
+  available. Stacked headings keep their own content height instead of
+  inheriting the taller heading's empty space.
+- The book, source notes and record split nested blocks at real DOM boundaries
+  without losing text or images. Archive and Origin image bases stay separate;
+  a failed obsolete book request cannot overwrite another open document.
+  Help and failure sheets fit their content on phones; Book and Research keep
+  their full reading area. Help is remeasured from its full source on resize.
+- Snapshot text is escaped at the HUD, card, record and instrument boundaries.
+  Failure recovery returns focus to the visible reader.
 
 ### The sprite cache
 
@@ -120,7 +153,7 @@ dotted reference tick where the literature gives one:
 |---|---|---|---|
 | Population | log pop vs time in founding doublings; Universe 25 laid under it with its phases A–D | Calhoun 1973 curve | never |
 | Births−deaths /100 adults | per year | 0 | below 0 |
-| Infant survival | to age 1 | 4% (Calhoun 1962), 80% (Gurven & Kaplan 2007) | below 80% |
+| Yearlings / prior births | current ages 1–2 divided by last annual births, capped at 100% | none: different cohorts, not infant survival | never |
 | Breeders · withdrawn | count · % of adults | none: the extinction clock | under 10 |
 | Claimants / place | per nest box or hearth | 1.0 | above 1 |
 | Sink | % at the busiest food point | 25% (even), 60% (Calhoun 1962) | 60% or more |
@@ -275,11 +308,11 @@ The drawing is ink over a flat wash of skin, the way a figure study is drawn.
 
 ### The pair
 
-Couples retain the individual body sprites and activity poses. The unfinished
-combined-pair renderer was removed during audit: it grouped unrelated people
-by tile, reused another couple's appearance, shifted flipped images downward,
-and discarded BMI, strength, injury and pregnancy differences. Individual
-sprites preserve the body's record and the existing pose solver.
+The current pair is one non-graphic composition of two bodies from the rig.
+Each body retains its own age, build, condition and variation. Two unrelated
+people sharing a tile are never treated as partners. Children and unknown ages
+cannot enter the combined-pair path; individual adult detail has the separate
+known-age-of-at-least-18 gate. The earlier removed draft is historical.
 
 ---
 
@@ -328,14 +361,13 @@ This is the honest list. Each line is a defect, not a design.
    EDEN's death phase (1,600 people) the pen becomes a wall of overlapping
    figures. *Fixing this needs a per-tile sort and a decision about which
    figure wins the tile — not just a bigger sort buffer.*
-2. **A crowded establishing shot cannot supply portraits.** It fits the
-   population bounds at the current aspect; the documentary close shots and
-   manual zoom provide individual detail. Very crowded populations still
+2. **A crowded establishing shot cannot supply portraits.** It frames the
+   largest camp; documentary close shots and manual zoom provide individual
+   detail. Very crowded populations still
    require further visual review on the instrument.
-3. **EDEN's night is still a grade, not a redraw.** The painted sky and the lit
-   windows are the same daytime image with a blue wash and a warm glow over
-   it. A real night sky with stars, and windows that are actually lit, would
-   be better.
+3. **EDEN retains the daytime ground artwork under its night grade.** Its
+   windows and outdoor pool now have correctly aligned light after the grade.
+   A separate exterior night-sky artwork is still absent.
 4. **The island rung is a map.** At 6 px a person is a body's mass; it is
    only reached on request (key 1, wheel). The auto camera uses camp and
    hearth.
@@ -345,8 +377,7 @@ This is the honest list. Each line is a defect, not a design.
    in the baked layer, so a person always draws over a hut, even when they
    are standing behind it.
 7. *(fixed 2026-10-28: children have their own proportions by age band.)*
-   The pair (`drawMating`) is still drawn from its own hand-placed segments,
-   not from the rig.
+   The current pair uses two calls to the same rigged body painter.
 8. **The animation budget is 12 buckets per activity.** At close zoom a
    two-handed gesture reads as a loop of twelve positions, not as motion.
 
@@ -355,6 +386,16 @@ This is the honest list. Each line is a defect, not a design.
 ## 7. Changelog
 
 Every change to the drawing gets a line here, newest first.
+
+- **2026-10-29 — finish the terrarium audit.** Identity, body caches, mirrored
+  terrain reuse, aligned night light, document pagination, source escaping,
+  compact expanded states and selected-person framing were corrected. The
+  mismatched-cohort gauge is labelled **YEARLINGS / PRIOR BIRTHS**, with no
+  survival reference band. The legacy `infant_survival` field remains for
+  contract compatibility; it is not an infant-survival measurement. The style
+  test intentionally pins the absence of those invalid reference ticks.
+  Screenshots, measurements and remaining limits: `docs/audits/2026-10-29/README.md`.
+
 
 - **2026-10-28 — the timeline and the first run.** The Book reader has a
   one-row timeline under the page: years before 2026 on a log scale (so the

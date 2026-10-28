@@ -10,23 +10,73 @@ The 2026.10.28.1 release adds four parts per day and corrects the unfinished
 conversion's daily rates, wall-clock migration and reseed timing. Its figures
 must be derived afresh. New reports include the actual engine version.
 
-## The live run restarts (owner's decision, 2026-10-28)
+## Audit release 2026.10.29.1
 
-With engine 2026.10.28.4 the live run on the 2016 MacBook starts again from
-genesis: eight pairs in each world. The previous world (114+ years, earlier
-engines, headcount food, phase-scripted EDEN) is archived, not migrated:
-its history could not have come from this model, so no figure from it is
-carried into this one. On the MacBook, after `git pull`:
+This engine changes the trajectory of an already running world. All historical tables
+below belong to their named earlier engines and are **stale for this release**.
+The needs/ecology fixes, world-specific names, and restored eight pairs per
+world are documented in DESIGN.md. Migration preserves an existing population
+and its food; an explicit restart archives the old run's state, events,
+postmortems and books together.
+
+A fresh seed-69 arc was re-derived from the reviewed engine for **60,000 full
+simulated days (240,000 parts; 166 complete years plus 240 days)**:
+
+```sh
+python3 tools/lab.py --days 60000 --seed 69 --every 1800 --quiet
+```
+
+| World | Population at day 36,000 | Population at day 60,000 | Peak | Iteration | Recorded outcome |
+|---|---:|---:|---:|---:|---|
+| EDEN | 614 | 711 | 723 | 1 | 359 withdrawn; phase label remains `exploit`; no extinction |
+| LAGOON | 231 | 435 | 439 | 1 | 13 technologies, three tribes, greater shore reached; no extinction |
+
+Neither world reseeded or produced a postmortem. **EDEN collapse remains
+unobserved**; withdrawal alone does not prove a future extinction. LAGOON
+carried `preserve` and `cleanliness` and had not discovered writing. This is
+one seed and horizon; no parameter was tuned to force an expected ending.
+
+The registry returned 14 supported checks and three undecided: missing EDEN
+sink-year/sink-gap phase dates and the inapplicable no-lore Dunbar check. This
+is not validation: absent phase dates remain unknown in the registry even
+beyond its proposed date range; withdrawal can precede a density phase label.
+
+Raw day-3,000/36,000/60,000 saves passed identity, bond, room, role, store and
+clock checks without migration; every adjacent census balanced population
+change = births − deaths. Raw evidence is retained in the release audit.
+
+Workbench runtime: **1,345.4 seconds**; a late memory sample was **41.4 MiB
+RSS**, not a measured peak or a MacBook benchmark. The live instrument was
+not inspected or changed.
+
+**Observer limitation.** The legacy `infant_survival` field is only the capped
+ratio of current people aged 360–719 days to births in the latest annual census
+(`min(1, yearlings / latest births)`, three decimals; missing if no births).
+Its cohorts do not match. It is not true infant survival and supports no
+comparison to a clinical or forager survival threshold; the viewer labels it
+YEARLINGS / PRIOR BIRTHS. The serialized column remains for compatibility.
+
+## Authorized MacBook restart — pending execution
+
+The owner authorized a fresh start on the instrument. After the MacBook
+pulls engine **2026.10.29.1**, the planned restart begins with eight pairs
+in each world. **This workbench audit has not reset or restarted the live
+MacBook.** Its actual current population and uptime were not inspected.
+
+The explicit reset preserves the prior run in a unique archive directory;
+state, events, postmortems and history books move together. Runtime mirror
+configuration remains in place. Earlier trajectories are historical and
+are not presented as results from this model. Planned MacBook procedure:
 
 ```sh
 launchctl unload ~/Library/LaunchAgents/com.universe69.sim.plist
-python3 sim/server.py --genesis   # archives state + events to data/archive, starts over; Ctrl-C once it is up
+python3 sim/server.py --genesis   # once up, Ctrl-C saves the fresh state
 launchctl load ~/Library/LaunchAgents/com.universe69.sim.plist
 ```
 
 The first run's record is kept in the viewer (help card → ABOUT → *The First Run*).
 
-## Engine 2026.10.28.4 — eight pairs, real needs, animals with places (re-derived 2026-10-28)
+## Historical engine 2026.10.28.4 — eight pairs, real needs, animals with places (re-derived 2026-10-28)
 
 Both worlds start from the same eight pairs. Food is gathered, carried and
 eaten by persons; EDEN and LAGOON decide with one function (DESIGN.md).
@@ -68,7 +118,7 @@ What the three seeds agree on, in the first century:
   the ≤1%/yr the forager literature gives (Howell; Marlowe), so fertility
   or child survival is too generous.
 
-## Current release baseline — 2026.10.28.1
+## Historical baseline — 2026.10.28.1
 
 Re-derived from the shipped engine, seed 69, for 60,000 full simulated days
 (240,000 parts; calendar year 166):
@@ -209,7 +259,7 @@ behaviour.
 ## 3. The arc of Universe 6, measured
 
 ```sh
-python3 /tmp/eden_arc.py     # or: python3 tools/lab.py --days 120000
+python3 tools/lab.py --days 120000  # current harness; historical figures below were not rerun
 ```
 
 | year | what happens |

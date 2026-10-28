@@ -1,0 +1,5393 @@
+{
+ "seed": 69,
+ "days": 60000,
+ "engine": "2026.10.29.1",
+ "research": {
+  "engine": "2026.10.29.1",
+  "record_scope": "Saved observations span iterations and engine versions; legacy rows without a version have unknown provenance.",
+  "history": [
+   {
+    "t": "Before the story",
+    "when": "the deep past",
+    "claim": "Homo sapiens came out of a world of other hominins and was not the strongest thing on the ground. What it had was flexible cooperation in large numbers, and the tool that made that possible was language about things that do not exist: gods, ancestors, money, nations.",
+    "source": "Harari, *Sapiens* chs. 1-5 and *Nexus* ch. 1 (RESEARCH.md \u00a73); Pinker, *The Blank Slate* ch. 19",
+    "hypos": [
+     "H-LAGOON-DUNBAR",
+     "H-LAGOON-TECH"
+    ]
+   },
+   {
+    "t": "The first fire",
+    "when": "and the first dark",
+    "claim": "Cooking changed what a body could be, and the fire changed what a band could be. The night is when the fire makes a group: people come in to it, they talk, and one of them stays awake. The stories told there are the first lore.",
+    "source": "Slingerland, *Drunk* ch. 3 (fire, cooking, the shared night); Harari, *Nexus* ch. 2; the model's own night watch",
+    "hypos": [
+     "H-LAGOON-PURPOSE",
+     "H-LAGOON-PAIRED"
+    ]
+   },
+   {
+    "t": "The band",
+    "when": "c. 50,000 years ago",
+    "claim": "Human groups have a size that gossip alone cannot hold \u2014 about a hundred and fifty. Past that, a band needs a story it can all believe, and then it can be any size at all.",
+    "source": "Harari, *Sapiens* ch. 1 (gossip and the ~150 threshold); Dunbar via RESEARCH.md \u00a73",
+    "hypos": [
+     "H-LAGOON-DUNBAR"
+    ]
+   },
+   {
+    "t": "The exchange ring",
+    "when": "the deep past, and still",
+    "claim": "Observed in the field: a people who keep a long-distance ring of gift exchange, and who believe the ring is mythical and unprofitable even as they maintain it. Obligation, not trade, is what holds it together.",
+    "source": "Malinowski, *Argonauts of the Western Pacific* \u2014 the kula and 'Magic and the Kula'",
+    "hypos": [
+     "H-LAGOON-DUNBAR",
+     "H-LAGOON-PAIRED"
+    ]
+   },
+   {
+    "t": "The tool, and the first kill",
+    "when": "the first technology",
+    "claim": "A species is domesticable only if it passes every test at once, and very few do. The same filter applies to prey: a hunter's gain is small until the weapon is right. And the big cat is not only a terror \u2014 once it can be killed, it is meat.",
+    "source": "Diamond, *Guns, Germs, and Steel* (the Anna Karenina filter); the model's own hunting of predators",
+    "hypos": [
+     "H-LAGOON-TECH",
+     "H-LAGOON-VIOLENCE"
+    ]
+   },
+   {
+    "t": "The first field",
+    "when": "c. 12,000 years ago",
+    "claim": "Farming raised the number of people and lowered the quality of most of their lives: narrower food, harder labour, new disease, and a one-way door \u2014 once the population outgrows the foraging baseline, foraging cannot feed it again.",
+    "source": "Harari, *Sapiens* ch. 4 (history's biggest fraud, the luxury trap); Diamond's surplus chain",
+    "hypos": [
+     "H-LAGOON-BMI",
+     "H-LAGOON-CHILDREN"
+    ]
+   },
+   {
+    "t": "The surplus and the specialists",
+    "when": "after the field",
+    "claim": "Storable surplus creates people who are not needed to hunt: smiths, priests, scribes, soldiers. Every specialist is another mouth to feed and another seat nobody empties.",
+    "source": "Diamond, *Guns, Germs, and Steel* (food production \u2192 surplus \u2192 specialists \u2192 writing \u2192 states); Bestor, *Tsukiji* ch. 6 (seats are a fixed count)",
+    "hypos": [
+     "H-EDEN-POSTS",
+     "H-LAGOON-TECH"
+    ]
+   },
+   {
+    "t": "The gods and the covers",
+    "when": "with the first city",
+    "claim": "A society that cannot explain what happens to it explains it with a story about somebody's will \u2014 a myth. Sacred and profane separate; and a people who have just discovered what a body is for begin to cover it.",
+    "source": "Durkheim, *Elementary Forms* (collective effervescence, the sacred); Harari, *Homo Deus* (the new gods); Peterson on Genesis 3 (covering as the first cultural act)",
+    "hypos": [
+     "H-LAGOON-FAMINE",
+     "H-LAGOON-PAIRED"
+    ]
+   },
+   {
+    "t": "The stranger",
+    "when": "the first crowds",
+    "claim": "When the demands stop and nothing regulates anything, people fall ill \u2014 not from hunger but from the emptiness. Anomie is a disease of regulation, and it comes to those who are competent and unasked-for.",
+    "source": "Durkheim, *Suicide* (anomie); Frankl, *Man's Search for Meaning* part 2 (the existential vacuum)",
+    "hypos": [
+     "H-EDEN-PURPOSE",
+     "H-EDEN-WITHDRAWN",
+     "H-EDEN-BMI"
+    ]
+   },
+   {
+    "t": "The written word",
+    "when": "c. 5,000 years ago",
+    "claim": "Writing fuses strangers into a single mind that can hold far more than any band, and it does so by carrying a shared fiction further than speech can. The network, not the village, is the unit that scales.",
+    "source": "Harari, *Nexus* and *Homo Deus* (the cognitive fusion of the modern era); the model's own lore and writing steps",
+    "hypos": [
+     "H-LAGOON-DUNBAR",
+     "H-LAGOON-TECH"
+    ]
+   },
+   {
+    "t": "The violence that went down",
+    "when": "the long run",
+    "claim": "Violence has fallen by orders of magnitude, and it fell for reasons: more strangers to be watched, more people to punish, and the state taking the killing over. The forager's 4-30% violent share of deaths is the baseline every later society is measured against.",
+    "source": "Pinker, *The Better Angels of Our Nature* ch. 2 (the numbers) and ch. 8 (revenge and the moralization gap)",
+    "hypos": [
+     "H-LAGOON-VIOLENCE",
+     "H-LAGOON-FAMINE",
+     "H-LAGOON-PAIRED"
+    ]
+   },
+   {
+    "t": "The other and the war",
+    "when": "the twentieth century",
+    "claim": "Dehumanising the enemy is not a metaphor but a mechanism: it widens the distance that makes killing possible, and it feeds the hate that produces the next atrocity. A band that cannot tell the difference between an outsider and a monster will treat people the way the model treats a predator.",
+    "source": "Dower, *War without Mercy* (race hate and the dehumanisation of the Other)",
+    "hypos": [
+     "H-LAGOON-VIOLENCE"
+    ]
+   },
+   {
+    "t": "The feast",
+    "when": "and the dark side of it",
+    "claim": "Intoxication is a technology: it dissolves the ordinary self and replaces it with a larger one, which is why people drink together. The same mechanism carries risk, aggression and loss of judgement \u2014 and it binds before it binds well.",
+    "source": "Slingerland, *Drunk* chs. 1, 3 and 5 (intoxication as social technology; the dark side of Dionysus)",
+    "hypos": [
+     "H-LAGOON-VIOLENCE",
+     "H-EDEN-WITHDRAWN"
+    ]
+   },
+   {
+    "t": "The brain that did not change",
+    "when": "and has not",
+    "claim": "The hardware is old: a Stone-Age mind with modules for gossip, status, bonding, and a very long time horizon. Everything that has happened since has been a new arrangement of the same parts. In a world that answers every need and asks for nothing, that machine has nothing to run on, and it stops.",
+    "source": "Bloom, *Psych* (the architecture); Pinker, *The Blank Slate*; Frankl (what the machine wants)",
+    "hypos": [
+     "H-EDEN-BMI",
+     "H-EDEN-PURPOSE",
+     "H-EDEN-WITHDRAWN",
+     "H-LAGOON-PURPOSE",
+     "H-LAGOON-EF"
+    ]
+   }
+  ],
+  "tested": 1,
+  "cadence_days": 30,
+  "hypotheses": [
+   {
+    "id": "H-EDEN-BMI",
+    "world": "EDEN",
+    "statement": "EDEN's adults fatten: their BMI reaches 30 or more.",
+    "source": "BOOKS.md, 'Minds and development' \u2014 Frankl: when the demands stop, the appetite answers the emptiness.",
+    "note": "The resort removes hunger but not the need to be needed. Earlier engines produced BMI 32; those figures do not validate this engine.",
+    "metric": "eden_bmi",
+    "test": "gte",
+    "threshold": 30.0,
+    "value": 31.526884346660584,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-EDEN-PURPOSE",
+    "world": "EDEN",
+    "statement": "EDEN's adults have almost nothing to live for: purpose falls to 0.3 or below.",
+    "source": "BOOKS.md, 'Minds and development' \u2014 Frankl, part 2: the existential vacuum shows as boredom and aggression.",
+    "note": "The same brain, the same people, a world that asks nothing.",
+    "metric": "eden_purpose",
+    "test": "lte",
+    "threshold": 0.3,
+    "value": 0.27626829875429587,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-EDEN-WITHDRAWN",
+    "world": "EDEN",
+    "statement": "In EDEN some adults withdraw for good and never come back.",
+    "source": "RESEARCH.md \u00a71 \u2014 Calhoun's beautiful ones and the withdrawn huddles; the social death that precedes the physical one.",
+    "note": "One adult in a hundred is enough to be a pathology, not a rounding error.",
+    "metric": "eden_withdrawn",
+    "test": "gte",
+    "threshold": 0.01,
+    "value": 0.716566866267465,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-EDEN-SINK-YEAR",
+    "world": "EDEN",
+    "statement": "EDEN's behavioural sink appears between 40 and 140 years after the founders arrive.",
+    "source": "DESIGN.md, 'Universe 6 \u2014 EDEN': the sink begins in year 83 with expansion, about year 42 without it.",
+    "note": "A date, not a number of people: when the pathology arrives is the shape of the whole arc.",
+    "metric": "eden_sink_year",
+    "test": "between",
+    "threshold": [
+     40,
+     140
+    ],
+    "value": null,
+    "verdict": "undecided",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 0,
+    "contradicted": 0,
+    "undecided": 1
+   },
+   {
+    "id": "H-EDEN-SINK-GAP",
+    "world": "EDEN",
+    "statement": "Once the sink appears, the death phase follows within 30 years.",
+    "source": "RESEARCH.md \u00a71 \u2014 Calhoun's phases C and D do not overlap.",
+    "note": "The pen does not recover. If the gap widens, the pen has a reprieve Calhoun's mice never got.",
+    "metric": "eden_sink_gap",
+    "test": "lte",
+    "threshold": 30,
+    "value": null,
+    "verdict": "undecided",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 0,
+    "contradicted": 0,
+    "undecided": 1
+   },
+   {
+    "id": "H-EDEN-COLLAPSE-BELOW-CAP",
+    "world": "EDEN",
+    "statement": "EDEN's peak population stays below the pen's nominal capacity.",
+    "source": "RESEARCH.md \u00a71 \u2014 collapse began at about 57% of the 3,840 nominal capacity, long before the space ran out.",
+    "note": "Space was never the binding constraint; roles were.",
+    "metric": "eden_peak_crowding",
+    "test": "lte",
+    "threshold": 1.0,
+    "value": 0.2892,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-EDEN-POSTS",
+    "world": "EDEN",
+    "statement": "EDEN's fixed posts fill up, and stay filled.",
+    "source": "BOOKS.md, 'Economy and captivity' \u2014 Bestor ch.6: seats are a fixed count, refilled only on a holder's death.",
+    "note": "Every role held is one fewer reason for a new adult to be needed.",
+    "metric": "eden_post_fill",
+    "test": "gte",
+    "threshold": 0.99,
+    "value": 1.0,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-LAGOON-VIOLENCE",
+    "world": "LAGOON",
+    "statement": "Violence accounts for at most 30% of LAGOON's deaths.",
+    "source": "BOOKS.md, 'Violence and civilisation' \u2014 Pinker ch.2: foragers 4\u201330% of deaths violent (the book's own figure).",
+    "note": "An order of magnitude, and contested by Fry and Ferguson. Earlier engines produced 0.6\u20137.8%; this engine requires its own measurements.",
+    "metric": "lagoon_violent_share",
+    "test": "lte",
+    "threshold": 0.3,
+    "value": 0.06582506762849413,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-LAGOON-FAMINE",
+    "world": "LAGOON",
+    "statement": "In LAGOON, hunger is what kills: starvation is the dominant cause of death.",
+    "source": "DESIGN.md, 'Engine 2026.10.27.2' \u2014 famine dominates deaths; Harari's agricultural revolution as a luxury trap.",
+    "note": "If violence takes over, the world has become a war, not a world that fails to feed itself.",
+    "metric": "lagoon_dominant_cause",
+    "test": "eq",
+    "threshold": "starvation",
+    "value": "starvation",
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-LAGOON-BMI",
+    "world": "LAGOON",
+    "statement": "LAGOON's adults stay lean: their BMI sits between 18 and 26.",
+    "source": "BOOKS.md, 'Minds and development' \u2014 a forager's appetite is paid for in work; Harari, foraging and the lean body.",
+    "note": "The same brain in the same bodies: the difference is the world.",
+    "metric": "lagoon_bmi",
+    "test": "between",
+    "threshold": [
+     18.0,
+     26.0
+    ],
+    "value": 21.91566766358445,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-LAGOON-PURPOSE",
+    "world": "LAGOON",
+    "statement": "LAGOON's adults are asked for something: purpose stays at 0.5 or above.",
+    "source": "BOOKS.md, 'Minds and development' \u2014 Frankl: purpose comes from being asked something.",
+    "note": "Earlier engines produced purpose 0.8 against EDEN's 0.2; this is not a current-engine measurement.",
+    "metric": "lagoon_purpose",
+    "test": "gte",
+    "threshold": 0.5,
+    "value": 0.928062039168433,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-LAGOON-TECH",
+    "world": "LAGOON",
+    "statement": "LAGOON climbs the ladder: it reaches five technologies, past fire, tools and fishing.",
+    "source": "RESEARCH.md \u00a74 \u2014 Diamond: food production, surplus, specialists, states; Harari: the ladder out of the cognitive revolution.",
+    "note": "A world that stays a forager forever is a world where the ladder is broken, not a world at the bottom of one.",
+    "metric": "lagoon_tech",
+    "test": "gte",
+    "threshold": 5.0,
+    "value": 13.0,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-LAGOON-DUNBAR",
+    "world": "LAGOON",
+    "statement": "A settlement without shared lore never grows past 150.",
+    "source": "RESEARCH.md \u00a73 \u2014 Harari, the gossip theory: groups without shared fictions fission at about 150.",
+    "note": "The model's own limit is 80 without lore, 220 with it. If the band outgrows the limit, the mechanic has broken.",
+    "metric": "lagoon_max_settlement",
+    "test": "lte",
+    "threshold": 150.0,
+    "value": null,
+    "verdict": "undecided",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": false,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 0,
+    "contradicted": 0,
+    "undecided": 1
+   },
+   {
+    "id": "H-LAGOON-HUNGER",
+    "world": "LAGOON",
+    "statement": "LAGOON's adults are hungry most of the time, but not starving: mean hunger stays at 20 or below.",
+    "source": "BOOKS.md, 'Second pass' \u2014 a forager's life is spent looking for food; the lean season is a season, not a famine.",
+    "note": "Above 40 is death. This is the distance between the two.",
+    "metric": "lagoon_hunger",
+    "test": "lte",
+    "threshold": 20.0,
+    "value": 3.234771276595745,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-LAGOON-EF",
+    "world": "LAGOON",
+    "statement": "LAGOON's mean self-control stays in a narrow band, 0.3 to 0.7, whatever the culture does.",
+    "source": "BOOKS.md, 'Two clocks' \u2014 genes move slowly, culture moves within generations; neither is the other's clock.",
+    "note": "If the mean swings with culture, the two clocks have been confused in the model.",
+    "metric": "lagoon_ef_mean",
+    "test": "between",
+    "threshold": [
+     0.3,
+     0.7
+    ],
+    "value": 0.483,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-LAGOON-CHILDREN",
+    "world": "LAGOON",
+    "statement": "LAGOON's last yearly births exceed five per hundred adults alive now.",
+    "source": "RESEARCH.md \u00a73 \u2014 foragers reproduce slowly; a shrinking population is a population that has lost its future.",
+    "note": "The denominator is today's adults, not the adults exposed during that year; this snapshot ratio is not a demographic birth rate.",
+    "metric": "lagoon_births_per_100",
+    "test": "gte",
+    "threshold": 5.0,
+    "value": 12.76595744680851,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   },
+   {
+    "id": "H-LAGOON-PAIRED",
+    "world": "LAGOON",
+    "statement": "Most of LAGOON's adults are paired: at least half.",
+    "source": "BOOKS.md, 'Violence and civilisation' \u2014 Pinker ch.2\u20133: unpaired young men are the dangerous ones; bonding is the civilising mechanism.",
+    "note": "The engine already doubles the homicide hazard for unpaired men aged 16\u201330, so this is the model's own assumption on trial.",
+    "metric": "lagoon_paired",
+    "test": "gte",
+    "threshold": 0.5,
+    "value": 0.9680851063829787,
+    "verdict": "supported",
+    "day": 60000,
+    "year": 166,
+    "iteration": 1,
+    "ready": true,
+    "engine": "2026.10.29.1",
+    "tested": 1,
+    "supported": 1,
+    "contradicted": 0,
+    "undecided": 0
+   }
+  ],
+  "counts": {
+   "supported": 14,
+   "contradicted": 0,
+   "undecided": 3
+  }
+ },
+ "arc": {
+  "eden": [
+   {
+    "day": 1800,
+    "year": 5,
+    "pop": 32,
+    "peak": 32,
+    "gen": 2,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 0,
+    "homeless": 0,
+    "fertile_f": 7,
+    "competent_m": 8,
+    "ennui": 0.02
+   },
+   {
+    "day": 3600,
+    "year": 10,
+    "pop": 37,
+    "peak": 37,
+    "gen": 2,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 0,
+    "homeless": 0,
+    "fertile_f": 5,
+    "competent_m": 8,
+    "ennui": 0.04
+   },
+   {
+    "day": 5400,
+    "year": 15,
+    "pop": 48,
+    "peak": 48,
+    "gen": 2,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 0,
+    "homeless": 0,
+    "fertile_f": 5,
+    "competent_m": 8,
+    "ennui": 0.06
+   },
+   {
+    "day": 7200,
+    "year": 20,
+    "pop": 63,
+    "peak": 63,
+    "gen": 3,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 0,
+    "homeless": 0,
+    "fertile_f": 10,
+    "competent_m": 15,
+    "ennui": 0.08
+   },
+   {
+    "day": 9000,
+    "year": 25,
+    "pop": 85,
+    "peak": 85,
+    "gen": 3,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 0,
+    "homeless": 0,
+    "fertile_f": 16,
+    "competent_m": 18,
+    "ennui": 0.1
+   },
+   {
+    "day": 10800,
+    "year": 30,
+    "pop": 114,
+    "peak": 115,
+    "gen": 3,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 0,
+    "homeless": 0,
+    "fertile_f": 17,
+    "competent_m": 23,
+    "ennui": 0.12
+   },
+   {
+    "day": 12600,
+    "year": 35,
+    "pop": 136,
+    "peak": 139,
+    "gen": 3,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 0,
+    "homeless": 0,
+    "fertile_f": 26,
+    "competent_m": 16,
+    "ennui": 0.14
+   },
+   {
+    "day": 14400,
+    "year": 40,
+    "pop": 172,
+    "peak": 172,
+    "gen": 4,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 1,
+    "homeless": 0,
+    "fertile_f": 35,
+    "competent_m": 19,
+    "ennui": 0.16
+   },
+   {
+    "day": 16200,
+    "year": 45,
+    "pop": 204,
+    "peak": 205,
+    "gen": 4,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 7,
+    "homeless": 0,
+    "fertile_f": 45,
+    "competent_m": 11,
+    "ennui": 0.18
+   },
+   {
+    "day": 18000,
+    "year": 50,
+    "pop": 248,
+    "peak": 248,
+    "gen": 4,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 14,
+    "homeless": 0,
+    "fertile_f": 48,
+    "competent_m": 11,
+    "ennui": 0.2
+   },
+   {
+    "day": 19800,
+    "year": 55,
+    "pop": 288,
+    "peak": 289,
+    "gen": 4,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 26,
+    "homeless": 0,
+    "fertile_f": 49,
+    "competent_m": 9,
+    "ennui": 0.22
+   },
+   {
+    "day": 21600,
+    "year": 60,
+    "pop": 334,
+    "peak": 334,
+    "gen": 5,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 44,
+    "homeless": 0,
+    "fertile_f": 65,
+    "competent_m": 5,
+    "ennui": 0.24
+   },
+   {
+    "day": 23400,
+    "year": 65,
+    "pop": 396,
+    "peak": 396,
+    "gen": 5,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 72,
+    "homeless": 16,
+    "fertile_f": 67,
+    "competent_m": 6,
+    "ennui": 0.26
+   },
+   {
+    "day": 25200,
+    "year": 70,
+    "pop": 443,
+    "peak": 444,
+    "gen": 5,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 97,
+    "homeless": 23,
+    "fertile_f": 75,
+    "competent_m": 8,
+    "ennui": 0.28
+   },
+   {
+    "day": 27000,
+    "year": 75,
+    "pop": 493,
+    "peak": 495,
+    "gen": 5,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 118,
+    "homeless": 23,
+    "fertile_f": 77,
+    "competent_m": 8,
+    "ennui": 0.3
+   },
+   {
+    "day": 28800,
+    "year": 80,
+    "pop": 520,
+    "peak": 520,
+    "gen": 6,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 138,
+    "homeless": 23,
+    "fertile_f": 82,
+    "competent_m": 10,
+    "ennui": 0.32
+   },
+   {
+    "day": 30600,
+    "year": 85,
+    "pop": 548,
+    "peak": 548,
+    "gen": 6,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 174,
+    "homeless": 22,
+    "fertile_f": 75,
+    "competent_m": 11,
+    "ennui": 0.34
+   },
+   {
+    "day": 32400,
+    "year": 90,
+    "pop": 556,
+    "peak": 559,
+    "gen": 6,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 197,
+    "homeless": 22,
+    "fertile_f": 70,
+    "competent_m": 13,
+    "ennui": 0.36
+   },
+   {
+    "day": 34200,
+    "year": 95,
+    "pop": 592,
+    "peak": 592,
+    "gen": 6,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 215,
+    "homeless": 22,
+    "fertile_f": 84,
+    "competent_m": 9,
+    "ennui": 0.38
+   },
+   {
+    "day": 36000,
+    "year": 100,
+    "pop": 614,
+    "peak": 619,
+    "gen": 6,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 229,
+    "homeless": 22,
+    "fertile_f": 87,
+    "competent_m": 10,
+    "ennui": 0.4
+   },
+   {
+    "day": 37800,
+    "year": 105,
+    "pop": 630,
+    "peak": 636,
+    "gen": 6,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 238,
+    "homeless": 22,
+    "fertile_f": 84,
+    "competent_m": 10,
+    "ennui": 0.42
+   },
+   {
+    "day": 39600,
+    "year": 110,
+    "pop": 650,
+    "peak": 658,
+    "gen": 7,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 236,
+    "homeless": 22,
+    "fertile_f": 93,
+    "competent_m": 10,
+    "ennui": 0.44
+   },
+   {
+    "day": 41400,
+    "year": 115,
+    "pop": 687,
+    "peak": 691,
+    "gen": 7,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 251,
+    "homeless": 17,
+    "fertile_f": 100,
+    "competent_m": 13,
+    "ennui": 0.46
+   },
+   {
+    "day": 43200,
+    "year": 120,
+    "pop": 693,
+    "peak": 695,
+    "gen": 7,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 264,
+    "homeless": 15,
+    "fertile_f": 94,
+    "competent_m": 12,
+    "ennui": 0.48
+   },
+   {
+    "day": 45000,
+    "year": 125,
+    "pop": 701,
+    "peak": 701,
+    "gen": 7,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 275,
+    "homeless": 9,
+    "fertile_f": 84,
+    "competent_m": 11,
+    "ennui": 0.5
+   },
+   {
+    "day": 46800,
+    "year": 130,
+    "pop": 711,
+    "peak": 711,
+    "gen": 7,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 299,
+    "homeless": 4,
+    "fertile_f": 89,
+    "competent_m": 10,
+    "ennui": 0.52
+   },
+   {
+    "day": 48600,
+    "year": 135,
+    "pop": 709,
+    "peak": 719,
+    "gen": 8,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 312,
+    "homeless": 1,
+    "fertile_f": 87,
+    "competent_m": 17,
+    "ennui": 0.54
+   },
+   {
+    "day": 50400,
+    "year": 140,
+    "pop": 702,
+    "peak": 723,
+    "gen": 8,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 318,
+    "homeless": 1,
+    "fertile_f": 81,
+    "competent_m": 9,
+    "ennui": 0.56
+   },
+   {
+    "day": 52200,
+    "year": 145,
+    "pop": 696,
+    "peak": 723,
+    "gen": 8,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 318,
+    "homeless": 0,
+    "fertile_f": 75,
+    "competent_m": 11,
+    "ennui": 0.58
+   },
+   {
+    "day": 54000,
+    "year": 150,
+    "pop": 701,
+    "peak": 723,
+    "gen": 8,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 323,
+    "homeless": 0,
+    "fertile_f": 75,
+    "competent_m": 15,
+    "ennui": 0.6
+   },
+   {
+    "day": 55800,
+    "year": 155,
+    "pop": 711,
+    "peak": 723,
+    "gen": 9,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 348,
+    "homeless": 0,
+    "fertile_f": 74,
+    "competent_m": 16,
+    "ennui": 0.62
+   },
+   {
+    "day": 57600,
+    "year": 160,
+    "pop": 701,
+    "peak": 723,
+    "gen": 9,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 352,
+    "homeless": 0,
+    "fertile_f": 71,
+    "competent_m": 8,
+    "ennui": 0.64
+   },
+   {
+    "day": 59400,
+    "year": 165,
+    "pop": 704,
+    "peak": 723,
+    "gen": 9,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 357,
+    "homeless": 0,
+    "fertile_f": 72,
+    "competent_m": 6,
+    "ennui": 0.66
+   },
+   {
+    "day": 60000,
+    "year": 166,
+    "pop": 711,
+    "peak": 723,
+    "gen": 9,
+    "iter": 1,
+    "phase": "exploit",
+    "extinct_day": null,
+    "withdrawn": 359,
+    "homeless": 0,
+    "fertile_f": 76,
+    "competent_m": 9,
+    "ennui": 0.668
+   }
+  ],
+  "lagoon": [
+   {
+    "day": 1800,
+    "year": 5,
+    "pop": 20,
+    "peak": 20,
+    "gen": 2,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools"
+    ],
+    "tribes": 1,
+    "store": 80.3,
+    "lessons": [],
+    "continent": false,
+    "innocent": false
+   },
+   {
+    "day": 3600,
+    "year": 10,
+    "pop": 28,
+    "peak": 28,
+    "gen": 2,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter"
+    ],
+    "tribes": 1,
+    "store": 318.0,
+    "lessons": [],
+    "continent": false,
+    "innocent": false
+   },
+   {
+    "day": 5400,
+    "year": 15,
+    "pop": 30,
+    "peak": 30,
+    "gen": 2,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing"
+    ],
+    "tribes": 1,
+    "store": 1474.0,
+    "lessons": [],
+    "continent": false,
+    "innocent": false
+   },
+   {
+    "day": 7200,
+    "year": 20,
+    "pop": 31,
+    "peak": 31,
+    "gen": 2,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing"
+    ],
+    "tribes": 1,
+    "store": 6084.8,
+    "lessons": [],
+    "continent": false,
+    "innocent": false
+   },
+   {
+    "day": 9000,
+    "year": 25,
+    "pop": 36,
+    "peak": 37,
+    "gen": 3,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt"
+    ],
+    "tribes": 1,
+    "store": 6918.3,
+    "lessons": [],
+    "continent": false,
+    "innocent": false
+   },
+   {
+    "day": 10800,
+    "year": 30,
+    "pop": 43,
+    "peak": 44,
+    "gen": 3,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt"
+    ],
+    "tribes": 1,
+    "store": 5984.4,
+    "lessons": [],
+    "continent": false,
+    "innocent": false
+   },
+   {
+    "day": 12600,
+    "year": 35,
+    "pop": 43,
+    "peak": 44,
+    "gen": 3,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt"
+    ],
+    "tribes": 1,
+    "store": 5894.6,
+    "lessons": [],
+    "continent": false,
+    "innocent": false
+   },
+   {
+    "day": 14400,
+    "year": 40,
+    "pop": 48,
+    "peak": 48,
+    "gen": 3,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt"
+    ],
+    "tribes": 1,
+    "store": 2937.4,
+    "lessons": [],
+    "continent": false,
+    "innocent": false
+   },
+   {
+    "day": 16200,
+    "year": 45,
+    "pop": 60,
+    "peak": 60,
+    "gen": 3,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt"
+    ],
+    "tribes": 1,
+    "store": 3893.3,
+    "lessons": [],
+    "continent": false,
+    "innocent": false
+   },
+   {
+    "day": 18000,
+    "year": 50,
+    "pop": 73,
+    "peak": 73,
+    "gen": 4,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt"
+    ],
+    "tribes": 1,
+    "store": 1999.8,
+    "lessons": [],
+    "continent": false,
+    "innocent": false
+   },
+   {
+    "day": 19800,
+    "year": 55,
+    "pop": 81,
+    "peak": 81,
+    "gen": 4,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt"
+    ],
+    "tribes": 1,
+    "store": 348.6,
+    "lessons": [],
+    "continent": false,
+    "innocent": false
+   },
+   {
+    "day": 21600,
+    "year": 60,
+    "pop": 88,
+    "peak": 88,
+    "gen": 4,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft"
+    ],
+    "tribes": 3,
+    "store": 21070.2,
+    "lessons": [],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 23400,
+    "year": 65,
+    "pop": 106,
+    "peak": 106,
+    "gen": 4,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft"
+    ],
+    "tribes": 3,
+    "store": 18527.1,
+    "lessons": [],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 25200,
+    "year": 70,
+    "pop": 123,
+    "peak": 123,
+    "gen": 5,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture"
+    ],
+    "tribes": 3,
+    "store": 6678.1,
+    "lessons": [],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 27000,
+    "year": 75,
+    "pop": 146,
+    "peak": 146,
+    "gen": 5,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore"
+    ],
+    "tribes": 3,
+    "store": 23532.2,
+    "lessons": [],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 28800,
+    "year": 80,
+    "pop": 159,
+    "peak": 159,
+    "gen": 5,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication"
+    ],
+    "tribes": 3,
+    "store": 29235.8,
+    "lessons": [],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 30600,
+    "year": 85,
+    "pop": 193,
+    "peak": 193,
+    "gen": 5,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication"
+    ],
+    "tribes": 3,
+    "store": 33742.6,
+    "lessons": [],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 32400,
+    "year": 90,
+    "pop": 214,
+    "peak": 216,
+    "gen": 5,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing"
+    ],
+    "tribes": 3,
+    "store": 31437.8,
+    "lessons": [],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 34200,
+    "year": 95,
+    "pop": 193,
+    "peak": 238,
+    "gen": 6,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing"
+    ],
+    "tribes": 3,
+    "store": 31035.9,
+    "lessons": [],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 36000,
+    "year": 100,
+    "pop": 231,
+    "peak": 241,
+    "gen": 6,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing"
+    ],
+    "tribes": 3,
+    "store": 30143.6,
+    "lessons": [],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 37800,
+    "year": 105,
+    "pop": 214,
+    "peak": 249,
+    "gen": 6,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing"
+    ],
+    "tribes": 3,
+    "store": 39683.5,
+    "lessons": [
+     "preserve"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 39600,
+    "year": 110,
+    "pop": 254,
+    "peak": 257,
+    "gen": 6,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing"
+    ],
+    "tribes": 3,
+    "store": 16726.5,
+    "lessons": [
+     "preserve"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 41400,
+    "year": 115,
+    "pop": 312,
+    "peak": 312,
+    "gen": 6,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing",
+     "metallurgy"
+    ],
+    "tribes": 3,
+    "store": 11909.3,
+    "lessons": [
+     "preserve"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 43200,
+    "year": 120,
+    "pop": 150,
+    "peak": 328,
+    "gen": 7,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing",
+     "metallurgy"
+    ],
+    "tribes": 3,
+    "store": 54528.9,
+    "lessons": [
+     "preserve",
+     "cleanliness"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 45000,
+    "year": 125,
+    "pop": 127,
+    "peak": 328,
+    "gen": 7,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing",
+     "metallurgy"
+    ],
+    "tribes": 3,
+    "store": 54595.9,
+    "lessons": [
+     "preserve",
+     "cleanliness"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 46800,
+    "year": 130,
+    "pop": 157,
+    "peak": 328,
+    "gen": 7,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing",
+     "metallurgy"
+    ],
+    "tribes": 3,
+    "store": 27463.5,
+    "lessons": [
+     "preserve",
+     "cleanliness"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 48600,
+    "year": 135,
+    "pop": 195,
+    "peak": 328,
+    "gen": 7,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing",
+     "metallurgy"
+    ],
+    "tribes": 3,
+    "store": 41779.2,
+    "lessons": [
+     "preserve",
+     "cleanliness"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 50400,
+    "year": 140,
+    "pop": 252,
+    "peak": 328,
+    "gen": 7,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing",
+     "metallurgy"
+    ],
+    "tribes": 3,
+    "store": 26384.5,
+    "lessons": [
+     "preserve",
+     "cleanliness"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 52200,
+    "year": 145,
+    "pop": 304,
+    "peak": 328,
+    "gen": 7,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing",
+     "metallurgy"
+    ],
+    "tribes": 3,
+    "store": 21648.9,
+    "lessons": [
+     "preserve",
+     "cleanliness"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 54000,
+    "year": 150,
+    "pop": 218,
+    "peak": 354,
+    "gen": 8,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing",
+     "metallurgy"
+    ],
+    "tribes": 3,
+    "store": 42380.5,
+    "lessons": [
+     "preserve",
+     "cleanliness"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 55800,
+    "year": 155,
+    "pop": 291,
+    "peak": 354,
+    "gen": 8,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing",
+     "metallurgy"
+    ],
+    "tribes": 3,
+    "store": 26383.7,
+    "lessons": [
+     "preserve",
+     "cleanliness"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 57600,
+    "year": 160,
+    "pop": 339,
+    "peak": 354,
+    "gen": 8,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing",
+     "metallurgy"
+    ],
+    "tribes": 3,
+    "store": 3536.3,
+    "lessons": [
+     "preserve",
+     "cleanliness"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 59400,
+    "year": 165,
+    "pop": 419,
+    "peak": 419,
+    "gen": 8,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing",
+     "metallurgy"
+    ],
+    "tribes": 3,
+    "store": 956.0,
+    "lessons": [
+     "preserve",
+     "cleanliness"
+    ],
+    "continent": true,
+    "innocent": false
+   },
+   {
+    "day": 60000,
+    "year": 166,
+    "pop": 435,
+    "peak": 439,
+    "gen": 8,
+    "iter": 1,
+    "phase": "strive",
+    "extinct_day": null,
+    "tech": [
+     "fire",
+     "stone_tools",
+     "preservation",
+     "shelter",
+     "fishing",
+     "predator_hunt",
+     "seacraft",
+     "agriculture",
+     "granary",
+     "lore",
+     "domestication",
+     "healing",
+     "metallurgy"
+    ],
+    "tribes": 3,
+    "store": 16682.2,
+    "lessons": [
+     "preserve",
+     "cleanliness"
+    ],
+    "continent": true,
+    "innocent": false
+   }
+  ]
+ },
+ "milestones": [
+  {
+   "day": 78,
+   "year": 0,
+   "u": "EDEN",
+   "t": "discovery",
+   "msg": "With every hour free, the pairs discover how new life begins."
+  },
+  {
+   "day": 365,
+   "year": 1,
+   "u": "EDEN",
+   "t": "discovery",
+   "msg": "The first child is named Leah. After this, everyone has a name."
+  },
+  {
+   "day": 365,
+   "year": 1,
+   "u": "EDEN",
+   "t": "phase",
+   "msg": "First child born in the pen. The exploit phase begins."
+  },
+  {
+   "day": 962,
+   "year": 2,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "The pairs discover, as all life does, how new life begins."
+  },
+  {
+   "day": 1080,
+   "year": 3,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 3: fire is tamed \u2014 first by Maya."
+  },
+  {
+   "day": 1315,
+   "year": 3,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "The first child is named Kishnadevi. After this, everyone has a name."
+  },
+  {
+   "day": 1440,
+   "year": 4,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 4: stone tools are knapped \u2014 first by Kali."
+  },
+  {
+   "day": 2160,
+   "year": 6,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 6: food can be kept \u2014 first by Kali."
+  },
+  {
+   "day": 2520,
+   "year": 7,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 7: shelters are raised \u2014 first by Kali."
+  },
+  {
+   "day": 3600,
+   "year": 10,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 10: fishing is learned \u2014 first by Kali."
+  },
+  {
+   "day": 7920,
+   "year": 22,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 22: the hunters learn to kill the big cat \u2014 first by Kali."
+  },
+  {
+   "day": 14760,
+   "year": 41,
+   "u": "LAGOON",
+   "t": "phase",
+   "msg": "Sumitra is a tribe now, 50 strong; Kali speaks for it."
+  },
+  {
+   "day": 18088,
+   "year": 50,
+   "u": "EDEN",
+   "t": "phase",
+   "msg": "The resort grows: the dome opens onto new sand, 48 new lodgings rise along the new walls. The pen is 64 paces across."
+  },
+  {
+   "day": 19800,
+   "year": 55,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 55: the island is full. Sumitra starts a boat at the shore."
+  },
+  {
+   "day": 19800,
+   "year": 55,
+   "u": "LAGOON",
+   "t": "feud",
+   "msg": "Year 55: too many strangers, no shared story \u2014 a feud splits Sumitra; 2 die, the rest walk away and become the Kambala tribe."
+  },
+  {
+   "day": 20160,
+   "year": 56,
+   "u": "LAGOON",
+   "t": "migration",
+   "msg": "Year 56: the boat is finished. 35 of them push off from the west beach toward the shore across the strait."
+  },
+  {
+   "day": 20174,
+   "year": 56,
+   "u": "LAGOON",
+   "t": "migration",
+   "msg": "The boat lands on the greater shore. 35 step off and become the Ganga tribe \u2014 a land without end, the one all their children's children will call home."
+  },
+  {
+   "day": 20520,
+   "year": 57,
+   "u": "LAGOON",
+   "t": "phase",
+   "msg": "Sumitra falls back to a band."
+  },
+  {
+   "day": 22320,
+   "year": 62,
+   "u": "LAGOON",
+   "t": "phase",
+   "msg": "Ganga is a tribe now, 50 strong; Mahakashyapa speaks for it."
+  },
+  {
+   "day": 24480,
+   "year": 68,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 68: seeds are sown on purpose \u2014 first by Vasudha."
+  },
+  {
+   "day": 25200,
+   "year": 70,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 70: granaries hold the surplus \u2014 first by Sumitra."
+  },
+  {
+   "day": 25284,
+   "year": 70,
+   "u": "EDEN",
+   "t": "phase",
+   "msg": "The resort grows: the dome opens onto new sand, 96 new lodgings rise along the new walls. The pen is 80 paces across."
+  },
+  {
+   "day": 26262,
+   "year": 72,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Asoka starves in the lean season."
+  },
+  {
+   "day": 26640,
+   "year": 74,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 74: shared stories bind the bands \u2014 first by Drona."
+  },
+  {
+   "day": 27673,
+   "year": 76,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "6 starve in the lean season: Sahadeva, Rambha, Arjuna and 3 others."
+  },
+  {
+   "day": 27674,
+   "year": 76,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Ajita, Ganga."
+  },
+  {
+   "day": 27675,
+   "year": 76,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sundari starves in the lean season."
+  },
+  {
+   "day": 27676,
+   "year": 76,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Rambha, Maitreya."
+  },
+  {
+   "day": 27677,
+   "year": 76,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "4 starve in the lean season: Radha, Lakshmi, Lakshmi and 1 others."
+  },
+  {
+   "day": 27677,
+   "year": 76,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Upananda starves in the lean season."
+  },
+  {
+   "day": 27678,
+   "year": 76,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nanda starves in the lean season."
+  },
+  {
+   "day": 28080,
+   "year": 78,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 78: animals are tamed \u2014 first by Amrapali."
+  },
+  {
+   "day": 29862,
+   "year": 82,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Savitri starves in the lean season."
+  },
+  {
+   "day": 29864,
+   "year": 82,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Padma, Krishna."
+  },
+  {
+   "day": 29866,
+   "year": 82,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Brahma starves in the lean season."
+  },
+  {
+   "day": 29867,
+   "year": 82,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kali starves in the lean season."
+  },
+  {
+   "day": 30240,
+   "year": 84,
+   "u": "LAGOON",
+   "t": "phase",
+   "msg": "Sumitra is a tribe now, 54 strong; Menaka speaks for it."
+  },
+  {
+   "day": 30905,
+   "year": 85,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganga starves in the lean season."
+  },
+  {
+   "day": 30907,
+   "year": 85,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ananda starves in the lean season."
+  },
+  {
+   "day": 30908,
+   "year": 85,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bhagavati starves in the lean season."
+  },
+  {
+   "day": 30922,
+   "year": 85,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Apsara starves in the lean season."
+  },
+  {
+   "day": 30927,
+   "year": 85,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nirvana starves in the lean season."
+  },
+  {
+   "day": 30930,
+   "year": 85,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Rambha, Bodhisattva."
+  },
+  {
+   "day": 30939,
+   "year": 85,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Devadatta starves in the lean season."
+  },
+  {
+   "day": 30944,
+   "year": 85,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mandodari starves in the lean season."
+  },
+  {
+   "day": 30946,
+   "year": 85,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Indrani starves in the lean season."
+  },
+  {
+   "day": 31320,
+   "year": 87,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 87: healing lore spreads \u2014 first by Kambala."
+  },
+  {
+   "day": 31622,
+   "year": 87,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Padma starves in the lean season."
+  },
+  {
+   "day": 31632,
+   "year": 87,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kali starves in the lean season."
+  },
+  {
+   "day": 31636,
+   "year": 87,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Yama starves in the lean season."
+  },
+  {
+   "day": 31639,
+   "year": 87,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Hanuman, Kausalya, Meera."
+  },
+  {
+   "day": 31640,
+   "year": 87,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kaikeyi starves in the lean season."
+  },
+  {
+   "day": 31640,
+   "year": 87,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Devadatta starves in the lean season."
+  },
+  {
+   "day": 31647,
+   "year": 87,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ananda starves in the lean season."
+  },
+  {
+   "day": 32365,
+   "year": 89,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Yama starves in the lean season."
+  },
+  {
+   "day": 32381,
+   "year": 89,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganga starves in the lean season."
+  },
+  {
+   "day": 32381,
+   "year": 89,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Shiva starves in the lean season."
+  },
+  {
+   "day": 32582,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 32693,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Maya, Sita."
+  },
+  {
+   "day": 32693,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sariputra starves in the lean season."
+  },
+  {
+   "day": 32694,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Arjuna starves in the lean season."
+  },
+  {
+   "day": 32696,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Hanuman, Chandraprabha."
+  },
+  {
+   "day": 32697,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Arjuna starves in the lean season."
+  },
+  {
+   "day": 32708,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 32728,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Durga starves in the lean season."
+  },
+  {
+   "day": 32730,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Bhishma, Savitri."
+  },
+  {
+   "day": 32731,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganesh starves in the lean season."
+  },
+  {
+   "day": 32731,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Menaka starves in the lean season."
+  },
+  {
+   "day": 32733,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Maya, Brahma."
+  },
+  {
+   "day": 32735,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 32736,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Karna starves in the lean season."
+  },
+  {
+   "day": 32744,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kambala starves in the lean season."
+  },
+  {
+   "day": 32744,
+   "year": 90,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ananda starves in the lean season."
+  },
+  {
+   "day": 33451,
+   "year": 92,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Drona starves in the lean season."
+  },
+  {
+   "day": 33784,
+   "year": 93,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Vasudha starves in the lean season."
+  },
+  {
+   "day": 33788,
+   "year": 93,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Parvati starves in the lean season."
+  },
+  {
+   "day": 33789,
+   "year": 93,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "5 starve in the lean season: Brahma, Drona, Devadatta and 2 others."
+  },
+  {
+   "day": 33790,
+   "year": 93,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Chandraprabha starves in the lean season."
+  },
+  {
+   "day": 33790,
+   "year": 93,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ajita starves in the lean season."
+  },
+  {
+   "day": 33790,
+   "year": 93,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Amrapali starves in the lean season."
+  },
+  {
+   "day": 33794,
+   "year": 93,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Chandraprabha, Savitri."
+  },
+  {
+   "day": 33806,
+   "year": 93,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nirvana starves in the lean season."
+  },
+  {
+   "day": 33812,
+   "year": 93,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Arjuna starves in the lean season."
+  },
+  {
+   "day": 33819,
+   "year": 93,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Duryodhana starves in the lean season."
+  },
+  {
+   "day": 33823,
+   "year": 93,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Asoka starves in the lean season."
+  },
+  {
+   "day": 33832,
+   "year": 93,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sundari starves in the lean season."
+  },
+  {
+   "day": 33840,
+   "year": 94,
+   "u": "LAGOON",
+   "t": "epidemic",
+   "msg": "Year 94: a sickness born of the herds kills 36 (16% of the people)."
+  },
+  {
+   "day": 33871,
+   "year": 94,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kambala starves in the lean season."
+  },
+  {
+   "day": 35264,
+   "year": 97,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bodhisattva starves in the lean season."
+  },
+  {
+   "day": 35596,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 35596,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Karna, Rambha, Karna."
+  },
+  {
+   "day": 35597,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Ganga, Sati."
+  },
+  {
+   "day": 35597,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Devadatta starves in the lean season."
+  },
+  {
+   "day": 35598,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Menaka starves in the lean season."
+  },
+  {
+   "day": 35598,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nanda starves in the lean season."
+  },
+  {
+   "day": 35598,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kali starves in the lean season."
+  },
+  {
+   "day": 35599,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Sati, Vishnu."
+  },
+  {
+   "day": 35599,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nanda starves in the lean season."
+  },
+  {
+   "day": 35600,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Lakshmi, Sahadeva."
+  },
+  {
+   "day": 35601,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganga starves in the lean season."
+  },
+  {
+   "day": 35602,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kambala starves in the lean season."
+  },
+  {
+   "day": 35602,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganesh starves in the lean season."
+  },
+  {
+   "day": 35605,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Lakshmi starves in the lean season."
+  },
+  {
+   "day": 35609,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Karna starves in the lean season."
+  },
+  {
+   "day": 35610,
+   "year": 98,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kali starves in the lean season."
+  },
+  {
+   "day": 36344,
+   "year": 100,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Upananda starves in the lean season."
+  },
+  {
+   "day": 36345,
+   "year": 100,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Upananda starves in the lean season."
+  },
+  {
+   "day": 36347,
+   "year": 100,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bhagavati starves in the lean season."
+  },
+  {
+   "day": 36357,
+   "year": 100,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Devadatta starves in the lean season."
+  },
+  {
+   "day": 36360,
+   "year": 101,
+   "u": "LAGOON",
+   "t": "phase",
+   "msg": "Kambala is a tribe now, 51 strong; Sumitra speaks for it."
+  },
+  {
+   "day": 36756,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nirvana starves in the lean season."
+  },
+  {
+   "day": 36758,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rambha starves in the lean season."
+  },
+  {
+   "day": 36758,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Padma starves in the lean season."
+  },
+  {
+   "day": 36759,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Arjuna, Brahma."
+  },
+  {
+   "day": 36766,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rahul starves in the lean season."
+  },
+  {
+   "day": 36767,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kaikeyi starves in the lean season."
+  },
+  {
+   "day": 36768,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Sati, Devadatta."
+  },
+  {
+   "day": 36768,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Indrani, Sumitra."
+  },
+  {
+   "day": 36769,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Siddhartha starves in the lean season."
+  },
+  {
+   "day": 36772,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rambha starves in the lean season."
+  },
+  {
+   "day": 36773,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bodhisattva starves in the lean season."
+  },
+  {
+   "day": 36774,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kambala starves in the lean season."
+  },
+  {
+   "day": 36775,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kishnadevi starves in the lean season."
+  },
+  {
+   "day": 36775,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Rambha, Radha."
+  },
+  {
+   "day": 36776,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 36778,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Indra starves in the lean season."
+  },
+  {
+   "day": 36990,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 36990,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 36992,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sariputra starves in the lean season."
+  },
+  {
+   "day": 36992,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Parvati starves in the lean season."
+  },
+  {
+   "day": 36993,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Indra starves in the lean season."
+  },
+  {
+   "day": 36993,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Padma starves in the lean season."
+  },
+  {
+   "day": 36993,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Brahma starves in the lean season."
+  },
+  {
+   "day": 36994,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sumitra starves in the lean season."
+  },
+  {
+   "day": 36994,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Siddhartha starves in the lean season."
+  },
+  {
+   "day": 36995,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Ajita, Kausalya."
+  },
+  {
+   "day": 36997,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rahul starves in the lean season."
+  },
+  {
+   "day": 36997,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Parvati, Siddhartha."
+  },
+  {
+   "day": 36998,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mahakashyapa starves in the lean season."
+  },
+  {
+   "day": 36999,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bodhisattva starves in the lean season."
+  },
+  {
+   "day": 36999,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganga starves in the lean season."
+  },
+  {
+   "day": 37000,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 37002,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Savitri starves in the lean season."
+  },
+  {
+   "day": 37004,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mandodari starves in the lean season."
+  },
+  {
+   "day": 37004,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Brahma, Meera."
+  },
+  {
+   "day": 37005,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kishnadevi starves in the lean season."
+  },
+  {
+   "day": 37006,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Mahakashyapa, Sundari."
+  },
+  {
+   "day": 37010,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kali starves in the lean season."
+  },
+  {
+   "day": 37013,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Kishnadevi, Durga."
+  },
+  {
+   "day": 37017,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sati starves in the lean season."
+  },
+  {
+   "day": 37019,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Yama starves in the lean season."
+  },
+  {
+   "day": 37023,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kaikeyi starves in the lean season."
+  },
+  {
+   "day": 37025,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 37035,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bodhisattva starves in the lean season."
+  },
+  {
+   "day": 37037,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Maya starves in the lean season."
+  },
+  {
+   "day": 37038,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sundari starves in the lean season."
+  },
+  {
+   "day": 37042,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Lakshmi starves in the lean season."
+  },
+  {
+   "day": 37042,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Savitri starves in the lean season."
+  },
+  {
+   "day": 37045,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 37055,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 37064,
+   "year": 102,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Arjuna starves in the lean season."
+  },
+  {
+   "day": 37080,
+   "year": 103,
+   "u": "LAGOON",
+   "t": "lesson",
+   "msg": "Year 103: starvation took 60 of them. The survivors carry a new instinct \u2014 'preserve' \u2014 passed on without a single word."
+  },
+  {
+   "day": 37312,
+   "year": 103,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bhagavati starves in the lean season."
+  },
+  {
+   "day": 39181,
+   "year": 108,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Sundari, Amrapali."
+  },
+  {
+   "day": 39183,
+   "year": 108,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Vishnu starves in the lean season."
+  },
+  {
+   "day": 39187,
+   "year": 108,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nirvana starves in the lean season."
+  },
+  {
+   "day": 39191,
+   "year": 108,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nirvana starves in the lean season."
+  },
+  {
+   "day": 39191,
+   "year": 108,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sahadeva starves in the lean season."
+  },
+  {
+   "day": 39202,
+   "year": 108,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Devadatta starves in the lean season."
+  },
+  {
+   "day": 39209,
+   "year": 108,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kaikeyi starves in the lean season."
+  },
+  {
+   "day": 39209,
+   "year": 108,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sahadeva starves in the lean season."
+  },
+  {
+   "day": 39210,
+   "year": 108,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Kali, Savitri."
+  },
+  {
+   "day": 39211,
+   "year": 108,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 39214,
+   "year": 108,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kishnadevi starves in the lean season."
+  },
+  {
+   "day": 40320,
+   "year": 112,
+   "u": "LAGOON",
+   "t": "discovery",
+   "msg": "Year 112: metal is smelted \u2014 first by Parvati."
+  },
+  {
+   "day": 40583,
+   "year": 112,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Upananda starves in the lean season."
+  },
+  {
+   "day": 41824,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Durga starves in the lean season."
+  },
+  {
+   "day": 41824,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sati starves in the lean season."
+  },
+  {
+   "day": 41824,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Meera, Devadatta."
+  },
+  {
+   "day": 41825,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Nanda, Kambala, Vasudha."
+  },
+  {
+   "day": 41825,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Drona, Amrapali."
+  },
+  {
+   "day": 41825,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Hanuman, Mandodari."
+  },
+  {
+   "day": 41826,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bhagavati starves in the lean season."
+  },
+  {
+   "day": 41826,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "6 starve in the lean season: Mandodari, Ganga, Kishnadevi and 3 others."
+  },
+  {
+   "day": 41827,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Mandodari, Bodhisattva."
+  },
+  {
+   "day": 41827,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganesh starves in the lean season."
+  },
+  {
+   "day": 41827,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ajita starves in the lean season."
+  },
+  {
+   "day": 41828,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Parvati starves in the lean season."
+  },
+  {
+   "day": 41829,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "5 starve in the lean season: Bhishma, Rama, Ajita and 2 others."
+  },
+  {
+   "day": 41829,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "4 starve in the lean season: Bodhisattva, Savitri, Nakula and 1 others."
+  },
+  {
+   "day": 41830,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Savitri starves in the lean season."
+  },
+  {
+   "day": 41831,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rama starves in the lean season."
+  },
+  {
+   "day": 41832,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sariputra starves in the lean season."
+  },
+  {
+   "day": 41832,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Indrani starves in the lean season."
+  },
+  {
+   "day": 41834,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Mandodari, Mahakashyapa."
+  },
+  {
+   "day": 41835,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Amrapali starves in the lean season."
+  },
+  {
+   "day": 41835,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Nanda, Kausalya, Durga."
+  },
+  {
+   "day": 41836,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kali starves in the lean season."
+  },
+  {
+   "day": 41841,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sumitra starves in the lean season."
+  },
+  {
+   "day": 41842,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ananda starves in the lean season."
+  },
+  {
+   "day": 41842,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Brahma starves in the lean season."
+  },
+  {
+   "day": 41843,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 41845,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Vishnu, Vishnu."
+  },
+  {
+   "day": 42008,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "5 starve in the lean season: Brahma, Nirvana, Mandodari and 2 others."
+  },
+  {
+   "day": 42010,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Amrapali starves in the lean season."
+  },
+  {
+   "day": 42011,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Apsara, Kambala, Ganga."
+  },
+  {
+   "day": 42012,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Rahul, Kambala."
+  },
+  {
+   "day": 42013,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Savitri starves in the lean season."
+  },
+  {
+   "day": 42018,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Indra starves in the lean season."
+  },
+  {
+   "day": 42021,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Maitreya starves in the lean season."
+  },
+  {
+   "day": 42028,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Maitreya starves in the lean season."
+  },
+  {
+   "day": 42030,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Menaka starves in the lean season."
+  },
+  {
+   "day": 42031,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Hanuman starves in the lean season."
+  },
+  {
+   "day": 42032,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Parvati, Kishnadevi."
+  },
+  {
+   "day": 42032,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganga starves in the lean season."
+  },
+  {
+   "day": 42032,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "4 starve in the lean season: Bhagavati, Tara, Meera and 1 others."
+  },
+  {
+   "day": 42033,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bhagavati starves in the lean season."
+  },
+  {
+   "day": 42033,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sati starves in the lean season."
+  },
+  {
+   "day": 42033,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Kambala, Sariputra."
+  },
+  {
+   "day": 42034,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "4 starve in the lean season: Devadatta, Maitreya, Ganesh and 1 others."
+  },
+  {
+   "day": 42034,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ajita starves in the lean season."
+  },
+  {
+   "day": 42034,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Sita, Nakula."
+  },
+  {
+   "day": 42034,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "7 starve in the lean season: Ganga, Bhagavati, Brahma and 4 others."
+  },
+  {
+   "day": 42036,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Menaka starves in the lean season."
+  },
+  {
+   "day": 42037,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Yama starves in the lean season."
+  },
+  {
+   "day": 42037,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Durga starves in the lean season."
+  },
+  {
+   "day": 42038,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Yama starves in the lean season."
+  },
+  {
+   "day": 42039,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Sita, Asoka."
+  },
+  {
+   "day": 42040,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bhagavati starves in the lean season."
+  },
+  {
+   "day": 42041,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Savitri starves in the lean season."
+  },
+  {
+   "day": 42043,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Padma starves in the lean season."
+  },
+  {
+   "day": 42043,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Amrapali starves in the lean season."
+  },
+  {
+   "day": 42044,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Krishna, Sahadeva."
+  },
+  {
+   "day": 42044,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Tara starves in the lean season."
+  },
+  {
+   "day": 42046,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Durga starves in the lean season."
+  },
+  {
+   "day": 42047,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Sati, Shiva."
+  },
+  {
+   "day": 42047,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sahadeva starves in the lean season."
+  },
+  {
+   "day": 42048,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kaikeyi starves in the lean season."
+  },
+  {
+   "day": 42049,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Savitri, Kali."
+  },
+  {
+   "day": 42050,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Meera starves in the lean season."
+  },
+  {
+   "day": 42051,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 42052,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kambala starves in the lean season."
+  },
+  {
+   "day": 42053,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Meera, Arjuna."
+  },
+  {
+   "day": 42054,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Nirvana, Nanda."
+  },
+  {
+   "day": 42054,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rambha starves in the lean season."
+  },
+  {
+   "day": 42055,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rama starves in the lean season."
+  },
+  {
+   "day": 42055,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Kaikeyi, Kaikeyi."
+  },
+  {
+   "day": 42056,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Tara starves in the lean season."
+  },
+  {
+   "day": 42057,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kaikeyi starves in the lean season."
+  },
+  {
+   "day": 42059,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bhagavati starves in the lean season."
+  },
+  {
+   "day": 42059,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Ganga, Meera."
+  },
+  {
+   "day": 42060,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mandodari starves in the lean season."
+  },
+  {
+   "day": 42061,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kali starves in the lean season."
+  },
+  {
+   "day": 42061,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Siddhartha, Rambha."
+  },
+  {
+   "day": 42062,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bodhisattva starves in the lean season."
+  },
+  {
+   "day": 42063,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganga starves in the lean season."
+  },
+  {
+   "day": 42065,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Radha starves in the lean season."
+  },
+  {
+   "day": 42065,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Kambala, Parvati."
+  },
+  {
+   "day": 42068,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Kaikeyi, Durga."
+  },
+  {
+   "day": 42069,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Arjuna starves in the lean season."
+  },
+  {
+   "day": 42070,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Hanuman starves in the lean season."
+  },
+  {
+   "day": 42072,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kambala starves in the lean season."
+  },
+  {
+   "day": 42072,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Maya starves in the lean season."
+  },
+  {
+   "day": 42073,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ananda starves in the lean season."
+  },
+  {
+   "day": 42073,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Bhagavati, Vishnu."
+  },
+  {
+   "day": 42075,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mandodari starves in the lean season."
+  },
+  {
+   "day": 42076,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sumitra starves in the lean season."
+  },
+  {
+   "day": 42076,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kaikeyi starves in the lean season."
+  },
+  {
+   "day": 42077,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Indra starves in the lean season."
+  },
+  {
+   "day": 42081,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 42081,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Kishnadevi, Drona."
+  },
+  {
+   "day": 42084,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mandodari starves in the lean season."
+  },
+  {
+   "day": 42089,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Parvati starves in the lean season."
+  },
+  {
+   "day": 42089,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kambala starves in the lean season."
+  },
+  {
+   "day": 42090,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Lakshmi starves in the lean season."
+  },
+  {
+   "day": 42091,
+   "year": 116,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Apsara starves in the lean season."
+  },
+  {
+   "day": 42448,
+   "year": 117,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sundari starves in the lean season."
+  },
+  {
+   "day": 42480,
+   "year": 118,
+   "u": "LAGOON",
+   "t": "epidemic",
+   "msg": "Year 118: a sickness born of the herds kills 54 (28% of the people)."
+  },
+  {
+   "day": 42480,
+   "year": 118,
+   "u": "LAGOON",
+   "t": "lesson",
+   "msg": "Year 118: epidemic took 54 of them. The survivors carry a new instinct \u2014 'cleanliness' \u2014 passed on without a single word."
+  },
+  {
+   "day": 44640,
+   "year": 124,
+   "u": "LAGOON",
+   "t": "epidemic",
+   "msg": "Year 124: a sickness born of the herds kills 63 (33% of the people)."
+  },
+  {
+   "day": 44640,
+   "year": 124,
+   "u": "LAGOON",
+   "t": "phase",
+   "msg": "Sumitra falls back to a band."
+  },
+  {
+   "day": 44672,
+   "year": 124,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bhishma starves in the lean season."
+  },
+  {
+   "day": 48240,
+   "year": 134,
+   "u": "LAGOON",
+   "t": "phase",
+   "msg": "Sumitra is a tribe now, 50 strong; Brahma speaks for it."
+  },
+  {
+   "day": 50676,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Bhishma, Bhishma, Indra."
+  },
+  {
+   "day": 50677,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kambala starves in the lean season."
+  },
+  {
+   "day": 50677,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Nakula, Ganga."
+  },
+  {
+   "day": 50678,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Ajita, Durga."
+  },
+  {
+   "day": 50678,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rambha starves in the lean season."
+  },
+  {
+   "day": 50679,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Sundari, Kishnadevi, Bhagavati."
+  },
+  {
+   "day": 50681,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "4 starve in the lean season: Vishnu, Ananda, Meera and 1 others."
+  },
+  {
+   "day": 50681,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Indra starves in the lean season."
+  },
+  {
+   "day": 50684,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Drona starves in the lean season."
+  },
+  {
+   "day": 50686,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Hanuman, Parvati, Nanda."
+  },
+  {
+   "day": 50704,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Hanuman starves in the lean season."
+  },
+  {
+   "day": 50708,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sariputra starves in the lean season."
+  },
+  {
+   "day": 50715,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sahadeva starves in the lean season."
+  },
+  {
+   "day": 50720,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 50720,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sahadeva starves in the lean season."
+  },
+  {
+   "day": 50721,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Indra starves in the lean season."
+  },
+  {
+   "day": 50722,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Yama, Sati."
+  },
+  {
+   "day": 50723,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Lakshmi starves in the lean season."
+  },
+  {
+   "day": 50723,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Karna, Bodhisattva."
+  },
+  {
+   "day": 50729,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganga starves in the lean season."
+  },
+  {
+   "day": 50729,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Padma starves in the lean season."
+  },
+  {
+   "day": 50732,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Yama starves in the lean season."
+  },
+  {
+   "day": 50732,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Radha starves in the lean season."
+  },
+  {
+   "day": 50736,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Apsara starves in the lean season."
+  },
+  {
+   "day": 50736,
+   "year": 140,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Shiva starves in the lean season."
+  },
+  {
+   "day": 52990,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganga starves in the lean season."
+  },
+  {
+   "day": 52991,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Vasudha starves in the lean season."
+  },
+  {
+   "day": 53128,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ajita starves in the lean season."
+  },
+  {
+   "day": 53129,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Rambha, Rahul."
+  },
+  {
+   "day": 53130,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nanda starves in the lean season."
+  },
+  {
+   "day": 53132,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 53133,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rahul starves in the lean season."
+  },
+  {
+   "day": 53133,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kali starves in the lean season."
+  },
+  {
+   "day": 53134,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Tara, Brahma, Ajita."
+  },
+  {
+   "day": 53136,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Upananda starves in the lean season."
+  },
+  {
+   "day": 53138,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kali starves in the lean season."
+  },
+  {
+   "day": 53139,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kishnadevi starves in the lean season."
+  },
+  {
+   "day": 53139,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sundari starves in the lean season."
+  },
+  {
+   "day": 53139,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Brahma starves in the lean season."
+  },
+  {
+   "day": 53140,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ananda starves in the lean season."
+  },
+  {
+   "day": 53154,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Karna starves in the lean season."
+  },
+  {
+   "day": 53156,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Rambha, Vishnu."
+  },
+  {
+   "day": 53157,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Vishnu, Amrapali."
+  },
+  {
+   "day": 53157,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Ajita, Siddhartha."
+  },
+  {
+   "day": 53157,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "5 starve in the lean season: Siddhartha, Krishna, Mandodari and 2 others."
+  },
+  {
+   "day": 53158,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Upananda starves in the lean season."
+  },
+  {
+   "day": 53158,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sahadeva starves in the lean season."
+  },
+  {
+   "day": 53159,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Parvati, Ananda, Kausalya."
+  },
+  {
+   "day": 53160,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Devadatta starves in the lean season."
+  },
+  {
+   "day": 53160,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Savitri starves in the lean season."
+  },
+  {
+   "day": 53161,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 53162,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Upananda starves in the lean season."
+  },
+  {
+   "day": 53166,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rama starves in the lean season."
+  },
+  {
+   "day": 53166,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Arjuna starves in the lean season."
+  },
+  {
+   "day": 53167,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Devadatta starves in the lean season."
+  },
+  {
+   "day": 53167,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Upananda starves in the lean season."
+  },
+  {
+   "day": 53168,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sati starves in the lean season."
+  },
+  {
+   "day": 53168,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Durga starves in the lean season."
+  },
+  {
+   "day": 53169,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Nanda, Siddhartha."
+  },
+  {
+   "day": 53170,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bhagavati starves in the lean season."
+  },
+  {
+   "day": 53170,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Padma, Ananda."
+  },
+  {
+   "day": 53171,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mahakashyapa starves in the lean season."
+  },
+  {
+   "day": 53171,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Duryodhana starves in the lean season."
+  },
+  {
+   "day": 53172,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sumitra starves in the lean season."
+  },
+  {
+   "day": 53173,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bodhisattva starves in the lean season."
+  },
+  {
+   "day": 53173,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganga starves in the lean season."
+  },
+  {
+   "day": 53173,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganga starves in the lean season."
+  },
+  {
+   "day": 53174,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "6 starve in the lean season: Lakshmi, Bhagavati, Arjuna and 3 others."
+  },
+  {
+   "day": 53174,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rambha starves in the lean season."
+  },
+  {
+   "day": 53178,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rambha starves in the lean season."
+  },
+  {
+   "day": 53179,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sumitra starves in the lean season."
+  },
+  {
+   "day": 53180,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Parvati starves in the lean season."
+  },
+  {
+   "day": 53181,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Upananda starves in the lean season."
+  },
+  {
+   "day": 53182,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Kambala, Hanuman."
+  },
+  {
+   "day": 53183,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Siddhartha starves in the lean season."
+  },
+  {
+   "day": 53183,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Parvati starves in the lean season."
+  },
+  {
+   "day": 53184,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 53184,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kambala starves in the lean season."
+  },
+  {
+   "day": 53185,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sundari starves in the lean season."
+  },
+  {
+   "day": 53185,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "4 starve in the lean season: Ganga, Bhagavati, Kaikeyi and 1 others."
+  },
+  {
+   "day": 53185,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Meera, Bhishma, Parvati."
+  },
+  {
+   "day": 53186,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Shiva, Bhishma, Hanuman."
+  },
+  {
+   "day": 53186,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ajita starves in the lean season."
+  },
+  {
+   "day": 53187,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "4 starve in the lean season: Kausalya, Rahul, Hanuman and 1 others."
+  },
+  {
+   "day": 53187,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Tara starves in the lean season."
+  },
+  {
+   "day": 53187,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganga starves in the lean season."
+  },
+  {
+   "day": 53187,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Sumitra, Sita, Drona."
+  },
+  {
+   "day": 53188,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Duryodhana, Kaikeyi."
+  },
+  {
+   "day": 53188,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Meera starves in the lean season."
+  },
+  {
+   "day": 53189,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 53189,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Parvati, Ganga."
+  },
+  {
+   "day": 53190,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Nirvana, Vishnu."
+  },
+  {
+   "day": 53192,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sundari starves in the lean season."
+  },
+  {
+   "day": 53192,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mandodari starves in the lean season."
+  },
+  {
+   "day": 53193,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rama starves in the lean season."
+  },
+  {
+   "day": 53194,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nanda starves in the lean season."
+  },
+  {
+   "day": 53194,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Ganga, Bhagavati."
+  },
+  {
+   "day": 53195,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kali starves in the lean season."
+  },
+  {
+   "day": 53195,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Rambha, Sundari."
+  },
+  {
+   "day": 53196,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Savitri, Indra, Amrapali."
+  },
+  {
+   "day": 53196,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Arjuna starves in the lean season."
+  },
+  {
+   "day": 53196,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Savitri starves in the lean season."
+  },
+  {
+   "day": 53197,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Duryodhana starves in the lean season."
+  },
+  {
+   "day": 53197,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Krishna starves in the lean season."
+  },
+  {
+   "day": 53198,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kishnadevi starves in the lean season."
+  },
+  {
+   "day": 53199,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Duryodhana starves in the lean season."
+  },
+  {
+   "day": 53200,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Siddhartha starves in the lean season."
+  },
+  {
+   "day": 53200,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Arjuna, Sariputra."
+  },
+  {
+   "day": 53201,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bhishma starves in the lean season."
+  },
+  {
+   "day": 53201,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Savitri starves in the lean season."
+  },
+  {
+   "day": 53202,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Drona, Kishnadevi."
+  },
+  {
+   "day": 53203,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Meera starves in the lean season."
+  },
+  {
+   "day": 53205,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 53206,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mandodari starves in the lean season."
+  },
+  {
+   "day": 53206,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Vasudha starves in the lean season."
+  },
+  {
+   "day": 53207,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Savitri starves in the lean season."
+  },
+  {
+   "day": 53208,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rama starves in the lean season."
+  },
+  {
+   "day": 53209,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mahakashyapa starves in the lean season."
+  },
+  {
+   "day": 53209,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sati starves in the lean season."
+  },
+  {
+   "day": 53210,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sati starves in the lean season."
+  },
+  {
+   "day": 53211,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ananda starves in the lean season."
+  },
+  {
+   "day": 53211,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 53213,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kaikeyi starves in the lean season."
+  },
+  {
+   "day": 53214,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sundari starves in the lean season."
+  },
+  {
+   "day": 53214,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Indrani starves in the lean season."
+  },
+  {
+   "day": 53214,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Sundari, Ajita."
+  },
+  {
+   "day": 53215,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Durga starves in the lean season."
+  },
+  {
+   "day": 53215,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Drona starves in the lean season."
+  },
+  {
+   "day": 53215,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Lakshmi starves in the lean season."
+  },
+  {
+   "day": 53216,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mandodari starves in the lean season."
+  },
+  {
+   "day": 53217,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Hanuman starves in the lean season."
+  },
+  {
+   "day": 53218,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 53219,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kishnadevi starves in the lean season."
+  },
+  {
+   "day": 53222,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Indrani starves in the lean season."
+  },
+  {
+   "day": 53224,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Arjuna starves in the lean season."
+  },
+  {
+   "day": 53225,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 53225,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Vasudha starves in the lean season."
+  },
+  {
+   "day": 53226,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kambala starves in the lean season."
+  },
+  {
+   "day": 53229,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Radha starves in the lean season."
+  },
+  {
+   "day": 53229,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Karna starves in the lean season."
+  },
+  {
+   "day": 53232,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sumitra starves in the lean season."
+  },
+  {
+   "day": 53232,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Bodhisattva, Maya."
+  },
+  {
+   "day": 53233,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 53234,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sati starves in the lean season."
+  },
+  {
+   "day": 53234,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ganesh starves in the lean season."
+  },
+  {
+   "day": 53235,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Karna starves in the lean season."
+  },
+  {
+   "day": 53235,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mahakashyapa starves in the lean season."
+  },
+  {
+   "day": 53237,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Maitreya starves in the lean season."
+  },
+  {
+   "day": 53238,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mahakashyapa starves in the lean season."
+  },
+  {
+   "day": 53239,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Amrapali starves in the lean season."
+  },
+  {
+   "day": 53240,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sati starves in the lean season."
+  },
+  {
+   "day": 53241,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Mandodari starves in the lean season."
+  },
+  {
+   "day": 53241,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "4 starve in the lean season: Mahakashyapa, Arjuna, Indrani and 1 others."
+  },
+  {
+   "day": 53242,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ajita starves in the lean season."
+  },
+  {
+   "day": 53242,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kaikeyi starves in the lean season."
+  },
+  {
+   "day": 53246,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kambala starves in the lean season."
+  },
+  {
+   "day": 53249,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 53250,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nirvana starves in the lean season."
+  },
+  {
+   "day": 53258,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sita starves in the lean season."
+  },
+  {
+   "day": 53259,
+   "year": 147,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Arjuna starves in the lean season."
+  },
+  {
+   "day": 53953,
+   "year": 149,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Sahadeva starves in the lean season."
+  },
+  {
+   "day": 54272,
+   "year": 150,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nirvana starves in the lean season."
+  },
+  {
+   "day": 54953,
+   "year": 152,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Savitri starves in the lean season."
+  },
+  {
+   "day": 56140,
+   "year": 155,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nirvana starves in the lean season."
+  },
+  {
+   "day": 56140,
+   "year": 155,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Brahma starves in the lean season."
+  },
+  {
+   "day": 56141,
+   "year": 155,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Brahma, Sariputra, Kali."
+  },
+  {
+   "day": 56142,
+   "year": 155,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ajita starves in the lean season."
+  },
+  {
+   "day": 56144,
+   "year": 155,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Amrapali starves in the lean season."
+  },
+  {
+   "day": 56145,
+   "year": 155,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Ananda starves in the lean season."
+  },
+  {
+   "day": 56148,
+   "year": 155,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bhishma starves in the lean season."
+  },
+  {
+   "day": 56148,
+   "year": 155,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Shiva starves in the lean season."
+  },
+  {
+   "day": 56151,
+   "year": 155,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "3 starve in the lean season: Shiva, Parvati, Rama."
+  },
+  {
+   "day": 56152,
+   "year": 155,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Arjuna starves in the lean season."
+  },
+  {
+   "day": 56155,
+   "year": 155,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Arjuna starves in the lean season."
+  },
+  {
+   "day": 56156,
+   "year": 155,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Lakshmi starves in the lean season."
+  },
+  {
+   "day": 56163,
+   "year": 156,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nakula starves in the lean season."
+  },
+  {
+   "day": 57560,
+   "year": 159,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Nirvana starves in the lean season."
+  },
+  {
+   "day": 57560,
+   "year": 159,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kaikeyi starves in the lean season."
+  },
+  {
+   "day": 57564,
+   "year": 159,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Vishnu starves in the lean season."
+  },
+  {
+   "day": 57983,
+   "year": 161,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Bodhisattva starves in the lean season."
+  },
+  {
+   "day": 59361,
+   "year": 164,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Maitreya starves in the lean season."
+  },
+  {
+   "day": 59362,
+   "year": 164,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Maitreya starves in the lean season."
+  },
+  {
+   "day": 59363,
+   "year": 164,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Bhishma, Sariputra."
+  },
+  {
+   "day": 59748,
+   "year": 165,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Rama, Kaikeyi."
+  },
+  {
+   "day": 59749,
+   "year": 165,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kausalya starves in the lean season."
+  },
+  {
+   "day": 59749,
+   "year": 165,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Rama starves in the lean season."
+  },
+  {
+   "day": 59749,
+   "year": 165,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Bhagavati, Indra."
+  },
+  {
+   "day": 59750,
+   "year": 165,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Padma, Ananda."
+  },
+  {
+   "day": 59750,
+   "year": 165,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "5 starve in the lean season: Nanda, Bhishma, Indrani and 2 others."
+  },
+  {
+   "day": 59751,
+   "year": 165,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "2 starve in the lean season: Asoka, Kambala."
+  },
+  {
+   "day": 59752,
+   "year": 165,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kausalya starves in the lean season."
+  },
+  {
+   "day": 59753,
+   "year": 165,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kausalya starves in the lean season."
+  },
+  {
+   "day": 59755,
+   "year": 165,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Brahma starves in the lean season."
+  },
+  {
+   "day": 59755,
+   "year": 165,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Hanuman starves in the lean season."
+  },
+  {
+   "day": 59760,
+   "year": 166,
+   "u": "LAGOON",
+   "t": "famine",
+   "msg": "Kambala starves in the lean season."
+  }
+ ],
+ "verdicts": [
+  {
+   "universe": "EDEN",
+   "iteration": 1,
+   "peak": 723,
+   "gen_max": 9,
+   "day": 60000,
+   "year": 166,
+   "phase": "exploit",
+   "extinct_day": null,
+   "postmortems": 0,
+   "completed": false,
+   "verdict": "NEVER EMPTIED \u2014 still in phase 'exploit' with 711 people after 166 years. No postmortem, no reseed, no Ice-Age cycle."
+  },
+  {
+   "universe": "LAGOON",
+   "iteration": 1,
+   "peak": 439,
+   "gen_max": 8,
+   "day": 60000,
+   "year": 166,
+   "tech": [
+    "fire",
+    "stone_tools",
+    "preservation",
+    "shelter",
+    "fishing",
+    "predator_hunt",
+    "seacraft",
+    "agriculture",
+    "granary",
+    "lore",
+    "domestication",
+    "healing",
+    "metallurgy"
+   ],
+   "lessons": [
+    "preserve",
+    "cleanliness"
+   ],
+   "tribes": 3,
+   "continent": true,
+   "extinct_day": null,
+   "postmortems": 0,
+   "completed": false,
+   "tech_missing": [
+    "writing"
+   ],
+   "verdict": "Survived. 13 technologies, 2 lesson(s) carried, 3 tribe(s)."
+  }
+ ],
+ "postmortems": {
+  "eden": [],
+  "lagoon": []
+ }
+}

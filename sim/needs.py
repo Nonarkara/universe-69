@@ -200,7 +200,7 @@ def ensure_sites(u, rng=None):
         if (fx, fy) not in have:
             u["sites"].append({"x": fx, "y": fy, "kind": "farm", "left": 0.0,
                                "max": FARM_HOLD, "regrow": FARM_YIELD,
-                               "provisioned": False})
+                               "provisioned": False, "worked": None})
     return u["sites"]
 
 
@@ -211,21 +211,17 @@ def regrow_sites(u, days=1):
     why a year has a hungry half and a fed half. The season is the
     world's, not the band's.
     """
-    season = 1.0
-    try:
-        from engine import lagoon_season
-        plant_mult, fish_mult, winter = lagoon_season(u.get("day", 0))
-        season = plant_mult if winter else 1.0
-    except Exception:
-        pass
+    from engine import lagoon_season
+    plant_mult, fish_mult, winter = lagoon_season(u.get("day", 0))
     dry = 0.3 if u.get("drought", 0) > 0 else 1.0
     for s in u.get("sites") or []:
         if s.get("provisioned"):
             continue
+        season = fish_mult if s["kind"] == "fish" else plant_mult
         k = season * (dry if s["kind"] in ("plants", "farm") else 1.0)
         if s["kind"] == "farm":
             # a field grows only if it was worked: tending is the sowing
-            k *= 1.0 if s.get("worked", 0) >= u.get("day", 0) - 30 else 0.0
+            k *= 1.0 if s.get("worked") is not None and s["worked"] >= u.get("day", 0) - 30 else 0.0
             k *= 0.25 if season < 1.0 else 1.0
         s["left"] = min(s["max"], s["left"] + s["regrow"] * days * k)
 
@@ -579,8 +575,8 @@ def assign(u, p, day, rng, cond=None, engine=None):
     # middle of the pen. This is Calhoun's beautiful ones, and it is a
     # consequence here, not a script: it needs solitude, a low purpose and
     # a world that does not ask anything of you.
-    if u.get("kind") == "EDEN" and sol < 0.25 and hun < 8:
-        options.append((0.5 + 1.4 * (0.25 - sol), E.A_WITHDRAW, None, None))
+    if u.get("kind") == "EDEN" and sol < 0.25 and hun < 8 and p.get("pu", 0.5) < 0.25:
+        options.append((2.0 + 1.4 * (0.25 - sol), E.A_WITHDRAW, None, None))
 
     if not options:
         options.append((0.3, E.A_REST, _home_of(u, p), None))
@@ -599,7 +595,7 @@ def assign(u, p, day, rng, cond=None, engine=None):
     if target is not None:
         p["tx"], p["ty"] = target
     if site is not None:
-        p["site"] = site["x"], site["y"]
+        p["site"] = [site["x"], site["y"]]
         st = camp_of(u, p)
         if cond.get("party") and st is not None:
             party = st.get("party")
@@ -771,6 +767,13 @@ def camp_store(u, p):
     return st.get("store", 0.0)
 
 
+def carry_food(p, amount, kind):
+    """Keep the source of an actual load; weight alone is not a carcass."""
+    previous = p.get("carry", 0.0)
+    p["carry_kind"] = kind if previous <= 0 or p.get("carry_kind") == kind else "mixed"
+    p["carry"] = previous + amount
+
+
 def add_to_store(u, p, amount):
     """Put food in the camp's store, for a camp that keeps one."""
     st = camp_of(u, p)
@@ -836,6 +839,8 @@ def eat(u, p, age_years=None):
         # nobody starves holding food: eat from the load first
         got = min(p["carry"], p["hun"], MEAL * body_capacity(p))
         p["carry"] -= got
+        if p["carry"] <= 0:
+            p["carry_kind"] = None
         p["hun"] -= got
         return got
     pantry = _pantry_at(u, p)
@@ -863,7 +868,7 @@ def fulfil(u, p, day, rng, act, E=None):
         p["hun"] = max(0.0, p.get("hun", 0.0) - MEAL)
         return MEAL
 
-    if act in (E.A_FORAGE, E.A_HUNT, E.A_FISH, E.A_FARM):
+    if act in (E.A_FORAGE, E.A_FISH, E.A_FARM):
         site = _site_at(u, p)
         if site is None:
             return 0
@@ -881,7 +886,7 @@ def fulfil(u, p, day, rng, act, E=None):
         if got <= 0:
             p["ad"] = 0              # picked over: decide again at once
             return 0
-        p["carry"] = p.get("carry", 0.0) + got
+        carry_food(p, got, kind)
         return got
 
     if act == E.A_BUILD:
@@ -936,10 +941,12 @@ def deposit(u, p, day):
     st = camp_of(u, p)
     if st is None:
         p["carry"] = 0.0
+        p["carry_kind"] = None
         return 0
     if abs(p.get("x", 0) - st["x"]) > st.get("r", 5) + 3 or \
        abs(p.get("y", 0) - st["y"]) > st.get("r", 5) + 3:
         return 0            # not home yet
     add_to_store(u, p, carried)
     p["carry"] = 0.0
+    p["carry_kind"] = None
     return carried

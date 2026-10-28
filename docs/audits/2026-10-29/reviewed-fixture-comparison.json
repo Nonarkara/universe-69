@@ -1,0 +1,8 @@
+{
+  "ignoredPaths": [
+    "state.wall"
+  ],
+  "semanticEqual": false,
+  "priorSHA256": "31d4190f433e067e4ee89adf3e691d59e53317c4e11530a1946d7f3ca771725a",
+  "reviewedSHA256": "1f254443f8831845a61217d5b9d414441a4ca267c77be8315be8ffe3a605ce9b"
+}

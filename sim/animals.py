@@ -24,6 +24,8 @@ numbers are model calibration, recorded as such in DESIGN.md.
 Standard library only, like the engine.
 """
 
+from needs import carry_food
+
 DEER, CAT = "deer", "cat"
 
 DEER_START = 240           # the island's herds at genesis
@@ -158,7 +160,7 @@ def tick(u, rng, terr, people, ctx):
 
     # --- the hunters strike first: they closed on the herd last part, and a
     # deer that has not yet bolted is the one that can be taken
-    hunters = [p for p in people if p.get("a") == ctx["A_HUNT"] and adult(p)]
+    hunters = [p for p in people if not p.get("ab") and p.get("a") == ctx["A_HUNT"] and adult(p)]
     for p in hunters:
         if not ctx["armed"]:
             break
@@ -186,7 +188,7 @@ def tick(u, rng, terr, people, ctx):
                 _seen(u, q["x"], q["y"], "deer_kill", ctx)
                 share = MEAT_DEER / (1 + len(party))
                 for h in [p] + party:
-                    h["carry"] = h.get("carry", 0.0) + share
+                    carry_food(h, share, DEER)
                     h["ad"] = 0                       # carry it home now
 
     # --- the herds: graze, drift together, run from people
@@ -211,6 +213,7 @@ def tick(u, rng, terr, people, ctx):
 
     # --- the cats: hunt deer; when deer fail them, look at people
     deer_list = [q for q in animals if q["k"] == DEER]
+    available_people = list(people)
     for c in animals:
         if c["k"] != CAT or c["i"] in dead_animals:
             continue
@@ -231,14 +234,15 @@ def tick(u, rng, terr, people, ctx):
                 c["fed"] = 0.0
             continue
         if c["fed"] >= CAT_HUNGRY:
-            target = _choose_person(u, c, people, night, has, adult)
+            target = _choose_person(u, c, available_people, night, has, adult)
             if target is not None:
                 c["tx"], c["ty"] = target["x"], target["y"]
                 _step(c, terr, CAT_STEP)
                 if _d2(target, c) <= 2:
-                    outcome = _attack(u, c, target, people, rng, ctx)
+                    outcome = _attack(u, c, target, available_people, rng, ctx)
                     if outcome == "taken":
                         taken.append((target, "predator"))
+                        available_people.remove(target)
                         c["fed"] = 0.0
                     elif outcome == "killed":
                         dead_animals.add(c["i"])
@@ -252,15 +256,17 @@ def tick(u, rng, terr, people, ctx):
 
     # --- the cat hunt, once they have learned it: a party with spears
     if has("predator_hunt"):
+        alive_ids = {p["id"] for p in available_people}
+        surviving_hunters = [p for p in hunters if p["id"] in alive_ids]
         for c in animals:
             if c["k"] != CAT or c["i"] in dead_animals:
                 continue
-            party = [p for p in _people_near(hunters, c, 4)]
+            party = _people_near(surviving_hunters, c, 4)
             if len(party) >= CROWD and rng.random() < 0.25:
                 dead_animals.add(c["i"])
                 _seen(u, c["x"], c["y"], "cat_hunt", ctx)
                 for h in party:
-                    h["carry"] = h.get("carry", 0.0) + MEAT_CAT / len(party)
+                    carry_food(h, MEAT_CAT / len(party), CAT)
                 u["kills"] = u.get("kills", 0) + 1
                 events.append((ctx["day"], "LAGOON", "hunt",
                                "The hunters bring down a big cat. It is meat now, and "
@@ -305,7 +311,7 @@ def _attack(u, c, p, people, rng, ctx):
     if rng.random() < min(0.8, kill_cat):
         _seen(u, p["x"], p["y"], "fought_off", ctx)
         u["kills"] = u.get("kills", 0) + 1
-        p["carry"] = p.get("carry", 0.0) + MEAT_CAT
+        carry_food(p, MEAT_CAT, CAT)
         if rng.random() < 0.5:
             ctx["events"].append((ctx["day"], "LAGOON", "hunt",
                                   f"A big cat springs at {p['n']}, who kills it."))
@@ -341,7 +347,7 @@ def _daily(u, rng, terr, ctx):
     born = 0
     p_deer = DEER_R / 360.0 * max(0.0, 1.0 - deer / cap)
     for q in list(animals):
-        if q["k"] == DEER and rng.random() < p_deer * 2:   # half of them are does
+        if q["k"] == DEER and rng.random() < p_deer:       # aggregate herd rate; sex is not tracked
             born += 1
             animals.append({"i": u["animal_id"], "k": DEER, "x": q["x"], "y": q["y"],
                             "tx": q["x"], "ty": q["y"]})

@@ -51,7 +51,7 @@ class TestTheaterKill(unittest.TestCase):
         u = engine.genesis(69)["lagoon"]
         run(u, engine.tick_lagoon, 120 * engine.PARTS_PER_DAY)
         self.assertEqual(u["cod"].get("starvation", 0), 0)
-        self.assertGreater(len(u["people"]), 10)
+        self.assertGreaterEqual(len(u["people"]), 8)
 
 
 class TestEating(unittest.TestCase):
@@ -182,10 +182,43 @@ class TestHuts(unittest.TestCase):
 
 class TestFounders(unittest.TestCase):
     def test_both_worlds_begin_with_eight_pairs(self):
+        """The current owner decision is eight pairs in each world."""
         w = engine.genesis(69)
         for kind in ("eden", "lagoon"):
-            self.assertEqual(len(w[kind]["people"]), 16)
-            self.assertTrue(all(p["p"] is not None for p in w[kind]["people"]))
+            people = w[kind]["people"]
+            self.assertEqual(len(people), 16)
+            self.assertEqual(sum(1 for p in people if p["s"] == "m"), 8)
+            self.assertEqual(sum(1 for p in people if p["s"] == "f"), 8)
+            self.assertTrue(all(p["p"] is not None for p in people))
+
+    def test_each_world_names_its_people_its_own_way(self):
+        """A name is a cultural invention, so the two worlds do not share
+        a stock. EDEN begins with Adam and Eve; LAGOON with Rahul and
+        Siddhartha."""
+        w = engine.genesis(69)
+        self.assertEqual(w["eden"]["people"][0]["n"], "Adam")
+        self.assertEqual(w["eden"]["people"][1]["n"], "Eve")
+        self.assertEqual(w["lagoon"]["people"][0]["n"], "Rahul")
+        self.assertEqual(w["lagoon"]["people"][2]["n"], "Siddhartha")
+        for kind in ("eden", "lagoon"):
+            self.assertFalse(w[kind].get("named"),
+                             "a world has no names at the beginning")
+
+    def test_the_first_child_is_the_first_name_anyone_gives(self):
+        import random
+        w = engine.genesis(69)
+        for kind in ("eden", "lagoon"):
+            u = w[kind]
+            self.assertFalse(u.get("named"))
+            events = []
+            for _ in range(2000 * engine.PARTS_PER_DAY):
+                engine.tick_world(w, events)
+                if u.get("named"):
+                    break
+            self.assertTrue(u.get("named"),
+                            f"{kind} never gave anyone a name")
+            self.assertTrue(any("first child is named" in e[3] for e in events),
+                            f"{kind} named a child without saying so")
 
 
 if __name__ == "__main__":

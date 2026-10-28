@@ -1,0 +1,480 @@
+{
+  "width": 390,
+  "height": 844,
+  "checks": [
+    {
+      "check": "Person stress uses four existing activity labels",
+      "passed": true
+    },
+    {
+      "check": "person-diary-stress: no page horizontal overflow",
+      "passed": true
+    },
+    {
+      "check": "person-diary-stress: one screen without page overflow",
+      "passed": true
+    },
+    {
+      "check": "person-diary-stress: visible reading content fits its page",
+      "passed": true
+    },
+    {
+      "check": "person-diary-stress: worlds, instruments, record and cards do not overlap",
+      "passed": true
+    },
+    {
+      "check": "person-diary-stress: both visible worlds are painted",
+      "passed": true
+    },
+    {
+      "check": "person-diary-stress: followed bodies remain visible above their cards",
+      "passed": true
+    },
+    {
+      "check": "person-diary-stress: visible images are decoded",
+      "passed": true
+    },
+    {
+      "check": "Person pages preserve every fact, condition and diary character",
+      "passed": true
+    },
+    {
+      "check": "Every person detail page fits without clipping",
+      "passed": true
+    },
+    {
+      "check": "Person name stays visible while detail pages turn",
+      "passed": true
+    },
+    {
+      "check": "Person page index survives repaint",
+      "passed": true
+    },
+    {
+      "check": "Person page index survives snapshot refresh",
+      "passed": true
+    },
+    {
+      "check": "Repeated reselect has one Arrow handler and advances exactly one page",
+      "passed": true
+    },
+    {
+      "check": "Person Prev returns one page",
+      "passed": true
+    },
+    {
+      "check": "Person Next advances one page",
+      "passed": true
+    },
+    {
+      "check": "person-diary-next-page: no page horizontal overflow",
+      "passed": true
+    },
+    {
+      "check": "person-diary-next-page: one screen without page overflow",
+      "passed": true
+    },
+    {
+      "check": "person-diary-next-page: visible reading content fits its page",
+      "passed": true
+    },
+    {
+      "check": "person-diary-next-page: worlds, instruments, record and cards do not overlap",
+      "passed": true
+    },
+    {
+      "check": "person-diary-next-page: both visible worlds are painted",
+      "passed": true
+    },
+    {
+      "check": "person-diary-next-page: followed bodies remain visible above their cards",
+      "passed": true
+    },
+    {
+      "check": "person-diary-next-page: visible images are decoded",
+      "passed": true
+    }
+  ],
+  "personCardStress": {
+    "id": 968,
+    "length": 329,
+    "name": "E-0968",
+    "age": 80,
+    "flags": 83,
+    "syntheticDiary": true,
+    "diary": [
+      "Y175 d1 \u00b7 sleeping",
+      "Y175 d2 \u00b7 eating",
+      "Y175 d3 \u00b7 grooming",
+      "Y175 d4 \u00b7 resting"
+    ],
+    "pages": 5,
+    "clippedPages": [],
+    "textPreserved": true,
+    "indexSurvivesPaint": true,
+    "index": 1,
+    "heading": "E-0968 \u00b7 sleeping"
+  },
+  "surfaces": {
+    "person-diary-stress": {
+      "hidden": false,
+      "width": 390,
+      "height": 844,
+      "documentWidth": 390,
+      "documentHeight": 844,
+      "bodyHeight": 844,
+      "top": {
+        "id": "masthead",
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 35,
+        "bottom": 35,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 34,
+        "clientHeight": 34
+      },
+      "bottom": {
+        "id": "god",
+        "x": 0,
+        "y": 559.8125,
+        "width": 390,
+        "height": 284.1875,
+        "bottom": 844,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 283,
+        "clientHeight": 283
+      },
+      "strip": {
+        "id": "strip",
+        "x": 0,
+        "y": 532.8125,
+        "width": 390,
+        "height": 27,
+        "bottom": 559.8125,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 26,
+        "clientHeight": 26
+      },
+      "scenes": [
+        {
+          "id": "",
+          "x": 0,
+          "y": 62.75,
+          "width": 390,
+          "height": 220.15625,
+          "bottom": 282.90625,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "scrollHeight": 220,
+          "clientHeight": 220
+        },
+        {
+          "id": "",
+          "x": 0,
+          "y": 312.65625,
+          "width": 390,
+          "height": 220.15625,
+          "bottom": 532.8125,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "scrollHeight": 220,
+          "clientHeight": 220
+        }
+      ],
+      "worldHeads": [
+        {
+          "id": "",
+          "x": 0,
+          "y": 35,
+          "width": 390,
+          "height": 27.75,
+          "bottom": 62.75,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "scrollHeight": 28,
+          "clientHeight": 28
+        },
+        {
+          "id": "",
+          "x": 0,
+          "y": 284.90625,
+          "width": 390,
+          "height": 27.75,
+          "bottom": 312.65625,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "scrollHeight": 28,
+          "clientHeight": 28
+        }
+      ],
+      "chrome": {
+        "masthead": 35,
+        "mastheadPercent": 4.1469194312796205,
+        "worldHeadings": [
+          27.75,
+          27.75
+        ],
+        "combinedHeight": 401.6875,
+        "combinedPercent": 47.59330568720379,
+        "bottom": 284.1875,
+        "bottomPercent": 33.67150473933649,
+        "strip": 27,
+        "stripPercent": 3.199052132701422
+      },
+      "overlays": [],
+      "dialogChrome": [],
+      "clippedReadingAreas": [],
+      "flowFailures": [],
+      "cards": [
+        {
+          "card": {
+            "id": "card6",
+            "x": 0,
+            "y": 151.40625,
+            "width": 390,
+            "height": 131.5,
+            "bottom": 282.90625,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 131,
+            "clientHeight": 131
+          },
+          "scene": {
+            "id": "",
+            "x": 0,
+            "y": 62.75,
+            "width": 390,
+            "height": 220.15625,
+            "bottom": 282.90625,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 220,
+            "clientHeight": 220
+          }
+        }
+      ],
+      "focus": "more",
+      "canvases": [
+        {
+          "id": "c6",
+          "width": 390,
+          "height": 220,
+          "lit": 885,
+          "samples": 885,
+          "imageRendering": "auto"
+        },
+        {
+          "id": "c9",
+          "width": 390,
+          "height": 220,
+          "lit": 885,
+          "samples": 885,
+          "imageRendering": "auto"
+        }
+      ],
+      "selectedBodies": [
+        {
+          "world": "e",
+          "id": 968,
+          "lying": true,
+          "body": {
+            "left": 183.52738683397084,
+            "right": 240.5359137192701,
+            "top": 138.25423883260353,
+            "bottom": 154.08994074518665
+          },
+          "cardTop": 151.40625,
+          "sceneTop": 62.75,
+          "sceneBottom": 282.90625,
+          "coveredByCard": false,
+          "visible": true
+        }
+      ],
+      "visibleImages": []
+    },
+    "person-diary-next-page": {
+      "hidden": false,
+      "width": 390,
+      "height": 844,
+      "documentWidth": 390,
+      "documentHeight": 844,
+      "bodyHeight": 844,
+      "top": {
+        "id": "masthead",
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 35,
+        "bottom": 35,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 34,
+        "clientHeight": 34
+      },
+      "bottom": {
+        "id": "god",
+        "x": 0,
+        "y": 559.8125,
+        "width": 390,
+        "height": 284.1875,
+        "bottom": 844,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 283,
+        "clientHeight": 283
+      },
+      "strip": {
+        "id": "strip",
+        "x": 0,
+        "y": 532.8125,
+        "width": 390,
+        "height": 27,
+        "bottom": 559.8125,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 26,
+        "clientHeight": 26
+      },
+      "scenes": [
+        {
+          "id": "",
+          "x": 0,
+          "y": 62.75,
+          "width": 390,
+          "height": 220.15625,
+          "bottom": 282.90625,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "scrollHeight": 220,
+          "clientHeight": 220
+        },
+        {
+          "id": "",
+          "x": 0,
+          "y": 312.65625,
+          "width": 390,
+          "height": 220.15625,
+          "bottom": 532.8125,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "scrollHeight": 220,
+          "clientHeight": 220
+        }
+      ],
+      "worldHeads": [
+        {
+          "id": "",
+          "x": 0,
+          "y": 35,
+          "width": 390,
+          "height": 27.75,
+          "bottom": 62.75,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "scrollHeight": 28,
+          "clientHeight": 28
+        },
+        {
+          "id": "",
+          "x": 0,
+          "y": 284.90625,
+          "width": 390,
+          "height": 27.75,
+          "bottom": 312.65625,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "scrollHeight": 28,
+          "clientHeight": 28
+        }
+      ],
+      "chrome": {
+        "masthead": 35,
+        "mastheadPercent": 4.1469194312796205,
+        "worldHeadings": [
+          27.75,
+          27.75
+        ],
+        "combinedHeight": 401.6875,
+        "combinedPercent": 47.59330568720379,
+        "bottom": 284.1875,
+        "bottomPercent": 33.67150473933649,
+        "strip": 27,
+        "stripPercent": 3.199052132701422
+      },
+      "overlays": [],
+      "dialogChrome": [],
+      "clippedReadingAreas": [],
+      "flowFailures": [],
+      "cards": [
+        {
+          "card": {
+            "id": "card6",
+            "x": 0,
+            "y": 151.40625,
+            "width": 390,
+            "height": 131.5,
+            "bottom": 282.90625,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 131,
+            "clientHeight": 131
+          },
+          "scene": {
+            "id": "",
+            "x": 0,
+            "y": 62.75,
+            "width": 390,
+            "height": 220.15625,
+            "bottom": 282.90625,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 220,
+            "clientHeight": 220
+          }
+        }
+      ],
+      "focus": "BUTTON",
+      "canvases": [
+        {
+          "id": "c6",
+          "width": 390,
+          "height": 220,
+          "lit": 885,
+          "samples": 885,
+          "imageRendering": "auto"
+        },
+        {
+          "id": "c9",
+          "width": 390,
+          "height": 220,
+          "lit": 885,
+          "samples": 885,
+          "imageRendering": "auto"
+        }
+      ],
+      "selectedBodies": [
+        {
+          "world": "e",
+          "id": 968,
+          "lying": true,
+          "body": {
+            "left": 165.2069061676734,
+            "right": 224.79311171126787,
+            "top": 98.47415881057526,
+            "bottom": 115.02588257268485
+          },
+          "cardTop": 151.40625,
+          "sceneTop": 62.75,
+          "sceneBottom": 282.90625,
+          "coveredByCard": false,
+          "visible": true
+        }
+      ],
+      "visibleImages": []
+    }
+  }
+}

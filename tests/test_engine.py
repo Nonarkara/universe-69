@@ -18,8 +18,8 @@ sys.path.insert(0, os.path.join(ROOT, "sim"))
 
 import engine  # noqa: E402
 
-SCRATCH = os.path.join(tempfile.gettempdir(), "universe69-audit-tests")
-os.makedirs(SCRATCH, exist_ok=True)
+from scratch_space import scratch_root
+SCRATCH = scratch_root()
 
 
 def run(world, days):
@@ -74,7 +74,7 @@ class TestGenesis(unittest.TestCase):
     def test_both_universes_receive_the_same_founders(self):
         """Same people, different world: the world is the only variable."""
         w = engine.genesis(seed=69)
-        key = lambda p: (p["n"], p["s"], p["ef"], p["ag"])
+        key = lambda p: (p["s"], p["ef"], p["ag"], p["vg"])
         self.assertEqual([key(p) for p in w["eden"]["people"]],
                          [key(p) for p in w["lagoon"]["people"]])
         for p in w["eden"]["people"]:
@@ -84,7 +84,8 @@ class TestGenesis(unittest.TestCase):
         e = engine.genesis_universe("EDEN", 1, iteration=2, fseed=69)
         l = engine.genesis_universe("LAGOON", 2, iteration=2, fseed=69)
         self.assertEqual(len(e["people"]), 16)
-        self.assertEqual([p["n"] for p in e["people"]], [p["n"] for p in l["people"]])
+        self.assertEqual([(p["s"], p["ef"], p["ag"], p["vg"]) for p in e["people"]],
+                         [(p["s"], p["ef"], p["ag"], p["vg"]) for p in l["people"]])
         for i in range(0, 16, 2):
             self.assertEqual(e["people"][i]["p"], e["people"][i + 1]["id"])
 
@@ -246,20 +247,24 @@ class TestBounds(unittest.TestCase):
 
 
 class TestEden(unittest.TestCase):
-    def test_phase_progression_reaches_stagnation(self):
-        # Two resort expansions postpone the sink; it still comes. On the
-        # four-part day the sink arrives in year 133 rather than 83, so the
-        # horizon has to be longer than it was (DESIGN.md, 2026.10.28.2).
-        w = engine.genesis(seed=69)
-        events = run(w, 160 * engine.DAYS_PER_YEAR)
-        kinds = [e[3].lower() for e in events if e[2] == "phase"]
-        self.assertTrue(any("exploit" in k for k in kinds))
-        # Since 2026.10.28.3 the sink is not a phase reached but a thing
-        # that happens: withdrawal and infant loss rise out of crowding.
-        # The 35% label is the pen's design and may come later or not at all.
-        u = w["eden"]
-        self.assertTrue(any(p["w"] for p in u["people"]), "nobody withdrew")
-        self.assertGreater(u["cod"].get("infant", 0), 0, "no infant was lost")
+    def test_crowded_rearing_raises_abandonment_and_incompetence(self):
+        # Phases describe the census; the mother's actual environment is
+        # what changes an infant's odds. No fixed-century outcome is assumed.
+        import copy
+        u = engine.genesis(seed=69)["eden"]
+        mother = u["people"][1]
+        mother["box"] = 0
+        u["box_occ"] = {"0": 1}
+        u["people"] = [mother]
+        u["_ctx"] = engine.day_context(u["people"], u["day"])
+        quiet = engine.rearing(u, mother)
+        mother["pu"], mother["inj"] = 0.05, 0.8
+        u["box_occ"]["0"] = 100
+        u["people"] = [dict(copy.deepcopy(mother), id=i + 1) for i in range(40)]
+        u["_ctx"] = engine.day_context(u["people"], u["day"])
+        crowded = engine.rearing(u, mother)
+        self.assertGreater(crowded[0], quiet[0])
+        self.assertGreater(crowded[1], quiet[1])
 
     def test_children_are_born_with_a_sequential_id(self):
         w = engine.genesis(seed=69)
@@ -283,13 +288,27 @@ class TestEden(unittest.TestCase):
 
 class TestLagoon(unittest.TestCase):
     def test_technology_ladder_respects_prerequisites(self):
-        w = engine.genesis(seed=69)
-        run(w, 60000)
-        tech = w["lagoon"]["tech"]
-        for name, prereq, _base, _minpop in engine.TECH_LADDER:
-            if name in tech and prereq:
-                self.assertIn(prereq, tech,
-                              f"{name} was discovered without {prereq}")
+        import copy
+        from unittest.mock import patch
+        for name, prereq, _chance, min_pop in engine.TECH_LADDER:
+            if not prereq:
+                continue
+            for available in (False, True):
+                u = engine.genesis(seed=69)["lagoon"]
+                founders = list(u["people"])
+                u["people"] = [dict(copy.deepcopy(founders[i % len(founders)]), id=i + 1)
+                               for i in range(max(min_pop, len(founders)))]
+                u["day"], u["part"] = 360, 0
+                u["tech"] = [prereq] if available else []
+                for p in u["people"]:
+                    p["ad"] = engine.days(100)
+                rng = engine.random.Random(69)
+                # Both sides have enough people and a guaranteed discovery
+                # coin. Only the prerequisite differs. A singleton ladder
+                # prevents discovering that prerequisite earlier in this year.
+                with patch.object(engine, "TECH_LADDER", [(name, prereq, 1e6, min_pop)]), patch.object(engine, "base_mortality", return_value=False), patch.object(engine.animals, "tick", return_value=[]), patch.object(engine, "lagoon_violence", return_value=False), patch.object(rng, "random", return_value=0.99):
+                    engine.tick_lagoon(u, rng, [])
+                self.assertEqual(name in u["tech"], available, (name, available))
 
     def test_terrain_is_deterministic_for_a_seed(self):
         a = engine.make_lagoon_terrain(502)
@@ -461,22 +480,15 @@ class TestRecord(unittest.TestCase):
             self.assertNotEqual(terr[y][x], 2, (x, y))
 
     def test_a_fall_is_not_reported_as_old_age(self):
-        # 6e-6 a person a day, so this takes a few decades of sim time.
-        # The point is the bucket: a fall must not also be booked as old age.
-        import random
+        from unittest.mock import patch
         u = engine.genesis_universe("LAGOON", 69)
-        rng = random.Random(69)
-        before = {}
-        for _ in range(40000 * engine.PARTS_PER_DAY):
-            before = dict(u["cod"])
+        u["part"] = 1
+        rng = engine.random.Random(69)
+        count = len(u["people"])
+        with patch.object(engine.animals, "tick", return_value=[]), patch.object(rng, "random", return_value=0.0):
             engine.tick_lagoon(u, rng, [])
-            if u["cod"].get("accident", 0) > before.get("accident", 0):
-                break
-        else:
-            self.fail("no accident in 40000 days; the branch may be dead")
-        self.assertEqual(u["cod"].get("age", 0), before.get("age", 0),
-                         "a fall was also counted as old age")
-        self.assertGreater(u["cod"]["accident"], before.get("accident", 0))
+        self.assertEqual(u["cod"].get("accident"), count)
+        self.assertEqual(u["cod"].get("age", 0), 0)
 
 
 class TestMinds(unittest.TestCase):
@@ -484,14 +496,25 @@ class TestMinds(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # LAGOON's first iteration dies in its fifth year and the world is
-        # reseeded; its second lives to about year 140. So the two worlds
-        # are compared in year 125, when both of them are alive, and the
-        # pen is run on to year 160 so that the withdrawal has begun.
+        # Isolate the documented physiology and purpose responses, rather
+        # than assuming both stochastic populations survive a chosen year.
         cls.world = engine.genesis(seed=69)
-        run(cls.world, 125 * engine.DAYS_PER_YEAR)
+        for day in range(30 * engine.DAYS_PER_YEAR):
+            for key in ("eden", "lagoon"):
+                u = cls.world[key]
+                u["day"] = day
+                for p in u["people"]:
+                    age = engine.age_of(p, day)
+                    p["a"] = engine.A_REST if key == "eden" else engine.A_FORAGE
+                    engine.minds.tend_body(p, age, key == "eden", 0.0)
+                    engine.minds.tend_purpose(p, age, 0.0 if key == "eden" else 0.35,
+                                              True, False, True)
         cls.compared = {k: cls.means_of(k) for k in ("eden", "lagoon")}
-        run(cls.world, 35 * engine.DAYS_PER_YEAR)
+        u = cls.world["eden"]
+        for p in u["people"][:2]:
+            engine.withdraw(u, p, engine.random.Random(p["id"]))
+        for u in (cls.world["eden"], cls.world["lagoon"]):
+            engine.record_mind(u)
 
     @classmethod
     def means_of(cls, key):
@@ -513,14 +536,14 @@ class TestMinds(unittest.TestCase):
     def test_the_resort_fattens_and_weakens_its_people(self):
         eden, lagoon = self.compared["eden"], self.compared["lagoon"]
         self.assertTrue(eden and lagoon,
-                        "both worlds must have adults in year 125 to compare")
+                        "controlled exposures must retain their adults")
         self.assertGreater(eden["bmi"], lagoon["bmi"] + 4)
         self.assertLess(eden["sn"], lagoon["sn"])
 
     def test_purpose_drains_where_nothing_is_asked(self):
         eden, lagoon = self.compared["eden"], self.compared["lagoon"]
         self.assertTrue(eden and lagoon,
-                        "both worlds must have adults in year 125 to compare")
+                        "controlled exposures must retain their adults")
         self.assertLess(eden["pu"], lagoon["pu"] - 0.3)
 
     def test_the_withdrawn_keep_apart_from_the_living_pen(self):
@@ -575,8 +598,8 @@ class TestResortAndIsland(unittest.TestCase):
 
     def test_posts_are_finite_and_filled_once(self):
         w = engine.genesis(seed=69)
-        run(w, 40 * engine.DAYS_PER_YEAR)
         u = w["eden"]
+        engine.fill_roles(u, engine.random.Random(69), [])
         held = [r["who"] for r in u["roles"] if r["who"]]
         self.assertEqual(len(held), len(set(held)))
         alive = {p["id"] for p in u["people"]}
@@ -586,19 +609,60 @@ class TestResortAndIsland(unittest.TestCase):
                 self.assertEqual(u["roles"][p["role"]]["who"], p["id"])
 
     def test_a_boat_is_built_before_anyone_crosses(self):
+        import copy
+        from unittest.mock import patch
         u = engine.genesis(seed=69)["lagoon"]
+        founders = list(u["people"])
+        u["people"] = [dict(copy.deepcopy(founders[i % len(founders)]), id=i + 1,
+                             p=i + 2 if i % 2 == 0 else i) for i in range(90)]
+        u["next_id"] = 91
+        u["tech"] = [name for name, _p, _b, _n in engine.TECH_LADDER]
+        u["settlements"][0]["store"] = 10000
+        rng = engine.random.Random(69)
         events = []
-        crossed_with_boat = False
-        for _ in range(130 * engine.DAYS_PER_YEAR * engine.PARTS_PER_DAY):
-            rng = engine.random.Random((u["seed"] << 20) ^ (u["day"] + 1) ^ u["iteration"])
-            engine.tick_lagoon(u, rng, events)
-            if u.get("voyage"):
-                aboard = [p for p in u["people"] if p.get("ab")]
-                self.assertTrue(aboard)
-                crossed_with_boat = True
-        if any("crosses the strait" in e[3] or "lands on the greater shore" in e[3] for e in events):
-            self.assertTrue(crossed_with_boat, "people reached the mainland without a boat")
-            self.assertTrue(u.get("boats") or u.get("voyage"))
+
+        def annual(day):
+            u["day"], u["part"] = day, 0
+            for p in u["people"]:
+                p["a"], p["ad"] = engine.A_REST, engine.days(100)
+                p["tx"], p["ty"] = p["x"], p["y"]
+            with patch.object(engine, "base_mortality", return_value=False), patch.object(engine.animals, "tick", return_value=[]), patch.object(engine, "lagoon_violence", return_value=False), patch.object(rng, "random", return_value=0.99):
+                engine.tick_lagoon(u, rng, events)
+
+        annual(360)
+        self.assertIn("boat", u, "a crowded island did not start its boat")
+        boat = u["boat"]
+        self.assertEqual(boat["work"], 0)
+        self.assertNotIn("voyage", u)
+        self.assertFalse(any(p.get("ab") for p in u["people"]))
+        builder = u["people"][0]
+        builder["x"], builder["y"], builder["a"] = boat["x"], boat["y"], engine.A_BUILD
+        with patch.object(engine.needs, "body_capacity", return_value=1):
+            for day in range(engine.BOAT_WORK - 1):
+                engine.needs.fulfil(u, builder, day, rng, engine.A_BUILD)
+            self.assertEqual(boat["work"], engine.BOAT_WORK - 1)
+            self.assertNotIn("voyage", u)
+            self.assertFalse(any(p.get("ab") for p in u["people"]))
+            engine.needs.fulfil(u, builder, engine.BOAT_WORK, rng, engine.A_BUILD)
+        self.assertEqual(boat["work"], engine.BOAT_WORK)
+        annual(720)
+        self.assertNotIn("boat", u)
+        self.assertIn("voyage", u)
+        aboard = [p for p in u["people"] if p.get("ab")]
+        self.assertTrue(aboard)
+        v = dict(u["voyage"])
+        self.assertEqual(engine.boatyard(u, v["y"]), (v["x0"], v["x1"]))
+        engine.sail(u, u["people"], rng, events, v["d0"] + v["days"] - 1)
+        self.assertIn("voyage", u)
+        self.assertFalse(u["continent"])
+        engine.sail(u, u["people"], rng, events, v["d0"] + v["days"])
+        self.assertNotIn("voyage", u)
+        self.assertTrue(u["continent"])
+        self.assertTrue(u["boats"])
+        self.assertTrue(all(not p.get("ab") and p["st"] == 1 for p in aboard))
+        self.assertTrue(all((p["x"], p["y"]) == (v["x1"], v["y"]) for p in aboard))
+        self.assertNotEqual(engine.terrain_of(u)[v["y"]][v["x1"]], 2)
+        self.assertTrue(any("lands on the greater shore" in e[3] for e in events))
 
     def test_fertility_follows_age_body_and_nursing(self):
         p = engine.person(1, "W", "f", 0, 1, 0, 0)

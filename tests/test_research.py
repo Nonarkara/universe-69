@@ -22,6 +22,8 @@ sys.path.insert(0, os.path.join(ROOT, "sim"))
 
 import engine  # noqa: E402
 import research  # noqa: E402
+from scratch_space import scratch_root
+SCRATCH = scratch_root()
 
 RENDERER = os.path.join(ROOT, "web", "index.html")
 MIRROR = os.path.join(ROOT, "docs", "index.html")
@@ -186,7 +188,7 @@ class TestTheRecordSurvives(unittest.TestCase):
         """The universes have been running since before this layer existed."""
         w = engine.genesis(seed=69)
         w.pop("research", None)
-        with tempfile.TemporaryDirectory() as directory:
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as directory:
             path = os.path.join(directory, "state.json")
             engine.save_state(w, path)
             back = engine.load_state(path)

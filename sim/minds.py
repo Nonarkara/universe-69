@@ -47,8 +47,58 @@ MALE_AG_SHIFT = 0.08       # ≈ half an sd: a distribution shift, never a rule 
 SYLLABLES = ["ka", "ra", "no", "ta", "mi", "lu", "se", "an", "ko", "ri",
              "ve", "sha", "on", "ba", "ni", "tu", "ma", "ilo", "ess", "ur"]
 
+# The names a world gives its people.
+#
+# A name is a cultural invention, so the two worlds do not share a stock.
+# EDEN is the older story: Adam and Eve, and the line after them. LAGOON
+# is the other older story: Rahul and Siddhartha, and the line after
+# them. The people themselves are the same — the founders of both worlds
+# have the same bodies and the same tempers — but a world names its own.
+#
+# The founders are named from the head of the list; everyone born after
+# them is named from the whole stock, so a name in the record always
+# says which world the person belongs to.
 
-def make_name(rng):
+NAMES = {
+    "EDEN": {
+        "m": ["Adam", "Cain", "Abel", "Seth", "Enosh", "Noah", "Lame", "Enoch",
+              "Mica", "Jubal", "Tubal", "Peleg", "Reu", "Serug", "Terah", "Abram",
+              "Isaac", "Jacob", "Judah", "Dan", "Zebulun", "Issachar", "Gad",
+              "Joseph", "Benjamin", "Levi", "Judah", "Amos", "Obadiah"],
+        "f": ["Eve", "Adah", "Zillah", "Miriam", "Ruth", "Sarah", "Rachel",
+              "Leah", "Dinah", "Tamar", "Jael", "Deborah", "Naomi", "Hannah",
+              "Rachel", "Dinah", "Phoebe", "Priscilla", "Lydia", "Mary",
+              "Martha", "Mary", "Elizabeth", "Esther", "Judith", "Ruth",
+              "Sarah", "Hephzibah", "Shiloh"],
+    },
+    "LAGOON": {
+        "m": ["Rahul", "Siddhartha", "Ganesh", "Shiva", "Arjuna", "Krishna",
+              "Indra", "Rama", "Vishnu", "Yama", "Brahma", "Hanuman", "Karna",
+              "Nakula", "Sahadeva", "Duryodhana", "Bhishma", "Drona", "Asoka",
+              "Chandraprabha", "Devadatta", "Maitreya", "Ananda", "Nirvana",
+              "Ajita", "Nanda", "Mahakashyapa", "Sariputra", "Upananda",
+              "Bodhisattva"],
+        "f": ["Sita", "Parvati", "Ganga", "Tara", "Radha", "Lakshmi", "Maya",
+              "Kali", "Ananda", "Savitri", "Meera", "Bhagavati", "Padma", "Durga",
+              "Sati", "Ganga", "Indrani", "Rambha", "Menaka", "Apsara", "Kausalya",
+              "Sumitra", "Kaikeyi", "Mandodari", "Sita", "Sundari", "Amrapali",
+              "Vasudha", "Kishnadevi", "Kambala"],
+    },
+}
+
+
+def make_name(rng, pool=None, index=None, sex=None):
+    """A name from the world's own stock.
+
+    With an index it is the name at that place in the list — used for the
+    founders, so that EDEN begins with Adam and Eve and LAGOON with Rahul
+    and Sita. Without one it is drawn at random from the stock.
+    """
+    if pool:
+        names = pool[sex] if sex in ("m", "f") else pool["m"] + pool["f"]
+        if index is not None:
+            return names[index % len(names)]
+        return names[rng.randrange(len(names))]
     n = rng.choice([2, 2, 3])
     return "".join(rng.choice(SYLLABLES) for _ in range(n)).capitalize()
 
@@ -57,18 +107,26 @@ def clamp01(x):
     return 0.0 if x < 0.0 else 1.0 if x > 1.0 else x
 
 
-def founders(fseed, iteration, pairs):
+def founders(fseed, iteration, pairs, pool=None):
     """The same people, for both universes.
 
-    Both worlds start from the same founders: same names, same temperaments.
-    The world is the only difference, which is what makes the comparison an
-    experiment. The first iteration is two pairs; a reseed after extinction
-    sends eight (owner's brief, after The Matrix's eight survivors).
+    Both worlds start from the same founders: the same bodies, the same
+    tempers, in the same order. The world is the only difference, which is
+    what makes the comparison an experiment. What differs is the *name*
+    each world gives them, because a name is a thing a world invents.
+
+    EDEN begins with Adam and Eve; LAGOON begins with Rahul and Sita.
+    Each world receives eight pairs, as on every reseed.
     """
     rng = random.Random(fseed * 1009 + iteration)
     out = []
     for i in range(pairs * 2):
-        out.append({"n": make_name(rng), "s": "m" if i % 2 == 0 else "f",
+        sex = "m" if i % 2 == 0 else "f"
+        if pool:
+            nm = make_name(rng, pool, index=i // 2, sex=sex)
+        else:
+            nm = make_name(rng)
+        out.append({"n": nm, "s": sex,
                     "ef": clamp01(rng.gauss(0.5, TRAIT_SD)),
                     "ag": clamp01(rng.gauss(0.5, TRAIT_SD)),
                     "vg": clamp01(rng.gauss(0.5, TRAIT_SD))})

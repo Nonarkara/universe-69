@@ -1,6 +1,6 @@
 # UNIVERSE 69
 
-Two sealed pixel universes living continuously on an old laptop, observed but
+Two sealed universes living continuously on an old laptop, observed but
 never helped. Universe **6 — EDEN** is John Calhoun's Universe 25 rebuilt for
 humans: free food, perfect climate, free mating, bounded space. Universe
 **9 — LAGOON** is the first-sapiens world: a lagoon, woods, game, predators,
@@ -13,16 +13,15 @@ seasons — nothing given, everything earned.
   did, and the commands that re-derive every number in it
 - **Live local view:** http://localhost:6969
 - **Live web mirror:** https://nonarkara.github.io/universe-69/ (snapshot every
-  10 min). The vanity name `universe.nonarkara.org` has **no DNS record** —
-  it needs a CNAME to `nonarkara.github.io` in Cloudflare, plus the custom
-  domain set in the repo's Pages settings.
+  10 min). `universe.nonarkara.org` is an optional vanity hostname; its
+  current DNS and Pages deployment were not verified in this code audit.
 
 ## Time
 
-1 sim-day every 2 real seconds → ~118 sim-years (5–6 generations) per real
-day. The clock is anchored to a genesis epoch: if the laptop sleeps or the
-process dies, the engine fast-forwards the missed days on wake, like a
-Tamagotchi that kept living in the dark.
+Dawn, day, dusk and night take three real seconds each: twelve seconds per
+simulated day, twenty 360-day years per real day. The saved cumulative clock
+catches up after sleep or restart. `UNIVERSE69_SEC_PER_PART` changes the pace
+without replaying completed time.
 
 ## The rules of the game
 
@@ -34,7 +33,8 @@ iterations as wordless instinct (faster to preserve food if starvation won,
 warier of the woods if predators won, cleaner around the herds if sickness
 won). Survivors of a near-wipe learn the same way, without going extinct
 first. EDEN is reseeded under identical conditions every time, because
-Calhoun's finding was precisely that nothing inside the pen can save it.
+the two worlds have different experimental conditions. The phase names
+describe the current model; they do not force a collapse.
 
 ## Running
 
@@ -45,6 +45,16 @@ python3 tools/chronicle.py  # digest new events into data/chronicle/
 
 The live run lives on the 2016 MacBook (a LaunchAgent keeps it alive 24/7).
 This repo is the workbench; the 2016 Mac is the instrument.
+
+For the planned new run, pull the audited commit on the MacBook, stop its
+LaunchAgent, then run `./run.sh --genesis` in the checkout. This explicitly
+archives the previous run before starting the new founders. Stop that
+foreground instance before loading the LaunchAgent again. Do not run two
+instances against the same data directory. Use `STUDY.md` for the recorded
+restart procedure and model-version caveats.
+
+Development instances must set both `UNIVERSE69_PORT` and `UNIVERSE69_DATA`,
+with scratch data under `/Volumes/Data/agent-scratch/`; never use live `data/`.
 
 ## Working on the model
 
@@ -82,8 +92,10 @@ The viewer is a camera you can take: **wheel** zooms, **drag** pans, **click a
 person** follows them, **escape** gives the camera back to the documentary
 eye. The lower-third card names whoever you picked — age, generation, their
 nest box, their partner, and why they are the way they are. `THE OBSERVER'S
-RECORD` is a console: every event, filterable by universe and by
-LIFE / WORLD / END.
+RECORD` keeps events filterable by universe and by LIFE / WORLD / END.
+The record, Research, Book and First Run archive use Prev/Next pages, arrow
+keys and swipes. Both worlds remain on the first screen: side by side on
+wide screens, stacked on phones.
 
 24/7 via launchd:
 
@@ -100,14 +112,16 @@ this repo.
 
 ```
 AGENTS.md         the standing instructions for every agent (design laws live here)
-sim/engine.py      the model (pure stdlib, deterministic per seed+day)
+sim/engine.py      the model (pure stdlib, deterministic per seed+day+part)
 sim/server.py      tick loop, HTTP viewer, snapshot uploader
-web/index.html     chunky-pixel renderer (also deployed to docs/)
+web/index.html     full-resolution terrarium renderer (also deployed to docs/)
 docs/              GitHub Pages mirror (reads the gist snapshot) + design laws
-tools/lab.py       fast local harness — run a century in seconds
+tools/lab.py       fast local harness — bounded arcs without wall-clock delay
 tools/chronicle.py mechanical event digest
 tests/             unittest suite (engine behaviour + viewer data contract)
 data/              state, events.ndjson, chronicles, postmortems (local)
 ```
 
-No dependencies, no build step, no framework. 8-bit honesty throughout.
+The simulation has no external dependencies or build step. The viewer uses
+the TERRARIUM palette, Jost for controls and Source Serif 4 for reading.
+`GRAPHICS.md` and `tests/test_style.py` define the rendering contract.

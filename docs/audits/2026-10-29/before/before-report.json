@@ -1,0 +1,406 @@
+{
+  "url": "http://127.0.0.1:6974/",
+  "fixture": null,
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "checks": [
+        {
+          "check": "Document renders in foreground",
+          "passed": true
+        },
+        {
+          "check": "No document horizontal overflow",
+          "passed": true
+        },
+        {
+          "check": "One screen: the page does not scroll",
+          "passed": true
+        },
+        {
+          "check": "Stacked world scenes align",
+          "passed": true
+        },
+        {
+          "check": "Worlds stack, both on the first screen",
+          "passed": true
+        },
+        {
+          "check": "Record metadata stays on one line",
+          "passed": true
+        },
+        {
+          "check": "Both canvases contain visible pixels",
+          "passed": true
+        },
+        {
+          "check": "Adult detail requires known age 18 and a distinct cache entry",
+          "passed": true
+        },
+        {
+          "check": "No browser exceptions",
+          "passed": true
+        }
+      ],
+      "errors": [],
+      "geometry": {
+        "hidden": false,
+        "width": 390,
+        "height": 844,
+        "documentWidth": 390,
+        "documentHeight": 844,
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 35,
+          "bottom": 35,
+          "scrollWidth": 390,
+          "clientWidth": 390
+        },
+        "bottom": {
+          "x": 0,
+          "y": 790,
+          "width": 390,
+          "height": 54,
+          "bottom": 844,
+          "scrollWidth": 390,
+          "clientWidth": 390
+        },
+        "scenes": [
+          {
+            "x": 0,
+            "y": 63,
+            "width": 390,
+            "height": 335,
+            "bottom": 398,
+            "scrollWidth": 390,
+            "clientWidth": 390
+          },
+          {
+            "x": 0,
+            "y": 428,
+            "width": 390,
+            "height": 335,
+            "bottom": 763,
+            "scrollWidth": 390,
+            "clientWidth": 390
+          }
+        ],
+        "worldHeads": [
+          {
+            "x": 0,
+            "y": 35,
+            "width": 390,
+            "height": 28,
+            "bottom": 63,
+            "scrollWidth": 390,
+            "clientWidth": 390
+          },
+          {
+            "x": 0,
+            "y": 400,
+            "width": 390,
+            "height": 28,
+            "bottom": 428,
+            "scrollWidth": 390,
+            "clientWidth": 390
+          }
+        ],
+        "chrome": {
+          "top": 35,
+          "bottom": 54,
+          "topPercent": 4.1469194312796205,
+          "bottomPercent": 6.398104265402844,
+          "combinedTop": 428,
+          "combinedTopPercent": 50.71090047393365
+        },
+        "canvases": [
+          {
+            "id": "c6",
+            "width": 390,
+            "height": 335,
+            "lit": 1347,
+            "samples": 1347
+          },
+          {
+            "id": "c9",
+            "width": 390,
+            "height": 335,
+            "lit": 1347,
+            "samples": 1347
+          }
+        ]
+      },
+      "screenshot": "before-390x844-world.png"
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "checks": [
+        {
+          "check": "Document renders in foreground",
+          "passed": true
+        },
+        {
+          "check": "No document horizontal overflow",
+          "passed": true
+        },
+        {
+          "check": "One screen: the page does not scroll",
+          "passed": true
+        },
+        {
+          "check": "World scenes align",
+          "passed": true
+        },
+        {
+          "check": "Worlds stay side by side",
+          "passed": true
+        },
+        {
+          "check": "Record metadata stays on one line",
+          "passed": true
+        },
+        {
+          "check": "Both canvases contain visible pixels",
+          "passed": true
+        },
+        {
+          "check": "Adult detail requires known age 18 and a distinct cache entry",
+          "passed": true
+        },
+        {
+          "check": "No browser exceptions",
+          "passed": true
+        }
+      ],
+      "errors": [],
+      "geometry": {
+        "hidden": false,
+        "width": 1024,
+        "height": 768,
+        "documentWidth": 1024,
+        "documentHeight": 768,
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 35,
+          "bottom": 35,
+          "scrollWidth": 1024,
+          "clientWidth": 1024
+        },
+        "bottom": {
+          "x": 0,
+          "y": 714,
+          "width": 1024,
+          "height": 54,
+          "bottom": 768,
+          "scrollWidth": 1024,
+          "clientWidth": 1024
+        },
+        "scenes": [
+          {
+            "x": 0,
+            "y": 63,
+            "width": 511,
+            "height": 541.625,
+            "bottom": 604.625,
+            "scrollWidth": 511,
+            "clientWidth": 511
+          },
+          {
+            "x": 513,
+            "y": 63,
+            "width": 511,
+            "height": 541.625,
+            "bottom": 604.625,
+            "scrollWidth": 511,
+            "clientWidth": 511
+          }
+        ],
+        "worldHeads": [
+          {
+            "x": 0,
+            "y": 35,
+            "width": 511,
+            "height": 28,
+            "bottom": 63,
+            "scrollWidth": 511,
+            "clientWidth": 511
+          },
+          {
+            "x": 513,
+            "y": 35,
+            "width": 511,
+            "height": 28,
+            "bottom": 63,
+            "scrollWidth": 511,
+            "clientWidth": 511
+          }
+        ],
+        "chrome": {
+          "top": 35,
+          "bottom": 54,
+          "topPercent": 4.557291666666667,
+          "bottomPercent": 7.03125,
+          "combinedTop": 63,
+          "combinedTopPercent": 8.203125
+        },
+        "canvases": [
+          {
+            "id": "c6",
+            "width": 511,
+            "height": 542,
+            "lit": 2856,
+            "samples": 2856
+          },
+          {
+            "id": "c9",
+            "width": 511,
+            "height": 542,
+            "lit": 2856,
+            "samples": 2856
+          }
+        ]
+      },
+      "screenshot": "before-1024x768-world.png"
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "checks": [
+        {
+          "check": "Document renders in foreground",
+          "passed": true
+        },
+        {
+          "check": "No document horizontal overflow",
+          "passed": true
+        },
+        {
+          "check": "One screen: the page does not scroll",
+          "passed": true
+        },
+        {
+          "check": "World scenes align",
+          "passed": true
+        },
+        {
+          "check": "Worlds stay side by side",
+          "passed": true
+        },
+        {
+          "check": "Record metadata stays on one line",
+          "passed": true
+        },
+        {
+          "check": "Both canvases contain visible pixels",
+          "passed": true
+        },
+        {
+          "check": "Adult detail requires known age 18 and a distinct cache entry",
+          "passed": true
+        },
+        {
+          "check": "No browser exceptions",
+          "passed": true
+        }
+      ],
+      "errors": [],
+      "geometry": {
+        "hidden": false,
+        "width": 1440,
+        "height": 900,
+        "documentWidth": 1440,
+        "documentHeight": 900,
+        "top": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 35,
+          "bottom": 35,
+          "scrollWidth": 1440,
+          "clientWidth": 1440
+        },
+        "bottom": {
+          "x": 0,
+          "y": 846,
+          "width": 1440,
+          "height": 54,
+          "bottom": 900,
+          "scrollWidth": 1440,
+          "clientWidth": 1440
+        },
+        "scenes": [
+          {
+            "x": 0,
+            "y": 63,
+            "width": 719,
+            "height": 728.3125,
+            "bottom": 791.3125,
+            "scrollWidth": 719,
+            "clientWidth": 719
+          },
+          {
+            "x": 721,
+            "y": 63,
+            "width": 719,
+            "height": 728.3125,
+            "bottom": 791.3125,
+            "scrollWidth": 719,
+            "clientWidth": 719
+          }
+        ],
+        "worldHeads": [
+          {
+            "x": 0,
+            "y": 35,
+            "width": 719,
+            "height": 28,
+            "bottom": 63,
+            "scrollWidth": 719,
+            "clientWidth": 719
+          },
+          {
+            "x": 721,
+            "y": 35,
+            "width": 719,
+            "height": 28,
+            "bottom": 63,
+            "scrollWidth": 719,
+            "clientWidth": 719
+          }
+        ],
+        "chrome": {
+          "top": 35,
+          "bottom": 54,
+          "topPercent": 3.888888888888889,
+          "bottomPercent": 6,
+          "combinedTop": 63,
+          "combinedTopPercent": 7
+        },
+        "canvases": [
+          {
+            "id": "c6",
+            "width": 719,
+            "height": 728,
+            "lit": 5397,
+            "samples": 5397
+          },
+          {
+            "id": "c9",
+            "width": 719,
+            "height": 728,
+            "lit": 5397,
+            "samples": 5397
+          }
+        ]
+      },
+      "screenshot": "before-1440x900-world.png"
+    }
+  ],
+  "failures": []
+}

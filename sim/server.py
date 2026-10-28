@@ -49,17 +49,10 @@ status = {"catching_up": False, "behind_days": 0, "started": time.time()}
 
 # `--genesis` starts both worlds over from the shared founders. The old world
 # is archived, never deleted: its numbers belong to the engine that made them.
-if "--genesis" in sys.argv and os.path.exists(STATE_PATH):
-    old = engine.load_state(STATE_PATH)
-    archive = os.path.join(DATA, "archive")
-    os.makedirs(archive, exist_ok=True)
-    stamp = time.strftime("%Y%m%d-%H%M%S")
-    ver = old.get("eden", {}).get("engine", "unknown")
-    dest = os.path.join(archive, f"state-{ver}-{stamp}.json")
-    os.replace(STATE_PATH, dest)
-    if os.path.exists(EVENTS_PATH):
-        os.replace(EVENTS_PATH, os.path.join(archive, f"events-{ver}-{stamp}.ndjson"))
-    print(f"[universe69] archived the old world to {dest}")
+if "--genesis" in sys.argv:
+    archived = historian.archive_run(DATA)
+    if archived:
+        print(f"[universe69] archived the old run to {archived}")
 
 if os.path.exists(STATE_PATH):
     world = engine.load_state(STATE_PATH)
@@ -76,7 +69,7 @@ engine.set_clock_pace(world, SEC_PER_PART)
 seen_events = set()
 if os.path.exists(EVENTS_PATH):
     with open(EVENTS_PATH) as f:
-        tail = f.readlines()[-4000:]
+        tail = list(deque(f, maxlen=4000))
     parsed = []
     for line in tail:
         try:
@@ -150,7 +143,7 @@ def engine_loop():
             if any(e[2] in ("extinction", "lesson") for e in evts):
                 dump_postmortems()
                 with lock:
-                    historian.compile_book(world, ROOT)
+                    historian.compile_book(world, data=DATA)
             if status["catching_up"]:
                 print(f"[universe69] fast-forwarding, {behind - batch} parts to go")
         if time.time() - last_save > 60:
@@ -288,7 +281,7 @@ signal.signal(signal.SIGINT, shutdown)
 
 # If the run was already over when we booted, make sure the book exists.
 with lock:
-    historian.compile_book(world, ROOT)
+    historian.compile_book(world, data=DATA)
 
 threading.Thread(target=engine_loop, daemon=True).start()
 threading.Thread(target=uploader_loop, daemon=True).start()

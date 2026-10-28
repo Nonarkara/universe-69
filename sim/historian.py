@@ -6,64 +6,47 @@ how a world evolves. The book is the record, not the experiment.
 
 import json
 import os
+import tempfile
+import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA = os.path.join(ROOT, "data")
-PM_DIR = os.path.join(DATA, "postmortems")
-EVENTS = os.path.join(DATA, "events.ndjson")
-BOOK_DIR = os.path.join(DATA, "history-books")
 
-
-def _load_postmortem(key, iteration):
-    path = os.path.join(PM_DIR, f"u{'6' if key == 'eden' else '9'}-iteration-{iteration:03d}.json")
-    if not os.path.exists(path):
+def archive_run(data):
+    """Archive the artifacts of one explicit restart; retain runtime config."""
+    names = [name for name in ("state.json", "events.ndjson", "postmortems", "history-books")
+             if os.path.exists(os.path.join(data, name))]
+    if not names:
         return None
-    with open(path) as f:
-        return json.load(f)
+    archive = os.path.join(data, "archive")
+    os.makedirs(archive, exist_ok=True)
+    folder = tempfile.mkdtemp(prefix="run-" + time.strftime("%Y%m%d-%H%M%S") + "-", dir=archive)
+    for name in names:
+        os.replace(os.path.join(data, name), os.path.join(folder, name))
+    return folder
 
 
-def _events_for(extinct_days):
-    if not os.path.exists(EVENTS):
-        return []
-    lo = 0
-    hi = max(extinct_days.values())
-    out = []
-    with open(EVENTS) as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                e = json.loads(line)
-            except ValueError:
-                continue
-            if lo <= e.get("d", 0) <= hi:
-                out.append(e)
-    return out
-
-
-def compile_book(world, root=None):
+def compile_book(world, root=None, data=None):
     """Write a history book if both universes are extinct. Return path or None."""
     root = root or ROOT
-    data = os.path.join(root, "data")
+    data = data or os.path.join(root, "data")
     pm_dir = os.path.join(data, "postmortems")
     events_path = os.path.join(data, "events.ndjson")
     book_dir = os.path.join(data, "history-books")
-    os.makedirs(book_dir, exist_ok=True)
 
     eden = world.get("eden") or {}
     lagoon = world.get("lagoon") or {}
     if eden.get("extinct_day") is None or lagoon.get("extinct_day") is None:
         return None
 
+    os.makedirs(book_dir, exist_ok=True)
     ei = eden.get("iteration", 1)
     li = lagoon.get("iteration", 1)
     out = os.path.join(book_dir, f"book-eden{ei:03d}-lagoon{li:03d}.md")
     if os.path.exists(out):
         return out
 
-    epm = None
-    lpm = None
+    epm = next((p for p in reversed(eden.get("postmortems", [])) if p.get("iteration") == ei), None)
+    lpm = next((p for p in reversed(lagoon.get("postmortems", [])) if p.get("iteration") == li), None)
     # load from disk if present, else from in-memory
     p = os.path.join(pm_dir, f"u6-iteration-{ei:03d}.json")
     if os.path.exists(p):
@@ -89,7 +72,9 @@ def compile_book(world, root=None):
                     e = json.loads(line)
                 except ValueError:
                     continue
-                if 0 <= e.get("d", 0) <= hi:
+                key = {"EDEN": "eden", "LAGOON": "lagoon"}.get(e.get("u"))
+                universe = world.get(key) if key else None
+                if universe and universe.get("founded_day", 0) <= e.get("d", 0) <= extinct_days[key]:
                     evs.append(e)
 
     def pm_block(pm, name):
@@ -98,6 +83,7 @@ def compile_book(world, root=None):
         lines = [f"### {name} — iteration {pm.get('iteration')}", ""]
         lines.append(f"- Extinct on sim-day {pm.get('day')} "
                      f"(year {pm.get('day', 0) // 360})")
+        lines.append(f"- Engine: {pm.get('engine', 'unknown')}")
         lines.append(f"- Peak population: {pm.get('peak')}")
         lines.append(f"- Highest generation: {pm.get('gen_max')}")
         lines.append(f"- Dominant cause of death: **{pm.get('dominant_cause')}**")

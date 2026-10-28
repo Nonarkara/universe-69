@@ -320,7 +320,9 @@ class TestTheInstrumentStrip(unittest.TestCase):
     def test_reference_ticks_are_the_cited_ones(self):
         ticks = {k: [float(x) for x in t.split(",")] if t else [] for k, _, t in self.gauges()}
         self.assertEqual(ticks["net"], [0])
-        self.assertEqual(ticks["inf"], [0.04, 0.80])     # Calhoun 1962; Gurven & Kaplan 2007
+        # This legacy field divides different cohorts; survival references
+        # would imply a comparison the observation cannot support.
+        self.assertEqual(ticks["inf"], [])
         self.assertEqual(ticks["clm"], [1])
         self.assertEqual(ticks["snk"], [25, 60])         # even over four hoppers; Calhoun 1962
         self.assertEqual(ticks["vio"], [1, 524])         # Pinker 2011

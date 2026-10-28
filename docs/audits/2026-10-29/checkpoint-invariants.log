@@ -1,0 +1,9 @@
+PASS day-3000 eden engine 2026.10.29.1 population 34 census rows 8
+PASS day-3000 lagoon engine 2026.10.29.1 population 28 census rows 8
+PASS identity, reciprocal bonds, clock, room claims, living role holders, store totals, all adjacent census stock-flow
+PASS day-36000 eden engine 2026.10.29.1 population 614 census rows 99
+PASS day-36000 lagoon engine 2026.10.29.1 population 231 census rows 99
+PASS identity, reciprocal bonds, clock, room claims, living role holders, store totals, all adjacent census stock-flow
+PASS day-60000 eden engine 2026.10.29.1 population 711 census rows 166
+PASS day-60000 lagoon engine 2026.10.29.1 population 435 census rows 166
+PASS identity, reciprocal bonds, clock, room claims, living role holders, store totals, all adjacent census stock-flow

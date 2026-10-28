@@ -1,0 +1,18 @@
+Command: /opt/homebrew/opt/python@3.14/bin/python3.14 -m unittest discover -s tests -p test_historian.py
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.071s
+
+OK
+Command: /opt/homebrew/opt/python@3.14/bin/python3.14 -m unittest discover -s tests -p test_research.py
+......................
+----------------------------------------------------------------------
+Ran 22 tests in 3.357s
+
+OK
+Command: /opt/homebrew/opt/python@3.14/bin/python3.14 -m unittest discover -s tests -p test_engine.py -k Persistence
+....
+----------------------------------------------------------------------
+Ran 4 tests in 3.897s
+
+OK

@@ -203,9 +203,9 @@ sim/engine.py      the model — pure stdlib, deterministic per seed+part
 sim/minds.py       the people: bodies, minds, fertility, names
 sim/research.py    the hypotheses the books imply, and the run that tests them
 sim/server.py      tick loop, HTTP viewer, snapshot uploader
-web/index.html     chunky-pixel renderer (identical to docs/index.html)
+web/index.html     full-resolution terrarium renderer (identical to docs/index.html)
 docs/              GitHub Pages mirror + the canonical design law
-tools/lab.py       fast local harness: run a century in seconds
+tools/lab.py       bounded local harness without wall-clock delay
 tools/sweep.py     vary the pen's design and report what each one does
 tools/shoot.py     capture the viewer at 390/1024/1440 and drive it
 tools/chronicle.py mechanical event digest

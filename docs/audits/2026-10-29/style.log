@@ -1,0 +1,6 @@
+python3 -m unittest discover -s tests -p test_style.py
+Ran 40 tests in 0.019s
+OK
+Viewer inline JavaScript: node --check OK
+web/index.html == docs/index.html
+sh -n run.sh OK

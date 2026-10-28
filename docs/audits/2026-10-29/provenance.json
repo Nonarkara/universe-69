@@ -1,0 +1,49 @@
+{
+  "engine": "2026.10.29.1",
+  "seed": 69,
+  "model_measurement_python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "compatibility_python": "Apple Python 3.9.6",
+  "source_sha256": {
+    "docs/audits/2026-10-29/fixtures/lab-day-3000.json": "2efa6e34216e1b304ddb26d87d08d683c5bf039aba707f2a52382f9af1d4f9ef",
+    "docs/audits/2026-10-29/fixtures/lab-day-36000.json": "9e914f27f8ad52aea6a5a9d0ed64474432704b957070b731cb506066606eff46",
+    "docs/index.html": "7b9bb6aca42bcef0d394390754486f7e1e9349bef7dedf339c49dcf25abe85c8",
+    "sim/animals.py": "b86accd789b2f3bb27e057118568b2dc06d7f366a0d331fd67a6eb8d0cd3368f",
+    "sim/engine.py": "04a6ed2badadecf47a2434aca2c4a4c5b3e4c4a1173fa1472835c9a9e363e803",
+    "sim/historian.py": "d433208daac783738e3bfd5771cf6f6417b3ce8c221616127e58141c62355ece",
+    "sim/minds.py": "d8234fba0e916043c3a083fec2036a6d9970b9a11ff9f39fa48f3ff08863a9b7",
+    "sim/needs.py": "df78b0bf52d6170879bde0d280a3e4c21980b6235b4127dfe06010062e4d3e8d",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "sim/server.py": "6f2b4f29a6069898e026a6f0e2c3c4e54a66bdaea2cc2eb1cbab8b4900553d54",
+    "tools/lab.py": "7ecb12a6d5e86d32394d0fe135eab8656eafcde4526bda3bd9a76dbc944a38ce",
+    "tools/shoot.py": "5945cbe3a7cfe534f958af0987a0da037d4b222415c8f1452b7130f967381618",
+    "web/index.html": "7b9bb6aca42bcef0d394390754486f7e1e9349bef7dedf339c49dcf25abe85c8",
+    "docs/audits/2026-10-29/fixtures/day-3000/saved-world.json": "b1de82075caa9aa9e1a35ec20480395a3bbace02c34f1201ff0ece4176cb7d1a",
+    "docs/audits/2026-10-29/fixtures/day-36000/saved-world.json": "bb4e9eb98830420953a6bf7a985687886a80aee74fedd186a53399eba9f2c1fa",
+    "docs/audits/2026-10-29/fixtures/day-60000/saved-world.json": "8267d896881d15b4d202ff3eba9d50b92cb18bdd751ed6fe06105d38ab403b6e"
+  },
+  "live_state_used": false,
+  "visual_viewports": [
+    [
+      390,
+      844
+    ],
+    [
+      1024,
+      768
+    ],
+    [
+      1440,
+      900
+    ]
+  ],
+  "reviewed_fixture_days": [
+    3000,
+    36000
+  ],
+  "checked_raw_fixture_days": [
+    3000,
+    36000,
+    60000
+  ],
+  "model_run_seconds": 1345.4
+}

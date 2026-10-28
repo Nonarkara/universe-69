@@ -18,13 +18,14 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
   (now − clock.epoch) / clock.seconds` and catches up. Pace changes preserve
   ticks already due. The universes age while the process is dead.
 
-## The founders (engine 2026.10.27.3)
+## The founders (engine 2026.10.29.1)
 
-Both universes receive **the same people**: same names, same heritable
-temperaments, generated from one shared founder seed. The world is the only
-variable. The first iteration is **two pairs**, young and innocent; both
-worlds must discover how new life begins (EDEN sooner — there is nothing
-else to do). Every reseed after an extinction sends **eight pairs**.
+Both universes receive **eight pairs** with the same sexes, bodies and
+heritable temperaments, generated from one shared founder seed. Every reseed
+also sends eight pairs. Their display names use separate world-specific pools;
+name choices do not consume the founder trait RNG. Existing saved people
+retain their names and population. Both worlds begin innocent; the first
+successful birth records the discovery of naming.
 
 ## Minds and bodies: one Stone-Age brain, two worlds
 
@@ -206,7 +207,7 @@ be reseeded, and no figure from an earlier engine carries over.**
 |---|---|---|
 | Foragers eat what somebody gathered (Lee & DeVore, *Man the Hunter*) | Food is in **sites** on the map (berry groves, shallows, game, tilled fields). A worker at a site eats there and carries a day's load home; a camp eats only from its own **store**. No food arrives because there are adults. If everybody sleeps, the store stays empty and the band starves (`tests/test_needs.py`, A1) | `needs.fulfil`, `needs.eat`, `needs.deposit` |
 | Hunger, energy and company are a person's own | Personal meters `hun`, `ene`, `sol`. Eating lowers the eater's hunger and empties the pantry it came from (A2). An infant is fed by its mother, and the mother pays 0.6 of it in her own hunger | `needs.meters`, `needs.eat` |
-| Starvation takes weeks (hunger-strike literature: ~45–70 days at normal weight) | Hunger 0→40 (death) at ~1.4/day for a working adult: about four weeks with nothing at all, longer with scraps | `needs.HUNGER_MAX`, `HUNGER_PER_DAY` |
+| A body deprived of food weakens (illustrative model calibration, not a validated human starvation timescale) | Hunger 0→40 (death) at ~1.4/day for a working adult: about four weeks with nothing at all, longer with scraps | `needs.HUNGER_MAX`, `HUNGER_PER_DAY` |
 | Foragers anticipate: they go out because the larder is low, not only when their own belly is | `want_food` is the larger of this belly's hunger and the camp's shortfall against four days' food | `needs.assign`, `larder_short` |
 | Food does not keep without the craft to keep it | Camp stores rot 4%/day; 0.8% with preservation (or a "preserve" lesson); 0.2% with a granary | `needs.keep_stores` |
 | A field gives food only if it is worked (Diamond ch.6) | Tilled fields are sites that grow only when tended in the last 30 days, a quarter as fast in winter, a third in drought | `needs.ensure_sites`, `regrow_sites` |
@@ -225,11 +226,11 @@ population could naturally learn how to fight back").** `sim/animals.py`.
 
 | Finding | Mechanic | Where |
 |---|---|---|
-| Big cats kill people mostly when prey fails them, and mostly people alone (Packer et al. 2005, *Nature*; Treves & Naughton-Treves 1999) | Every deer and cat has a position. A cat kills deer every ~3.5 days; only after 12 days without a kill does it look at people, and then only at someone with fewer than three adults within three paces, outside a lit or watched camp. Children and the night make prey easier; vigilance (`vg`) harder | `animals.tick`, `_choose_person` |
+| Big cats kill people mostly when prey fails them, and mostly people alone (Packer et al. 2005, *Nature*; Treves & Naughton-Treves 1999) | Every deer and cat has a position. A cat looks for deer after eight days without a meal; only after 16 days without a kill does it look at people, and then only at someone with fewer than three adults within three paces, outside a lit or watched camp. Children and the night make prey easier; vigilance (`vg`) harder | `animals.tick`, `_choose_person` |
 | People fight back | An attacked adult with stone tools kills the cat 25% of the time (5% unarmed), +20% per adult defender, +10% with the "vigilance" lesson; otherwise the victim is taken (adult 55%, child 85%, halved if armed) or mauled | `_attack` |
 | The hunt follows the herd (Hadza: big kills are rare per hunter — Hawkes et al. 1991) | Hunters with stone tools track the nearest deer; deer bolt from people within four paces; a strike succeeds 5% + 5% per partner (max 30%) per part; the carcass is carried home as a shared load. Hunts last a day or two, and a hungry hunter gives up to eat | `animals.tick`, `needs.assign` |
 | Predator hunting | With `predator_hunt`, three armed hunters within four paces of a cat may kill it (25% per part); the cat is meat | `animals.tick` |
-| Herds and cats live on the land | Deer grow logistically to 0.035 per tile of grass or wood; cats are capped at one per 18 deer and starve after 45 days unfed. An empty island is recolonised: a small herd, or a single cat, arrives a few times a year (model calibration — the Observers' one act of design) | `animals._daily` |
+| Herds and cats live on the land | Deer have aggregate annual growth 0.6 at low density toward 0.08 per tile of grass or wood; cat reproduction is limited toward one per 120 deer and starve after 45 days unfed. An empty island is recolonised: a small herd, or a single cat, arrives a few times a year (model calibration — the Observers' one act of design) | `animals._daily` |
 
 | Shelter is built, pair by pair | With `shelter` known, each bonded pair raises its own hut at the camp: ten person-days of work (`needs.HUT_WORK`), scaled by body capacity. A finished hut is where the pair sleeps, and a cat does not take someone asleep under their own roof. Huts and their progress go to the viewer (`huts`) | `needs.hut_of`, `animals._sheltered` |
 | The drama is recorded where it happened | Each deer killed, cat hunted, cat fought off, person mauled or taken is kept for three days as an encounter with its place (`encounters`), for the documentary camera | `animals._seen` |
@@ -248,10 +249,42 @@ The day-counter fatigue is gone from LAGOON's assigner and the old
 phase-gated scripts are gone from EDEN. **Not yet done:** LAGOON's homicide
 model (`lagoon_violence`) is still a per-person hazard, unchanged.
 
+## Engine 2026.10.29.1 — audit of needs, wildlife, naming and restart boundaries
+
+**This changes the live run's trajectory.** Earlier engine numbers, including
+2026.10.28.4, are historical. No old population is silently reset by migration;
+only an explicit authorized `--genesis` starts new worlds. Eight pairs **per
+world** remain the current owner decision; the unfinished reduction to four
+pairs per world was removed.
+
+| Finding or contract | Audited mechanic | Where |
+|---|---|---|
+| The shared founders are the experimental control | World-specific indexed names consume no trait draws; newborn names use the child's sex. Legacy names survive; older established worlds migrate as already named | `minds.founders`, `make_name`, `migrate` |
+| Food must be earned and conserved | Existing pooled stores migrate once into camps by their resident headcounts. Food remains in sites, loads or stores until eaten, spoiled or lost with its carrier; death never teleports a remote load home. The world's total is synchronized after work, meals and spoilage | `migrate`, `tick_lagoon`, `needs` |
+| A field has to be worked; fish have their own season | A new farm starts unworked, including during the first month. Fish and plant regrowth use their respective seasonal factors. A hunter cannot harvest an unrelated berry site merely by reaching it | `needs.regrow_sites`, `fulfil` |
+| Need-driven withdrawal must be a reachable choice | In EDEN a fed adult with purpose <0.25 and solitude <0.25 can prioritize withdrawal above seeking company. The draft's maximum withdrawal score was always beaten by company. Purpose is now a required condition, matching the intended mechanic | `needs.assign` |
+| The carried picture has to match its source | A load records plants, fish, field harvest, deer, cat or mixed; only a recorded animal carcass uses the carcass rendering flag. Large berry baskets and legacy unknown loads remain generic loads | `needs.carry_food`, `animals`, `summarize` |
+| Death releases a claim and a bond, whatever its cause | One shared removal path handles ordinary, plague, epidemic and feud deaths; it frees occupied rooms/posts and unpairs survivors. Migration repairs old ghost occupancy, dead role holders and one-way pairs from actual living claims, preserving valid zero keys | `remove_dead`, `migrate` |
+| Dead people cannot supply new opportunities | Mating pools refresh after plague; annual discovery/culture uses surviving population and adults after epidemic. Revenge cannot kill a staged casualty twice. Withdrawal and exile detach both sides of a bond | `tick_eden`, `tick_lagoon`, `lagoon_violence`, `withdraw` |
+| Population stock must match its flows | An infant born and lost in the same part counts one birth and one death; a miscarriage counts neither. Census births minus deaths no longer subtracts these infants twice from population change | birth branches, `record_census` |
+| Each casualty and carcass is counted once | A person already taken by one cat cannot feed another, eat or die again in a later fight that part. Passengers aboard a boat are not terrestrial hunters. Deer reproduction uses its aggregate annual rate once | `animals.tick`, `_daily`, `tick_lagoon` |
+| Per-day rates convert once | Hunger has four quarter-day updates; a completed day's body/purpose update remains daily; story accumulation divides by the four parts once rather than twice | `needs.meters`, `keep_watch` |
+| A runtime data override isolates the whole run | History books use the configured data directory, current-iteration event bounds, and in-memory postmortems when disk copies are absent. Living worlds create no book directory | `historian.compile_book`, `server` |
+| An explicit restart must not mix iterations from different runs | State, events, postmortems and history books move together into a unique archive directory; runtime web configuration remains in place. Iteration 1 artifacts from an old run cannot suppress a new postmortem | `historian.archive_run`, `server --genesis` |
+
+The numeric needs/ecology parameters are illustrative calibration, not measured
+human or animal coefficients. Tests pin these causal contracts with controlled
+fixtures; they do not require a particular century's population, extinction or
+psychological outcome. One separately recorded bounded arc reports what this
+engine actually did. Birth-helper staging in the viewer is visual inference
+unless the snapshot actually records an `A_TEND` actor; there is no explicit
+persistent helper-to-mother link in the model.
+
 ## Universe 6 — EDEN (after Calhoun's Universe 25)
 
 A 48×48 sealed pen. Food hoppers and water are always full. Climate is perfect.
-No predators, no disease, no work. Two founding pairs (lab IDs, e.g. `E-0001`).
+No predators and no provisioning work. Eight founding pairs; mating-borne
+sickness remains a modeled risk.
 
 The only scarce resource is **social space** (Calhoun's actual variable):
 
@@ -269,7 +302,7 @@ The only scarce resource is **social space** (Calhoun's actual variable):
 
 A 96×96 world: woods, grassland, a lagoon with fish, beaches. Wildlife stocks
 (plants, game, fish, predators) regrow logistically and deplete when harvested.
-Two founding pairs with organic names. Nothing is given; everything is earned.
+Eight founding pairs with world-specific names. Nothing is given; everything is earned.
 
 | Research finding                           | Mechanic                                                    |
 |--------------------------------------------|-------------------------------------------------------------|
@@ -369,7 +402,7 @@ tribes*: peacefully after lore exists, as a deadly feud before it.
   hopper's level — each as full as `f` says.
 - **The instrument strip** under the worlds: eight gauges — population (log,
   against founding doublings, Universe 25 laid under it), births−deaths per
-  100 adults, infant survival, breeders and the withdrawn share, claimants
+  100 adults, yearlings / prior births (legacy capped proxy), breeders and the withdrawn share, claimants
   per place, the sink, food in store, violent deaths per 100k — each with
   EDEN above LAGOON on one scale and a reference tick where the literature
   gives one (Calhoun 1962/1973; Gurven & Kaplan 2007; Pinker 2011). Colour
@@ -430,3 +463,16 @@ depends on population and hardware; a century can take minutes:
 The verdict, not the eye, is the acceptance test for a change to the engine.
 Run it before and after any model change, and treat a change in the verdict as
 a change in the experiment.
+
+
+### Observer limitation: the legacy `infant_survival` column
+
+For compatibility, `gauges()` and the positional census retain the field name
+`infant_survival`. Its actual formula is
+`min(1, current people aged >=360 and <720 days / births in the latest annual census)`,
+rounded to three decimals, or `None` if that census has no births. The numerator
+is a rolling age window and the denominator is an annual period; they are not
+the same birth cohort. The cap can also hide ratios above one. It is labelled
+**YEARLINGS / PRIOR BIRTHS** in the viewer and must not be described as a true
+infant-survival rate or compared with an empirical survival threshold. No cohort
+tracking or trajectory change was introduced for this observer-label correction.

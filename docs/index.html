@@ -88,11 +88,19 @@
   .key { display:inline-block; width:8px; height:8px; border:2px solid; vertical-align:-1px; margin-right:3px; }
   .card { position:absolute; left:0; bottom:0; max-width:min(70%, 46ch); padding:6px 10px;
           line-height:1.5; background:rgba(20,19,15,0.86); border-top:1px solid var(--line);
-          pointer-events:none; display:none; }
+          pointer-events:auto; display:none; }
   .card.on { display:block; }
   .card .nm { color:var(--accent); font-weight:600; }
   .card .dl { color:var(--muted); }
   .card .dl b { color:var(--ink); font-weight:400; }
+  .personhead { margin-bottom:3px; }
+  .personpage { overflow:hidden; color:var(--muted); overflow-wrap:anywhere; }
+  .personpage p { margin:0 0 4px; }
+  .personpage p:last-child { margin-bottom:0; }
+  .personpager { display:flex; align-items:center; gap:4px; margin-top:4px; }
+  .personpager button { min-height:24px; padding:0 7px; }
+  .personpager .pageind { margin:0 auto; }
+
 
   /* ---- 2. the instrument strip --------------------------------------------- */
   #strip { flex:0 0 auto; background:var(--surface-2); border-top:1px solid var(--line); }
@@ -143,7 +151,7 @@
   .sheethead .close { margin-left:auto; }
   .sheethead .sum { flex-basis:100%; color:var(--muted); }
   .tabs { flex:none; display:flex; gap:6px; padding:8px 16px 0; flex-wrap:wrap; }
-  .page { flex:1 1 auto; min-height:0; overflow:hidden; padding:10px 16px; }
+  .page { overflow-wrap:anywhere; flex:1 1 auto; min-height:0; overflow:hidden; padding:10px 16px; }
   .sheetfoot { flex:none; display:flex; align-items:center; gap:8px; padding:8px 16px 10px; border-top:1px solid var(--line); }
   .sheetfoot .pageind { margin:0 auto; }
   .intro p, .failcard p { margin:0 0 8px; line-height:1.55; max-width:62ch; }
@@ -223,6 +231,8 @@
     button { padding:2px 7px; }
     .modal { padding:0; }
     .sheet, .sheet.small { max-width:none; height:100dvh; max-height:none; border:0; }
+    .sheet.small { width:calc(100% - 24px); max-width:520px; height:auto;
+                   max-height:calc(100dvh - 24px); border:1px solid var(--line); }
     .read { font-size:16px; }
     .read h1 { font-size:25px; }
     .read figure img { height:min(26vh, 230px); }
@@ -234,6 +244,8 @@
   /* Under ~700px the two worlds stack, each the full width of the phone, and
      each heading collapses to one line (tap it to open the rest). */
   @media (max-width: 700px) {
+    /* Leave portrait-sized live views above the paged record on phones. */
+    #god.tall #reclines { height:30vh; }
     #worlds { flex-direction:column; }
     #divider { width:auto; height:2px; }
     .hud .l2 { display:none; }
@@ -246,7 +258,7 @@
     #strip.open #gnote:not([hidden]) { display:block; }
     .gauge { border-right:0; border-top:1px solid var(--line); }
     .gauge:nth-child(odd) { border-right:1px solid var(--line); }
-    .card { pointer-events:auto; }
+    .card { width:100%; max-width:100%; pointer-events:auto; }
     /* the record's controls in one row: the filters, then the pager */
     #records h2 { display:none; }
     #rechead { flex-wrap:nowrap; gap:3px; }
@@ -444,7 +456,8 @@ var hudCache={ e:"", l:"" };
 // view (and a margin round it) is cached on an offscreen canvas at a
 // quarter-octave zoom step, and only repainted when the camera leaves that
 // margin, crosses a zoom step, or the world itself changes.
-var terr9=null, heat9=null, pathsSeq=-1, water9=[];
+var terrainInput9=null, mirrorTerrainKey9=null, mirrorIteration9=null;
+var terr9=null, terrainKey9=null, heat9=null, pathsSeq=-1, water9=[];
 var ground={ e:null, l:null };
 function nIs(terrain,x,y,k){ var S=terrain.length;
   return x>=0&&y>=0&&x<S&&y<S&&terrain[y][x]===k; }
@@ -804,8 +817,13 @@ var EDEN_WORLD={
 function compose9(u, st){
   var terrain=SNAP ? (st.world&&st.world.terrain) : (worldInfo&&worldInfo.terrain);
   if (!terrain) return null;
-  if (terr9!==terrain){
-    terr9=terrain; heat9=new Uint16Array(terrain.length*terrain.length); pathsSeq=-1; ground.l=null;
+  if (SNAP && (terrainInput9!==terrain || mirrorIteration9!==u.iter)){
+    terrainInput9=terrain; mirrorIteration9=u.iter;
+    mirrorTerrainKey9=JSON.stringify([u.iter, st.world.lagoon_iter, terrain]);
+  }
+  var terrainKey=SNAP ? mirrorTerrainKey9 : terrain;
+  if (terrainKey9!==terrainKey){
+    terrainKey9=terrainKey; terr9=terrain; heat9=new Uint16Array(terrain.length*terrain.length); pathsSeq=-1; ground.l=null;
     water9=[];
     for (var y=0;y<terrain.length;y++) for (var x=0;x<terrain.length;x++)
       if (terrain[y][x]===2 && hash2(x,y)>0.9 && (nIs(terrain,x,y-2,0)||nIs(terrain,x,y-2,3)||nIs(terrain,x-2,y,3)||nIs(terrain,x+2,y,3)||nIs(terrain,x,y+2,3))) water9.push([x,y]);
@@ -818,10 +836,50 @@ function compose6(u){
   EDEN_WORLD.S=(u.size||48)+2*EM;
   return EDEN_WORLD;
 }
+// EDEN at night. The resort does not close — the food is still free and
+// the beds are still there — but the lights come on, and the pen becomes a
+// lit stage in the dark: the windows of the lodgings, the glow that falls
+// out of them, and the pool with its own light under the water.
+function edenNight(g, u, sx, sy, ts, canvas){
+  var tod=u.tod||"day";
+  if (tod!=="night" && tod!=="dusk") return;
+  var lit=tod==="night"?0.65:0.32, S=u.size||48;
+  var boxes=(u.boxes_xy&&u.boxes_xy.length)?u.boxes_xy:EDEN_BOXES_FALLBACK;
+  g.save();
+  boxes.forEach(function(box, bi){
+    var ac=alcoveFor(box,S), x=(ac[0]+EM-sx)*ts, y=(ac[1]+EM-sy)*ts;
+    if (x<-4*ts||y<-4*ts||x>canvas.width+4*ts||y>canvas.height+4*ts) return;
+    g.globalCompositeOperation="source-over";
+    g.globalAlpha=lit; g.fillStyle=P.fire;
+    if (bi%2===0){
+      g.fillRect(x+0.25*ts,y+0.6*ts,0.42*ts,0.34*ts);
+      g.fillRect(x+1.33*ts,y+0.6*ts,0.42*ts,0.34*ts);
+    } else {
+      for (var row=0;row<3;row++) for (var col=0;col<3;col++){
+        if ((row+col+bi)%4!==0) g.fillRect(x+(0.18+col*0.58)*ts,y+(0.5+row*0.48)*ts,0.4*ts,0.3*ts);
+      }
+    }
+    g.globalCompositeOperation="lighter"; g.globalAlpha=lit*0.3;
+    var glow=g.createRadialGradient(x+ts,y+ts,0,x+ts,y+ts,2.2*ts);
+    glow.addColorStop(0,P.fire); glow.addColorStop(1,"transparent");
+    g.fillStyle=glow; g.fillRect(x-1.2*ts,y-1.2*ts,4.4*ts,4.4*ts);
+  });
+  // The actual outdoor pool is centred at world (7, 6.4), outside the pen.
+  var px=(7-sx)*ts, py=(6.4-sy)*ts, radius=6*ts;
+  if (px>-radius&&py>-radius&&px<canvas.width+radius&&py<canvas.height+radius){
+    g.globalCompositeOperation="lighter"; g.globalAlpha=lit*0.3;
+    var pool=g.createRadialGradient(px,py,0,px,py,radius);
+    pool.addColorStop(0,P.poolL); pool.addColorStop(1,"transparent");
+    g.fillStyle=pool; g.fillRect(px-radius,py-radius,2*radius,2*radius);
+  }
+  g.restore();
+}
+
 // The parts of the ground that move are painted every frame: light on the
 // water near the shore, and the fire.
-function drawLiveGround(g, key, u, sx, sy, hx, hy, ts){
-  if (key!=="l" || ts<6) return;
+function drawLiveGround(g, key, u, sx, sy, hx, hy, ts, canvas){
+  if (key==="e") return;
+  if (ts<6) return;
   g.strokeStyle=P.foam; g.lineWidth=Math.max(1, ts*0.05);
   for (var i=0;i<water9.length;i++){
     var w=water9[i]; if (w[0]<sx-1||w[0]>sx+2*hx+1||w[1]<sy-1||w[1]>sy+2*hy+1) continue;
@@ -1633,9 +1691,7 @@ var pairCache={}, pairCount=0;
 function matingSprite(m, f, view, s){
   var Bm=bodyOf(m), Bf=bodyOf(f);
   var sq=Math.max(1,Math.round(s));
-  var key=[Bm.stage,Bm.fat,Bm.strong,Bm.hurt,Bm.preg,m.sex,
-           Bf.stage,Bf.fat,Bf.strong,Bf.hurt,Bf.preg,f.sex,
-           view,sq].join("|");
+  var key=JSON.stringify([Bm, Bf, m.sex, f.sex, m.v%20, f.v%20, view, sq]);
   var sp=pairCache[key];
   if (sp) return sp;
   var W=Math.ceil(62*sq), H=Math.ceil(30*sq);
@@ -1702,6 +1758,7 @@ function syncActors(map, people, ox, detail){
     var d=detail&&detail[String(id)]; a.pid=d?d[6]:0; a.preg=d?((d[3]&4)?1:0):0;
     a.hungry = a.hun>=0 ? (a.hun>=5?1:0) : (d?((d[3]&32)?1:0):0);
     a.infant = d?((d[3]&8)?1:0):0;
+    if (a.wk_) a.wk_=walkerOf(a);
     a.tx=nx; a.ty=ny;
   });
   Object.keys(map).forEach(function(id){ if(!seen[id]) delete map[id]; });
@@ -2034,7 +2091,15 @@ function render(canvas, world, map, key, u){
     tx=c.tx; ty=c.ty; th=WALK_H;
   } else if (c.mode==="follow" && map[c.follow]){
     var who=map[c.follow];
-    tx=who.x; ty=who.y; th=c.th;
+    th=c.th;
+    var card=document.getElementById(key==="e"?"card6":"card9");
+    var scale=canvas.height/(canvas.clientHeight||canvas.height);
+    var cardPixels=card.classList.contains("on")?card.offsetHeight*scale:0;
+    var tilePixels=canvas.height/(2*th), body=bodyOf(who);
+    var lying=!who.moving&&(who.act===A_SLEEP||who.act===A_MATE||body.stage===0);
+    var extent=lying?0.5:1.45*STATURE[body.ab];
+    tx=who.x+(who.nudge||0)+0.5;
+    ty=who.y+(who.nudgeY||0)+0.95-extent/2+cardPixels/(2*tilePixels);
   } else if (c.mode==="manual"){
     tx=c.tx; ty=c.ty; th=c.th;
   } else if (!sh.wide){
@@ -2067,18 +2132,21 @@ function render(canvas, world, map, key, u){
     // glide across empty ground is the camera's time, not the viewer's.
     if (!c.placed || Math.hypot(tx-c.x, ty-c.y) > 3*Math.max(c.h, th)){ c.x=tx; c.y=ty; c.h=th; c.placed=1; }
   }
-  var ease = (c.mode==="manual"||c.mode==="walk") ? 0.3 : (sh.wide ? 0.02 : 0.035);
+  var ease = (c.mode==="manual"||c.mode==="walk") ? 0.3 : (c.mode==="follow" ? 0.2 : (sh.wide ? 0.02 : 0.035));
   c.x=lerp(c.x,tx,ease); c.y=lerp(c.y,ty,ease); c.h=lerp(c.h,th,ease);
   if (sh.shown!==sh.label){ sh.shown=sh.label; refreshHud(key); }
   var hy=c.h, hx=Math.min(S/2, c.h*aspect);
   if (hx/aspect<hy) hy=hx/aspect;
-  var sx=Math.max(0,Math.min(S-2*hx,c.x-hx)), sy=Math.max(0,Math.min(S-2*hy,c.y-hy));
+  // The card may cover space beyond the map edge; its portrait area must
+  // still be able to frame a person standing at that edge.
+  var coveredTiles=c.mode==="follow"&&cardPixels ? cardPixels/(canvas.height/(2*hy)) : 0;
+  var sx=Math.max(0,Math.min(S-2*hx,c.x-hx)), sy=Math.max(0,Math.min(S-2*hy+coveredTiles,c.y-hy));
   view[key]={sx:sx,sy:sy,hx:hx,hy:hy,S:S,canvas:canvas,ts:canvas.width/(2*hx)};
   var g=canvas.getContext("2d");
   g.fillStyle=P.surface; g.fillRect(0,0,canvas.width,canvas.height);
   drawGround(g, key, world, u, sx, sy, hx, hy, canvas.width, canvas.height);
   var ts=canvas.width/(2*hx);
-  drawLiveGround(g, key, u, sx, sy, hx, hy, ts);
+  drawLiveGround(g, key, u, sx, sy, hx, hy, ts, canvas);
 
   spawnParticles(u, key, sx, sy, hx, hy);
   drawSites(g, u, key, sx, sy, ts);
@@ -2110,7 +2178,9 @@ function render(canvas, world, map, key, u){
   list.forEach(function(a){
     if (a.act!==A_MATE || !a.pid || coupled[a.id]) return;
     var other=byId[a.pid];
-    if (!other || other.act!==A_MATE || other.pid!==a.id) return;
+    if (!other || other.act!==A_MATE || other.pid!==a.id ||
+        !bodyOf(a).adult || !bodyOf(other).adult || a.moving || other.moving ||
+        Math.hypot(a.x-other.x,a.y-other.y)>1.5) return;
     coupled[a.id]=1; coupled[other.id]=1;
     a.mate=other; other.mate=a;
   });
@@ -2120,22 +2190,13 @@ function render(canvas, world, map, key, u){
     pr.sort(function(p,q){return p.id-q.id;});
     pr[0].face=1; pr[0].nudge=-0.3; pr[1].face=-1; pr[1].nudge=0.3;
   });
-  // What a scene asks of the people in it, for the drawing only (the record
-  // is untouched): a woman giving birth has the nearest woman kneel by her,
-  // and anyone standing near a big cat in a recent encounter raises a spear
-  // and turns to face it.
+  // Recent encounters can orient an armed person; they never change the
+  // recorded activity or move somebody into a scene that did not happen.
   list.forEach(function(a){ a.drawAct=a.act; a.drawFace=0; });
-  list.forEach(function(m){
-    if (m.act!==A_BIRTH) return;
-    var best=null, bd=2.6;
-    list.forEach(function(h){ if (h===m||h.sex!==1||h.moving||(h.age||0)<16||coupled[h.id]) return;
-      var d=Math.hypot(h.x-m.x,h.y-m.y); if (d<bd){ bd=d; best=h; } });
-    if (best){ best.drawAct=A_TEND; best.nudge=(best.x<=m.x?-0.55:0.55)-(best.x-m.x); best.nudgeY=(m.y-best.y)+0.05; best.drawFace=(best.x<=m.x)?1:-1; }
-  });
   if (key==="l") (u.encounters||[]).forEach(function(e){
     if (e[2]!=="fought_off"&&e[2]!=="mauled"&&e[2]!=="cat_hunt"&&e[2]!=="taken") return;
-    list.forEach(function(a){ if (a.moving||(a.age||0)<14) return;
-      if (Math.abs(a.x-e[0])<=2.5 && Math.abs(a.y-e[1])<=2.5){ a.drawAct=A_HUNT; a.drawFace=(e[0]>=a.x)?1:-1; } });
+    list.forEach(function(a){ if (a.moving||(a.age||0)<18 || (a.act!==A_HUNT&&a.act!==A_WATCH&&a.act!==A_FIGHT)) return;
+      if (Math.abs(a.x-e[0])<=2.5 && Math.abs(a.y-e[1])<=2.5){ a.drawFace=(e[0]>=a.x)?1:-1; } });
   });
   // Several people on one tile (a nest box's sleepers, a hearth's circle)
   // were drawn on one spot and read as one figure. They are fanned out
@@ -2173,7 +2234,7 @@ function render(canvas, world, map, key, u){
         var pscale=s/msp.s, pw=msp.w*pscale, ph=msp.h*pscale;
         var flip=(pv===0 && dx<0);
         var ox=Math.round(pairPx-pw/2), oy=Math.round(pairPy-ph+2*msp.s*pscale);
-        if (flip){ g.save(); g.translate(Math.round(pairPx), oy+ph);
+        if (flip){ g.save(); g.translate(Math.round(pairPx), oy);
                    g.scale(-1,1); g.drawImage(msp.c, Math.round(-pw/2), 0, Math.round(pw), Math.round(ph));
                    g.restore(); }
         else g.drawImage(msp.c, ox, oy, Math.round(pw), Math.round(ph));
@@ -2231,17 +2292,7 @@ function render(canvas, world, map, key, u){
       });
     }
   }
-  if (key==="e" && night){
-    // the resort's own lights: the pen is lit from inside, and the beach
-    // outside it is not
-    g.save(); g.globalCompositeOperation="lighter";
-    var Sw=world.S;
-    var cxw=(Sw/2-sx)*ts+ts/2, cyw=(Sw/2-sy)*ts+ts/2, rr=ts*15;
-    var gr=g.createRadialGradient(cxw,cyw,0,cxw,cyw,rr);
-    gr.addColorStop(0,"rgba(255,196,110,0.17)"); gr.addColorStop(1,"rgba(255,170,80,0)");
-    g.fillStyle=gr; g.fillRect(cxw-rr,cyw-rr,2*rr,2*rr);
-    g.restore();
-  }
+  if (key==="e") edenNight(g, u, sx, sy, ts, canvas);
 }
 
 // ---- the overlay: captions and the person you are watching ---------------
@@ -2478,8 +2529,23 @@ function stepWalk(){
     c.ty=Math.max(1,Math.min(v.S-1,c.ty+dy/n*WALK_SPEED));
   });
 }
+function compactFocus(region){
+  if (window.innerWidth>700) return;
+  document.querySelectorAll(".worldhead").forEach(function(h){
+    if (h.parentElement.id===region) return;
+    h.classList.remove("open"); h.setAttribute("aria-expanded","false");
+  });
+  if (region!=="strip"){
+    document.getElementById("strip").classList.remove("open");
+    document.getElementById("stripbar").setAttribute("aria-expanded","false");
+  }
+  if (region!=="record"){
+    document.getElementById("god").classList.remove("tall");
+    var more=document.getElementById("more"); more.classList.remove("on"); more.textContent="MORE";
+  }
+}
 document.querySelectorAll(".worldhead").forEach(function(h){
-  function toggle(){ var o=!h.classList.contains("open"); h.classList.toggle("open", o); h.setAttribute("aria-expanded", String(o)); fit(); }
+  function toggle(){ var o=!h.classList.contains("open"); if (o) compactFocus(h.parentElement.id); h.classList.toggle("open", o); h.setAttribute("aria-expanded", String(o)); fit(); }
   h.addEventListener("click", toggle);
   h.addEventListener("keydown", function(e){ if (e.key==="Enter"||e.key===" "){ e.preventDefault(); e.stopPropagation(); toggle(); } });
 });
@@ -2549,7 +2615,7 @@ var GAUGES=[
   { key:"pop", label:"POPULATION", log:true,
     series:function(rows){ return col(rows,"pop"); },
     now:function(u){ return u.pop; },
-    fmt:function(v){ return v===null?"–":String(v); },
+    fmt:function(v){ return v===null?"–":escapeHTML(v); },
     out:function(){ return false; },
     note:"Log population against time in founding doublings (mice 55 d; ours from the census). Faint line and bands: Universe 25 and its phases A–D (Calhoun 1973)." },
   { key:"net", label:"BIRTHS−DEATHS /100 ADULTS", ticks:[0],
@@ -2559,18 +2625,18 @@ var GAUGES=[
     fmt:function(v){ return v===null?"–":(v>0?"+":"")+v.toFixed(1); },
     out:function(v){ return v!==null && v<0; },
     note:"Births minus deaths per 100 adults a year. Tick 0: below it the population shrinks, as in Calhoun's phase D." },
-  { key:"inf", label:"INFANT SURVIVAL", ticks:[0.04,0.80], lo:0, hi:1,
+  { key:"inf", label:"YEARLINGS / PRIOR BIRTHS", lo:0, hi:1,
     series:function(rows){ return col(rows,"infant_survival"); },
     now:function(u, s){ var g=u.gauges; return (g && g.infant_survival!==undefined && g.infant_survival!==null) ? g.infant_survival : last(s); },
     fmt:function(v){ return v===null?"–":Math.round(v*100)+"%"; },
-    out:function(v){ return v!==null && v<0.80; },
-    note:"Alive at age one. Ticks: ~4%, Universe 25's late phase (Calhoun 1962); ~80%, foragers (Gurven & Kaplan 2007). Coloured below 80%." },
+    out:function(){ return false; },
+    note:"Current one-to-two-year-olds divided by births in the last annual record, capped at 100%. These are different cohorts: this is a rough ratio, not infant survival. No survival reference band applies." },
   { key:"brd", label:"BREEDERS · WITHDRAWN", lo:0,
     series:function(rows){ return col(rows,"breeders"); },
     now:function(u, s){ var g=u.gauges; return g ? g.breeders : last(s); },
     fmt:function(v, u){ var g=u&&u.gauges; if (v===null) return "–";
       var w=(g&&g.adults)?Math.round(100*g.withdrawn/g.adults):null;
-      return "<b>"+v+"</b>"+(w===null?"":" · "+w+"%"); },
+      return "<b>"+escapeHTML(v)+"</b>"+(w===null?"":" · "+w+"%"); },
     out:function(v){ return v!==null && v<10; },
     note:"Adults still breeding · share of adults withdrawn. No tick: this is the extinction clock — at 0 there is no recovery. Coloured under 10." },
   { key:"clm", label:"CLAIMANTS / PLACE", ticks:[1], lo:0,
@@ -2621,6 +2687,7 @@ function buildStrip(){
   });
   document.getElementById("stripbar").addEventListener("click", function(){
     var s=document.getElementById("strip"), open=!s.classList.contains("open");
+    if (open) compactFocus("strip");
     s.classList.toggle("open", open); this.setAttribute("aria-expanded", String(open));
     stripSeq=""; fit(); updateStrip();
   });
@@ -2712,8 +2779,8 @@ function updateStrip(){
     });
   });
   var bar=document.getElementById("stripbar"), g=U.e.gauges||{}, h=U.l.gauges||{};
-  bar.innerHTML="<span class='gl'>INSTRUMENTS</span> breeders <span class='u6'>U6</span> <b>"+(g.breeders===undefined?"–":g.breeders)+
-    "</b> · <span class='u9'>U9</span> <b>"+(h.breeders===undefined?"–":h.breeders)+"</b>"+
+  bar.innerHTML="<span class='gl'>INSTRUMENTS</span> breeders <span class='u6'>U6</span> <b>"+escapeHTML(g.breeders===undefined?"–":g.breeders)+
+    "</b> · <span class='u9'>U9</span> <b>"+escapeHTML(h.breeders===undefined?"–":h.breeders)+"</b>"+
     (outs.length?" · <span class='off'>"+outs.length+" off reference</span>":"")+" <span class='dim'>▾</span>";
 }
 
@@ -2750,7 +2817,7 @@ function statLine(u, kind){
     ck.sort(function(a,c){return cod[c]-cod[a];});
     b.push("DEATHS "+ck.slice(0,2).map(function(k){return k+" "+cod[k];}).join(", "));
   }
-  return "<span class='dim'>"+b.join(" · ")+"</span>";
+  return "<span class='dim'>"+escapeHTML(b.join(" · "))+"</span>";
 }
 var hudExtra="", edenSize=0;
 // ---- the diary: what the person you follow has done since you started
@@ -2792,17 +2859,17 @@ function whoInfo(key){
 function hudText(u, kind){
   var l2 = kind==="e" ? u.phase.toUpperCase()+" · ALWAYS SPRING"
     : (u.tech&&u.tech.length?"AGE OF "+u.tech[u.tech.length-1].replace("_"," ").toUpperCase():u.phase.toUpperCase());
-  var sh=shots[kind], cap = (sh && !sh.wide && sh.label) ? "<span class='shot'> · "+sh.label.toUpperCase()+"</span>" : "";
+  var sh=shots[kind], cap = (sh && !sh.wide && sh.label) ? "<span class='shot'> · "+escapeHTML(sh.label.toUpperCase())+"</span>" : "";
   var v=view[kind];
   var sc = "";
   var w=whoInfo(kind);
-  var who = w ? "<span class='who'> · "+w.name.toUpperCase()+", "+w.act.toUpperCase()+"</span>" : "";
+  var who = w ? "<span class='who'> · "+escapeHTML(w.name.toUpperCase())+", "+escapeHTML(w.act.toUpperCase())+"</span>" : "";
   var key = (kind==="e" && v && v.ts>5) ? "<span class='keys'>  <span class='key' style='border-color:var(--accent)'></span>held "+
             "<span class='key' style='border-color:var(--lagoon)'></span>vacant</span>" : "";
-  var clock = u.tod ? " · "+u.tod.toUpperCase() : "";
+  var clock = u.tod ? " · "+escapeHTML(u.tod.toUpperCase()) : "";
   return "<div class='l1'><span class='identity'><b>"+(kind==="e"?"EDEN · U6":"LAGOON · U9")+"</b></span>"+
-         "<span class='clock'>Y"+u.year+clock+" · POP "+u.pop+"</span>"+
-         "<span class='l2'><span class='ph'> · "+l2+"</span>"+hudExtra+sc+cap+"</span>"+who+"</div>"+
+         "<span class='clock'>Y"+escapeHTML(u.year)+clock+" · POP "+escapeHTML(u.pop)+"</span>"+
+         "<span class='l2'><span class='ph'> · "+escapeHTML(l2)+"</span>"+escapeHTML(hudExtra)+sc+cap+"</span>"+who+"</div>"+
          doingHTML(u.people)+key+"\n"+statLine(u, kind);
 }
 function refreshHud(kind){
@@ -2816,15 +2883,15 @@ function refreshHud(kind){
 }
 // the lower third: who you are watching
 function paintCard(key){
-  var el=document.getElementById(key==="e"?"card6":"card9");
-  var w=whoInfo(key);
-  if(!w && sel[key] && diary[key].length && diaryLast[key]==="gone"){
-    el.className="card on";
-    el.innerHTML="<span class='nm'>"+(diary[key].name||"")+"</span><br><span class='dl'>"+diary[key].slice(-3).join("<br>")+"</span>";
-    return;
-  }
-  if(!w){ el.className="card"; el.innerHTML=""; return; }
-  el.className="card on";
+  var el=document.getElementById(key==="e"?"card6":"card9"), w=whoInfo(key);
+  var title, blocks, person=sel[key];
+  if (!w){
+    if (!person || !diary[key].length || diaryLast[key]!=="gone"){
+      el.className="card"; el.replaceChildren(); el.cardSignature=""; el.personPager=null; return;
+    }
+    title="<span class='nm'>"+escapeHTML(diary[key].name||"")+"</span> · no longer here";
+    blocks=diary[key].slice(-3).map(function(line){return "<p>"+escapeHTML(line)+"</p>";});
+  } else {
   var bits=[];
   var wa=(key==="e"?actors6:actors9)[w.id];
   if (w.flags&1)  bits.push(["withdrawn","withdrawn — huddled on the floor with the others who gave up",
@@ -2833,7 +2900,7 @@ function paintCard(key){
   if (w.flags&2)  bits.push("incompetent — born into the sink");
   if (w.flags&4)  bits.push("pregnant");
   if (w.flags&8)  bits.push("minding an infant");
-  if (w.flags&16) bits.push("no territory — every nest box is full");
+  if (w.flags&16) bits.push("no territory");
   if (w.flags&32) bits.push("hungry");
   if (w.flags&64) bits.push("elder");
   var pname="no partner";
@@ -2842,15 +2909,57 @@ function paintCard(key){
     if (pd) pname="partner: "+pd[0];
   }
   var d=w.u.detail[String(w.id)]||[];
-  if (d[8]) bits.unshift(d[8]);
+
   if (d.length>11) bits.push("purpose "+Math.round(d[9]*100)+"% · self-control "+Math.round(d[10]*100)+"% · temper "+Math.round(d[11]*100)+"%");
-  el.innerHTML="<span class='nm'>"+w.name+"</span> · "+w.act+
-    "<br><span class='dl'>"+w.age+" years · generation "+w.gen+
-    " · "+w.hun+" hunger<br>"+
-    (key==="e" ? "nest box at "+w.hx+","+w.hy : "hearth at "+w.hx+","+w.hy)+
-    " · "+pname+
-    (bits.length?"<br>"+bits.join(" · "):"")+"</span>"+
-    (diary[key].length>1?"<br><span class='dl'>"+diary[key].slice(-4).join(" → ")+"</span>":"");
+    title="<span class='nm'>"+escapeHTML(w.name)+"</span> · "+escapeHTML(w.act);
+    blocks=["<p>"+escapeHTML(w.age)+" years · generation "+escapeHTML(w.gen)+" · "+escapeHTML(w.hun)+" hunger</p>",
+      "<p>"+escapeHTML(key==="e"?"Nest box at "+w.hx+","+w.hy:"Hearth at "+w.hx+","+w.hy)+" · "+escapeHTML(pname)+"</p>"];
+    if (d[8]) blocks.push("<p>"+escapeHTML(d[8])+"</p>");
+    blocks=blocks.concat(bits.map(function(text){return "<p>"+escapeHTML(text)+"</p>";}));
+    if (diary[key].length>1) blocks=blocks.concat(diary[key].slice(-4).map(function(line){
+      return "<p>"+escapeHTML(line)+"</p>";
+    }));
+  }
+  el.className="card on";
+  var scene=el.parentElement, signature=[person,title,blocks.join("|"),scene.clientWidth,scene.clientHeight].join("\u0001");
+  if (el.cardSignature===signature) return;
+  el.cardSignature=signature;
+  var heading=el.querySelector(".personhead"), page=el.querySelector(".personpage");
+  var pager=el.personPager, oldIndex=pager&&pager.person===person?pager.i:0;
+  if (!page){
+    heading=document.createElement("div"); heading.className="personhead"; heading.id="person-title-"+key;
+    page=document.createElement("div"); page.className="personpage"; page.tabIndex=0;
+    page.setAttribute("role","region"); page.setAttribute("aria-labelledby",heading.id);
+    page.setAttribute("aria-label","Selected person's details");
+    var bar=document.createElement("div"); bar.className="personpager";
+    bar.innerHTML="<button type='button' class='prev' aria-label='Previous person details'>‹</button><span class='pageind' aria-live='polite'></span><button type='button' class='next' aria-label='Next person details'>›</button>";
+    el.replaceChildren(heading,page,bar);
+    pager=el.personPager=new Pager(page,page,bar,"personpage");
+    if (!el.personKeys){
+      el.personKeys=true;
+      el.addEventListener("keydown", function(ev){
+        if (ev.key!=="ArrowLeft"&&ev.key!=="ArrowRight") return;
+        ev.preventDefault(); ev.stopPropagation();
+        var p=el.personPager; if (p) p.go(p.i+(ev.key==="ArrowRight"?1:-1));
+      });
+    }
+  }
+  pager.person=person; heading.innerHTML=title; pager.bar.hidden=true;
+  page.style.width=""; page.style.height=""; page.innerHTML=blocks.join("");
+  var css=getComputedStyle(el), padding=parseFloat(css.paddingTop)+parseFloat(css.paddingBottom)+
+    parseFloat(css.borderTopWidth)+parseFloat(css.borderBottomWidth)+parseFloat(getComputedStyle(heading).marginBottom);
+  page.style.width=Math.max(1,el.clientWidth-parseFloat(css.paddingLeft)-parseFloat(css.paddingRight))+"px";
+  // Preserve a portrait-sized live area; long personal records use the same
+  // measured pages as the Book instead of growing over the person.
+  var budget=Math.max(60,Math.min(scene.clientHeight*0.6,scene.clientHeight-72));
+  var available=Math.max(20,budget-heading.offsetHeight-padding);
+  page.style.height=available+"px"; pager.sig=""; pager.set(blocks,"first");
+  if (pager.pages.length>1){
+    pager.bar.hidden=false;
+    page.style.height=Math.max(20,available-pager.bar.offsetHeight-4)+"px";
+    pager.sig=""; pager.set(blocks,"first");
+  } else page.style.height="";
+  pager.go(oldIndex);
 }
 
 // ---------------------------------------------------------- the console
@@ -2921,6 +3030,7 @@ function fitRecordBox(el){
 }
 document.getElementById("more").addEventListener("click", function(){
   var god=document.getElementById("god");
+  if (!god.classList.contains("tall")) compactFocus("record");
   god.className = god.className==="tall" ? "" : "tall";
   this.className = god.className==="tall" ? "on" : "";
   this.textContent = god.className==="tall" ? "LESS" : "MORE";
@@ -2952,7 +3062,7 @@ function reportError(where, ev){
   var msg=(ev && ev.message) ? ev.message : String(ev);
   try{ console.error("UNIVERSE69 "+where+": "+msg); }catch(e){}
   var el=document.getElementById("reclines");
-  if (el) el.innerHTML="<div class='row end'>VIEWER ERROR in "+where+": "+msg+"</div>";
+  if (el) el.innerHTML="<div class='row end'>VIEWER ERROR in "+escapeHTML(where)+": "+escapeHTML(msg)+"</div>";
 }
 window.addEventListener("error", function(ev){
   reportError("page", (ev && ev.message) ? ev : {message:String(ev)});
@@ -2960,14 +3070,18 @@ window.addEventListener("error", function(ev){
 function alignWorldHeads(){
   var heads=Array.from(document.querySelectorAll('.worldhead'));
   heads.forEach(function(el){ el.style.minHeight=""; });
+  if (window.innerWidth<=700) return;
   var height=Math.max.apply(null, heads.map(function(el){return el.offsetHeight;}));
   heads.forEach(function(el){ el.style.minHeight=height+"px"; });
 }
 function fit(){
+  alignWorldHeads();
   var dpr=Math.min(window.devicePixelRatio||1, 2.5);
   ["c6","c9"].forEach(function(id){
     var cv=document.getElementById(id);
     cv.width=Math.round(cv.clientWidth*dpr); cv.height=Math.round(cv.clientHeight*dpr);
+    var key=id==="c6"?"e":"l";
+    if (cam[key].mode==="follow") cam[key].th=rungH(key,2);
     var ov=document.getElementById(id==="c6"?"o6":"o9");
     ov.width=cv.width; ov.height=cv.height;
   });
@@ -2975,6 +3089,8 @@ function fit(){
   stripSeq=""; updateStrip();
   if (typeof pagers==="undefined") return;
   if (pagers.rec){ pagers.rec.sig=""; updateRecords(null); }
+  if (state){ paintCard("e"); paintCard("l"); }
+  if (!document.getElementById("veil").hidden) layoutIntro("keep");
   if (!document.getElementById("research").hidden) renderResearch("keep");
   if (!document.getElementById("book").hidden && book.data) layoutBook();
 }
@@ -3048,15 +3164,29 @@ function hideFail(){
   var fail=document.getElementById("fail"), wasOpen=!fail.hidden;
   fail.hidden=true;
   if (wasOpen){
-    var next=document.querySelector('#research:not([hidden]) button, #veil:not([hidden]) button');
+    var next=document.querySelector('#book:not([hidden]) button, #research:not([hidden]) button, #veil:not([hidden]) button');
     (next||document.getElementById("veilbtn")).focus();
   }
+}
+function resetIteration(key){
+  if (key==="e"){ actors6={}; edenSize=0; } else { actors9={}; terrainKey9=null; }
+  sel[key]=0; diary[key]=[]; diaryWho[key]=0; diaryLast[key]="";
+  cam[key].mode="auto"; cam[key].follow=0; cam[key].placed=0;
+  shots[key].until=0; shots[key].camp=null; hudCache[key]=""; ground[key]=null;
+  view[key]=null;
+  if (key==="e") parts6=[]; else { parts9=[]; birds9=null; }
+  paintCard(key);
+  document.getElementById("walkbtn").classList.toggle("on", cam.e.mode==="walk"||cam.l.mode==="walk");
 }
 function poll(){
   if (polling) return;
   polling=true;
   (SNAP?fetchJSON(SNAP):fetchJSON("/state")).then(function(st){
     if (!st||!st.u||!st.u.eden||!st.u.lagoon) throw new Error("snapshot has no worlds");
+    if (state){
+      if (state.u.eden.iter!==st.u.eden.iter || st.u.eden.day<state.u.eden.day) resetIteration("e");
+      if (state.u.lagoon.iter!==st.u.lagoon.iter || st.u.lagoon.day<state.u.lagoon.day) resetIteration("l");
+    }
     state=st; pollSeq++; snapBad=false; snapReady=true;
     if (SNAP) snapWall=+st.wall||0;
     hideFail();
@@ -3184,23 +3314,52 @@ function pageBox(box){
            l: parseFloat(cs.paddingLeft), t: parseFloat(cs.paddingTop) };
 }
 function splitBlock(html){
-  var m=html.match(/^<p([^>]*)>([\s\S]*)<\/p>$/);
-  if (!m) return null;
-  var parts=m[2].split(/(?<=[.!?…;:])\s+/);
-  if (parts.length<2) return null;
-  var half=Math.ceil(parts.length/2);
-  return ["<p"+m[1]+">"+parts.slice(0,half).join(" ")+"</p>", "<p"+m[1]+" class='cont'>"+parts.slice(half).join(" ")+"</p>"];
+  var holder=document.createElement("div"); holder.innerHTML=html;
+  if (holder.childNodes.length!==1 || !holder.firstElementChild) return null;
+  var node=holder.firstElementChild, shells=[];
+  while (node.childNodes.length===1 && node.firstElementChild){
+    shells.push(node); node=node.firstElementChild;
+  }
+  function wrap(part){
+    for (var i=shells.length-1;i>=0;i--){ var parent=shells[i].cloneNode(false); parent.appendChild(part); part=parent; }
+    return part.outerHTML;
+  }
+  if (node.children.length>1 && !/^(P|BLOCKQUOTE|FIGCAPTION|SPAN)$/.test(node.tagName)){
+    var first=node.cloneNode(false), second=node.cloneNode(false), at=Math.ceil(node.childNodes.length/2);
+    Array.from(node.childNodes).forEach(function(child,i){ (i<at?first:second).appendChild(child.cloneNode(true)); });
+    if (first.childNodes.length && second.childNodes.length) return [wrap(first),wrap(second)];
+  }
+  var text=node.textContent;
+  if (text.length<2) return null;
+  var at=Math.floor(text.length/2), space=text.lastIndexOf(" ",at);
+  if (space>0) at=space+1;
+  var walker=document.createTreeWalker(node,NodeFilter.SHOW_TEXT), leaf, offset=at;
+  while ((leaf=walker.nextNode())){ if (offset<=leaf.length) break; offset-=leaf.length; }
+  if (!leaf || at<=0 || at>=text.length) return null;
+  var left=document.createRange(), right=document.createRange();
+  left.selectNodeContents(node); left.setEnd(leaf,offset);
+  right.selectNodeContents(node); right.setStart(leaf,offset);
+  var first=node.cloneNode(false), second=node.cloneNode(false);
+  first.appendChild(left.cloneContents()); second.appendChild(right.cloneContents());
+  second.classList.add("cont");
+  return [wrap(first),wrap(second)];
 }
 function paginate(box, cls, blocks, fromEnd){
   var B=pageBox(box), meas=document.createElement("div");
   meas.className=cls||"";
   meas.style.cssText="position:absolute;visibility:hidden;left:"+B.l+"px;top:0;width:"+Math.max(10,B.w)+"px;";
   box.appendChild(meas);
-  var guard=0, pages, again;
+  var pages, again;
   do {
     again=false; pages=[];
     meas.innerHTML=blocks.map(function(b,i){ return "<div class='pb' data-i='"+i+"'>"+b+"</div>"; }).join("");
     var kids=meas.children, start=0, cur=[], avail=Math.max(20,B.h*0.98-4);
+    for (var j=0;j<kids.length;j++){
+      if (kids[j].offsetHeight<=avail+1) continue;
+      var split=splitBlock(blocks[j]);
+      if (split){ blocks=blocks.slice(0,j).concat(split,blocks.slice(j+1)); again=true; break; }
+    }
+    if (again) continue;
     if (fromEnd){                                       // newest last: the last page is the full one
       var end=0;
       for (var i=kids.length-1;i>=0;i--){
@@ -3216,10 +3375,6 @@ function paginate(box, cls, blocks, fromEnd){
       var top=kids[i].offsetTop, bot=top+kids[i].offsetHeight;
       if (cur.length && bot-start>avail){ pages.push(cur); cur=[]; start=top; }
       if (!cur.length) start=top;
-      if (bot-start>avail+1 && guard<40){                 // one block taller than a page
-        var parts=splitBlock(blocks[i]);
-        if (parts){ blocks=blocks.slice(0,i).concat(parts, blocks.slice(i+1)); again=true; guard++; break; }
-      }
       cur.push(i);
     }
     if (!again && cur.length) pages.push(cur);
@@ -3275,7 +3430,8 @@ var pagers={};
 
 // ---- reading pages: the book's schema, set as type ----------------------------
 var readBase="book/";
-function readBlocks(blocks){
+function readBlocks(blocks, base){
+  base=base||readBase;
   return (blocks||[]).map(function(b){
     var t=b.t, tx=escapeHTML(b.text||"");
     if (t==="h2") return "<h2>"+tx+"</h2>";
@@ -3284,7 +3440,7 @@ function readBlocks(blocks){
     if (t==="figure"){
       var cr=[b.credit, b.license].filter(Boolean).map(escapeHTML).join(" · ");
       if (b.source) cr+=(cr?" · ":"")+escapeHTML(b.source);
-      var src=String(b.src||""); if (src && !/^(https?:|\/|book\/|archive\/)/.test(src)) src=readBase+src;
+      var src=String(b.src||""); if (src && !/^(https?:|\/|book\/|archive\/)/.test(src)) src=base+src;
       return "<figure><img src='"+escapeHTML(src)+"' alt='"+escapeHTML(b.alt||"")+"' loading='lazy' decoding='async'>"+
              "<figcaption>"+escapeHTML(b.caption||"")+(cr?"<span class='cr'>"+cr+"</span>":"")+"</figcaption></figure>";
     }
@@ -3434,8 +3590,8 @@ function openBook(src){
   if (!book.data && !book.loading){
     body.innerHTML="<div class='col'><p class='note'>Opening…</p></div>";
     book.loading=loadJSONOnce(src).then(function(d){ return readyToSet(d, src.replace(/[^\/]*$/, "")).then(function(){ return d; }); })
-      .then(function(d){ book.cache[src]=d; if (book.src===src){ book.data=d; layoutBook(); } })
-      .catch(function(e){ body.innerHTML="<div class='col'><h1>"+escapeHTML((READER_DOCS[src]||{}).title||"")+"</h1><p>This is not on this server yet ("+escapeHTML(e.message)+"). It lives in <code>"+escapeHTML(src)+"</code> beside this page.</p></div>"; book.loading=null; });
+      .then(function(d){ book.cache[src]=d; if (book.src===src){ book.loading=null; book.data=d; layoutBook(); } })
+      .catch(function(e){ if (book.src!==src) return; body.innerHTML="<div class='col'><h1>"+escapeHTML((READER_DOCS[src]||{}).title||"")+"</h1><p>This is not on this server yet ("+escapeHTML(e.message)+"). It lives in <code>"+escapeHTML(src)+"</code> beside this page.</p></div>"; book.loading=null; });
   } else if (book.data) layoutBook();
   document.getElementById("bookclose").focus();
 }
@@ -3474,7 +3630,7 @@ document.getElementById("bookbody").addEventListener("click", function(e){
   pagers.intro=new Pager(page, page, bar, "");
   pagers.intro.source=blocks;
 })();
-function layoutIntro(){ var p=pagers.intro; p.sig=""; p.set(p.source.slice(), "first");
+function layoutIntro(where){ var p=pagers.intro; p.target.innerHTML=p.source.join(""); p.sig=""; p.set(p.source.slice(), where||"first");
   p.bar.hidden=(p.pages.length<2); }
 
 function storyBlocks(rep){
@@ -3513,7 +3669,7 @@ function originBlocks(){
   if (!origin.data) return ["<p class='note'>Opening…</p>"];
   var d=origin.data, out=[];
   if (isStub(d)) out.push("<p class='stub'>STUB — placeholder text until the writer's chapter arrives</p>");
-  (d.chapters||[]).forEach(function(ch){ out=out.concat([chapterHead(ch)], readBlocks(ch.blocks)); });
+  (d.chapters||[]).forEach(function(ch){ out=out.concat([chapterHead(ch)], readBlocks(ch.blocks, "book/")); });
   return out.map(function(h){ return "<div class='col'>"+h+"</div>"; });
 }
 var resTab="origin";

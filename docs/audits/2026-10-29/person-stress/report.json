@@ -1,0 +1,199 @@
+{
+  "person": {
+    "id": 968,
+    "height": 228,
+    "name": "E-0968",
+    "age": 80,
+    "flags": 83,
+    "act": "sleeping",
+    "diary": [
+      "Y175 d1 \u00b7 minding children",
+      "Y175 d2 \u00b7 keeping watch",
+      "Y175 d3 \u00b7 giving birth",
+      "Y175 d4 \u00b7 making love"
+    ],
+    "syntheticDiary": true
+  },
+  "geometry": {
+    "hidden": false,
+    "width": 390,
+    "height": 844,
+    "documentWidth": 390,
+    "documentHeight": 844,
+    "bodyHeight": 844,
+    "top": {
+      "id": "masthead",
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 35,
+      "bottom": 35,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 34,
+      "clientHeight": 34
+    },
+    "bottom": {
+      "id": "god",
+      "x": 0,
+      "y": 559.8125,
+      "width": 390,
+      "height": 284.1875,
+      "bottom": 844,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 283,
+      "clientHeight": 283
+    },
+    "strip": {
+      "id": "strip",
+      "x": 0,
+      "y": 532.8125,
+      "width": 390,
+      "height": 27,
+      "bottom": 559.8125,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "scrollHeight": 26,
+      "clientHeight": 26
+    },
+    "scenes": [
+      {
+        "id": "",
+        "x": 0,
+        "y": 62.75,
+        "width": 390,
+        "height": 220.15625,
+        "bottom": 282.90625,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 220,
+        "clientHeight": 220
+      },
+      {
+        "id": "",
+        "x": 0,
+        "y": 312.65625,
+        "width": 390,
+        "height": 220.15625,
+        "bottom": 532.8125,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 220,
+        "clientHeight": 220
+      }
+    ],
+    "worldHeads": [
+      {
+        "id": "",
+        "x": 0,
+        "y": 35,
+        "width": 390,
+        "height": 27.75,
+        "bottom": 62.75,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 28,
+        "clientHeight": 28
+      },
+      {
+        "id": "",
+        "x": 0,
+        "y": 284.90625,
+        "width": 390,
+        "height": 27.75,
+        "bottom": 312.65625,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 28,
+        "clientHeight": 28
+      }
+    ],
+    "chrome": {
+      "masthead": 35,
+      "mastheadPercent": 4.1469194312796205,
+      "worldHeadings": [
+        27.75,
+        27.75
+      ],
+      "combinedHeight": 401.6875,
+      "combinedPercent": 47.59330568720379,
+      "bottom": 284.1875,
+      "bottomPercent": 33.67150473933649,
+      "strip": 27,
+      "stripPercent": 3.199052132701422
+    },
+    "overlays": [],
+    "dialogChrome": [],
+    "clippedReadingAreas": [],
+    "flowFailures": [
+      "card6 leaves its scene"
+    ],
+    "cards": [
+      {
+        "card": {
+          "id": "card6",
+          "x": 0,
+          "y": 55.40625,
+          "width": 273,
+          "height": 227.5,
+          "bottom": 282.90625,
+          "scrollWidth": 273,
+          "clientWidth": 273,
+          "scrollHeight": 227,
+          "clientHeight": 227
+        },
+        "scene": {
+          "id": "",
+          "x": 0,
+          "y": 62.75,
+          "width": 390,
+          "height": 220.15625,
+          "bottom": 282.90625,
+          "scrollWidth": 390,
+          "clientWidth": 390,
+          "scrollHeight": 220,
+          "clientHeight": 220
+        }
+      }
+    ],
+    "focus": "more",
+    "canvases": [
+      {
+        "id": "c6",
+        "width": 390,
+        "height": 220,
+        "lit": 885,
+        "samples": 885,
+        "imageRendering": "auto"
+      },
+      {
+        "id": "c9",
+        "width": 390,
+        "height": 220,
+        "lit": 885,
+        "samples": 885,
+        "imageRendering": "auto"
+      }
+    ]
+  },
+  "bodyProjection": [
+    {
+      "world": "e",
+      "id": 968,
+      "lying": true,
+      "body": {
+        "left": 165.20707331363187,
+        "right": 224.7932519022642,
+        "top": 50.47457029910131,
+        "bottom": 67.02628657372139
+      },
+      "cardTop": 55.40625,
+      "sceneTop": 62.75,
+      "sceneBottom": 282.90625,
+      "coveredByCard": true,
+      "visible": false
+    }
+  ],
+  "cardText": "E-0968 \u00b7 sleeping\n80.3 years \u00b7 generation 5 \u00b7 0 hunger\nnest box at 27,30 \u00b7 no partner\nobese, weak \u00b7 withdrawn \u2014 one of the beautiful ones: eats, sleeps, grooms, alone \u00b7 incompetent \u2014 born into the sink \u00b7 no territory \u2014 every nest box is full \u00b7 elder \u00b7 purpose 15% \u00b7 self-control 50% \u00b7 temper 58%\nY175 d1 \u00b7 minding children \u2192 Y175 d2 \u00b7 keeping watch \u2192 Y175 d3 \u00b7 giving birth \u2192 Y175 d4 \u00b7 making love"
+}
