@@ -32,7 +32,9 @@
       "supported": 12,
       "contradicted": 1,
       "undecided": 4
-    }
+    },
+    "console_log": "lab-36000.log.gz",
+    "console_uncompressed_sha256": "23867f5ab25235e313ac559567c5d45403ef7996085131c9c621859766eca8e2"
   },
   "clock_years_per_real_day_target": 100,
   "macbook_throughput_verified": false,

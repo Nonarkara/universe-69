@@ -39,6 +39,9 @@ coefficients or population forecasts (RESEARCH.md).
 
 ## Verification
 
+`lab-36000.log.gz` retains the unmodified console bytes, compressed to
+preserve the fixed-width table without generated trailing-space changes.
+
 All 268 tests pass on Apple Python 3.9.6 in 227.804 seconds. Independent
 source review passed all 22 new causal tests and checked the six final
 model/lab hashes. The final century experiment completed in 604.9 seconds on Python 3.14.6;
