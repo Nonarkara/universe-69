@@ -1,0 +1,3603 @@
+{
+  "synthetic": true,
+  "fixtures": "fixtures.json",
+  "fixtureSHA256": "4f9389002a910d1e58efab068a71f0a2e9f400d69da86988a50d0edc3d6fc2f1",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "checks": [
+        {
+          "passed": true,
+          "check": "Origins accessible name includes visible label"
+        },
+        {
+          "passed": true,
+          "check": "legacy: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "legacy: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "legacy: one-page Runs fits content without disabled pager"
+        },
+        {
+          "passed": true,
+          "check": "legacy: no unexplained space below reading content"
+        },
+        {
+          "passed": true,
+          "check": "empty: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "empty: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "empty: one-page Runs fits content without disabled pager"
+        },
+        {
+          "passed": true,
+          "check": "empty: no unexplained space below reading content"
+        },
+        {
+          "passed": true,
+          "check": "falls: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "falls: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "page2: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page2: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page2: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page2: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page2: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "page3: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page3: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page3: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page3: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page3: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "falls: multi-page Runs preserves full reading budget/pager"
+        },
+        {
+          "passed": true,
+          "check": "res: Next turns the page"
+        },
+        {
+          "passed": true,
+          "check": "res: Prev returns to first page"
+        },
+        {
+          "passed": true,
+          "check": "res: arrow key turns the page"
+        },
+        {
+          "passed": true,
+          "check": "res: swipe turns the page"
+        },
+        {
+          "passed": true,
+          "check": "partial: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "partial: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "page2: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page2: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page2: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page2: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page2: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "page3: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page3: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page3: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page3: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page3: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "partial: multi-page Runs preserves full reading budget/pager"
+        },
+        {
+          "passed": true,
+          "check": "error: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "error: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "error: one-page Runs fits content without disabled pager"
+        },
+        {
+          "passed": true,
+          "check": "error: no unexplained space below reading content"
+        },
+        {
+          "passed": true,
+          "check": "Existing origin view still opens"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "Existing tests view still opens"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "Existing books view still opens"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "Runs repaginates in shorter viewport"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "research: reverse Tab stays inside dialog"
+        },
+        {
+          "passed": true,
+          "check": "research: Tab stays inside dialog"
+        },
+        {
+          "passed": true,
+          "check": "Escape closes Research"
+        },
+        {
+          "passed": true,
+          "check": "Escape restores Research trigger focus"
+        },
+        {
+          "passed": true,
+          "check": "preserved: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "preserved: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "preserved: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "preserved: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "preserved: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "preserved: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "preserved: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "World walk camera still works"
+        },
+        {
+          "passed": true,
+          "check": "No browser errors"
+        }
+      ],
+      "errors": [],
+      "htmlSHA256": "0c8a4cbcf125fefda0b554f755df67068e9355f061016f351e1e780a9bd6a71f",
+      "pagination": {
+        "res:runs": {
+          "initialPages": 3,
+          "pages": 3,
+          "clipped": [],
+          "complete": true
+        },
+        "res:origin": {
+          "initialPages": 12,
+          "pages": 12,
+          "clipped": [],
+          "complete": true
+        },
+        "res:tests": {
+          "initialPages": 6,
+          "pages": 6,
+          "clipped": [],
+          "complete": true
+        },
+        "res:books": {
+          "initialPages": 7,
+          "pages": 7,
+          "clipped": [],
+          "complete": true
+        }
+      },
+      "cases": {
+        "legacy": {
+          "pages": 1,
+          "audit": {
+            "initialPages": 1,
+            "pages": 1,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 271.171875,
+            "sheetTop": 286.40625,
+            "topChrome": 107.1875,
+            "bottomChrome": 0,
+            "chromeViewportPercent": 12.699940758293838,
+            "bottomGap": 20,
+            "short": true
+          }
+        },
+        "empty": {
+          "pages": 1,
+          "audit": {
+            "initialPages": 1,
+            "pages": 1,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 310.421875,
+            "sheetTop": 266.78125,
+            "topChrome": 107.1875,
+            "bottomChrome": 0,
+            "chromeViewportPercent": 12.699940758293838,
+            "bottomGap": 20,
+            "short": true
+          }
+        },
+        "falls": {
+          "pages": 3,
+          "audit": {
+            "initialPages": 3,
+            "pages": 3,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 844,
+            "sheetTop": 0,
+            "topChrome": 107.1875,
+            "bottomChrome": 47,
+            "chromeViewportPercent": 18.26866113744076,
+            "bottomGap": 617.625,
+            "short": false
+          }
+        },
+        "partial": {
+          "pages": 3,
+          "audit": {
+            "initialPages": 3,
+            "pages": 3,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 844,
+            "sheetTop": 0,
+            "topChrome": 107.1875,
+            "bottomChrome": 47,
+            "chromeViewportPercent": 18.26866113744076,
+            "bottomGap": 438.84375,
+            "short": false
+          }
+        },
+        "error": {
+          "pages": 1,
+          "audit": {
+            "initialPages": 1,
+            "pages": 1,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 395.484375,
+            "sheetTop": 224.25,
+            "topChrome": 107.1875,
+            "bottomChrome": 0,
+            "chromeViewportPercent": 12.699940758293838,
+            "bottomGap": 20,
+            "short": true
+          }
+        }
+      },
+      "surfaces": {
+        "page1": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 706,
+            "width": 390,
+            "height": 27,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 369.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 399.25,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 706,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 371.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 399.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 228.5,
+            "combinedPercent": 27.07345971563981,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [
+            {
+              "id": "research",
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844,
+              "bottom": 844,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 844,
+              "clientHeight": 844
+            }
+          ],
+          "dialogChrome": [
+            {
+              "id": "research",
+              "regions": [
+                {
+                  "id": "",
+                  "x": 0,
+                  "y": 224.25,
+                  "width": 390,
+                  "height": 71.1875,
+                  "bottom": 295.4375,
+                  "scrollWidth": 390,
+                  "clientWidth": 390,
+                  "scrollHeight": 70,
+                  "clientHeight": 70
+                },
+                {
+                  "id": "",
+                  "x": 0,
+                  "y": 295.4375,
+                  "width": 390,
+                  "height": 36,
+                  "bottom": 331.4375,
+                  "scrollWidth": 390,
+                  "clientWidth": 390,
+                  "scrollHeight": 36,
+                  "clientHeight": 36
+                }
+              ]
+            }
+          ],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "resruns",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "page2": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 706,
+            "width": 390,
+            "height": 27,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 369.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 399.25,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 706,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 371.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 399.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 228.5,
+            "combinedPercent": 27.07345971563981,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [
+            {
+              "id": "research",
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844,
+              "bottom": 844,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 844,
+              "clientHeight": 844
+            }
+          ],
+          "dialogChrome": [
+            {
+              "id": "research",
+              "regions": [
+                {
+                  "id": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 390,
+                  "height": 71.1875,
+                  "bottom": 71.1875,
+                  "scrollWidth": 390,
+                  "clientWidth": 390,
+                  "scrollHeight": 70,
+                  "clientHeight": 70
+                },
+                {
+                  "id": "",
+                  "x": 0,
+                  "y": 71.1875,
+                  "width": 390,
+                  "height": 36,
+                  "bottom": 107.1875,
+                  "scrollWidth": 390,
+                  "clientWidth": 390,
+                  "scrollHeight": 36,
+                  "clientHeight": 36
+                },
+                {
+                  "id": "respager",
+                  "x": 0,
+                  "y": 797,
+                  "width": 390,
+                  "height": 47,
+                  "bottom": 844,
+                  "scrollWidth": 390,
+                  "clientWidth": 390,
+                  "scrollHeight": 46,
+                  "clientHeight": 46
+                }
+              ]
+            }
+          ],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "resruns",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "page3": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 706,
+            "width": 390,
+            "height": 27,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 369.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 399.25,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 706,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 371.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 399.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 228.5,
+            "combinedPercent": 27.07345971563981,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [
+            {
+              "id": "research",
+              "x": 0,
+              "y": 0,
+              "width": 390,
+              "height": 844,
+              "bottom": 844,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 844,
+              "clientHeight": 844
+            }
+          ],
+          "dialogChrome": [
+            {
+              "id": "research",
+              "regions": [
+                {
+                  "id": "",
+                  "x": 0,
+                  "y": 0,
+                  "width": 390,
+                  "height": 71.1875,
+                  "bottom": 71.1875,
+                  "scrollWidth": 390,
+                  "clientWidth": 390,
+                  "scrollHeight": 70,
+                  "clientHeight": 70
+                },
+                {
+                  "id": "",
+                  "x": 0,
+                  "y": 71.1875,
+                  "width": 390,
+                  "height": 36,
+                  "bottom": 107.1875,
+                  "scrollWidth": 390,
+                  "clientWidth": 390,
+                  "scrollHeight": 36,
+                  "clientHeight": 36
+                },
+                {
+                  "id": "respager",
+                  "x": 0,
+                  "y": 797,
+                  "width": 390,
+                  "height": 47,
+                  "bottom": 844,
+                  "scrollWidth": 390,
+                  "clientWidth": 390,
+                  "scrollHeight": 46,
+                  "clientHeight": 46
+                }
+              ]
+            }
+          ],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "resruns",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "preserved": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 706,
+            "width": 390,
+            "height": 27,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 369.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 399.25,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 706,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 371.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 399.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 228.5,
+            "combinedPercent": 27.07345971563981,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "resbtn",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        }
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "checks": [
+        {
+          "passed": true,
+          "check": "Origins accessible name includes visible label"
+        },
+        {
+          "passed": true,
+          "check": "legacy: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "legacy: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "legacy: one-page Runs fits content without disabled pager"
+        },
+        {
+          "passed": true,
+          "check": "legacy: no unexplained space below reading content"
+        },
+        {
+          "passed": true,
+          "check": "empty: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "empty: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "empty: one-page Runs fits content without disabled pager"
+        },
+        {
+          "passed": true,
+          "check": "empty: no unexplained space below reading content"
+        },
+        {
+          "passed": true,
+          "check": "falls: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "falls: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "page2: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page2: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page2: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page2: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page2: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "page3: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page3: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page3: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page3: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page3: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "falls: multi-page Runs preserves full reading budget/pager"
+        },
+        {
+          "passed": true,
+          "check": "res: Next turns the page"
+        },
+        {
+          "passed": true,
+          "check": "res: Prev returns to first page"
+        },
+        {
+          "passed": true,
+          "check": "res: arrow key turns the page"
+        },
+        {
+          "passed": true,
+          "check": "res: swipe turns the page"
+        },
+        {
+          "passed": true,
+          "check": "partial: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "partial: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "page2: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page2: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page2: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page2: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page2: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "page3: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page3: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page3: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page3: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page3: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "partial: multi-page Runs preserves full reading budget/pager"
+        },
+        {
+          "passed": true,
+          "check": "error: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "error: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "error: one-page Runs fits content without disabled pager"
+        },
+        {
+          "passed": true,
+          "check": "error: no unexplained space below reading content"
+        },
+        {
+          "passed": true,
+          "check": "Existing origin view still opens"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "Existing tests view still opens"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "Existing books view still opens"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "Runs repaginates in shorter viewport"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "research: reverse Tab stays inside dialog"
+        },
+        {
+          "passed": true,
+          "check": "research: Tab stays inside dialog"
+        },
+        {
+          "passed": true,
+          "check": "Escape closes Research"
+        },
+        {
+          "passed": true,
+          "check": "Escape restores Research trigger focus"
+        },
+        {
+          "passed": true,
+          "check": "preserved: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "preserved: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "preserved: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "preserved: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "preserved: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "preserved: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "preserved: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "World walk camera still works"
+        },
+        {
+          "passed": true,
+          "check": "No browser errors"
+        }
+      ],
+      "errors": [],
+      "htmlSHA256": "0c8a4cbcf125fefda0b554f755df67068e9355f061016f351e1e780a9bd6a71f",
+      "pagination": {
+        "res:runs": {
+          "initialPages": 3,
+          "pages": 3,
+          "clipped": [],
+          "complete": true
+        },
+        "res:origin": {
+          "initialPages": 10,
+          "pages": 10,
+          "clipped": [],
+          "complete": true
+        },
+        "res:tests": {
+          "initialPages": 6,
+          "pages": 6,
+          "clipped": [],
+          "complete": true
+        },
+        "res:books": {
+          "initialPages": 6,
+          "pages": 6,
+          "clipped": [],
+          "complete": true
+        }
+      },
+      "cases": {
+        "legacy": {
+          "pages": 1,
+          "audit": {
+            "initialPages": 1,
+            "pages": 1,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 228.21875,
+            "sheetTop": 269.890625,
+            "topChrome": 107.1875,
+            "bottomChrome": 0,
+            "chromeViewportPercent": 13.956705729166666,
+            "bottomGap": 21,
+            "short": true
+          }
+        },
+        "empty": {
+          "pages": 1,
+          "audit": {
+            "initialPages": 1,
+            "pages": 1,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 267.46875,
+            "sheetTop": 250.265625,
+            "topChrome": 107.1875,
+            "bottomChrome": 0,
+            "chromeViewportPercent": 13.956705729166666,
+            "bottomGap": 21,
+            "short": true
+          }
+        },
+        "falls": {
+          "pages": 3,
+          "audit": {
+            "initialPages": 3,
+            "pages": 3,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 736,
+            "sheetTop": 16,
+            "topChrome": 107.1875,
+            "bottomChrome": 47,
+            "chromeViewportPercent": 20.076497395833332,
+            "bottomGap": 591.46875,
+            "short": false
+          }
+        },
+        "partial": {
+          "pages": 3,
+          "audit": {
+            "initialPages": 3,
+            "pages": 3,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 736,
+            "sheetTop": 16,
+            "topChrome": 107.1875,
+            "bottomChrome": 47,
+            "chromeViewportPercent": 20.076497395833332,
+            "bottomGap": 555.125,
+            "short": false
+          }
+        },
+        "error": {
+          "pages": 1,
+          "audit": {
+            "initialPages": 1,
+            "pages": 1,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 330.84375,
+            "sheetTop": 218.578125,
+            "topChrome": 107.1875,
+            "bottomChrome": 0,
+            "chromeViewportPercent": 13.956705729166666,
+            "bottomGap": 21,
+            "short": true
+          }
+        }
+      },
+      "surfaces": {
+        "page1": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 638,
+            "width": 1024,
+            "height": 130,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 528.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 638,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 302.375,
+            "combinedPercent": 39.371744791666664,
+            "bottom": 130,
+            "bottomPercent": 16.927083333333332,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [
+            {
+              "id": "research",
+              "x": 0,
+              "y": 0,
+              "width": 1024,
+              "height": 768,
+              "bottom": 768,
+              "scrollWidth": 1024,
+              "clientWidth": 1024,
+              "scrollHeight": 768,
+              "clientHeight": 768
+            }
+          ],
+          "dialogChrome": [
+            {
+              "id": "research",
+              "regions": [
+                {
+                  "id": "",
+                  "x": 133,
+                  "y": 219.578125,
+                  "width": 758,
+                  "height": 71.1875,
+                  "bottom": 290.765625,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 70,
+                  "clientHeight": 70
+                },
+                {
+                  "id": "",
+                  "x": 133,
+                  "y": 290.765625,
+                  "width": 758,
+                  "height": 36,
+                  "bottom": 326.765625,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 36,
+                  "clientHeight": 36
+                }
+              ]
+            }
+          ],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "resruns",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "page2": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 638,
+            "width": 1024,
+            "height": 130,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 528.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 638,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 302.375,
+            "combinedPercent": 39.371744791666664,
+            "bottom": 130,
+            "bottomPercent": 16.927083333333332,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [
+            {
+              "id": "research",
+              "x": 0,
+              "y": 0,
+              "width": 1024,
+              "height": 768,
+              "bottom": 768,
+              "scrollWidth": 1024,
+              "clientWidth": 1024,
+              "scrollHeight": 768,
+              "clientHeight": 768
+            }
+          ],
+          "dialogChrome": [
+            {
+              "id": "research",
+              "regions": [
+                {
+                  "id": "",
+                  "x": 133,
+                  "y": 17,
+                  "width": 758,
+                  "height": 71.1875,
+                  "bottom": 88.1875,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 70,
+                  "clientHeight": 70
+                },
+                {
+                  "id": "",
+                  "x": 133,
+                  "y": 88.1875,
+                  "width": 758,
+                  "height": 36,
+                  "bottom": 124.1875,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 36,
+                  "clientHeight": 36
+                },
+                {
+                  "id": "respager",
+                  "x": 133,
+                  "y": 704,
+                  "width": 758,
+                  "height": 47,
+                  "bottom": 751,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 46,
+                  "clientHeight": 46
+                }
+              ]
+            }
+          ],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "resruns",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "page3": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 638,
+            "width": 1024,
+            "height": 130,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 528.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 638,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 302.375,
+            "combinedPercent": 39.371744791666664,
+            "bottom": 130,
+            "bottomPercent": 16.927083333333332,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [
+            {
+              "id": "research",
+              "x": 0,
+              "y": 0,
+              "width": 1024,
+              "height": 768,
+              "bottom": 768,
+              "scrollWidth": 1024,
+              "clientWidth": 1024,
+              "scrollHeight": 768,
+              "clientHeight": 768
+            }
+          ],
+          "dialogChrome": [
+            {
+              "id": "research",
+              "regions": [
+                {
+                  "id": "",
+                  "x": 133,
+                  "y": 17,
+                  "width": 758,
+                  "height": 71.1875,
+                  "bottom": 88.1875,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 70,
+                  "clientHeight": 70
+                },
+                {
+                  "id": "",
+                  "x": 133,
+                  "y": 88.1875,
+                  "width": 758,
+                  "height": 36,
+                  "bottom": 124.1875,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 36,
+                  "clientHeight": 36
+                },
+                {
+                  "id": "respager",
+                  "x": 133,
+                  "y": 704,
+                  "width": 758,
+                  "height": 47,
+                  "bottom": 751,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 46,
+                  "clientHeight": 46
+                }
+              ]
+            }
+          ],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "resruns",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "preserved": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 638,
+            "width": 1024,
+            "height": 130,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 528.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 638,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 302.375,
+            "combinedPercent": 39.371744791666664,
+            "bottom": 130,
+            "bottomPercent": 16.927083333333332,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "resbtn",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        }
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "checks": [
+        {
+          "passed": true,
+          "check": "Origins accessible name includes visible label"
+        },
+        {
+          "passed": true,
+          "check": "legacy: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "legacy: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "legacy: one-page Runs fits content without disabled pager"
+        },
+        {
+          "passed": true,
+          "check": "legacy: no unexplained space below reading content"
+        },
+        {
+          "passed": true,
+          "check": "empty: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "empty: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "empty: one-page Runs fits content without disabled pager"
+        },
+        {
+          "passed": true,
+          "check": "empty: no unexplained space below reading content"
+        },
+        {
+          "passed": true,
+          "check": "falls: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "falls: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "page2: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page2: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page2: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page2: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page2: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "falls: multi-page Runs preserves full reading budget/pager"
+        },
+        {
+          "passed": true,
+          "check": "res: Next turns the page"
+        },
+        {
+          "passed": true,
+          "check": "res: Prev returns to first page"
+        },
+        {
+          "passed": true,
+          "check": "res: arrow key turns the page"
+        },
+        {
+          "passed": true,
+          "check": "res: swipe turns the page"
+        },
+        {
+          "passed": true,
+          "check": "partial: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "partial: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "page2: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page2: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page2: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page2: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page2: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "page3: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page3: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page3: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page3: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page3: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "partial: multi-page Runs preserves full reading budget/pager"
+        },
+        {
+          "passed": true,
+          "check": "error: four tabs fit one row"
+        },
+        {
+          "passed": true,
+          "check": "error: pagination preserves all source text"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "page1: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "page1: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "page1: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "error: one-page Runs fits content without disabled pager"
+        },
+        {
+          "passed": true,
+          "check": "error: no unexplained space below reading content"
+        },
+        {
+          "passed": true,
+          "check": "Existing origin view still opens"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "Existing tests view still opens"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "Existing books view still opens"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "Runs repaginates in shorter viewport"
+        },
+        {
+          "passed": true,
+          "check": "res: every page fits without clipping"
+        },
+        {
+          "passed": true,
+          "check": "research: reverse Tab stays inside dialog"
+        },
+        {
+          "passed": true,
+          "check": "research: Tab stays inside dialog"
+        },
+        {
+          "passed": true,
+          "check": "Escape closes Research"
+        },
+        {
+          "passed": true,
+          "check": "Escape restores Research trigger focus"
+        },
+        {
+          "passed": true,
+          "check": "preserved: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "preserved: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "preserved: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "preserved: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "preserved: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "preserved: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "preserved: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "World walk camera still works"
+        },
+        {
+          "passed": true,
+          "check": "No browser errors"
+        }
+      ],
+      "errors": [],
+      "htmlSHA256": "0c8a4cbcf125fefda0b554f755df67068e9355f061016f351e1e780a9bd6a71f",
+      "pagination": {
+        "res:runs": {
+          "initialPages": 2,
+          "pages": 2,
+          "clipped": [],
+          "complete": true
+        },
+        "res:origin": {
+          "initialPages": 10,
+          "pages": 10,
+          "clipped": [],
+          "complete": true
+        },
+        "res:tests": {
+          "initialPages": 6,
+          "pages": 6,
+          "clipped": [],
+          "complete": true
+        },
+        "res:books": {
+          "initialPages": 6,
+          "pages": 6,
+          "clipped": [],
+          "complete": true
+        }
+      },
+      "cases": {
+        "legacy": {
+          "pages": 1,
+          "audit": {
+            "initialPages": 1,
+            "pages": 1,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 228.21875,
+            "sheetTop": 335.890625,
+            "topChrome": 107.1875,
+            "bottomChrome": 0,
+            "chromeViewportPercent": 11.909722222222221,
+            "bottomGap": 21,
+            "short": true
+          }
+        },
+        "empty": {
+          "pages": 1,
+          "audit": {
+            "initialPages": 1,
+            "pages": 1,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 267.46875,
+            "sheetTop": 316.265625,
+            "topChrome": 107.1875,
+            "bottomChrome": 0,
+            "chromeViewportPercent": 11.909722222222221,
+            "bottomGap": 21,
+            "short": true
+          }
+        },
+        "falls": {
+          "pages": 2,
+          "audit": {
+            "initialPages": 2,
+            "pages": 2,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 760,
+            "sheetTop": 70,
+            "topChrome": 107.1875,
+            "bottomChrome": 47,
+            "chromeViewportPercent": 17.131944444444443,
+            "bottomGap": 101.8125,
+            "short": false
+          }
+        },
+        "partial": {
+          "pages": 3,
+          "audit": {
+            "initialPages": 3,
+            "pages": 3,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 760,
+            "sheetTop": 70,
+            "topChrome": 107.1875,
+            "bottomChrome": 47,
+            "chromeViewportPercent": 17.131944444444443,
+            "bottomGap": 615.46875,
+            "short": false
+          }
+        },
+        "error": {
+          "pages": 1,
+          "audit": {
+            "initialPages": 1,
+            "pages": 1,
+            "clipped": [],
+            "complete": true
+          },
+          "metrics": {
+            "sheetHeight": 330.84375,
+            "sheetTop": 284.578125,
+            "topChrome": 107.1875,
+            "bottomChrome": 0,
+            "chromeViewportPercent": 11.909722222222221,
+            "bottomGap": 21,
+            "short": true
+          }
+        }
+      },
+      "surfaces": {
+        "page1": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 770,
+            "width": 1440,
+            "height": 130,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 715.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 770,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 247.6875,
+            "combinedPercent": 27.520833333333332,
+            "bottom": 130,
+            "bottomPercent": 14.444444444444445,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [
+            {
+              "id": "research",
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900,
+              "bottom": 900,
+              "scrollWidth": 1440,
+              "clientWidth": 1440,
+              "scrollHeight": 900,
+              "clientHeight": 900
+            }
+          ],
+          "dialogChrome": [
+            {
+              "id": "research",
+              "regions": [
+                {
+                  "id": "",
+                  "x": 341,
+                  "y": 285.578125,
+                  "width": 758,
+                  "height": 71.1875,
+                  "bottom": 356.765625,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 70,
+                  "clientHeight": 70
+                },
+                {
+                  "id": "",
+                  "x": 341,
+                  "y": 356.765625,
+                  "width": 758,
+                  "height": 36,
+                  "bottom": 392.765625,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 36,
+                  "clientHeight": 36
+                }
+              ]
+            }
+          ],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "resruns",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "page2": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 770,
+            "width": 1440,
+            "height": 130,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 715.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 770,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 247.6875,
+            "combinedPercent": 27.520833333333332,
+            "bottom": 130,
+            "bottomPercent": 14.444444444444445,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [
+            {
+              "id": "research",
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900,
+              "bottom": 900,
+              "scrollWidth": 1440,
+              "clientWidth": 1440,
+              "scrollHeight": 900,
+              "clientHeight": 900
+            }
+          ],
+          "dialogChrome": [
+            {
+              "id": "research",
+              "regions": [
+                {
+                  "id": "",
+                  "x": 341,
+                  "y": 71,
+                  "width": 758,
+                  "height": 71.1875,
+                  "bottom": 142.1875,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 70,
+                  "clientHeight": 70
+                },
+                {
+                  "id": "",
+                  "x": 341,
+                  "y": 142.1875,
+                  "width": 758,
+                  "height": 36,
+                  "bottom": 178.1875,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 36,
+                  "clientHeight": 36
+                },
+                {
+                  "id": "respager",
+                  "x": 341,
+                  "y": 782,
+                  "width": 758,
+                  "height": 47,
+                  "bottom": 829,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 46,
+                  "clientHeight": 46
+                }
+              ]
+            }
+          ],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "resruns",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "page3": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 770,
+            "width": 1440,
+            "height": 130,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 715.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 770,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 247.6875,
+            "combinedPercent": 27.520833333333332,
+            "bottom": 130,
+            "bottomPercent": 14.444444444444445,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [
+            {
+              "id": "research",
+              "x": 0,
+              "y": 0,
+              "width": 1440,
+              "height": 900,
+              "bottom": 900,
+              "scrollWidth": 1440,
+              "clientWidth": 1440,
+              "scrollHeight": 900,
+              "clientHeight": 900
+            }
+          ],
+          "dialogChrome": [
+            {
+              "id": "research",
+              "regions": [
+                {
+                  "id": "",
+                  "x": 341,
+                  "y": 71,
+                  "width": 758,
+                  "height": 71.1875,
+                  "bottom": 142.1875,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 70,
+                  "clientHeight": 70
+                },
+                {
+                  "id": "",
+                  "x": 341,
+                  "y": 142.1875,
+                  "width": 758,
+                  "height": 36,
+                  "bottom": 178.1875,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 36,
+                  "clientHeight": 36
+                },
+                {
+                  "id": "respager",
+                  "x": 341,
+                  "y": 782,
+                  "width": 758,
+                  "height": 47,
+                  "bottom": 829,
+                  "scrollWidth": 758,
+                  "clientWidth": 758,
+                  "scrollHeight": 46,
+                  "clientHeight": 46
+                }
+              ]
+            }
+          ],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "resruns",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "preserved": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 770,
+            "width": 1440,
+            "height": 130,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 715.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 770,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 247.6875,
+            "combinedPercent": 27.520833333333332,
+            "bottom": 130,
+            "bottomPercent": 14.444444444444445,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "resbtn",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        }
+      }
+    }
+  ],
+  "failures": []
+}

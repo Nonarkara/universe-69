@@ -115,8 +115,27 @@ def dump_postmortems():
                 path = os.path.join(
                     pmdir, f"u{'6' if key == 'eden' else '9'}-iteration-{pm['iteration']:03d}.json")
                 if not os.path.exists(path):
-                    with open(path, "w") as f:
-                        json.dump(pm, f, indent=2)
+                    pending = path + ".tmp"
+                    try:
+                        with open(pending, "w") as f:
+                            json.dump(pm, f, indent=2)
+                        os.replace(pending, path)
+                    finally:
+                        if os.path.exists(pending):
+                            os.unlink(pending)
+
+
+def update_histories():
+    """Keep observer I/O failures outside the simulation's failure boundary."""
+    global observations
+    try:
+        dump_postmortems()
+        with lock:
+            observations = historian.observe(world, DATA, observations)
+            historian.compile_book(world, data=DATA)
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        with lock:
+            observations = dict(observations, error='History unavailable: ' + str(exc))
 
 
 def engine_loop():
@@ -140,9 +159,7 @@ def engine_loop():
                         research.record(world, research.evaluate(world))
             log_events(evts)
             if any(e[2] in ("extinction", "lesson") for e in evts):
-                dump_postmortems()
-                with lock:
-                    historian.compile_book(world, data=DATA)
+                update_histories()
             if status["catching_up"]:
                 print(f"[universe69] fast-forwarding, {behind - batch} parts to go")
         if time.time() - last_save > 60:
@@ -214,6 +231,7 @@ def snapshot(with_world=False):
         snap["events"] = list(recent_events)[-EVENTS_IN_VIEW:]
         snap["status"] = dict(status)
         snap["research"] = research.report(world)
+        snap["observations"] = observations
         if with_world:
             snap["world"] = world_payload()
     return snap
@@ -279,8 +297,8 @@ signal.signal(signal.SIGTERM, shutdown)
 signal.signal(signal.SIGINT, shutdown)
 
 # If the run was already over when we booted, make sure the book exists.
-with lock:
-    historian.compile_book(world, data=DATA)
+observations = {"schema": 1, "records": []}
+update_histories()
 
 threading.Thread(target=engine_loop, daemon=True).start()
 threading.Thread(target=uploader_loop, daemon=True).start()

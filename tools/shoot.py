@@ -498,8 +498,9 @@ def drive(page, shot, check, item):
     audit_pages(page, 'res', check, item)
     stress_pagination(page, check, item)
     turn_page(page, 'res', '#respager', check)
-    for tab in ('tests', 'books'):
-        page.locator('#restests' if tab == 'tests' else '#resbooks').click()
+    check(page.evaluate("Array.from(document.querySelectorAll('.resnav button')).every((b,i,a)=>Math.abs(b.getBoundingClientRect().top-a[0].getBoundingClientRect().top)<=1)"), 'Four Research views fit on one control row')
+    for tab in ('tests', 'runs', 'books'):
+        page.locator({'tests':'#restests', 'runs':'#resruns', 'books':'#resbooks'}[tab]).click()
         check(page.evaluate('resTab') == tab, f'Research {tab} tab opens')
         audit_pages(page, 'res', check, item)
         shot('research-'+tab)

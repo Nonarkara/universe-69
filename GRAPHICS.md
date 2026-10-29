@@ -611,3 +611,7 @@ at 600 ms, while the mirror retains its configured upload interval.
 An explicit restart can keep iteration 1 while rewinding the day. The local
 viewer now discards its old world response on that rewind and fetches the
 new terrain; otherwise an open page could retain the preceding landscape.
+
+Research also provides a paged Runs reader: recorded outcomes first, candidate
+lessons and missing evidence second. It shares the existing reading surface
+and preserves both worlds on the observation screen.

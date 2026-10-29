@@ -392,18 +392,28 @@ the record always says which world the person belongs to.
 
 Every death is tallied by cause. When a universe dies, a **postmortem** is
 recorded (data/postmortems/): peak, generations, technologies, cause-of-death
-table, dominant cause, and whether it was preventable.
+table, dominant cause, and a model preventability flag. That flag is a policy
+assumption, not evidence of preventability.
 
 - **LAGOON learns.** Reseeded founders inherit lessons mapped from past
-  dominant causes — starvation → *preserve* (starting food cache, faster
-  preservation/fishing), predators → *vigilance* (−40% predation, faster
+  dominant causes — starvation → *preserve* (storage habit and faster
+  preservation/fishing; no food gift), predators → *vigilance* (−40% predation, faster
   tools), epidemic → *cleanliness* (half outbreak odds), feud → *unity*
   (faster shared lore). Survivors of a near-wipe (one cause killing >20% in a
   year) imprint the same lesson without going extinct — instinct passed on
   with no written language, the way fear of snakes is.
-- **EDEN cannot learn.** Each reseed restarts under identical, perfect, fatal
-  conditions, and each postmortem records the same verdict: nothing within
-  the walls could have prevented it. That asymmetry is the experiment.
+- **EDEN cannot learn.** Each reseed restarts under identical controlled
+  conditions. The absence of inherited assistance is experimental policy,
+  not proof that any particular collapse was inevitable. That asymmetry is
+  the experiment.
+
+Each fall also produces an independent observer volume and durable index in
+`data/history-books/`, even while the other universe lives. The RUNS reader
+separates cumulative recorded facts from candidate lessons and unknowns.
+Historical founding dates and engine versions remain unknown when absent;
+current-run values are never substituted for earlier iterations. Explicit
+`--genesis` archives these records with the old world. This observer layer
+does not alter the engine or the worlds.
 
 ## Bands and tribes
 

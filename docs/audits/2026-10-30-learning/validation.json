@@ -1,0 +1,58 @@
+{
+  "base_commit": "7ac8355",
+  "engine": "2026.10.30.1",
+  "engine_behavior_changed": false,
+  "new_model_arc_run": false,
+  "live_macbook_accessed": false,
+  "source_sha256": {
+    "sim/engine.py": "36a8ef73ed905e6cead5ac59793c12fee398c0745cdd657bc8e060399d0b402c",
+    "sim/minds.py": "164b2f44df0a63e45d7a319c396648ab25cd86c04c40628d2cb9498f9a753bd8",
+    "sim/needs.py": "f422dfe1dfd5f988573a8fef7573fb6bbe2fb46b3f2355079484c3e6ec36a3cd",
+    "sim/historian.py": "ad0728651b5f6b326fc02cc05ab2c112dfe34506e1ba1af81dacfa3541f30c69",
+    "sim/server.py": "5e1bfe65ed3a37e8695c190bc8764fe98d6986108c877fead8c4bbf87cf44f4d",
+    "web/index.html": "0c8a4cbcf125fefda0b554f755df67068e9355f061016f351e1e780a9bd6a71f",
+    "docs/index.html": "0c8a4cbcf125fefda0b554f755df67068e9355f061016f351e1e780a9bd6a71f",
+    "tools/shoot.py": "fe1f7546f35f0e2aa91fd77c80a84cc5e90136c38527c606556d2a8d041acf35",
+    "tests/test_historian.py": "ce314f51ca1cd42df24125ed34ff0306dd88649203d44396c5f375b7a8e941d3",
+    "tests/test_observation_view.py": "1f6d24c96d4071def2bc3af12d7d90a799053dd94bfc26d7d06ca83df65f1dab"
+  },
+  "runtime_smoke": {
+    "python": "Apple Python3.9.6",
+    "corrupt_index": "HTTP snapshots available and model day advanced; warnings reported",
+    "archive_path_blocked_by_file": "HTTP snapshots available and model day advanced; error reported",
+    "cleanup": "Both owned servers saved and exited. Final unwritable fixture exceeded 20-second wait before its later clean exit.",
+    "fixture": "Synthetic postmortem used only to exercise observer failure paths; not an experimental outcome"
+  },
+  "first_full_suite": {
+    "python": "3.14.6",
+    "tests": 237,
+    "failures": 1,
+    "note": "Started while reader tests were still being edited; imported early legacy test used case-sensitive assertion. Corrected focused six-test suite passes. Final Apple Python suite rerun separately."
+  },
+  "final_full_suite": {
+    "python": "Apple Python3.9.6",
+    "tests": 246,
+    "failures": 0,
+    "seconds": 356.773,
+    "log": "unittest-python39.log"
+  },
+  "final_focused_checks": {
+    "tests": 58,
+    "log": "final-focused.log",
+    "scope": "After final paired-book wording and compact one-page Runs repair; historian12, reader6, style40"
+  },
+  "mirrors_equal": true,
+  "engine_files_equal_base": true,
+  "viewer": {
+    "source_sha256": "0c8a4cbcf125fefda0b554f755df67068e9355f061016f351e1e780a9bd6a71f",
+    "checks": {
+      "390x844": 95,
+      "1024x768": 95,
+      "1440x900": 90
+    },
+    "failures": 0,
+    "error_count": 0,
+    "report": "viewer/report.json"
+  },
+  "independent_review": "Source and final rendered states cleared; see independent-review.md"
+}

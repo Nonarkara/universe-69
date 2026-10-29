@@ -145,6 +145,9 @@
   .sheet { width:100%; max-width:760px; height:min(760px, calc(100dvh - 32px)); background:var(--surface-2);
            border:1px solid var(--line); display:flex; flex-direction:column; min-height:0; }
   .sheet.small { max-width:520px; height:auto; max-height:calc(100dvh - 32px); }
+  #research.shortRuns .sheet { height:auto; max-height:calc(100dvh - 32px); }
+  #research.shortRuns #resbody { flex:0 1 auto; }
+  #research.shortRuns #respager { display:none; }
   .sheethead { flex:none; display:flex; align-items:center; gap:6px 12px; flex-wrap:wrap; padding:10px 16px 8px;
                border-bottom:1px solid var(--line); }
   .sheethead h2 { font-size:20px; font-weight:500; letter-spacing:0.02em; }
@@ -176,6 +179,7 @@
   .story .cl { font-family:var(--font-read); font-size:15px; line-height:1.5; margin:3px 0; max-width:65ch; }
   .story .sr { color:var(--muted); font-size:12px; max-width:65ch; }
   .story .hl { color:var(--accent); }
+  .read .archivewarning { color:var(--warn); font-family:var(--font-ui); font-size:14px; }
   #resstory h3 { font-size:13px; font-weight:500; color:var(--muted); letter-spacing:0.08em; margin:2px 0 6px; }
 
   /* the reading page: the book and the origin story */
@@ -349,11 +353,12 @@
       <span id="ressum" class="sum"></span>
     </div>
     <div class="tabs resnav" role="group" aria-label="Research view">
-      <button id="resorigin" aria-pressed="true">From Universe 25 to here</button>
+      <button id="resorigin" aria-pressed="true" title="From Universe 25 to here" aria-label="Origins — from Universe 25 to here">Origins</button>
       <button id="restests" aria-pressed="false">Model tests</button>
+      <button id="resruns" aria-pressed="false">Runs</button>
       <button id="resbooks" aria-pressed="false">The books</button>
     </div>
-    <div id="resbody" class="page" tabindex="0" aria-label="Research reading area"><div id="resorig" class="read"></div><div id="resstory" hidden></div><div id="reslist" hidden></div></div>
+    <div id="resbody" class="page" tabindex="0" aria-label="Research reading area"><div id="resorig" class="read"></div><div id="resstory" hidden></div><div id="reslist" hidden></div><div id="resrunsbody" class="read" hidden></div></div>
     <div class="sheetfoot" id="respager"><button type="button" class="prev">‹ Prev</button><span class="pageind" aria-live="polite"></span><button type="button" class="next">Next ›</button></div>
   </div>
 </div>
@@ -3740,31 +3745,96 @@ function originBlocks(){
   (d.chapters||[]).forEach(function(ch){ out=out.concat([chapterHead(ch)], readBlocks(ch.blocks, "book/")); });
   return out.map(function(h){ return "<div class='col'>"+h+"</div>"; });
 }
+// ---- run observations: recorded facts, then tentative interpretations --------
+// Reading only: this consumes the snapshot and cannot change either world.
+function observationBlocks(observations, worlds){
+  var available=observations && observations.schema===1 && Array.isArray(observations.records);
+  var records=available?observations.records:[], blocks=[];
+  var warnings=observations&&Array.isArray(observations.warnings)?observations.warnings:[];
+  var archiveError=observations&&observations.error;
+  function value(v){ return v===null||v===undefined||v===""?"not recorded":escapeHTML(v); }
+  function list(a){ return Array.isArray(a)?(a.length?a.map(escapeHTML).join(", "):"none recorded"):"not recorded"; }
+  function col(html){ return "<div class='col'>"+html+"</div>"; }
+  var living=["eden","lagoon"].filter(function(k){return worlds&&worlds[k]&&worlds[k].pop>0;}).map(function(k){
+    var u=worlds[k];return k.toUpperCase()+" · run "+value(u.iter)+" ("+value(u.pop)+" people)";
+  });
+  if (archiveError) blocks.push(col("<p class='archivewarning'><strong>Archive error:</strong> "+escapeHTML(archiveError)+"</p>"));
+  warnings.forEach(function(note){blocks.push(col("<p class='archivewarning'><strong>Archive warning:</strong> "+escapeHTML(note)+"</p>"));});
+  if (!available){
+    blocks.push(col("<p>Run observations are unavailable in this snapshot. Earlier runs may exist outside this snapshot.</p>"));
+  } else if (!records.length){
+    blocks.push(col("<h3 class='chap'>"+(archiveError||warnings.length?"Run records unavailable":living.length?"Experiments still running":"No completed runs included")+"</h3>"+
+      "<p>No completed-run observations are included in this snapshot. Historical records may be unavailable.</p>"));
+  } else {
+    blocks.push(col("<p class='resnote'>Death totals cover the full iteration and may include earlier crises. Candidate lessons are hypotheses to test in later runs.</p>"));
+  }
+  if (living.length) blocks.push(col("<p><strong>Still running:</strong> "+living.join("; ")+".</p>"));
+  records.forEach(function(r){
+    var tone=r.world==="EDEN"?"eden":r.world==="LAGOON"?"lagoon":"";
+    blocks.push(col("<h3 class='chap "+tone+"'>"+value(r.world)+" · run "+value(r.iteration)+"</h3>"+
+      "<p class='by'>Engine at recorded end: "+value(r.engine)+" · "+(r.scope==="cumulative_iteration"?"whole-iteration totals":"scope not recorded")+"</p>"+
+      "<p><strong>Observed facts.</strong> Recorded end: day "+value(r.day)+". Founding day: "+value(r.founded_day)+
+      ". Peak: "+value(r.peak)+" people. Highest generation: "+value(r.gen_max)+".</p>"));
+    (Array.isArray(r.engine_history)?r.engine_history:[]).forEach(function(change){
+      blocks.push(col("<p class='note'><strong>Lineage engine transition:</strong> "+(change&&typeof change==="object" ?
+        value(change.from)+" → "+value(change.to)+" on day "+value(change.day)+", part "+value(change.part) : value(change))+".</p>"));
+    });
+    var cod=r.cod||{}, causes=Object.keys(cod).sort(function(a,b){return (+cod[b]-+cod[a])||a.localeCompare(b);}).map(function(k){
+      return escapeHTML(k)+": "+value(cod[k]);
+    });
+    blocks.push(col("<p><strong>Recorded deaths:</strong> "+(causes.length?causes.join("; "):"not recorded")+
+      ". Largest recorded category: "+value(r.dominant_cause)+".</p>"+
+      "<p><strong>Technologies reached:</strong> "+list(r.tech)+".</p>"+
+      "<p><strong>Lessons held:</strong> "+list(r.lessons_held)+".</p>"));
+    blocks.push(col("<p><strong>Candidate lesson:</strong> "+(r.lesson?value(r.lesson):"none recorded")+".</p>"+
+      "<p>"+value(r.interpretation)+"</p>"));
+    (Array.isArray(r.unknowns)?r.unknowns:[]).forEach(function(note){
+      blocks.push(col("<p><strong>Unresolved:</strong> "+escapeHTML(note)+"</p>"));
+    });
+  });
+  return blocks;
+}
 var resTab="origin";
 pagers.res=new Pager(document.getElementById("resbody"), document.getElementById("resorig"), document.getElementById("respager"), "read");
 function renderResearch(where){
   var rep = state && state.research, P0=pagers.res;
-  var tabs={origin:"resorig", tests:"reslist", books:"resstory"};
+  var panel=document.getElementById("research");
+  panel.classList.remove("shortRuns");
+  var tabs={origin:"resorig", tests:"reslist", books:"resstory", runs:"resrunsbody"};
   Object.keys(tabs).forEach(function(k){ document.getElementById(tabs[k]).hidden=(k!==resTab); });
-  ["origin","tests","books"].forEach(function(k){
-    document.getElementById({origin:"resorigin",tests:"restests",books:"resbooks"}[k]).setAttribute("aria-pressed", String(k===resTab)); });
+  ["origin","tests","books","runs"].forEach(function(k){
+    document.getElementById({origin:"resorigin",tests:"restests",books:"resbooks",runs:"resruns"}[k]).setAttribute("aria-pressed", String(k===resTab)); });
   var blocks, cls="";
   if (resTab==="origin"){ blocks=originBlocks(); cls="read"; }
+  else if (resTab==="runs"){ blocks=observationBlocks(state&&state.observations,state&&state.u); cls="read"; }
   else if (!rep || !rep.hypotheses || !rep.hypotheses.length){
     blocks=['<p class="dim">No hypotheses yet. The engine tests them as the world runs; this build predates the research layer.</p>'];
   } else blocks = resTab==="tests" ? testBlocks(rep) : storyBlocks(rep);
   if (!blocks.length) blocks=['<p class="dim">The books are unavailable in this snapshot.</p>'];
   P0.target=document.getElementById(tabs[resTab]); P0.cls=cls;
   var c = (rep && rep.counts) || {};
-  document.getElementById("ressum").textContent = rep ?
+  var observations=state&&state.observations;
+  document.getElementById("ressum").textContent = resTab==="runs" ?
+    (observations&&observations.schema===1&&Array.isArray(observations.records) ? observations.records.length+" completed iterations in snapshot"+(observations.error?" · archive error":observations.warnings&&observations.warnings.length?" · archive warnings":"") : "Run observations unavailable") : rep ?
     (c.supported||0) + " supported · " + (c.contradicted||0) + " contradicted · "
     + (c.undecided||0) + " undecided · engine " + (rep.engine || "?") : "";
   P0.set(blocks, where||"keep");
+  panel.classList.toggle("shortRuns", resTab==="runs" && P0.pages.length===1);
+}
+// Runs may be opened before the origin chapter has loaded the reading face.
+// Re-measure after the face arrives instead of leaving fallback-font breaks.
+if (document.fonts && document.fonts.addEventListener){
+  document.fonts.addEventListener("loadingdone", function(){
+    if (resTab==="runs" && !document.getElementById("research").hidden){
+      pagers.res.sig=""; renderResearch("keep");
+    }
+  });
 }
 function researchView(tab){ resTab=tab; renderResearch("first"); }
 document.getElementById("resorigin").onclick=function(){ researchView("origin"); };
 document.getElementById("restests").onclick=function(){ researchView("tests"); };
 document.getElementById("resbooks").onclick=function(){ researchView("books"); };
+document.getElementById("resruns").onclick=function(){ researchView("runs"); };
 function openResearch(){
   held={};
   document.getElementById("research").hidden=false;

@@ -1,0 +1,58 @@
+{
+  "synthetic": true,
+  "purpose": "UI contract/layout fixtures, not scientific findings",
+  "sourceHTMLSHA256": "0c8a4cbcf125fefda0b554f755df67068e9355f061016f351e1e780a9bd6a71f",
+  "fixtureSHA256": "4f9389002a910d1e58efab068a71f0a2e9f400d69da86988a50d0edc3d6fc2f1",
+  "base": "Retained engine2026.10.30.1 day3000 snapshot for background worlds; invented observation records are explicitly labelled UI fixture",
+  "beforeShortFit": {
+    "source": "Independent reviewer measured original short Runs screenshots before repair",
+    "390empty": {
+      "usefulContentEnd": 284,
+      "pagerTop": 798,
+      "unexplainedGap": 514
+    },
+    "1440legacy": {
+      "usefulContentEnd": 270,
+      "pagerTop": 780,
+      "unexplainedGap": 510
+    },
+    "1024error": {
+      "usefulContentEnd": 320,
+      "pagerTop": 704,
+      "unexplainedGap": 384
+    }
+  },
+  "finalChecks": {
+    "390": {
+      "passed": 95,
+      "total": 95
+    },
+    "1024": {
+      "passed": 95,
+      "total": 95
+    },
+    "1440": {
+      "passed": 90,
+      "total": 90
+    }
+  },
+  "hierarchy": [
+    "Archive availability warning, when present",
+    "Run identity and observed cumulative facts",
+    "Tentative lesson, interpretation and unresolved limits"
+  ],
+  "preserved": [
+    "All facts and unknowns, exact DOM text through pagination",
+    "Four reading views, one control row",
+    "Pager/arrows/swipe on long content",
+    "Focus containment and Escape return",
+    "Worlds and documentary/walk cameras"
+  ],
+  "remaining": "No unresolved SH or unverified states in the exercised fixtures; fixture numbers are not model evidence",
+  "MSH": {
+    "Found": "Short Runs states reserved a full reader: 514px unexplained gap on390 empty,510px on1440 legacy,384px on1024 error.",
+    "Changed": "Single-page Runs now fits content and hides the unused pager. Multi-page histories and other Research views retain their reading budget.",
+    "Verified": "Screenshots and chrome/bottom-gap metrics at390/1024/1440; exact text preservation; all four views, paging, resize, focus, Escape and world camera checks; independent review accepted. Final95/95,95/95,90/90.",
+    "Remaining": "None in the exercised UI fixtures. Synthetic observations demonstrate rendering, not model outcomes."
+  }
+}

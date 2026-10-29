@@ -149,3 +149,12 @@ preserves previously completed time when its pace changes. Existing
 `UNIVERSE69_SEC_PER_PART` overrides still take precedence; remove an old
 explicit override to use 0.6 seconds. A faster clock does not guarantee
 survival or civilization: the current ladder ends at writing.
+
+Each extinction now has an independent report in `data/history-books/` and
+a **Runs** view inside Research. It does not wait for both worlds to die.
+Counts describe a cumulative iteration; inherited lessons remain hypotheses,
+not proven remedies. Explicit restarts archive the ledger with the old state.
+This observer change does not change engine trajectories.
+
+The larger digital-human objective remains in progress; see
+[the capability audit](docs/audits/2026-10-30/capabilities.md).
