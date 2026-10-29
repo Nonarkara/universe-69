@@ -27,6 +27,9 @@ empty state left about 514px between its last useful text and a disabled
 pager. Single-page Runs now fit their content and omit that unused pager;
 long reports retain the full reading budget. See `viewer/` for final geometry
 and explicit synthetic UI fixtures at 390×844, 1024×768 and 1440×900.
+Original pre-repair PNGs were overwritten by the final captures; before-gap
+figures retain the independent reviewer’s measurements of those actual
+images. They were not reconstructed. Final captures are retained.
 
 The Runs reader puts observations before interpretations, preserves all
 recorded values, and uses the existing pager. Archive errors and missing
