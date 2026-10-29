@@ -1,0 +1,17 @@
+{
+  "engine": "2026.10.30.4",
+  "base_commit": "042485c4aa6f5bf910e686359cd223224d53b70d",
+  "seed": 69,
+  "days": 36000,
+  "python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "live_state_accessed": false,
+  "model_hashes": {
+    "sim/engine.py": "318ed7e3b9d7734c4c7159e5870caba875eff5a58ff947cc34fe6fb2f590e01e",
+    "sim/needs.py": "82c4723217d3e5c1462e0177282cc916bbe4ca15cdd825f9dcf66e61c32a0d55",
+    "sim/minds.py": "5258216b1b02a21251643d3e042b78bfddfb3cd01fc5903621430721b3c890a0",
+    "sim/animals.py": "5622b0910d185da4e9c8b6f680ce87a1feada111fb5505b483bd3de563864577",
+    "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "tools/lab.py": "91237f6cbf03f284825692047d4b8df3ed0746474a6a8cb6f51d1ea7779267ac"
+  }
+}

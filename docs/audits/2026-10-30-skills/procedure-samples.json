@@ -1,0 +1,92 @@
+{
+  "interpretation": "Maxima of annual point-in-time samples, not cumulative people or communication counts.",
+  "maxima": {
+    "fire": {
+      "aware": 17,
+      "qualified": 15,
+      "taught": 13,
+      "practiced": 15
+    },
+    "stone_tools": {
+      "aware": 1,
+      "qualified": 1,
+      "taught": 0,
+      "practiced": 1
+    },
+    "fishing": {
+      "aware": 1,
+      "qualified": 1,
+      "taught": 0,
+      "practiced": 1
+    },
+    "predator_hunt": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "practiced": 0
+    },
+    "shelter": {
+      "aware": 17,
+      "qualified": 6,
+      "taught": 1,
+      "practiced": 9
+    },
+    "preservation": {
+      "aware": 17,
+      "qualified": 15,
+      "taught": 8,
+      "practiced": 15
+    },
+    "lore": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "practiced": 0
+    },
+    "agriculture": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "practiced": 0
+    },
+    "domestication": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "practiced": 0
+    },
+    "granary": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "practiced": 0
+    },
+    "seacraft": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "practiced": 0
+    },
+    "healing": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "practiced": 0
+    },
+    "metallurgy": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "practiced": 0
+    },
+    "writing": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "practiced": 0
+    }
+  },
+  "max_prepared_food": 788.48,
+  "annual_samples": 101,
+  "last_year_duplicated": true
+}

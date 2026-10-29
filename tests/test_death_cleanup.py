@@ -8,6 +8,7 @@ import unittest
 from unittest.mock import patch
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sim'))
 import engine
+import skills
 
 
 def rest(u):
@@ -117,11 +118,16 @@ class TestMassDeaths(unittest.TestCase):
                 p['ef'] = 1 if p['id'] % 2 else 0.1
             rng = random.Random(7)
             forced = [False]
-            real_has = engine.has
-            def has(world, tech):
-                if tech == 'domestication':
-                    forced[0] = True
-                return real_has(world, tech)
+            # Trigger the epidemic coin from actual local livestock exposure,
+            # rather than the removed world-history capability check.
+            class ExposedCamp(dict):
+                def get(self, key, default=None):
+                    if key == 'domestic': forced[0] = True
+                    return super().get(key,default)
+            u['settlements'][0]=ExposedCamp(u['settlements'][0],domestic=1)
+            for person in u['people']:
+                for tech in ('fire','shelter','lore'):
+                    skills.invent(person,tech,0)
             def coin():
                 if forced[0]:
                     forced[0] = False
@@ -130,14 +136,14 @@ class TestMassDeaths(unittest.TestCase):
             def sample(values, n):
                 return ([p for p in values if p['id'] % 2] if n > 5 else values)[:n]
             events = []
-            with patch.object(engine, 'has', side_effect=has), patch.object(rng, 'random', side_effect=coin), patch.object(rng, 'sample', side_effect=sample), patch.object(engine, 'base_mortality', return_value=False), patch.object(engine.animals, 'tick', return_value=[]), patch.object(engine, 'lagoon_violence', return_value=False), patch.object(engine, 'TECH_LADDER', [('writing', None, 1e6, min_pop)]):
+            with patch.object(rng, 'random', side_effect=coin), patch.object(rng, 'sample', side_effect=sample), patch.object(engine, 'base_mortality', return_value=False), patch.object(engine.animals, 'tick', return_value=[]), patch.object(engine, 'lagoon_violence', return_value=False), patch.object(engine, 'TECH_LADDER', [('writing', None, 1e6, min_pop)]):
                 engine.tick_lagoon(u, rng, events)
             self.assertEqual(len(u['people']), 27)
             self.assertEqual(u['cod'].get('epidemic'), 13)
             self.assertTrue(all(p['p'] is None for p in u['people'] if p['id'] <= 26 and p['id'] % 2 == 0))
             self.assertEqual('writing' in u['tech'], min_pop == 1)
             if min_pop == 1:
-                self.assertTrue(any(engine.TECH_LABEL['writing'] in msg and 'first by P2.' in msg for _, _, _, msg in events))
+                self.assertTrue(any(engine.TECH_LABEL['writing'] in msg and 'P2 discovers' in msg for _, _, _, msg in events))
 
     def test_feud_losses_release_living_partners(self):
         u = population(100)

@@ -144,6 +144,9 @@ class TestExperience(unittest.TestCase):
     def test_empty_farm_is_still_a_work_target_and_tending_is_not_a_harvest(self):
         s=dict(x=10,y=10,kind='farm',left=0.,max=20.)
         self.u['sites']=[s]
+        import skills
+        for tech in ('fire','preservation','agriculture'):
+            skills.invent(self.p,tech,0)
         self.p.update(a=engine.A_FARM)
         self.assertIsNotNone(needs._field_to_work(self.u,self.p,26))
         needs.fulfil(self.u,self.p,0,random.Random(1),engine.A_FARM)

@@ -1,0 +1,191 @@
+{
+  "engine": "2026.10.30.4",
+  "source_hashes_match": true,
+  "hash_checks": {
+    "sim/engine.py": true,
+    "sim/needs.py": true,
+    "sim/minds.py": true,
+    "sim/animals.py": true,
+    "sim/skills.py": true,
+    "sim/research.py": true,
+    "tools/lab.py": true
+  },
+  "seed": 69,
+  "days": 36000,
+  "arc_sha256": "b2da0d814b617de64f48c9b9efc28fd4bdcfc5a3d6a5b735ccb98d6faba6f96b",
+  "endpoint": {
+    "eden": {
+      "day": 36000,
+      "year": 100,
+      "pop": 456,
+      "peak": 525,
+      "gen": 6,
+      "iter": 1,
+      "phase": "exploit",
+      "extinct_day": null,
+      "knowledge": {
+        "notes": 2801,
+        "reported_notes": 20,
+        "people_with_reports": 17,
+        "max_hops": 2
+      },
+      "withdrawn": 239,
+      "homeless": 23,
+      "fertile_f": 35,
+      "competent_m": 43,
+      "ennui": 0.4
+    },
+    "lagoon": {
+      "day": 36000,
+      "year": 100,
+      "pop": 12,
+      "peak": 22,
+      "gen": 5,
+      "iter": 1,
+      "phase": "strive",
+      "extinct_day": null,
+      "knowledge": {
+        "notes": 288,
+        "reported_notes": 0,
+        "people_with_reports": 0,
+        "max_hops": 0
+      },
+      "tech": [
+        "fire",
+        "preservation",
+        "stone_tools",
+        "fishing",
+        "shelter"
+      ],
+      "procedures": {
+        "fire": {
+          "aware": 11,
+          "qualified": 9,
+          "taught": 0,
+          "practiced": 9
+        },
+        "stone_tools": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "practiced": 0
+        },
+        "fishing": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "practiced": 0
+        },
+        "predator_hunt": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "practiced": 0
+        },
+        "shelter": {
+          "aware": 11,
+          "qualified": 3,
+          "taught": 0,
+          "practiced": 4
+        },
+        "preservation": {
+          "aware": 11,
+          "qualified": 9,
+          "taught": 0,
+          "practiced": 9
+        },
+        "lore": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "practiced": 0
+        },
+        "agriculture": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "practiced": 0
+        },
+        "domestication": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "practiced": 0
+        },
+        "granary": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "practiced": 0
+        },
+        "seacraft": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "practiced": 0
+        },
+        "healing": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "practiced": 0
+        },
+        "metallurgy": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "practiced": 0
+        },
+        "writing": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "practiced": 0
+        }
+      },
+      "camp_assets": {
+        "lit_fires": 1,
+        "granaries": 0,
+        "records": 0,
+        "domestic": 0,
+        "prepared_food": 173.19
+      },
+      "tribes": 1,
+      "store": 173.2,
+      "lessons": [
+        "preserve"
+      ],
+      "continent": false,
+      "innocent": false
+    }
+  },
+  "eden_control": {
+    "columns": [
+      "competent_m",
+      "day",
+      "ennui",
+      "extinct_day",
+      "fertile_f",
+      "gen",
+      "homeless",
+      "iter",
+      "knowledge",
+      "peak",
+      "phase",
+      "pop",
+      "withdrawn",
+      "year"
+    ],
+    "rows_current": 101,
+    "rows_prior": 101,
+    "all_equal": true
+  },
+  "eden_sampled_iterations": [
+    1
+  ],
+  "eden_postmortems": 0,
+  "lagoon_sampled_iterations": [
+    1
+  ],
+  "lagoon_postmortems": 0
+}

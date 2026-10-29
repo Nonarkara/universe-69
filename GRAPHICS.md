@@ -615,3 +615,25 @@ new terrain; otherwise an open page could retain the preceding landscape.
 Research also provides a paged Runs reader: recorded outcomes first, candidate
 lessons and missing evidence second. It shares the existing reading surface
 and preserves both worlds on the observation screen.
+
+
+### Local craft assets and active work — 2026-10-30
+
+Current snapshots provide `camp_state` for each LAGOON settlement. Hearths,
+flames, firelight and new smoke follow that camp's `fire` state. A global
+technology discovery no longer creates a fire at every camp, and does not
+invent defensive walls. The header's age/technology label remains a historical
+discovery label, not proof of local construction or an individual's proficiency. Grain stores, records benches and domestic-stock
+pens are drawn only from local completion/work fields, using TERRARIUM.
+An occupied pen marks aggregate domestic stock; it does not invent positions
+or identities for individual animals. Construction is modest ground scenery,
+with its cache key including local progress at the same eighth-step precision
+as huts. There are no new panels or badges.
+
+The existing selected-person activity and diary read the person's active
+`crafts` job: tending fire, knapping tools, preserving food, building a grain
+store, animal care, making records or caring. A walking worker retains the
+actual job in the existing details card. Missing `camp_state` is a legacy
+snapshot: the previous fire/wall approximation remains available and is
+explicitly labelled unverified in the expanded world facts. An authoritative
+empty array or a local false value never falls back to global technology.

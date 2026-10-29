@@ -1,0 +1,8 @@
+{
+  "changed_model_files": [
+    "sim/needs.py"
+  ],
+  "prior_needs_reconstructed_sha256": "82c4723217d3e5c1462e0177282cc916bbe4ca15cdd825f9dcf66e61c32a0d55",
+  "matches_prior_needs": true,
+  "interpretation": "One scheduling predicate changed. Same-seed outcomes are descriptive, not population-level evidence or a guaranteed survival benefit; changed choices alter subsequent random draw paths."
+}

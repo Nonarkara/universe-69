@@ -1,0 +1,23 @@
+.......................................F....................................................................................................................................................................................................F.......................................................................................................................
+======================================================================
+FAIL: test_epidemic_releases_bonds_and_discovery_uses_survivors (test_death_cleanup.TestMassDeaths)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_death_cleanup.py", line 135, in test_epidemic_releases_bonds_and_discovery_uses_survivors
+    self.assertEqual(len(u['people']), 27)
+AssertionError: 40 != 27
+
+======================================================================
+FAIL: test_a_run_with_research_looks_exactly_like_one_without (test_research.TestTheLayerReadsOnly)
+Adding a hypothesis must not move a single simulated outcome.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_research.py", line 176, in test_a_run_with_research_looks_exactly_like_one_without
+    self.assertEqual(a["lagoon"], b["lagoon"])
+AssertionError: {'kin[300906 chars]9, 4429902272), []), 'circles': [{'x': 136, 'y[20 chars] 0}]} != {'kin[300906 chars]9, 4440434624), []), 'circles': [{'x': 136, 'y[20 chars] 0}]}
+Diff is 921016 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 356 tests in 235.102s
+
+FAILED (failures=2)

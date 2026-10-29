@@ -23,6 +23,7 @@ Standard library only, like the engine.
 """
 
 from needs import carry_food
+import skills
 
 DEER, CAT = "deer", "cat"
 
@@ -139,12 +140,24 @@ def _seen(u, x, y, kind, ctx):
         del enc[:-24]
 
 
-def _guarded(u, q, night, has):
+def _guarded(u, q, night, has, people=None):
     """A lit camp at night, or a camp with a watch, keeps the cats out."""
+    from engine import terrain_of
+    from needs import reachable_contact
+    terr = terrain_of(u)
+    import minds
+    people = u.get("people",[]) if people is None else people
+    dead = (u.get("_ctx") or {}).get("dead",[])
     for st in u.get("settlements") or []:
         r = FIRE_RANGE + st.get("r", 5)
-        if abs(st["x"] - q["x"]) <= r and abs(st["y"] - q["y"]) <= r:
-            if (night and has("fire")) or st.get("watch"):
+        if (abs(st["x"] - q["x"]) <= r and abs(st["y"] - q["y"]) <= r
+                and reachable_contact(terr,st,q)):
+            watching = any(p["id"] == st.get("watch") and p not in dead
+                           and p.get("a") == minds.A_WATCH and not p.get("w") and not p.get("ab")
+                           and (p["x"],p["y"]) == (p.get("tx"),p.get("ty"))
+                           and _d2(p,st) <= (st.get("r",5)+3)**2
+                           and reachable_contact(terr,p,st) for p in people)
+            if (night and st.get("fire_until",-1) > u.get("parts",0)) or watching:
                 return True
     return False
 
@@ -154,25 +167,23 @@ def tick(u, rng, terr, people, ctx):
     [(person, cause)], and appends to ctx["events"].
 
     ctx carries: day, part, night (bool), adult (callable p -> bool),
-    has (callable tech -> bool), armed (bool), lessons (list).
+    lessons (list). Legacy has/armed inputs are accepted but confer no ability.
     """
     from engine import same_land
     animals = ensure(u, rng, terr)
-    night, has, adult = ctx["night"], ctx["has"], ctx["adult"]
+    night, has, adult = ctx["night"], ctx.get("has"), ctx["adult"]
     taken, dead_animals = [], set()
     events = ctx["events"]
 
     # --- the hunters strike first: they closed on the herd last part, and a
     # deer that has not yet bolted is the one that can be taken
-    hunters = [p for p in people if not p.get("ab") and p.get("a") == ctx["A_HUNT"] and adult(p)]
+    hunters = [p for p in people if not p.get("ab") and p.get("a") == ctx["A_HUNT"] and adult(p) and skills.knows(p,"stone_tools")]
     for p in hunters:
-        if not ctx["armed"]:
-            break
         if p.get("hun", 0.0) > 14.0:
             p["ad"] = 0              # too hungry to keep stalking: go and eat
             continue
         q = nearest(u, p, DEER, 12, terr)
-        if has("predator_hunt"):
+        if skills.knows(p,"predator_hunt"):
             # those who have learned to kill the big cat go after it, if it
             # is nearer than the herd: the danger is also the prize
             c = nearest(u, p, CAT, 12, terr)
@@ -188,7 +199,10 @@ def tick(u, rng, terr, people, ctx):
                      same_land(terr, h["x"], h["y"], p["x"], p["y"])]
             # most stalks fail; more spears, better odds (Hadza: a big
             # kill every few weeks per hunter — Hawkes et al. 1991)
-            if rng.random() < min(0.3, 0.05 + 0.05 * len(party)):
+            import needs
+            probability = min(0.3,0.05+0.05*len(party))*skills.level(p,'stone_tools')
+            needs.practice_work(u,p,'stone_tools',ctx['day'],True)
+            if rng.random() < probability:
                 dead_animals.add(q["i"])
                 _seen(u, q["x"], q["y"], "deer_kill", ctx)
                 share = MEAT_DEER / (1 + len(party))
@@ -260,14 +274,18 @@ def tick(u, rng, terr, people, ctx):
         _step(c, terr, 2)
 
     # --- the cat hunt, once they have learned it: a party with spears
-    if has("predator_hunt"):
+    if any(skills.knows(p,'predator_hunt') for p in hunters):
         alive_ids = {p["id"] for p in available_people}
-        surviving_hunters = [p for p in hunters if p["id"] in alive_ids]
+        surviving_hunters = [p for p in hunters if p["id"] in alive_ids and skills.knows(p,"predator_hunt")]
         for c in animals:
             if c["k"] != CAT or c["i"] in dead_animals:
                 continue
             party = _people_near(surviving_hunters, c, 4, terr)
-            if len(party) >= CROWD and rng.random() < 0.25:
+            probability = .25*sum(skills.level(h,"predator_hunt") for h in party)/len(party) if party else 0.
+            if len(party) >= CROWD:
+                import needs
+                for h in party:needs.practice_work(u,h,'predator_hunt',ctx['day'],True)
+            if len(party) >= CROWD and rng.random() < probability:
                 dead_animals.add(c["i"])
                 _seen(u, c["x"], c["y"], "cat_hunt", ctx)
                 for h in party:
@@ -287,7 +305,7 @@ def tick(u, rng, terr, people, ctx):
 def _choose_person(u, c, people, night, has, adult, terr=None):
     """A hungry cat takes the easiest person it can see: alone, small, out of
     the firelight. A group is not prey."""
-    if _guarded(u, c, night, has):
+    if _guarded(u, c, night, has, people):
         return None
     best, bs = None, 0.0
     for p in _people_near(people, c, STALK, terr):
@@ -308,11 +326,15 @@ def _attack(u, c, p, people, rng, ctx, terr=None):
     """The cat strikes. 'taken', 'killed' (the people killed the cat), or
     'fled'."""
     adult = ctx["adult"]
-    armed = ctx["armed"] and adult(p)
+    armed = skills.knows(p,"stone_tools") and adult(p)
     defenders = [o for o in _people_near(people, p, 3, terr) if o is not p and adult(o)]
-    kill_cat = (0.25 if armed else 0.05) + 0.2 * len(defenders)
+    tool_level = skills.level(p,"stone_tools") if armed else 0.
+    kill_cat = 0.05+0.2*tool_level+0.2*len(defenders)
     if "vigilance" in ctx["lessons"]:
         kill_cat += 0.1
+    if armed:
+        import needs
+        needs.practice_work(u,p,'stone_tools',ctx['day'],True)
     if rng.random() < min(0.8, kill_cat):
         _seen(u, p["x"], p["y"], "fought_off", ctx)
         u["kills"] = u.get("kills", 0) + 1
@@ -323,7 +345,8 @@ def _attack(u, c, p, people, rng, ctx, terr=None):
         return "killed"
     take = 0.55 if adult(p) else 0.85
     if armed:
-        take *= 0.5
+        # The attempt was made with the pre-practice capacity.
+        take *= 1.-.5*tool_level
     take *= 1.0 - 0.5 * min(1.0, len(defenders) / 2.0)
     if rng.random() < take:
         _seen(u, p["x"], p["y"], "taken", ctx)

@@ -1,0 +1,3355 @@
+{
+  "synthetic": true,
+  "fixtureSHA256": "98fb01163543f70207ce51e7fb13bd1d2997e6ce86fe4ada2b50d3315744abb4",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "checks": [
+        {
+          "passed": true,
+          "check": "unbuilt: actual renderer firelight follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "unbuilt: new smoke follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "camp: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "camp: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "camp: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "camp: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "unbuilt: legacy approximation is explicitly distinguished"
+        },
+        {
+          "passed": true,
+          "check": "working: actual renderer firelight follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "working: new smoke follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "camp: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "camp: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "camp: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "camp: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "working: legacy approximation is explicitly distinguished"
+        },
+        {
+          "passed": true,
+          "check": "working: existing person card shows actual private job"
+        },
+        {
+          "passed": true,
+          "check": "working: person details accept keyboard focus"
+        },
+        {
+          "passed": true,
+          "check": "worker: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "worker: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "worker: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "worker: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "worker: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "built: actual renderer firelight follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "built: new smoke follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "camp: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "camp: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "camp: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "camp: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "built: legacy approximation is explicitly distinguished"
+        },
+        {
+          "passed": true,
+          "check": "built: existing person card shows actual private job"
+        },
+        {
+          "passed": true,
+          "check": "built: person details accept keyboard focus"
+        },
+        {
+          "passed": true,
+          "check": "worker: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "worker: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "worker: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "worker: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "worker: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "legacy: actual renderer firelight follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "legacy: new smoke follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "camp: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "camp: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "camp: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "camp: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "legacy: legacy approximation is explicitly distinguished"
+        },
+        {
+          "passed": true,
+          "check": "No browser errors"
+        }
+      ],
+      "errors": [],
+      "htmlSHA256": "d1578231d0e0582325b9dee913e71b9774c168ed57ceaa789ab1bdcefcd8b152",
+      "cases": {
+        "unbuilt": {
+          "fire": {
+            "fireGradients": 0,
+            "newSmoke": 0,
+            "local": {
+              "fire": false,
+              "granary": false,
+              "writing": false,
+              "domestic": 0,
+              "work": {
+                "granary": 0,
+                "domestication": 0,
+                "writing": 0
+              },
+              "legacy": false
+            }
+          }
+        },
+        "working": {
+          "fire": {
+            "fireGradients": 0,
+            "newSmoke": 0,
+            "local": {
+              "fire": false,
+              "granary": false,
+              "writing": false,
+              "domestic": 0,
+              "work": {
+                "granary": 0.5,
+                "domestication": 0.5,
+                "writing": 0.5
+              },
+              "legacy": false
+            }
+          }
+        },
+        "built": {
+          "fire": {
+            "fireGradients": 1,
+            "newSmoke": 1,
+            "local": {
+              "fire": true,
+              "granary": true,
+              "writing": true,
+              "domestic": 4,
+              "work": {
+                "granary": 1,
+                "domestication": 1,
+                "writing": 1
+              },
+              "legacy": false
+            }
+          }
+        },
+        "legacy": {
+          "fire": {
+            "fireGradients": 1,
+            "newSmoke": 1,
+            "local": {
+              "fire": true,
+              "granary": false,
+              "writing": false,
+              "domestic": 0,
+              "work": {},
+              "legacy": true
+            }
+          }
+        }
+      },
+      "surfaces": {
+        "camp": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 706,
+            "width": 390,
+            "height": 27,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 369.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 399.25,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 706,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 371.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 399.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 228.5,
+            "combinedPercent": 27.07345971563981,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "expanded": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 706,
+            "width": 390,
+            "height": 27,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 369.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 531.15625,
+              "width": 390,
+              "height": 174.84375,
+              "bottom": 706,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 175,
+              "clientHeight": 175
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 371.5,
+              "width": 390,
+              "height": 159.65625,
+              "bottom": 531.15625,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 160,
+              "clientHeight": 160
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              159.65625
+            ],
+            "combinedHeight": 360.40625,
+            "combinedPercent": 42.70216232227488,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 175,
+              "lit": 704,
+              "samples": 704,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "worker": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 706,
+            "width": 390,
+            "height": 27,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 369.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 399.25,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 706,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 371.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 399.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 228.5,
+            "combinedPercent": 27.07345971563981,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 580.5,
+                "width": 390,
+                "height": 125.5,
+                "bottom": 706,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 125,
+                "clientHeight": 125
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 399.25,
+                "width": 390,
+                "height": 306.75,
+                "bottom": 706,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 307,
+                "clientHeight": 307
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 10,
+              "lying": false,
+              "body": {
+                "left": 192.35172313971754,
+                "right": 218.8344820493444,
+                "top": 510.8368926689605,
+                "bottom": 558.8368931926592
+              },
+              "cardTop": 580.5,
+              "sceneTop": 399.25,
+              "sceneBottom": 706,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "worker-more": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 559.8125,
+            "width": 390,
+            "height": 284.1875,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 283,
+            "clientHeight": 283
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 532.8125,
+            "width": 390,
+            "height": 27,
+            "bottom": 559.8125,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 220.15625,
+              "bottom": 282.90625,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 220,
+              "clientHeight": 220
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 312.65625,
+              "width": 390,
+              "height": 220.15625,
+              "bottom": 532.8125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 220,
+              "clientHeight": 220
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 284.90625,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 312.65625,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 401.6875,
+            "combinedPercent": 47.59330568720379,
+            "bottom": 284.1875,
+            "bottomPercent": 33.67150473933649,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 407.3125,
+                "width": 390,
+                "height": 125.5,
+                "bottom": 532.8125,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 125,
+                "clientHeight": 125
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 312.65625,
+                "width": 390,
+                "height": 220.15625,
+                "bottom": 532.8125,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 220,
+                "clientHeight": 220
+              }
+            }
+          ],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 220,
+              "lit": 885,
+              "samples": 885,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 220,
+              "lit": 885,
+              "samples": 885,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 10,
+              "lying": false,
+              "body": {
+                "left": 185.5676458933071,
+                "right": 206.70159433371884,
+                "top": 358.05715412694127,
+                "bottom": 396.3624356751876
+              },
+              "cardTop": 407.3125,
+              "sceneTop": 312.65625,
+              "sceneBottom": 532.8125,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        }
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "checks": [
+        {
+          "passed": true,
+          "check": "unbuilt: actual renderer firelight follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "unbuilt: new smoke follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "camp: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "camp: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "camp: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "camp: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "unbuilt: legacy approximation is explicitly distinguished"
+        },
+        {
+          "passed": true,
+          "check": "working: actual renderer firelight follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "working: new smoke follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "camp: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "camp: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "camp: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "camp: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "working: legacy approximation is explicitly distinguished"
+        },
+        {
+          "passed": true,
+          "check": "working: existing person card shows actual private job"
+        },
+        {
+          "passed": true,
+          "check": "working: person details accept keyboard focus"
+        },
+        {
+          "passed": true,
+          "check": "worker: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "worker: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "worker: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "worker: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "worker: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "built: actual renderer firelight follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "built: new smoke follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "camp: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "camp: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "camp: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "camp: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "built: legacy approximation is explicitly distinguished"
+        },
+        {
+          "passed": true,
+          "check": "built: existing person card shows actual private job"
+        },
+        {
+          "passed": true,
+          "check": "built: person details accept keyboard focus"
+        },
+        {
+          "passed": true,
+          "check": "worker: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "worker: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "worker: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "worker: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "worker: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "legacy: actual renderer firelight follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "legacy: new smoke follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "camp: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "camp: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "camp: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "camp: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "legacy: legacy approximation is explicitly distinguished"
+        },
+        {
+          "passed": true,
+          "check": "No browser errors"
+        }
+      ],
+      "errors": [],
+      "htmlSHA256": "d1578231d0e0582325b9dee913e71b9774c168ed57ceaa789ab1bdcefcd8b152",
+      "cases": {
+        "unbuilt": {
+          "fire": {
+            "fireGradients": 0,
+            "newSmoke": 0,
+            "local": {
+              "fire": false,
+              "granary": false,
+              "writing": false,
+              "domestic": 0,
+              "work": {
+                "granary": 0,
+                "domestication": 0,
+                "writing": 0
+              },
+              "legacy": false
+            }
+          }
+        },
+        "working": {
+          "fire": {
+            "fireGradients": 0,
+            "newSmoke": 0,
+            "local": {
+              "fire": false,
+              "granary": false,
+              "writing": false,
+              "domestic": 0,
+              "work": {
+                "granary": 0.5,
+                "domestication": 0.5,
+                "writing": 0.5
+              },
+              "legacy": false
+            }
+          }
+        },
+        "built": {
+          "fire": {
+            "fireGradients": 1,
+            "newSmoke": 1,
+            "local": {
+              "fire": true,
+              "granary": true,
+              "writing": true,
+              "domestic": 4,
+              "work": {
+                "granary": 1,
+                "domestication": 1,
+                "writing": 1
+              },
+              "legacy": false
+            }
+          }
+        },
+        "legacy": {
+          "fire": {
+            "fireGradients": 1,
+            "newSmoke": 1,
+            "local": {
+              "fire": true,
+              "granary": false,
+              "writing": false,
+              "domestic": 0,
+              "work": {},
+              "legacy": true
+            }
+          }
+        }
+      },
+      "surfaces": {
+        "camp": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 638,
+            "width": 1024,
+            "height": 130,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 528.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 638,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 302.375,
+            "combinedPercent": 39.371744791666664,
+            "bottom": 130,
+            "bottomPercent": 16.927083333333332,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "expanded": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 638,
+            "width": 1024,
+            "height": 130,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 528.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 638,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 138,
+              "width": 511,
+              "height": 390.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 391,
+              "clientHeight": 391
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 138.125,
+              "width": 511,
+              "height": 390.5,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 391,
+              "clientHeight": 391
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 103,
+              "bottom": 138,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 103,
+              "clientHeight": 103
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 103.125,
+              "bottom": 138.125,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 103,
+              "clientHeight": 103
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              103,
+              103.125
+            ],
+            "combinedHeight": 377.5,
+            "combinedPercent": 49.153645833333336,
+            "bottom": 130,
+            "bottomPercent": 16.927083333333332,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 391,
+              "lit": 2060,
+              "samples": 2060,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 391,
+              "lit": 2060,
+              "samples": 2060,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "worker": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 638,
+            "width": 1024,
+            "height": 130,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 528.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 638,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 302.375,
+            "combinedPercent": 39.371744791666664,
+            "bottom": 130,
+            "bottomPercent": 16.927083333333332,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 513,
+                "y": 383.625,
+                "width": 272,
+                "height": 145,
+                "bottom": 528.625,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 513,
+                "y": 63,
+                "width": 511,
+                "height": 465.625,
+                "bottom": 528.625,
+                "scrollWidth": 511,
+                "clientWidth": 511,
+                "scrollHeight": 466,
+                "clientHeight": 466
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 10,
+              "lying": false,
+              "body": {
+                "left": 762.0381935640049,
+                "right": 788.5209553858421,
+                "top": 232.2467632854296,
+                "bottom": 280.2467690875095
+              },
+              "cardTop": 383.625,
+              "sceneTop": 63,
+              "sceneBottom": 528.625,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "worker-more": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 524,
+            "width": 1024,
+            "height": 244,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 243,
+            "clientHeight": 243
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 414.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 524,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 351.625,
+              "bottom": 414.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 352,
+              "clientHeight": 352
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 351.625,
+              "bottom": 414.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 352,
+              "clientHeight": 352
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 416.375,
+            "combinedPercent": 54.215494791666664,
+            "bottom": 244,
+            "bottomPercent": 31.770833333333332,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 513,
+                "y": 269.625,
+                "width": 272,
+                "height": 145,
+                "bottom": 414.625,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 513,
+                "y": 63,
+                "width": 511,
+                "height": 351.625,
+                "bottom": 414.625,
+                "scrollWidth": 511,
+                "clientWidth": 511,
+                "scrollHeight": 352,
+                "clientHeight": 352
+              }
+            }
+          ],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 352,
+              "lit": 1855,
+              "samples": 1855,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 352,
+              "lit": 1855,
+              "samples": 1855,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 10,
+              "lying": false,
+              "body": {
+                "left": 757.6127964648824,
+                "right": 780.9939405472946,
+                "top": 157.68235119496018,
+                "bottom": 200.0606748443323
+              },
+              "cardTop": 269.625,
+              "sceneTop": 63,
+              "sceneBottom": 414.625,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        }
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "checks": [
+        {
+          "passed": true,
+          "check": "unbuilt: actual renderer firelight follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "unbuilt: new smoke follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "camp: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "camp: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "camp: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "camp: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "unbuilt: legacy approximation is explicitly distinguished"
+        },
+        {
+          "passed": true,
+          "check": "working: actual renderer firelight follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "working: new smoke follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "camp: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "camp: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "camp: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "camp: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "working: legacy approximation is explicitly distinguished"
+        },
+        {
+          "passed": true,
+          "check": "working: existing person card shows actual private job"
+        },
+        {
+          "passed": true,
+          "check": "working: person details accept keyboard focus"
+        },
+        {
+          "passed": true,
+          "check": "worker: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "worker: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "worker: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "worker: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "worker: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "built: actual renderer firelight follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "built: new smoke follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "camp: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "camp: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "camp: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "camp: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "built: legacy approximation is explicitly distinguished"
+        },
+        {
+          "passed": true,
+          "check": "built: existing person card shows actual private job"
+        },
+        {
+          "passed": true,
+          "check": "built: person details accept keyboard focus"
+        },
+        {
+          "passed": true,
+          "check": "worker: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "worker: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "worker: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "worker: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "worker: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "worker-more: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "legacy: actual renderer firelight follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "legacy: new smoke follows local authority/fallback"
+        },
+        {
+          "passed": true,
+          "check": "camp: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "camp: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "camp: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "camp: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "camp: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "legacy: legacy approximation is explicitly distinguished"
+        },
+        {
+          "passed": true,
+          "check": "No browser errors"
+        }
+      ],
+      "errors": [],
+      "htmlSHA256": "d1578231d0e0582325b9dee913e71b9774c168ed57ceaa789ab1bdcefcd8b152",
+      "cases": {
+        "unbuilt": {
+          "fire": {
+            "fireGradients": 0,
+            "newSmoke": 0,
+            "local": {
+              "fire": false,
+              "granary": false,
+              "writing": false,
+              "domestic": 0,
+              "work": {
+                "granary": 0,
+                "domestication": 0,
+                "writing": 0
+              },
+              "legacy": false
+            }
+          }
+        },
+        "working": {
+          "fire": {
+            "fireGradients": 0,
+            "newSmoke": 0,
+            "local": {
+              "fire": false,
+              "granary": false,
+              "writing": false,
+              "domestic": 0,
+              "work": {
+                "granary": 0.5,
+                "domestication": 0.5,
+                "writing": 0.5
+              },
+              "legacy": false
+            }
+          }
+        },
+        "built": {
+          "fire": {
+            "fireGradients": 1,
+            "newSmoke": 1,
+            "local": {
+              "fire": true,
+              "granary": true,
+              "writing": true,
+              "domestic": 4,
+              "work": {
+                "granary": 1,
+                "domestication": 1,
+                "writing": 1
+              },
+              "legacy": false
+            }
+          }
+        },
+        "legacy": {
+          "fire": {
+            "fireGradients": 1,
+            "newSmoke": 1,
+            "local": {
+              "fire": true,
+              "granary": false,
+              "writing": false,
+              "domestic": 0,
+              "work": {},
+              "legacy": true
+            }
+          }
+        }
+      },
+      "surfaces": {
+        "camp": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 770,
+            "width": 1440,
+            "height": 130,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 715.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 770,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 247.6875,
+            "combinedPercent": 27.520833333333332,
+            "bottom": 130,
+            "bottomPercent": 14.444444444444445,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "expanded": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 770,
+            "width": 1440,
+            "height": 130,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 715.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 770,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 119,
+              "width": 719,
+              "height": 596.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 596,
+              "clientHeight": 596
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 119.28125,
+              "width": 719,
+              "height": 596.03125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 596,
+              "clientHeight": 596
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 84,
+              "bottom": 119,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 84,
+              "clientHeight": 84
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 84.28125,
+              "bottom": 119.28125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 84,
+              "clientHeight": 84
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              84,
+              84.28125
+            ],
+            "combinedHeight": 303.96875,
+            "combinedPercent": 33.77430555555556,
+            "bottom": 130,
+            "bottomPercent": 14.444444444444445,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 596,
+              "lit": 4418,
+              "samples": 4418,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 596,
+              "lit": 4418,
+              "samples": 4418,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "worker": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 770,
+            "width": 1440,
+            "height": 130,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 715.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 770,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 247.6875,
+            "combinedPercent": 27.520833333333332,
+            "bottom": 130,
+            "bottomPercent": 14.444444444444445,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 721,
+                "y": 570.3125,
+                "width": 272,
+                "height": 145,
+                "bottom": 715.3125,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 721,
+                "y": 63,
+                "width": 719,
+                "height": 652.3125,
+                "bottom": 715.3125,
+                "scrollWidth": 719,
+                "clientWidth": 719,
+                "scrollHeight": 652,
+                "clientHeight": 652
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 10,
+              "lying": false,
+              "body": {
+                "left": 1074.038202409283,
+                "right": 1100.520961711469,
+                "top": 325.2467973951616,
+                "bottom": 373.24679863037335
+              },
+              "cardTop": 570.3125,
+              "sceneTop": 63,
+              "sceneBottom": 715.3125,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "worker-more": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 656,
+            "width": 1440,
+            "height": 244,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 243,
+            "clientHeight": 243
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 601.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 656,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 538.3125,
+              "bottom": 601.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 538,
+              "clientHeight": 538
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 538.3125,
+              "bottom": 601.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 538,
+              "clientHeight": 538
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 361.6875,
+            "combinedPercent": 40.1875,
+            "bottom": 244,
+            "bottomPercent": 27.11111111111111,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 721,
+                "y": 456.3125,
+                "width": 272,
+                "height": 145,
+                "bottom": 601.3125,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 721,
+                "y": 63,
+                "width": 719,
+                "height": 538.3125,
+                "bottom": 601.3125,
+                "scrollWidth": 719,
+                "clientWidth": 719,
+                "scrollHeight": 538,
+                "clientHeight": 538
+              }
+            }
+          ],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 538,
+              "lit": 3988,
+              "samples": 3988,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 538,
+              "lit": 3988,
+              "samples": 3988,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 10,
+              "lying": false,
+              "body": {
+                "left": 1068.6590394628483,
+                "right": 1093.026853076948,
+                "top": 244.86310849124766,
+                "bottom": 289.02977066680324
+              },
+              "cardTop": 456.3125,
+              "sceneTop": 63,
+              "sceneBottom": 601.3125,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        }
+      }
+    }
+  ],
+  "failures": []
+}

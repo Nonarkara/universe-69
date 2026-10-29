@@ -1,0 +1,29 @@
+{
+  "kind": "controlled mechanism fixture, NOT natural trajectory",
+  "version": "2026.10.30.4",
+  "created_unix": 1793314046.252054,
+  "recipe": "seed69 genesis; explicitly train actor via skills.invent recursive prerequisites; place at dry camp; invoke actual perform_craft quarter-day work until granary then fire complete, then one writing work part; no natural simulation arc",
+  "steps": [
+    {
+      "skill": "granary",
+      "parts": 160,
+      "work": {
+        "granary": 40.0
+      }
+    },
+    {
+      "skill": "fire",
+      "parts": 164,
+      "work": {
+        "granary": 40.0,
+        "fire": 0.0
+      }
+    }
+  ],
+  "source_sha256": {
+    "sim/engine.py": "318ed7e3b9d7734c4c7159e5870caba875eff5a58ff947cc34fe6fb2f590e01e",
+    "sim/needs.py": "1c994a5c333a0743fa4e40319f29d123fefc5d2604a0984b0ab843f85f91e916",
+    "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555",
+    "sim/animals.py": "5622b0910d185da4e9c8b6f680ce87a1feada111fb5505b483bd3de563864577"
+  }
+}

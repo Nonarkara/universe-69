@@ -214,3 +214,40 @@ parent-to-child inheritance, long-term knowledge fidelity, or an extinction
 benefit in isolated human populations. Any such rules and coefficients remain
 explicit model choices; a local encounter gate is an operational simplification,
 not a measured prehistoric communication range.
+
+## Procedural skill and cumulative culture — primary human evidence (2026-10-30)
+
+Morgan et al. (2015) compared transmission conditions while modern adults
+learned to make Oldowan-style stone flakes. Teaching, especially verbal
+teaching, improved several measures of actual production relative to simpler
+transmission conditions. Learners performed the knapping task: this was not
+a test of instant proficiency from hearing a technology's name. Performance
+also deteriorated along transmission chains, so communication did not ensure
+perfect retention or continuing improvement. [*Nature Communications*
+6:6029, doi:10.1038/ncomms7029](https://www.nature.com/articles/ncomms7029).
+
+The successful learning route depends on the task. Caldwell and Millen (2009)
+found cumulative improvement in paper-airplane construction under imitation,
+emulation and teaching conditions independently. Observing actions or having
+a teacher was not universally necessary: learners could use end products and
+outcomes. [*Psychological Science* 20:1478–1483,
+doi:10.1111/j.1467-9280.2009.02469.x](https://journals.sagepub.com/doi/10.1111/j.1467-9280.2009.02469.x).
+
+**Candidate constraints before tuning.** Keep exposure to a technique separate
+from demonstrated ability to perform it. Let instruction or demonstration
+supply useful information, while actual attempts and their outcomes provide
+practice evidence. Do not turn an incidental conversation into instant
+mastery, or assume every contact improves performance. Equally, do not claim
+a universal requirement for spoken language, direct imitation or a living
+teacher; artifact-based learning is another possible route when artifacts
+are represented. Distinguish discovery, transmission, individual proficiency
+and successful collective use. Loss and imperfect transmission remain
+possible; cultural accumulation is an outcome to test.
+
+**Limits.** These are particular modern-adult tasks, not calibrated histories
+of prehistoric apprenticeship or every technology in LAGOON. They do not
+supply proficiency growth rates, mastery thresholds, childhood schedules,
+required teacher counts, forgetting constants or survival multipliers.
+Those are explicit model choices. The tool-making experiment informs a
+hypothesis about teaching and language evolution; it does not establish the
+historical sequence or validate the simulation's technological ladder.

@@ -21,6 +21,7 @@ Standard library only, like the engine.
 """
 
 import random
+import skills
 
 # The number of parts in a day. The engine owns the truth of this; it is
 # repeated here so that this module stands alone.
@@ -310,7 +311,7 @@ def capture_contact(u, p):
             or _age(u,p) < 3 or (p['x'],p['y']) != (p.get('tx'),p.get('ty'))):
         return None
     observe_sites(u,p)
-    return {'id':p['id'], 'x':p['x'], 'y':p['y'], 'notes':[
+    return {'id':p['id'], 'x':p['x'], 'y':p['y'], 'skills':_skill_snapshot(p), 'notes':[
         dict(n, path=list(n.get('path',[p['id']]))) for n in p['experience']['sites']]}
 
 
@@ -328,11 +329,11 @@ def exchange(u, contacts):
     from engine import terrain_of
     terr = terrain_of(u) if u.get('kind') == 'LAGOON' and contacts else None
     day = u.get('day',0)
+    lesson_frames = list(u.pop('_demos', []))
     for pid in sorted(contacts):
         listener, at = living[pid], contacts[pid]
         memory = listener['experience']
-        if memory.get('heard_on') == day:
-            continue
+        can_report = memory.get('heard_on') != day
         own = {(n['x'],n['y'],n['kind']):n for n in memory['sites']}
         best = None
         gx,gy = at['x']//4,at['y']//4
@@ -354,6 +355,9 @@ def exchange(u, contacts):
                         if any(ax != bx and ay != by and (terr[ay][bx] == 2 or terr[by][ax] == 2)
                                for (ax,ay),(bx,by) in zip(cells,cells[1:])):
                             continue
+                    lesson_frames.append((speaker,[at]))
+                    if not can_report:
+                        continue
                     for note in speaker['notes']:
                         path = note.get('path',[speaker['id']])
                         age = day-note['seen_day']
@@ -385,6 +389,7 @@ def exchange(u, contacts):
             memory['sites'].remove(oldest)
         memory['sites'].append(received)
         memory['heard_on'] = day
+    _teach_frames(u, lesson_frames)
 
 
 def observe_sites(u, p):
@@ -417,6 +422,14 @@ def observe_sites(u, p):
             _remember(u, p, site)
     st = camp_of(u,p)
     if st is not None and at_camp(u,p):
+        if _age(u,p) >= 3 and p.get('skill_day') != u.get('day',0):
+            artifacts = [('fire',fire_lit(u,st)), ('shelter',any(h.get('done') for h in st.get('huts',[]))),
+                         ('preservation',st.get('prepared',0.) > 0),
+                         ('granary',built(st,'granary')), ('writing',built(st,'writing'))]
+            for tech,exists in artifacts:
+                if exists and skills.expose(p,tech,u.get('day',0),basis='artifact'):
+                    p['skill_day'] = u.get('day',0)
+                    break
         memory['camp'] = {k:st.get(k,0.) for k in ('x','y','store','water','mouths')}
 
 
@@ -766,7 +779,7 @@ def assign(u, p, day, rng, cond=None, engine=None):
 
     # --- food from the wild ------------------------------------------------
     if cond.get("must_work_to_eat"):
-        if _has(u, "stone_tools"):
+        if _has(u, "stone_tools", p):
             # the hunt: the nearest deer, wherever the herd has gone
             import animals
             deer = animals.nearest(u, p, animals.DEER, min(reach, SIGHT))
@@ -780,7 +793,7 @@ def assign(u, p, day, rng, cond=None, engine=None):
                 options.append((score, E.A_HUNT, (deer["x"], deer["y"]), None))
         food_known = False
         for kind, act in (("plants", E.A_FORAGE), ("fish", E.A_FISH)):
-            if kind == "fish" and not _has(u, "fishing"):
+            if kind == "fish" and not _has(u, "fishing", p):
                 continue
             site, dist = nearest_site(u, p, kind, reach)
             if site is None:
@@ -793,6 +806,7 @@ def assign(u, p, day, rng, cond=None, engine=None):
             score = want_food * 2.2 * (0.6 + 0.8 * cond.get("abundance", 0.5))
             score *= 1.0 - 0.5 * (dist / float(reach))
             score *= 0.4 + 0.6 * (site["left"] / max(1.0, site["max"]))
+            score *= skills.level(p, 'fishing') if kind == 'fish' else 1.0
             options.append((score, act, (site["x"], site["y"]), site))
 
         if not food_known and want_food > .15 and a >= 12:
@@ -800,7 +814,7 @@ def assign(u, p, day, rng, cond=None, engine=None):
             if scout is not None:
                 options.append((want_food*1.5, E.A_WALK, scout, None))
 
-        if _has(u, "agriculture"):
+        if _has(u, "agriculture", p):
             # a field wants work before it gives food: tend it while it
             # grows, and harvest when it is ripe (Diamond, ch. 6)
             field = _field_to_work(u, p, reach)
@@ -839,22 +853,49 @@ def assign(u, p, day, rng, cond=None, engine=None):
         options.append((want_company * 1.1 * soc * held, E.A_TALK, _home_of(u, p), None))
         options.append((want_company * 0.8 * soc * held, E.A_GROOM, _home_of(u, p), None))
 
+    craft_choice = None
+    if cond.get('must_work_to_eat') and a >= 12 and at_camp(u,p):
+        st = camp_of(u,p)
+        candidates = []
+        for tech in ('fire','preservation','stone_tools','granary','domestication','writing'):
+            if not skills.knows(p,tech):
+                continue
+            need = ((tech == 'fire' and st.get('fire_until',-1) <= u.get('parts',0)+1)
+                    or (tech == 'preservation' and st.get('store',0.)-st.get('prepared',0.) > 1.)
+                    or (tech == 'stone_tools' and not skills.qualified(p,tech))
+                    or (tech in CRAFT_WORK and not built(st,tech)))
+            if need:
+                candidates.append(tech)
+        if candidates:
+            craft_choice = candidates[0]
+            options.append((.9*cond.get('work_drive',.5)*(1.-.7*want_food), E.A_WORK,(st['x'],st['y']),None))
+    if a >= 12 and skills.knows(p,'healing'):
+        from engine import terrain_of, same_land
+        dead = (u.get('_ctx') or {}).get('dead', [])
+        patients = [q for q in u.get('people',[]) if q not in dead and not q.get('ab')
+                    and q.get('inj',0.) > 0
+                    and (q['x']-p['x'])**2+(q['y']-p['y'])**2 <= SIGHT*SIGHT
+                    and same_land(terrain_of(u),p['x'],p['y'],q['x'],q['y'])]
+        if patients:
+            q = min(patients,key=lambda q:(q['x']-p['x'])**2+(q['y']-p['y'])**2)
+            options.append((.9*(1.-.5*want_food),E.A_TEND,(q['x'],q['y']),None))
+
     # --- work --------------------------------------------------------------
     # EDEN's people work for a place to be needed, not for food; LAGOON's
     # work for food is already in the options above, so this is the rest:
     # the posts, the building, the boat.
-    if cond.get("must_work_to_eat") and _has(u, "shelter") and p.get("p") is not None \
+    if cond.get("must_work_to_eat") and _has(u, "shelter", p) and p.get("p") is not None \
             and a >= 16:
         h = hut_of(u, p)
         if h is None or not h["done"]:
             h = h or hut_of(u, p, make=True)
             options.append((cond.get("work_drive", 0.5) * 0.9 * (1.0 - 0.8 * want_food)
                             * (0.5 + 0.5 * ene), E.A_BUILD, (h["x"], h["y"]), None))
-    if cond.get("work_drive") > 0 and u.get("boat"):
+    if cond.get("work_drive") > 0 and u.get("boat") and (skills.knows(p,'shelter') or skills.knows(p,'fishing')):
         # the boat: work for a shore nobody has seen, when nothing is wrong
         options.append((cond.get("work_drive", 0.3) * 0.5
-                        * (0.4 + 0.6 * _has(u, "lore")) * (1.0 - 0.7 * want_food),
-                        E.A_BUILD, _home_of(u, p), None))
+                        * (0.4 + 0.6 * _has(u, "lore", p)) * (1.0 - 0.7 * want_food),
+                        E.A_BUILD, (u["boat"]["x"],u["boat"]["y"]), None))
     if cond.get("posts") and p.get("role") is not None:
         # a post to keep: the only thing in EDEN that is worth doing
         options.append(((0.9 + 0.6 * (p.get("pu", 0.5))) * (1.0 - 0.9 * want_food),
@@ -933,6 +974,8 @@ def assign(u, p, day, rng, cond=None, engine=None):
 
     score, act, target, site = best
     p.pop("was", None)        # a fresh decision replaces any paused stint
+    p['craft'] = ({'skill':craft_choice,'x':target[0],'y':target[1]}
+                  if craft_choice and act == E.A_WORK else None)
     p["a"] = act
     p["ad"] = _duration(act, rng)
     if act == E.A_WALK and scout is not None and target == scout:
@@ -972,8 +1015,8 @@ def _duration(act, rng):
     return days(rng.randint(1, 3))
 
 
-def _has(u, tech):
-    return tech in (u.get("tech") or [])
+def _has(u, tech, person=None):
+    return skills.knows(person, tech) if person is not None else tech in (u.get("tech") or [])
 
 
 def _aggression(p):
@@ -1024,16 +1067,22 @@ SPOIL = {"none": 0.04, "preservation": 0.008, "granary": 0.002}   # of the store
 def keep_stores(u):
     """Once a day: count the camps' mouths, and let food rot. Food does not
     keep without the craft to keep it, and a camp cannot hoard what spoils."""
-    tech = u.get("tech") or []
-    keeps = "preservation" in tech or "preserve" in (u.get("lessons") or [])
-    rot = SPOIL["granary"] if "granary" in tech else (
-        SPOIL["preservation"] if keeps else SPOIL["none"])
+    habit = "preserve" in (u.get("lessons") or [])
     count = {}
     for q in u.get("people", []):
         count[q.get("st", 0)] = count.get(q.get("st", 0), 0) + 1
     for i, st in enumerate(u.get("settlements") or []):
         st["mouths"] = count.get(i, 0)
-        st["store"] = max(0.0, st.get("store", 0.0) * (1.0 - rot))
+        total = max(0., st.get('store',0.))
+        prepared = min(total, max(0.,st.get('prepared',0.)))
+        if built(st,'granary'):
+            remaining = total*(1.-SPOIL['granary'])
+            prepared *= 1.-SPOIL['granary']
+        else:
+            remaining = prepared*(1.-SPOIL['preservation'])+(total-prepared)*(1.-SPOIL['preservation' if habit else 'none'])
+            prepared *= 1.-SPOIL['preservation']
+        st['store'],st['prepared'] = remaining, min(remaining,prepared)
+        st['farm_food'] = min(remaining,st.get('farm_food',0.)*(remaining/total if total else 0.))
         st["water"] = max(0.0, st.get("water", 0.0) * 0.99)
 
 
@@ -1143,7 +1192,10 @@ def _take(pantry, amount):
     if "left" in pantry:
         pantry["left"] -= got
     else:
-        pantry["store"] = pantry.get("store", 0.0) - got
+        total = pantry.get('store',0.)
+        pantry["store"] = total-got
+        for tag in ('prepared','farm_food'):
+            pantry[tag] = min(pantry['store'],pantry.get(tag,0.)*(1.-got/total if total else 0.))
     return got
 
 
@@ -1152,8 +1204,9 @@ def _pantry_at(u, p):
     on, or their camp's store. EDEN's hoppers are the resort's, and free."""
     import minds
     s = _site_at(u, p) if p.get("a") in KIND_OF_ACT else None
-    if s is not None and (s["kind"] == "game" and not _has(u, "stone_tools")
-                          or s["kind"] == "fish" and not _has(u, "fishing")):
+    if s is not None and (s["kind"] == "game" and not _has(u, "stone_tools", p)
+                          or s["kind"] == "fish" and not _has(u, "fishing", p)
+                          or s['kind'] == 'farm' and not _has(u,'agriculture',p)):
         s = None
     if s is not None and s["left"] > 0:
         return s             # a gatherer eats as she gathers
@@ -1200,10 +1253,14 @@ def eat(u, p, age_years=None, record=True):
     pantry = _pantry_at(u, p)
     if pantry is None:
         return 0.0
-    got = _take(pantry, min(p["hun"], MEAL * body_capacity(p)))
+    technique = {'fish':'fishing','farm':'agriculture'}.get(pantry.get('kind'))
+    factor = skills.level(p,technique) if technique else 1.
+    got = _take(pantry, min(p["hun"], MEAL * body_capacity(p)*factor))
     p["hun"] -= got
     if record and pantry.get('kind') in ('plants', 'fish', 'farm'):
         _remember(u,p,pantry,got)
+        if technique:
+            practice_work(u,p,technique,u.get('day',0),got > 0)
     return got
 
 
@@ -1242,15 +1299,20 @@ def fulfil(u, p, day, rng, act, E=None):
         if site is None:
             return 0
         kind = site["kind"]
-        if kind == "game" and not _has(u, "stone_tools"):
+        if kind == "game" and not _has(u, "stone_tools", p):
             return 0
-        if kind == "fish" and not _has(u, "fishing"):
+        if kind == "fish" and not _has(u, "fishing", p):
+            return 0
+        technique = {'fish':'fishing','farm':'agriculture'}.get(kind)
+        if technique and not skills.knows(p,technique):
             return 0
         if kind == "farm":
             site["worked"] = u.get("day", 0)
         before = site['left']
         eat(u, p, record=False)       # they eat there first, if hungry
-        got = _take(site, CARRY_PER_DAY * cap)
+        got = _take(site, CARRY_PER_DAY * cap*(skills.level(p,technique) if technique else 1.))
+        if technique:
+            practice_work(u,p,technique,day,kind == 'farm' or before > site['left'])
         _remember(u,p,site,before-site['left'])
         if got <= 0 and kind == "farm":
             return 0                 # tending a field that is not yet ripe
@@ -1264,14 +1326,26 @@ def fulfil(u, p, day, rng, act, E=None):
         h = hut_of(u, p)
         if h is not None and not h["done"] and abs(p["x"] - h["x"]) <= 1 \
                 and abs(p["y"] - h["y"]) <= 1:
-            h["w"] += cap
+            if not skills.knows(p,'shelter'):
+                return 0
+            h["w"] += cap*skills.level(p,'shelter')
+            practice_work(u,p,'shelter',day,True)
             if h["w"] >= HUT_WORK:
                 h["done"] = True
                 p["ad"] = 0
             return 1
         boat = u.get("boat")
-        if boat and abs(p["x"] - boat["x"]) <= 3 and abs(p["y"] - boat["y"]) <= 3:
-            boat["work"] = boat.get("work", 0) + cap    # a day's work, as strong as the body
+        if (boat and abs(p["x"] - boat["x"]) <= 3 and abs(p["y"] - boat["y"]) <= 3
+                and reachable_contact(E.terrain_of(u),p,boat)):
+            techniques = [t for t in ('seacraft','shelter','fishing') if skills.knows(p,t)]
+            if not techniques:
+                return 0
+            technique = 'seacraft' if 'seacraft' in techniques else max(techniques,key=lambda t:skills.level(p,t))
+            boat["work"] = boat.get("work", 0) + cap*skills.level(p,technique)
+            builders = boat.setdefault('builders',[])
+            if p['id'] not in builders:
+                builders.append(p['id'])
+            practice_work(u,p,technique,day,True)
             return 1
         return 0
 
@@ -1335,8 +1409,193 @@ def deposit(u, p, day):
     if not at_camp(u, p):
         return 0            # not home yet
     add_to_store(u, p, carried)
+    if p.get('carry_kind') == 'farm':
+        st['farm_food'] = st.get('farm_food',0.)+carried
     st["water"] = st.get("water", 0.0) + water
     p["carry_water"] = 0.0
     p["carry"] = 0.0
     p["carry_kind"] = None
     return carried
+
+
+# Procedures are personal; completed works and prepared supplies are local assets.
+CRAFT_WORK = {'granary': 40.0, 'domestication': 30.0, 'writing': 10.0}
+
+
+def built(st: dict, tech: str) -> bool:
+    return st.get('works', {}).get(tech, 0.) >= CRAFT_WORK[tech]
+
+
+def fire_lit(u: dict, st: dict) -> bool:
+    return st.get('fire_until', -1) > u.get('parts', 0)
+
+
+def camp_has(u: dict, st: dict, tech: str) -> bool:
+    """A present competent practitioner, never a historical world marker."""
+    from engine import terrain_of, same_land
+    terr = terrain_of(u)
+    radius = st.get('r', 5)+3
+    dead = (u.get('_ctx') or {}).get('dead', [])
+    return any(q not in dead and not q.get('w') and not q.get('ab') and skills.qualified(q, tech)
+               and abs(q['x']-st['x']) <= radius and abs(q['y']-st['y']) <= radius
+               and same_land(terr, q['x'], q['y'], st['x'], st['y'])
+               for q in u.get('people', []))
+
+
+def farming_food(u: dict, p: dict) -> bool:
+    st = camp_of(u, p)
+    return bool(st and at_camp(u, p) and st.get('farm_food', 0.) >= max(1., st.get('mouths', 1)))
+
+
+def reachable_contact(terr: list, a: dict, b: dict) -> bool:
+    """Short direct contact cannot cross water or a diagonal water corner."""
+    dx,dy = b['x']-a['x'],b['y']-a['y']
+    count = max(1,abs(dx),abs(dy))
+    cells = [(round(a['x']+dx*i/count),round(a['y']+dy*i/count)) for i in range(count+1)]
+    return not (any(terr[y][x] == 2 for x,y in cells)
+        or any(ax != bx and ay != by and (terr[ay][bx] == 2 or terr[by][ax] == 2)
+               for (ax,ay),(bx,by) in zip(cells,cells[1:])))
+
+
+def healing_near(u: dict, p: dict) -> bool:
+    import minds
+    from engine import terrain_of, same_land
+    terr = terrain_of(u)
+    key = u.get('parts', 0), len(u.get('people',[]))
+    cached = u.get('_healers')
+    if cached is None or cached[0] != key:
+        cached = key, [q for q in u.get('people', []) if skills.qualified(q, 'healing')
+                       and q.get('a') == minds.A_TEND and not q.get('w') and not q.get('ab')]
+        u['_healers'] = cached
+    dead = (u.get('_ctx') or {}).get('dead', [])
+    alive = {q['id'] for q in u.get('people',[])}
+    return any(q['id'] in alive and q not in dead and q.get('a') == minds.A_TEND
+               and not q.get('w') and not q.get('ab') and skills.qualified(q,'healing')
+               and abs(q['x']-p['x']) <= 2 and abs(q['y']-p['y']) <= 2
+               and (q['x'], q['y']) == (q.get('tx'), q.get('ty'))
+               and reachable_contact(terr,q,p) for q in cached[1])
+
+
+def _skill_snapshot(p: dict) -> dict:
+    return {t:dict(v) for t,v in p.get('skills', {}).items()}
+
+
+def practice_work(u: dict, p: dict, tech: str, day: int, worked: bool) -> None:
+    """An actual performed task can improve practice and be witnessed."""
+    import minds
+    if not worked or p in (u.get('_ctx') or {}).get('dead', []):
+        return
+    skills.practice(p, tech, day, worked=True)
+    if not skills.can_teach(p, tech):
+        return
+    # Witnesses are captured now, not after a later walk or camp relocation.
+    witnesses = [{'id':q['id'], 'x':q['x'], 'y':q['y'], 'skills':_skill_snapshot(q)}
+                 for q in u.get('people', []) if q is not p and not q.get('w') and not q.get('ab')
+                 and _age(u, q) >= 3 and q.get('a') not in (minds.A_SLEEP, minds.A_MATE, minds.A_BIRTH, minds.A_FIGHT)
+                 and (q['x']-p['x'])**2+(q['y']-p['y'])**2 <= CONTACT_RADIUS**2]
+    if witnesses:
+        u.setdefault('_demos', []).append((
+            {'id':p['id'], 'x':p['x'], 'y':p['y'], 'skills':_skill_snapshot(p), 'topics':[tech]}, witnesses))
+
+
+def _teach_frames(u: dict, frames: list) -> None:
+    """Instruction grants awareness only; no practice or stock-location reveal."""
+    from engine import terrain_of
+    dead = (u.get('_ctx') or {}).get('dead', [])
+    living = {q['id']:q for q in u.get('people', []) if q not in dead and not q.get('w') and not q.get('ab')}
+    terr = terrain_of(u) if u.get('kind') == 'LAGOON' and frames else None
+    day = u.get('day', 0)
+    offers = {}
+    for teacher, listeners in frames:
+        if teacher['id'] not in living:
+            continue
+        for listener in listeners:
+            pid = listener['id']
+            if pid == teacher['id'] or pid not in living or living[pid].get('skill_day') == day:
+                continue
+            dx,dy = teacher['x']-listener['x'],teacher['y']-listener['y']
+            if dx*dx+dy*dy > CONTACT_RADIUS**2:
+                continue
+            if terr is not None and not reachable_contact(terr,teacher,listener):
+                continue
+            frozen_teacher = {'skills':teacher.get('skills', {})}
+            frozen_listener = {'skills':listener.get('skills', {})}
+            for order,(tech,parent,_,_) in enumerate(skills.TECH_LADDER):
+                if teacher.get('topics') is not None and tech not in teacher['topics']:
+                    continue
+                if (not skills.can_teach(frozen_teacher, tech) or skills.level(frozen_listener, tech) > 0
+                        or (parent is not None and not skills.knows(frozen_listener, parent))):
+                    continue
+                rank = order, teacher['id']
+                if pid not in offers or rank < offers[pid][0]:
+                    offers[pid] = rank, tech, teacher
+                break
+    for pid,(_,tech,teacher) in sorted(offers.items()):
+        if skills.expose(living[pid], tech, day, teacher=teacher['id'],
+                         basis='demonstration' if teacher.get('topics') else 'instruction',
+                         origin=teacher['skills'][tech].get('origin')):
+            living[pid]['skill_day'] = day
+
+
+def perform_craft(u: dict, p: dict, day: int) -> None:
+    """Quarter-day work, separate from the once/day food-harvest gate."""
+    import animals
+    import minds
+    if u.get('kind') != 'LAGOON' or p.get('a') not in (minds.A_WORK, minds.A_WATCH, minds.A_TEND):
+        return
+    from engine import terrain_of, same_land
+    dead = (u.get('_ctx') or {}).get('dead', [])
+    if (p in dead or p.get('w') or p.get('ab')
+            or (p['x'],p['y']) != (p.get('tx'),p.get('ty'))):
+        return
+    part = u.get('parts', 0)
+    if p.get('craft_part') == part:
+        return
+    job = p.get('craft') or {}
+    tech = 'fire' if p.get('a') == minds.A_WATCH else job.get('skill')
+    if p.get('a') == minds.A_TEND:
+        tech = 'healing'
+    if not tech or not skills.knows(p, tech):
+        return
+    if p.get('a') == minds.A_WORK and (p['x'],p['y']) != (job.get('x'),job.get('y')):
+        return
+    p['craft_part'] = part
+    st = camp_of(u, p)
+    amount = body_capacity(p)*skills.level(p, tech)/PARTS_PER_DAY
+    worked = False
+    if tech == 'healing':
+        worked = any(q not in dead and not q.get('ab') and q.get('inj', 0.) > 0
+                     and abs(q['x']-p['x']) <= 1 and abs(q['y']-p['y']) <= 1
+                     and reachable_contact(terrain_of(u),p,q)
+                     for q in u.get('people', []))
+    elif st is not None and at_camp(u, p):
+        works = st.setdefault('works', {})
+        if tech == 'preservation':
+            available = max(0., st.get('store', 0.)-st.get('prepared', 0.))
+            done = min(available, CARRY_PER_DAY*amount)
+            st['prepared'] = st.get('prepared', 0.)+done
+            worked = done > 0
+        elif tech == 'fire':
+            works['fire'] = works.get('fire', 0.)+amount
+            if works['fire'] >= 1.:
+                works['fire'] -= 1.
+                st['fire_until'] = part+PARTS_PER_DAY
+            worked = amount > 0
+        elif tech == 'stone_tools':
+            # Locally available craft materials remain an explicit abstraction.
+            worked = amount > 0
+        elif tech in CRAFT_WORK and not built(st, tech):
+            animal = animals.nearest(u, p, animals.DEER, SIGHT) if tech == 'domestication' else None
+            capture_ready = (animal is not None and (animal['x']-p['x'])**2+(animal['y']-p['y'])**2 <= 2)
+            finishing = works.get(tech,0.)+amount >= CRAFT_WORK.get(tech,float('inf'))
+            if tech != 'domestication' or (animal is not None and (not finishing or capture_ready)):
+                works[tech] = min(CRAFT_WORK[tech],works.get(tech, 0.)+amount)
+                worked = amount > 0
+                if tech == 'domestication' and built(st, tech):
+                    u['animals'].remove(animal)
+                    st['domestic'] = st.get('domestic', 0)+1
+    practice_work(u, p, tech, day, worked)
+    if (not worked or (st is not None and tech in CRAFT_WORK and built(st,tech))
+            or (tech == 'stone_tools' and skills.qualified(p,tech))):
+        p['ad'] = 0
+        p['craft'] = None

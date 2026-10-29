@@ -1,0 +1,42 @@
+{
+  "engine": "2026.10.30.4",
+  "full_goal_complete": false,
+  "full_suite": {
+    "python": "Apple Python 3.9.6",
+    "tests": 358,
+    "seconds": 249.463,
+    "failures": 0,
+    "log": "unittest-python39.log"
+  },
+  "focused_procedure_and_viewer_tests": 73,
+  "cache_and_epidemic_regressions": 54,
+  "independent_research_tests": 22,
+  "live_state_accessed": false,
+  "macbook_throughput_verified": false,
+  "century": {
+    "seed": 69,
+    "days": 36000,
+    "seconds": 529.1,
+    "python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+    "arc_sha256": "b2da0d814b617de64f48c9b9efc28fd4bdcfc5a3d6a5b735ccb98d6faba6f96b",
+    "console_log": "lab-36000.log.gz",
+    "console_uncompressed_sha256": "6939d1fbce58f406cb314cb8e42bcc3e6fe41f33a51338f6a63a6aa54eaa070a"
+  },
+  "viewer": {
+    "widths": [
+      390,
+      1024,
+      1440
+    ],
+    "actual_checks_per_viewport": 32,
+    "controlled_checks_per_viewport": 33,
+    "synthetic_checks_per_viewport": 101,
+    "html_sha256": "d1578231d0e0582325b9dee913e71b9774c168ed57ceaa789ab1bdcefcd8b152",
+    "native_tab_focus": true,
+    "independent_review": "independent-review.md",
+    "natural_advanced_assets_verified": false
+  },
+  "source_hashes_match": true,
+  "eden_control_all_common_sampled_columns_equal_prior": true,
+  "interpretation": "One-seed bounded outcome; historical discoveries are not current capabilities. Both worlds remain iteration1 with no extinctions/reseeds; civilization and long-term survival are unproven."
+}

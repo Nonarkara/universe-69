@@ -25,6 +25,8 @@ sys.path.insert(0, os.path.join(ROOT, "sim"))
 
 import engine  # noqa: E402
 import research  # noqa: E402
+import skills  # noqa: E402
+import needs  # noqa: E402
 
 
 # ------------------------------------------------------------------ sampling
@@ -63,6 +65,20 @@ def sample(u, day):
         row["ennui"] = round(u.get("ennui", 0.0), 3)
     else:
         row["tech"] = list(u["tech"])
+        row["procedures"] = {
+            name: {"aware": sum(skills.knows(p,name) for p in people),
+                   "qualified": sum(skills.qualified(p,name) for p in people),
+                   "taught": sum(p.get('skills',{}).get(name,{}).get('teacher') is not None for p in people),
+                   "practiced": sum(p.get('skills',{}).get(name,{}).get('uses',0)>0 for p in people)}
+            for name,_,_,_ in skills.TECH_LADDER
+        }
+        row["camp_assets"] = {
+            "lit_fires": sum(needs.fire_lit(u,st) for st in u["settlements"]),
+            "granaries": sum(needs.built(st,'granary') for st in u["settlements"]),
+            "records": sum(needs.built(st,'writing') for st in u["settlements"]),
+            "domestic": sum(st.get('domestic',0) for st in u["settlements"]),
+            "prepared_food": round(sum(st.get('prepared',0.) for st in u["settlements"]),2),
+        }
         row["tribes"] = len(u["settlements"])
         row["store"] = round(u.get("store", 0.0), 1)
         row["lessons"] = list(u.get("lessons", []))
@@ -76,10 +92,9 @@ def sample(u, day):
 def verdict(u, key):
     """Did this universe do the thing the design says it does?
 
-    EDEN   must reach extinction and be reseeded — that is the whole point of
-           the pen, and the postmortem that records it is the artifact.
-    LAGOON must survive by learning: the lesson survives a wipe, the tech
-           ladder advances, and the founders reach the greater shore.
+    EDEN: measure whether the pen empties and records a reseed.
+    LAGOON: measure survival, discoveries and crossings without assuming them.
+    A history marker is not a count of currently competent practitioners.
     """
     name = "EDEN" if key == "eden" else "LAGOON"
     out = {"universe": name, "iteration": u["iteration"], "peak": u["peak"],
@@ -108,6 +123,7 @@ def verdict(u, key):
                 f"{len(u['postmortems'])} postmortem(s) written.")
     else:
         out["tech"] = list(u["tech"])
+        out["tech_scope"] = "historical discoveries; not current competent holders"
         out["lessons"] = list(u.get("lessons", []))
         out["tribes"] = len(u["settlements"])
         out["continent"] = bool(u.get("continent"))
@@ -119,7 +135,7 @@ def verdict(u, key):
         out["tech_missing"] = missing
         if not out["completed"]:
             out["verdict"] = (
-                f"Survived. {len(u['tech'])} technologies, "
+                f"Current iteration alive. {len(u['tech'])} historical discoveries, "
                 f"{len(u.get('lessons', []))} lesson(s) carried, "
                 f"{len(u['settlements'])} tribe(s).")
         else:
@@ -199,7 +215,7 @@ def main():
                              f"fertF {row['fertile_f']:>3} "
                              f"compM {row['competent_m']:>3}")
                 else:
-                    extra = f"tech {len(row['tech'])} tribes {row['tribes']}"
+                    extra = f"discoveries {len(row['tech'])} tribes {row['tribes']}"
                 if row["extinct_day"] is not None:
                     extra += f"  EXTINCT d{row['extinct_day']}"
                 print(f"{row['year']:>5} {row['pop']:>5} {row['peak']:>5} "

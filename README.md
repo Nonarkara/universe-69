@@ -144,8 +144,8 @@ stride follows actual leg size and distance travelled, with a shared stance
 law and frame-rate-independent movement. Sleeping arms now reach their pose,
 bedrolls fit their bodies, and age changes invalidate the sprite cache.
 
-Engine `2026.10.30.3` changes future trajectories through contact-based
-resource knowledge sharing. The `.2` personal memory, maturation and nursing
+Engine `2026.10.30.4` changes future trajectories through personal procedures,
+actual practice and local camp works. The `.3` contact-based resource sharing remains. The `.2` personal memory, maturation and nursing
 corrections remain in force;
 the earlier `2026.10.30.1` resource changes remain in force. The century-per-day clock
 preserves previously completed time when its pace changes. Existing
@@ -174,3 +174,12 @@ original observer/date, sender and relay path. Retelling does not refresh old
 information or grant personal harvesting experience. Reports can be stale;
 technology knowledge still remains world-shared, and general cognition is
 unimplemented. Both worlds use the same contact policy.
+
+
+Historical technology is now a discovery record. Individuals learn procedures
+through contact, observation and actual practice; new children do not inherit
+them automatically. The old-save capability assumption is explicitly labelled.
+Physical fires, prepared food and completed works belong to camps. See
+[the procedure audit](docs/audits/2026-10-30-skills/README.md) for final verification
+and limitations. This remains a finite simulation, not human-level cognition or
+a guarantee that a great civilization will emerge.

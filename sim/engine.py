@@ -19,6 +19,7 @@ import time
 import minds
 import needs
 import animals
+import skills
 from minds import (DAYS_PER_YEAR, ADULT_AGE, ELDER_AGE, make_name,  # noqa: F401
                    A_IDLE, A_WALK, A_FORAGE, A_HUNT, A_FISH, A_FARM, A_BUILD,
                    A_TALK, A_MATE, A_BIRTH, A_TEND, A_REST, A_EAT, A_WITHDRAW,
@@ -30,7 +31,7 @@ GESTATION = 270
 # The version of the model. Determinism holds per (seed, day, part) only *within* one
 # version, so every published figure and every postmortem must say which
 # version produced it.
-ENGINE_VERSION = "2026.10.30.3"
+ENGINE_VERSION = "2026.10.30.4"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -56,23 +57,8 @@ RESEED_YEARS = 30       # quiet years before the Observers reseed (Ice Age cycle
 FOUNDER_PAIRS = 8       # eight pairs per world, matching every reseed
 RESEED_PAIRS = 8        # after an extinction the Observers send eight pairs
 
-TECH_LADDER = [
-    # name, prerequisite, base chance per year, min population
-    ("fire",          None,            0.50,  2),
-    ("stone_tools",   None,            0.40,  2),
-    ("fishing",       "stone_tools",   0.35,  6),
-    ("predator_hunt", "fishing",       0.08,  25),  # the big cat becomes meat
-    ("shelter",       "fire",          0.35,  6),
-    ("preservation",  "fire",          0.20, 12),
-    ("lore",          "shelter",       0.15, 40),   # shared fiction -> >150 coop
-    ("agriculture",   "preservation",  0.10, 90),
-    ("domestication", "agriculture",   0.12, 120),  # unlocks epidemics (germs)
-    ("granary",       "agriculture",   0.20, 120),
-    ("seacraft",      "fishing",       0.08, 140),
-    ("healing",       "lore",          0.10, 150),
-    ("metallurgy",    "granary",       0.06, 250),
-    ("writing",       "lore",          0.05, 400),
-]
+TECH_LADDER = skills.TECH_LADDER
+
 ARTS = ["cave paintings", "drum songs", "the dance of the tides",
         "carved totems", "the story of the stars", "spirit masks",
         "tattoo rites", "the great feast", "shell jewelry", "the long game"]
@@ -181,7 +167,7 @@ def person(uid, name, sex, born, gen, x, y, competent=True):
                            # this person is carrying home
                            "ene": 1.0, "sol": 0.7, "carry": 0.0, "carry_kind": None,
                            "a": 0, "tx": x, "ty": y, "ad": 0,   # activity, target, days left
-                           "hx": x, "hy": y})                   # home: the place they return to
+                           "hx": x, "hy": y, "stories": 0.0})                   # home: the place they return to
 
 
 def age_of(p, day):
@@ -264,7 +250,7 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None,
          "extinct_day": None, "census": [], "year_flags": {},
          "cod": {}, "cod_y": {}, "postmortems": postmortems or [],
          "lessons": lessons or [], "phases": [[0, "strive"]], "engine": ENGINE_VERSION,
-         "part": 0, "parts": 0, "engine_history": [], "founded_day": 0,
+         "part": 0, "parts": 0, "skill_schema": 1, "engine_history": [], "founded_day": 0,
          "fseed": fseed, "innocent": True, "modesty": 0.0, "mind": []}
     if kind == "EDEN":
         u["ennui"] = 0.0      # hedonic adaptation: easy pleasure dulls appetite
@@ -672,7 +658,7 @@ def nurse(u, p, day):
     Settled farmers wean sooner — births about two years apart against a
     nomad's four (Diamond ch.4)."""
     n = minds.LACTATION_DAYS[u["kind"]]
-    if u["kind"] == "LAGOON" and has(u, "agriculture"):
+    if u["kind"] == "LAGOON" and needs.farming_food(u, p):
         n = 2 * DAYS_PER_YEAR
     p["nurse"], p["nurse_len"] = day + n, n
 
@@ -1054,6 +1040,7 @@ def tick_eden(u, rng, events):
     byid = {q["id"]: q for q in people}
     u["_ctx"] = day_context(people, day)
     contacts = []
+    u['_demos'] = []
     u["_ctx"]["dead"] = dead
     moms = u["_ctx"]["moms"]
     for p in people:
@@ -1142,6 +1129,7 @@ def tick_eden(u, rng, events):
             p["day_done"] = u["day"]
             needs.fulfil(u, p, day, rng, A_EAT)       # a meal at the hopper
         if arrived:
+            needs.perform_craft(u,p,day)
             contacts.append(needs.capture_contact(u,p))
             p["ad"] = p.get("ad", 0) - 1
             if p["ad"] <= 0:
@@ -1328,6 +1316,53 @@ def same_land(terr, ax, ay, bx, by):
         _LAND_COMPONENTS[id(terr)] = entry
     labels = entry[1]
     return labels[ay*n+ax] >= 0 and labels[ay*n+ax] == labels[by*n+bx]
+
+
+def discover_tech(u: dict, rng: random.Random, events: list, shortfall: float) -> None:
+    """A living qualified-prerequisite inventor acquires the procedure.
+
+    World names remain discovery history. A lost procedure may be discovered
+    again; an existing living aware holder instead supplies the teaching path.
+    """
+    day = u["day"]
+    adults = [p for p in u["people"] if ADULT_AGE <= age_of(p, day) < ELDER_AGE
+              and not p.get("w") and not p.get("ab")]
+    pop = len(u["people"])
+    for name, parent, base, minimum in TECH_LADDER:
+        if pop < minimum or any(skills.knows(p, name) for p in u["people"]
+                                if not p.get("w") and not p.get("ab")):
+            continue
+        candidates = [p for p in adults if (parent is None or skills.qualified(p, parent))
+                      and p.get("a") not in (A_SLEEP, A_BIRTH, A_FIGHT)]
+        if name == "lore":
+            candidates = [p for p in candidates if p.get("stories", 0.) > 0]
+        if not candidates:
+            continue
+        tail = sum(p.get("ef", .5) > .6 for p in candidates) / len(candidates)
+        chance = base * min(2.5, math.log(max(2, pop), 8)) * (.5 + 2.0 * tail)
+        for lesson in u.get("lessons", []):
+            if name in LESSON_TECH.get(lesson, ()):
+                chance *= 3.0
+        if name == "lore":
+            chance *= min(3.0, .2 + max(p.get("stories", 0.) for p in candidates) / 40.0)
+        if name == "agriculture" and shortfall == 0 and pop < 140:
+            chance *= .3
+        if rng.random() >= chance:
+            continue
+        inventor = max(rng.sample(candidates, min(5, len(candidates))), key=lambda p: p.get("ef", .5))
+        if not skills.invent(inventor, name, day):
+            continue
+        rediscovery = name in u["tech"]
+        if not rediscovery:
+            u["tech"].append(name)
+        events.append((day, "LAGOON", "discovery",
+                       f"Year {day // DAYS_PER_YEAR}: {inventor['n']} "
+                       f"{'rediscovers' if rediscovery else 'discovers'} {TECH_LABEL[name]}."))
+        if name == "agriculture":
+            st = needs.camp_of(u, inventor)
+            if st is not None and needs.at_camp(u, inventor):
+                till_near(u, rng, st, 7)
+        break
 
 
 def terrain_of(u):
@@ -1824,27 +1859,66 @@ def boatyard(u, y):
     return yard, land
 
 
-def launch(u, people, boat, rng, events, day, year):
-    """The boat is finished: young adults and their children board at the
-    yard and paddle west across the strait, a few tiles a day, in sight."""
-    xy = boatyard(u, boat["y"])
-    if not xy:
+def finish_boat(u: dict, people: list, rng: random.Random, events: list, day: int) -> None:
+    """Present contributors can learn from their completed physical project."""
+    boat = u.get("boat")
+    if not boat or boat.get("work", 0) < BOAT_WORK or "voyage" in u:
         return
+    if not boat.get("completion_recorded"):
+        eligible = [q for q in people if q["id"] in boat.get("builders", [])
+                    and not q.get("w") and not q.get("ab")
+                    and q.get("a") not in (A_SLEEP, A_BIRTH, A_FIGHT)
+                    and abs(q["x"]-boat["x"]) <= 3 and abs(q["y"]-boat["y"]) <= 3
+                    and needs.reachable_contact(terrain_of(u), q, boat)
+                    and skills.qualified(q, "fishing")]
+        for builder in eligible:
+            if skills.invent(builder, "seacraft", day):
+                if "seacraft" not in u["tech"]:
+                    u["tech"].append("seacraft")
+                events.append((day, "LAGOON", "discovery",
+                               f"{builder['n']} learns seacraft by examining the boat they helped complete."))
+        if eligible:
+            boat["completion_recorded"] = True
+    if launch(u, people, boat, rng, events, day, day // DAYS_PER_YEAR):
+        del u["boat"]
+
+
+def launch(u, people, boat, rng, events, day, year):
+    """An actual finished boat needs a competent present operator.
+
+    Only people at the yard board; passengers do not need navigation skill.
+    Building a boat never teleports distant families to it.
+    """
+    xy = boatyard(u, boat["y"])
+    if not xy or boat.get("work", 0) < BOAT_WORK:
+        return False
     yard, land = xy
-    young = [q for q in people if ADULT_AGE <= age_of(q, day) < 35 * DAYS_PER_YEAR]
+    terr = terrain_of(u)
+    present = [q for q in people if not q.get("w") and not q.get("ab")
+               and abs(q["x"]-yard) <= 3 and abs(q["y"]-boat["y"]) <= 3
+               and same_land(terr, q["x"], q["y"], yard, boat["y"])]
+    operators = [q for q in present if age_of(q, day) >= ADULT_AGE
+                 and skills.qualified(q, "seacraft") and q.get("a") != A_SLEEP]
+    if not operators:
+        return False
+    operator = min(operators, key=lambda q: q["id"])
+    young = [q for q in present if ADULT_AGE <= age_of(q, day) < 35 * DAYS_PER_YEAR]
     rng.shuffle(young)
     go = {q["id"] for q in young[:max(6, len(people) // 5)]}
-    go |= {q["p"] for q in people if q["id"] in go and q.get("p")}
-    go |= {q["id"] for q in people if q.get("mom") in go and age_of(q, day) < ADULT_AGE}
-    for q in people:
+    go.add(operator["id"])
+    go |= {q["p"] for q in present if q["id"] in go and q.get("p")}
+    go |= {q["id"] for q in present if q.get("mom") in go and age_of(q, day) < ADULT_AGE}
+    for q in present:
         if q["id"] in go:
             q["ab"] = 1
             q["a"], q["ad"] = A_REST, days(99)
     u["voyage"] = {"x0": yard, "x1": land, "y": boat["y"], "d0": day,
-                   "days": max(4, (yard - land) // 3), "n": len(go)}
+                   "days": max(4, (yard-land)//3), "n": sum(bool(q.get("ab")) for q in people),
+                   "operator": operator["id"]}
     events.append((day, "LAGOON", "migration",
-                   f"Year {year}: the boat is finished. {len(go)} of them push off from the "
-                   f"west beach toward the shore across the strait."))
+                   f"Year {year}: the finished boat carries {u['voyage']['n']} from the west beach, "
+                   f"with {operator['n']} navigating toward the greater shore."))
+    return True
 
 
 def sail(u, people, rng, events, day):
@@ -1872,12 +1946,6 @@ def sail(u, people, rng, events, day):
         q["tx"], q["ty"], q["ad"] = q["hx"], q["hy"], 0
     u.setdefault("boats", []).append([land + 1, v["y"]])   # pulled up on the beach
     del u["voyage"]
-    if not u.get("continent"):
-        # land no one has harvested: full groves and naive game, the boom
-        # every first landing in Diamond's island histories enjoys (ch.2)
-        st = u["stocks"]
-        st["plants"] += 120000.0
-        st["game"] += 5000.0
     u["continent"] = True
     events.append((day, "LAGOON", "migration",
                    f"The boat lands on the greater shore. {len(aboard)} step off and become "
@@ -1904,12 +1972,10 @@ def keep_watch(u, people, day, events, part=0, rng=None):
     out, but everyone else converges on the fire. A camp that has a fire
     is a camp that spends its dark hours together, which is the thing that
     turns a band into a society."""
-    if not has(u, "fire"):
-        return
     night = (part == PART_NIGHT)
     by_st = {}
     for q in people:
-        if q.get("ab") or not (ADULT_AGE <= age_of(q, day) < ELDER_AGE):
+        if q.get("ab") or q.get("w") or not (ADULT_AGE <= age_of(q, day) < ELDER_AGE) or not needs.at_camp(u, q):
             continue
         by_st.setdefault(q.get("st", 0), []).append(q)
     for i, st in enumerate(u["settlements"]):
@@ -1917,8 +1983,17 @@ def keep_watch(u, people, day, events, part=0, rng=None):
         st["watch"] = 0
         if not band:
             continue
-        band.sort(key=lambda q: -q.get("vg", 0.5))
-        half = band[:max(1, len(band) // 2)]
+        # Watch cannot cancel a bodily decision to sleep, eat or recover.
+        # A lit hearth allows another awake adult to guard while its expert rests.
+        available = [q for q in band
+                     if q.get("a") not in (A_SLEEP, A_REST, A_EAT, A_DRINK, A_BIRTH, A_RITE, A_FIGHT)
+                     and not q.get("due") and q.get("ene", 1.0) > 0.35
+                     and q.get("hun", 0.0) < needs.HUNGRY and q.get("thirst", 0.0) < 1.0]
+        keepers = [q for q in available if skills.knows(q, "fire")]
+        if not available or (not keepers and not needs.fire_lit(u, st)):
+            continue
+        pool = sorted(keepers or available, key=lambda q: -q.get("vg", 0.5))
+        half = pool[:max(1, len(pool) // 2)]
         w = half[u.get("day", 0) % len(half)]
         if w.get("a") in (A_BIRTH, A_RITE) or w.get("due"):
             continue
@@ -1939,9 +2014,17 @@ def keep_watch(u, people, day, events, part=0, rng=None):
                     if q.get("a") in (A_IDLE, A_WALK, A_TALK):
                         q["a"] = A_TALK if rng.random() < 0.6 else A_SLEEP
                         q["ad"] = days(2)
-        talkers = sum(1 for q in band if q.get("a") == A_TALK)
+        talking = [q for q in band if needs.fire_lit(u, st) and q.get("a") == A_TALK
+                   and (q["x"], q["y"]) == (q.get("tx"), q.get("ty"))
+                   and (q["x"]-fx)**2+(q["y"]-fy)**2 <= 16
+                   and needs.reachable_contact(terrain_of(u), q, {"x":fx,"y":fy})]
         before = u.get("stories", 0.0)
-        u["stories"] = before + talkers * (0.02 if night else 0.01) / PARTS_PER_DAY
+        amount = (0.02 if night else 0.01) / PARTS_PER_DAY
+        u["stories"] = before + len(talking) * amount
+        for q in talking:
+            q["stories"] = q.get("stories", 0.0) + amount
+            if skills.knows(q, "lore"):
+                needs.practice_work(u, q, "lore", day, True)
         if before < 1.0 <= u["stories"]:
             events.append((day, "LAGOON", "culture",
                            f"Around the fire, with {w['n']} watching the dark, someone tells "
@@ -1963,7 +2046,10 @@ def tell_myth(u, cause, events, day):
     """Before any way of testing an explanation, a people with shared lore
     explains what it cannot understand with a story about someone's will
     (Harari's fictions; Durkheim's sacred). Each kind of disaster gets one."""
-    if not has(u, "lore"):
+    speakers = [q for q in u.get("people", []) if skills.qualified(q, "lore")
+                and not q.get("w") and not q.get("ab") and q.get("a") == A_TALK
+                and needs.at_camp(u, q)]
+    if not speakers:
         return
     myths = u.setdefault("myths", [])
     if cause in [m[0] for m in myths] or cause not in MYTHS:
@@ -1971,7 +2057,7 @@ def tell_myth(u, cause, events, day):
     myths.append([cause, MYTHS[cause], day // DAYS_PER_YEAR])
     events.append((day, "LAGOON", "culture",
                    f"A story spreads to explain the {cause}: {MYTHS[cause]}. It becomes "
-                   f"something they all know, and teach."))
+                   f"a story told by {speakers[0]['n']}."))
 
 
 def lagoon_violence(u, p, a, people, byid, gone, dead, rng, events):
@@ -2062,13 +2148,13 @@ def organise(u, people, rng, events):
         new = cur
         if cur == "band" and n >= 50:
             new = "tribe"
-        elif cur == "tribe" and n >= 300 and has(u, "granary"):
+        elif cur == "tribe" and n >= 300 and needs.built(st, "granary"):
             new = "chiefdom"
         elif cur == "tribe" and n < 40:
             new = "band"
-        elif cur == "chiefdom" and (n < 240 or not has(u, "granary")):
+        elif cur == "chiefdom" and (n < 240 or not needs.built(st, "granary")):
             new = "tribe"
-        st["arb"] = ARBITER[new] + (0.15 if has(u, "writing") else 0.0)
+        st["arb"] = ARBITER[new] + (0.15 if needs.built(st, "writing") and needs.camp_has(u, st, "writing") else 0.0)
         st["coh"] = round(max(0.0, st.get("coh", 0.0) - 0.25), 3)
         if new != cur:
             st["org"] = new
@@ -2092,15 +2178,20 @@ def hold_rites(u, people, shortfall, rng, events):
     has shared lore, each settlement gathers at midsummer and dances for its
     totem — the thing it lives on, set apart. The gathering is what renews
     cohesion; a hungry year skips it, and cohesion drains."""
-    if not has(u, "lore"):
-        return
-    eaten = {"plants": 1.0, "fish": 0.8 if has(u, "fishing") else 0.0, "game": 0.6}
+    eaten = {"plants": 1.0, "fish": 0.8, "game": 0.6}
     for i, st in enumerate(u["settlements"]):
         if "totem" not in st:
             st["totem"] = TOTEMS[max(eaten, key=eaten.get) if i == 0
                                  else rng.choice(list(TOTEMS))]
-        mine = [q for q in people if q.get("st", 0) == i]
-        if not mine:
+        mine = [q for q in people if q.get("st", 0) == i and needs.at_camp(u, q)
+                and not q.get("w") and not q.get("ab") and q.get("a") not in (A_SLEEP, A_BIRTH)]
+        leaders = [q for q in mine if skills.qualified(q, "lore")]
+        if not leaders:
+            continue
+        leader = max(leaders, key=lambda q: q.get("ef", .5))
+        mine = [q for q in mine if (q["x"]-leader["x"])**2+(q["y"]-leader["y"])**2 <= 16
+                and needs.reachable_contact(terrain_of(u), leader, q)]
+        if len(mine) < 2:
             continue
         if shortfall > 0.25:
             if rng.random() < 0.3:
@@ -2109,6 +2200,7 @@ def hold_rites(u, people, shortfall, rng, events):
                                f"midsummer pass without honouring {st['totem']}."))
             continue
         first = not st.get("rites")
+        needs.practice_work(u, leader, "lore", u["day"], True)
         st["rites"] = st.get("rites", 0) + 1
         st["coh"] = min(1.0, st.get("coh", 0.0) + 0.5)
         ring = len(mine)
@@ -2196,7 +2288,7 @@ def tick_lagoon(u, rng, events):
     # days that follow. Without preservation it is gone in a couple of days.
     meat = u.get("meat", 0.0)
     if meat > 0:
-        meat *= (0.85 if has(u, "preservation") else 0.55) ** (1 / PARTS_PER_DAY)
+        meat *= 0.55 ** (1 / PARTS_PER_DAY)
         u["meat"] = meat
     # The hunters carry the carcass home: it goes into the camp's store,
     # where it is eaten like anything else, and rots like anything else.
@@ -2209,13 +2301,12 @@ def tick_lagoon(u, rng, events):
         st["store"] = max(0.0, st.get("store", 0.0))
     u["store"] = sum(st.get("store", 0.0) for st in u.get("settlements") or [])
 
-    weapons = has(u, "stone_tools")
-    healing = has(u, "healing")
     terr_l = terrain_of(u)
     byid = {q["id"]: q for q in people}
     u["_ctx"] = day_context(people, day)
     dead, born, starved = [], [], []
     contacts = []
+    u['_demos'] = []
     u["_ctx"]["dead"] = dead
     moms = u["_ctx"]["moms"]
     gone = {}                     # ids killed by someone else earlier this tick
@@ -2227,8 +2318,7 @@ def tick_lagoon(u, rng, events):
     # when the deer fail them and someone is alone in the dark
     taken = animals.tick(u, rng, terr_l, people, {
         "day": day, "part": part, "night": part == PART_NIGHT, "events": events,
-        "adult": lambda q: age_of(q, day) >= ADULT_AGE, "has": lambda t: has(u, t),
-        "armed": weapons, "lessons": u.get("lessons", []), "A_HUNT": A_HUNT})
+        "adult": lambda q: age_of(q, day) >= ADULT_AGE, "lessons": u.get("lessons", []), "A_HUNT": A_HUNT})
     # A person already taken cannot eat, work, or be killed again by a
     # quarrel later in this part.
     for p, _cause in taken:
@@ -2267,6 +2357,7 @@ def tick_lagoon(u, rng, events):
             dead.append(p)
             cod(u, "age")
             continue
+        healing = needs.healing_near(u, p)
         if part == 0:
             minds.tend_body(p, a, False, shortfall, healing)
             # Everything here must be earned. Physiology remains daily.
@@ -2330,6 +2421,7 @@ def tick_lagoon(u, rng, events):
             lagoon_assign(u, p, day, rng, shortfall)
         arrived = step_toward(p, terr_l, LAGOON_WALK)
         if arrived:
+            needs.perform_craft(u,p,day)
             contacts.append(needs.capture_contact(u,p))
             # The work happens here and now, and it happens every day they
             # are here: they reach the place, they take what is there, they
@@ -2381,9 +2473,9 @@ def tick_lagoon(u, rng, events):
             fert *= 1.15
         if shortfall > 0.3:
             fert *= 0.35
-        if has(u, "agriculture"):
-            fert *= 1.25  # the luxury trap: more mouths, more hands, more work
-        try_conceive(u, rng, people, fert, byid=byid)
+        for mother in people:
+            local_rate = fert * (1.25 if needs.farming_food(u, mother) else 1.0)
+            try_conceive(u, rng, [mother], local_rate, byid=byid)
 
     # the wild places come back, slowly
     if part == 0:
@@ -2410,15 +2502,18 @@ def tick_lagoon(u, rng, events):
             tell_myth(u, "drought", events, day)
         if rng.random() < 0.02 and u["store"] > 0:
             for st in u["settlements"]:
-                st["store"] = st.get("store", 0.0) * 0.4
+                for field in ("store", "prepared", "farm_food"):
+                    st[field] = st.get(field, 0.0) * 0.4
             u["store"] *= 0.4
             events.append((day, "LAGOON", "disaster",
                            f"Year {year}: a storm off the lagoon destroys most of the stores."))
             tell_myth(u, "storm", events, day)
         p_epidemic = 0.02 if "cleanliness" in u["lessons"] else 0.04
-        if has(u, "domestication") and rng.random() < p_epidemic and pop > 30:
+        exposed = [q for q in people if needs.camp_of(u, q)
+                   and needs.camp_of(u, q).get("domestic", 0) > 0 and needs.at_camp(u, q)]
+        if exposed and rng.random() < p_epidemic and len(exposed) > 30:
             kill = rng.uniform(0.15, 0.35)
-            victims = rng.sample(people, max(1, int(pop * kill)))
+            victims = rng.sample(exposed, max(1, int(len(exposed) * kill)))
             remove_dead(u, victims)
             u["deaths_y"] += len(victims)
             cod(u, "epidemic", len(victims))
@@ -2431,37 +2526,7 @@ def tick_lagoon(u, rng, events):
         adults = [p for p in people if ADULT_AGE <= age_of(p, day) < ELDER_AGE]
         daily_need = sum(0.6 if age_of(p, day) < ADULT_AGE else
                          0.8 if age_of(p, day) >= ELDER_AGE else 1.0 for p in people)
-        # technology: discovery odds scale with living population
-        for name, prereq, base, min_pop in TECH_LADDER:
-            if has(u, name) or pop < min_pop:
-                continue
-            if prereq and not has(u, prereq):
-                continue
-            # Invention needs people with the self-control to plan, and the
-            # leisure and company to try (BOOKS.md: Pinker ch.3; Diamond ch.13)
-            tail = sum(1 for q in adults if q.get("ef", 0.5) > 0.6) / max(1, len(adults))
-            p_disc = (base * min(2.5, math.log(max(2, pop), 8))
-                      * (0.5 + 2.0 * tail)
-                      * (1.0 + min(0.5, u.get("scouted", 0) / 2000.0)))
-            for lesson in u["lessons"]:
-                if name in LESSON_TECH.get(lesson, ()):
-                    p_disc *= 3.0  # inherited wisdom from a dead iteration
-            if name == "lore":
-                p_disc *= min(3.0, 0.2 + u.get("stories", 0.0) / 40.0)
-            if name == "agriculture" and shortfall == 0 and pop < 140:
-                p_disc *= 0.3  # agriculture is born of pressure, not comfort
-            if rng.random() < p_disc:
-                u["tech"].append(name)
-                pick = rng.sample(adults, min(5, len(adults))) if adults else []
-                discoverer = (max(pick, key=lambda q: q.get("ef", 0.5))["n"]
-                              if pick else "someone")
-                events.append((day, "LAGOON", "discovery",
-                               f"Year {year}: {TECH_LABEL[name]} — first by {discoverer}."))
-                if name == "agriculture":
-                    st = u["settlements"][0]
-                    for _ in range(6):
-                        till_near(u, rng, st, 7)
-                break  # at most one discovery a year
+        discover_tech(u, rng, events, shortfall)
 
         # Crowding, not chance, puts people in boats. When the island holds
         # more than it comfortably feeds, the people who can plan start a
@@ -2469,8 +2534,9 @@ def tick_lagoon(u, rng, events):
         # sails for the greater land (BOOKS.md; Diamond on Austronesian and
         # Polynesian expansion).
         crowd = pop / ISLAND_CAP
-        if (not u.get("continent") and crowd > 0.85 and has(u, "fishing")
-                and has(u, "shelter") and "boat" not in u):
+        if (not u.get("continent") and crowd > 0.85 and "boat" not in u
+                and needs.camp_has(u, u["settlements"][0], "fishing")
+                and needs.camp_has(u, u["settlements"][0], "shelter")):
             st0 = u["settlements"][0]
             spot = None
             for dy in range(0, 30):
@@ -2485,38 +2551,35 @@ def tick_lagoon(u, rng, events):
                 events.append((day, "LAGOON", "discovery",
                                f"Year {year}: the island is full. {st0.get('n', 'The camp')} "
                                f"starts a boat at the shore."))
-        boat = u.get("boat")
-        if boat and boat["work"] >= BOAT_WORK and "voyage" not in u:
-            del u["boat"]
-            if not has(u, "seacraft"):
-                u["tech"].append("seacraft")
-            launch(u, people, boat, rng, events, day, year)
-
         # full bellies and long evenings: surplus turns into art and pleasure
-        if (has(u, "lore") and u["store"] > daily_need * 20 and adults
+        if (any(skills.qualified(q, "lore") and needs.at_camp(u, q) for q in adults)
+                and u["store"] > daily_need * 20 and adults
                 and len(u.get("culture", [])) < len(ARTS)
                 and rng.random() < 0.2):
             art = next(a for a in ARTS if a not in u["culture"])
             u.setdefault("meat", 0.0)
             u.setdefault("kills", 0)
             u.setdefault("culture", []).append(art)
-            maker = rng.choice(adults)["n"]
+            artists = [q for q in adults if skills.qualified(q, "lore") and needs.at_camp(u, q)]
+            maker = rng.choice(artists)["n"]
             events.append((day, "LAGOON", "culture",
                            f"Year {year}: with food enough and nothing to fear, "
                            f"{art} {culture_verb(art)} — "
                            f"first made by {maker}."))
 
-        if has(u, "agriculture") and len(u["farms"]) < pop // 3:
-            till_near(u, rng, rng.choice(u["settlements"]), 8)
+        farming_camps = [st for st in u["settlements"] if needs.camp_has(u, st, "agriculture")]
+        if farming_camps and len(u["farms"]) < pop // 3:
+            till_near(u, rng, rng.choice(farming_camps), 8)
 
         # Dunbar / fission: settlements over their social limit split
-        limit = 500 if has(u, "granary") else 220 if has(u, "lore") else 80
         counts = {}
         for p in people:
             counts[p.get("st", 0)] = counts.get(p.get("st", 0), 0) + 1
         for si, n in list(counts.items()):
             st = u["settlements"][min(si, len(u["settlements"]) - 1)]
             st["r"] = max(5, int(4 + math.sqrt(n) * 1.3))
+            local_lore = st.get("rites", 0) > 0 and st.get("coh", 0.) > 0
+            limit = 500 if needs.built(st, "granary") else 220 if local_lore else 80
             if n > limit and len(u["settlements"]) < 12:
                 terr = terrain_of(u)
                 nx = ny = None
@@ -2559,7 +2622,7 @@ def tick_lagoon(u, rng, events):
                                    f"Year {year}: the boats cross the strait. The {tribe} tribe "
                                    f"lands on the greater shore — a land without end, the one "
                                    f"all their children's children will call home."))
-                elif has(u, "lore"):
+                elif local_lore:
                     events.append((day, "LAGOON", "migration",
                                    f"Year {year}: a band leaves {old_tribe} in peace and founds "
                                    f"the {tribe} tribe."))
@@ -2600,6 +2663,7 @@ def tick_lagoon(u, rng, events):
         stocks[kind] = sum(site["left"] for site in u.get("sites", []) if site["kind"] == kind)
     if not people:
         record_extinction(u, events)
+    finish_boat(u, people, rng, events, day)
     needs.exchange(u, contacts)
     advance_part(u)
 
@@ -2700,6 +2764,27 @@ def person_detail(u, p, day, ctx):
             round(p.get("bmi", 22.0), 1)]
 
 
+def active_craft(u: dict, p: dict) -> str:
+    """Describe an arrived, capable procedure at its actual work site."""
+    if u.get("kind") != "LAGOON" or p.get("w") or p.get("ab"):
+        return ""
+    if (p["x"], p["y"]) != (p.get("tx"), p.get("ty")):
+        return ""
+    act = p.get("a")
+    job = p.get("craft") or {}
+    tech = "fire" if act == A_WATCH else "healing" if act == A_TEND else job.get("skill") if act == A_WORK else None
+    if not tech or not skills.knows(p, tech):
+        return ""
+    st = needs.camp_of(u, p)
+    if tech in needs.CRAFT_WORK and st is not None and needs.built(st, tech):
+        return ""
+    if act == A_WORK and (p["x"], p["y"]) != (job.get("x"), job.get("y")):
+        return ""
+    if tech != "healing" and not needs.at_camp(u, p):
+        return ""
+    return tech
+
+
 def summarize(world):
     """Compact snapshot for the renderer / web mirror."""
     out = {"wall": time.time(), "sec_per_day": world["sec_per_day"],
@@ -2748,7 +2833,16 @@ def summarize(world):
                 "named": bool(u.get("named")),
                 "mind": u.get("mind", [])[-120:],
                 "engine": u.get("engine", ENGINE_VERSION)}
+        info["crafts"] = {str(p["id"]): active_craft(u, p)
+                          for p in u["people"] if active_craft(u, p)}
         if u["kind"] == "LAGOON":
+            info["camp_state"] = [{
+                "x": st["x"], "y": st["y"], "fire": needs.fire_lit(u, st),
+                "granary": needs.built(st, "granary"), "domestic": st.get("domestic", 0),
+                "writing": needs.built(st, "writing"),
+                "work": {name: round(min(1.0, max(0.0, value / needs.CRAFT_WORK.get(name, 1.0))), 3)
+                         for name, value in st.get("works", {}).items()}}
+                for st in u["settlements"]]
             info["tech"] = u["tech"]
             info["settlements"] = u["settlements"]
             info["farms"] = u["farms"]
@@ -2879,6 +2973,8 @@ def migrate(world):
         u = world.get(key)
         if not u:
             continue
+        legacy_skills = not u.get("skill_schema")
+        u.setdefault("skill_schema", 1)
         u.setdefault("cod", {})
         u.setdefault("cod_y", {})
         u.setdefault("viol_y", 0)
@@ -2921,6 +3017,11 @@ def migrate(world):
             u.setdefault("stagnation", EDEN_STAGNATION)
             u.setdefault("box_cap", EDEN_BOX_CAP)
         if u.get("kind") == "LAGOON":
+            if u.get("voyage"):
+                u["voyage"].setdefault("operator", None)
+            if u.get("boat"):
+                u["boat"].setdefault("builders", [])
+                u["boat"].setdefault("completion_recorded", False)
             sts = u.get("settlements", [])
             if sts and all("store" not in st for st in sts):
                 # Existing pooled food is redistributed once, never discarded
@@ -2937,6 +3038,11 @@ def migrate(world):
             for st in sts:
                 st.setdefault("store", 0.0)
                 st.setdefault("water", 0.0)
+                st.setdefault("prepared", 0.)
+                st.setdefault("farm_food", 0.)
+                st.setdefault("works", {})
+                st.setdefault("domestic", 0)
+                st.setdefault("fire_until", -1)
             u.setdefault("animals", None)     # None: animals.ensure seeds them on the next tick
             u.setdefault("animal_id", max((a["i"] for a in u.get("animals") or []), default=0) + 1)
             u.setdefault("encounters", [])
@@ -2946,6 +3052,11 @@ def migrate(world):
             if site.get("kind") == "farm":
                 site.setdefault("worked", None)
         for p in u.get("people", []):
+            skills.migrate_person(p, u.get("tech", []), u["day"], legacy_skills)
+            p.setdefault("stories", 0.)
+            p.setdefault("skill_day", None)
+            p.setdefault("craft", None)
+            p.setdefault("craft_part", None)
             p.setdefault("a", 0)
             p.setdefault("ad", 0)
             p.setdefault("hun", 0.0)

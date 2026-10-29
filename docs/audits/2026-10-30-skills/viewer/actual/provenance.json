@@ -1,0 +1,26 @@
+{
+  "kind": "actual natural bounded replay; not live runtime or century outcome",
+  "provisional": false,
+  "synthetic": false,
+  "engine": "2026.10.30.4",
+  "seed": 69,
+  "days": 120,
+  "parts": 480,
+  "elapsedSeconds": 0.8442159169972001,
+  "model_hashes": {
+    "sim/engine.py": "318ed7e3b9d7734c4c7159e5870caba875eff5a58ff947cc34fe6fb2f590e01e",
+    "sim/needs.py": "1c994a5c333a0743fa4e40319f29d123fefc5d2604a0984b0ab843f85f91e916",
+    "sim/minds.py": "5258216b1b02a21251643d3e042b78bfddfb3cd01fc5903621430721b3c890a0",
+    "sim/animals.py": "5622b0910d185da4e9c8b6f680ce87a1feada111fb5505b483bd3de563864577",
+    "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "tools/lab.py": "91237f6cbf03f284825692047d4b8df3ed0746474a6a8cb6f51d1ea7779267ac"
+  },
+  "createdUTC": "2026-10-29T22:47:21.684398+00:00",
+  "firstActiveCraftPart": null,
+  "sourceFrozen": true,
+  "finalActiveCrafts": {
+    "eden": {},
+    "lagoon": {}
+  }
+}

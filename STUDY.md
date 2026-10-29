@@ -1,6 +1,13 @@
 # STUDY — measurements from the running universes
 
-**Current version boundary.** Engine `2026.10.30.3` adds actual-contact
+**Current version boundary.** Engine `2026.10.30.4` replaces universal
+capabilities with person-held procedures and actual practice, and ties camp
+benefits to local works. It changes future trajectories. Old-schema working-age
+survivors keep labelled legacy capabilities; their training history is unknown.
+See `docs/audits/2026-10-30-skills/` for final evidence. Prior results below
+remain versioned historical observations.
+
+**Earlier version boundary.** Engine `2026.10.30.3` adds actual-contact
 resource reports, preserving original age/provenance without granting supplies
 or personal harvest experience. All older arcs are historical until re-derived.
 
@@ -16,6 +23,48 @@ wildlife replenishment, conception and the default clock. All earlier results
 below are historical; none is evidence for the new trajectory. The model is a
 Sri Lanka coastal-ecology analogue, not an exact island map, physical-scale
 survey, demographic prediction or guaranteed civilizational ladder.
+
+## Personal procedures and local works — 2026.10.30.4
+
+Fresh seed 69, 36,000 model days (100 years), from the final source hashes in
+`docs/audits/2026-10-30-skills/bake-inputs.json`, took 529.1s on the workbench
+with Python 3.14.6. It does not measure throughput on the 2016 MacBook.
+
+| World at year 100 | Population | Peak | Highest generation | Iteration | Extinctions / reseeds |
+| --- | ---: | ---: | ---: | ---: | --- |
+| EDEN | 456 | 525 | 6 | 1 | 0 / 0 |
+| LAGOON | 12 | 22 | 5 | 1 | 0 / 0 |
+
+Every common sampled EDEN column in all 101 rows matches the shipped `.3`
+control. The last year 100 sample is duplicated by the lab's final-row append;
+these are not 101 independent annual observations.
+
+LAGOON retained five **historical discoveries**, but no living tool-making or
+fishing holders at the endpoint. Of 12 living people, fire had 11 aware/9
+qualified holders, preservation 11/9, shelter 11/3. The camp had one lit fire
+and 173.19 prepared food units (173.2 total food rounded). Prepared food tags
+existing inventory; it is not an additional food stock. No agriculture,
+local granary, livestock or writing emerged. The controlled positive-rendering
+fixture exercises grain-store construction, fire tending and writing work only;
+it does not demonstrate natural cultural achievement, agriculture or livestock.
+Endpoint teacher-linked entries were zero for surviving procedures; artifact
+learning and practical use must not be described as observed verbal teaching.
+Annual procedure maxima are in `procedure-samples.json`, not cumulative counts.
+
+The completed pre-release run with the faulty fire-priority predicate died on
+day 35330. That defect always ranked a fully lit four-part fire as needing
+maintenance before every other craft. The independent pure-choice regression,
+not the desired demographic outcome, justified changing the threshold to one
+remaining part. The superseded arc and hashes remain separately retained;
+`priority-change-proof.json` verifies the single model predicate difference.
+Changed choices also change subsequent random draw paths: this one-seed
+comparison does not establish a general survival benefit or real-world rate.
+
+The final full suite passes 358 tests on Apple Python 3.9.6. Rendered natural
+and explicitly controlled fixtures pass at 390, 1024 and 1440 px, with independent
+MSH review and native keyboard focus. The finite ladder and illustrative
+coefficients remain limitations; neither great civilization nor millennia of
+survival has been established. The broader digital-human goal stays in progress.
 
 ## Contact-based knowledge — 2026.10.30.3
 

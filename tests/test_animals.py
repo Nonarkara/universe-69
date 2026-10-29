@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.join(ROOT, "sim"))
 
 import animals  # noqa: E402
 import engine  # noqa: E402
+import skills
 
 
 def lagoon():
@@ -90,6 +91,9 @@ class TestPredation(unittest.TestCase):
         cat = {"i": 999, "k": animals.CAT, "x": 0, "y": 0, "fed": 99.0}
 
         def rate(armed):
+            p["skills"] = {}
+            if armed:
+                skills.invent(p,"stone_tools",u["day"])
             rng = random.Random(7)
             killed = 0
             for _ in range(2000):
@@ -123,6 +127,7 @@ class TestHunting(unittest.TestCase):
         for i, p in enumerate(hunters):
             p["a"], p["x"], p["y"], p["carry"] = engine.A_HUNT, 100 + (i % 2), 101, 0.0
             p["hun"] = 0.0
+            skills.invent(p,"stone_tools",u["day"])
         rng = random.Random(3)
         terr = engine.terrain_of(u)
         for _ in range(40):

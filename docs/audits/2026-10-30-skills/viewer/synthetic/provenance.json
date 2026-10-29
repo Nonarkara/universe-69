@@ -1,0 +1,31 @@
+{
+  "synthetic": true,
+  "sourceHTMLSHA256": "d1578231d0e0582325b9dee913e71b9774c168ed57ceaa789ab1bdcefcd8b152",
+  "fixtureSHA256": "98fb01163543f70207ce51e7fb13bd1d2997e6ce86fe4ada2b50d3315744abb4",
+  "purpose": "Local camp authority and existing-person-card contract rendering; not model outcomes",
+  "Found": "Old global technology flags lit all camp hearths and inferred walls; no local grain store/record/domestic visuals existed. Long active-job HUD duplication wrapped the phone world heading.",
+  "Changed": "Local camp_state controls physical visuals and cache invalidation; current authoritative empty/false never falls back. Active crafts appear in existing card/caption/diary. Compact HUD retains selected name without repeating long job text.",
+  "Verified": {
+    "before": "0c8a4cbcf125fefda0b554f755df67068e9355f061016f351e1e780a9bd6a71f",
+    "beforeFalseLocalFireGradientCounts": [
+      1,
+      1,
+      1
+    ],
+    "checks": {
+      "390": 101,
+      "1024": 101,
+      "1440": 101
+    },
+    "actualRendererTrace": "Local false gives0firelight gradients/0new smoke; local true gives1/1; legacy fallback1/1 explicitly unverified.",
+    "preserved": [
+      "Both worlds",
+      "Readable person details/keyboard focus",
+      "Portrait visibility with MORE",
+      "Existing palette/rig/camera/pagers",
+      "No new panels or badges"
+    ],
+    "independentReview": "viewer_review cleared synthetic rendering at all3 widths"
+  },
+  "Remaining": "Actual final engine .4 snapshot validation pending; synthetic fixture demonstrates contract only."
+}

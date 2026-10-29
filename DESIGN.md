@@ -18,6 +18,38 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
   (now − clock.epoch) / clock.seconds` and catches up. Pace changes preserve
   ticks already due. The universes age while the process is dead.
 
+## Engine 2026.10.30.4: personal procedures and local works
+
+| Research finding / modeling choice | Mechanic | Qualification |
+| --- | --- | --- |
+| Morgan et al. (2015): instruction changes stone-knapping performance; Caldwell & Millen (2009): learning routes vary by task (RESEARCH, procedural transmission) | Historical discoveries no longer grant every person an ability. Inventors hold a procedure; nearby completed conversations and witnessed work expose one new procedure per person/day. Frozen contact facts prevent same-part teaching cascades. | A finite predefined skill ladder, not invented human knowledge or general intelligence. |
+| Practical production differs from hearing a description | First exposure gives level .25; actual task use adds .1 at most once/day, capped at 1. Personal prerequisites must be mastered for qualification. Repeated conversation cannot supply practice. | Rates, prerequisites and competence thresholds are illustrative, not fitted experimental estimates. Failed genuine attempts may count as practice; pretending to work does not. |
+| Knowledge can outlive stale resource reports | Procedures retain original teacher/origin and learning basis; they have no stock-report 90-day expiry or three-hop ceiling. | No modeled forgetting, misinformation about procedures, or richer pedagogy yet. |
+| Physical supplies and works are not the builder's memory | Camp fires expire without tending; actual preservation work tags existing food; local completed granaries reduce rot even after a builder dies. Farm-origin food remains an inventory tag. | Food processing conserves food units. Construction materials, fuel and tools are still abstract, not a wood/ore economy. |
+| Learning routes include observable products | Nearby lit fires, completed huts, prepared food, stores and records can expose their corresponding procedure, subject to personal prerequisites. | Seeing a product supplies awareness only; it does not grant mastery. |
+| Historical saves never recorded individual learners | Only old-schema working-age survivors missing a skills field retain old capabilities as `legacy_global_capability`, with unknown dates, teachers and origins. They must actually use a procedure before teaching it. New people and new worlds start empty. | This is an explicit migration prior, not recovered history. Existing ecology and world history are preserved. |
+
+Camp projects track person-work rather than unlocking on a world tag: grain
+storage 40, livestock enclosure 30, record-keeping 10 person-days at full capacity.
+These values are illustrative. Domestication remains a coarse handling/enclosure
+abstraction: completion requires a real game animal at capture distance, removes
+that animal from the wild population and records a local aggregate. It does not
+establish the biological domesticability of deer or simulate selective breeding.
+Metallurgy remains a historical procedure on the finite ladder, with no invented
+ore, smelting, walls or industrial economy. Civilization beyond this ladder is
+unimplemented; elapsed millennia alone cannot supply it.
+
+Fire maintenance gains priority only when unlit or within one part of expiry;
+a fully lit four-part fire must not monopolize all other camp crafts. This
+choice schedules real work; it supplies no food, fuel or skill by assignment.
+Watch duty respects sleep and urgent bodily needs. Sailing needs a completed
+boat and a present qualified operator; historical builders learn completion
+only while physically present and awake. Landfall creates no food or wildlife.
+
+This engine version changes all subsequent trajectories. Re-derive results from
+the exact shipped source hashes; prior century results remain historical.
+
+
 ## Engine 2026.10.30.3: knowledge passes through contact
 
 **This changes future run trajectories.** Completed conversation/grooming can
@@ -33,7 +65,7 @@ RESEARCH.md). They do not calibrate these numerical choices.
 | Retelling is not a fresh observation | Each note preserves original observer and seen_day; immediate sender, heard_day and a bounded path identify hearsay. Local observation replaces it with personal evidence | Modern experimental support is qualitative; literal map coordinates stand in for communicated location information |
 | Rumour must not refresh or amplify itself | Freeze sender notes before delivery; one incoming report/listener/day, at most 3 hops, at most 90 days original age. Reject equal/older facts and return loops. Hearsay discounts expected stock by hop count | Limits and discount weights are illustrative. No deception, inferred trust or general theory of mind |
 | Hearing is not harvesting | Received notes keep only the listener's own visits/gained counters. No stock lookup to verify distant reports. Stale reports cannot evict fresher notes at capacity | Actual-use outcomes remain audit data, not learned skills/action values |
-| Both worlds perceive their actual resources | EDEN's provisioned hopper observation sites now exist and follow pen expansion; free provision and EDEN reset conditions remain unchanged | World-wide technology knowledge still remains a separate abstraction |
+| Both worlds perceive their actual resources | EDEN's provisioned hopper observation sites now exist and follow pen expansion; free provision and EDEN reset conditions remain unchanged | World-wide technology was still a separate abstraction in .3; superseded by .4 |
 
 Source snapshots and contact positions prevent an instantaneous whole-chain
 broadcast or fabricated meetings after fission relocation. Knowledge remains
@@ -57,7 +89,7 @@ evidence”, for the primary experimental evidence and its limits.
 | Human food-location memory and sampled spatial rewards can guide later search (de Vries 2020; Wu 2018) | Each person records at most 24 nearby resource places, copying observed quantity, location, kind and model day. Physical use records actual source depletion, including food eaten on-site and water drunk before carrying | Six-tile connected-radius sight is illustrative, not occlusion/line-of-sight or a measured human range. Quantity observations are abstractions |
 | A past success cannot reveal current distant stock | Planning ranks all known sites by remembered quantity and travel cost. Beyond sight, estimates drift toward uncertainty over a 30-day scale; a remembered empty patch can be checked after 7 days without changing its actual reserve | Capacity, prior 25% fullness, cost weights and decay/revisit times are model choices. Actual gained units are audit evidence, not a learned action-value or skill bonus |
 | Resource encounters can guide subsequent local search (Hills 2013) | Hungry/thirsty people lacking known supplies scout nearby connected dry terrain. A 12-position trail contains actual visited positions, never intended destinations, and makes unfamiliar directions preferable | Local waypoint search is not general planning. It does not know unseen site coordinates or guarantee discovery/survival |
-| Knowledge must come from perception or experience | Perception continues during travel/work. Party and farm targets use known places; away workers remember camp inventories rather than reading current distant stocks | World-level technology and social knowledge remain shared abstractions. Hunt initiation detects within 6 tiles; existing active animal pursuit retains its separate 12-tile approximation |
+| Knowledge must come from perception or experience | Perception continues during travel/work. Party and farm targets use known places; away workers remember camp inventories rather than reading current distant stocks | In .2, technology and social knowledge remained shared abstractions; personal procedures supersede this in .4. Hunt initiation detects within 6 tiles; existing active animal pursuit retains its separate 12-tile approximation |
 | Memories belong to the person who experienced them | New people and reseeded founders start with empty notes; migration supplies independent empty defaults without fabricating visits. JSON reload preserves subsequent choices | EDEN receives no inherited personal memory or new cross-iteration assistance; LAGOON's existing fixed lesson tags remain separate |
 
 Two existing physical/behavioral contract bugs are corrected in this version:
@@ -290,7 +322,7 @@ be reseeded, and no figure from an earlier engine carries over.**
 | Hunger, energy and company are a person's own | Personal meters `hun`, `ene`, `sol`. Eating lowers the eater's hunger and empties the pantry it came from (A2). An infant is fed by its mother, and the mother pays 0.6 of it in her own hunger | `needs.meters`, `needs.eat` |
 | A body deprived of food weakens (illustrative model calibration, not a validated human starvation timescale) | Hunger 0→40 (death) at ~1.4/day for a working adult: about four weeks with nothing at all, longer with scraps | `needs.HUNGER_MAX`, `HUNGER_PER_DAY` |
 | Foragers anticipate: they go out because the larder is low, not only when their own belly is | `want_food` is the larger of this belly's hunger and the camp's shortfall against four days' food | `needs.assign`, `larder_short` |
-| Food does not keep without the craft to keep it | Camp stores rot 4%/day; 0.8% with preservation (or a "preserve" lesson); 0.2% with a granary | `needs.keep_stores` |
+| Food does not keep without the craft to keep it | Raw food rots 4%/day; actually prepared units 0.8%; a built local granary 0.2%. The inherited "preserve" habit retains its separate 0.8% raw-food prior | `needs.keep_stores` |
 | A field gives food only if it is worked (Diamond ch.6) | Tilled fields are sites that grow only when tended in the last 30 days, a quarter as fast in winter, a third in drought | `needs.ensure_sites`, `regrow_sites` |
 | Night is slept (A3) | At night everyone not on watch, in labour, nursing, withdrawn or on the way to dinner sleeps where they are — at the hearth, or out at the patch. At dawn everybody decides again. Sleep restores energy | `needs.night` |
 | One mind, two conditions (A5) | Both worlds' adults decide with `needs.assign`. The worlds differ only in `needs.CONDITIONS` (same keys): EDEN's food is provisioned, its mating free of bonds, its posts the only work; LAGOON must work to eat, works in parties, mates in bonds | `needs.CONDITIONS` |
@@ -388,14 +420,14 @@ Eight founding pairs with world-specific names. Nothing is given; everything is 
 
 | Research finding                           | Mechanic                                                    |
 |--------------------------------------------|-------------------------------------------------------------|
-| Foraging economics                          | Adults gather daily; yield depends on tech, season, stock levels; shortfall → hunger → starvation (weakest first) |
-| Predation, accidents, childbirth mortality  | Daily hazard rates; children more vulnerable; weapons/healing lore reduce them |
+| Foraging economics                          | People gather from actual patches; fishing/farming require personal procedures and yield scales with practice, season and remaining stock; hunger can kill |
+| Predation, accidents, childbirth mortality  | Daily hazard rates; children more vulnerable; personal tool competence affects defense, present qualified care affects healing/childbirth |
 | Seasons + disasters                         | 360-day year with monsoons, storms and droughts; legacy saved terrain keeps its old winter regime |
 | Blue Lagoon innocence                       | The founders don't know how life begins; a discovery event in the first years unlocks reproduction |
-| Sapiens: cognitive revolution / Dunbar 150  | Without **shared lore**, a settlement over its social limit splits or feuds; lore raises the cooperation ceiling |
-| Sapiens: agriculture = "luxury trap"        | Farming raises carrying capacity and birth rate but adds workload and disease exposure |
-| GG&S: domestication → germs                 | Animal domestication unlocks epidemics (can kill 15–35%)    |
-| GG&S: surplus → specialists → tech          | Tech ladder: fire → stone tools → fishing → shelter → preservation → shared lore → agriculture → domestication → granary → healing lore → metallurgy → writing. Discovery odds scale with population and need |
+| Sapiens: cognitive revolution / Dunbar 150  | Local enacted rites/cohesion raise the social limit; an overfull settlement splits or feuds, rather than benefiting from a distant lore discovery |
+| Sapiens: agriculture = "luxury trap"        | Personally worked fields raise food supply; sufficient local farm-origin food affects nursing and fertility; labor remains necessary |
+| GG&S: domestication → germs                 | Existing local handled livestock exposes present people to an illustrative epidemic (15–35% of the exposed group)    |
+| GG&S: surplus → specialists → tech          | Tech ladder: fire → stone tools → fishing → shelter → preservation → shared lore → agriculture → domestication → granary → healing lore → metallurgy → writing. Historical finite ladder; personal qualified prerequisites gate inventors, discovery odds scale with population and need |
 | Expansion                                   | Overfull settlements fission; new bands found new settlements — the map fills as the camera zooms out |
 
 ## Sex, boredom, and disease (EDEN)

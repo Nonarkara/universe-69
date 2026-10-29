@@ -1,0 +1,35 @@
+{
+  "sourceHTMLSHA256": "d1578231d0e0582325b9dee913e71b9774c168ed57ceaa789ab1bdcefcd8b152",
+  "Found": [
+    "Global fire discovery previously produced local fires at every camp; local completion/work was not represented.",
+    "Repeating long private-job text in the compact phone HUD added a header row."
+  ],
+  "Changed": [
+    "Current camp_state controls hearth/firelight/flame/newsmoke and earned local structures; global historical labels confer no local installation or proficiency.",
+    "Existing person card/caption/diary show private craft; compact HUD retains selected name without duplicating long job.",
+    "Legacy missing camp_state is explicitly unverified."
+  ],
+  "Verified": {
+    "synthetic": "101/101 checks at all3 widths; before renderer emitted1firelight gradient despite localfalse, current0.",
+    "actual": "Final fire-priority source seed69 natural120day replay,32/32 checks at all3 widths including native Tab and visible focus; no active craft occurred in that bounded window.",
+    "controlled": "Final fire-priority source controlled model fixture with actual perform_craft output,33/33 checks at all3 widths including native Tab and visible focus; grainstore/fire completed, active writing work. Not a natural trajectory.",
+    "independentReview": "viewer_review cleared final fire-priority actual32/controlled33 three-width evidence; refreshed PNGs/focus sound and model hashes match current bake needs1c994\u2026e916. See ../independent-review.md.",
+    "viewportWidths": [
+      390,
+      1024,
+      1440
+    ],
+    "preserved": [
+      "Both worlds",
+      "Existing palette/rig/cameras/pagers",
+      "Readable actualjob/persondetails and focus",
+      "Portrait visible with MORE",
+      "No new panels/badges"
+    ]
+  },
+  "Remaining": [
+    "Natural occurrence of advanced local assets is not established by the120day replay.",
+    "Occupied stock pen and completed records artwork were exercised with explicit synthetic contract fixtures; controlled model fixture covers grainstore/fire and writing in progress."
+  ],
+  "humanValidation": "No learning or achievement rates are calibrated from these renderer fixtures."
+}

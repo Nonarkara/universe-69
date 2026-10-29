@@ -17,6 +17,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "sim"))
 
 import engine  # noqa: E402
+import skills
 
 from scratch_space import scratch_root
 SCRATCH = scratch_root()
@@ -300,8 +301,15 @@ class TestLagoon(unittest.TestCase):
                                for i in range(max(min_pop, len(founders)))]
                 u["day"], u["part"] = 360, 0
                 u["tech"] = [prereq] if available else []
+                parents = {t:parent for t,parent,_,_ in skills.TECH_LADDER}
+                def train(p, tech):
+                    if parents[tech]: train(p,parents[tech])
+                    skills.invent(p,tech,0)
                 for p in u["people"]:
                     p["ad"] = engine.days(100)
+                    p["a"] = engine.A_TALK
+                    p["stories"] = 1.
+                    if available: train(p,prereq)
                 rng = engine.random.Random(69)
                 # Both sides have enough people and a guaranteed discovery
                 # coin. Only the prerequisite differs. A singleton ladder
@@ -618,6 +626,9 @@ class TestResortAndIsland(unittest.TestCase):
                              p=i + 2 if i % 2 == 0 else i) for i in range(90)]
         u["next_id"] = 91
         u["tech"] = [name for name, _p, _b, _n in engine.TECH_LADDER]
+        for p in u["people"]:
+            for name, _parent, _base, _minimum in engine.TECH_LADDER:
+                engine.skills.invent(p, name, 0)
         u["settlements"][0]["store"] = 10000
         rng = engine.random.Random(69)
         events = []
@@ -689,6 +700,10 @@ class TestDayAndNight(unittest.TestCase):
     def _lagoon(self, seed=69):
         u = engine.genesis_universe("LAGOON", seed)
         u["tech"] = list(u.get("tech") or []) + ["fire", "stone_tools"]
+        for p in u["people"]:
+            skills.invent(p,"fire",0)
+            skills.invent(p,"stone_tools",0)
+        u["settlements"][0]["fire_until"] = 10000
         return u
 
     def test_a_day_is_four_parts_and_turns_at_the_dawn(self):
@@ -826,6 +841,8 @@ class TestDayAndNight(unittest.TestCase):
         u["animals"] = [cat]
         party = [p for p in u["people"] if engine.age_of(p, u["day"]) >= engine.ADULT_AGE][:4]
         for p in party:
+            for technique in ("stone_tools", "fishing", "predator_hunt"):
+                engine.skills.invent(p, technique, 0)
             p["a"], p["x"], p["y"], p["carry"] = engine.A_HUNT, st["x"] + 1, st["y"], 0.0
         ctx = {"day": u["day"], "part": 1, "night": False, "events": [],
                "adult": lambda q: True, "has": lambda t: t in u["tech"], "armed": True,

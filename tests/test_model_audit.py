@@ -12,6 +12,7 @@ import animals
 import engine
 import minds
 import needs
+import skills
 
 
 class TestNamesAndMigration(unittest.TestCase):
@@ -86,6 +87,8 @@ class TestFoodAndNeeds(unittest.TestCase):
         needs.regrow_sites(u)
         self.assertEqual(field["left"], 0)
         p = u["people"][0]
+        for tech in ("fire","preservation","agriculture"):
+            skills.invent(p,tech,0)
         p["x"], p["y"], p["a"] = 137, 109, minds.A_FARM
         needs.fulfil(u, p, 0, random.Random(1), minds.A_FARM)
         needs.regrow_sites(u)
@@ -152,8 +155,11 @@ class TestFoodAndNeeds(unittest.TestCase):
     def test_story_rates_are_divided_into_parts_once(self):
         u = engine.genesis()["lagoon"]
         u["tech"] = ["fire"]
+        st=u["settlements"][0]
+        st["fire_until"]=100
         for p in u["people"]:
-            p["a"] = engine.A_TALK
+            skills.invent(p,"fire",0)
+            p.update(x=st["x"]+2,y=st["y"]+1,tx=st["x"]+2,ty=st["y"]+1,a=engine.A_TALK)
         for part in range(4):
             engine.keep_watch(u, u["people"], 0, [], part=part)
         talkers = len(u["people"]) - 1
@@ -175,6 +181,8 @@ class TestWildlife(unittest.TestCase):
         u["settlements"] = []
         hunters = u["people"][:3]
         for p, (x, y) in zip(hunters, ((100, 100), (104, 100), (104, 101))):
+            for tech in ("stone_tools","fishing","predator_hunt"):
+                skills.invent(p,tech,0)
             p["a"], p["x"], p["y"] = minds.A_HUNT, x, y
         u["animals"] = [dict(i=i, k="cat", x=x, y=100, tx=x, ty=100, hx=x, hy=100, fed=fed)
                         for i, x, fed in ((1, 100, 20), (2, 103, 0))]

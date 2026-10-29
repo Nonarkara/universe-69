@@ -1,0 +1,16 @@
+F
+======================================================================
+FAIL: test_a_lit_fire_does_not_monopolize_other_craft_practice (test_procedural_world.TestProceduralWorld)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_procedural_world.py", line 295, in test_a_lit_fire_does_not_monopolize_other_craft_practice
+    self.assertEqual(self.a['craft']['skill'],'stone_tools')
+AssertionError: 'fire' != 'stone_tools'
+- fire
++ stone_tools
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.087s
+
+FAILED (failures=1)

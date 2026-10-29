@@ -152,6 +152,9 @@ class TestHuts(unittest.TestCase):
         u = engine.genesis(69)["lagoon"]
         u["tech"] = ["fire", "shelter"]
         p = u["people"][0]
+        import skills
+        skills.invent(p,"fire",u["day"])
+        skills.invent(p,"shelter",u["day"])
         h = needs.hut_of(u, p, make=True)
         self.assertIs(needs.hut_of(u, u["people"][1]), h, "a pair shares one hut")
         self.assertFalse(h["done"])
