@@ -1,0 +1,50 @@
+{
+  "engine": "2026.10.30.2",
+  "full_goal_complete": false,
+  "base_commit": "bd897be",
+  "model_source_matches_bake": true,
+  "full_suite": {
+    "python": "Apple Python3.9.6",
+    "tests": 268,
+    "seconds": 227.804,
+    "failures": 0
+  },
+  "focused": {
+    "tests": 60,
+    "seconds": 14.254,
+    "failures": 0,
+    "independent_new_causal_tests": 22
+  },
+  "century": {
+    "seed": 69,
+    "days": 36000,
+    "seconds": 604.9,
+    "python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+    "artifact": "arc-36000.json",
+    "sha256": "b048fcd24536bf0715869116f4bb97d4723ef0c68082c6c599bbd34d21be77fe",
+    "human_extinctions": 0,
+    "reseed_events": 0,
+    "final_populations": {
+      "eden": 456,
+      "lagoon": 36
+    },
+    "registry": {
+      "supported": 12,
+      "contradicted": 1,
+      "undecided": 4
+    }
+  },
+  "clock_years_per_real_day_target": 100,
+  "macbook_throughput_verified": false,
+  "live_state_accessed": false,
+  "viewer_changed": false,
+  "viewer_mirrors_equal": true,
+  "viewer_sha256": "0c8a4cbcf125fefda0b554f755df67068e9355f061016f351e1e780a9bd6a71f",
+  "superseded_checks": "Interrupted deliberately to correct maturation/nursing behavior; no completed century outcome claimed",
+  "limits": [
+    "One combined-release seed; no isolated causal population benefit estimate",
+    "Local stock/location memory is not general cognition or learned action values",
+    "Global technology, terrain routing and 12-tile active animal pursuit remain abstractions",
+    "No natural human-universe extinction in the century; lifecycle verified with forced tests"
+  ]
+}

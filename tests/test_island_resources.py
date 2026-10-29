@@ -254,7 +254,14 @@ class IslandResources(unittest.TestCase):
             self.assertFalse(needs.at_camp(u,p))
             self.assertEqual(needs.drink(u,p),0.)
             self.assertEqual(needs.eat(u,p),0.)
-            self.assertIsNone(needs.water_target(u,p))
+            # No known water now triggers scouting, never a route to the
+            # pantry across the strait or a virtual drink from its reserves.
+            target = needs.water_target(u,p)
+            self.assertIsNotNone(target)
+            self.assertNotEqual(target,(st['x'],st['y']))
+            self.assertTrue(engine.same_land(terr,p['x'],p['y'],*target))
+            self.assertEqual(st['water'],20.)
+            self.assertEqual(st['store'],20.)
 
     def test_server_world_payload_uses_the_simulated_terrain_version(self):
         # Compile the real pure payload function without importing the server's

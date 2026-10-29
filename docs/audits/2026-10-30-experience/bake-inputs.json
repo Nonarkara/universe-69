@@ -1,0 +1,21 @@
+{
+  "base_commit": "bd897be",
+  "engine": "2026.10.30.2",
+  "seed": 69,
+  "days": 36000,
+  "python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "model_hashes": {
+    "sim/engine.py": "c67dae21baab31e1b015a24d4992e06e75b0a84604cd9fef5a2f73d613e5d7f5",
+    "sim/minds.py": "2ef4abee96cbdc51ea47a46c565c0850fc8766e235e7d241c38c5e62673e4f98",
+    "sim/needs.py": "16abef76335e5aa0111e514f36ae535843ccdce9c26aee5dcdc738f5701e0f9c",
+    "sim/animals.py": "7c5fcb7fb1c5ee069f669fb63de680c989422df6e936f94811756570d4fea006",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "tools/lab.py": "34e67d9a58a921ad41b110da79cbd2b508dbd0494e6bb0b26b177187c92d0c55"
+  },
+  "live_state_accessed": false,
+  "changes": [
+    "local resource experience and exploration",
+    "fight-scoring age unit conversion",
+    "nursing physical proximity and connected land"
+  ]
+}

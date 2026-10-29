@@ -1,0 +1,58 @@
+{
+  "engine": "2026.10.30.2",
+  "seed": 69,
+  "days": 36000,
+  "years": 100,
+  "final": {
+    "eden": {
+      "day": 36000,
+      "year": 100,
+      "pop": 456,
+      "peak": 525,
+      "gen": 6,
+      "iter": 1,
+      "phase": "exploit",
+      "extinct_day": null,
+      "withdrawn": 239,
+      "homeless": 23,
+      "fertile_f": 35,
+      "competent_m": 43,
+      "ennui": 0.4
+    },
+    "lagoon": {
+      "day": 36000,
+      "year": 100,
+      "pop": 36,
+      "peak": 36,
+      "gen": 6,
+      "iter": 1,
+      "phase": "strive",
+      "extinct_day": null,
+      "tech": [
+        "fire",
+        "shelter",
+        "preservation",
+        "stone_tools",
+        "fishing",
+        "predator_hunt"
+      ],
+      "tribes": 1,
+      "store": 1645.5,
+      "lessons": [
+        "preserve"
+      ],
+      "continent": false,
+      "innocent": false
+    }
+  },
+  "hypothesis_counts": {
+    "supported": 12,
+    "contradicted": 1,
+    "undecided": 4
+  },
+  "postmortems": {
+    "eden": [],
+    "lagoon": []
+  },
+  "interpretation": "One combined-release model run, not a human forecast or isolated memory-benefit estimate."
+}

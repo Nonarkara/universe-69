@@ -140,3 +140,44 @@ the first year. [WHO breastfeeding Q&A](https://www.who.int/news-room/questions-
 The implementation keeps its existing under-three nursing/following window
 for both flows, with maternal cost and proximity; that cutoff and the units
 are model calibration, not a derived clinical feeding schedule.
+
+## Personal resource experience — primary human evidence (2026-10-30)
+
+Three human experiments support qualitative, experience-sensitive resource
+search:
+
+- **Remembering food locations.** de Vries et al. (2020) covertly tested
+  location memory after people followed a route through food or food-odour
+  stations. Participants incidentally learned locations, with better recall
+  for high-calorie stimuli. This supports resource-location memory; an
+  ancestral adaptation remains an interpretation. [*Scientific Reports*
+  10:15174](https://www.nature.com/articles/s41598-020-72570-x).
+- **Search responds to encounters.** Hills, Kalff and Wiener (2013) tracked
+  human search for hidden resources in a virtual environment. Resource
+  encounters triggered more intensive local searching in patchy environments;
+  the dispersed condition differed. This supports context-sensitive search,
+  rather than a universal movement rule. [*PLOS ONE* 8(4):e60488](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0060488).
+- **Learning sampled rewards.** Wu et al. (2018) studied human search in
+  spatially correlated bandit tasks with up to 121 options. Their results
+  supported learning and generalization from observed rewards to guide
+  exploration. Their fitted Gaussian-process model is not a required
+  implementation for this simulation. [*Nature Human Behaviour*
+  2:915–924](https://www.nature.com/articles/s41562-018-0467-4).
+
+**Candidate mapping, not human calibration.** Give a person a bounded record
+of places they actually visited and outcomes they actually obtained. Let
+successful and empty attempts adjust future preferences among accessible
+sites, alongside travel cost and continued exploration. Keep observations
+local: an unvisited site is unknown, and a remembered success does not reveal
+its current stock. Memory capacity, forgetting, exploration probability,
+update rates and any practice multiplier are illustrative design choices.
+These papers do not supply those coefficients or establish harvesting-skill
+growth rates.
+
+**Limits.** These are modern experimental tasks, not longitudinal studies
+of Palaeolithic survival or small isolated populations. They do not validate
+LAGOON's demography, resource regeneration, freshwater memory, inherited
+knowledge, or a claim that memory will prevent extinction. Seasonal change
+and depletion can make old experience misleading. Any population effect
+must be reported as a result of the versioned model, not a measured human
+benefit.

@@ -1,10 +1,51 @@
 # STUDY — measurements from the running universes
 
-**Version boundary.** Engine `2026.10.30.1` changes food/water availability,
+**Current version boundary.** Engine `2026.10.30.2` changes resource choices
+through local perception, personal stock/location memory and exploration.
+It also corrects fight-scoring age units and requires physical maternal
+proximity/connected land for nursing; both worlds can change trajectory.
+Results for `2026.10.30.1` below remain historical, not forecasts for this
+new trajectory. The 100-year-per-real-day target clock is unchanged.
+
+**Earlier boundary.** Engine `2026.10.30.1` changes food/water availability,
 wildlife replenishment, conception and the default clock. All earlier results
 below are historical; none is evidence for the new trajectory. The model is a
 Sri Lanka coastal-ecology analogue, not an exact island map, physical-scale
 survey, demographic prediction or guaranteed civilizational ladder.
+
+## Personal resource experience — 2026.10.30.2
+
+Seed 69, 36,000 model days (100 years), eight founding pairs in each world,
+from the final source hashes in `docs/audits/2026-10-30-experience/bake-inputs.json`:
+
+| World | Year 100 population | Peak | Highest generation | Recorded outcome |
+|---|---:|---:|---:|---|
+| EDEN | 456 | 525 | 6 | 239 withdrawn; phase exploit; no extinction/reseed |
+| LAGOON | 36 | 36 | 6 | Six technologies, one camp, preserve lesson; no extinction/reseed |
+
+LAGOON reached fire, shelter, preservation, stone tools, fishing and predator
+hunting. Lore, agriculture, seacraft and writing were not reached in this arc.
+The predefined registry reported 12 supported, 1 contradicted and 4 undecided;
+the contradicted claim was complete EDEN post occupancy, not a software test.
+Registry support is not scientific validation. No human-universe fall occurred;
+forced lifecycle tests cover fresh founders and the separate inherited-tag rule.
+
+The run took 604.9 seconds on the workbench using Python 3.14.6. This is not
+2016 MacBook throughput. All 268 tests pass on Apple Python 3.9.6; 22 new causal
+cases cover local knowledge, outcomes, exploration, reload, maturation and
+nursing. The initial 120-day canonical EDEN comparison matches the previous
+release; later EDEN changes are expected from the maturation/nursing fixes.
+
+Population and generation figures have changed from the prior release because
+this version alters information, choices and physical/age contracts. The prior
+source/provenance remains a separate historical audit. This combined
+comparison does not isolate memory's population effect and is not a claim
+about historical human growth. Reproduce with:
+
+```sh
+python3 tools/lab.py --days 36000 --every 360 --json /your/scratch/arc.json
+python3 -m unittest discover -s tests
+```
 
 ## Audit release 2026.10.30.1
 

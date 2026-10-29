@@ -1,0 +1,24 @@
+[lab] genesis, seed 69
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tools/lab.py", line 247, in <module>
+    main()
+    ~~~~^^
+  File "/Volumes/Data/Projects/Universe69/tools/lab.py", line 158, in main
+    engine.tick_world(world, events)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Volumes/Data/Projects/Universe69/sim/engine.py", line 2619, in tick_world
+    (tick_eden if u["kind"] == "EDEN" else tick_lagoon)(u, rng, events)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Volumes/Data/Projects/Universe69/sim/engine.py", line 2242, in tick_lagoon
+    needs.meters(u, p, day, rng, needs.CONDITIONS["LAGOON"])
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Volumes/Data/Projects/Universe69/sim/needs.py", line 415, in meters
+    observe_sites(u, p)
+    ~~~~~~~~~~~~~^^^^^^
+  File "/Volumes/Data/Projects/Universe69/sim/needs.py", line 322, in observe_sites
+    for site in local:
+                ^^^^^
+  File "/Volumes/Data/Projects/Universe69/sim/needs.py", line 321, in <genexpr>
+    for site in cache[2].get((x//8+dx)*4096+y//8+dy, ()))
+                ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

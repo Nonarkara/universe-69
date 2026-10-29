@@ -1,6 +1,6 @@
 # UNIVERSE 69 — Design
 
-Two sealed worlds, observed side by side, running continuously on this laptop.
+Two sealed worlds, observed side by side, running continuously on the 2016 MacBook.
 The Observers (you + Claude) never intervene; they only provision (EDEN) and record.
 
 Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
@@ -17,6 +17,34 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
   or wake the engine computes `target_parts = clock.parts +
   (now − clock.epoch) / clock.seconds` and catches up. Pace changes preserve
   ticks already due. The universes age while the process is dead.
+
+## Engine 2026.10.30.2: personal resource experience
+
+**This changes existing run trajectories.** The shared brain now chooses from
+locally observed and remembered resources rather than consulting every reachable
+patch's current stock. This is bounded stock/location learning, not general
+cognition or learned harvesting skill. See RESEARCH.md, “Personal resource experience — primary human
+evidence”, for the primary experimental evidence and its limits.
+
+| Evidence / causal constraint | Implemented mechanic | Limits |
+|---|---|---|
+| Human food-location memory and sampled spatial rewards can guide later search (de Vries 2020; Wu 2018) | Each person records at most 24 nearby resource places, copying observed quantity, location, kind and model day. Physical use records actual source depletion, including food eaten on-site and water drunk before carrying | Six-tile connected-radius sight is illustrative, not occlusion/line-of-sight or a measured human range. Quantity observations are abstractions |
+| A past success cannot reveal current distant stock | Planning ranks all known sites by remembered quantity and travel cost. Beyond sight, estimates drift toward uncertainty over a 30-day scale; a remembered empty patch can be checked after 7 days without changing its actual reserve | Capacity, prior 25% fullness, cost weights and decay/revisit times are model choices. Actual gained units are audit evidence, not a learned action-value or skill bonus |
+| Resource encounters can guide subsequent local search (Hills 2013) | Hungry/thirsty people lacking known supplies scout nearby connected dry terrain. A 12-position trail contains actual visited positions, never intended destinations, and makes unfamiliar directions preferable | Local waypoint search is not general planning. It does not know unseen site coordinates or guarantee discovery/survival |
+| Knowledge must come from perception or experience | Perception continues during travel/work. Party and farm targets use known places; away workers remember camp inventories rather than reading current distant stocks | World-level technology and social knowledge remain shared abstractions. Hunt initiation detects within 6 tiles; existing active animal pursuit retains its separate 12-tile approximation |
+| Memories belong to the person who experienced them | New people and reseeded founders start with empty notes; migration supplies independent empty defaults without fabricating visits. JSON reload preserves subsequent choices | EDEN receives no inherited personal memory or new cross-iteration assistance; LAGOON's existing fixed lesson tags remain separate |
+
+Two existing physical/behavioral contract bugs are corrected in this version:
+`needs` supplies age in years, so its self-control adapter now converts to
+`minds` day units; mature fight choices therefore change. Milk-food now needs
+the same two-tile maternal proximity as milk-water, and both require connected
+land. These are model contact distances, not clinical measures. Both worlds’
+future trajectories can change; EDEN retains its provision/control conditions,
+not its earlier buggy fights or remote nursing.
+
+The century-per-real-day clock is unchanged. Older numerical arcs below are
+historical unless re-derived for 2026.10.30.2. Fresh quantitative results and
+source hashes belong in STUDY.md and the accompanying experience audit.
 
 ## Engine 2026.10.30.1: a tropical resource budget
 

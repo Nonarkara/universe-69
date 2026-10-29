@@ -1,0 +1,21 @@
+FF.
+======================================================================
+FAIL: test_food_cannot_arrive_from_a_distant_mother (test_experience.TestPhysicalNursing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_experience.py", line 228, in test_food_cannot_arrive_from_a_distant_mother
+    self.assertEqual(needs.eat(self.u,self.baby),0.)
+AssertionError: 6.0 != 0.0
+
+======================================================================
+FAIL: test_milk_food_and_water_cannot_bridge_a_strait (test_experience.TestPhysicalNursing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_experience.py", line 243, in test_milk_food_and_water_cannot_bridge_a_strait
+    self.assertEqual(needs.eat(self.u,self.baby),0.)
+AssertionError: 6.0 != 0.0
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+FAILED (failures=2)

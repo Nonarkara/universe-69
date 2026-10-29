@@ -1,0 +1,27 @@
+test_actual_empty_and_productive_attempts_change_the_next_choice (test_experience.TestExperience) ... ok
+test_arrival_learns_empty_and_actual_meal_even_without_carry (test_experience.TestExperience) ... ok
+test_away_camp_stock_changes_do_not_telepathically_update_the_worker (test_experience.TestExperience) ... ok
+test_different_experience_changes_the_same_needs_decision (test_experience.TestExperience) ... ok
+test_empty_farm_is_still_a_work_target_and_tending_is_not_a_harvest (test_experience.TestExperience) ... ok
+test_empty_memory_explores_local_dry_ground_without_site_knowledge (test_experience.TestExperience) ... ok
+test_empty_remote_memory_can_be_rechecked_without_observing_regrowth (test_experience.TestExperience) ... ok
+test_legacy_defaults_are_independent_and_json_persistent (test_experience.TestExperience) ... ok
+test_memory_is_bounded_and_new_people_do_not_inherit_it (test_experience.TestExperience) ... ok
+test_perception_updates_during_a_long_stint_not_only_when_choosing (test_experience.TestExperience) ... ok
+test_remote_depletion_does_not_update_belief_or_decision (test_experience.TestExperience) ... ok
+test_reseed_drops_personal_experience_but_keeps_the_existing_lesson_rule (test_experience.TestExperience) ... ok
+test_save_reload_preserves_the_next_decisions_and_world_trajectory (test_experience.TestExperience) ... ok
+test_unseen_party_target_cannot_override_a_persons_known_resource (test_experience.TestExperience) ... ok
+test_unseen_stock_is_not_a_known_destination (test_experience.TestExperience) ... ok
+test_urgent_scout_continues_a_trip_instead_of_retargeting_midway (test_experience.TestExperience) ... ok
+test_water_outcome_does_not_credit_drinking_a_previously_carried_load (test_experience.TestExperience) ... ok
+test_decision_adapter_converts_years_to_the_minds_day_units (test_experience.TestMaturation) ... ok
+test_maturation_changes_fight_selection_under_the_same_crowding (test_experience.TestMaturation) ... ok
+test_food_cannot_arrive_from_a_distant_mother (test_experience.TestPhysicalNursing) ... ok
+test_milk_food_and_water_cannot_bridge_a_strait (test_experience.TestPhysicalNursing) ... ok
+test_nearby_nursing_pays_the_mother_and_does_not_invent_a_site_visit (test_experience.TestPhysicalNursing) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.644s
+
+OK

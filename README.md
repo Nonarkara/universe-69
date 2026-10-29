@@ -144,7 +144,9 @@ stride follows actual leg size and distance travelled, with a shared stance
 law and frame-rate-independent movement. Sleeping arms now reach their pose,
 bedrolls fit their bodies, and age changes invalidate the sprite cache.
 
-Engine `2026.10.30.1` changes future trajectories. The century-per-day clock
+Engine `2026.10.30.2` changes future trajectories through personal resource
+knowledge, corrected fight-scoring age units and physical nursing contact;
+the earlier `2026.10.30.1` resource changes remain in force. The century-per-day clock
 preserves previously completed time when its pace changes. Existing
 `UNIVERSE69_SEC_PER_PART` overrides still take precedence; remove an old
 explicit override to use 0.6 seconds. A faster clock does not guarantee
@@ -158,3 +160,10 @@ This observer change does not change engine trajectories.
 
 The larger digital-human objective remains in progress; see
 [the capability audit](docs/audits/2026-10-30/capabilities.md).
+
+People now remember locally seen resource locations and quantities, learn
+from physical uses, and scout when known supplies are missing. They retain
+stale beliefs about distant patches and camp stores instead of reading those
+reserves instantly. Capacity and forgetting are explicit model assumptions;
+this is spatial resource learning, not general human cognition. Newborns and
+reseeded founders do not inherit another person's memories.

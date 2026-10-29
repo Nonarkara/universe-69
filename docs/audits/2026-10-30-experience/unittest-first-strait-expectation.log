@@ -1,0 +1,13 @@
+...........................................................................................................................................F...........................................................................................................................
+======================================================================
+FAIL: test_camp_pantry_and_water_cannot_bridge_a_strait (test_island_resources.IslandResources)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_island_resources.py", line 257, in test_camp_pantry_and_water_cannot_bridge_a_strait
+    self.assertIsNone(needs.water_target(u,p))
+AssertionError: (6, 7) is not None
+
+----------------------------------------------------------------------
+Ran 263 tests in 271.653s
+
+FAILED (failures=1)

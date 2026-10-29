@@ -273,13 +273,119 @@ def regrow_sites(u, days=1):
         s["left"] = min(s["max"], s["left"] + s["regrow"] * days * k)
 
 
+SIGHT = 6                  # tiles; an illustrative perception radius
+MEMORY_SITES = 24           # bounded personal notes, never inherited
+MEMORY_TRAIL = 12
+
+
+def _remember(u, p, site, gained=None):
+    memory = p.setdefault('experience', {'sites': [], 'trail': []})
+    notes = memory['sites']
+    key = site['x'], site['y'], site['kind']
+    note = next((m for m in notes if (m['x'], m['y'], m['kind']) == key), None)
+    if note is None:
+        note = {'x': key[0], 'y': key[1], 'kind': key[2], 'visits': 0, 'gained': None}
+    else:
+        notes.remove(note)
+    note.update(left=float(site['left']), max=float(site['max']), seen_day=u.get('day', 0))
+    if gained is not None:
+        note['gained'] = float(gained)
+        note['visits'] += 1
+    notes.append(note)
+    del notes[:-MEMORY_SITES]
+
+
+def observe_sites(u, p):
+    """Only nearby, connected resources become personal observations.
+
+    Notes copy numbers, not live site references. Their stock estimates remain
+    stale when the person leaves. A trail records actual positions, not plans.
+    """
+    memory = p.setdefault('experience', {'sites': [], 'trail': []})
+    trail = memory['trail']
+    x, y = p.get('x', 0), p.get('y', 0)
+    if not trail or (x-trail[-1][0])**2 + (y-trail[-1][1])**2 >= 9:
+        trail.append([x, y])
+        del trail[:-MEMORY_TRAIL]
+    from engine import terrain_of, same_land
+    terr = terrain_of(u) if u.get('kind') == 'LAGOON' else None
+    sites = u.get('sites') or []
+    cache = u.get('_perception_grid')
+    if cache is None or cache[0] is not sites or cache[1] != len(sites):
+        grid = {}
+        for site in sites:
+            grid.setdefault((site['x']//8)*4096+site['y']//8, []).append(site)
+        cache = (sites, len(sites), grid)
+        u['_perception_grid'] = cache
+    local = (site for dx in (-1,0,1) for dy in (-1,0,1)
+             for site in cache[2].get((x//8+dx)*4096+y//8+dy, ()))
+    for site in local:
+        if ((site['x']-x)**2 + (site['y']-y)**2 <= SIGHT*SIGHT
+                and (terr is None or same_land(terr, x, y, site['x'], site['y']))):
+            _remember(u, p, site)
+    st = camp_of(u,p)
+    if st is not None and at_camp(u,p):
+        memory['camp'] = {k:st.get(k,0.) for k in ('x','y','store','water','mouths')}
+
+
+def known_camp(u, p):
+    st = camp_of(u,p)
+    if st is None:
+        return None
+    if at_camp(u,p):
+        return st
+    memory = p.get('experience',{}).get('camp') or {}
+    return memory if (memory.get('x'),memory.get('y')) == (st['x'],st['y']) else {}
+
+
+def known_sites(u, p, kind, reach, empty=False):
+    """Belief views for planning; distant physical stocks are never consulted.
+
+    Old quantities tend toward uncertainty, not knowledge of regrowth. An
+    empty remembered patch may be checked again after seven model days.
+    """
+    observe_sites(u, p)
+    from engine import terrain_of, same_land
+    terr = terrain_of(u) if u.get('kind') == 'LAGOON' else None
+    for note in p['experience']['sites']:
+        if note['kind'] != kind:
+            continue
+        d2 = (note['x']-p['x'])**2 + (note['y']-p['y'])**2
+        if d2 >= reach*reach or (terr is not None and not same_land(terr, p['x'], p['y'], note['x'], note['y'])):
+            continue
+        age = max(0, u.get('day', 0)-note['seen_day'])
+        if not empty and note['left'] <= 0 and age < 7:
+            continue
+        belief = dict(note)
+        certainty = 30.0/(30.0+age)
+        belief['left'] = note['left']*certainty + note['max']*.25*(1-certainty)
+        yield belief, d2**.5
+
+
+def explore_target(u, p):
+    """Scout visible dry terrain, never an unseen resource's coordinates."""
+    observe_sites(u, p)
+    from engine import terrain_of, same_land
+    terr = terrain_of(u)
+    offsets = [(6,0),(4,4),(0,6),(-4,4),(-6,0),(-4,-4),(0,-6),(4,-4)]
+    turn = (p.get('id', 0)+u.get('day', 0)+u.get('part', 0)) % len(offsets)
+    offsets = offsets[turn:]+offsets[:turn]
+    choices = []
+    offsets += [(dx//2,dy//2) for dx,dy in offsets] + [(1,0),(0,1),(-1,0),(0,-1)]
+    for dx, dy in offsets:
+        x,y = p['x']+dx,p['y']+dy
+        if (0 < y < len(terr)-1 and 0 < x < len(terr[y])-1 and terr[y][x] != 2
+                and same_land(terr,p['x'],p['y'],x,y)):
+            novelty = min((x-a)**2+(y-b)**2 for a,b in p['experience']['trail'])
+            choices.append((novelty,(x,y)))
+    return max(choices, key=lambda v:v[0])[1] if choices else None
+
+
 def _field_to_work(u, p, reach):
     from engine import terrain_of, same_land
     terr = terrain_of(u)
     best, bd = None, reach * reach
-    for s in u.get("sites") or []:
-        if s["kind"] != "farm":
-            continue
+    for s, _ in known_sites(u, p, 'farm', reach, empty=True):
         d = (s["x"] - p.get("x", 0)) ** 2 + (s["y"] - p.get("y", 0)) ** 2
         if d < bd and same_land(terr,p["x"],p["y"],s["x"],s["y"]):
             best, bd = s, d
@@ -287,17 +393,16 @@ def _field_to_work(u, p, reach):
 
 
 def nearest_site(u, p, kind, reach):
-    """The best place of this kind within reach, by distance."""
+    """The best known place, balancing expected stock against travel."""
     best = None
     bd = reach * reach
-    from engine import terrain_of, same_land
-    terr = terrain_of(u) if u.get("kind") != "EDEN" else None
     px, py = p.get("x", 0), p.get("y", 0)
-    for s in u.get("sites") or []:
-        if s["kind"] != kind or s["left"] <= 0:
-            continue
+    utility = -1.0
+    for s, distance in known_sites(u, p, kind, reach):
         d = (s["x"] - px) ** 2 + (s["y"] - py) ** 2
-        if d < bd and (terr is None or same_land(terr, px, py, s["x"], s["y"])):
+        value = (0.2 + s['left']/max(1.,s['max']))/(1.+distance/SIGHT)
+        if value > utility:
+            utility = value
             bd = d
             best = s
     return best, (bd ** 0.5 if best else None)
@@ -307,6 +412,7 @@ def nearest_site(u, p, kind, reach):
 
 def meters(u, p, day, rng, cond):
     """Update the personal meters. Nobody else's body is touched."""
+    observe_sites(u, p)
     hun = p.get("hun", 0.0)
     ene = p.get("ene", 1.0)
     sol = p.get("sol", 1.0)
@@ -364,7 +470,7 @@ THIRST_MAX = 4.0
 WATER_CARRY = 12.0
 
 
-def drink(u, p):
+def drink(u, p, record=True):
     """Drink only water physically at hand, never ocean/lagoon saltwater."""
     if u.get("kind") == "EDEN":
         p["thirst"] = 0.0          # unlimited food AND water are its premise
@@ -377,6 +483,10 @@ def drink(u, p):
         byid = (u.get("_ctx") or {}).get("byid")
         mother = (byid.get(p.get("mom")) if byid is not None else
                   next((q for q in u.get("people", []) if q["id"] == p.get("mom")), None))
+        if mother is not None and u.get('kind') == 'LAGOON':
+            from engine import terrain_of, same_land
+            if not same_land(terrain_of(u), p['x'], p['y'], mother['x'], mother['y']):
+                mother = None
         if (mother is not None and mother not in (u.get("_ctx") or {}).get("dead", [])
                 and mother.get("thirst", 0.0) < 2.0 and
                 abs(mother["x"]-p["x"]) <= 2 and abs(mother["y"]-p["y"]) <= 2):
@@ -389,7 +499,8 @@ def drink(u, p):
         p["thirst"] -= got
         return got
     source = _site_at(u, p, "water")
-    if source is not None and source["left"] > 0:
+    used_source = source is not None and source['left'] > 0
+    if used_source:
         got = _take(source, thirst)
     else:
         st = camp_of(u, p)
@@ -397,18 +508,26 @@ def drink(u, p):
         if got:
             st["water"] -= got
     p["thirst"] -= got
+    if record and used_source:
+        _remember(u, p, source, got)
     return got
 
 
 def water_target(u, p):
     """A thirsty person returns to stored water, or visits a real bank."""
     st = camp_of(u, p)
-    if st and st.get("water", 0.0) > 0 and not at_camp(u, p):
+    observe_sites(u,p)
+    belief = known_camp(u,p)
+    if st and belief.get('water',0.) > 0 and not at_camp(u, p):
         from engine import terrain_of, same_land
         if same_land(terrain_of(u), p["x"], p["y"], st["x"], st["y"]):
             return _home_of(u, p)
     source, _ = nearest_site(u, p, "water", REACH["LAGOON"])
-    return (source["x"], source["y"]) if source is not None else None
+    if source is not None:
+        return source['x'], source['y']
+    if (p.get('a') in (1, 22) and (p.get('tx'), p.get('ty')) != (p['x'], p['y'])):
+        return p['tx'], p['ty']
+    return explore_target(u, p)
 
 
 def _workload(u, p):
@@ -534,24 +653,30 @@ def assign(u, p, day, rng, cond=None, engine=None):
     want_company = 1.0 - sol
 
     options = []   # (score, activity, target)
+    scout = None
 
     # --- fetching freshwater ----------------------------------------------
     if cond.get("must_work_to_eat") and a >= 12:
         st = camp_of(u, p)
-        mouths = max(1, st.get("mouths", len(u.get("people", [])))) if st else 1
-        lack = max(0.0, 1.0 - (st.get("water", 0.0) if st else 0) / (mouths * 2.0))
+        belief = known_camp(u,p) or {}
+        mouths = max(1, belief.get('mouths',1))
+        lack = max(0.0, 1.0 - belief.get('water',0.) / (mouths * 2.0))
         source, dist = nearest_site(u, p, "water", reach)
         if source is not None:
             urgency = max(p.get("thirst", 0.0), lack * 0.9)
             options.append((urgency * 1.8 * (1.0 - 0.3 * dist/reach), E.A_DRINK,
                             (source["x"], source["y"]), source))
+        elif max(p.get('thirst', 0), lack*.9) > .5:
+            scout = explore_target(u, p)
+            if scout is not None:
+                options.append((max(p.get('thirst', 0), lack*.9)*1.8, E.A_WALK, scout, None))
 
     # --- food from the wild ------------------------------------------------
     if cond.get("must_work_to_eat"):
         if _has(u, "stone_tools"):
             # the hunt: the nearest deer, wherever the herd has gone
             import animals
-            deer = animals.nearest(u, p, animals.DEER, reach)
+            deer = animals.nearest(u, p, animals.DEER, min(reach, SIGHT))
             if deer is not None:
                 dist = ((deer["x"] - p.get("x", 0)) ** 2 + (deer["y"] - p.get("y", 0)) ** 2) ** 0.5
                 # gathering feeds a band; meat is the prize, not the diet
@@ -560,12 +685,14 @@ def assign(u, p, day, rng, cond=None, engine=None):
                 if p.get("s") == "m" and 16 <= a <= 35:
                     score *= 1.3             # young men's prestige as much as meat
                 options.append((score, E.A_HUNT, (deer["x"], deer["y"]), None))
+        food_known = False
         for kind, act in (("plants", E.A_FORAGE), ("fish", E.A_FISH)):
             if kind == "fish" and not _has(u, "fishing"):
                 continue
             site, dist = nearest_site(u, p, kind, reach)
             if site is None:
                 continue
+            food_known = True
             # Hunger is the strongest thing in a body: going to get food
             # beats everything else when the belly is empty. Beyond that the
             # further it is, the less it is worth, and the more there is
@@ -574,6 +701,11 @@ def assign(u, p, day, rng, cond=None, engine=None):
             score *= 1.0 - 0.5 * (dist / float(reach))
             score *= 0.4 + 0.6 * (site["left"] / max(1.0, site["max"]))
             options.append((score, act, (site["x"], site["y"]), site))
+
+        if not food_known and want_food > .15 and a >= 12:
+            scout = scout or explore_target(u, p)
+            if scout is not None:
+                options.append((want_food*1.5, E.A_WALK, scout, None))
 
         if _has(u, "agriculture"):
             # a field wants work before it gives food: tend it while it
@@ -639,8 +771,9 @@ def assign(u, p, day, rng, cond=None, engine=None):
         # holds food, go where they went (the pull of company on the work)
         party = _party_of(u, p)
         if party is not None:
-            site = next((s for s in u.get("sites") or [] if s["x"] == party["x"]
-                         and s["y"] == party["y"] and s["left"] > 0), None)
+            kind = KIND_OF_ACT.get(party['a'])
+            site = next((s for s, _ in known_sites(u,p,kind,reach)
+                         if s['x'] == party['x'] and s['y'] == party['y']), None)
             if site is not None:
                 options.append((want_food * 2.0 + 0.2 * want_company, party["a"],
                                 (site["x"], site["y"]), site))
@@ -709,6 +842,8 @@ def assign(u, p, day, rng, cond=None, engine=None):
     p.pop("was", None)        # a fresh decision replaces any paused stint
     p["a"] = act
     p["ad"] = _duration(act, rng)
+    if act == E.A_WALK and scout is not None and target == scout:
+        p['ad'] = 0             # look again on arrival, not days of idling
     if target is not None:
         p["tx"], p["ty"] = target
     if site is not None:
@@ -756,10 +891,10 @@ def _aggression(p):
         return 0.5
 
 
-def _self_control(p, age):
+def _self_control(p, age_years):
     try:
         import minds
-        return minds.self_control(p, age)
+        return minds.self_control(p, age_years * minds.DAYS_PER_YEAR)
     except Exception:
         return 0.5
 
@@ -783,7 +918,7 @@ LARDER_DAYS = 4.0        # how many days of food a band likes to have in
 
 def larder_short(u, p):
     """How far the camp's store is from a few days' food: 0 full, 1 empty."""
-    st = camp_of(u, p)
+    st = known_camp(u, p)
     if st is None:
         return 0.0
     mouths = st.get("mouths") or 1
@@ -884,7 +1019,7 @@ def camp_store(u, p):
     if st is None:
         # EDEN: the resort's provision. It is free and it is always there.
         return 900.0
-    return st.get("store", 0.0)
+    return (known_camp(u,p) or {}).get("store", 0.0)
 
 
 def carry_food(p, amount, kind):
@@ -935,7 +1070,7 @@ def _pantry_at(u, p):
     return None
 
 
-def eat(u, p, age_years=None):
+def eat(u, p, age_years=None, record=True):
     """The reflex: a hungry body with food at hand eats it. Run every part
     for everybody. Infants are fed by their mothers, and the mother pays."""
     a = _age(u, p) if age_years is None else age_years
@@ -945,8 +1080,13 @@ def eat(u, p, age_years=None):
         byid = (u.get("_ctx") or {}).get("byid")
         m = (byid.get(p.get("mom")) if byid is not None else
              next((q for q in u.get("people", []) if q["id"] == p.get("mom")), None))
+        if m is not None and u.get('kind') == 'LAGOON':
+            from engine import terrain_of, same_land
+            if not same_land(terrain_of(u), p['x'], p['y'], m['x'], m['y']):
+                m = None
         if (m is not None and m not in (u.get("_ctx") or {}).get("dead", [])
-                and m.get("hun", 0.0) <= HUNGER_MAX * 0.75):
+                and m.get("hun", 0.0) <= HUNGER_MAX * 0.75
+                and abs(m['x']-p['x']) <= 2 and abs(m['y']-p['y']) <= 2):
             got = min(p["hun"], MEAL * 0.5)
             p["hun"] -= got
             m["hun"] = m.get("hun", 0.0) + got * NURSING_COST
@@ -969,6 +1109,8 @@ def eat(u, p, age_years=None):
         return 0.0
     got = _take(pantry, min(p["hun"], MEAL * body_capacity(p)))
     p["hun"] -= got
+    if record and pantry.get('kind') in ('plants', 'fish', 'farm'):
+        _remember(u,p,pantry,got)
     return got
 
 
@@ -985,14 +1127,17 @@ def fulfil(u, p, day, rng, act, E=None):
     cap = body_capacity(p)
 
     if act == E.A_DRINK:
-        drink(u, p)
-        source = _site_at(u, p, "water")
+        source = _site_at(u, p, 'water')
+        before = source['left'] if source is not None else 0.
+        drink(u, p, record=False)
+        got = 0.
         if source is not None and _age(u, p) >= 12:
             got = _take(source, max(0.0, WATER_CARRY - p.get("carry_water", 0.0)))
             p["carry_water"] = p.get("carry_water", 0.0) + got
             p["ad"] = 0          # fetching is a trip; bring the water home
-            return got
-        return 0.0
+        if source is not None:
+            _remember(u,p,source,before-source['left'])
+        return got
 
     if act == E.A_EAT and u.get("kind") == "EDEN":
         # the resort's hoppers: free, and always full. That is the premise.
@@ -1010,8 +1155,10 @@ def fulfil(u, p, day, rng, act, E=None):
             return 0
         if kind == "farm":
             site["worked"] = u.get("day", 0)
-        eat(u, p)                    # they eat there first, if hungry
+        before = site['left']
+        eat(u, p, record=False)       # they eat there first, if hungry
         got = _take(site, CARRY_PER_DAY * cap)
+        _remember(u,p,site,before-site['left'])
         if got <= 0 and kind == "farm":
             return 0                 # tending a field that is not yet ripe
         if got <= 0:

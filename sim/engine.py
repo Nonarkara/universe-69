@@ -30,7 +30,7 @@ GESTATION = 270
 # The version of the model. Determinism holds per (seed, day, part) only *within* one
 # version, so every published figure and every postmortem must say which
 # version produced it.
-ENGINE_VERSION = "2026.10.30.1"
+ENGINE_VERSION = "2026.10.30.2"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -2944,6 +2944,7 @@ def migrate(world):
             p.setdefault("hun", 0.0)
             p.setdefault("thirst", 0.0)
             p.setdefault("carry_water", 0.0)
+            p.setdefault("experience", {"sites": [], "trail": []})
             p.setdefault("ene", 1.0)          # the personal meters (needs.py)
             p.setdefault("sol", 0.7)
             p.setdefault("carry", 0.0)
