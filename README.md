@@ -18,8 +18,10 @@ seasons — nothing given, everything earned.
 
 ## Time
 
-Dawn, day, dusk and night take three real seconds each: twelve seconds per
-simulated day, twenty 360-day years per real day. The saved cumulative clock
+Dawn, day, dusk and night take 0.6 real seconds each: 2.4 seconds per
+simulated day, **100 simulated 360-day years per real day**. A millennium
+takes ten real days at this pace. Eight pairs found each world at day zero;
+their descendants replace them through actual births, aging and deaths. The saved cumulative clock
 catches up after sleep or restart. `UNIVERSE69_SEC_PER_PART` changes the pace
 without replaying completed time.
 
@@ -59,7 +61,7 @@ with scratch data under `/Volumes/Data/agent-scratch/`; never use live `data/`.
 ## Working on the model
 
 The live run advances through dawn, day, dusk and night: one part every
-three real seconds, twelve seconds per simulated day. Test changes with the
+0.6 real seconds, 2.4 seconds per simulated day. Test changes with the
 lab bench; century runs can take minutes, depending on population:
 
 ```sh
@@ -125,3 +127,25 @@ data/              state, events.ndjson, chronicles, postmortems (local)
 The simulation has no external dependencies or build step. The viewer uses
 the TERRARIUM palette, Jost for controls and Source Serif 4 for reading.
 `GRAPHICS.md` and `tests/test_style.py` define the rendering contract.
+
+
+## Island and people — 2026-10-30
+
+New LAGOON worlds use a Sri Lanka-inspired tropical coastal analogue: shared
+forest food patches, fish at actual shores, moving game, finite freshwater
+banks and cultivable land. People must reach and work their resources; a new
+camp cannot create another copy of a depleted patch. Wet/dry seasons change
+renewal. Existing saves retain their original terrain and seasonal regime.
+The map is procedural, not a surveyed replica; see RESEARCH.md for sources
+and the model's limits.
+
+The anatomy rig keeps age/sex proportions and fixed bone lengths. Walking
+stride follows actual leg size and distance travelled, with a shared stance
+law and frame-rate-independent movement. Sleeping arms now reach their pose,
+bedrolls fit their bodies, and age changes invalidate the sprite cache.
+
+Engine `2026.10.30.1` changes future trajectories. The century-per-day clock
+preserves previously completed time when its pace changes. Existing
+`UNIVERSE69_SEC_PER_PART` overrides still take precedence; remove an old
+explicit override to use 0.6 seconds. A faster clock does not guarantee
+survival or civilization: the current ladder ends at writing.

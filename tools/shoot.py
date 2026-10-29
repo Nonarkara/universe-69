@@ -7,6 +7,7 @@ Geometry checks detect clipping; screenshots still require independent review.
 Book/archive files are fetched from the real server, without test substitutes.
 """
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -35,6 +36,52 @@ BODY_PROJECTION = """() => ['e','l'].flatMap(k=>{
   return [{world:k,id:a.id,lying:lying,body:body,cardTop:r.top,sceneTop:scene.top,
     sceneBottom:scene.bottom,coveredByCard:covered,visible:inside&&!covered}];
 })"""
+
+
+
+def anatomy_diagnostic(page, out, tag, provenance=None):
+    """Actual drawing helpers; explicitly synthetic bodies, never model evidence."""
+    page.set_viewport_size({'width': 1440, 'height': 900})
+    page.wait_for_function('typeof drawSketch === "function"')
+    try:
+        result = page.evaluate("""() => {
+          var cv=document.createElement('canvas');cv.id='u69-anatomy-diagnostic';
+          cv.width=1440;cv.height=900;cv.style.cssText='position:fixed;inset:0;z-index:999999;width:1440px;height:900px';
+          document.body.appendChild(cv);var g=cv.getContext('2d');
+          g.fillStyle='#ede6d6';g.fillRect(0,0,1440,900);g.fillStyle='#14130f';
+          g.font='22px Jost, sans-serif';g.fillText('SYNTHETIC ANATOMY / MOTION DIAGNOSTIC — actual drawSketch()',24,34);
+          g.font='14px Jost, sans-serif';g.fillText('Adult male reference height 120 CSS px. Same world scale for all ages. Fixtures are not simulation records.',24,58);
+          var fixtures=[
+            {label:'Child, age 3',age:3,sex:0},{label:'Child, age 6',age:6,sex:1},
+            {label:'Adolescent, age 12',age:12,sex:0},{label:'Adult male, standing',age:30,sex:0},
+            {label:'Adult female, standing',age:30,sex:1},{label:'Elder male, age 70',age:70,sex:0},
+            {label:'Elder female, age 70',age:70,sex:1},{label:'Adult male, BMI 34',age:30,sex:0,bmi:34},
+            {label:'Adult female, BMI 14 / hunger 9',age:30,sex:1,bmi:14,hun:9},
+            {label:'Adult male, injury 7',age:30,sex:0,inj:7},
+            {label:'Male asleep, primitive bare ground',age:30,sex:0,sleep:true,bedding:false},
+            {label:'Female asleep, furnished reference',age:30,sex:1,sleep:true,bedding:true},
+            {label:'Walk profile, phase 0.00',age:30,sex:0,move:true,phase:0},
+            {label:'Walk profile, phase 0.20',age:30,sex:0,move:true,phase:.2},
+            {label:'Walk profile, phase 0.50',age:30,sex:0,move:true,phase:.5},
+            {label:'Walk profile, phase 0.80',age:30,sex:0,move:true,phase:.8},
+            {label:'Walk front, phase 0.20',age:30,sex:0,move:true,phase:.2,view:1},
+            {label:'Walk back, phase 0.20',age:30,sex:1,move:true,phase:.2,view:2}];
+          fixtures.forEach((f,i)=>{
+            var x=(i%6)*240,y=86+Math.floor(i/6)*263;
+            g.fillStyle='#14130f';g.font='13px Jost, sans-serif';g.fillText(f.label,x+12,y+20);
+            g.strokeStyle='#c2baab';g.lineWidth=1;g.beginPath();g.moveTo(x+12,y+205);g.lineTo(x+228,y+205);g.stroke();
+            drawSketch(g,x+120,y+204,120/32,f.sleep?A_SLEEP:A_WALK,f.phase||0,!!f.move,1,
+              bodyOf(Object.assign({bmi:22,sn:5},f)),f.sex,'',0,f.view||0,f.bedding);
+          });
+          return {synthetic:true,adultReferenceHeight:120,fixtures:fixtures,
+            actualGait:{sweep:WALK_SWEEP,stance:WALK_STANCE,buckets:WALK_BUCKETS,
+              referenceWalker:walkerOf({id:7,age:30,sex:0,bmi:22,sn:5,inj:0})}};
+        }""")
+        result['provenance'] = provenance
+        page.screenshot(path=str(out / f'{tag}-anatomy-diagnostic.png'))
+        (out / f'{tag}-anatomy-diagnostic.json').write_text(json.dumps(result, indent=2)+'\n')
+    finally:
+        page.evaluate("document.getElementById('u69-anatomy-diagnostic')?.remove()")
 
 
 def geometry(page):
@@ -167,9 +214,15 @@ def audit_pages(page, name, check, item):
 
 
 def verify_helpers(page, check, item):
-    terrain = json.loads((Path(__file__).resolve().parent.parent / 'web/archive/first-run-snapshot.json').read_text())['world']
-    results = page.evaluate("""worldPayload => {
-      var out={}, savedDraw=drawMating, savedCache=pairCache, savedCount=pairCount;
+    archive = json.loads((Path(__file__).resolve().parent.parent / 'web/archive/first-run-snapshot.json').read_text())
+    terrain = archive['world']
+    results = page.evaluate("""fixture => {
+      var worldPayload=fixture.world;
+      var years=state.pace&&+state.pace.years_per_real_day;
+      var expectedPace=years>0?(+years.toPrecision(3))+" years / real day · observed, never helped":"two sealed worlds · observed, never helped";
+      var out={eventYearsPresent:(state.events||[]).every(e=>Number.isFinite(e.y)),clockMatchesRuntime:document.getElementById('pace').textContent===expectedPace,
+        waterActionLabel:ACT_LABEL[22]==='fetching water'},
+        savedDraw=drawMating, savedCache=pairCache, savedCount=pairCount;
       try{
         drawMating=function(){};pairCache={};pairCount=0;
         var m={age:30,bmi:22,sn:5,inj:0,preg:0,hun:0,carry:0,infant:0,sex:0,v:1};
@@ -184,41 +237,132 @@ def verify_helpers(page, check, item):
         out.adultGate=!bodyOf({age:17}).adult && bodyOf({age:18}).adult && !bodyOf({}).adult;
       }finally{drawMating=savedDraw;pairCache=savedCache;pairCount=savedCount;}
       var names=['actors6','actors9','edenSize','terrainKey9','sel','diary','diaryWho','diaryLast',
-        'cam','shots','hudCache','ground','view','parts6','parts9','birds9'];
+        'cam','shots','hudCache','ground','view','parts6','parts9','birds9','worldInfo','fields9','wild9','wildById'];
       var saved={};names.forEach(n=>saved[n]=window[n]);
-      var cards=['card6','card9'].map(id=>{var e=document.getElementById(id);return [e,e.className,Array.from(e.childNodes),e.getAttribute('style')];});
+      var cards=['card6','card9'].map(id=>{var e=document.getElementById(id);return [e,e.className,Array.from(e.childNodes),e.getAttribute('style'),e.personPager,e.cardSignature];});
       var walk=document.getElementById('walkbtn'),walkClass=walk.className;
       try{
         actors6={1:{id:1}};actors9={1:{id:1}};edenSize=48;terrainKey9='old';
         sel={e:1,l:1};diary={e:['old'],l:['old']};diaryWho={e:1,l:1};diaryLast={e:'old',l:'old'};
         cam=JSON.parse(JSON.stringify(saved.cam));shots=JSON.parse(JSON.stringify(saved.shots));
         ['e','l'].forEach(k=>{cam[k].mode='follow';cam[k].follow=1;cam[k].placed=1;shots[k].until=999;shots[k].camp={};});
-        hudCache={e:'old',l:'old'};ground={e:{},l:{}};view={e:{},l:{}};parts6=[{}];parts9=[{}];birds9={};
+        wild9=[{old:true}];wildById={1:{old:true}};worldInfo={old:true};hudCache={e:'old',l:'old'};ground={e:{},l:{}};view={e:{},l:{}};parts6=[{}];parts9=[{}];birds9={};
         resetIteration('e');resetIteration('l');
         out.reseedClearsIdentity=!Object.keys(actors6).length&&!Object.keys(actors9).length&&
           !sel.e&&!sel.l&&!diary.e.length&&!diary.l.length&&!diaryWho.e&&!diaryWho.l&&
           diaryLast.e===''&&diaryLast.l==='';
+        out.reseedClearsWorldInfo=worldInfo===null;
+        out.reseedClearsWildlife=wild9.length===0&&Object.keys(wildById).length===0;
         out.reseedClearsCamera=['e','l'].every(k=>cam[k].mode==='auto'&&!cam[k].follow&&!cam[k].placed&&
           shots[k].until===0&&!shots[k].camp&&!ground[k]&&!view[k]&&hudCache[k]==='')&&
           !parts6.length&&!parts9.length&&!birds9&&edenSize===0&&terrainKey9===null;
-      }finally{names.forEach(n=>window[n]=saved[n]);cards.forEach(c=>{c[0].className=c[1];c[0].replaceChildren(...c[2]);if(c[3]===null)c[0].removeAttribute('style');else c[0].setAttribute('style',c[3]);});walk.className=walkClass;}
-      names=['SNAP','terrainInput9','mirrorTerrainKey9','mirrorIteration9','terrainKey9','terr9','heat9','pathsSeq','ground','water9'];
+      }finally{names.forEach(n=>window[n]=saved[n]);cards.forEach(c=>{c[0].className=c[1];c[0].replaceChildren(...c[2]);if(c[4]===undefined)delete c[0].personPager;else c[0].personPager=c[4];if(c[5]===undefined)delete c[0].cardSignature;else c[0].cardSignature=c[5];if(c[3]===null)c[0].removeAttribute('style');else c[0].setAttribute('style',c[3]);});walk.className=walkClass;}
+      names=['SNAP','terrainInput9','mirrorTerrainKey9','mirrorIteration9','terrainKey9','terr9','heat9','pathsSeq','ground','water9','fields9'];
       saved={};names.forEach(n=>saved[n]=window[n]);var oldS=LAGOON_WORLD.S;
       try{
         SNAP='verification';terrainInput9=null;terrainKey9=null;ground=Object.assign({},saved.ground);
         var st={world:JSON.parse(JSON.stringify(worldPayload))},u={iter:worldPayload.lagoon_iter};
-        compose9(u,st);var heat=heat9,marker={cached:true};heat[0]=1234;ground.l=marker;
+        compose9(u,st);var heat=heat9,marker={cached:true},fieldMarker={cachedFields:true};heat[0]=1234;ground.l=marker;fields9=fieldMarker;
         compose9(Object.assign({},u),JSON.parse(JSON.stringify(st)));
-        out.mirrorTerrainReuse=heat9===heat&&heat9[0]===1234&&ground.l===marker;
+        out.mirrorTerrainReuse=heat9===heat&&heat9[0]===1234&&ground.l===marker&&fields9===fieldMarker;
         var next=JSON.parse(JSON.stringify(st));next.world.lagoon_iter++;
         compose9({iter:u.iter+1},next);
         out.mirrorIterationInvalidates=heat9!==heat&&heat9[0]===0&&ground.l===null;
+        out.mirrorIterationInvalidatesFields=fields9===null;
       }finally{names.forEach(n=>window[n]=saved[n]);LAGOON_WORLD.S=oldS;}
+      var savedEvents=conEvents,savedPage=pagers.rec?pagers.rec.i:0,savedFilter=conFilter;
+      try{
+        conFilter={u:'all',k:'all'};conEvents=[fixture.event];updateRecords(null);
+        out.recordNullPreserves=conEvents.length===1&&conEvents[0]===fixture.event;
+        updateRecords([]);
+        out.recordEmptyAuthoritative=conEvents.length===0&&!document.querySelector('#reclines .row');
+        var literal='<i data-record-probe>literal</i>';
+        updateRecords([{d:0,y:literal,u:'EDEN',t:literal,msg:'UI-only record metadata regression'}]);
+        out.recordMetadataLiteral=!document.querySelector('#reclines [data-record-probe]')&&document.getElementById('reclines').textContent.includes(literal);
+      }finally{conEvents=savedEvents;conFilter=savedFilter;updateRecords(null);if(pagers.rec)pagers.rec.go(savedPage);}
       return out;
-    }""", terrain)
+    }""", {'world': terrain, 'event': archive['events'][0]})
     item['helperRegressions'] = results
     for name, passed in results.items():
         check(passed, f'Viewer helper regression: {name}')
+
+
+
+def verify_body_motion(page, check, item):
+    result = page.evaluate("""() => {
+      var out={},details={},savedDraw=drawSketch,savedCache=spriteCache,savedCount=spriteCount;
+      try{
+        drawSketch=function(){};spriteCache={};spriteCount=0;
+        var a={id:7,age:57,sex:0,bmi:22,sn:5,v:1},b=Object.assign({},a,{age:58});
+        var first=figureSprite(a,A_WALK,0,false,2,'');
+        out.stageCacheReuse=figureSprite(a,A_WALK,0,false,2,'')===first;
+        out.beddingCacheDistinct=figureSprite(a,A_WALK,0,false,2,'',false)!==first;
+        out.stageCacheDistinct=bodyOf(a).ab===bodyOf(b).ab && bodyOf(a).stage!==bodyOf(b).stage &&
+          figureSprite(b,A_WALK,0,false,2,'')!==first;
+      }finally{drawSketch=savedDraw;spriteCache=savedCache;spriteCount=savedCount;}
+      var segments=[['hipL','kneeL','ankL','thigh','shin'],['hipR','kneeR','ankR','thigh','shin'],
+        ['shL','elbL','wriL','upper','fore'],['shR','elbR','wriR','upper','fore']];
+      function boneError(J,D){return Math.max(...segments.flatMap(([r,m,e,a,b])=>[
+        Math.abs(Math.hypot(J[m][0]-J[r][0],J[m][1]-J[r][1])-D[a]),
+        Math.abs(Math.hypot(J[e][0]-J[m][0],J[e][1]-J[m][1])-D[b])]));}
+      var oldRig=buildRig,stop={probe:true},sleep=[];
+      try{
+        buildRig=function(P,D,v){var J=oldRig(P,D,v);sleep.push({scale:scale,age:age,sex:sex,
+          keepsArms:!!P.keepArms,wristY:J.wriR[1],headY:J.head[1],headRadius:D.hr,
+          shoulderY:J.shR[1],boneError:boneError(J,D)});throw stop;};
+        for(var age of [6,18,58])for(var sex of [0,1])for(var scale of [.2,2]){
+          try{drawSketch(null,0,0,scale,A_SLEEP,.2,false,1,bodyOf({age:age,bmi:22,sn:5}),sex,'',0,0);}
+          catch(e){if(e!==stop)throw e;}
+        }
+      }finally{buildRig=oldRig;}
+      var stands=[];
+      try{
+        buildRig=function(P,D,v){var J=oldRig(P,D,v);stands.push({rest:!!P.rest,
+          left:J.ankL,right:J.ankR,pelvis:J.pelvis,boneError:boneError(J,D)});throw stop;};
+        for(var phase of [0,.2,.5,.8]){
+          try{drawSketch(null,0,0,2,A_WALK,phase,false,1,bodyOf({age:30,bmi:22,sn:5}),0,'',0,0);}
+          catch(e){if(e!==stop)throw e;}
+        }
+      }finally{buildRig=oldRig;}
+      details.standing=stands;
+      out.standingFeetFixed=stands.length===4&&stands.every(s=>s.rest&&s.boneError<1e-5&&
+        Math.abs(s.left[1]-31.2)<.002&&Math.abs(s.right[1]-31.2)<.002&&
+        JSON.stringify(s.left)===JSON.stringify(stands[0].left)&&
+        JSON.stringify(s.right)===JSON.stringify(stands[0].right));
+      details.sleep=sleep;
+      out.sleeperArmsNearAndFar=sleep.length===12&&sleep.every(s=>s.keepsArms&&
+        s.wristY<s.shoulderY+2&&Math.abs(s.wristY-s.headY)<s.headRadius+3);
+      out.sleeperBones=sleep.every(s=>s.boneError<1e-5);
+      var walks=[];
+      for(var age of [3,6,12,17,18,30,58,70])for(var sex of [0,1]){
+        var a={id:7,age:age,sex:sex,bmi:22,sn:5,inj:0},B=bodyOf(a),D=rigDims(B,sex),
+          Hs=STATURE[B.ab]*(sex===1?1-.07*D.dm:1),w=walkerOf(a),K=1.45/32*Hs;
+        var xs=[],ys=[],err=0;
+        for(var j=1;j<60;j++){
+          var ph=j/100,J=buildRig(solvePose(A_WALK,ph,true,0),D,0);
+          xs.push(w.stride*ph+J.ankL[0]*K);ys.push(J.ankL[1]*K);err=Math.max(err,boneError(J,D));
+        }
+        walks.push({age:age,sex:sex,groundDrift:Math.max(...xs)-Math.min(...xs),
+          verticalDrift:Math.max(...ys)-Math.min(...ys),boneError:err});
+      }
+      details.walks=walks;
+      out.plantedFootFixed=walks.every(w=>w.groundDrift<.0002&&w.verticalDrift<.0002);
+      out.walkBones=walks.every(w=>w.boneError<1e-5);
+      function motion(fps){
+        var map={};[7,18,31].forEach(id=>map[id]={id:id,age:id===18?70:30,sex:id%2,
+          bmi:22,sn:5,inj:0,x:10,y:10,tx:17,ty:12,act:A_WALK,face:1});
+        for(var i=0;i<fps*2;i++)updateActors(map,null,48,1/fps);
+        return Object.values(map).map(a=>({id:a.id,x:a.x,y:a.y,vx:a.vx,vy:a.vy,
+          dist:a.dist,walkc:a.walkc,moving:a.moving,wait:a.wait}));
+      }
+      var slow=motion(30),fast=motion(60);details.motion30=slow;details.motion60=fast;
+      out.equalWallTimeMotion=JSON.stringify(slow)===JSON.stringify(fast);
+      out.individualMotion=slow[0].dist!==slow[1].dist&&slow[0].walkc!==slow[2].walkc;
+      return {checks:out,measurements:details};
+    }""")
+    item['bodyMotionRegressions'] = result
+    for name, passed in result['checks'].items():
+        check(passed, f'Body/motion regression: {name}')
 
 
 def stress_pagination(page, check, item):
@@ -524,12 +668,24 @@ def drive(page, shot, check, item):
     page.keyboard.press('Escape')
     check(page.evaluate("cam.e.mode==='auto' && cam.l.mode==='auto'"), 'Escape leaves walk mode')
 
+    # Actual model terrain, viewed at the existing island rung.
+    # Centre the documentary camera on its recorded world, never invented geography.
+    page.evaluate("""() => {
+      activeWorld='l';cam.l.mode='manual';cam.l.tx=cam.l.ty=LAGOON_WORLD.S/2;
+    }""")
+    page.keyboard.press('1')
+    page.wait_for_function('Math.abs(cam.l.h-cam.l.th)<0.05', timeout=15000)
+    shot('island-overview')
+    page.keyboard.press('Escape')
+
     pending = []
     hold = True
 
     def bad_state(route):
         if hold:
             pending.append(route)
+        elif page.evaluate('Boolean(window.__u69RetryRequested)'):
+            route.fallback()
         else:
             route.fulfill(status=200, content_type='application/json', body='{}')
 
@@ -547,9 +703,17 @@ def drive(page, shot, check, item):
     check(page.evaluate("document.activeElement.id==='retry'"), 'Failure takes focus above the open Book')
     focus_check(page, 'fail', check)
     shot('error')
-    page.unroute('**/state', bad_state)
+    # Keep automatic polling in the failed state until the actual click.
+    # Unrouting before click lets a 600ms poll heal and hide the target first.
+    page.evaluate("""() => {
+      document.getElementById('retry').addEventListener('click',function(){
+        window.__u69RetryRequested=true;
+      },{capture:true,once:true});
+    }""")
     page.locator('#retry').click()
     page.wait_for_function("document.getElementById('fail').hidden")
+    page.unroute('**/state', bad_state)
+    page.evaluate('delete window.__u69RetryRequested')
     check(page.locator('#fail').is_hidden(), 'RETRY recovers the real snapshot')
     check(page.evaluate("document.getElementById('book').contains(document.activeElement)"),
           'Recovery returns focus to the still-open Book')
@@ -564,6 +728,7 @@ def main():
     ap.add_argument('--wait', type=float, default=6.0)
     ap.add_argument('--fixture', type=Path, help='Snapshot JSON, or object with state/world payloads')
     ap.add_argument('--source', type=Path, help='Preserved HTML for before/after comparison; assets stay real')
+    ap.add_argument('--diagnostic-only', action='store_true', help='Capture explicitly synthetic anatomy/motion fixtures only')
     ap.add_argument('--interact', action='store_true', help='Exercise dialogs, every reader page and camera controls')
     args = ap.parse_args()
     out = Path(args.out).expanduser().resolve()
@@ -574,12 +739,28 @@ def main():
     fixture = json.loads(args.fixture.read_text()) if args.fixture else None
     if fixture and 'state' not in fixture:
         fixture = {'state': fixture, 'world': fixture.get('world')}
+    if fixture and any(not isinstance(e.get('y'), (int, float)) for e in fixture['state'].get('events', [])):
+        ap.error('Fixture events must use the server event contract, including numeric y (year)')
     report = {'url': args.url, 'fixture': str(args.fixture) if args.fixture else None,
+              'fixtureSHA256': hashlib.sha256(args.fixture.read_bytes()).hexdigest() if args.fixture else None,
               'source': str(args.source) if args.source else None, 'viewports': [], 'failures': []}
     path = out / f'{args.tag}-report.json'
     with sync_playwright() as pw:
         browser = pw.chromium.launch(channel='chrome', args=['--disable-dev-shm-usage',
             '--disable-background-timer-throttling', '--disable-renderer-backgrounding'])
+        if args.diagnostic_only:
+            try:
+                ctx = browser.new_context()
+                if args.source:
+                    ctx.route(args.url, lambda r: r.fulfill(status=200, content_type='text/html', body=args.source.read_text()))
+                page = ctx.new_page()
+                response = page.goto(args.url, wait_until='load', timeout=30000)
+                provenance = {'sourcePath': str(args.source) if args.source else args.url,
+                              'actualHTMLSHA256': hashlib.sha256(response.body()).hexdigest()}
+                anatomy_diagnostic(page, out, args.tag, provenance)
+            finally:
+                browser.close()
+            return 0
         try:
             for w, h in WIDTHS:
                 ctx = browser.new_context(viewport={'width': w, 'height': h}, device_scale_factor=1)
@@ -590,22 +771,25 @@ def main():
                 if args.source:
                     ctx.route(args.url, lambda r: r.fulfill(status=200, content_type='text/html', body=args.source.read_text()))
                 page = ctx.new_page()
-                errors, checks = [], []
+                errors, checks, request_failures = [], [], []
                 page.on('pageerror', lambda e: errors.append(str(e)))
-                page.on('console', lambda m: errors.append(m.text) if m.type == 'error' else None)
+                page.on('console', lambda m: errors.append(m.text+' ['+m.location.get('url', '')+']') if m.type == 'error' else None)
+                page.on('requestfailed', lambda r: request_failures.append({'url': r.url, 'failure': r.failure}))
 
                 def check(ok, label):
                     checks.append({'check': label, 'passed': bool(ok)})
                     if not ok:
                         report['failures'].append(f'{w}x{h}: {label}')
 
-                item = {'width': w, 'height': h, 'checks': checks, 'errors': errors}
+                item = {'width': w, 'height': h, 'checks': checks, 'errors': errors, 'requestFailures': request_failures}
                 report['viewports'].append(item)
                 stem = f'{args.tag}-{w}x{h}'
                 shot = lambda state: screenshot(page, out, stem, state, item, check)
                 try:
-                    page.goto(args.url, wait_until='load', timeout=30000)
+                    response = page.goto(args.url, wait_until='load', timeout=30000)
+                    item['htmlSHA256'] = hashlib.sha256(response.body()).hexdigest()
                     page.wait_for_function('state && view.e && view.l')
+                    item['engine'] = page.evaluate('state.engine')
                     page.wait_for_timeout(int(args.wait*1000))
                     info = item['geometry'] = geometry(page)
                     item['screenshot'] = shot('world')
@@ -620,16 +804,28 @@ def main():
                           'Both canvases render full-resolution pixels')
                     if args.interact:
                         verify_helpers(page, check, item)
+                        verify_body_motion(page, check, item)
                         drive(page, shot, check, item)
+                    item['fontReadiness'] = page.evaluate("""() => ({
+                      jost:document.fonts.check('13px Jost'),
+                      sourceSerif:document.fonts.check('17px "Source Serif 4"'),
+                      faces:Array.from(document.fonts).map(f=>({family:f.family,weight:f.weight,style:f.style,status:f.status}))
+                    })""")
                     check(not errors, 'No browser errors')
                 except Exception as exc:
                     report['failures'].append(f'{w}x{h}: {exc}')
                     item['exception'] = str(exc)
                     page.screenshot(path=str(out/f'{stem}-failure.png'))
                 finally:
+                    ctx.close()
+                    # Frame/observer errors can arrive while the context closes.
+                    # Include them in the outcome rather than only in its log.
+                    for entry in checks:
+                        if entry['check'] == 'No browser errors' and entry['passed'] and errors:
+                            entry['passed'] = False
+                            report['failures'].append(f'{w}x{h}: Late browser errors')
                     path.write_text(json.dumps(report, indent=2)+'\n')
                     print(f'{w}x{h}: {sum(c["passed"] for c in checks)}/{len(checks)} checks', flush=True)
-                    ctx.close()
         finally:
             path.write_text(json.dumps(report, indent=2)+'\n')
             browser.close()

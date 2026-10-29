@@ -147,35 +147,88 @@ def make_sites(u, rng=None, camps=None):
                           "max": 900.0, "regrow": 0.0, "provisioned": True,
                           "id": i})
         return sites
-    # LAGOON: wild places, taken from the ground the band actually lives
-    # on — near the camp, not scattered across an island nobody walks.
+    # Physical patches belong to the land, not to camps or their RNG.
+    # One representative patch per habitat cell bounds local food; a new
+    # settlement can reach an existing stock but cannot create another one.
     from engine import terrain_of
     terr = terrain_of(u)
+    n = len(terr)
     sites = []
-    kinds = ((1, "plants", 150.0, 12.0),   # woods: berries
-             (3, "fish", 180.0, 10.0))     # the shallows
-    # (game is not a place: it is the herds in animals.py, which move)
-    for i, st in enumerate(u.get("settlements") or []):
-        if camps is not None and i not in camps:
-            continue
-        cx, cy = st["x"], st["y"]
-        for kind_id, kind, amount, regrow in kinds:
-            spots = []
-            for r in range(4, 34, 3):
-                for a in range(0, 360, 20):
-                    x = int(cx + r * _cos(a)) + rng.randint(-1, 1)
-                    y = int(cy + r * _sin(a)) + rng.randint(-1, 1)
-                    if 2 <= x < len(terr) - 2 and 2 <= y < len(terr) - 2 \
-                            and terr[y][x] == kind_id:
-                        spots.append((x, y))
-                if len(spots) >= 8:
-                    break
-            rng.shuffle(spots)
-            for x, y in spots[:8]:
-                sites.append({"x": x, "y": y, "kind": kind, "left": amount,
-                              "max": amount, "regrow": regrow,
-                              "provisioned": False, "st": i})
+    for by in range(2, n - 2, 8):
+        for bx in range(2, n - 2, 8):
+            woods, shores = [], []
+            for y in range(by, min(by + 8, n - 2)):
+                for x in range(bx, min(bx + 8, n - 2)):
+                    if terr[y][x] == 1:
+                        woods.append((x, y))
+                    if terr[y][x] == 3 and any(terr[y+dy][x+dx] == 2
+                            for dx, dy in ((1,0), (-1,0), (0,1), (0,-1))):
+                        shores.append((x, y))
+            for spots, kind, amount, regrow in ((woods, "plants", 90., 3.),
+                                               (shores, "fish", 120., 2.)):
+                if spots:
+                    x, y = spots[len(spots)//2]
+                    sites.append({"x": x, "y": y, "kind": kind, "left": amount,
+                                  "max": amount, "regrow": regrow, "provisioned": False})
+    sites.extend(water_sources(u))
     return sites
+
+
+def water_sources(u):
+    """Inland rain-fed freshwater banks, separately identified from saltwater.
+
+    Their sites abstract small catchments/seeps on dry land; they do not
+    change saved terrain or claim a hydrological survey. Rainfall replenishes
+    a finite shared reserve, which a person must visit to drink or fetch.
+    """
+    from engine import terrain_of
+    terr = terrain_of(u)
+    n = len(terr)
+    sites = []
+    for by in range(2, n-2, 24):
+        for bx in range(2, n-2, 24):
+            candidates = [(x, y) for y in range(by, min(by+24, n-2))
+                          for x in range(bx, min(bx+24, n-2))
+                          if terr[y][x] in (0,1) and all(
+                              terr[y+dy][x+dx] != 2 for dx,dy in
+                              ((2,0),(-2,0),(0,2),(0,-2)))]
+            if candidates:
+                x, y = min(candidates, key=lambda q: (q[0]-bx-12)**2 + (q[1]-by-12)**2)
+                sites.append({"x":x, "y":y, "kind":"water", "left":180.,
+                              "max":180., "regrow":24., "provisioned":False})
+    return sites
+
+
+def reconcile_sites(u):
+    """Repair legacy per-camp duplicates without refilling depleted stocks."""
+    if u.get("resource_version") == 2:
+        return
+    merged = {}
+    from engine import terrain_of
+    terr = terrain_of(u)
+    n = len(terr)
+    for source in u.get("sites") or []:
+        s = dict(source)
+        x,y,kind = s["x"],s["y"],s["kind"]
+        if kind == "game":
+            continue
+        if kind == "fish" and not (1 <= x < n-1 and 1 <= y < n-1 and
+                terr[y][x] != 2 and any(terr[y+dy][x+dx] == 2
+                  for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)))):
+            continue
+        key = (x,y,kind)
+        s.pop("st", None)
+        if key in merged:
+            merged[key]["left"] = min(merged[key]["left"], s["left"])
+        else:
+            merged[key] = s
+    if merged or u.get("sites"):
+        for s in water_sources(u):
+            merged.setdefault((s["x"],s["y"],s["kind"]), s)
+        u["sites"] = list(merged.values())
+    else:
+        u["sites"] = make_sites(u)
+    u["resource_version"] = 2
 
 
 FARM_YIELD = 10.0        # what a worked field gives back in a growing day
@@ -183,17 +236,11 @@ FARM_HOLD = 160.0        # what a field holds at harvest
 
 
 def ensure_sites(u, rng=None):
-    if not u.get("sites"):
-        u["sites"] = make_sites(u, rng)
-    if any(s["kind"] == "game" for s in u["sites"]):
-        # a world saved before animals.py had game as fixed places
-        u["sites"] = [s for s in u["sites"] if s["kind"] != "game"]
-    if u.get("kind") != "EDEN":
-        # a camp founded later finds the wild places around its own hearths
-        have = {s.get("st", 0) for s in u["sites"] if s["kind"] != "farm"}
-        new = [i for i in range(len(u.get("settlements") or [])) if i not in have]
-        if new:
-            u["sites"].extend(make_sites(u, rng, camps=set(new)))
+    if u.get("kind") == "EDEN":
+        if not u.get("sites"):
+            u["sites"] = make_sites(u, rng)
+    else:
+        reconcile_sites(u)
     # every tilled field is a place that holds food once it is sown
     have = {(s["x"], s["y"]) for s in u["sites"] if s["kind"] == "farm"}
     for fx, fy in u.get("farms") or []:
@@ -212,13 +259,13 @@ def regrow_sites(u, days=1):
     world's, not the band's.
     """
     from engine import lagoon_season
-    plant_mult, fish_mult, winter = lagoon_season(u.get("day", 0))
+    plant_mult, fish_mult, winter = lagoon_season(u.get("day", 0), u.get("terrain_version", 1) >= 2)
     dry = 0.3 if u.get("drought", 0) > 0 else 1.0
     for s in u.get("sites") or []:
         if s.get("provisioned"):
             continue
         season = fish_mult if s["kind"] == "fish" else plant_mult
-        k = season * (dry if s["kind"] in ("plants", "farm") else 1.0)
+        k = season * (dry if s["kind"] in ("plants", "farm", "water") else 1.0)
         if s["kind"] == "farm":
             # a field grows only if it was worked: tending is the sowing
             k *= 1.0 if s.get("worked") is not None and s["worked"] >= u.get("day", 0) - 30 else 0.0
@@ -227,12 +274,14 @@ def regrow_sites(u, days=1):
 
 
 def _field_to_work(u, p, reach):
+    from engine import terrain_of, same_land
+    terr = terrain_of(u)
     best, bd = None, reach * reach
     for s in u.get("sites") or []:
         if s["kind"] != "farm":
             continue
         d = (s["x"] - p.get("x", 0)) ** 2 + (s["y"] - p.get("y", 0)) ** 2
-        if d < bd:
+        if d < bd and same_land(terr,p["x"],p["y"],s["x"],s["y"]):
             best, bd = s, d
     return best
 
@@ -241,12 +290,14 @@ def nearest_site(u, p, kind, reach):
     """The best place of this kind within reach, by distance."""
     best = None
     bd = reach * reach
+    from engine import terrain_of, same_land
+    terr = terrain_of(u) if u.get("kind") != "EDEN" else None
     px, py = p.get("x", 0), p.get("y", 0)
     for s in u.get("sites") or []:
         if s["kind"] != kind or s["left"] <= 0:
             continue
         d = (s["x"] - px) ** 2 + (s["y"] - py) ** 2
-        if d < bd:
+        if d < bd and (terr is None or same_land(terr, px, py, s["x"], s["y"])):
             bd = d
             best = s
     return best, (bd ** 0.5 if best else None)
@@ -300,9 +351,64 @@ def meters(u, p, day, rng, cond):
     elif act == minds.A_REST:
         ene += SLEEP_PER_PART * 0.4
 
+    if u.get("kind") == "LAGOON":
+        p["thirst"] = p.get("thirst", 0.0) + 1.0 / D
     p["hun"] = max(0.0, min(HUNGER_MAX * 1.2, hun))
     p["ene"] = max(0.0, min(ENERGY_MAX, ene))
     p["sol"] = max(0.0, min(SOLITUDE_MAX, sol))
+
+
+# Water units are person-days of drinking, unlike the food/hunger units.
+# Limits are explicit model hypotheses, not clinical survival predictions.
+THIRST_MAX = 4.0
+WATER_CARRY = 12.0
+
+
+def drink(u, p):
+    """Drink only water physically at hand, never ocean/lagoon saltwater."""
+    if u.get("kind") == "EDEN":
+        p["thirst"] = 0.0          # unlimited food AND water are its premise
+        return 0.0
+    thirst = p.get("thirst", 0.0)
+    if thirst <= 0:
+        return 0.0
+    # Milk supplies water throughout the same nursing window as food.
+    if _age(u, p) < 3.0:
+        byid = (u.get("_ctx") or {}).get("byid")
+        mother = (byid.get(p.get("mom")) if byid is not None else
+                  next((q for q in u.get("people", []) if q["id"] == p.get("mom")), None))
+        if (mother is not None and mother not in (u.get("_ctx") or {}).get("dead", [])
+                and mother.get("thirst", 0.0) < 2.0 and
+                abs(mother["x"]-p["x"]) <= 2 and abs(mother["y"]-p["y"]) <= 2):
+            p["thirst"] = 0.0
+            mother["thirst"] = mother.get("thirst", 0.0) + thirst * 0.6
+            return thirst
+    if p.get("carry_water", 0.0) > 0:
+        got = min(thirst, p["carry_water"])
+        p["carry_water"] -= got
+        p["thirst"] -= got
+        return got
+    source = _site_at(u, p, "water")
+    if source is not None and source["left"] > 0:
+        got = _take(source, thirst)
+    else:
+        st = camp_of(u, p)
+        got = min(thirst, st.get("water", 0.0)) if st and at_camp(u, p) else 0.0
+        if got:
+            st["water"] -= got
+    p["thirst"] -= got
+    return got
+
+
+def water_target(u, p):
+    """A thirsty person returns to stored water, or visits a real bank."""
+    st = camp_of(u, p)
+    if st and st.get("water", 0.0) > 0 and not at_camp(u, p):
+        from engine import terrain_of, same_land
+        if same_land(terrain_of(u), p["x"], p["y"], st["x"], st["y"]):
+            return _home_of(u, p)
+    source, _ = nearest_site(u, p, "water", REACH["LAGOON"])
+    return (source["x"], source["y"]) if source is not None else None
 
 
 def _workload(u, p):
@@ -428,6 +534,17 @@ def assign(u, p, day, rng, cond=None, engine=None):
     want_company = 1.0 - sol
 
     options = []   # (score, activity, target)
+
+    # --- fetching freshwater ----------------------------------------------
+    if cond.get("must_work_to_eat") and a >= 12:
+        st = camp_of(u, p)
+        mouths = max(1, st.get("mouths", len(u.get("people", [])))) if st else 1
+        lack = max(0.0, 1.0 - (st.get("water", 0.0) if st else 0) / (mouths * 2.0))
+        source, dist = nearest_site(u, p, "water", reach)
+        if source is not None:
+            urgency = max(p.get("thirst", 0.0), lack * 0.9)
+            options.append((urgency * 1.8 * (1.0 - 0.3 * dist/reach), E.A_DRINK,
+                            (source["x"], source["y"]), source))
 
     # --- food from the wild ------------------------------------------------
     if cond.get("must_work_to_eat"):
@@ -689,6 +806,7 @@ def keep_stores(u):
     for i, st in enumerate(u.get("settlements") or []):
         st["mouths"] = count.get(i, 0)
         st["store"] = max(0.0, st.get("store", 0.0) * (1.0 - rot))
+        st["water"] = max(0.0, st.get("water", 0.0) * 0.99)
 
 
 # ---- huts ---------------------------------------------------------------
@@ -754,8 +872,10 @@ def at_camp(u, p):
     if st is None:
         return True          # EDEN: the resort is everywhere
     r = st.get("r", 5) + 3
-    return (abs(p.get("x", 0) - st["x"]) <= r and
-            abs(p.get("y", 0) - st["y"]) <= r)
+    if abs(p.get("x",0)-st["x"]) > r or abs(p.get("y",0)-st["y"]) > r:
+        return False
+    from engine import terrain_of, same_land
+    return same_land(terrain_of(u), p["x"], p["y"], st["x"], st["y"])
 
 
 def camp_store(u, p):
@@ -825,7 +945,8 @@ def eat(u, p, age_years=None):
         byid = (u.get("_ctx") or {}).get("byid")
         m = (byid.get(p.get("mom")) if byid is not None else
              next((q for q in u.get("people", []) if q["id"] == p.get("mom")), None))
-        if m is not None and m.get("hun", 0.0) <= HUNGER_MAX * 0.75:
+        if (m is not None and m not in (u.get("_ctx") or {}).get("dead", [])
+                and m.get("hun", 0.0) <= HUNGER_MAX * 0.75):
             got = min(p["hun"], MEAL * 0.5)
             p["hun"] -= got
             m["hun"] = m.get("hun", 0.0) + got * NURSING_COST
@@ -862,6 +983,16 @@ def fulfil(u, p, day, rng, act, E=None):
     if E is None:
         import engine as E
     cap = body_capacity(p)
+
+    if act == E.A_DRINK:
+        drink(u, p)
+        source = _site_at(u, p, "water")
+        if source is not None and _age(u, p) >= 12:
+            got = _take(source, max(0.0, WATER_CARRY - p.get("carry_water", 0.0)))
+            p["carry_water"] = p.get("carry_water", 0.0) + got
+            p["ad"] = 0          # fetching is a trip; bring the water home
+            return got
+        return 0.0
 
     if act == E.A_EAT and u.get("kind") == "EDEN":
         # the resort's hoppers: free, and always full. That is the premise.
@@ -923,30 +1054,49 @@ def _site_at(u, p, kind=None):
     """The site of this kind a person is standing on, if any. The kind is
     the work they are doing: a berry picker does not eat the deer."""
     kind = kind or KIND_OF_ACT.get(p.get("a"))
+    from engine import terrain_of, same_land
+    terr = terrain_of(u) if u.get("kind") == "LAGOON" else None
+    sites = u.get("sites") or []
+    cached = u.get("_site_grid")
+    if cached is None or cached[0] is not sites or cached[1] != len(sites):
+        grid = {}
+        for s in sites:
+            grid.setdefault((s["x"]//4) * 4096 + s["y"]//4, []).append(s)
+        cached = (sites, len(sites), grid)
+        u["_site_grid"] = cached
+    gx, gy = p.get("x",0)//4, p.get("y",0)//4
     best = None
-    for s in u.get("sites") or []:
-        if kind is not None and s["kind"] != kind:
-            continue
-        if abs(s["x"] - p.get("x", 0)) <= 1 and abs(s["y"] - p.get("y", 0)) <= 1:
-            if best is None or s["left"] > best["left"]:
-                best = s     # of two bushes at hand, the fuller one
+    for dx in (-1,0,1):
+        for dy in (-1,0,1):
+            for s in cached[2].get((gx+dx) * 4096 + gy+dy, ()):
+                if kind is not None and s["kind"] != kind:
+                    continue
+                if abs(s["x"]-p.get("x",0)) > 1 or abs(s["y"]-p.get("y",0)) > 1:
+                    continue
+                if terr is not None and not same_land(terr,p["x"],p["y"],s["x"],s["y"]):
+                    continue
+                if best is None or s["left"] > best["left"]:
+                    best = s
+
     return best
 
 
 def deposit(u, p, day):
     """Carry what you have gathered back to the camp and put it down."""
     carried = p.get("carry", 0.0)
-    if carried <= 0:
+    water = p.get("carry_water", 0.0)
+    if carried <= 0 and water <= 0:
         return 0
     st = camp_of(u, p)
     if st is None:
         p["carry"] = 0.0
         p["carry_kind"] = None
         return 0
-    if abs(p.get("x", 0) - st["x"]) > st.get("r", 5) + 3 or \
-       abs(p.get("y", 0) - st["y"]) > st.get("r", 5) + 3:
+    if not at_camp(u, p):
         return 0            # not home yet
     add_to_store(u, p, carried)
+    st["water"] = st.get("water", 0.0) + water
+    p["carry_water"] = 0.0
     p["carry"] = 0.0
     p["carry_kind"] = None
     return carried

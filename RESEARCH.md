@@ -106,3 +106,37 @@ The two universes are deliberately inverted: Universe A removes every material c
 13. Wikipedia, "Sapiens: A Brief History of Humankind." https://en.wikipedia.org/wiki/Sapiens:_A_Brief_History_of_Humankind
 14. Harari, Y.N. *Sapiens* (2014), chs. 1–5 (cognitive revolution, gossip theory, ~150 threshold, "history's biggest fraud," luxury trap) — summarized per [13].
 15. Wikipedia, "Guns, Germs, and Steel." https://en.wikipedia.org/wiki/Guns,_Germs,_and_Steel
+
+
+## Tropical island analogue — 2026-10-30
+
+LAGOON uses a **Sri Lanka-inspired coastal ecology**, not a surveyed copy of
+Sri Lanka or a promise that sixteen founders will establish a civilization.
+FAO describes coastal lowlands, uplands, monsoon rainfall and freshwater
+fisheries; the implementation uses wet and dry tropical seasons rather than
+European winters for newly founded worlds. [FAO, *Reservoirs of Sri Lanka and
+their fisheries*, chapter 2](https://www.fao.org/4/T0028E/T0028E02.htm).
+
+WWCT's field study at Ritigala records forest mammals and deer prey, and
+explains their relationship to leopard habitat. The model's deer and big cats
+are abstract populations, not an exhaustive fauna census. [WWCT, Ritigala
+Strict Natural Reserve study](https://www.wwct.org/study-sites/ritigala-snr).
+
+These sources support habitat relationships, not the simulation's numerical
+coefficients. Patch yields, freshwater reserves, thirst thresholds, fertility
+and discovery probabilities remain illustrative model choices. Freshwater
+banks are finite shared resources; ocean and lagoon water are not drinking
+sources. There is no complete hydrological, nutritional or pathogen model.
+Heritable traits are not a genome: kinship genetics and inbreeding depression
+are not simulated. The current technology ladder ends at writing; it does
+not predict an industrial or modern civilization's arrival date.
+
+
+### Milk supplies water as well as food
+
+The model must credit water whenever it credits nursing food. WHO explains
+that breast milk contains water and supports continued breastfeeding beyond
+the first year. [WHO breastfeeding Q&A](https://www.who.int/news-room/questions-and-answers/item/breastfeeding).
+The implementation keeps its existing under-three nursing/following window
+for both flows, with maternal cost and proximity; that cutoff and the units
+are model calibration, not a derived clinical feeding schedule.

@@ -10,10 +10,8 @@ people. A cat holds a range, eats deer, and only turns on people when the
 deer have failed it — and even then it takes the one who is alone, out of
 the firelight, unarmed. People can fight back: a group drives a cat off,
 an armed adult can kill one that attacks, and once the band has learned to
-hunt it, the cat is meat. The ecosystem is built so that it does not kill
-a population outright if the population can learn — that is the Observers'
-one act of design, and it is written down here rather than hidden in a
-rate.
+hunt it, the cat is meat. The ecosystem can exhaust prey and can kill a vulnerable band; learning
+changes particular risks without guaranteeing survival.
 
 Sources for the shape, not the numbers: big cats kill people mostly when
 prey is short or the cat is old or hurt, and mostly people who are alone
@@ -90,13 +88,15 @@ def counts(u):
     return deer, len(a) - deer
 
 
-def nearest(u, p, kind, reach):
+def nearest(u, p, kind, reach, terr=None):
+    from engine import terrain_of, same_land
+    terr = terrain_of(u) if terr is None else terr
     best, bd = None, reach * reach
     for q in u.get("animals") or []:
         if q["k"] != kind:
             continue
         d = _d2(q, p)
-        if d < bd:
+        if d < bd and same_land(terr, p["x"], p["y"], q["x"], q["y"]):
             best, bd = q, d
     return best
 
@@ -108,15 +108,18 @@ def _step(q, terr, speed):
             return
         nx = q["x"] + (dx > 0) - (dx < 0)
         ny = q["y"] + (dy > 0) - (dy < 0)
-        if not _land(terr, nx, ny):
+        if not _land(terr, nx, ny) or (nx != q["x"] and ny != q["y"] and
+                (terr[q["y"]][nx] == 2 or terr[ny][q["x"]] == 2)):
             q["tx"], q["ty"] = q["x"], q["y"]      # water: graze here instead
             return
         q["x"], q["y"] = nx, ny
 
 
-def _people_near(people, q, r):
+def _people_near(people, q, r, terr=None):
+    from engine import same_land
     r2 = r * r
-    return [p for p in people if not p.get("ab") and _d2(p, q) <= r2]
+    return [p for p in people if not p.get("ab") and _d2(p, q) <= r2 and
+            (terr is None or same_land(terr, p["x"], p["y"], q["x"], q["y"]))]
 
 
 def _sheltered(u, p):
@@ -153,6 +156,7 @@ def tick(u, rng, terr, people, ctx):
     ctx carries: day, part, night (bool), adult (callable p -> bool),
     has (callable tech -> bool), armed (bool), lessons (list).
     """
+    from engine import same_land
     animals = ensure(u, rng, terr)
     night, has, adult = ctx["night"], ctx["has"], ctx["adult"]
     taken, dead_animals = [], set()
@@ -167,11 +171,11 @@ def tick(u, rng, terr, people, ctx):
         if p.get("hun", 0.0) > 14.0:
             p["ad"] = 0              # too hungry to keep stalking: go and eat
             continue
-        q = nearest(u, p, DEER, 12)
+        q = nearest(u, p, DEER, 12, terr)
         if has("predator_hunt"):
             # those who have learned to kill the big cat go after it, if it
             # is nearer than the herd: the danger is also the prize
-            c = nearest(u, p, CAT, 12)
+            c = nearest(u, p, CAT, 12, terr)
             if c is not None and c["i"] not in dead_animals and (
                     q is None or _d2(c, p) < _d2(q, p)):
                 p["tx"], p["ty"] = c["x"], c["y"]
@@ -180,7 +184,8 @@ def tick(u, rng, terr, people, ctx):
             continue
         p["tx"], p["ty"] = q["x"], q["y"]
         if _d2(p, q) <= 2:
-            party = [h for h in hunters if h is not p and _d2(h, p) <= 9]
+            party = [h for h in hunters if h is not p and _d2(h, p) <= 9 and
+                     same_land(terr, h["x"], h["y"], p["x"], p["y"])]
             # most stalks fail; more spears, better odds (Hadza: a big
             # kill every few weeks per hunter — Hawkes et al. 1991)
             if rng.random() < min(0.3, 0.05 + 0.05 * len(party)):
@@ -224,7 +229,7 @@ def tick(u, rng, terr, people, ctx):
             if q["i"] in dead_animals:
                 continue
             d = _d2(q, c)
-            if d < bd:
+            if d < bd and same_land(terr, q["x"], q["y"], c["x"], c["y"]):
                 prey, bd = q, d
         if prey is not None:
             c["tx"], c["ty"] = prey["x"], prey["y"]
@@ -234,12 +239,12 @@ def tick(u, rng, terr, people, ctx):
                 c["fed"] = 0.0
             continue
         if c["fed"] >= CAT_HUNGRY:
-            target = _choose_person(u, c, available_people, night, has, adult)
+            target = _choose_person(u, c, available_people, night, has, adult, terr)
             if target is not None:
                 c["tx"], c["ty"] = target["x"], target["y"]
                 _step(c, terr, CAT_STEP)
                 if _d2(target, c) <= 2:
-                    outcome = _attack(u, c, target, available_people, rng, ctx)
+                    outcome = _attack(u, c, target, available_people, rng, ctx, terr)
                     if outcome == "taken":
                         taken.append((target, "predator"))
                         available_people.remove(target)
@@ -261,7 +266,7 @@ def tick(u, rng, terr, people, ctx):
         for c in animals:
             if c["k"] != CAT or c["i"] in dead_animals:
                 continue
-            party = _people_near(surviving_hunters, c, 4)
+            party = _people_near(surviving_hunters, c, 4, terr)
             if len(party) >= CROWD and rng.random() < 0.25:
                 dead_animals.add(c["i"])
                 _seen(u, c["x"], c["y"], "cat_hunt", ctx)
@@ -279,16 +284,16 @@ def tick(u, rng, terr, people, ctx):
     return taken
 
 
-def _choose_person(u, c, people, night, has, adult):
+def _choose_person(u, c, people, night, has, adult, terr=None):
     """A hungry cat takes the easiest person it can see: alone, small, out of
     the firelight. A group is not prey."""
     if _guarded(u, c, night, has):
         return None
     best, bs = None, 0.0
-    for p in _people_near(people, c, STALK):
+    for p in _people_near(people, c, STALK, terr):
         if _sheltered(u, p):
             continue                                  # a roof and a door
-        company = sum(1 for o in _people_near(people, p, 3) if o is not p and adult(o))
+        company = sum(1 for o in _people_near(people, p, 3, terr) if o is not p and adult(o))
         if company + (1 if adult(p) else 0) >= CROWD:
             continue
         ease = (2.0 if not adult(p) else 1.0) * (1.6 if night else 1.0)
@@ -299,12 +304,12 @@ def _choose_person(u, c, people, night, has, adult):
     return best
 
 
-def _attack(u, c, p, people, rng, ctx):
+def _attack(u, c, p, people, rng, ctx, terr=None):
     """The cat strikes. 'taken', 'killed' (the people killed the cat), or
     'fled'."""
     adult = ctx["adult"]
     armed = ctx["armed"] and adult(p)
-    defenders = [o for o in _people_near(people, p, 3) if o is not p and adult(o)]
+    defenders = [o for o in _people_near(people, p, 3, terr) if o is not p and adult(o)]
     kill_cat = (0.25 if armed else 0.05) + 0.2 * len(defenders)
     if "vigilance" in ctx["lessons"]:
         kill_cat += 0.1
@@ -361,20 +366,8 @@ def _daily(u, rng, terr, ctx):
                         "hx": mother["x"] + rng.randint(-15, 15),
                         "hy": mother["y"] + rng.randint(-15, 15), "fed": 0.0})
         u["animal_id"] += 1
-    if deer < 6 and rng.random() < 1 / 180.0:
-        # a small herd comes over the hills or across the shallows: the
-        # land does not stay empty of game for ever
-        x, y = rng.choice(_woods_cached(u, terr))
-        for _ in range(6):
-            animals.append({"i": u["animal_id"], "k": DEER, "x": x, "y": y, "tx": x, "ty": y})
-            u["animal_id"] += 1
-    if cats == 0 and deer > PREY_PER_CAT and rng.random() < 1 / 360.0:
-        # a cat swims the strait or comes down from the hills: the land
-        # does not stay empty of hunters for ever
-        x, y = rng.choice(_woods_cached(u, terr))
-        animals.append({"i": u["animal_id"], "k": CAT, "x": x, "y": y, "tx": x, "ty": y,
-                        "hx": x, "hy": y, "fed": 0.0})
-        u["animal_id"] += 1
+    # Sealed land masses have no spontaneous replacement herds or cats.
+    # Hunting/predation may eliminate a species; births need living parents.
     u["animals"] = animals
 
 

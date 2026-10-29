@@ -383,7 +383,35 @@ This is the honest list. Each line is a defect, not a design.
 
 ---
 
-## 7. Changelog
+## 7. The sleeper
+
+A person asleep is the hardest figure to draw and the easiest to get wrong.
+A body curled into a ball reads as a bundle, not as a person, and a crowd of
+them reads as a litter on the grass — which is exactly what it looked like
+on the night of the 29th of October, when the owner said that everyone
+looked fetal.
+
+What makes a sleeper read as asleep, seen from above:
+
+- **the legs are long and straight.** A sleeper's legs are stretched out
+  along the ground, not folded. The rig used to carry the standing pose
+  through the rotation, which left the limbs bunched.
+- **one arm is folded under the head.** That single bend is what says
+  "asleep" rather than "collapsed".
+- **there is a bedroll under them**, with a woven edge, and a pillow at the
+  head end.
+- **there is a blanket over the legs and hips**, in a colour of its own,
+  with a fold across it. From above, the blanket is the first thing you
+  see, and it is what separates a sleeping person from a shape on the
+  grass.
+
+Bedrolls follow stature once. Infants have a smaller mat without a pillow;
+older children and adults in furnished EDEN have a pillow. LAGOON begins
+with bare-ground sleeping; hide/fur bedding is drawn only when its existing
+clothing/cultural state supplies it, without a resort pillow. The cover reaches toward the ankles
+and is drawn at both near and far detail levels.
+
+## 8. Changelog
 
 Every change to the drawing gets a line here, newest first.
 
@@ -499,6 +527,22 @@ Every change to the drawing gets a line here, newest first.
   their scene. The broken combined-pair draft was removed; individual body
   sprites, the cache, pose solver, particles and camera controls remain.
   Evidence and remaining limits: `docs/audits/2026-10-28/README.md`.
+- **2026-10-29 — the sleepers were read as bundles.** A curled body looked
+  like a fetal shape on the grass. The sleeper now lies stretched out on one
+  side with an arm folded under the head, on a bedroll with a pillow and a
+  blanket over the legs. See §7.
+- **2026-10-29 — EDEN has a night.** The resort's lights come on at dusk:
+  the windows of the lodgings are lit, the glow falls out of them, and the
+  pool is lit from under the water. The food is still free — that is the
+  experiment — but the pen is a lit stage in the dark instead of a colour
+  wash over it.
+- **2026-10-29 — every world names its people its own way.** EDEN begins
+  with Adam and Eve and the line after them; LAGOON with Rahul and
+  Siddhartha, Ganesh and Shiva. The people themselves are the same in both
+  worlds — the founders have the same bodies and tempers — but a name is a
+  cultural invention, and each world invents its own. A world has no names
+  at the beginning: the first name anyone gives is the first child's, and
+  after that everyone has one.
 - **2026-10-28 — the pair is one picture, and only ever a real pair.** A
   couple is drawn as one scene — in profile, from the front, from behind —
   rather than as two people who happen to be on the same tile. The first
@@ -533,3 +577,37 @@ Every change to the drawing gets a line here, newest first.
   sixteen-colour palettes, 7.5-head adults, the pair drawn as one picture and
   the planted-foot walk are all back, and `tests/test_style.py` now fails any
   attempt to take them away again. The collarbones were kept.
+
+
+## Audit update — 2026-10-30
+
+The earlier stance/swing code did not plant a foot in world coordinates:
+its hardcoded distance per stride disagreed with the rig, and pelvis sway
+moved the foot again. The profile stride now derives from leg length,
+stature and the shared 62% stance phase. A wider ten-unit foot sweep and slower individual pace avoid a rapid
+short-step shuffle. Support transfers smoothly instead of snapping sides;
+children scale speed with stature and catch-up is bounded. These are drawing
+calibrations, not a change to simulated travel. Fixed 30 Hz motion steps preserve
+movement at different rendering frame rates. Forty-eight cached walk poses
+reduce visible stepping while keeping the sprite cache. Front/back views
+share contact timing; the projection remains a drawn 2D approximation.
+
+The minimum half-unit sprite scale prevented island-sized people from ever
+reaching the small-figure drawing. Rendering now respects the camera scale;
+age stage is part of the cache key. Sleeper arms retain their solver targets,
+the bedroll scales stature once, and the same cover is painted at both LODs.
+New LAGOON sleepers get no invented mattress or pillow; EDEN is furnished,
+and LAGOON hide/fur bedding follows its existing clothing state.
+Mobile reader images fit their page rather than adding a horizontal scroll.
+
+Freshwater seeps use the model's water-site positions and reserve fraction:
+wet surface shrinks as water is drawn, leaving a mud basin at zero. The
+fetching-water activity and personal water deficit are visible; climate and
+camp reserves appear with the world's expanded facts. Both worlds, paged
+records, existing camera controls, sprites, rigs and particles remain.
+The default clock is 100 simulated years per real day; local snapshots poll
+at 600 ms, while the mirror retains its configured upload interval.
+
+An explicit restart can keep iteration 1 while rewinding the day. The local
+viewer now discards its old world response on that rewind and fetches the
+new terrain; otherwise an open page could retain the preceding landscape.

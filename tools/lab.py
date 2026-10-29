@@ -8,7 +8,7 @@ the one thing that matters: did the experiment actually produce its result?
     python3 tools/lab.py --from data/state.json --days 5000
 
 Why this exists: a bounded local arc is faster than tuning against the live
-run, which advances one sim-day every twelve real seconds. Arc runtime depends
+run, which advances one sim-day every 2.4 real seconds by default. Arc runtime depends
 on population and hardware; a century can take minutes. Use this harness
 before touching the instrument.
 """

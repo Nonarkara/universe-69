@@ -437,7 +437,9 @@
      "caption": "The history of the universe as a widening bell, from the Big Bang through the release of the first light, the dark ages and the first stars, to the galaxies of today. NASA's diagram from the WMAP mission.",
      "credit": "NASA / WMAP Science Team",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:CMB_Timeline300_no_WMAP.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:CMB_Timeline300_no_WMAP.jpg",
+     "width": 1600,
+     "height": 1056
     },
     {
      "t": "h2",
@@ -458,7 +460,9 @@
      "caption": "The Hubble Ultra Deep Field: a patch of sky smaller than a grain of sand held at arm's length, in which almost every point of light is a galaxy. Some of this light set out more than thirteen billion years ago.",
      "credit": "NASA and the European Space Agency",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Hubble_ultra_deep_field.jpg",
+     "width": 1600,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -479,7 +483,9 @@
      "caption": "The Pillars of Creation in the Eagle Nebula, photographed by Hubble in 2014: columns of gas and dust where new stars are being born today, some 6,500 light-years away.",
      "credit": "NASA, ESA and the Hubble Heritage Team (STScI/AURA)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg",
+     "width": 1534,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -500,7 +506,9 @@
      "caption": "The Blue Marble, photographed by the crew of Apollo 17 on 7 December 1972. Africa, the continent where our species began, is at the centre.",
      "credit": "Harrison Schmitt / NASA, Apollo 17",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:The_Blue_Marble,_AS17-148-22727.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:The_Blue_Marble,_AS17-148-22727.jpg",
+     "width": 1600,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -576,7 +584,9 @@
      "caption": "Living stromatolites at Shark Bay, Western Australia. Mounds like these, built by microbes, are the oldest widely accepted evidence of life on Earth, more than three billion years old.",
      "credit": "Happy Little Nomad",
      "license": "CC BY-SA 2.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Stromatolites_in_Shark_Bay.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Stromatolites_in_Shark_Bay.jpg",
+     "width": 1600,
+     "height": 1200
     },
     {
      "t": "p",
@@ -589,7 +599,9 @@
      "caption": "The geological time spiral from the U.S. Geological Survey: the whole history of the Earth, with the first life near the centre and humans a sliver at the very end.",
      "credit": "U.S. Geological Survey",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Geological_time_spiral.png"
+     "source": "https://commons.wikimedia.org/wiki/File:Geological_time_spiral.png",
+     "width": 1600,
+     "height": 1416
     },
     {
      "t": "h2",
@@ -606,7 +618,9 @@
      "caption": "A reconstruction of the Burgess Shale sea, about 508 million years ago, when the fossil record suddenly fills with animals of many strange designs.",
      "credit": "PaleoEquii",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Burgess_Shale_reconstruction.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Burgess_Shale_reconstruction.jpg",
+     "width": 1600,
+     "height": 950
     },
     {
      "t": "p",
@@ -619,7 +633,9 @@
      "caption": "Tiktaalik roseae, about 375 million years ago: a fish with a neck and sturdy fins, of the kind that gave rise to every four-limbed animal. Reconstruction for the U.S. National Science Foundation.",
      "credit": "Zina Deretsky, U.S. National Science Foundation",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Tiktaalik_roseae_life_restor.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Tiktaalik_roseae_life_restor.jpg",
+     "width": 1600,
+     "height": 924
     },
     {
      "t": "h2",
@@ -636,7 +652,9 @@
      "caption": "The Berlin specimen of Archaeopteryx, about 150 million years old, found in Germany in 1874: feathers and wings, but also teeth, claws and a long bony tail.",
      "credit": "H. Raab (Vesta)",
      "license": "CC BY-SA 3.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Archaeopteryx_lithographica_(Berlin_specimen).jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Archaeopteryx_lithographica_(Berlin_specimen).jpg",
+     "width": 1183,
+     "height": 1600
     },
     {
      "t": "p",
@@ -657,7 +675,9 @@
      "caption": "Charles Darwin's first sketch of an evolutionary tree, from his notebook of 1837.",
      "credit": "Charles Darwin, Notebook B (1837)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Darwin_Tree_1837.png"
+     "source": "https://commons.wikimedia.org/wiki/File:Darwin_Tree_1837.png",
+     "width": 982,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -674,7 +694,9 @@
      "caption": "A cast of \"Lucy,\" Australopithecus afarensis, about 3.2 million years old, found in Ethiopia in 1974. She walked upright on a brain hardly bigger than a chimpanzee's.",
      "credit": "Andrew from Cleveland, Ohio, USA",
      "license": "CC BY-SA 2.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Lucy_Skeleton.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Lucy_Skeleton.jpg",
+     "width": 1064,
+     "height": 1600
     },
     {
      "t": "p",
@@ -738,7 +760,9 @@
      "caption": "Olduvai Gorge in Tanzania, where layer upon layer of ancient lake beds have yielded stone tools and hominin fossils spanning nearly two million years.",
      "credit": "gailhampshire",
      "license": "CC BY 2.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Olduvai_gorge_-_Flickr_-_gailhampshire.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Olduvai_gorge_-_Flickr_-_gailhampshire.jpg",
+     "width": 1600,
+     "height": 1159
     },
     {
      "t": "figure",
@@ -747,7 +771,9 @@
      "caption": "A handaxe from Olduvai Gorge, Tanzania, more than a million years old. The design was made, with small changes, for over a million years — longer than any technology since.",
      "credit": "BabelStone (photograph of an object in the British Museum)",
      "license": "CC0",
-     "source": "https://commons.wikimedia.org/wiki/File:British_Museum_Olduvai_handaxe.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:British_Museum_Olduvai_handaxe.jpg",
+     "width": 791,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -768,7 +794,9 @@
      "caption": "\"Turkana Boy,\" a Homo erectus youth who died about 1.5 million years ago near Lake Turkana in Kenya: already tall, long-legged and built for walking. Cast at the American Museum of Natural History.",
      "credit": "Mike Peel (www.mikepeel.net)",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Turkana_Boy_at_the_American_Museum_of_Natural_History.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Turkana_Boy_at_the_American_Museum_of_Natural_History.jpg",
+     "width": 499,
+     "height": 1600
     },
     {
      "t": "figure",
@@ -777,7 +805,9 @@
      "caption": "The peopling of the world, as reconstructed from fossils, archaeology and genetics. Figures are thousands of years ago; every one of them is argued over.",
      "credit": "Dbachmann (map drawn on a public-domain USGS shoreline base)",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Early_migrations_mercator.svg"
+     "source": "https://commons.wikimedia.org/wiki/File:Early_migrations_mercator.svg",
+     "width": 1600,
+     "height": 776
     },
     {
      "t": "h2",
@@ -798,7 +828,9 @@
      "caption": "A reconstruction of a Neanderthal man at the Natural History Museum, London. Most people alive today outside Africa carry a small share of Neanderthal DNA.",
      "credit": "Werner Ustorf",
      "license": "CC BY-SA 2.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Neanderthal_man_reconstruction,_Natural_History_Museum,_London.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Neanderthal_man_reconstruction,_Natural_History_Museum,_London.jpg",
+     "width": 1066,
+     "height": 1600
     },
     {
      "t": "p",
@@ -894,7 +926,9 @@
      "caption": "The Lion-man of Hohlenstein-Stadel, carved from mammoth ivory about forty thousand years ago: a creature that exists only in a story.",
      "credit": "Dagmar Hollmann",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Loewenmensch1.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Loewenmensch1.jpg",
+     "width": 900,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -931,7 +965,9 @@
      "caption": "Engraved ochre from Blombos Cave, South Africa, about 75,000 years old: an abstract pattern made long before the supposed revolution of seventy thousand years ago.",
      "credit": "Chris S. Henshilwood",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Blombo.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Blombo.jpg",
+     "width": 331,
+     "height": 388
     },
     {
      "t": "p",
@@ -944,7 +980,9 @@
      "caption": "Horses on the wall of the Chauvet cave in southern France (museum replica), drawn more than thirty thousand years ago with a sureness that still startles.",
      "credit": "Thomas T.",
      "license": "CC BY-SA 2.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Chauvet%C2%B4s_cave_horses.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Chauvet%C2%B4s_cave_horses.jpg",
+     "width": 1200,
+     "height": 1189
     },
     {
      "t": "h2",
@@ -961,7 +999,9 @@
      "caption": "The Venus of Hohle Fels, carved from mammoth ivory about 40,000 years ago in the same German valleys as the Lion-man: the oldest known sculpture of a human body.",
      "credit": "Catatine",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Venus_of_Hohle_Fels_URMU.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Venus_of_Hohle_Fels_URMU.jpg",
+     "width": 1245,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -1037,7 +1077,9 @@
      "caption": "Stencilled hands at the Cueva de las Manos in Patagonia, Argentina, many of them made around nine thousand years ago. Each was a person saying: I was here, with the others.",
      "credit": "Mariano",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:SantaCruz-CuevaManos-P2210651b.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:SantaCruz-CuevaManos-P2210651b.jpg",
+     "width": 1200,
+     "height": 900
     },
     {
      "t": "h2",
@@ -1074,7 +1116,9 @@
      "caption": "Hunters dancing in the bush in Tanzania. Among many foragers, song and dance accompany the return from a hunt and the sharing of meat.",
      "credit": "Arnold Tibaijuka",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Hunters_dancing_in_bush_in_Tanzania.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Hunters_dancing_in_bush_in_Tanzania.jpg",
+     "width": 1600,
+     "height": 1066
     },
     {
      "t": "h2",
@@ -1111,7 +1155,9 @@
      "caption": "The Ain Sakhri lovers, carved from a calcite pebble about eleven thousand years ago near Bethlehem, now in the British Museum: perhaps the oldest known image of a couple making love.",
      "credit": "Marie-Lan Nguyen",
      "license": "CC BY 2.5",
-     "source": "https://commons.wikimedia.org/wiki/File:Lovers_BM_1958.10-7.1.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Lovers_BM_1958.10-7.1.jpg",
+     "width": 1200,
+     "height": 1600
     },
     {
      "t": "p",
@@ -1124,7 +1170,9 @@
      "caption": "Paintings of people and animals in the rock shelters of Bhimbetka, central India, where people lived and painted for many thousands of years.",
      "credit": "Yann (Wikimedia Commons user)",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Rock_painting,_Bhimbetka,_Raisen_district,_MP.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Rock_painting,_Bhimbetka,_Raisen_district,_MP.jpg",
+     "width": 1600,
+     "height": 1066
     },
     {
      "t": "h2",
@@ -1204,7 +1252,9 @@
      "caption": "Firelight gathers a band into one small circle. Anthropologists find that talk around the fire turns from work to stories.",
      "credit": "kallerna",
      "license": "CC BY-SA 3.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Campfire_and_sparks_in_Anttoora_1.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Campfire_and_sparks_in_Anttoora_1.jpg",
+     "width": 1600,
+     "height": 1163
     },
     {
      "t": "h2",
@@ -1229,7 +1279,9 @@
      "caption": "Pieter Bruegel the Elder, The Peasant Wedding (1567 or 1568). The feast is where a community renews itself, and drink is how it lowers its guard.",
      "credit": "Pieter Bruegel the Elder (image: Google Arts & Culture)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_the_Elder_-_Peasant_Wedding_-_Google_Art_Project.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_the_Elder_-_Peasant_Wedding_-_Google_Art_Project.jpg",
+     "width": 1600,
+     "height": 1106
     },
     {
      "t": "h2",
@@ -1246,7 +1298,9 @@
      "caption": "A predator descends above a wild boar on Pillar 27 at Göbekli Tepe, carved by foragers more than eleven thousand years ago.",
      "credit": "Kerimove",
      "license": "CC0",
-     "source": "https://commons.wikimedia.org/wiki/File:G%C3%B6bekli_Tepe_Enclosure_C_Pillar_27_relief.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:G%C3%B6bekli_Tepe_Enclosure_C_Pillar_27_relief.jpg",
+     "width": 864,
+     "height": 1148
     },
     {
      "t": "p",
@@ -1259,7 +1313,9 @@
      "caption": "One of the enclosures at Göbekli Tepe. These pillars were raised by people who did not yet farm.",
      "credit": "Teomancimit",
      "license": "CC BY-SA 3.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Gobekli_Tepe_2.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Gobekli_Tepe_2.jpg",
+     "width": 796,
+     "height": 1200
     },
     {
      "t": "h2",
@@ -1280,7 +1336,9 @@
      "caption": "Émile Durkheim (1858–1917), who argued that the sacred is the group made visible to itself.",
      "credit": "Unknown photographer",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Portrait_of_Emile_Durkheim_in_%22a_collection_of_essays,_with_translations_and_a_bibliography%22_(cropped).jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Portrait_of_Emile_Durkheim_in_%22a_collection_of_essays,_with_translations_and_a_bibliography%22_(cropped).jpg",
+     "width": 900,
+     "height": 1200
     },
     {
      "t": "p",
@@ -1301,7 +1359,9 @@
      "caption": "The Dionysus cup by the potter-painter Exekias, Athens, about 530 BCE: the god of wine sails a ship that sprouts grapevines. Staatliche Antikensammlungen, Munich.",
      "credit": "Matthias Kabel (photograph); cup painted by Exekias",
      "license": "CC BY 2.5",
-     "source": "https://commons.wikimedia.org/wiki/File:Exekias_Dionysos_Staatliche_Antikensammlungen_2044.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Exekias_Dionysos_Staatliche_Antikensammlungen_2044.jpg",
+     "width": 1430,
+     "height": 1600
     },
     {
      "t": "p",
@@ -1365,7 +1425,9 @@
      "caption": "A Mesopotamian planisphere, a clay star map, from the library at Nineveh: the sky ordered into named divisions. British Museum.",
      "credit": "BabelStone (photograph of an object in the British Museum)",
      "license": "CC0",
-     "source": "https://commons.wikimedia.org/wiki/File:British_Museum_Cuneiform_planisphere_K8538.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:British_Museum_Cuneiform_planisphere_K8538.jpg",
+     "width": 1050,
+     "height": 1068
     },
     {
      "t": "h2",
@@ -1406,7 +1468,9 @@
      "caption": "The Flood Tablet, the eleventh tablet of the Epic of Gilgamesh, from the library of the Assyrian king Ashurbanipal at Nineveh, seventh century BCE. Its flood story is older than the one in Genesis. British Museum.",
      "credit": "BabelStone (photograph of an object in the British Museum)",
      "license": "CC0",
-     "source": "https://commons.wikimedia.org/wiki/File:British_Museum_Flood_Tablet.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:British_Museum_Flood_Tablet.jpg",
+     "width": 1005,
+     "height": 1137
     },
     {
      "t": "p",
@@ -1427,7 +1491,9 @@
      "caption": "Pieter Bruegel the Elder, The Tower of Babel (1563), Kunsthistorisches Museum, Vienna.",
      "credit": "Pieter Bruegel the Elder (image: Google Arts & Culture)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_the_Elder_-_The_Tower_of_Babel_(Vienna)_-_Google_Art_Project_-_edited.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_the_Elder_-_The_Tower_of_Babel_(Vienna)_-_Google_Art_Project_-_edited.jpg",
+     "width": 1600,
+     "height": 1171
     },
     {
      "t": "p",
@@ -1527,7 +1593,9 @@
      "caption": "Malinowski with Trobriand Islanders, about 1918. He insisted that the anthropologist must live in the village, not visit it.",
      "credit": "Uncredited (likely Billy Hancock, a pearl trader in the Trobriands)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:W_Malinowski_Trobriand_Isles_1918.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:W_Malinowski_Trobriand_Isles_1918.jpg",
+     "width": 1200,
+     "height": 755
     },
     {
      "t": "h2",
@@ -1544,7 +1612,9 @@
      "caption": "Malinowski's own map of the kula ring (1922): necklaces travel one way around the islands, armbands the other, for ever.",
      "credit": "Bronisław Malinowski, Argonauts of the Western Pacific (1922), map V",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:MAP_V_-_Argonauts_of_the_western_Pacific_1922_(page_136_crop).jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:MAP_V_-_Argonauts_of_the_western_Pacific_1922_(page_136_crop).jpg",
+     "width": 1600,
+     "height": 1205
     },
     {
      "t": "p",
@@ -1561,7 +1631,9 @@
      "caption": "A mwali, a white shell armband of the kula, photographed by Malinowski in the Trobriands. Armbands travelled anticlockwise around the ring.",
      "credit": "Bronisław Malinowski, Argonauts of the Western Pacific (1922), plate XVI",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Malinowski_mwali_plate_xvi.png"
+     "source": "https://commons.wikimedia.org/wiki/File:Malinowski_mwali_plate_xvi.png",
+     "width": 1200,
+     "height": 898
     },
     {
      "t": "h2",
@@ -1586,7 +1658,9 @@
      "caption": "A soulava, a necklace of red shell discs, which travelled clockwise around the kula ring.",
      "credit": "Bronisław Malinowski, Argonauts of the Western Pacific (1922), plate XVIII",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Malinowski_soulava_plate_xviii_cropped.png"
+     "source": "https://commons.wikimedia.org/wiki/File:Malinowski_soulava_plate_xviii_cropped.png",
+     "width": 369,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -1662,7 +1736,9 @@
      "caption": "The Fertile Crescent, one of the first places where people domesticated plants and animals, about eleven thousand years ago.",
      "credit": "Nafsadh",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Map_of_fertile_crescent.svg"
+     "source": "https://commons.wikimedia.org/wiki/File:Map_of_fertile_crescent.svg",
+     "width": 1302,
+     "height": 1600
     },
     {
      "t": "p",
@@ -1683,7 +1759,9 @@
      "caption": "Einkorn, one of the first wheats domesticated in the Fertile Crescent, in a nineteenth-century botanical plate.",
      "credit": "Nikolaus Thomas Host, Icones et descriptiones graminum austriacorum (1801–09)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Triticum_monococcum_illustration_(01f).png"
+     "source": "https://commons.wikimedia.org/wiki/File:Triticum_monococcum_illustration_(01f).png",
+     "width": 1066,
+     "height": 1600
     },
     {
      "t": "p",
@@ -1700,7 +1778,9 @@
      "caption": "Sennedjem and his wife ploughing and harvesting in the fields of the afterlife, from their tomb at Deir el-Medina, Egypt, about 1250 BCE. Even paradise, for a farming people, was a field to be worked.",
      "credit": "Painter of the tomb of Sennedjem (reproduction: The Yorck Project)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Maler_der_Grabkammer_des_Sennudem_001.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Maler_der_Grabkammer_des_Sennudem_001.jpg",
+     "width": 1600,
+     "height": 1044
     },
     {
      "t": "h2",
@@ -1721,7 +1801,9 @@
      "caption": "The stone tower of Jericho, built about ten thousand years ago by some of the first people to settle and farm: a monument raised by a village, long before kings.",
      "credit": "Reinhard Dietrich",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Tower_of_Jericho.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Tower_of_Jericho.jpg",
+     "width": 1600,
+     "height": 1200
     },
     {
      "t": "h2",
@@ -1738,7 +1820,9 @@
      "caption": "Çatalhöyük in central Anatolia, about 7400 BCE: thousands of people living in mudbrick houses packed so closely that they walked across the rooftops instead of streets.",
      "credit": "Murat Özsoy",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:%C3%87atalh%C3%B6y%C3%BCk,_7400_BC,_Konya,_Turkey_-_UNESCO_World_Heritage_Site,_02.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:%C3%87atalh%C3%B6y%C3%BCk,_7400_BC,_Konya,_Turkey_-_UNESCO_World_Heritage_Site,_02.jpg",
+     "width": 737,
+     "height": 1600
     },
     {
      "t": "p",
@@ -1810,7 +1894,9 @@
      "caption": "The Capture of Atahualpa at Cajamarca, painted by the Peruvian artist Juan Lepiani in the 1920s, almost four centuries after the event.",
      "credit": "Juan Lepiani",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:La_Captura_de_Atahualpa_-_Juan_Lepiani_1920s.png"
+     "source": "https://commons.wikimedia.org/wiki/File:La_Captura_de_Atahualpa_-_Juan_Lepiani_1920s.png",
+     "width": 1600,
+     "height": 1139
     },
     {
      "t": "p",
@@ -1823,7 +1909,9 @@
      "caption": "Nahua victims of smallpox, drawn for Book XII of the Florentine Codex (about 1577), the Aztec account of the conquest compiled under Bernardino de Sahagún. The epidemic of 1520 killed a large share of the population of the Aztec capital.",
      "credit": "Nahua artists for Bernardino de Sahagún, Florentine Codex, Book XII, folio 54",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:FlorentineCodex_BK12_F54_smallpox.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:FlorentineCodex_BK12_F54_smallpox.jpg",
+     "width": 640,
+     "height": 494
     },
     {
      "t": "h2",
@@ -1848,7 +1936,9 @@
      "caption": "An Inca khipu, a record kept in knotted cords. The Inca ran an empire without writing as Eurasia knew it; Diamond counts this among the reasons Atahuallpa knew nothing of Spain. Larco Museum, Lima.",
      "credit": "bobistraveling",
      "license": "CC BY 2.0",
-     "source": "https://commons.wikimedia.org/wiki/File:52_Quipu_Inca_Larco_Museum_Lima_Peru_1840.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:52_Quipu_Inca_Larco_Museum_Lima_Peru_1840.jpg",
+     "width": 1582,
+     "height": 1600
     },
     {
      "t": "p",
@@ -1861,7 +1951,9 @@
      "caption": "Smallpox virus particles under the electron microscope. The disease, which came to humans from domestic animals, killed more people in the Americas than any army.",
      "credit": "CDC / Dr. Fred Murphy; Sylvia Whitfield",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Smallpox_virus_virions_TEM_PHIL_1849.JPG"
+     "source": "https://commons.wikimedia.org/wiki/File:Smallpox_virus_virions_TEM_PHIL_1849.JPG",
+     "width": 1470,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -1937,7 +2029,9 @@
      "caption": "The Swimming Reindeer, carved from the tip of a mammoth tusk about thirteen thousand years ago in what is now France. The carver had watched reindeer cross a river in autumn.",
      "credit": "Johnbod",
      "license": "CC BY-SA 3.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Swimming_reindeerDSCF6976_cropped.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Swimming_reindeerDSCF6976_cropped.jpg",
+     "width": 967,
+     "height": 1191
     },
     {
      "t": "h2",
@@ -1966,7 +2060,9 @@
      "caption": "The \"Peace\" side of the Standard of Ur, about 2500 BCE: produce and animals are brought up the rows to a king feasting at the top.",
      "credit": "Juan Carlos Fonseca Mata",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Standard_of_Ur_-_Peace_Panel_-_Sumer.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Standard_of_Ur_-_Peace_Panel_-_Sumer.jpg",
+     "width": 1600,
+     "height": 1007
     },
     {
      "t": "p",
@@ -1991,7 +2087,9 @@
      "caption": "The Cyrus Cylinder, 539 BCE, in which the Persian king Cyrus announced his conquest of Babylon and his restoration of its temples and peoples. It has been called the first charter of human rights, which says more about our times than about his. British Museum.",
      "credit": "Mike Peel (www.mikepeel.net), modified by مانفی",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Cyrus_Cylinder.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Cyrus_Cylinder.jpg",
+     "width": 1600,
+     "height": 1092
     },
     {
      "t": "figure",
@@ -2000,7 +2098,9 @@
      "caption": "The Rosetta Stone, 196 BCE, carved with the same decree in hieroglyphs, Demotic and Greek. It was found by French soldiers in 1799 and is now in the British Museum.",
      "credit": "Hans Hillewaert",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Rosetta_Stone.JPG"
+     "source": "https://commons.wikimedia.org/wiki/File:Rosetta_Stone.JPG",
+     "width": 1025,
+     "height": 1200
     },
     {
      "t": "p",
@@ -2072,7 +2172,9 @@
      "caption": "The frontispiece of Hobbes's Leviathan (1651), designed by Abraham Bosse. The sovereign's body is made of the people who have agreed to obey him.",
      "credit": "Abraham Bosse (scan of the British Museum impression)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Leviathan_frontispiece.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Leviathan_frontispiece.jpg",
+     "width": 900,
+     "height": 1200
     },
     {
      "t": "p",
@@ -2085,7 +2187,9 @@
      "caption": "Thomas Hobbes (1588–1679), painted by John Michael Wright about 1669.",
      "credit": "John Michael Wright",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Thomas_Hobbes_by_John_Michael_Wright.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Thomas_Hobbes_by_John_Michael_Wright.jpg",
+     "width": 1311,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -2106,7 +2210,9 @@
      "caption": "The law code of Hammurabi of Babylon, about 1754 BCE: a king announcing, in stone, that crimes will be punished by the state and not by the victim's family. Louvre, Paris.",
      "credit": "Mbzt",
      "license": "CC BY 3.0",
-     "source": "https://commons.wikimedia.org/wiki/File:P1050763_Louvre_code_Hammurabi_face_rwk.JPG"
+     "source": "https://commons.wikimedia.org/wiki/File:P1050763_Louvre_code_Hammurabi_face_rwk.JPG",
+     "width": 972,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -2131,7 +2237,9 @@
      "caption": "Jacques Callot, The Hanging, from The Miseries of War (1633): soldiers executed for plunder during the Thirty Years War. The cruelty of early modern Europe is the starting point of Pinker's Humanitarian Revolution.",
      "credit": "Jacques Callot (The Metropolitan Museum of Art)",
      "license": "CC0",
-     "source": "https://commons.wikimedia.org/wiki/File:The_Hanging_Met_DP891375.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:The_Hanging_Met_DP891375.jpg",
+     "width": 1600,
+     "height": 833
     },
     {
      "t": "h2",
@@ -2223,7 +2331,9 @@
      "caption": "Phineas Gage, after his accident, holding the tamping iron that passed through his brain. Daguerreotype of the 1850s, rediscovered in 2009.",
      "credit": "Jack and Beverly Wilgus (photograph of the daguerreotype in their collection)",
      "license": "CC BY-SA 3.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Phineas_Gage_Cased_Daguerreotype_WilgusPhoto2008-12-19_Unretouched_Color.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Phineas_Gage_Cased_Daguerreotype_WilgusPhoto2008-12-19_Unretouched_Color.jpg",
+     "width": 436,
+     "height": 504
     },
     {
      "t": "p",
@@ -2256,7 +2366,9 @@
      "caption": "The human brain from the side. The frontal lobe, at the left, holds the prefrontal cortex, where planning and restraint mature last.",
      "credit": "John A. Beal, Louisiana State University Health Sciences Center",
      "license": "CC BY 2.5",
-     "source": "https://commons.wikimedia.org/wiki/File:Human_brain_lateral_view_description.JPG"
+     "source": "https://commons.wikimedia.org/wiki/File:Human_brain_lateral_view_description.JPG",
+     "width": 701,
+     "height": 487
     },
     {
      "t": "p",
@@ -2293,7 +2405,9 @@
      "caption": "René Descartes (1596–1650), after a portrait by Frans Hals. He made the mind a ghost in the machine of the body.",
      "credit": "After Frans Hals",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Frans_Hals_-_Portret_van_Ren%C3%A9_Descartes.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Frans_Hals_-_Portret_van_Ren%C3%A9_Descartes.jpg",
+     "width": 817,
+     "height": 1000
     },
     {
      "t": "h2",
@@ -2369,7 +2483,9 @@
      "caption": "Jacques-Louis David, The Death of Socrates (1787). The Metropolitan Museum of Art.",
      "credit": "Jacques-Louis David (The Metropolitan Museum of Art)",
      "license": "CC0",
-     "source": "https://commons.wikimedia.org/wiki/File:The_Death_of_Socrates_MET_DT40.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:The_Death_of_Socrates_MET_DT40.jpg",
+     "width": 1600,
+     "height": 1061
     },
     {
      "t": "p",
@@ -2394,7 +2510,9 @@
      "caption": "Raphael, The School of Athens (1509–11), Vatican. At the centre, Plato points up to the heavens and Aristotle gestures to the earth.",
      "credit": "Raphael",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg",
+     "width": 1600,
+     "height": 1241
     },
     {
      "t": "p",
@@ -2415,7 +2533,9 @@
      "caption": "Jean-Jacques Rousseau (1712–1778), by Maurice Quentin de La Tour.",
      "credit": "Maurice Quentin de La Tour",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Jean-Jacques_Rousseau_(painted_portrait).jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Jean-Jacques_Rousseau_(painted_portrait).jpg",
+     "width": 1149,
+     "height": 1600
     },
     {
      "t": "p",
@@ -2511,7 +2631,9 @@
      "caption": "Sigmund Freud (1856–1939), photographed by Max Halberstadt around 1921.",
      "credit": "Max Halberstadt",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Sigmund_Freud,_by_Max_Halberstadt_(cropped).jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Sigmund_Freud,_by_Max_Halberstadt_(cropped).jpg",
+     "width": 1176,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -2572,7 +2694,9 @@
      "caption": "Masaccio, The Expulsion from the Garden of Eden (about 1425), Brancacci Chapel, Florence: the moment of self-consciousness, painted as grief.",
      "credit": "Masaccio",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Masaccio-TheExpulsionOfAdamAndEveFromEden-Restoration.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Masaccio-TheExpulsionOfAdamAndEveFromEden-Restoration.jpg",
+     "width": 913,
+     "height": 1173
     },
     {
      "t": "p",
@@ -2589,7 +2713,9 @@
      "caption": "Titian, Cain and Abel (about 1542–44): the first murder, in Genesis, is over standing, not food.",
      "credit": "Titian",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Titian_-_Cain_and_Abel_-_WGA22778.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Titian_-_Cain_and_Abel_-_WGA22778.jpg",
+     "width": 1006,
+     "height": 1045
     },
     {
      "t": "h2",
@@ -2653,7 +2779,9 @@
      "caption": "The gate of the Small Fortress at Terezín (Theresienstadt) in the Czech Republic, now a memorial. Frankl's father died in the ghetto here.",
      "credit": "Godot13",
      "license": "CC BY-SA 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Czech-2013-Terezin-Theresienstadt-Arbeit_macht_frei.JPG"
+     "source": "https://commons.wikimedia.org/wiki/File:Czech-2013-Terezin-Theresienstadt-Arbeit_macht_frei.JPG",
+     "width": 1600,
+     "height": 1201
     },
     {
      "t": "figure",
@@ -2662,7 +2790,9 @@
      "caption": "Viktor Frankl (1905–1997), the psychiatrist who survived four camps and wrote about what keeps people alive.",
      "credit": "Prof. Dr. Franz Vesely",
      "license": "CC BY-SA 3.0 de",
-     "source": "https://commons.wikimedia.org/wiki/File:Viktor_Frankl2.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Viktor_Frankl2.jpg",
+     "width": 1000,
+     "height": 1100
     },
     {
      "t": "p",
@@ -2687,7 +2817,9 @@
      "caption": "Inside the fortress at Terezín today.",
      "credit": "Christian Alexander Tietgen",
      "license": "CC BY 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:KZ_Theresienstadt_2015.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:KZ_Theresienstadt_2015.jpg",
+     "width": 1600,
+     "height": 1200
     },
     {
      "t": "p",
@@ -2791,7 +2923,9 @@
      "caption": "Hiroshima after the atomic bomb of 6 August 1945. Dower argues that the race hatred on both sides made such destruction easier to plan.",
      "credit": "U.S. government photograph (via U.S. Navy Public Affairs)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Hiroshima_aftermath.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Hiroshima_aftermath.jpg",
+     "width": 780,
+     "height": 546
     },
     {
      "t": "p",
@@ -2828,7 +2962,9 @@
      "caption": "General Douglas MacArthur and Emperor Hirohito at their first meeting, Tokyo, 27 September 1945. The informality of the general beside the formality of the emperor told the Japanese public who now held power.",
      "credit": "Lt. Gaetano Faillace, U.S. Army",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Emperor_Hirohito_and_General_MacArthur.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Emperor_Hirohito_and_General_MacArthur.jpg",
+     "width": 1264,
+     "height": 1600
     },
     {
      "t": "p",
@@ -2841,7 +2977,9 @@
      "caption": "The Japanese delegation on board USS Missouri in Tokyo Bay, 2 September 1945, for the signing of the surrender.",
      "credit": "U.S. Army Signal Corps",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Surrender_of_Japan_-_USS_Missouri_(restored).jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Surrender_of_Japan_-_USS_Missouri_(restored).jpg",
+     "width": 1600,
+     "height": 1253
     },
     {
      "t": "h2",
@@ -2905,7 +3043,9 @@
      "caption": "The tuna auction at Tsukiji, Tokyo, in 2014. Buyers judge each fish by the cut flesh at its tail.",
      "credit": "Joe deSousa",
      "license": "CC0",
-     "source": "https://commons.wikimedia.org/wiki/File:Tuna_auction_at_Tsukiji_Fish_Market,_Tokyo;_2014.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Tuna_auction_at_Tsukiji_Fish_Market,_Tokyo;_2014.jpg",
+     "width": 1600,
+     "height": 900
     },
     {
      "t": "p",
@@ -2954,7 +3094,9 @@
      "caption": "Utagawa Hiroshige, Morning View of Nihonbashi, the first print in his Fifty-Three Stations of the Tōkaidō (about 1833–34). Fishmongers with their baskets cross the bridge beside the market that fed Edo for three centuries.",
      "credit": "Utagawa Hiroshige (The Metropolitan Museum of Art)",
      "license": "CC0",
-     "source": "https://commons.wikimedia.org/wiki/File:%E6%9D%B1%E6%B5%B7%E9%81%93%E4%BA%94%E5%8D%81%E4%B8%89%E6%AC%A1%E4%B9%8B%E5%86%85_%E6%97%A5%E6%9C%AC%E6%A9%8B_%E6%9C%9D%E4%B9%8B%E6%99%AF-Stations_One-_Morning_View_of_Nihonbashi_MET_DP122174.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:%E6%9D%B1%E6%B5%B7%E9%81%93%E4%BA%94%E5%8D%81%E4%B8%89%E6%AC%A1%E4%B9%8B%E5%86%85_%E6%97%A5%E6%9C%AC%E6%A9%8B_%E6%9C%9D%E4%B9%8B%E6%99%AF-Stations_One-_Morning_View_of_Nihonbashi_MET_DP122174.jpg",
+     "width": 1200,
+     "height": 816
     },
     {
      "t": "p",
@@ -2971,7 +3113,9 @@
      "caption": "Tsukiji's outer market, the warren of shops around the wholesale market, which still trades after the inner market moved to Toyosu.",
      "credit": "Aw1805",
      "license": "CC BY-SA 3.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Tsukiji_Outer_Market_2.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Tsukiji_Outer_Market_2.jpg",
+     "width": 1600,
+     "height": 1200
     },
     {
      "t": "h2",
@@ -3035,7 +3179,9 @@
      "caption": "An administrative tablet from Mesopotamia, about 3100–2900 BCE, recording the distribution of barley and emmer wheat. Writing began as bookkeeping.",
      "credit": "The Metropolitan Museum of Art",
      "license": "CC0",
-     "source": "https://commons.wikimedia.org/wiki/File:Cuneiform_tablet-_administrative_account_concerning_the_distribution_of_barley_and_emmer_MET_DP297601.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Cuneiform_tablet-_administrative_account_concerning_the_distribution_of_barley_and_emmer_MET_DP297601.jpg",
+     "width": 1200,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -3084,7 +3230,9 @@
      "caption": "The Gutenberg Bible, printed in Mainz about 1455, at the Library of Congress. Within a generation the same machine was printing the witch-hunters' manual.",
      "credit": "Uncredited photographer for the Library of Congress (1944)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Gutenberg_Bible,_Library_of_Congress,_1944.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Gutenberg_Bible,_Library_of_Congress,_1944.jpg",
+     "width": 1600,
+     "height": 1306
     },
     {
      "t": "figure",
@@ -3093,7 +3241,9 @@
      "caption": "Title page of a 1669 Lyon edition of the Malleus Maleficarum, the witch-hunters' manual first printed in 1486. The printing press spread it across Europe.",
      "credit": "Unknown printer, Lyon (1669)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Malleus_maleficarum,_Lyon_1669,_Titelseite.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Malleus_maleficarum,_Lyon_1669,_Titelseite.jpg",
+     "width": 398,
+     "height": 569
     },
     {
      "t": "h2",
@@ -3110,7 +3260,9 @@
      "caption": "Glen Beck and Betty Snyder programming ENIAC, the first general-purpose electronic computer, at the U.S. Army's Ballistic Research Laboratory, about 1947.",
      "credit": "U.S. Army photograph",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Glen_Beck_and_Betty_Snyder_program_the_ENIAC_in_building_328_at_the_Ballistic_Research_Laboratory.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Glen_Beck_and_Betty_Snyder_program_the_ENIAC_in_building_328_at_the_Ballistic_Research_Laboratory.jpg",
+     "width": 1340,
+     "height": 1024
     },
     {
      "t": "p",
@@ -3178,7 +3330,9 @@
      "caption": "John B. Calhoun inside one of his rodent universes, photographed in 1970 by Yoichi Okamoto, a White House photographer.",
      "credit": "Yoichi R. Okamoto, White House photographer",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:CalhounJ.JPG"
+     "source": "https://commons.wikimedia.org/wiki/File:CalhounJ.JPG",
+     "width": 1600,
+     "height": 1058
     },
     {
      "t": "h2",
@@ -3199,7 +3353,9 @@
      "caption": "A white laboratory mouse. Universe 25 was founded with BALB/c albinos, a highly inbred strain, which is one reason its results are hard to read. Illustration from NIH BioArt.",
      "credit": "Ryan Kissinger, NIAID (NIH BioArt)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Lab_Mouse_(NIH_BioArt_279_-_631470).png"
+     "source": "https://commons.wikimedia.org/wiki/File:Lab_Mouse_(NIH_BioArt_279_-_631470).png",
+     "width": 1200,
+     "height": 738
     },
     {
      "t": "figure",
@@ -3208,7 +3364,9 @@
      "caption": "The population of Universe 25, from Calhoun's 1973 paper \"Death Squared\": growth, plateau, and decline to extinction.",
      "credit": "John B. Calhoun, \"Death Squared\" (1973), republished by the NIH",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Mice_population_Universe_25.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:Mice_population_Universe_25.jpg",
+     "width": 780,
+     "height": 498
     },
     {
      "t": "p",
@@ -3304,7 +3462,9 @@
      "caption": "Earthrise, photographed by Bill Anders from Apollo 8 on 24 December 1968: the first time humans saw their whole world from outside.",
      "credit": "William Anders, NASA",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:NASA-Apollo8-Dec24-Earthrise.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:NASA-Apollo8-Dec24-Earthrise.jpg",
+     "width": 1600,
+     "height": 1600
     },
     {
      "t": "h2",
@@ -3357,7 +3517,9 @@
      "caption": "A Purkinje cell from the cerebellum, drawn by Santiago Ramón y Cajal around 1899. Cajal showed that the brain is a network of separate cells.",
      "credit": "Santiago Ramón y Cajal",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:PurkinjeCell.jpg"
+     "source": "https://commons.wikimedia.org/wiki/File:PurkinjeCell.jpg",
+     "width": 611,
+     "height": 715
     },
     {
      "t": "p",
@@ -3370,7 +3532,9 @@
      "caption": "The Mark I Perceptron, from its 1960 operator's manual: one of the first machines built to learn by adjusting the connections in a network of simple artificial neurons.",
      "credit": "John C. Hay, Albert E. Murray et al., Mark I Perceptron Operators' Manual (1960)",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Mark_I_Perceptron,_Figure_2_of_operator%27s_manual.png"
+     "source": "https://commons.wikimedia.org/wiki/File:Mark_I_Perceptron,_Figure_2_of_operator%27s_manual.png",
+     "width": 1166,
+     "height": 945
     },
     {
      "t": "p",
@@ -3383,7 +3547,9 @@
      "caption": "An artificial neural network in its simplest form: inputs, a layer of units whose connections are learned, and outputs. The units are loosely modelled on Cajal's neurons; the resemblance is real, and so is the difference.",
      "credit": "hikari_no_yume",
      "license": "CC BY 4.0",
-     "source": "https://commons.wikimedia.org/wiki/File:Neural_networks_diagram.png"
+     "source": "https://commons.wikimedia.org/wiki/File:Neural_networks_diagram.png",
+     "width": 1600,
+     "height": 1200
     },
     {
      "t": "p",
@@ -3404,7 +3570,9 @@
      "caption": "The Earth as a pale blue dot, photographed by Voyager 1 on 14 February 1990 from about six billion kilometres away. Every person in this book lived on that point of light.",
      "credit": "NASA / JPL-Caltech, Voyager 1",
      "license": "Public domain",
-     "source": "https://commons.wikimedia.org/wiki/File:Pale_Blue_Dot.png"
+     "source": "https://commons.wikimedia.org/wiki/File:Pale_Blue_Dot.png",
+     "width": 453,
+     "height": 614
     },
     {
      "t": "h2",

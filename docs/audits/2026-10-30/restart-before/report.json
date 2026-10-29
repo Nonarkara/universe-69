@@ -1,0 +1,2623 @@
+{
+  "source": "/Volumes/Data/agent-scratch/u69-oct30-viewer/restart-before.html",
+  "sourceSHA256": "32ca5a85f3ac96827023162c767c95b238aaf9a03e340f51d99c47a97e8c5332",
+  "initialDay": 63212,
+  "resetDay": 0,
+  "sameIteration": 1,
+  "synthetic": false,
+  "transition": "Real archived high-day payload -> real current genesis; same iteration id",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "checks": [
+        {
+          "passed": true,
+          "check": "high-day: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "high-day: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "high-day: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "high-day: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "high-day: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "high-day: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "high-day: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "Actual poll accepts day rewind with unchanged iteration1"
+        },
+        {
+          "passed": false,
+          "check": "Day rewind refetches /world"
+        },
+        {
+          "passed": false,
+          "check": "New actual terrain identity installed in worldInfo and renderer"
+        },
+        {
+          "passed": true,
+          "check": "genesis: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "genesis: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "genesis: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "genesis: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "genesis: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "genesis: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "genesis: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: eventYearsPresent"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: clockMatchesRuntime"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: waterActionLabel"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: pairCacheReuse"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: pairVariation"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: pairBodyIdentity"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: adultGate"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: reseedClearsIdentity"
+        },
+        {
+          "passed": false,
+          "check": "Viewer helper regression: reseedClearsWorldInfo"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: reseedClearsCamera"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: mirrorTerrainReuse"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: mirrorIterationInvalidates"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: stageCacheReuse"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: beddingCacheDistinct"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: stageCacheDistinct"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: standingFeetFixed"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: sleeperArmsNearAndFar"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: sleeperBones"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: plantedFootFixed"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: walkBones"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: equalWallTimeMotion"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: individualMotion"
+        },
+        {
+          "passed": true,
+          "check": "No JavaScript errors"
+        }
+      ],
+      "errors": [],
+      "surfaces": {
+        "high-day": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 706,
+            "width": 390,
+            "height": 27,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 369.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 399.25,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 706,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 371.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 399.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 228.5,
+            "combinedPercent": 27.07345971563981,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "BODY",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "genesis": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 706,
+            "width": 390,
+            "height": 27,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 369.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 399.25,
+              "width": 390,
+              "height": 306.75,
+              "bottom": 706,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 307,
+              "clientHeight": 307
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 371.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 399.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 228.5,
+            "combinedPercent": 27.07345971563981,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "BODY",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 307,
+              "lit": 1235,
+              "samples": 1235,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        }
+      },
+      "restart": {
+        "installed": false,
+        "changed": false,
+        "identity": true,
+        "iter": 1,
+        "day": 0
+      },
+      "worldRequests": [
+        {
+          "reset": false
+        }
+      ],
+      "helperRegressions": {
+        "eventYearsPresent": true,
+        "clockMatchesRuntime": true,
+        "waterActionLabel": true,
+        "pairCacheReuse": true,
+        "pairVariation": true,
+        "pairBodyIdentity": true,
+        "adultGate": true,
+        "reseedClearsIdentity": true,
+        "reseedClearsWorldInfo": false,
+        "reseedClearsCamera": true,
+        "mirrorTerrainReuse": true,
+        "mirrorIterationInvalidates": true
+      },
+      "bodyMotionRegressions": {
+        "checks": {
+          "stageCacheReuse": true,
+          "beddingCacheDistinct": true,
+          "stageCacheDistinct": true,
+          "standingFeetFixed": true,
+          "sleeperArmsNearAndFar": true,
+          "sleeperBones": true,
+          "plantedFootFixed": true,
+          "walkBones": true,
+          "equalWallTimeMotion": true,
+          "individualMotion": true
+        },
+        "measurements": {
+          "standing": [
+            {
+              "rest": true,
+              "left": [
+                -1.0633728700128702,
+                31.199000082822042
+              ],
+              "right": [
+                3.578144120061497,
+                31.2
+              ],
+              "pelvis": [
+                0,
+                15.581873721251913
+              ],
+              "boneError": 2.6645352591003757e-15
+            },
+            {
+              "rest": true,
+              "left": [
+                -1.0633728700128702,
+                31.199000082822042
+              ],
+              "right": [
+                3.578144120061497,
+                31.2
+              ],
+              "pelvis": [
+                0,
+                15.581873721251913
+              ],
+              "boneError": 2.6645352591003757e-15
+            },
+            {
+              "rest": true,
+              "left": [
+                -1.0633728700128702,
+                31.199000082822042
+              ],
+              "right": [
+                3.578144120061497,
+                31.2
+              ],
+              "pelvis": [
+                0,
+                15.581873721251913
+              ],
+              "boneError": 2.6645352591003757e-15
+            },
+            {
+              "rest": true,
+              "left": [
+                -1.0633728700128702,
+                31.199000082822042
+              ],
+              "right": [
+                3.578144120061497,
+                31.2
+              ],
+              "pelvis": [
+                0,
+                15.581873721251913
+              ],
+              "boneError": 2.6645352591003757e-15
+            }
+          ],
+          "sleep": [
+            {
+              "scale": 0.2,
+              "age": 6,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 7.884081841281777,
+              "headY": 2.763591778388694,
+              "headRadius": 2.5157232704402515,
+              "shoulderY": 7.884081841281777,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 2,
+              "age": 6,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 7.884081841281777,
+              "headY": 2.763591778388694,
+              "headRadius": 2.5157232704402515,
+              "shoulderY": 7.884081841281777,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 6,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 7.884081841281777,
+              "headY": 2.763591778388694,
+              "headRadius": 2.5157232704402515,
+              "shoulderY": 7.884081841281777,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 2,
+              "age": 6,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 7.884081841281777,
+              "headY": 2.763591778388694,
+              "headRadius": 2.5157232704402515,
+              "shoulderY": 7.884081841281777,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 18,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 6.419088598444897,
+              "headY": 2.2079710400205332,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.419088598444897,
+              "boneError": 1.7763568394002505e-15
+            },
+            {
+              "scale": 2,
+              "age": 18,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 6.419088598444897,
+              "headY": 2.2079710400205332,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.419088598444897,
+              "boneError": 1.7763568394002505e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 18,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 6.426597931778231,
+              "headY": 2.2455177066872007,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.426597931778231,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 2,
+              "age": 18,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 6.426597931778231,
+              "headY": 2.2455177066872007,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.426597931778231,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 58,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 6.419088598444897,
+              "headY": 2.2079710400205332,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.419088598444897,
+              "boneError": 1.7763568394002505e-15
+            },
+            {
+              "scale": 2,
+              "age": 58,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 6.419088598444897,
+              "headY": 2.2079710400205332,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.419088598444897,
+              "boneError": 1.7763568394002505e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 58,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 6.426597931778231,
+              "headY": 2.2455177066872007,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.426597931778231,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 2,
+              "age": 58,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 6.426597931778231,
+              "headY": 2.2455177066872007,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.426597931778231,
+              "boneError": 3.552713678800501e-15
+            }
+          ],
+          "walks": [
+            {
+              "age": 3,
+              "sex": 0,
+              "groundDrift": 1.1705204900638866e-05,
+              "verticalDrift": 2.537468147811861e-05,
+              "boneError": 5.329070518200751e-15
+            },
+            {
+              "age": 3,
+              "sex": 1,
+              "groundDrift": 1.1705204900638866e-05,
+              "verticalDrift": 2.537468147811861e-05,
+              "boneError": 5.329070518200751e-15
+            },
+            {
+              "age": 6,
+              "sex": 0,
+              "groundDrift": 1.4118277435581916e-05,
+              "verticalDrift": 3.035936940487538e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 6,
+              "sex": 1,
+              "groundDrift": 1.4118277435581916e-05,
+              "verticalDrift": 3.035936940487538e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 12,
+              "sex": 0,
+              "groundDrift": 2.4518767429426713e-05,
+              "verticalDrift": 3.9421721513166474e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 12,
+              "sex": 1,
+              "groundDrift": 2.409837818406757e-05,
+              "verticalDrift": 3.873195976056287e-05,
+              "boneError": 7.105427357601002e-15
+            },
+            {
+              "age": 17,
+              "sex": 0,
+              "groundDrift": 2.7156843935866037e-05,
+              "verticalDrift": 4.3499875418628875e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 17,
+              "sex": 1,
+              "groundDrift": 2.6037986405436087e-05,
+              "verticalDrift": 4.1672959553151756e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 18,
+              "sex": 0,
+              "groundDrift": 2.8353959445392984e-05,
+              "verticalDrift": 4.531242176541994e-05,
+              "boneError": 4.440892098500626e-15
+            },
+            {
+              "age": 18,
+              "sex": 1,
+              "groundDrift": 2.6405051065159224e-05,
+              "verticalDrift": 4.214042058747758e-05,
+              "boneError": 7.105427357601002e-15
+            },
+            {
+              "age": 30,
+              "sex": 0,
+              "groundDrift": 2.8353959445392984e-05,
+              "verticalDrift": 4.531242176541994e-05,
+              "boneError": 4.440892098500626e-15
+            },
+            {
+              "age": 30,
+              "sex": 1,
+              "groundDrift": 2.6405051065159224e-05,
+              "verticalDrift": 4.214042058747758e-05,
+              "boneError": 7.105427357601002e-15
+            },
+            {
+              "age": 58,
+              "sex": 0,
+              "groundDrift": 2.8353959445392984e-05,
+              "verticalDrift": 4.531242176541994e-05,
+              "boneError": 4.440892098500626e-15
+            },
+            {
+              "age": 58,
+              "sex": 1,
+              "groundDrift": 2.6405051065159224e-05,
+              "verticalDrift": 4.214042058747758e-05,
+              "boneError": 7.105427357601002e-15
+            },
+            {
+              "age": 70,
+              "sex": 0,
+              "groundDrift": 2.7470245050120745e-05,
+              "verticalDrift": 4.3953108141980834e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 70,
+              "sex": 1,
+              "groundDrift": 2.5582482567010345e-05,
+              "verticalDrift": 4.0876032888714775e-05,
+              "boneError": 5.329070518200751e-15
+            }
+          ],
+          "motion30": [
+            {
+              "id": 7,
+              "x": 11.658366511648149,
+              "y": 10.47381900332805,
+              "vx": 0.034045518296091544,
+              "vy": 0.009727290941740395,
+              "dist": 1.9818792150513842,
+              "walkc": 0.5143265652273965,
+              "moving": true,
+              "wait": 0
+            },
+            {
+              "id": 18,
+              "x": 11.12418878615259,
+              "y": 10.321196796043605,
+              "vx": 0.022616888603394288,
+              "vy": 0.006461968172398349,
+              "dist": 1.2705671418902995,
+              "walkc": 0.5615216648062449,
+              "moving": true,
+              "wait": 0
+            },
+            {
+              "id": 31,
+              "x": 11.679360486525358,
+              "y": 10.479817281864388,
+              "vx": 0.031869642065553816,
+              "vy": 0.009105612018729657,
+              "dist": 1.8719328135058653,
+              "walkc": 0.37484220308381877,
+              "moving": true,
+              "wait": 0
+            }
+          ],
+          "motion60": [
+            {
+              "id": 7,
+              "x": 11.658366511648149,
+              "y": 10.47381900332805,
+              "vx": 0.034045518296091544,
+              "vy": 0.009727290941740395,
+              "dist": 1.9818792150513842,
+              "walkc": 0.5143265652273965,
+              "moving": true,
+              "wait": 0
+            },
+            {
+              "id": 18,
+              "x": 11.12418878615259,
+              "y": 10.321196796043605,
+              "vx": 0.022616888603394288,
+              "vy": 0.006461968172398349,
+              "dist": 1.2705671418902995,
+              "walkc": 0.5615216648062449,
+              "moving": true,
+              "wait": 0
+            },
+            {
+              "id": 31,
+              "x": 11.679360486525358,
+              "y": 10.479817281864388,
+              "vx": 0.031869642065553816,
+              "vy": 0.009105612018729657,
+              "dist": 1.8719328135058653,
+              "walkc": 0.37484220308381877,
+              "moving": true,
+              "wait": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "checks": [
+        {
+          "passed": true,
+          "check": "high-day: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "high-day: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "high-day: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "high-day: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "high-day: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "high-day: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "high-day: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "Actual poll accepts day rewind with unchanged iteration1"
+        },
+        {
+          "passed": false,
+          "check": "Day rewind refetches /world"
+        },
+        {
+          "passed": false,
+          "check": "New actual terrain identity installed in worldInfo and renderer"
+        },
+        {
+          "passed": true,
+          "check": "genesis: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "genesis: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "genesis: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "genesis: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "genesis: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "genesis: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "genesis: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: eventYearsPresent"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: clockMatchesRuntime"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: waterActionLabel"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: pairCacheReuse"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: pairVariation"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: pairBodyIdentity"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: adultGate"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: reseedClearsIdentity"
+        },
+        {
+          "passed": false,
+          "check": "Viewer helper regression: reseedClearsWorldInfo"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: reseedClearsCamera"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: mirrorTerrainReuse"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: mirrorIterationInvalidates"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: stageCacheReuse"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: beddingCacheDistinct"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: stageCacheDistinct"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: standingFeetFixed"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: sleeperArmsNearAndFar"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: sleeperBones"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: plantedFootFixed"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: walkBones"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: equalWallTimeMotion"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: individualMotion"
+        },
+        {
+          "passed": true,
+          "check": "No JavaScript errors"
+        }
+      ],
+      "errors": [],
+      "surfaces": {
+        "high-day": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 638,
+            "width": 1024,
+            "height": 130,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 528.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 638,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 302.375,
+            "combinedPercent": 39.371744791666664,
+            "bottom": 130,
+            "bottomPercent": 16.927083333333332,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "BODY",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "genesis": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 638,
+            "width": 1024,
+            "height": 130,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 528.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 638,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 465.625,
+              "bottom": 528.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 466,
+              "clientHeight": 466
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 302.375,
+            "combinedPercent": 39.371744791666664,
+            "bottom": 130,
+            "bottomPercent": 16.927083333333332,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "BODY",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 466,
+              "lit": 2455,
+              "samples": 2455,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        }
+      },
+      "restart": {
+        "installed": false,
+        "changed": false,
+        "identity": true,
+        "iter": 1,
+        "day": 0
+      },
+      "worldRequests": [
+        {
+          "reset": false
+        }
+      ],
+      "helperRegressions": {
+        "eventYearsPresent": true,
+        "clockMatchesRuntime": true,
+        "waterActionLabel": true,
+        "pairCacheReuse": true,
+        "pairVariation": true,
+        "pairBodyIdentity": true,
+        "adultGate": true,
+        "reseedClearsIdentity": true,
+        "reseedClearsWorldInfo": false,
+        "reseedClearsCamera": true,
+        "mirrorTerrainReuse": true,
+        "mirrorIterationInvalidates": true
+      },
+      "bodyMotionRegressions": {
+        "checks": {
+          "stageCacheReuse": true,
+          "beddingCacheDistinct": true,
+          "stageCacheDistinct": true,
+          "standingFeetFixed": true,
+          "sleeperArmsNearAndFar": true,
+          "sleeperBones": true,
+          "plantedFootFixed": true,
+          "walkBones": true,
+          "equalWallTimeMotion": true,
+          "individualMotion": true
+        },
+        "measurements": {
+          "standing": [
+            {
+              "rest": true,
+              "left": [
+                -1.0633728700128702,
+                31.199000082822042
+              ],
+              "right": [
+                3.578144120061497,
+                31.2
+              ],
+              "pelvis": [
+                0,
+                15.581873721251913
+              ],
+              "boneError": 2.6645352591003757e-15
+            },
+            {
+              "rest": true,
+              "left": [
+                -1.0633728700128702,
+                31.199000082822042
+              ],
+              "right": [
+                3.578144120061497,
+                31.2
+              ],
+              "pelvis": [
+                0,
+                15.581873721251913
+              ],
+              "boneError": 2.6645352591003757e-15
+            },
+            {
+              "rest": true,
+              "left": [
+                -1.0633728700128702,
+                31.199000082822042
+              ],
+              "right": [
+                3.578144120061497,
+                31.2
+              ],
+              "pelvis": [
+                0,
+                15.581873721251913
+              ],
+              "boneError": 2.6645352591003757e-15
+            },
+            {
+              "rest": true,
+              "left": [
+                -1.0633728700128702,
+                31.199000082822042
+              ],
+              "right": [
+                3.578144120061497,
+                31.2
+              ],
+              "pelvis": [
+                0,
+                15.581873721251913
+              ],
+              "boneError": 2.6645352591003757e-15
+            }
+          ],
+          "sleep": [
+            {
+              "scale": 0.2,
+              "age": 6,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 7.884081841281777,
+              "headY": 2.763591778388694,
+              "headRadius": 2.5157232704402515,
+              "shoulderY": 7.884081841281777,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 2,
+              "age": 6,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 7.884081841281777,
+              "headY": 2.763591778388694,
+              "headRadius": 2.5157232704402515,
+              "shoulderY": 7.884081841281777,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 6,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 7.884081841281777,
+              "headY": 2.763591778388694,
+              "headRadius": 2.5157232704402515,
+              "shoulderY": 7.884081841281777,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 2,
+              "age": 6,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 7.884081841281777,
+              "headY": 2.763591778388694,
+              "headRadius": 2.5157232704402515,
+              "shoulderY": 7.884081841281777,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 18,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 6.419088598444897,
+              "headY": 2.2079710400205332,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.419088598444897,
+              "boneError": 1.7763568394002505e-15
+            },
+            {
+              "scale": 2,
+              "age": 18,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 6.419088598444897,
+              "headY": 2.2079710400205332,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.419088598444897,
+              "boneError": 1.7763568394002505e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 18,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 6.426597931778231,
+              "headY": 2.2455177066872007,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.426597931778231,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 2,
+              "age": 18,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 6.426597931778231,
+              "headY": 2.2455177066872007,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.426597931778231,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 58,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 6.419088598444897,
+              "headY": 2.2079710400205332,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.419088598444897,
+              "boneError": 1.7763568394002505e-15
+            },
+            {
+              "scale": 2,
+              "age": 58,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 6.419088598444897,
+              "headY": 2.2079710400205332,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.419088598444897,
+              "boneError": 1.7763568394002505e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 58,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 6.426597931778231,
+              "headY": 2.2455177066872007,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.426597931778231,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 2,
+              "age": 58,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 6.426597931778231,
+              "headY": 2.2455177066872007,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.426597931778231,
+              "boneError": 3.552713678800501e-15
+            }
+          ],
+          "walks": [
+            {
+              "age": 3,
+              "sex": 0,
+              "groundDrift": 1.1705204900638866e-05,
+              "verticalDrift": 2.537468147811861e-05,
+              "boneError": 5.329070518200751e-15
+            },
+            {
+              "age": 3,
+              "sex": 1,
+              "groundDrift": 1.1705204900638866e-05,
+              "verticalDrift": 2.537468147811861e-05,
+              "boneError": 5.329070518200751e-15
+            },
+            {
+              "age": 6,
+              "sex": 0,
+              "groundDrift": 1.4118277435581916e-05,
+              "verticalDrift": 3.035936940487538e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 6,
+              "sex": 1,
+              "groundDrift": 1.4118277435581916e-05,
+              "verticalDrift": 3.035936940487538e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 12,
+              "sex": 0,
+              "groundDrift": 2.4518767429426713e-05,
+              "verticalDrift": 3.9421721513166474e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 12,
+              "sex": 1,
+              "groundDrift": 2.409837818406757e-05,
+              "verticalDrift": 3.873195976056287e-05,
+              "boneError": 7.105427357601002e-15
+            },
+            {
+              "age": 17,
+              "sex": 0,
+              "groundDrift": 2.7156843935866037e-05,
+              "verticalDrift": 4.3499875418628875e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 17,
+              "sex": 1,
+              "groundDrift": 2.6037986405436087e-05,
+              "verticalDrift": 4.1672959553151756e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 18,
+              "sex": 0,
+              "groundDrift": 2.8353959445392984e-05,
+              "verticalDrift": 4.531242176541994e-05,
+              "boneError": 4.440892098500626e-15
+            },
+            {
+              "age": 18,
+              "sex": 1,
+              "groundDrift": 2.6405051065159224e-05,
+              "verticalDrift": 4.214042058747758e-05,
+              "boneError": 7.105427357601002e-15
+            },
+            {
+              "age": 30,
+              "sex": 0,
+              "groundDrift": 2.8353959445392984e-05,
+              "verticalDrift": 4.531242176541994e-05,
+              "boneError": 4.440892098500626e-15
+            },
+            {
+              "age": 30,
+              "sex": 1,
+              "groundDrift": 2.6405051065159224e-05,
+              "verticalDrift": 4.214042058747758e-05,
+              "boneError": 7.105427357601002e-15
+            },
+            {
+              "age": 58,
+              "sex": 0,
+              "groundDrift": 2.8353959445392984e-05,
+              "verticalDrift": 4.531242176541994e-05,
+              "boneError": 4.440892098500626e-15
+            },
+            {
+              "age": 58,
+              "sex": 1,
+              "groundDrift": 2.6405051065159224e-05,
+              "verticalDrift": 4.214042058747758e-05,
+              "boneError": 7.105427357601002e-15
+            },
+            {
+              "age": 70,
+              "sex": 0,
+              "groundDrift": 2.7470245050120745e-05,
+              "verticalDrift": 4.3953108141980834e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 70,
+              "sex": 1,
+              "groundDrift": 2.5582482567010345e-05,
+              "verticalDrift": 4.0876032888714775e-05,
+              "boneError": 5.329070518200751e-15
+            }
+          ],
+          "motion30": [
+            {
+              "id": 7,
+              "x": 11.658366511648149,
+              "y": 10.47381900332805,
+              "vx": 0.034045518296091544,
+              "vy": 0.009727290941740395,
+              "dist": 1.9818792150513842,
+              "walkc": 0.5143265652273965,
+              "moving": true,
+              "wait": 0
+            },
+            {
+              "id": 18,
+              "x": 11.12418878615259,
+              "y": 10.321196796043605,
+              "vx": 0.022616888603394288,
+              "vy": 0.006461968172398349,
+              "dist": 1.2705671418902995,
+              "walkc": 0.5615216648062449,
+              "moving": true,
+              "wait": 0
+            },
+            {
+              "id": 31,
+              "x": 11.679360486525358,
+              "y": 10.479817281864388,
+              "vx": 0.031869642065553816,
+              "vy": 0.009105612018729657,
+              "dist": 1.8719328135058653,
+              "walkc": 0.37484220308381877,
+              "moving": true,
+              "wait": 0
+            }
+          ],
+          "motion60": [
+            {
+              "id": 7,
+              "x": 11.658366511648149,
+              "y": 10.47381900332805,
+              "vx": 0.034045518296091544,
+              "vy": 0.009727290941740395,
+              "dist": 1.9818792150513842,
+              "walkc": 0.5143265652273965,
+              "moving": true,
+              "wait": 0
+            },
+            {
+              "id": 18,
+              "x": 11.12418878615259,
+              "y": 10.321196796043605,
+              "vx": 0.022616888603394288,
+              "vy": 0.006461968172398349,
+              "dist": 1.2705671418902995,
+              "walkc": 0.5615216648062449,
+              "moving": true,
+              "wait": 0
+            },
+            {
+              "id": 31,
+              "x": 11.679360486525358,
+              "y": 10.479817281864388,
+              "vx": 0.031869642065553816,
+              "vy": 0.009105612018729657,
+              "dist": 1.8719328135058653,
+              "walkc": 0.37484220308381877,
+              "moving": true,
+              "wait": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "checks": [
+        {
+          "passed": true,
+          "check": "high-day: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "high-day: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "high-day: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "high-day: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "high-day: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "high-day: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "high-day: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "Actual poll accepts day rewind with unchanged iteration1"
+        },
+        {
+          "passed": false,
+          "check": "Day rewind refetches /world"
+        },
+        {
+          "passed": false,
+          "check": "New actual terrain identity installed in worldInfo and renderer"
+        },
+        {
+          "passed": true,
+          "check": "genesis: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "genesis: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "genesis: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "genesis: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "genesis: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "genesis: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "genesis: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: eventYearsPresent"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: clockMatchesRuntime"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: waterActionLabel"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: pairCacheReuse"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: pairVariation"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: pairBodyIdentity"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: adultGate"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: reseedClearsIdentity"
+        },
+        {
+          "passed": false,
+          "check": "Viewer helper regression: reseedClearsWorldInfo"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: reseedClearsCamera"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: mirrorTerrainReuse"
+        },
+        {
+          "passed": true,
+          "check": "Viewer helper regression: mirrorIterationInvalidates"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: stageCacheReuse"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: beddingCacheDistinct"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: stageCacheDistinct"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: standingFeetFixed"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: sleeperArmsNearAndFar"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: sleeperBones"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: plantedFootFixed"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: walkBones"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: equalWallTimeMotion"
+        },
+        {
+          "passed": true,
+          "check": "Body/motion regression: individualMotion"
+        },
+        {
+          "passed": true,
+          "check": "No JavaScript errors"
+        }
+      ],
+      "errors": [],
+      "surfaces": {
+        "high-day": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 770,
+            "width": 1440,
+            "height": 130,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 715.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 770,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 247.6875,
+            "combinedPercent": 27.520833333333332,
+            "bottom": 130,
+            "bottomPercent": 14.444444444444445,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "BODY",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "genesis": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 770,
+            "width": 1440,
+            "height": 130,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 129,
+            "clientHeight": 129
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 715.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 770,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 652.3125,
+              "bottom": 715.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 652,
+              "clientHeight": 652
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 247.6875,
+            "combinedPercent": 27.520833333333332,
+            "bottom": 130,
+            "bottomPercent": 14.444444444444445,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "BODY",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 652,
+              "lit": 4833,
+              "samples": 4833,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        }
+      },
+      "restart": {
+        "installed": false,
+        "changed": false,
+        "identity": true,
+        "iter": 1,
+        "day": 0
+      },
+      "worldRequests": [
+        {
+          "reset": false
+        }
+      ],
+      "helperRegressions": {
+        "eventYearsPresent": true,
+        "clockMatchesRuntime": true,
+        "waterActionLabel": true,
+        "pairCacheReuse": true,
+        "pairVariation": true,
+        "pairBodyIdentity": true,
+        "adultGate": true,
+        "reseedClearsIdentity": true,
+        "reseedClearsWorldInfo": false,
+        "reseedClearsCamera": true,
+        "mirrorTerrainReuse": true,
+        "mirrorIterationInvalidates": true
+      },
+      "bodyMotionRegressions": {
+        "checks": {
+          "stageCacheReuse": true,
+          "beddingCacheDistinct": true,
+          "stageCacheDistinct": true,
+          "standingFeetFixed": true,
+          "sleeperArmsNearAndFar": true,
+          "sleeperBones": true,
+          "plantedFootFixed": true,
+          "walkBones": true,
+          "equalWallTimeMotion": true,
+          "individualMotion": true
+        },
+        "measurements": {
+          "standing": [
+            {
+              "rest": true,
+              "left": [
+                -1.0633728700128702,
+                31.199000082822042
+              ],
+              "right": [
+                3.578144120061497,
+                31.2
+              ],
+              "pelvis": [
+                0,
+                15.581873721251913
+              ],
+              "boneError": 2.6645352591003757e-15
+            },
+            {
+              "rest": true,
+              "left": [
+                -1.0633728700128702,
+                31.199000082822042
+              ],
+              "right": [
+                3.578144120061497,
+                31.2
+              ],
+              "pelvis": [
+                0,
+                15.581873721251913
+              ],
+              "boneError": 2.6645352591003757e-15
+            },
+            {
+              "rest": true,
+              "left": [
+                -1.0633728700128702,
+                31.199000082822042
+              ],
+              "right": [
+                3.578144120061497,
+                31.2
+              ],
+              "pelvis": [
+                0,
+                15.581873721251913
+              ],
+              "boneError": 2.6645352591003757e-15
+            },
+            {
+              "rest": true,
+              "left": [
+                -1.0633728700128702,
+                31.199000082822042
+              ],
+              "right": [
+                3.578144120061497,
+                31.2
+              ],
+              "pelvis": [
+                0,
+                15.581873721251913
+              ],
+              "boneError": 2.6645352591003757e-15
+            }
+          ],
+          "sleep": [
+            {
+              "scale": 0.2,
+              "age": 6,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 7.884081841281777,
+              "headY": 2.763591778388694,
+              "headRadius": 2.5157232704402515,
+              "shoulderY": 7.884081841281777,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 2,
+              "age": 6,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 7.884081841281777,
+              "headY": 2.763591778388694,
+              "headRadius": 2.5157232704402515,
+              "shoulderY": 7.884081841281777,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 6,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 7.884081841281777,
+              "headY": 2.763591778388694,
+              "headRadius": 2.5157232704402515,
+              "shoulderY": 7.884081841281777,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 2,
+              "age": 6,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 7.884081841281777,
+              "headY": 2.763591778388694,
+              "headRadius": 2.5157232704402515,
+              "shoulderY": 7.884081841281777,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 18,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 6.419088598444897,
+              "headY": 2.2079710400205332,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.419088598444897,
+              "boneError": 1.7763568394002505e-15
+            },
+            {
+              "scale": 2,
+              "age": 18,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 6.419088598444897,
+              "headY": 2.2079710400205332,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.419088598444897,
+              "boneError": 1.7763568394002505e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 18,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 6.426597931778231,
+              "headY": 2.2455177066872007,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.426597931778231,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 2,
+              "age": 18,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 6.426597931778231,
+              "headY": 2.2455177066872007,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.426597931778231,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 58,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 6.419088598444897,
+              "headY": 2.2079710400205332,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.419088598444897,
+              "boneError": 1.7763568394002505e-15
+            },
+            {
+              "scale": 2,
+              "age": 58,
+              "sex": 0,
+              "keepsArms": true,
+              "wristY": 6.419088598444897,
+              "headY": 2.2079710400205332,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.419088598444897,
+              "boneError": 1.7763568394002505e-15
+            },
+            {
+              "scale": 0.2,
+              "age": 58,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 6.426597931778231,
+              "headY": 2.2455177066872007,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.426597931778231,
+              "boneError": 3.552713678800501e-15
+            },
+            {
+              "scale": 2,
+              "age": 58,
+              "sex": 1,
+              "keepsArms": true,
+              "wristY": 6.426597931778231,
+              "headY": 2.2455177066872007,
+              "headRadius": 1.9860973187686195,
+              "shoulderY": 6.426597931778231,
+              "boneError": 3.552713678800501e-15
+            }
+          ],
+          "walks": [
+            {
+              "age": 3,
+              "sex": 0,
+              "groundDrift": 1.1705204900638866e-05,
+              "verticalDrift": 2.537468147811861e-05,
+              "boneError": 5.329070518200751e-15
+            },
+            {
+              "age": 3,
+              "sex": 1,
+              "groundDrift": 1.1705204900638866e-05,
+              "verticalDrift": 2.537468147811861e-05,
+              "boneError": 5.329070518200751e-15
+            },
+            {
+              "age": 6,
+              "sex": 0,
+              "groundDrift": 1.4118277435581916e-05,
+              "verticalDrift": 3.035936940487538e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 6,
+              "sex": 1,
+              "groundDrift": 1.4118277435581916e-05,
+              "verticalDrift": 3.035936940487538e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 12,
+              "sex": 0,
+              "groundDrift": 2.4518767429426713e-05,
+              "verticalDrift": 3.9421721513166474e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 12,
+              "sex": 1,
+              "groundDrift": 2.409837818406757e-05,
+              "verticalDrift": 3.873195976056287e-05,
+              "boneError": 7.105427357601002e-15
+            },
+            {
+              "age": 17,
+              "sex": 0,
+              "groundDrift": 2.7156843935866037e-05,
+              "verticalDrift": 4.3499875418628875e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 17,
+              "sex": 1,
+              "groundDrift": 2.6037986405436087e-05,
+              "verticalDrift": 4.1672959553151756e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 18,
+              "sex": 0,
+              "groundDrift": 2.8353959445392984e-05,
+              "verticalDrift": 4.531242176541994e-05,
+              "boneError": 4.440892098500626e-15
+            },
+            {
+              "age": 18,
+              "sex": 1,
+              "groundDrift": 2.6405051065159224e-05,
+              "verticalDrift": 4.214042058747758e-05,
+              "boneError": 7.105427357601002e-15
+            },
+            {
+              "age": 30,
+              "sex": 0,
+              "groundDrift": 2.8353959445392984e-05,
+              "verticalDrift": 4.531242176541994e-05,
+              "boneError": 4.440892098500626e-15
+            },
+            {
+              "age": 30,
+              "sex": 1,
+              "groundDrift": 2.6405051065159224e-05,
+              "verticalDrift": 4.214042058747758e-05,
+              "boneError": 7.105427357601002e-15
+            },
+            {
+              "age": 58,
+              "sex": 0,
+              "groundDrift": 2.8353959445392984e-05,
+              "verticalDrift": 4.531242176541994e-05,
+              "boneError": 4.440892098500626e-15
+            },
+            {
+              "age": 58,
+              "sex": 1,
+              "groundDrift": 2.6405051065159224e-05,
+              "verticalDrift": 4.214042058747758e-05,
+              "boneError": 7.105427357601002e-15
+            },
+            {
+              "age": 70,
+              "sex": 0,
+              "groundDrift": 2.7470245050120745e-05,
+              "verticalDrift": 4.3953108141980834e-05,
+              "boneError": 6.217248937900877e-15
+            },
+            {
+              "age": 70,
+              "sex": 1,
+              "groundDrift": 2.5582482567010345e-05,
+              "verticalDrift": 4.0876032888714775e-05,
+              "boneError": 5.329070518200751e-15
+            }
+          ],
+          "motion30": [
+            {
+              "id": 7,
+              "x": 11.658366511648149,
+              "y": 10.47381900332805,
+              "vx": 0.034045518296091544,
+              "vy": 0.009727290941740395,
+              "dist": 1.9818792150513842,
+              "walkc": 0.5143265652273965,
+              "moving": true,
+              "wait": 0
+            },
+            {
+              "id": 18,
+              "x": 11.12418878615259,
+              "y": 10.321196796043605,
+              "vx": 0.022616888603394288,
+              "vy": 0.006461968172398349,
+              "dist": 1.2705671418902995,
+              "walkc": 0.5615216648062449,
+              "moving": true,
+              "wait": 0
+            },
+            {
+              "id": 31,
+              "x": 11.679360486525358,
+              "y": 10.479817281864388,
+              "vx": 0.031869642065553816,
+              "vy": 0.009105612018729657,
+              "dist": 1.8719328135058653,
+              "walkc": 0.37484220308381877,
+              "moving": true,
+              "wait": 0
+            }
+          ],
+          "motion60": [
+            {
+              "id": 7,
+              "x": 11.658366511648149,
+              "y": 10.47381900332805,
+              "vx": 0.034045518296091544,
+              "vy": 0.009727290941740395,
+              "dist": 1.9818792150513842,
+              "walkc": 0.5143265652273965,
+              "moving": true,
+              "wait": 0
+            },
+            {
+              "id": 18,
+              "x": 11.12418878615259,
+              "y": 10.321196796043605,
+              "vx": 0.022616888603394288,
+              "vy": 0.006461968172398349,
+              "dist": 1.2705671418902995,
+              "walkc": 0.5615216648062449,
+              "moving": true,
+              "wait": 0
+            },
+            {
+              "id": 31,
+              "x": 11.679360486525358,
+              "y": 10.479817281864388,
+              "vx": 0.031869642065553816,
+              "vy": 0.009105612018729657,
+              "dist": 1.8719328135058653,
+              "walkc": 0.37484220308381877,
+              "moving": true,
+              "wait": 0
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "failures": [
+    "390x844: Day rewind refetches /world",
+    "390x844: New actual terrain identity installed in worldInfo and renderer",
+    "390x844: Viewer helper regression: reseedClearsWorldInfo",
+    "1024x768: Day rewind refetches /world",
+    "1024x768: New actual terrain identity installed in worldInfo and renderer",
+    "1024x768: Viewer helper regression: reseedClearsWorldInfo",
+    "1440x900: Day rewind refetches /world",
+    "1440x900: New actual terrain identity installed in worldInfo and renderer",
+    "1440x900: Viewer helper regression: reseedClearsWorldInfo"
+  ]
+}

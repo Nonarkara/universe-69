@@ -1,0 +1,116 @@
+{
+  "synthetic": true,
+  "adultReferenceHeight": 120,
+  "fixtures": [
+    {
+      "label": "Child, age 3",
+      "age": 3,
+      "sex": 0
+    },
+    {
+      "label": "Child, age 6",
+      "age": 6,
+      "sex": 1
+    },
+    {
+      "label": "Adolescent, age 12",
+      "age": 12,
+      "sex": 0
+    },
+    {
+      "label": "Adult male, standing",
+      "age": 30,
+      "sex": 0
+    },
+    {
+      "label": "Adult female, standing",
+      "age": 30,
+      "sex": 1
+    },
+    {
+      "label": "Elder male, age 70",
+      "age": 70,
+      "sex": 0
+    },
+    {
+      "label": "Elder female, age 70",
+      "age": 70,
+      "sex": 1
+    },
+    {
+      "label": "Adult male, BMI 34",
+      "age": 30,
+      "sex": 0,
+      "bmi": 34
+    },
+    {
+      "label": "Adult female, BMI 14 / hunger 9",
+      "age": 30,
+      "sex": 1,
+      "bmi": 14,
+      "hun": 9
+    },
+    {
+      "label": "Adult male, injury 7",
+      "age": 30,
+      "sex": 0,
+      "inj": 7
+    },
+    {
+      "label": "Adult male, asleep",
+      "age": 30,
+      "sex": 0,
+      "sleep": true
+    },
+    {
+      "label": "Adult female, asleep",
+      "age": 30,
+      "sex": 1,
+      "sleep": true
+    },
+    {
+      "label": "Walk profile, phase 0.00",
+      "age": 30,
+      "sex": 0,
+      "move": true,
+      "phase": 0
+    },
+    {
+      "label": "Walk profile, phase 0.20",
+      "age": 30,
+      "sex": 0,
+      "move": true,
+      "phase": 0.2
+    },
+    {
+      "label": "Walk profile, phase 0.50",
+      "age": 30,
+      "sex": 0,
+      "move": true,
+      "phase": 0.5
+    },
+    {
+      "label": "Walk profile, phase 0.80",
+      "age": 30,
+      "sex": 0,
+      "move": true,
+      "phase": 0.8
+    },
+    {
+      "label": "Walk front, phase 0.20",
+      "age": 30,
+      "sex": 0,
+      "move": true,
+      "phase": 0.2,
+      "view": 1
+    },
+    {
+      "label": "Walk back, phase 0.20",
+      "age": 30,
+      "sex": 1,
+      "move": true,
+      "phase": 0.2,
+      "view": 2
+    }
+  ]
+}

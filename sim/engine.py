@@ -22,7 +22,7 @@ import animals
 from minds import (DAYS_PER_YEAR, ADULT_AGE, ELDER_AGE, make_name,  # noqa: F401
                    A_IDLE, A_WALK, A_FORAGE, A_HUNT, A_FISH, A_FARM, A_BUILD,
                    A_TALK, A_MATE, A_BIRTH, A_TEND, A_REST, A_EAT, A_WITHDRAW,
-                   A_FIGHT, A_PLAY, A_RITE, A_SLEEP, A_WORK, A_SCOUT, A_WATCH, A_GROOM,
+                   A_FIGHT, A_PLAY, A_RITE, A_SLEEP, A_WORK, A_SCOUT, A_WATCH, A_GROOM, A_DRINK,
                    WK_HUDDLE, WK_BEAUTIFUL, WK_UPSTAIRS)
 
 GESTATION = 270
@@ -30,7 +30,7 @@ GESTATION = 270
 # The version of the model. Determinism holds per (seed, day, part) only *within* one
 # version, so every published figure and every postmortem must say which
 # version produced it.
-ENGINE_VERSION = "2026.10.29.1"
+ENGINE_VERSION = "2026.10.30.1"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -40,7 +40,7 @@ PARTS_PER_DAY = 4
 # How long a part of a day takes in real seconds. A day is four parts, so a
 # sim-day is four times this. The value is here so the server and the engine
 # agree; the server may override the pace with UNIVERSE69_SEC_PER_PART.
-SEC_PER_PART = 3.0
+SEC_PER_PART = 86400.0 / (100 * DAYS_PER_YEAR * PARTS_PER_DAY)
 SEC_PER_DAY = SEC_PER_PART * PARTS_PER_DAY
 
 PART_NAMES = ("dawn", "day", "dusk", "night")
@@ -176,7 +176,7 @@ TECH_LABEL = {
 def person(uid, name, sex, born, gen, x, y, competent=True):
     return minds.new_mind({"id": uid, "n": name, "s": sex, "b": born, "g": gen,
                            "p": None, "x": x, "y": y, "c": competent, "w": False,
-                           "due": 0, "hun": 0.0,
+                           "due": 0, "hun": 0.0, "thirst": 0.0, "carry_water": 0.0,
                            # the personal meters: energy, company, and what
                            # this person is carrying home
                            "ene": 1.0, "sol": 0.7, "carry": 0.0, "carry_kind": None,
@@ -190,7 +190,7 @@ def age_of(p, day):
 
 # ---------------------------------------------------------------- world gen
 
-def make_lagoon_terrain(seed):
+def make_lagoon_terrain(seed, version=1):
     """An island off a continental coast. 0 grass, 1 woods, 2 water, 3 beach,
     4 farm. The mainland runs down the west edge; a strait separates them
     until someone builds boats."""
@@ -236,6 +236,15 @@ def make_lagoon_terrain(seed):
                 t[y][x] = 1
             x = min(s - 1, max(0, x + rng.choice([-1, 0, 1])))
             y = min(s - 1, max(0, y + rng.choice([-1, 0, 1])))
+    if version >= 2:
+        # A tropical coastal-forest analogue, not a surveyed map. Retain the
+        # old coastline and seed geometry; new worlds have a forest mosaic
+        # across both land masses rather than a few accidental random walks.
+        forest = random.Random(f"{seed}:tropical-forest")
+        for y in range(2, s - 2):
+            for x in range(2, s - 2):
+                if t[y][x] == 0 and forest.random() < 0.48:
+                    t[y][x] = 1
     return t
 
 
@@ -264,9 +273,9 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None,
         cx = cy = EDEN_SIZE // 2
     else:
         u["terrain_seed"] = seed
-        # sized as a *territory*, not a garden: max sustainable yield is
-        # r*K/4 — plants alone sustain ~50-70 foragers, fish (with the
-        # technology to take them) roughly as many again
+        u["terrain_version"] = 2
+        # Legacy observer fields. Each tick mirrors the actual patch and
+        # animal stocks; these initial values do not supply meals.
         u["stocks"] = {"plants": 60000.0, "game": 2500.0,
                        "fish": 50000.0, "pred": 48.0}
         u["tech"] = []
@@ -1043,6 +1052,7 @@ def tick_eden(u, rng, events):
 
     byid = {q["id"]: q for q in people}
     u["_ctx"] = day_context(people, day)
+    u["_ctx"]["dead"] = dead
     moms = u["_ctx"]["moms"]
     for p in people:
         if part == 0 and base_mortality(p, day, rng, events, u):
@@ -1075,6 +1085,7 @@ def tick_eden(u, rng, events):
         needs.night(u, p, rng, part)
         needs.meters(u, p, day, rng, needs.CONDITIONS["EDEN"])
         needs.eat(u, p, a / DAYS_PER_YEAR)
+        needs.drink(u, p)
         if p["hun"] > needs.HUNGER_MAX:
             dead.append(p)
             cod(u, "starvation")      # in a resort with full hoppers: the withdrawn
@@ -1249,9 +1260,15 @@ def record_mind(u):
 
 # ---------------------------------------------------------------- LAGOON
 
-def lagoon_season(day):
+def lagoon_season(day, tropical=False):
     """Returns (plant_mult, fish_mult, is_winter)."""
     d = day % DAYS_PER_YEAR
+    if tropical:
+        # Two rainy seasons, with drier intervals. Multipliers are model
+        # hypotheses; the analogy supplies seasonality, not measured yields.
+        if 90 <= d < 180 or 270 <= d < 330:
+            return 1.15, 0.85, False
+        return 0.65, 1.0, False
     if 240 <= d < 330:
         return 0.55, 0.7, True
     if 60 <= d < 150:
@@ -1266,11 +1283,55 @@ def has(u, tech):
 _TERRAIN_CACHE = {}
 
 
+_LAND_COMPONENTS = {}     # bounded derived cache, never serialized
+
+
+def dry_neighbors(terr, x, y):
+    n = len(terr)
+    for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1),
+                   (1, 1), (-1, -1), (1, -1), (-1, 1)):
+        nx, ny = x + dx, y + dy
+        if not (0 <= nx < n and 0 <= ny < n) or terr[ny][nx] == 2:
+            continue
+        if dx and dy and (terr[y][nx] == 2 or terr[ny][x] == 2):
+            continue                    # cannot cut diagonally across water
+        yield nx, ny
+
+
+def same_land(terr, ax, ay, bx, by):
+    """Two dry positions share a walkable land mass, without a boat."""
+    n = len(terr)
+    if not all(0 <= v < n for v in (ax, ay, bx, by)):
+        return False
+    entry = _LAND_COMPONENTS.get(id(terr))
+    if entry is None or entry[0] is not terr:
+        labels, label = [-1] * (n * n), 0
+        for y in range(n):
+            for x in range(n):
+                if terr[y][x] == 2 or labels[y*n+x] >= 0:
+                    continue
+                labels[y*n+x] = label
+                queue = [(x, y)]
+                for qx, qy in queue:
+                    for nx, ny in dry_neighbors(terr, qx, qy):
+                        if labels[ny*n+nx] < 0:
+                            labels[ny*n+nx] = label
+                            queue.append((nx, ny))
+                label += 1
+        if len(_LAND_COMPONENTS) >= 8:
+            _LAND_COMPONENTS.pop(next(iter(_LAND_COMPONENTS)))
+        entry = (terr, labels)
+        _LAND_COMPONENTS[id(terr)] = entry
+    labels = entry[1]
+    return labels[ay*n+ax] >= 0 and labels[ay*n+ax] == labels[by*n+bx]
+
+
 def terrain_of(u):
     seed = u.get("terrain_seed", u["seed"])
-    if seed not in _TERRAIN_CACHE:
-        _TERRAIN_CACHE[seed] = make_lagoon_terrain(seed)
-    return _TERRAIN_CACHE[seed]
+    key = (seed, u.get("terrain_version", 1))
+    if key not in _TERRAIN_CACHE:
+        _TERRAIN_CACHE[key] = make_lagoon_terrain(seed, key[1])
+    return _TERRAIN_CACHE[key]
 
 
 def till_near(u, rng, st, span):
@@ -1280,7 +1341,8 @@ def till_near(u, rng, st, span):
         x = int(st["x"] + rng.randint(-span, span))
         y = int(st["y"] + rng.randint(-span, span))
         if (1 <= x < LAGOON_SIZE - 1 and 1 <= y < LAGOON_SIZE - 1
-                and terr[y][x] != 2):
+                and terr[y][x] != 2 and [x,y] not in u["farms"]
+                and same_land(terr,st["x"],st["y"],x,y)):
             u["farms"].append([x, y])
             return True
     return False
@@ -1295,7 +1357,7 @@ def settlement_sites(u, si):
     """Tiles around a settlement where each kind of work gets done.
     Cached — the land does not move."""
     st = u["settlements"][min(si, len(u["settlements"]) - 1)]
-    key = (u.get("terrain_seed", u["seed"]), st["x"], st["y"], int(st["r"]))
+    key = (u.get("terrain_seed", u["seed"]), u.get("terrain_version",1), st["x"], st["y"], int(st["r"]))
     hit = _SITES.get(key)
     if hit:
         return hit
@@ -1413,6 +1475,12 @@ def lagoon_assign(u, p, day, rng, shortfall):
         p["a"], p["ad"] = A_REST, days(6)
         p["tx"], p["ty"] = at_home(1)
         return
+    if p.get("thirst", 0.0) >= 1.0:
+        target = needs.water_target(u, p)
+        if target is not None:
+            p["a"], p["ad"] = A_DRINK, days(1)
+            p["tx"], p["ty"] = target
+            return
     if a < 3 * DAYS_PER_YEAR:                  # infants: wherever mother is
         p["a"], p["ad"] = A_TEND, days(3)
         p["tx"], p["ty"] = at_home(1)
@@ -1434,7 +1502,7 @@ def lagoon_assign(u, p, day, rng, shortfall):
         return
 
     near_home = (abs(p["x"] - p["hx"]) <= 3 and abs(p["y"] - p["hy"]) <= 3)
-    if not near_home and p.get("carry", 0.0) > 0:
+    if not near_home and (p.get("carry", 0.0) > 0 or p.get("carry_water", 0.0) > 0):
         p["a"], p["ad"] = A_WALK, days(0)            # a load to bring home
         p["tx"], p["ty"] = home
         return
@@ -1514,7 +1582,7 @@ def day_context(people, day):
     for q in people:
         a = day - q["b"]
         if 3 * DAYS_PER_YEAR <= a < 12 * DAYS_PER_YEAR:
-            kids.setdefault((q["x"] >> 3, q["y"] >> 3), []).append(q)
+            kids.setdefault((q["x"] >> 3) * 4096 + (q["y"] >> 3), []).append(q)
         elif a < 3 * DAYS_PER_YEAR and q.get("mom") is not None:
             moms[q["mom"]] = True
         elif ADULT_AGE <= a <= 45 * DAYS_PER_YEAR and not q["w"]:
@@ -1532,7 +1600,7 @@ def kids_near(ctx, p):
     out = []
     for dx in (-1, 0, 1):
         for dy in (-1, 0, 1):
-            out.extend(ctx["kids"].get((gx + dx, gy + dy), ()))
+            out.extend(ctx["kids"].get((gx + dx) * 4096 + gy + dy, ()))
     return out
 
 
@@ -1656,8 +1724,7 @@ def land_field(terr, tx, ty):
         q = [(tx, ty)]
         for x, y in q:
             d = f[y * n + x] + 1
-            for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1),
-                           (x + 1, y + 1), (x - 1, y - 1), (x + 1, y - 1), (x - 1, y + 1)):
+            for nx, ny in dry_neighbors(terr, x, y):
                 if 0 <= nx < n and 0 <= ny < n and terr[ny][nx] != 2 and f[ny * n + nx] > d:
                     f[ny * n + nx] = d
                     q.append((nx, ny))
@@ -1690,7 +1757,8 @@ def step_toward(p, terr=None, speed=WALK_SPEED):
                 continue
         if p.get("detour") and terr is not None:
             nx, ny = p["x"], p["y"]                    # already going round
-        elif terr is not None and terr[ny][nx] == 2:   # don't walk into the sea
+        elif terr is not None and (terr[ny][nx] == 2 or
+                (sx and sy and (terr[p["y"]][nx] == 2 or terr[ny][p["x"]] == 2))):   # don't walk into the sea
             if sx and terr[p["y"]][nx] != 2:
                 ny = p["y"]
             elif sy and terr[ny][p["x"]] != 2:
@@ -1703,8 +1771,7 @@ def step_toward(p, terr=None, speed=WALK_SPEED):
             f = land_field(terr, p["tx"], p["ty"])
             here = f[p["y"] * n + p["x"]]
             best = None
-            for ax, ay in ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)):
-                xx, yy = p["x"] + ax, p["y"] + ay
+            for xx, yy in dry_neighbors(terr, p["x"], p["y"]):
                 if 0 <= xx < n and 0 <= yy < n and f[yy * n + xx] < here:
                     if best is None or f[yy * n + xx] < f[best[1] * n + best[0]]:
                         best = (xx, yy)
@@ -1727,7 +1794,7 @@ def step_toward(p, terr=None, speed=WALK_SPEED):
 TOTEMS = {"plants": "the fig", "game": "the boar", "fish": "the great fish"}
 
 
-ISLAND_CAP = 95      # what the island feeds in practice: famine crashes begin near 90 (lab, seeds 69/123/5)
+ISLAND_CAP = 95      # illustrative crowding trigger for boatbuilding, not measured food capacity
 BOAT_WORK = 400      # person-days to build a boat that can cross the strait
 
 
@@ -2092,20 +2159,15 @@ def tick_lagoon(u, rng, events):
         return
 
     stocks = u["stocks"]
-    plant_mult, fish_mult, winter = lagoon_season(day)
+    plant_mult, fish_mult, winter = lagoon_season(day, u.get("terrain_version", 1) >= 2)
     if u["drought"] > 0:
         plant_mult *= 0.45
     if winter and u["harsh_winter"]:
         plant_mult *= 0.5
         fish_mult *= 0.6
 
-    # --- stocks regrow (logistic, daily rate)
-    cont = 3.0 if u.get("continent") else 1.0   # a continent's bounty
-    for key, cap, r in (("plants", 60000 * cont, 0.9), ("fish", 50000 * cont, 0.6)):
-        x = stocks[key]
-        stocks[key] = max(1.0, x + (r / DAYS_PER_YEAR / PARTS_PER_DAY) * x * (1 - x / cap))
-    # game and predators are animals with places now (animals.py); the
-    # stocks only mirror their counts, for the record
+    # Stocks are an observer mirror of the actual patches and animals;
+    # there is no second renewing global pool behind the places people work.
     stocks["game"], stocks["pred"] = (float(n) for n in animals.counts(u))
 
     # --- demography groups
@@ -2149,6 +2211,7 @@ def tick_lagoon(u, rng, events):
     byid = {q["id"]: q for q in people}
     u["_ctx"] = day_context(people, day)
     dead, born, starved = [], [], []
+    u["_ctx"]["dead"] = dead
     moms = u["_ctx"]["moms"]
     gone = {}                     # ids killed by someone else earlier this tick
 
@@ -2179,6 +2242,11 @@ def tick_lagoon(u, rng, events):
         needs.meters(u, p, day, rng, needs.CONDITIONS["LAGOON"])
         needs.deposit(u, p, day)
         needs.eat(u, p, a / DAYS_PER_YEAR)
+        needs.drink(u, p)
+        if p.get("thirst", 0.0) > needs.THIRST_MAX:
+            dead.append(p)
+            cod(u, "dehydration")
+            continue
         if p["hun"] > needs.HUNGER_MAX:
             dead.append(p)
             cod(u, "starvation")
@@ -2242,6 +2310,12 @@ def tick_lagoon(u, rng, events):
                 u["births_y"] += 1  # born and lost in the same part
                 u["deaths_y"] += 1
                 cod(u, "infant")
+        # Thirst interrupts a long work stint before it becomes fatal.
+        if p.get("thirst", 0.0) >= 1.25 and p.get("a") != A_BIRTH:
+            target = needs.water_target(u, p)
+            if target is not None:
+                p["a"], p["ad"] = A_DRINK, days(1)
+                p["tx"], p["ty"] = target
         # go about the day's work: travel to the site, then do the thing
         if age_of(p, day) < 3 * DAYS_PER_YEAR:
             follow_mother(p, byid, lambda x, y: (min(LAGOON_SIZE - 2, max(1, x)),
@@ -2291,11 +2365,16 @@ def tick_lagoon(u, rng, events):
             living_adults = [p for p in people
                              if ADULT_AGE <= age_of(p, day) < ELDER_AGE]
             pair_singles(u, rng, living_adults)
-        fert = 1.0 / 200 / PARTS_PER_DAY
+        # Preserve the draft's food-sensitive conception hypothesis. These
+        # coefficients are illustrative, not fitted demographic estimates;
+        # the physical food/water budget constrains the resulting population.
+        fert = 1.0 / 240 / PARTS_PER_DAY
+        fed = 1.0 - min(1.0, shortfall * 1.6)
+        fert *= 0.30 + 0.70 * fed
         if u["store"] > daily_need * 20:
-            fert *= 1.3
+            fert *= 1.15
         if shortfall > 0.3:
-            fert *= 0.3
+            fert *= 0.35
         if has(u, "agriculture"):
             fert *= 1.25  # the luxury trap: more mouths, more hands, more work
         try_conceive(u, rng, people, fert, byid=byid)
@@ -2313,7 +2392,7 @@ def tick_lagoon(u, rng, events):
         year = day // DAYS_PER_YEAR
         if u["drought"] > 0:
             u["drought"] -= 1
-        u["harsh_winter"] = rng.random() < 0.06
+        u["harsh_winter"] = rng.random() < 0.06 and u.get("terrain_version", 1) < 2
         if u["harsh_winter"]:
             events.append((day, "LAGOON", "disaster",
                            f"Year {year}: a brutal ice-age winter grips the lagoon."))
@@ -2511,6 +2590,8 @@ def tick_lagoon(u, rng, events):
 
     u["store"] = sum(st.get("store", 0.0) for st in u.get("settlements", []))
     stocks["game"], stocks["pred"] = (float(n) for n in animals.counts(u))
+    for kind in ("plants", "fish"):
+        stocks[kind] = sum(site["left"] for site in u.get("sites", []) if site["kind"] == kind)
     if not people:
         record_extinction(u, events)
     advance_part(u)
@@ -2616,6 +2697,9 @@ def summarize(world):
     """Compact snapshot for the renderer / web mirror."""
     out = {"wall": time.time(), "sec_per_day": world["sec_per_day"],
            "engine": ENGINE_VERSION, "u": {}}
+    seconds = (world.get("clock") or {}).get("seconds", world["sec_per_day"] / PARTS_PER_DAY)
+    out["pace"] = {"seconds_per_part": seconds,
+                   "years_per_real_day": 86400.0 / (seconds * PARTS_PER_DAY * DAYS_PER_YEAR)}
     for key in ("eden", "lagoon"):
         u = world[key]
         day = u["day"]
@@ -2690,9 +2774,14 @@ def summarize(world):
                 info["voyage"] = {"x": round(v["x0"] + (v["x1"] - v["x0"]) * t, 2),
                                   "y": v["y"], "n": v["n"]}
             d = day % DAYS_PER_YEAR
-            info["season"] = ("winter" if 240 <= d < 330 else
+            info["climate"] = "tropical" if u.get("terrain_version", 1) >= 2 else "legacy"
+            info["season"] = (("monsoon" if 90 <= d < 180 or 270 <= d < 330 else "dry season")
+                              if info["climate"] == "tropical" else
+                              "winter" if 240 <= d < 330 else
                               "summer" if 60 <= d < 150 else
                               "autumn" if 150 <= d < 240 else "spring")
+            info["thirst"] = {str(p["id"]): round(p.get("thirst", 0.0), 2) for p in u["people"]}
+            info["water"] = round(sum(st.get("water", 0.0) for st in u["settlements"]), 1)
             info["harsh"] = bool(u.get("harsh_winter"))
             info["dry"] = u.get("drought", 0) > 0
             info["phase"] = ("innocence" if u.get("innocent") else
@@ -2806,6 +2895,7 @@ def migrate(world):
         u.setdefault("named", any(p.get("g", 1) > 1 for p in u.get("people", [])) or u.get("gen_max", 1) > 1)
         u.setdefault("sites", [])
         if u.get("kind") == "LAGOON":
+            u.setdefault("terrain_version", 1)
             u.setdefault("meat", 0.0)
             u.setdefault("kills", 0)
             u.setdefault("culture", [])
@@ -2839,6 +2929,7 @@ def migrate(world):
                     remaining -= st["store"]
             for st in sts:
                 st.setdefault("store", 0.0)
+                st.setdefault("water", 0.0)
             u.setdefault("animals", None)     # None: animals.ensure seeds them on the next tick
             u.setdefault("animal_id", max((a["i"] for a in u.get("animals") or []), default=0) + 1)
             u.setdefault("encounters", [])
@@ -2851,6 +2942,8 @@ def migrate(world):
             p.setdefault("a", 0)
             p.setdefault("ad", 0)
             p.setdefault("hun", 0.0)
+            p.setdefault("thirst", 0.0)
+            p.setdefault("carry_water", 0.0)
             p.setdefault("ene", 1.0)          # the personal meters (needs.py)
             p.setdefault("sol", 0.7)
             p.setdefault("carry", 0.0)
@@ -2874,6 +2967,8 @@ def migrate(world):
             p.setdefault("wk", (WK_UPSTAIRS if p["s"] == "f" else WK_BEAUTIFUL) if p.get("w") else 0)
             if u.get("kind") == "EDEN":
                 p.setdefault("box", None)   # claims a nest box on next move
+        if u.get("kind") == "LAGOON":
+            needs.reconcile_sites(u)
         byid = {p["id"]: p for p in u.get("people", [])}
         for p in byid.values():
             partner = byid.get(p.get("p"))

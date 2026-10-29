@@ -1,0 +1,312 @@
+{
+  "fixtureSHA256": "c567e21c46589450bc1e1d9cc10b1c5470658a37e7e152ab720055f5a2d58b27",
+  "htmlSHA256": "32ca5a85f3ac96827023162c767c95b238aaf9a03e340f51d99c47a97e8c5332",
+  "reportSHA256": "b9ca085715e77c0c4f39e65f11bbe81905e8e53a80d481a7ab6628dec346c754",
+  "screenshots": [
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-world.png",
+      "sha256": "6810f7d99afd04e4cb3e11e0ed4e6018a75185bd67371ff0db83c69cc47c522d",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-research-origin.png",
+      "sha256": "490e13d0ca0e2755ff4a2a785a931f0f2b3880dda255be94b19c91288675d36e",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-research-tests.png",
+      "sha256": "c298197e153b3f82dbf5d783dda997975aa4f84518300ff4029393ffdde3f62c",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-research-books.png",
+      "sha256": "24f7feafdd17cc654e1f63cb996554fd1c4066d4034d2e616c0eac84f4c01250",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-book-contents.png",
+      "sha256": "6a73d2fde35398fde1bda070c8fb2e117291d1e4ade8027362baec1ed584256b",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-book-chapter.png",
+      "sha256": "8f75bb362188cfd10e25c67c972ea793f389bf7f0bec8da64a90d473920b7ea9",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-help.png",
+      "sha256": "a6fdcf2a64f3b143bd270f5a0870688cc698497f1e21f00c84f788bf91e52af5",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-archive-contents.png",
+      "sha256": "82c9d0139d7ce6a46859e13d4559cf4a1037917f9bee4ba2547320371082d6da",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-archive-chapter.png",
+      "sha256": "56ce5969a791fc9b4085bcf00dfb61b581a04f43f772e0e5b15053477ca57336",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-research-origin-after-archive.png",
+      "sha256": "44e774c54fa5df4c993a733fe496ff29b4e3d5743cf1b9e0107c9b6586beb564",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-record-expanded.png",
+      "sha256": "59d516a4bbadc86014c7eeeeac2161d2c87c1b99ccef3b19f2d73a3e013b51c1",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-details-eden.png",
+      "sha256": "7ae3d213c2c43e8d37e19f4339d47db1fb4ae28a8dc750bfc6b5b63201c5292d",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-details-lagoon.png",
+      "sha256": "5bcf89d5fd51e1350c50916f48cfdab792beeb62396d483a39cee35382809b16",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-combined-expanded.png",
+      "sha256": "8ea0cc9ee2fd0f2ef95c90d95fed821274769f1eb8cb0c04c630f73b0f3f5560",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-instruments-expanded.png",
+      "sha256": "6a698b9ec37374fc44a01972491a9548fa073fa6ff48a11c847d52e6467edacc",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-instrument-note.png",
+      "sha256": "1f2038855522e746807fb8d9f78f40e72209fca303e32e6cb8b62664565495c7",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-follow.png",
+      "sha256": "5ffd2662873f05ee1a42eaa79553bf7b8240d9ec034f050cc9b651178b2fdbab",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-follow-and-record.png",
+      "sha256": "2b3e8280b4295ecc269e556e63ded59d878b61b2ba4f642fd576c2c6e5905141",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-person-diary-stress.png",
+      "sha256": "ec1e6d8d1a141f3bfb2c581c437ed7ddbbe393684e834bd403845e4bac38a9df",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-person-diary-next-page.png",
+      "sha256": "f3fd6a25f550e7da1d7a6269b7db24a874bc7ac56dc7cb668b4639eef8cf07a1",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-island-overview.png",
+      "sha256": "d28758787ac869cfb87aff98519643a6c6c79f78d220cd2a49a2011d7c77515e",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-390x844-error.png",
+      "sha256": "f812242a7d9f66441a2176a1093500b9497763f623417f77eb987186c12500fa",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-world.png",
+      "sha256": "f3fb1b6501342f1a575a20926c9c8560898ea5aa94f5f2c7baf5a3a7e2eedd31",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-research-origin.png",
+      "sha256": "d2e6c4bab80115dc2702b8bb7d13e3338e14240355cd811282987afd3af43f07",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-research-tests.png",
+      "sha256": "3e9fcaabdc8fecc9c96df322a343211f915874527b62b7d84172e1bc34e3dede",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-research-books.png",
+      "sha256": "9b2d8058f05161c1a18059a4770be6865c1fdb4f48b4c8a8aa7a0a942a8a38d5",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-book-contents.png",
+      "sha256": "59ee568fada36629ff26166c566ed2c7313f173f7d71bd0ce818a3100bae615a",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-book-chapter.png",
+      "sha256": "0dc3b2ea72a12d3ee57ae140328a0669b382521f29124a70c0d8280bac52d263",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-help.png",
+      "sha256": "6770219402d498bba7466c928a39ce32dc975335480ef036dbb68e4471a56909",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-archive-contents.png",
+      "sha256": "e09ddad689718bca8d8069a5e15a0d5522112d639a3c68cb8226486a228a8a06",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-archive-chapter.png",
+      "sha256": "8dd7eda67c05046d46b19126509d337d92b226b963480340cd3ad3fa005373f5",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-research-origin-after-archive.png",
+      "sha256": "e07c787a840afaaf8b105141a764cf6917b8949be5c70157eb63ba84809f7fe5",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-record-expanded.png",
+      "sha256": "a1e234eae1ae7aca8c316af000b936839390867075dc163bbe2485d20fa717ee",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-details-eden.png",
+      "sha256": "3aba2a0fc7f2d50497e0a53555b215021f0691e240147373a6fd9bdb49ca6756",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-details-lagoon.png",
+      "sha256": "54b9ed432d1ce00188dc734ed9ee9a053b58136c67fb4bbdea3a4ea4ce0808ff",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-instrument-note.png",
+      "sha256": "1c3dc63a452edc6323b01a6e0f3543aafc546f68406e16915e162b6874953680",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-follow.png",
+      "sha256": "4c2f6eb9edf279262543f102e17559cd9c9038e542498d3b069d5ba8745a1434",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-follow-and-record.png",
+      "sha256": "5b56df8ee16e7ab8299bbbc8601dd212c652b82edb78f2d1991e1e5a4db4441b",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-person-diary-stress.png",
+      "sha256": "f03352124f0218e4bf786192b915bc13324ccd5314441af9598f3ff1b431d826",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-person-diary-next-page.png",
+      "sha256": "6a6724e3a421eb751d90be66a35bd30a1b8c66bece473752e9cd04222f74d2a1",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-island-overview.png",
+      "sha256": "51fa8aac859996f23d1f2386f8c75a25e426b364c3cfea54a4dc80936acbf2dc",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1024x768-error.png",
+      "sha256": "bafff31d33983c4f3b38e0ba0d2753eb1a33d5a8b1cd66724c4bb14aa016822b",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-world.png",
+      "sha256": "8d0c30619a693ee7df19d5c84681a0b3aecac7c9899bceacdab719205b7d1eb1",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-research-origin.png",
+      "sha256": "4f1e8dec50498bdf188e4649d400d5cab5c515bac1c95473c55e0b6560a6a618",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-research-tests.png",
+      "sha256": "4126217f169787cdd6fa8e0d74ea46d0710c9b6614d32a6603b7ea29b76c48c8",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-research-books.png",
+      "sha256": "b56275cb5f2c180f8cc87424316ef791917184e70dd048f0d3c50e7121c18bdd",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-book-contents.png",
+      "sha256": "e3287f9d161a11e914fab448cf564774abb79cec3d300f9045dd79adb6f82610",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-book-chapter.png",
+      "sha256": "63eb01b8705cb508cbf5e79aff117dc0f7fadbb789ff566c428f77592c05116b",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-help.png",
+      "sha256": "8c294815e817c65c3223a6ff5edbf58a022c2aad12a0e3a053d25c0fd1b841a5",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-archive-contents.png",
+      "sha256": "2b2544336f7baf1c312c55ef5eda30aef2e5e38bbdc4461fe9b419a131b92b15",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-archive-chapter.png",
+      "sha256": "6c2ac6ba588f993b774d716cbff58f6668a37a52aec65ecc410ec69c1d21fde4",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-research-origin-after-archive.png",
+      "sha256": "9c354951de9ae5d6067ea8d4bd39846e9866fc2f7d8cda7f4a43f024a654e4dd",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-record-expanded.png",
+      "sha256": "7910158c641110dbe5ea66ff2b5d9f522647c1cdbc4c728d56705441291e40fa",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-details-eden.png",
+      "sha256": "0fbe72f8b1dfb43ab383d4aeda053919fd8944cf63182e51459936093fd79f3e",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-details-lagoon.png",
+      "sha256": "bcc7fbd65d4ee99599e86c438c368d31334a1e01710f41624be5252b256381cd",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-instrument-note.png",
+      "sha256": "535d6ccc9c9b76449b7b824d7beb4c597638aa737dfbfd49538c652ef4b8b8cd",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-follow.png",
+      "sha256": "04e55b153814aca609a36d0e9017eb86c1d47373f6d1ee7f1ec1f76af1c5ec43",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-follow-and-record.png",
+      "sha256": "17ed96af77a600e9a395e35b1a6ff79b84e6e7a5d73d15035f754b44582871e4",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-person-diary-stress.png",
+      "sha256": "ecd7a406c17f9580de9e3e3498a331559c6c973884cd58ab72919b9a5bebe83f",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-island-overview.png",
+      "sha256": "fcdba0b1b58f1cb498bdee37c37eb7a4b36461dd44c548921ca2436b6abf5213",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/day-3000/day3000-1440x900-error.png",
+      "sha256": "68126bbe3a3a92feca09d907658685fb53f36b1f27903f6fa508980444374509",
+      "modifiedAfterReport": false
+    }
+  ]
+}

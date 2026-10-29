@@ -1,0 +1,117 @@
+{
+  "fixtureSHA256": "5e08bfda581b4b8a8fd570fd4a474a0af25014cad8f5013217ee8ee75360b446",
+  "htmlSHA256": "32ca5a85f3ac96827023162c767c95b238aaf9a03e340f51d99c47a97e8c5332",
+  "reportSHA256": "52134cb0500b648242f95748263d45befca9b7a29065299bef6cddaa345d3bbe",
+  "screenshots": [
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-world.png",
+      "sha256": "168b661bb8b886ec6983e7432e4b79fbf968cb74e1741f499eadeb81115e0e2c",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-research-origin.png",
+      "sha256": "490e13d0ca0e2755ff4a2a785a931f0f2b3880dda255be94b19c91288675d36e",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-research-tests.png",
+      "sha256": "9a22a6a92752ce7c4c30780606d97a6970045c0e0ca8f4e451abb9a2d1795564",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-research-books.png",
+      "sha256": "24f7feafdd17cc654e1f63cb996554fd1c4066d4034d2e616c0eac84f4c01250",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-book-contents.png",
+      "sha256": "6a73d2fde35398fde1bda070c8fb2e117291d1e4ade8027362baec1ed584256b",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-book-chapter.png",
+      "sha256": "8f75bb362188cfd10e25c67c972ea793f389bf7f0bec8da64a90d473920b7ea9",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-help.png",
+      "sha256": "036f2ffbfc54bec5de21615de37f3db695970aa89f4c0613820ed94fa4add6f4",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-archive-contents.png",
+      "sha256": "82c9d0139d7ce6a46859e13d4559cf4a1037917f9bee4ba2547320371082d6da",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-archive-chapter.png",
+      "sha256": "56ce5969a791fc9b4085bcf00dfb61b581a04f43f772e0e5b15053477ca57336",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-research-origin-after-archive.png",
+      "sha256": "44e774c54fa5df4c993a733fe496ff29b4e3d5743cf1b9e0107c9b6586beb564",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-record-expanded.png",
+      "sha256": "d8d3dbb181d137ba508c972b8373c93559867605b15252ae8bc0736dfd09b30e",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-details-eden.png",
+      "sha256": "bc675b15e397d974ba7ee0dbdd0406cd2684df74677f0fe11cdbd409c25a3e8f",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-details-lagoon.png",
+      "sha256": "c5b1379df44162fab74415aba98aecbcb1b0085363a701a58dec0a8175c32202",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-combined-expanded.png",
+      "sha256": "ad60283ab1d843353c07a5d6706ded6191164c1c07ac3802227db0252517adb5",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-instruments-expanded.png",
+      "sha256": "bc34a0150d8a7a590439d4c980c31a1359395c51e5e6dade07ff7cc5135ca71c",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-instrument-note.png",
+      "sha256": "8dd863e707300aababcea91eaaaed68cec6095420077a737d24155fac2022bfc",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-follow.png",
+      "sha256": "127adfa021f029e2b1b4fa74ade51acda5dfb6343472aedfb21e25219d7f4f9e",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-follow-and-record.png",
+      "sha256": "438af0bdecae5617e39771eaf1418cce7cd95ca95319f5be8079937a170777ce",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-person-diary-stress.png",
+      "sha256": "5834eb5670711a2dde0238d6ec2dcb686b3758781c77569bd7395567435d903a",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-person-diary-next-page.png",
+      "sha256": "2fa23b72aeaf13dda5c7286aa719adb7f61f96eebd108602cbb1f65aaa78d39e",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-island-overview.png",
+      "sha256": "1e2a4cd8c6495258ea54740336a9bf2b448d7a2b854d39493a1b9a532863a715",
+      "modifiedAfterReport": false
+    },
+    {
+      "path": "/Volumes/Data/agent-scratch/u69-oct30-viewer/fresh-phone-recheck/fresh-390x844-error.png",
+      "sha256": "f812242a7d9f66441a2176a1093500b9497763f623417f77eb987186c12500fa",
+      "modifiedAfterReport": false
+    }
+  ]
+}

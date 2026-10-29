@@ -1,0 +1,368 @@
+{
+  "bodyMotionRegressions": {
+    "checks": {
+      "stageCacheReuse": true,
+      "stageCacheDistinct": true,
+      "sleeperArmsNearAndFar": true,
+      "sleeperBones": true,
+      "plantedFootFixed": true,
+      "walkBones": true,
+      "equalWallTimeMotion": true,
+      "individualMotion": true
+    },
+    "measurements": {
+      "sleep": [
+        {
+          "scale": 0.2,
+          "age": 6,
+          "sex": 0,
+          "keepsArms": true,
+          "wristY": 7.884081841281777,
+          "headY": 2.763591778388694,
+          "headRadius": 2.5157232704402515,
+          "shoulderY": 7.884081841281777,
+          "boneError": 3.552713678800501e-15
+        },
+        {
+          "scale": 2,
+          "age": 6,
+          "sex": 0,
+          "keepsArms": true,
+          "wristY": 7.884081841281777,
+          "headY": 2.763591778388694,
+          "headRadius": 2.5157232704402515,
+          "shoulderY": 7.884081841281777,
+          "boneError": 3.552713678800501e-15
+        },
+        {
+          "scale": 0.2,
+          "age": 6,
+          "sex": 1,
+          "keepsArms": true,
+          "wristY": 7.884081841281777,
+          "headY": 2.763591778388694,
+          "headRadius": 2.5157232704402515,
+          "shoulderY": 7.884081841281777,
+          "boneError": 3.552713678800501e-15
+        },
+        {
+          "scale": 2,
+          "age": 6,
+          "sex": 1,
+          "keepsArms": true,
+          "wristY": 7.884081841281777,
+          "headY": 2.763591778388694,
+          "headRadius": 2.5157232704402515,
+          "shoulderY": 7.884081841281777,
+          "boneError": 3.552713678800501e-15
+        },
+        {
+          "scale": 0.2,
+          "age": 18,
+          "sex": 0,
+          "keepsArms": true,
+          "wristY": 6.419088598444897,
+          "headY": 2.2079710400205332,
+          "headRadius": 1.9860973187686195,
+          "shoulderY": 6.419088598444897,
+          "boneError": 1.7763568394002505e-15
+        },
+        {
+          "scale": 2,
+          "age": 18,
+          "sex": 0,
+          "keepsArms": true,
+          "wristY": 6.419088598444897,
+          "headY": 2.2079710400205332,
+          "headRadius": 1.9860973187686195,
+          "shoulderY": 6.419088598444897,
+          "boneError": 1.7763568394002505e-15
+        },
+        {
+          "scale": 0.2,
+          "age": 18,
+          "sex": 1,
+          "keepsArms": true,
+          "wristY": 6.426597931778231,
+          "headY": 2.2455177066872007,
+          "headRadius": 1.9860973187686195,
+          "shoulderY": 6.426597931778231,
+          "boneError": 3.552713678800501e-15
+        },
+        {
+          "scale": 2,
+          "age": 18,
+          "sex": 1,
+          "keepsArms": true,
+          "wristY": 6.426597931778231,
+          "headY": 2.2455177066872007,
+          "headRadius": 1.9860973187686195,
+          "shoulderY": 6.426597931778231,
+          "boneError": 3.552713678800501e-15
+        },
+        {
+          "scale": 0.2,
+          "age": 58,
+          "sex": 0,
+          "keepsArms": true,
+          "wristY": 6.419088598444897,
+          "headY": 2.2079710400205332,
+          "headRadius": 1.9860973187686195,
+          "shoulderY": 6.419088598444897,
+          "boneError": 1.7763568394002505e-15
+        },
+        {
+          "scale": 2,
+          "age": 58,
+          "sex": 0,
+          "keepsArms": true,
+          "wristY": 6.419088598444897,
+          "headY": 2.2079710400205332,
+          "headRadius": 1.9860973187686195,
+          "shoulderY": 6.419088598444897,
+          "boneError": 1.7763568394002505e-15
+        },
+        {
+          "scale": 0.2,
+          "age": 58,
+          "sex": 1,
+          "keepsArms": true,
+          "wristY": 6.426597931778231,
+          "headY": 2.2455177066872007,
+          "headRadius": 1.9860973187686195,
+          "shoulderY": 6.426597931778231,
+          "boneError": 3.552713678800501e-15
+        },
+        {
+          "scale": 2,
+          "age": 58,
+          "sex": 1,
+          "keepsArms": true,
+          "wristY": 6.426597931778231,
+          "headY": 2.2455177066872007,
+          "headRadius": 1.9860973187686195,
+          "shoulderY": 6.426597931778231,
+          "boneError": 3.552713678800501e-15
+        }
+      ],
+      "walks": [
+        {
+          "age": 3,
+          "sex": 0,
+          "groundDrift": 6.666442840641551e-06,
+          "verticalDrift": 2.5367745070004055e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 3,
+          "sex": 1,
+          "groundDrift": 6.666442840641551e-06,
+          "verticalDrift": 2.5367745070004055e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 6,
+          "sex": 0,
+          "groundDrift": 7.510757664558332e-06,
+          "verticalDrift": 3.0358255151186064e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 6,
+          "sex": 1,
+          "groundDrift": 7.510757664558332e-06,
+          "verticalDrift": 3.0358255151186064e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 12,
+          "sex": 0,
+          "groundDrift": 9.414179104438869e-06,
+          "verticalDrift": 3.9421831012687036e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 12,
+          "sex": 1,
+          "groundDrift": 9.249430970165173e-06,
+          "verticalDrift": 3.8731921715884354e-05,
+          "boneError": 7.105427357601002e-15
+        },
+        {
+          "age": 17,
+          "sex": 0,
+          "groundDrift": 1.0388059701410546e-05,
+          "verticalDrift": 4.3499747913289255e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 17,
+          "sex": 1,
+          "groundDrift": 9.951761193977005e-06,
+          "verticalDrift": 4.167290973344784e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 18,
+          "sex": 0,
+          "groundDrift": 1.4878731343370699e-05,
+          "verticalDrift": 4.531247608530187e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 18,
+          "sex": 1,
+          "groundDrift": 1.006343283579958e-05,
+          "verticalDrift": 4.2140618761399296e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 30,
+          "sex": 0,
+          "groundDrift": 1.4878731343370699e-05,
+          "verticalDrift": 4.531247608530187e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 30,
+          "sex": 1,
+          "groundDrift": 1.006343283579958e-05,
+          "verticalDrift": 4.2140618761399296e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 58,
+          "sex": 0,
+          "groundDrift": 1.4878731343370699e-05,
+          "verticalDrift": 4.531247608530187e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 58,
+          "sex": 1,
+          "groundDrift": 1.006343283579958e-05,
+          "verticalDrift": 4.2140618761399296e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 70,
+          "sex": 0,
+          "groundDrift": 1.4432369403016843e-05,
+          "verticalDrift": 4.39531249476488e-05,
+          "boneError": 5.329070518200751e-15
+        },
+        {
+          "age": 70,
+          "sex": 1,
+          "groundDrift": 9.789831728918008e-06,
+          "verticalDrift": 4.0876396452338426e-05,
+          "boneError": 4.440892098500626e-15
+        }
+      ],
+      "motion30": [
+        {
+          "id": 7,
+          "x": 14.618848926768587,
+          "y": 11.319671121933881,
+          "vx": 0.05634412910417631,
+          "vy": 0.016098322601193243,
+          "dist": 4.963109638350412,
+          "walkc": 0.15562557436503788,
+          "moving": true,
+          "wait": 0
+        },
+        {
+          "id": 18,
+          "x": 14.673926724395411,
+          "y": 11.335407635541545,
+          "vx": 0.05507779762682457,
+          "vy": 0.015736513607664173,
+          "dist": 4.923820923737861,
+          "walkc": 0.7602502781706661,
+          "moving": true,
+          "wait": 0
+        },
+        {
+          "id": 31,
+          "x": 14.831810067548421,
+          "y": 11.380517162156691,
+          "vx": 0.05142743158128803,
+          "vy": 0.01469355188036802,
+          "dist": 5.102888679630764,
+          "walkc": 0.44164456443892774,
+          "moving": true,
+          "wait": 0
+        }
+      ],
+      "motion60": [
+        {
+          "id": 7,
+          "x": 14.618848926768587,
+          "y": 11.319671121933881,
+          "vx": 0.05634412910417631,
+          "vy": 0.016098322601193243,
+          "dist": 4.963109638350412,
+          "walkc": 0.15562557436503788,
+          "moving": true,
+          "wait": 0
+        },
+        {
+          "id": 18,
+          "x": 14.673926724395411,
+          "y": 11.335407635541545,
+          "vx": 0.05507779762682457,
+          "vy": 0.015736513607664173,
+          "dist": 4.923820923737861,
+          "walkc": 0.7602502781706661,
+          "moving": true,
+          "wait": 0
+        },
+        {
+          "id": 31,
+          "x": 14.831810067548421,
+          "y": 11.380517162156691,
+          "vx": 0.05142743158128803,
+          "vy": 0.01469355188036802,
+          "dist": 5.102888679630764,
+          "walkc": 0.44164456443892774,
+          "moving": true,
+          "wait": 0
+        }
+      ]
+    }
+  },
+  "checks": [
+    {
+      "passed": true,
+      "check": "Body/motion regression: stageCacheReuse"
+    },
+    {
+      "passed": true,
+      "check": "Body/motion regression: stageCacheDistinct"
+    },
+    {
+      "passed": true,
+      "check": "Body/motion regression: sleeperArmsNearAndFar"
+    },
+    {
+      "passed": true,
+      "check": "Body/motion regression: sleeperBones"
+    },
+    {
+      "passed": true,
+      "check": "Body/motion regression: plantedFootFixed"
+    },
+    {
+      "passed": true,
+      "check": "Body/motion regression: walkBones"
+    },
+    {
+      "passed": true,
+      "check": "Body/motion regression: equalWallTimeMotion"
+    },
+    {
+      "passed": true,
+      "check": "Body/motion regression: individualMotion"
+    }
+  ]
+}

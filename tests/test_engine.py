@@ -912,8 +912,8 @@ class TestQuarterDayAudit(unittest.TestCase):
         engine.migrate(w)
         self.assertEqual(w["eden"]["parts"], 160000)
         self.assertEqual(engine.target_parts(w, now=81000), 160000)
-        self.assertEqual(engine.target_parts(w, now=81012), 160004)
-        self.assertEqual(w["sec_per_day"], 12)
+        self.assertEqual(engine.target_parts(w, now=81000 + engine.SEC_PER_DAY), 160004)
+        self.assertEqual(w["sec_per_day"], engine.SEC_PER_DAY)
 
     def test_pace_change_preserves_due_ticks_and_restart_anchor(self):
         w = engine.genesis(seed=69)

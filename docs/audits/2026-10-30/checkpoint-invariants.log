@@ -1,0 +1,5 @@
+PASS raw day 3000 eden pop 34 census_rows 8
+PASS raw day 3000 lagoon pop 25 census_rows 8
+PASS raw day 36000 eden pop 614 census_rows 99
+PASS raw day 36000 lagoon pop 25 census_rows 99
+PASS identity/bonds/clock/version/claims/roles/resourcebounds/shore/census stock-flow

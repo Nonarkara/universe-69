@@ -1,0 +1,132 @@
+{
+  "synthetic": true,
+  "adultReferenceHeight": 120,
+  "fixtures": [
+    {
+      "label": "Child, age 3",
+      "age": 3,
+      "sex": 0
+    },
+    {
+      "label": "Child, age 6",
+      "age": 6,
+      "sex": 1
+    },
+    {
+      "label": "Adolescent, age 12",
+      "age": 12,
+      "sex": 0
+    },
+    {
+      "label": "Adult male, standing",
+      "age": 30,
+      "sex": 0
+    },
+    {
+      "label": "Adult female, standing",
+      "age": 30,
+      "sex": 1
+    },
+    {
+      "label": "Elder male, age 70",
+      "age": 70,
+      "sex": 0
+    },
+    {
+      "label": "Elder female, age 70",
+      "age": 70,
+      "sex": 1
+    },
+    {
+      "label": "Adult male, BMI 34",
+      "age": 30,
+      "sex": 0,
+      "bmi": 34
+    },
+    {
+      "label": "Adult female, BMI 14 / hunger 9",
+      "age": 30,
+      "sex": 1,
+      "bmi": 14,
+      "hun": 9
+    },
+    {
+      "label": "Adult male, injury 7",
+      "age": 30,
+      "sex": 0,
+      "inj": 7
+    },
+    {
+      "label": "Male asleep, primitive bare ground",
+      "age": 30,
+      "sex": 0,
+      "sleep": true,
+      "bedding": false
+    },
+    {
+      "label": "Female asleep, furnished reference",
+      "age": 30,
+      "sex": 1,
+      "sleep": true,
+      "bedding": true
+    },
+    {
+      "label": "Walk profile, phase 0.00",
+      "age": 30,
+      "sex": 0,
+      "move": true,
+      "phase": 0
+    },
+    {
+      "label": "Walk profile, phase 0.20",
+      "age": 30,
+      "sex": 0,
+      "move": true,
+      "phase": 0.2
+    },
+    {
+      "label": "Walk profile, phase 0.50",
+      "age": 30,
+      "sex": 0,
+      "move": true,
+      "phase": 0.5
+    },
+    {
+      "label": "Walk profile, phase 0.80",
+      "age": 30,
+      "sex": 0,
+      "move": true,
+      "phase": 0.8
+    },
+    {
+      "label": "Walk front, phase 0.20",
+      "age": 30,
+      "sex": 0,
+      "move": true,
+      "phase": 0.2,
+      "view": 1
+    },
+    {
+      "label": "Walk back, phase 0.20",
+      "age": 30,
+      "sex": 1,
+      "move": true,
+      "phase": 0.2,
+      "view": 2
+    }
+  ],
+  "actualGait": {
+    "sweep": 10,
+    "stance": 0.62,
+    "buckets": 48,
+    "referenceWalker": {
+      "pace": 0.026248478106595575,
+      "stride": 0.8475640948483388,
+      "ph0": 0.32623790740035474
+    }
+  },
+  "provenance": {
+    "sourcePath": "/Volumes/Data/agent-scratch/u69-oct30/gait-candidate10.html",
+    "actualHTMLSHA256": "4bb5b143c03c7535a2a64de5fdd56b5e9da8bf093b134e81ca65691fff1ed463"
+  }
+}

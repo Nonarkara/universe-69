@@ -35,9 +35,8 @@ EVENTS_PATH = os.path.join(DATA, "events.ndjson")
 WEBCFG_PATH = os.path.join(DATA, "web.json")
 PORT = int(os.environ.get("UNIVERSE69_PORT", "6969"))
 # How long one part of a day takes in real seconds. A day is four parts, so
-# this sets how fast the year goes by. The default is deliberately slower
-# than the old one-day-per-two-seconds: a day and a night have to be
-# watchable, and a cycle that passes in two seconds is not a cycle.
+# this sets how fast the year goes by: default 100 model years of 360 days
+# per real day, retaining dawn/day/dusk/night as separate ticks.
 SEC_PER_PART = float(os.environ.get("UNIVERSE69_SEC_PER_PART", engine.SEC_PER_PART))
 EVENTS_IN_VIEW = 500          # how much of the record the console is given
 
@@ -197,7 +196,7 @@ def uploader_loop():
 
 def world_payload():
     lag = world["lagoon"]
-    terrain = (engine.make_lagoon_terrain(lag.get("terrain_seed", lag["seed"]))
+    terrain = (engine.terrain_of(lag)
                if lag["kind"] == "LAGOON" else None)
     return {"eden_size": engine.EDEN_SIZE, "lagoon_size": engine.LAGOON_SIZE,
             "lagoon_iter": lag["iteration"], "terrain": terrain}

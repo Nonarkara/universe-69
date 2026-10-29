@@ -1,0 +1,53 @@
+{
+  "engine": "2026.10.30.1",
+  "seed": 69,
+  "days": 36000,
+  "parts": 144000,
+  "years": 100,
+  "seconds_per_part": 0.6,
+  "years_per_real_day": 100,
+  "model_python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "test_python": "Apple Python3.9.6",
+  "live_state_accessed": false,
+  "source_sha256": {
+    "sim/minds.py": "164b2f44df0a63e45d7a319c396648ab25cd86c04c40628d2cb9498f9a753bd8",
+    "sim/server.py": "e68cba916d8fe0c12aa7dc1afb394ee9b148ac4b71dc4e9999d847a2fa8684fc",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "sim/needs.py": "f422dfe1dfd5f988573a8fef7573fb6bbe2fb46b3f2355079484c3e6ec36a3cd",
+    "sim/historian.py": "d433208daac783738e3bfd5771cf6f6417b3ce8c221616127e58141c62355ece",
+    "sim/engine.py": "36a8ef73ed905e6cead5ac59793c12fee398c0745cdd657bc8e060399d0b402c",
+    "sim/animals.py": "7c5fcb7fb1c5ee069f669fb63de680c989422df6e936f94811756570d4fea006",
+    "web/index.html": "5213612d36db015be71b729d7a2818ba5c9e1201ee88e99b4721217a4449b791",
+    "docs/index.html": "5213612d36db015be71b729d7a2818ba5c9e1201ee88e99b4721217a4449b791",
+    "tools/lab.py": "34e67d9a58a921ad41b110da79cbd2b508dbd0494e6bb0b26b177187c92d0c55",
+    "tools/shoot.py": "44fa481ba2abe02197a7fb2e011eeb108607cc592a2799458a7c98f952c4811f",
+    "web/book/book.json": "5b43f4a524ea036260e715aeaae120f0e87eedb867c4c4129680460042585c64",
+    "web/book/origin.json": "7d53cd43d9c2e2cfc9fd869b0629ecc5f440febc15c264fd425adc054247e21f",
+    "web/archive/archive.json": "3b1db2a80e79e289561d710cd996d7db83d9ffc0eca6929033486d953d41f11e"
+  },
+  "fixture_sha256": {
+    "fixtures/day-3000/saved-world.json": "191de5f2c3118064aa4061359520873e2a9c50a1bdd3875dd989347a857435bf",
+    "fixtures/day-3000/state.json": "c567e21c46589450bc1e1d9cc10b1c5470658a37e7e152ab720055f5a2d58b27",
+    "fixtures/day-3000/world.json": "356d9f8b19ffcf9322fb25cf29ea814ba93b421001336e28c4fe75ff4493deba",
+    "fixtures/day-36000/saved-world.json": "ce0433c0859a22f8b1a148133894a8e6aca9defdc5e53236dad533cda02d9be5",
+    "fixtures/day-36000/state.json": "3f34f19200fc68adde611e55581b862cc9fe7d246a910ae879d92d4e41fe45b4",
+    "fixtures/day-36000/world.json": "356d9f8b19ffcf9322fb25cf29ea814ba93b421001336e28c4fe75ff4493deba"
+  },
+  "visual_viewports": [
+    [
+      390,
+      844
+    ],
+    [
+      1024,
+      768
+    ],
+    [
+      1440,
+      900
+    ]
+  ],
+  "full_journey_html_sha256": "32ca5a85f3ac96827023162c767c95b238aaf9a03e340f51d99c47a97e8c5332",
+  "final_html_sha256": "5213612d36db015be71b729d7a2818ba5c9e1201ee88e99b4721217a4449b791",
+  "final_lifecycle_checks_per_viewport": 69
+}

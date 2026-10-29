@@ -30,7 +30,7 @@ ELDER_AGE = 58 * DAYS_PER_YEAR
 # Activity codes — shared verbatim with the renderer (tests/test_contract.py).
 (A_IDLE, A_WALK, A_FORAGE, A_HUNT, A_FISH, A_FARM, A_BUILD, A_TALK,
  A_MATE, A_BIRTH, A_TEND, A_REST, A_EAT, A_WITHDRAW, A_FIGHT, A_PLAY,
- A_RITE, A_SLEEP, A_WORK, A_SCOUT, A_WATCH, A_GROOM) = range(22)
+ A_RITE, A_SLEEP, A_WORK, A_SCOUT, A_WATCH, A_GROOM, A_DRINK) = range(23)
 
 WORK_ACTS = frozenset((A_FORAGE, A_HUNT, A_FISH, A_FARM, A_BUILD, A_WORK, A_SCOUT))
 

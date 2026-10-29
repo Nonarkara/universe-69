@@ -67,7 +67,7 @@ class TestSummarizeShape(unittest.TestCase):
         for field in ("tech", "settlements", "farms", "store", "lessons",
                       "culture", "season", "harsh", "dry"):
             self.assertIn(field, u, f"lagoon is missing {field}")
-        self.assertIn(u["season"], ("winter", "summer", "spring"))
+        self.assertIn(u["season"], ("winter", "summer", "spring", "autumn", "monsoon", "dry season"))
         self.assertIsInstance(u["tech"], list)
         self.assertIsInstance(u["settlements"], list)
 
@@ -174,22 +174,22 @@ class TestActivityCodes(unittest.TestCase):
             "A_FIGHT": engine.A_FIGHT, "A_PLAY": engine.A_PLAY,
             "A_RITE": engine.A_RITE, "A_SLEEP": engine.A_SLEEP,
             "A_WORK": engine.A_WORK, "A_SCOUT": engine.A_SCOUT,
-            "A_WATCH": engine.A_WATCH, "A_GROOM": engine.A_GROOM,
+            "A_WATCH": engine.A_WATCH, "A_GROOM": engine.A_GROOM, "A_DRINK": engine.A_DRINK,
         }
-        self.assertEqual(len(set(codes.values())), 22)
+        self.assertEqual(len(set(codes.values())), 23)
         self.assertEqual(engine.A_PLAY, 15)
         self.assertEqual(engine.A_WATCH, 20)
 
     def test_renderer_activity_codes_match_the_engine(self):
         src = read(RENDERER)
-        block = re.search(r"var A_WALK=(\d+),.*?A_GROOM=(\d+);", src, re.S)
+        block = re.search(r"var A_WALK=(\d+),.*?A_DRINK=(\d+);", src, re.S)
         self.assertIsNotNone(block, "renderer activity codes not found")
         pairs = dict(re.findall(r"(A_[A-Z]+)=(\d+)", block.group(0)))
         pairs = {k: int(v) for k, v in pairs.items()}
         for name in ("A_WALK", "A_FORAGE", "A_HUNT", "A_FISH", "A_FARM",
                      "A_BUILD", "A_TALK", "A_MATE", "A_BIRTH", "A_TEND",
                      "A_REST", "A_EAT", "A_WITHDRAW", "A_FIGHT", "A_PLAY", "A_RITE",
-                     "A_SLEEP", "A_WORK", "A_SCOUT", "A_WATCH", "A_GROOM"):
+                     "A_SLEEP", "A_WORK", "A_SCOUT", "A_WATCH", "A_GROOM", "A_DRINK"):
             self.assertEqual(pairs[name], getattr(engine, name),
                              f"{name} differs between engine and renderer")
 
@@ -198,7 +198,7 @@ class TestActivityCodes(unittest.TestCase):
         block = re.search(r"var ACT_LABEL = \[(.*?)\];", src, re.S)
         self.assertIsNotNone(block)
         labels = re.findall(r'"([^"]*)"', block.group(1))
-        self.assertEqual(len(labels), 22)
+        self.assertEqual(len(labels), 23)
 
 
 class TestMirrorIsIdentical(unittest.TestCase):

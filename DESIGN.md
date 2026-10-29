@@ -8,15 +8,41 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
 ## Time
 
 - 1 tick = **one part of a day** (dawn, day, dusk, night). A part is
-  **3.0 real seconds**, so a sim-day is **12.0 real seconds**.
-- → 1 real day ≈ 7,200 sim-days ≈ **20 sim-years ≈ 1 generation**.
+  **0.6 real seconds**, so a sim-day is **2.4 real seconds**.
+- → 1 real day = 36,000 sim-days = **100 sim-years** (360-day model years).
 - The pace is set by `UNIVERSE69_SEC_PER_PART`. It was one day per two
-  seconds before the day and the night were modelled; a cycle that passes
-  in two seconds is not a cycle.
+  seconds before the day and the night were modelled. This release changes
+  only the default wall-clock pace; overrides still apply.
 - A persistent clock anchors cumulative parts to elapsed real time. On restart
   or wake the engine computes `target_parts = clock.parts +
   (now − clock.epoch) / clock.seconds` and catches up. Pace changes preserve
   ticks already due. The universes age while the process is dead.
+
+## Engine 2026.10.30.1: a tropical resource budget
+
+**This changes existing run trajectories.** Older figures below are historical
+unless explicitly re-derived for this version. New worlds use a Sri Lanka
+coastal-ecology analogue: tropical forest, coastal fishing, freshwater catchments
+and two monsoons (FAO, RESEARCH.md). It is neither an exact map nor a digital
+twin: tiles have no surveyed physical scale. Existing saves retain their old
+terrain geometry and seasonal regime (`terrain_version=1`); new worlds use 2.
+Eight founding pairs remain unchanged.
+
+| Evidence / causal constraint | Implemented mechanic | Limits |
+|---|---|---|
+| FAO: coastal lowlands, forest and seasonal monsoon rain support distinct resource habitats | New terrain has a forest mosaic; two rainy intervals replenish plants and freshwater differently from fishing | The locations and multipliers are illustrative, not measured Sri Lankan productivity |
+| Food and water exist in physical places | Wild patches are generated from habitat cells once for the entire terrain. Camps share each patch's remaining stock; founding another camp does not create/refill patches. Fish require a dry bank directly adjoining water | One patch abstracts a habitat cell; yields are food units rather than calories or species inventories |
+| Fresh water is a separate requirement from saltwater fishing | Inland `water` banks hold finite rain-fed reserves. `A_DRINK=22` visits a bank, drinks and carries up to 12 person-days home. Camp water evaporates 1% daily. Drinking depletes the source, carried supply or camp reserve actually used | Banks abstract catchments/seeps without changing terrain; no pathogen chemistry, containers or groundwater flow model |
+| Human bodies need water; WHO confirms milk also supplies it (RESEARCH.md, “Milk supplies water as well as food”) | Thirst advances 0.25 per part, interrupts work to seek water, and can cause dehydration above 4 model days. A nursing mother pays the child's water cost through the same under-three nursing window as milk-food | Threshold and units are explicit hypotheses, not clinical predictions. EDEN retains unlimited provisioned water |
+| An ocean gap requires a boat | Gathering, farm work, hunts, cat targets and nearby defenders require connected dry ground; walking does not cut diagonally over water | Perception reach remains tile distance; actual movement follows a dry path |
+| A finite island cannot conjure replacement wildlife | Deer/cat births need living animals. Removed automatic low-stock herd/cat respawning. Plant/fish observer stocks mirror actual patches rather than an independent global renewable pool | Animal birth rates and grazing capacity remain simplified; there is no guarantee against prey/predator extinction |
+| Old runs must resume without duplicate grants | Migration merges duplicate legacy patches using the minimum remaining stock, rejects dry inland fishing places, adds missing freshwater banks once, and defaults thirst/carry/camp water. Existing terrain is preserved | These repairs change future food availability; old trajectory forecasts no longer apply |
+| Food-sensitive conception was already drafted | Retained 1/240 daily base, food-shortfall multiplier, 1.15 stored-food bonus and farming modifier | These coefficients are hypotheses; removed unsupported claims that these rates reproduce a universal forager growth target |
+
+The clock defaults to `86400 / (100 * 360 * 4) = 0.6` seconds per part.
+Changing pace preserves cumulative ticks already due with the existing clock
+anchor; it does not replay the old world's calendar. This is a target pace,
+not a measured throughput claim for the 2016 MacBook.
 
 ## The founders (engine 2026.10.29.1)
 
@@ -52,7 +78,8 @@ calibration, checked with `tools/lab.py`.
 | Invention needs planners with company (Pinker ch.3; Diamond ch.13) | Tech discovery × (0.5 + 2 × share of adults with `ef` > 0.6); the discoverer is the most self-controlled of a few | `tick_lagoon` |
 | Two clocks | Mean and tail of `ef` recorded yearly in `mind`, apart from tech and arts | `record_mind` |
 
-Re-derived with this engine (`tools/lab.py`, seeds 69/7/123/5, 150 years):
+Historical earlier-engine measurements (version not consistently recorded;
+stale for 2026.10.30.1; `tools/lab.py`, seeds 69/7/123/5, 150 years):
 LAGOON's violent share of deaths runs 0.6–7.8%, lowest where a chiefdom
 formed (Pinker's forager range is 4–30%; famine dominates deaths here).
 After 80 years from seed 69 the EDEN adults average BMI ≈ 32 with purpose
@@ -79,7 +106,7 @@ index — still not cover to cover), `RESEARCH.md`. Values are calibration.
 | Crowding puts people in boats (Diamond, Austronesian expansion) | When the island holds more than ~0.85 × 95, the camp builds a **boat** at its west beach (400 person-days, visible); a party of young adults, partners and children **sails across the strait** over days, lands, and leaves the boat on the far beach. The mainland is untouched land: fresh groves and naive game |
 | Seasons | LAGOON has four (spring, summer, autumn, winter) with droughts, storms and ice-age winters; EDEN is always spring |
 
-Re-derived with this engine (seeds 69, 7, 123, 5, 11, 42, 300, 8; 150
+Historical measurements recorded for 2026.10.27.2 (seeds 69, 7, 123, 5, 11, 42, 300, 8; 150
 years): LAGOON died out at least once in 3 of 8 runs, against 6 of 8 on
 the previous engine; peaks ran 39–406, highest where a boat landed. LAGOON time budget after year 60 (seed 69): foraging 24%, walking
 20%, minding children 13%, play 13%, sleep 8%, talk 7%, sex 3.5%,
@@ -300,15 +327,16 @@ The only scarce resource is **social space** (Calhoun's actual variable):
 
 ## Universe 9 — LAGOON (Blue Lagoon / first Sapiens world)
 
-A 96×96 world: woods, grassland, a lagoon with fish, beaches. Wildlife stocks
-(plants, game, fish, predators) regrow logistically and deplete when harvested.
+A 160×160 world: coastal forest, grassland, a saltwater lagoon and beaches.
+Food patches deplete when harvested and replenish seasonally; animals live,
+breed, hunt and die at actual locations. Inland freshwater is separate.
 Eight founding pairs with world-specific names. Nothing is given; everything is earned.
 
 | Research finding                           | Mechanic                                                    |
 |--------------------------------------------|-------------------------------------------------------------|
 | Foraging economics                          | Adults gather daily; yield depends on tech, season, stock levels; shortfall → hunger → starvation (weakest first) |
 | Predation, accidents, childbirth mortality  | Daily hazard rates; children more vulnerable; weapons/healing lore reduce them |
-| Seasons + disasters                         | 360-day year with winters; storms, droughts, harsh "ice age" winters, all logged |
+| Seasons + disasters                         | 360-day year with monsoons, storms and droughts; legacy saved terrain keeps its old winter regime |
 | Blue Lagoon innocence                       | The founders don't know how life begins; a discovery event in the first years unlocks reproduction |
 | Sapiens: cognitive revolution / Dunbar 150  | Without **shared lore**, a settlement over its social limit splits or feuds; lore raises the cooperation ceiling |
 | Sapiens: agriculture = "luxury trap"        | Farming raises carrying capacity and birth rate but adds workload and disease exposure |
@@ -326,6 +354,39 @@ next generation *wary* (a ~20-year cultural-memory fertility dampener that
 fades when that generation ages out — "the pen forgets"). All logged.
 LAGOON keeps pair-bonds (widows re-pair); there, only famine suppresses
 fertility.
+
+## Growth and its limits
+
+The uncommitted fertility draft reduced the base conception chance from 1/200
+to 1/240 per woman-day, scaled it with hunger, and reduced the stored-food bonus.
+This release preserves those explicit hypotheses while adding physical shared
+food and water budgets. Neither fishing nor storage alone is agriculture; a
+forager growth target cannot be inferred from one seed or assigned to a decade
+because a technology appeared. The old draft's before/after growth figures were
+not reproduced for 2026.10.30.1 and are removed. See STUDY.md for the bounded
+shipped-code result, including failure or extinction if that is what occurs.
+
+## Names (engine 2026.10.30.1)
+
+A name is a cultural invention, so the two worlds do not share a stock.
+
+| World | The first names | Where the rest come from |
+|---|---|---|
+| EDEN | Adam and Eve, then Cain, Adah, Abel, Zillah, Seth, Miriam | The line after them: Enosh, Noah, Lame, Enoch; Ruth, Sarah, Rachel, Leah |
+| LAGOON | Rahul and Sita, then Siddhartha, Parvati, Ganesh, Ganga, Shiva, Tara | Arjuna, Krishna, Indra, Rama; Radha, Lakshmi, Maya, Kali |
+
+The founders of the two worlds are **the same people** — the same bodies,
+the same tempers, in the same order. Only the names differ, because a name
+is a thing a world invents and EDEN did not invent the ones LAGOON uses.
+
+**A world has no names at the beginning.** `u["named"]` is false until the
+first child is born, and then it is true, with an event: *the first child
+is named, and after this everyone has a name.* A language is a thing you
+invent later; before that, the names in the record are the observer's
+bookkeeping, and the people themselves have not got round to it.
+
+Everyone born after the founders is named from the same stock, so a name in
+the record always says which world the person belongs to.
 
 ## Death, postmortems, and lessons (the Edge-of-Tomorrow loop)
 

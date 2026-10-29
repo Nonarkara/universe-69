@@ -190,7 +190,7 @@
   .read blockquote { margin:0 0 10px; padding-left:14px; border-left:2px solid var(--accent); font-style:italic; }
   .read .note { font-family:var(--font-ui); font-size:13px; color:var(--muted); margin:0 0 10px; }
   .read figure { margin:4px 0 12px; }
-  .read figure img { display:block; width:100%; height:min(32vh, 300px); object-fit:contain; }
+  .read figure img { display:block; width:100%; height:auto; max-height:min(32vh, 300px); object-fit:contain; }
   .read figcaption { font-family:var(--font-ui); font-size:12.5px; line-height:1.45; color:var(--ink); margin-top:5px; }
   .read figcaption .cr { display:block; color:var(--muted); }
   .read .sub { color:var(--muted); font-size:18px; margin:0 0 4px; }
@@ -235,7 +235,7 @@
                    max-height:calc(100dvh - 24px); border:1px solid var(--line); }
     .read { font-size:16px; }
     .read h1 { font-size:25px; }
-    .read figure img { height:min(26vh, 230px); }
+    .read figure img { height:auto; max-height:min(34vh, 280px); width:100%; max-width:100%; }
     #records h2 .long { display:none; }
     #reclines { height:calc(4 * 19px + 4px); padding:0 8px 4px; }
     #rechead { padding:3px 8px; }
@@ -276,7 +276,7 @@
 <body>
 <div id="masthead">
   <span class="ttl">UNIVERSE 69</span>
-  <span class="sub">two sealed worlds — observed, never helped</span>
+  <span class="sub" id="pace">100 years / real day · observed, never helped</span>
   <span class="hint">wheel zoom · drag pan · click to follow · WASD walk in · esc</span>
   <button id="walkbtn" title="Walk into the world you last touched">WALK</button>
   <button type="button" id="bookbtn" title="The book: how these two worlds came to be">BOOK</button>
@@ -324,8 +324,8 @@
     <div class="sheethead"><h2 id="introtitle">Universe 69</h2></div>
     <div class="page" id="intropage">
     <p><b class="eden">EDEN</b> is universe 6: a sealed resort where it is always spring. Food, water, and a bed are free. The only scarce things are room and a place to be needed.</p>
-    <p><b class="lagoon">LAGOON</b> is universe 9: an island of woods, fish, winters, and predators. Nothing is given.</p>
-    <p>Watch only. You cannot feed them or step in. They keep living while you are away — a whole day and a night every 12 seconds, about 20 sim-years in a real day.</p>
+    <p><b class="lagoon">LAGOON</b> is universe 9: a Sri Lanka-inspired tropical island of woods, fish, freshwater and predators, shaped by wet and dry seasons. Nothing is given.</p>
+    <p>Watch only. You cannot feed them or step in. They keep living while you are away — by default, a whole day and a night every 2.4 seconds — 100 simulated years in one real day.</p>
     <p>The light turns: dawn, day, dusk, night. In LAGOON the band comes in to the fire after dark and takes turns keeping watch. EDEN never closes, but it goes to bed.</p>
     <p class="dim">THE FIRST RUN keeps the record of the original two universes: what they did, what we missed, what failed.</p>
     <p class="dim">Wheel to look closer, drag to pan, click a person to follow, 1 · 2 · 3 for island, camp and hearth, WASD to walk in among them. BOOK and RESEARCH read in pages: ‹ › or the arrow keys.</p>
@@ -823,7 +823,7 @@ function compose9(u, st){
   }
   var terrainKey=SNAP ? mirrorTerrainKey9 : terrain;
   if (terrainKey9!==terrainKey){
-    terrainKey9=terrainKey; terr9=terrain; heat9=new Uint16Array(terrain.length*terrain.length); pathsSeq=-1; ground.l=null;
+    terrainKey9=terrainKey; terr9=terrain; fields9=null; heat9=new Uint16Array(terrain.length*terrain.length); pathsSeq=-1; ground.l=null;
     water9=[];
     for (var y=0;y<terrain.length;y++) for (var x=0;x<terrain.length;x++)
       if (terrain[y][x]===2 && hash2(x,y)>0.9 && (nIs(terrain,x,y-2,0)||nIs(terrain,x,y-2,3)||nIs(terrain,x-2,y,3)||nIs(terrain,x+2,y,3)||nIs(terrain,x,y+2,3))) water9.push([x,y]);
@@ -903,10 +903,11 @@ function drawLiveGround(g, key, u, sx, sy, hx, hy, ts, canvas){
 var ACT_LABEL = ["idle","walking","foraging","hunting","fishing","farming",
                  "building","talking","making love","giving birth",
                  "minding children","resting","eating","withdrawn","fighting",
-                 "playing","dancing","sleeping","working","scouting","keeping watch","grooming"];
+                 "playing","dancing","sleeping","working","scouting","keeping watch","grooming","fetching water"];
 var A_WALK=1, A_FORAGE=2, A_HUNT=3, A_FISH=4, A_FARM=5, A_BUILD=6, A_TALK=7,
     A_MATE=8, A_BIRTH=9, A_TEND=10, A_REST=11, A_EAT=12, A_WITHDRAW=13,
-    A_FIGHT=14, A_PLAY=15, A_RITE=16, A_SLEEP=17, A_WORK=18, A_SCOUT=19, A_WATCH=20, A_GROOM=21;
+    A_FIGHT=14, A_PLAY=15, A_RITE=16, A_SLEEP=17, A_WORK=18, A_SCOUT=19, A_WATCH=20, A_GROOM=21, A_DRINK=22;
+var WALK_STANCE=0.62, WALK_SWEEP=10.0, WALK_BUCKETS=48;
 var PERIOD = [240,22,100,110,160,90,110,80,60,130,130,240,80,180,40,26,34,300,70,22,260,90];
 
 var SKINS = [ ["#f1d2b0","#c9a079","#f9e4cf"], ["#e3b88c","#b98c5f","#f0cfa8"],
@@ -930,7 +931,8 @@ function solvePose(act, c, moving, v){
     // ground while the body passes over it; the other foot arcs forward and
     // plants. The body rises as each leg straightens and falls as each lands,
     // and the hips travel toward the leg that is carrying the weight.
-    var A=3.1, ST=0.62;                       // stride half-length, stance share
+    P.walk=1;
+    var A=WALK_SWEEP/2, ST=WALK_STANCE;                       // stride half-length, stance share
     function leg(p){                          // p in [0,1): stance then swing
       if (p<ST){ var t=p/ST; return {x:A-2*A*t, y:32, bend:0.5*(1-t)}; }
       var t=(p-ST)/(1-ST);
@@ -945,7 +947,7 @@ function solvePose(act, c, moving, v){
     var bob=-0.55*Math.cos(4*Math.PI*(ph/(Math.PI*2)));
     P.drop=bob;
     // the hips lean over the standing leg; the shoulders lean the other way
-    var stance = lL.bend>lR.bend ? 1 : -1;
+    var stance=Math.cos(ph);
     P.hipDx=stance*0.55; P.shDx=-stance*0.35;
     P.lean=1.1+stance*0.25; P.twist=stance*0.5;
     // the arms swing against the leg on the same side
@@ -961,6 +963,10 @@ function solvePose(act, c, moving, v){
     return P;
   }
   switch(act){
+    case A_DRINK: {
+      P.lean=1.0; P.drop=1.1; P.headTilt=0.5;
+      P.handRx=0.9; P.handRy=5.8; P.elbRx=4.3; P.elbRy=11.6;
+      P.handLx=-3.2; P.handLy=16.0; P.elbLx=-4.1; P.elbLy=12.0; break; }
     case A_FORAGE: { var r=(Math.sin(ph)+1)/2;
       P.lean=3.0+r*1.4; P.drop=r*1.6; P.headTilt=1.8;
       P.handLx=-2.6; P.handRx=3.4; P.handLy=24+r*4.5; P.handRy=24.6+r*4.8;
@@ -1150,7 +1156,7 @@ function buildRig(P, D, view){
   var foot={};
   ["L","R"].forEach(function(side){
     var fy=P["foot"+side+"y"];
-    foot[side]={ x:hipCx+(P["foot"+side+"x"]+P.cx-ox)*legK, y:(fy>=31.5 ? ANK : ANK-(32-fy)*0.6+drop), ground:fy>=31.5 };
+    foot[side]={ x:P.walk ? P["foot"+side+"x"]*legK : hipCx+(P["foot"+side+"x"]+P.cx-ox)*legK, y:(fy>=31.5 ? ANK : ANK-(32-fy)*0.6+drop), ground:fy>=31.5 };
   });
   if (P.rest){                                      // the weight leg plumb, the free leg eased forward
     foot.L={x:hipX.L+0.2, y:ANK, ground:true};
@@ -1244,6 +1250,20 @@ function limbOutline(a, j, e, w){
   return [ off(a,n1,w[0]/2), off(b1,n1,w[1]/2), off(j,nk,w[3]/2), off(b2,n2,w[4]/2), off(e,n2,w[6]/2),
            [e[0]+(e[0]-j[0])*0.06, e[1]+(e[1]-j[1])*0.06],
            off(e,n2,-w[6]/2), off(b2,n2,-w[5]/2), off(j,nk,-w[3]/2), off(b1,n1,-w[2]/2), off(a,n1,-w[0]/2) ];
+}
+
+// A woven cover belongs to the body, in the same coordinates at every LOD.
+function drawSleepCover(g, J, D, B, act, lying, dress, ink, bedding){
+  if (!lying || act!==A_SLEEP || B.stage===0 || bedding===false) return;
+  var x=J.pelvis[0], top=J.pelvis[1]+0.4;
+  var end=Math.max(J.ankL[1],J.ankR[1])-1.2, w=Math.max(D.hpW,D.shW)*1.22;
+  g.fillStyle=dress==="fur"?DRESS.fur:DRESS.hide; g.strokeStyle=INK; g.lineWidth=ink;
+  g.beginPath(); g.moveTo(x-w,top); g.lineTo(x+w,top);
+  g.quadraticCurveTo(x+w*1.1,(top+end)/2,x+w*0.8,end);
+  g.lineTo(x-w*0.8,end); g.quadraticCurveTo(x-w*1.1,(top+end)/2,x-w,top);
+  g.closePath(); g.fill(); g.stroke();
+  g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.7;
+  g.beginPath(); g.moveTo(x-w*0.9,top+1.1); g.lineTo(x+w*0.9,top+1.1); g.stroke();
 }
 
 // The figure at a distance (an adult under ~26 px): silhouette first. A head,
@@ -1345,7 +1365,7 @@ function drawTiny(g, J, D, k, tones, dress, v){
   R(cxp-w/2, hip, cxp-w/2+px, foot, tones[1]);              // legs, a pixel apart when there is room
   R(cxp+w/2-px, hip, cxp+w/2, foot, INK);
 }
-function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view){
+function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view, bedding){
   var fem=(sex===1), adult=B.adult;
   // Sleeping, an infant, and two people making love are drawn lying down —
   // but only once they are there: nobody slides across the ground lying.
@@ -1371,13 +1391,23 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
     var st2=Math.sin(c*Math.PI*2);
     P.rest=0; P.lean=0; P.cx=0; P.headTilt=0; P.tool=0; P.basket=0; P.carry=0; P.twist=0; P.shDx=0; P.hipDx=0;
     P.footLx=-1.6; P.footRx=1.6; P.kneeLx=-1.5; P.kneeRx=1.5;
-    P.footLy=32-Math.max(0,st2)*1.4; P.footRy=32-Math.max(0,-st2)*1.4;
-    P.kneeLy=26-Math.max(0,st2)*1.2; P.kneeRy=26-Math.max(0,-st2)*1.2;
+    // Keep the same stance and swing times in a front/back view.
+    P.kneeLy=26-(32-P.footLy)*0.45; P.kneeRy=26-(32-P.footRy)*0.45;
     P.handLx=-5.0; P.handRx=5.0; P.elbLx=-5.2; P.elbRx=5.2;
     P.handLy=18.0-st2*0.9; P.handRy=18.0+st2*0.9; P.elbLy=12.8; P.elbRy=12.8;
   }
   if (lying){ P.rest=1; P.lean=0; P.cx=0; P.drop=0; P.headTilt=0;
-    if (act===A_MATE){ P.rest=0; P.elbRx=5.4; P.elbRy=11; P.handRx=7.5; P.handRy=9; P.footLx=-0.6; P.footRx=0.9; } }
+    if (act===A_MATE){ P.rest=0; P.elbRx=5.4; P.elbRy=11; P.handRx=7.5; P.handRy=9; P.footLx=-0.6; P.footRx=0.9; }
+    else if (act===A_SLEEP){
+      P.keepArms=true;
+      // A sleeper is stretched out on its side with one arm folded under
+      // the head. This is the difference between a person asleep and a
+      // bundle: the legs are long and straight, and the head rests.
+      P.footLx=-1.4; P.footLy=32; P.footRx=0.9; P.footRy=32;
+      P.kneeLx=-1.0; P.kneeLy=26.2; P.kneeRx=1.1; P.kneeRy=26.0;
+      P.handRx=2.2; P.handRy=7.4; P.elbRx=4.0; P.elbRy=12.6;   // under the head
+      P.handLx=-2.2; P.handLy=21.5; P.elbLx=-3.2; P.elbLy=15.0; // along the body
+    } }
   var D=rigDims(B, sex), J=buildRig(P, D, view);
   var Hs=STATURE[B.ab]*(fem?1-0.07*D.dm:1), k=s*Hs;      // a woman ~7% shorter, from puberty
   var skin=SKINS[v%4], SK=skin[0], SKD=skin[1];
@@ -1387,9 +1417,16 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
   var starving=(B.fat===0)||B.gaunt;
   g.save();
   if (lying){
-    if (act===A_SLEEP && B.stage>0){                // a mat or a bedroll under the sleeper
+    if (act===A_SLEEP && bedding!==false){         // furnished or existing hide/fur bedding
+      var bw=17*k, bh=(B.stage>0?6:4.2)*k, bx0=cx-bw, by0=footY-bh-1.2*k;
       g.fillStyle=dress==="fur"?"#8a6a44":"#d8cfa8"; g.strokeStyle=INK; g.lineWidth=0.9;
-      g.fillRect(cx-17*k*Hs, footY-6.5*k, 34*k*Hs, 6*k); g.strokeRect(cx-17*k*Hs, footY-6.5*k, 34*k*Hs, 6*k);
+      g.fillRect(bx0,by0,2*bw,bh); g.strokeRect(bx0,by0,2*bw,bh);
+      g.strokeStyle=INK_SOFT; g.lineWidth=0.7;              // the woven edge
+      for (var wv=1;wv<4;wv++){ g.beginPath(); g.moveTo(bx0+bw*wv/4,by0+0.4*k); g.lineTo(bx0+bw*wv/4,by0+bh-0.4*k); g.stroke(); }
+      if (B.stage>0 && dress!=="hide" && dress!=="fur"){ // resort pillow
+        g.fillStyle="#e8e0cc"; g.strokeStyle=INK; g.lineWidth=0.8;
+        g.fillRect(bx0-0.6*k, by0-0.9*k, 4.2*k, bh+0.6*k); g.strokeRect(bx0-0.6*k, by0-0.9*k, 4.2*k, bh+0.6*k);
+      }
     }
     g.translate(cx-16*k, footY-3*k);
     g.rotate(-Math.PI/2);
@@ -1402,7 +1439,7 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
   var shX=J.chest[0], shY=J.shL[1]-0.9+(J.shR[1]-J.shL[1])/2, hipX=J.pelvis[0], hipY=J.pelvis[1];
 
   if (32*k<10 && !lying){ drawTiny(g, J, D, k, tones, dress, v); g.restore(); return; }
-  if (32*k<26){ drawFar(g, J, D, k, tones, dress, v, B, fem, P); g.restore(); return; }
+  if (32*k<26){ drawFar(g, J, D, k, tones, dress, v, B, fem, P); drawSleepCover(g,J,D,B,act,lying,dress,ink,bedding); g.restore(); return; }
 
   function limb(x1,y1,x2,y2,w,col){            // a plain round-ended stroke (the neck)
     g.strokeStyle=INK; g.lineWidth=w+ink*2;
@@ -1575,6 +1612,8 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view)
     g.fillStyle="#b8322a"; g.beginPath(); g.arc(bx+0.2, by, 0.42, 0, 6.283); g.fill();
   }
 
+  drawSleepCover(g, J, D, B, act, lying, dress, ink, bedding);
+
   // tools and burdens, held in the hand the skeleton put there
   drawHeld(g, J, D, P, B, ink*1.2, false);
   if (P.carry){
@@ -1705,25 +1744,25 @@ function matingSprite(m, f, view, s){
 
 // ---- sprite cache: one render per (pose, zoom), then a blit per person -----
 var spriteCache={}, spriteCount=0;
-function figureSprite(a, act, bucket, moving, s, dress){
+function figureSprite(a, act, bucket, moving, s, dress, bedding){
   // Individual variation is only visible close up, so it only enters the
   // cache key when zoomed in; crowds share sprites and stay cheap. The key
   // fixes everything the drawing reads, so a cached figure is never someone
   // else's body.
   var sq = s>=2 ? Math.round(s) : Math.round(s*8)/8;
   var vk = s>=2 ? (a.v%20) : (s>=1.25 ? (a.v%4) : 0);
-  var bk = s>=1.25 ? bucket : (bucket>>2);
+  var bk = s>=1.25 ? bucket : Math.floor(bucket/4)*4;
   var B=bodyOf(a), wk=(act===A_WITHDRAW)?(a.wk||0):0;
   var view = !moving ? 0 : (Math.abs(a.vy||0)>1.2*Math.abs(a.vx||0) ? ((a.vy>0)?1:2) : 0);
-  var key=act+"|"+B.ab+B.fat+B.mus+B.hurt+B.preg+B.hungry+B.gaunt+B.carry+B.infant+"|"+B.adult+"|"+a.sex+"|"+(dress||"")+"|"+wk+"|"+
-          bk+"|"+(moving?1:0)+view+"|"+vk+"|"+sq;
+  var key=act+"|"+B.ab+B.fat+B.mus+B.hurt+B.preg+B.hungry+B.gaunt+B.carry+B.infant+"|"+B.stage+"|"+B.adult+"|"+a.sex+"|"+(dress||"")+"|"+wk+"|"+
+          bk+"|"+(moving?1:0)+view+"|"+vk+"|"+sq+"|"+(bedding!==false);
   var sp=spriteCache[key];
   if (sp) return sp;
   var cap = sq>=3 ? 420 : 1400;
   if (spriteCount>cap){ spriteCache={}; spriteCount=0; }
   var W=Math.ceil(40*sq), H=Math.ceil(40*sq);
   var c=mkCanvas(W,H), g=c.getContext("2d");
-  drawSketch(g, W/2, H-2*sq, sq, act, bucket/12+0.02, moving, vk, B, a.sex, dress, wk, view);
+  drawSketch(g, W/2, H-2*sq, sq, act, bk/(moving?WALK_BUCKETS:12)+(moving?0:0.02), moving, vk, B, a.sex, dress, wk, view, bedding);
   sp={c:c, w:W, h:H, s:sq, view:view}; spriteCache[key]=sp; spriteCount++;
   return sp;
 }
@@ -1771,28 +1810,37 @@ function syncActors(map, people, ox, detail){
 function walkerOf(a){
   var h=((a.id*2654435761)>>>0)/4294967296;
   var age=a.age===undefined?30:a.age, b=a.bmi||22;
-  var pace=0.042*(0.82+0.36*h);
-  if (age<12) pace*=1.15; else if (age>=58) pace*=0.72;
+  var pace=0.028*(0.82+0.36*h);
+  if (age<12) pace*=STATURE[ageBand(age)]*1.15; else if (age>=58) pace*=0.72;
   if (b>=30) pace*=0.82; if ((a.inj||0)>=5) pace*=0.6;
-  return {pace:pace, stride:age<12?0.55:(age<16?0.75:0.9), ph0:h};
+  var B=bodyOf(a),D=rigDims(B,a.sex),Hs=STATURE[B.ab]*(a.sex===1?1-0.07*D.dm:1);
+  var stride=WALK_SWEEP*((D.thigh+D.shin)/13.4)*(1.45/32)*Hs/WALK_STANCE;
+  return {pace:pace, stride:stride, ph0:h};
 }
-function updateActors(map, heat, S){
+var actorClocks=new WeakMap(), frameSeconds=1/30;
+function updateActors(map, heat, S, seconds){
+  var left=(actorClocks.get(map)||0)+Math.max(0,Math.min(0.25,seconds===undefined?frameSeconds:seconds));
+  while(left+1e-9>=1/30){ updateActorsStep(map,heat,S); left-=1/30; }
+  actorClocks.set(map,Math.max(0,left));
+}
+function updateActorsStep(map, heat, S){
   Object.keys(map).forEach(function(id){
     var a=map[id];
     if (!a.wk_){ a.wk_=walkerOf(a); a.vx=a.vy=0; a.dist=a.wk_.ph0*a.wk_.stride; a.wait=0; }
     if (a.tx!==a.ltx || a.ty!==a.lty){              // a new place to be
       a.ltx=a.tx; a.lty=a.ty;
-      a.wait=Math.floor(((a.id*7919+tick)%37)*0.9);  // nobody leaves on the same beat
+      a.wait=Math.floor(Math.abs(a.id*7919+a.tx*17+a.ty*31)%5);  // nobody leaves on the same beat
     }
     var dx=a.tx-a.x, dy=a.ty-a.y, d=Math.hypot(dx,dy);
     if (d>14){ a.x=a.tx; a.y=a.ty; a.vx=a.vy=0; d=0; }  // a move of camp: cut, don't glide
     var want=0;
     if (a.wait>0) a.wait--;
-    else if (d>0.03) want=Math.max(a.wk_.pace, d/52)*Math.min(1, d/0.7);  // arrive within the day; ease in
+    else if (d>0.03) want=Math.min(a.wk_.pace*1.35,Math.max(a.wk_.pace,d/52))*Math.min(1,d/0.7);  // bounded catch-up; ease into the destination
     var ux=d>0?dx/d:0, uy=d>0?dy/d:0;
     a.vx+=(ux*want-a.vx)*0.12; a.vy+=(uy*want-a.vy)*0.12;  // no instant starts or stops
     var v=Math.hypot(a.vx,a.vy);
     if (d<=0.03 && v<0.004){ a.x=a.tx; a.y=a.ty; a.vx=a.vy=0; a.moving=false; a.face=a.eface||a.face; return; }
+    if (v>d){ a.vx=dx; a.vy=dy; v=d; }
     a.x+=a.vx; a.y+=a.vy; a.dist+=v;
     a.moving=v>0.006;
     if (Math.abs(a.vx)>0.01) a.face=a.vx>0?1:-1;
@@ -2049,6 +2097,16 @@ function drawSites(g, u, key, sx, sy, ts){
       var n=Math.round(f*6);
       for (var b=0;b<n;b++){ var bx=x+ts*(0.30+0.14*(b%3)), by=y+ts*(0.48+0.12*Math.floor(b/3));
         g.fillRect(Math.round(bx),Math.round(by),Math.max(1,Math.round(k*1.6)),Math.max(1,Math.round(k*1.6))); }
+    } else if (st.k==="water"){
+      // An inland seep is drawn from its actual finite reserve, never the sea.
+      g.fillStyle=P.soilD; g.beginPath(); g.ellipse(x+ts*0.5,y+ts*0.55,ts*0.43,ts*0.30,0,0,6.283); g.fill();
+      if (f>0){
+        g.fillStyle=P.waterS; g.beginPath(); g.ellipse(x+ts*0.5,y+ts*0.55,ts*0.36*Math.sqrt(f),ts*0.23*Math.sqrt(f),0,0,6.283); g.fill();
+        g.strokeStyle=P.waterL; g.lineWidth=Math.max(0.6,ts*0.025);
+        g.beginPath(); g.ellipse(x+ts*0.5,y+ts*0.55,ts*0.22*Math.sqrt(f),ts*0.10*Math.sqrt(f),0,0,Math.PI); g.stroke();
+      }
+      g.strokeStyle=P.grassD; g.lineWidth=Math.max(1,ts*0.045);
+      for(var reed=0;reed<3;reed++){ g.beginPath(); g.moveTo(x+ts*(0.72+reed*0.06),y+ts*0.47); g.lineTo(x+ts*(0.70+reed*0.07),y+ts*(0.15+reed*0.04)); g.stroke(); }
     } else if (st.k==="fish"){                  // fish in the shallows, as many as are there
       var nf=Math.round(f*3), t=tick*0.05+st.x*0.7+st.y;
       g.fillStyle=P.waterD;
@@ -2155,7 +2213,7 @@ function render(canvas, world, map, key, u){
 
   // people
   var sRaw=ts*1.45/32;
-  var s = sRaw>=2 ? Math.round(sRaw) : Math.max(0.5, sRaw);
+  var s = sRaw;
   var modesty=(u&&u.modesty)||0, winter=key==="l"&&u&&u.season==="winter";
   function dressOf(a){
     if (winter) return "fur";
@@ -2244,9 +2302,11 @@ function render(canvas, world, map, key, u){
     g.drawImage(sh.c, Math.round(px+ts*0.12-sh.w/2), Math.round(py-ts*0.02-sh.h/2));
     var dact=a.drawAct===undefined?a.act:a.drawAct;
     var period=PERIOD[dact]||200, c0=moving0(a)?a.walkc:((tick+a.v*7)%period)/period;
-    var bucket=Math.floor(c0*12)%12;
+    var buckets=moving0(a)?WALK_BUCKETS:12;
+    var bucket=Math.floor(c0*buckets)%buckets;
     var moving=a.moving;
-    var sp=figureSprite(a, dact, bucket, moving, s, dressOf(a));
+    var dress=dressOf(a), bedding=key==="e"||dress==="hide"||dress==="fur";
+    var sp=figureSprite(a, dact, bucket, moving, s, dress, bedding);
     var facing=a.drawFace||a.face;
     var scale=s/sp.s;
     var dw=sp.w*scale, dh=sp.h*scale;
@@ -2807,6 +2867,8 @@ function statLine(u, kind){
   } else {
     b.push("TRIBES "+((u.settlements||[]).length), "STORE "+Math.round(u.store||0));
     b.push(u.season==="winter"&&u.harsh?"ICE-AGE WINTER":(u.season||"").toUpperCase());
+    if (u.water!==undefined) b.push("WATER "+Math.round(u.water)+" PERSON-DAYS");
+    if (u.climate==="tropical") b.push("TROPICAL ISLAND");
     if (u.dry) b.push("DROUGHT");
     if (u.myths&&u.myths.length) b.push(u.myths.length+" MYTHS");
     if (u.lessons&&u.lessons.length) b.push("INSTINCTS "+u.lessons.join(", ").toUpperCase());
@@ -2854,6 +2916,7 @@ function whoInfo(key){
   if (!d) return null;
   return {id:id, name:d[0], age:d[1], gen:d[2], flags:d[3],
           hx:d[4], hy:d[5], pid:d[6], hun:d[7], u:u,
+          thirst:u.thirst?u.thirst[String(id)]:undefined,
           act:a.moving?"walking":(ACT_LABEL[a.act]||"idle")};
 }
 function hudText(u, kind){
@@ -2914,6 +2977,7 @@ function paintCard(key){
     title="<span class='nm'>"+escapeHTML(w.name)+"</span> · "+escapeHTML(w.act);
     blocks=["<p>"+escapeHTML(w.age)+" years · generation "+escapeHTML(w.gen)+" · "+escapeHTML(w.hun)+" hunger</p>",
       "<p>"+escapeHTML(key==="e"?"Nest box at "+w.hx+","+w.hy:"Hearth at "+w.hx+","+w.hy)+" · "+escapeHTML(pname)+"</p>"];
+    if (w.thirst!==undefined) blocks.push("<p>Water deficit: "+escapeHTML(w.thirst)+" days</p>");
     if (d[8]) blocks.push("<p>"+escapeHTML(d[8])+"</p>");
     blocks=blocks.concat(bits.map(function(text){return "<p>"+escapeHTML(text)+"</p>";}));
     if (diary[key].length>1) blocks=blocks.concat(diary[key].slice(-4).map(function(line){
@@ -2987,7 +3051,7 @@ function eventClass(e){
   return g;
 }
 function updateRecords(events){
-  if (events && events.length) conEvents=events;
+  if (events) conEvents=events;
   var el=document.getElementById("reclines");
   var rows=[];
   for (var i=0;i<conEvents.length;i++){
@@ -3012,9 +3076,9 @@ function updateRecords(events){
     }
     if (r.same>1) msg+=" <span class='n'>×"+r.same+"</span>";
     var yr = r.y1!==e.y ? "Y"+e.y+"–"+r.y1 : "Y"+e.y;
-    return "<div class='row "+r.g+"'><span class='yr'>"+yr+"</span> "+
+    return "<div class='row "+r.g+"'><span class='yr'>"+escapeHTML(yr)+"</span> "+
       "<span class='"+(e.u==="EDEN"?"u6":"u9")+"'>"+(e.u==="EDEN"?"U6":"U9")+"</span> "+
-      "<span class='yr'>["+e.t+"]</span> "+msg+"</div>";
+      "<span class='yr'>["+escapeHTML(e.t)+"]</span> "+msg+"</div>";
   });
   // read in pages, newest last; a reader on the newest page stays on it.
   // A record shorter than its box takes only the room its lines need.
@@ -3169,7 +3233,7 @@ function hideFail(){
   }
 }
 function resetIteration(key){
-  if (key==="e"){ actors6={}; edenSize=0; } else { actors9={}; terrainKey9=null; }
+  if (key==="e"){ actors6={}; edenSize=0; } else { actors9={}; wild9=[]; wildById={}; terrainKey9=null; worldInfo=null; }
   sel[key]=0; diary[key]=[]; diaryWho[key]=0; diaryLast[key]="";
   cam[key].mode="auto"; cam[key].follow=0; cam[key].placed=0;
   shots[key].until=0; shots[key].camp=null; hudCache[key]=""; ground[key]=null;
@@ -3188,6 +3252,8 @@ function poll(){
       if (state.u.lagoon.iter!==st.u.lagoon.iter || st.u.lagoon.day<state.u.lagoon.day) resetIteration("l");
     }
     state=st; pollSeq++; snapBad=false; snapReady=true;
+    var pace=document.getElementById("pace"), years=st.pace&&+st.pace.years_per_real_day;
+    if(pace) pace.textContent=years>0?(+years.toPrecision(3))+" years / real day · observed, never helped":"two sealed worlds · observed, never helped";
     if (SNAP) snapWall=+st.wall||0;
     hideFail();
     if (!SNAP&&!worldInfo) loadWorld().then(function(){ ground.l=null; });
@@ -3216,10 +3282,11 @@ function poll(){
   }).then(function(){ polling=false; });
 }
 // 30 frames a second, backing off to 15 if the machine is struggling
-var frameMs=33, loopTimer=null, costAvg=10;
+var frameMs=33, loopTimer=null, costAvg=10, lastFrame=0;
 function frame(){
-  if (document.hidden) return;
+  if (document.hidden){ lastFrame=0; return; }
   var t0=performance.now();
+  frameSeconds=lastFrame?Math.min(0.25,(t0-lastFrame)/1000):1/30; lastFrame=t0;
   tick++;
   try{
   if (state){
@@ -3441,7 +3508,8 @@ function readBlocks(blocks, base){
       var cr=[b.credit, b.license].filter(Boolean).map(escapeHTML).join(" · ");
       if (b.source) cr+=(cr?" · ":"")+escapeHTML(b.source);
       var src=String(b.src||""); if (src && !/^(https?:|\/|book\/|archive\/)/.test(src)) src=base+src;
-      return "<figure><img src='"+escapeHTML(src)+"' alt='"+escapeHTML(b.alt||"")+"' loading='lazy' decoding='async'>"+
+      var dims=Number(b.width)>0&&Number(b.height)>0 ? " width='"+Number(b.width)+"' height='"+Number(b.height)+"' style='aspect-ratio:"+Number(b.width)+"/"+Number(b.height)+"'" : " style='height:min(26vh,230px)'";
+      return "<figure><img"+dims+" src='"+escapeHTML(src)+"' alt='"+escapeHTML(b.alt||"")+"' loading='lazy' decoding='async'>"+
              "<figcaption>"+escapeHTML(b.caption||"")+(cr?"<span class='cr'>"+cr+"</span>":"")+"</figcaption></figure>";
     }
     return "<p>"+tx+"</p>";
@@ -3687,11 +3755,11 @@ function renderResearch(where){
   } else blocks = resTab==="tests" ? testBlocks(rep) : storyBlocks(rep);
   if (!blocks.length) blocks=['<p class="dim">The books are unavailable in this snapshot.</p>'];
   P0.target=document.getElementById(tabs[resTab]); P0.cls=cls;
-  P0.set(blocks, where||"keep");
   var c = (rep && rep.counts) || {};
   document.getElementById("ressum").textContent = rep ?
     (c.supported||0) + " supported · " + (c.contradicted||0) + " contradicted · "
     + (c.undecided||0) + " undecided · engine " + (rep.engine || "?") : "";
+  P0.set(blocks, where||"keep");
 }
 function researchView(tab){ resTab=tab; renderResearch("first"); }
 document.getElementById("resorigin").onclick=function(){ researchView("origin"); };
@@ -3738,13 +3806,13 @@ document.addEventListener("keydown", function(ev){
 
 if (!seenIntro()){ document.getElementById("veil").hidden=false; layoutIntro(); document.getElementById("veilok").focus(); }
 loadWorld().then(function(){
-  poll(); setInterval(poll,2000);
+  poll(); setInterval(poll,SNAP?2000:600);
   frame(); loopTimer=setInterval(frame, frameMs);
 }, function(err){
   snapBad=true;
   showFail("Could not read the world ("+(err&&err.message?err.message:"network error")+"). Retrying.");
   freshness();
-  poll(); setInterval(poll,2000);
+  poll(); setInterval(poll,SNAP?2000:600);
   frame(); loopTimer=setInterval(frame, frameMs);
 });
 </script>

@@ -1,16 +1,96 @@
 # STUDY — measurements from the running universes
 
-**Historical results.** The numbered historical sections below predate engine `2026.10.28.1` and
-have not been re-derived for this release. They describe the earlier engine
-used when each study was written, whose exact version is not consistently
-recorded. Treat those results as stale until rerun with the named commands;
-they are not current measurements or evidence of current behavior.
+**Version boundary.** Engine `2026.10.30.1` changes food/water availability,
+wildlife replenishment, conception and the default clock. All earlier results
+below are historical; none is evidence for the new trajectory. The model is a
+Sri Lanka coastal-ecology analogue, not an exact island map, physical-scale
+survey, demographic prediction or guaranteed civilizational ladder.
 
-The 2026.10.28.1 release adds four parts per day and corrects the unfinished
-conversion's daily rates, wall-clock migration and reseed timing. Its figures
-must be derived afresh. New reports include the actual engine version.
+## Audit release 2026.10.30.1
 
-## Audit release 2026.10.29.1
+Eight founding pairs per world; four parts per day; default 0.6 seconds per
+part = 100 model years per real day. This is a configured pace, not a measured
+speed for the 2016 MacBook. Existing saves retain their terrain/season version
+and resume with a clock anchor that preserves ticks already due. Engine edits
+change their future trajectories.
+
+Food patches now belong to habitat locations rather than camps. Freshwater
+banks, fetching, carried water, camp reserves and thirst make drinking distinct
+from fishing in saltwater. Both resources deplete and replenish once per shared
+place. Dry paths gate resources and animal encounters. Wildlife cannot respawn
+from nothing. The retained food-sensitive fertility coefficients are hypotheses,
+not a fit to a universal forager growth target.
+
+The first audit arc was superseded after a causal nursing-channel bug: milk
+supplied food until age three but supplied water only until six months. The
+corrected model credits milk-water through the same nursing window, charging
+the mother; no yield, mortality threshold or growth coefficient was tuned.
+Private site/child cache keys were also made JSON-safe without changing their
+lookup order or trajectory.
+
+The final frozen-source, seed-69 measurement covers **36,000 full days =
+144,000 parts = 100 model years**:
+
+```sh
+python3 tools/lab.py --days 36000 --seed 69 --every 1800 --quiet --json arc.json
+```
+
+| World | Day 3,000 population | Day 36,000 population | Peak | Generations reached | Iteration | Observed outcome |
+|---|---:|---:|---:|---:|---:|---|
+| EDEN | 34 | 614 | 619 | 6 | 1 | 229 withdrawn; phase label `exploit`; no extinction |
+| LAGOON | 25 | 25 | 48 | 5 | 1 | Six technologies; one tribe; no extinction or greater-shore crossing |
+
+Neither universe produced a postmortem or reseeded. **EDEN collapse remains
+unobserved.** LAGOON reached fire, stone tools, shelter, fishing, predator
+hunting and preservation. It did not discover lore, agriculture, domestication,
+granaries, seacraft, healing, metallurgy or writing, and carried no inherited
+lessons. Its final camp held 81.5 food units and 42.3 drinking units. Across the
+whole terrain, including the unvisited mainland, 593 abstract deer and 0 big
+cats remained; wildlife is not automatically replaced after extinction.
+
+The recorded cause-of-death buckets were:
+
+| Cause bucket | EDEN | LAGOON |
+|---|---:|---:|
+| Immediate infant loss at delivery | 893 | 12 |
+| Starvation | 330 | 2 |
+| Dehydration | 0 | 61 |
+| Violence | 228 | 11 |
+| Age | 69 | 16 |
+| Accident | 0 | 7 |
+| Childbirth | 0 | 2 |
+
+The infant bucket counts immediate birth losses; infants who die later enter
+their actual cause bucket. It is not a true infant-survival statistic.
+Dehydration dominated LAGOON's recorded deaths, so the registry's starvation-
+dominance hypothesis was **contradicted**. This is an outcome of this model's
+water demand, access, transport and decision rules, not an estimate of Sri
+Lankan mortality or carrying capacity. Resource units, travel reach and
+thresholds remain illustrative hypotheses.
+
+The registry returned 14 supported, 1 contradicted and 2 undecided checks; the
+two unknown values are EDEN's absent sink-year/sink-gap phase dates. These
+checks are not empirical validation. One seed and century do not validate a
+millennium, founder genetics, or a guaranteed civilization timeline. The
+technology ladder currently stops at writing.
+
+**Validation and provenance.** All 231 tests passed on Apple Python 3.9.6
+(547.846s); 22 new resource cases also passed independent review. Raw day-3,000
+and day-36,000 saves were checked without migration: identities, reciprocal
+bonds, clocks, claims, role holders, food/water bounds, unique shared sites,
+shore adjacency, animal IDs and every adjacent annual census stock-flow all
+passed. Ready-to-serve fixture events include the server's canonical year.
+The final arc's captured source hashes still matched the frozen code after
+completion. The raw saves, observer payloads, source hashes, logs and a clearly
+superseded first arc are retained in the release audit.
+
+Workbench arc runtime with Python 3.14.6: **1,146.888s** (about 19m7s), with
+**42.8 MiB peak RSS**. This includes checkpoint observation and is not a
+MacBook throughput guarantee. This audit did not inspect, reset or restart the
+live instrument. The legacy yearlings/prior-births observer limitation below
+also applies to this version.
+
+## Historical audit release 2026.10.29.1
 
 This engine changes the trajectory of an already running world. All historical tables
 below belong to their named earlier engines and are **stale for this release**.
@@ -59,7 +139,7 @@ YEARLINGS / PRIOR BIRTHS. The serialized column remains for compatibility.
 ## Authorized MacBook restart — pending execution
 
 The owner authorized a fresh start on the instrument. After the MacBook
-pulls engine **2026.10.29.1**, the planned restart begins with eight pairs
+pulls engine **2026.10.30.1**, the planned restart begins with eight pairs
 in each world. **This workbench audit has not reset or restarted the live
 MacBook.** Its actual current population and uptime were not inspected.
 
