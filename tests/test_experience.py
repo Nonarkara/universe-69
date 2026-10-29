@@ -95,6 +95,8 @@ class TestExperience(unittest.TestCase):
         a,b=w['lagoon']['people'][:2]
         a['experience']['sites'].append({'x':1,'y':2,'kind':'plants','left':1,'max':2,'seen_day':0})
         self.assertEqual(b['experience']['sites'],[])
+        engine.migrate(w)  # normalize new provenance defaults before exact round-trip
+        self.assertEqual(a['experience']['sites'][0]['origin'],a['id'])
         with tempfile.TemporaryDirectory(dir=scratch_root()) as d:
             path=os.path.join(d,'fixture.json');engine.save_state(w,path)
             self.assertEqual(engine.load_state(path)['lagoon']['people'][0]['experience'],a['experience'])

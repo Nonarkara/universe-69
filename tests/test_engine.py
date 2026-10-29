@@ -398,7 +398,7 @@ class TestExtinctionAndPostmortems(unittest.TestCase):
         self.assertIn("dominant_cause", pm)
         self.assertFalse(pm["preventable"])   # EDEN cannot learn
 
-    def test_eden_postmortem_declares_the_pen_the_cause(self):
+    def test_eden_postmortem_records_policy_without_causal_certainty(self):
         w = engine.genesis(seed=69)
         u = w["eden"]
         u["people"] = []
@@ -407,7 +407,8 @@ class TestExtinctionAndPostmortems(unittest.TestCase):
         engine.tick_eden(u, __import__("random").Random(1), events)
         self.assertEqual(u["postmortems"][0]["dominant_cause"], "violence")
         self.assertIsNone(u["postmortems"][0]["lesson"])
-        self.assertTrue(any("pen itself" in e[3] for e in events))
+        self.assertTrue(any("does not establish" in e[3] for e in events))
+        self.assertFalse(any("pen itself" in e[3] for e in events))
 
     def test_lagoon_postmortem_derives_a_lesson_from_the_dominant_cause(self):
         w = engine.genesis(seed=69)

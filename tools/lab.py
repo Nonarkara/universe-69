@@ -43,6 +43,13 @@ def sample(u, day):
         "phase": u["phase"],
         "extinct_day": u["extinct_day"],
     }
+    notes = [p.get('experience',{}).get('sites',[]) for p in people]
+    row['knowledge'] = {
+        'notes': sum(len(ns) for ns in notes),
+        'reported_notes': sum(n.get('via') is not None for ns in notes for n in ns),
+        'people_with_reports': sum(any(n.get('via') is not None for n in ns) for ns in notes),
+        'max_hops': max((max(0,len(n.get('path',[]))-1) for ns in notes for n in ns),default=0),
+    }
     if u["kind"] == "EDEN":
         row["withdrawn"] = sum(1 for p in people if p["w"])
         row["homeless"] = sum(1 for p in adults

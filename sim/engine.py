@@ -30,7 +30,7 @@ GESTATION = 270
 # The version of the model. Determinism holds per (seed, day, part) only *within* one
 # version, so every published figure and every postmortem must say which
 # version produced it.
-ENGINE_VERSION = "2026.10.30.2"
+ENGINE_VERSION = "2026.10.30.3"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -335,8 +335,8 @@ def cod(u, cause, n=1):
 
 def write_postmortem(u, events):
     """On extinction: record what happened, how, and the dominant cause.
-    The next iteration of LAGOON inherits a lesson; EDEN, by design, cannot
-    learn its way out — the pen itself is the cause (Calhoun's conclusion)."""
+    LAGOON inherits mapped lesson tags; EDEN retains its control conditions.
+    These policies are hypotheses, not causal or preventability findings."""
     total = sum(u["cod"].values()) or 1
     dominant = max(u["cod"], key=u["cod"].get) if u["cod"] else "unknown"
     pm = {"iteration": u["iteration"], "day": u["day"], "peak": u["peak"],
@@ -354,14 +354,14 @@ def write_postmortem(u, events):
             events.append((u["day"], u["kind"], "lesson",
                            f"Postmortem, iteration {u['iteration']}: dominant cause of death was "
                            f"{dominant} ({u['cod'].get(dominant, 0)}/{total}). Lesson recorded: "
-                           f"'{lesson}'. The next castaways will not make this mistake."))
+                           f"'{lesson}'. Its effect remains a hypothesis for later runs."))
     else:
         pm["lesson"] = None
         pm["preventable"] = False
         events.append((u["day"], u["kind"], "lesson",
                        f"Postmortem, iteration {u['iteration']}: dominant cause was {dominant}. "
-                       f"Nothing within the walls could have prevented this — the pen itself "
-                       f"is the cause. The experiment can only be escaped, not won."))
+                       f"EDEN inherits no lesson by experimental design; this record "
+                       f"does not establish that the collapse was inevitable."))
     u["postmortems"] = (u["postmortems"] + [pm])[-20:]
 
 
@@ -1007,7 +1007,7 @@ def tick_eden(u, rng, events):
             u.update(fresh)
             events.append((day, "EDEN", "reseed",
                            f"The Observers reseed the pen. Iteration {u['iteration']} begins "
-                           f"under the same perfect, fatal conditions."))
+                           f"under the same controlled conditions."))
         advance_part(u)
         return
 
@@ -1017,6 +1017,7 @@ def tick_eden(u, rng, events):
             crowd = pop / eden_design(u)["cap"]
     if part == 0 and day % 30 == 0:
         fill_roles(u, rng, events)
+    needs.ensure_sites(u)
     dead, born = [], []
 
     # how many are at each hopper today — the sink feeds on its own crowd
@@ -1052,6 +1053,7 @@ def tick_eden(u, rng, events):
 
     byid = {q["id"]: q for q in people}
     u["_ctx"] = day_context(people, day)
+    contacts = []
     u["_ctx"]["dead"] = dead
     moms = u["_ctx"]["moms"]
     for p in people:
@@ -1140,6 +1142,7 @@ def tick_eden(u, rng, events):
             p["day_done"] = u["day"]
             needs.fulfil(u, p, day, rng, A_EAT)       # a meal at the hopper
         if arrived:
+            contacts.append(needs.capture_contact(u,p))
             p["ad"] = p.get("ad", 0) - 1
             if p["ad"] <= 0:
                 eden_assign(u, p, day, rng, crowd)
@@ -1238,6 +1241,7 @@ def tick_eden(u, rng, events):
 
     if not people:
         record_extinction(u, events)
+    needs.exchange(u, contacts)
     advance_part(u)
 
 
@@ -2211,6 +2215,7 @@ def tick_lagoon(u, rng, events):
     byid = {q["id"]: q for q in people}
     u["_ctx"] = day_context(people, day)
     dead, born, starved = [], [], []
+    contacts = []
     u["_ctx"]["dead"] = dead
     moms = u["_ctx"]["moms"]
     gone = {}                     # ids killed by someone else earlier this tick
@@ -2325,6 +2330,7 @@ def tick_lagoon(u, rng, events):
             lagoon_assign(u, p, day, rng, shortfall)
         arrived = step_toward(p, terr_l, LAGOON_WALK)
         if arrived:
+            contacts.append(needs.capture_contact(u,p))
             # The work happens here and now, and it happens every day they
             # are here: they reach the place, they take what is there, they
             # eat what they need and carry the rest home.
@@ -2594,6 +2600,7 @@ def tick_lagoon(u, rng, events):
         stocks[kind] = sum(site["left"] for site in u.get("sites", []) if site["kind"] == kind)
     if not people:
         record_extinction(u, events)
+    needs.exchange(u, contacts)
     advance_part(u)
 
 
@@ -2944,7 +2951,13 @@ def migrate(world):
             p.setdefault("hun", 0.0)
             p.setdefault("thirst", 0.0)
             p.setdefault("carry_water", 0.0)
-            p.setdefault("experience", {"sites": [], "trail": []})
+            memory = p.setdefault("experience", {"sites": [], "trail": []})
+            memory.setdefault('heard_on',None)
+            for note in memory['sites']:
+                note.setdefault('origin',p['id'])
+                note.setdefault('via',None)
+                note.setdefault('heard_day',None)
+                note.setdefault('path',[p['id']])
             p.setdefault("ene", 1.0)          # the personal meters (needs.py)
             p.setdefault("sol", 0.7)
             p.setdefault("carry", 0.0)

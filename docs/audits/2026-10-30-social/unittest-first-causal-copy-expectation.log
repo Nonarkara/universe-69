@@ -1,0 +1,13 @@
+................................................................F............................................................................................................................................................................................................................
+======================================================================
+FAIL: test_eden_postmortem_declares_the_pen_the_cause (test_engine.TestExtinctionAndPostmortems)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_engine.py", line 410, in test_eden_postmortem_declares_the_pen_the_cause
+    self.assertTrue(any("pen itself" in e[3] for e in events))
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 285 tests in 248.611s
+
+FAILED (failures=1)

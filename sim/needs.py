@@ -237,7 +237,9 @@ FARM_HOLD = 160.0        # what a field holds at harvest
 
 def ensure_sites(u, rng=None):
     if u.get("kind") == "EDEN":
-        if not u.get("sites"):
+        from engine import hoppers
+        actual = [(s['x'],s['y']) for s in u.get('sites') or [] if s['kind'] == 'hopper']
+        if actual != list(hoppers(u)):
             u["sites"] = make_sites(u, rng)
     else:
         reconcile_sites(u)
@@ -288,11 +290,101 @@ def _remember(u, p, site, gained=None):
     else:
         notes.remove(note)
     note.update(left=float(site['left']), max=float(site['max']), seen_day=u.get('day', 0))
+    note.update(origin=p['id'], via=None, heard_day=None, path=[p['id']])
     if gained is not None:
         note['gained'] = float(gained)
         note['visits'] += 1
     notes.append(note)
     del notes[:-MEMORY_SITES]
+
+
+REPORT_AGE = 90             # model days; illustrative communication limits
+REPORT_HOPS = 3
+CONTACT_RADIUS = 4
+
+
+def capture_contact(u, p):
+    """Freeze knowledge at a completed social act, before movement/reassignment."""
+    import minds
+    if (p.get('a') not in (minds.A_TALK, minds.A_GROOM) or p.get('w') or p.get('ab')
+            or _age(u,p) < 3 or (p['x'],p['y']) != (p.get('tx'),p.get('ty'))):
+        return None
+    observe_sites(u,p)
+    return {'id':p['id'], 'x':p['x'], 'y':p['y'], 'notes':[
+        dict(n, path=list(n.get('path',[p['id']]))) for n in p['experience']['sites']]}
+
+
+def exchange(u, contacts):
+    """One report per listener/day, using frozen contacts: never a same-part cascade.
+
+    Neither inventories nor technology are consulted to verify distant claims.
+    Original observation time survives every retelling; heard time is separate.
+    """
+    living = {p['id']:p for p in u.get('people',[]) if not p.get('w') and not p.get('ab')}
+    contacts = {c['id']:c for c in contacts if c is not None and c['id'] in living}
+    grid = {}
+    for c in contacts.values():
+        grid.setdefault((c['x']//4)*4096+c['y']//4, []).append(c)
+    from engine import terrain_of
+    terr = terrain_of(u) if u.get('kind') == 'LAGOON' and contacts else None
+    day = u.get('day',0)
+    for pid in sorted(contacts):
+        listener, at = living[pid], contacts[pid]
+        memory = listener['experience']
+        if memory.get('heard_on') == day:
+            continue
+        own = {(n['x'],n['y'],n['kind']):n for n in memory['sites']}
+        best = None
+        gx,gy = at['x']//4,at['y']//4
+        for dx in (-1,0,1):
+            for dy in (-1,0,1):
+                for speaker in grid.get((gx+dx)*4096+gy+dy,()):
+                    if speaker['id'] == pid:
+                        continue
+                    x,y = speaker['x']-at['x'], speaker['y']-at['y']
+                    if x*x+y*y > CONTACT_RADIUS**2:
+                        continue
+                    # Direct dry segment, not a global land-component shortcut
+                    # across a nearby lagoon/strait. No occlusion model implied.
+                    steps = max(abs(x),abs(y),1)
+                    if terr is not None:
+                        cells = [(round(at['x']+x*i/steps),round(at['y']+y*i/steps)) for i in range(steps+1)]
+                        if any(terr[cy][cx] == 2 for cx,cy in cells):
+                            continue
+                        if any(ax != bx and ay != by and (terr[ay][bx] == 2 or terr[by][ax] == 2)
+                               for (ax,ay),(bx,by) in zip(cells,cells[1:])):
+                            continue
+                    for note in speaker['notes']:
+                        path = note.get('path',[speaker['id']])
+                        age = day-note['seen_day']
+                        if pid in path or len(path) > REPORT_HOPS or not 0 <= age <= REPORT_AGE:
+                            continue
+                        previous = own.get((note['x'],note['y'],note['kind']))
+                        if previous is not None and previous['seen_day'] >= note['seen_day']:
+                            continue
+                        priority = (note['seen_day'], -len(path), -speaker['id'])
+                        if best is None or priority > best[0]:
+                            best = priority,speaker['id'],note
+        if best is None:
+            continue
+        _, speaker, note = best
+        previous = own.get((note['x'],note['y'],note['kind']))
+        # A report is not a personal harvest. Preserve only the listener's
+        # own use counters, and never refresh its original observation date.
+        received = {k:note[k] for k in ('x','y','kind','left','max','seen_day')}
+        received.update(origin=note.get('origin',speaker),via=speaker,heard_day=day,
+                        path=list(note.get('path',[speaker]))+[pid],
+                        visits=previous.get('visits',0) if previous else 0,
+                        gained=previous.get('gained') if previous else None)
+        if previous is not None:
+            memory['sites'].remove(previous)
+        elif len(memory['sites']) >= MEMORY_SITES:
+            oldest = min(memory['sites'],key=lambda n:n['seen_day'])
+            if oldest['seen_day'] >= received['seen_day']:
+                continue
+            memory['sites'].remove(oldest)
+        memory['sites'].append(received)
+        memory['heard_on'] = day
 
 
 def observe_sites(u, p):
@@ -359,6 +451,7 @@ def known_sites(u, p, kind, reach, empty=False):
         belief = dict(note)
         certainty = 30.0/(30.0+age)
         belief['left'] = note['left']*certainty + note['max']*.25*(1-certainty)
+        belief['left'] /= 1.+.25*max(0,len(note.get('path',[p['id']]))-1)
         yield belief, d2**.5
 
 

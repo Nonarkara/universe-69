@@ -1,0 +1,26 @@
+{
+  "engine": "2026.10.30.3",
+  "full_goal_complete": false,
+  "source_hashes_match": true,
+  "full_suite": {
+    "python": "Apple Python3.9.6",
+    "tests": 285,
+    "seconds": 251.144,
+    "failures": 0
+  },
+  "independent_new_tests": 17,
+  "prior_causal_tests": 22,
+  "century": {
+    "seed": 69,
+    "days": 36000,
+    "seconds": 691.7,
+    "python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+    "arc_sha256": "63725efbd60190684c7cbf061e88f0489264e8ded71667c5d0b5e51dbdd6b7a4",
+    "console_log": "lab-36000.log.gz",
+    "console_uncompressed_sha256": "f3404a415d976abcd5eac0b93ab73e9121d365c6aaa2be28250ae2855c7ce31d"
+  },
+  "viewer_changed": false,
+  "live_state_accessed": false,
+  "macbook_throughput_verified": false,
+  "interpretation": "Retained reports are point-in-time beliefs, not cumulative communication or intelligence; one seed does not establish population benefit."
+}

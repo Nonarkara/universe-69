@@ -18,6 +18,32 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
   (now − clock.epoch) / clock.seconds` and catches up. Pace changes preserve
   ticks already due. The universes age while the process is dead.
 
+## Engine 2026.10.30.3: knowledge passes through contact
+
+**This changes future run trajectories.** Completed conversation/grooming can
+pass one resource report to a listener per model day. Both worlds use the same
+transfer-only phase; it does not add solitude bonuses, food, water, skill or
+personal harvest experience. Primary human foraging experiments support social
+information use with context-dependent benefits (King 2011; Deffner 2024;
+RESEARCH.md). They do not calibrate these numerical choices.
+
+| Causal requirement | Mechanic | Limits |
+|---|---|---|
+| Communication requires an actual encounter | Capture completed TALK/GROOM positions and knowledge before reassignment; resolve among surviving, non-withdrawn, non-aboard participants. Four-tile direct dry contact, including the movement corner rule | Not an acoustics/language model; under-three actors do not communicate reports |
+| Retelling is not a fresh observation | Each note preserves original observer and seen_day; immediate sender, heard_day and a bounded path identify hearsay. Local observation replaces it with personal evidence | Modern experimental support is qualitative; literal map coordinates stand in for communicated location information |
+| Rumour must not refresh or amplify itself | Freeze sender notes before delivery; one incoming report/listener/day, at most 3 hops, at most 90 days original age. Reject equal/older facts and return loops. Hearsay discounts expected stock by hop count | Limits and discount weights are illustrative. No deception, inferred trust or general theory of mind |
+| Hearing is not harvesting | Received notes keep only the listener's own visits/gained counters. No stock lookup to verify distant reports. Stale reports cannot evict fresher notes at capacity | Actual-use outcomes remain audit data, not learned skills/action values |
+| Both worlds perceive their actual resources | EDEN's provisioned hopper observation sites now exist and follow pen expansion; free provision and EDEN reset conditions remain unchanged | World-wide technology knowledge still remains a separate abstraction |
+
+Source snapshots and contact positions prevent an instantaneous whole-chain
+broadcast or fabricated meetings after fission relocation. Knowledge remains
+bounded and JSON-safe; old .2 notes were locally observed and receive that
+provenance on migration. Newborns/reseeded people inherit no personal claims.
+The lab samples retained reported notes and path lengths read-only, not a
+lifetime communication count. Postmortem/reseed wording now identifies model
+policies without promising prevention or inevitable collapse. The default
+100 years per real day is unchanged; all quantitative arcs must be re-derived.
+
 ## Engine 2026.10.30.2: personal resource experience
 
 **This changes existing run trajectories.** The shared brain now chooses from

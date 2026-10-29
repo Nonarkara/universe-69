@@ -8,7 +8,7 @@ need-driven actions do not establish human cognition or consciousness.
 | Eight founding pairs | Shared founders, different world conditions | Three inherited traits are not validated genomes |
 | Independent choices | Individual needs and traits score predefined actions (`sim/needs.py`) | Learned beliefs, remembered outcomes and planning |
 | Personal memory | Injury, grudge/target, partner/mother, paused work; bounded resource observations, actual-use outcomes and visited trail | Rich episodic memory, danger/trust, learned skills and social beliefs |
-| Social memory | World-level stories, lore, technology and lesson tags | Person-held knowledge transmitted through actual contact |
+| Social memory | Resource reports transmitted through completed physical conversations/grooming with original age/provenance (.3); world-level stories/lore/technology/lesson tags remain | Person-held skills/technology, social beliefs and richer teaching |
 | A century per real day | Persistent default 0.6-second quarter-day clock | Sustained throughput on the 2016 MacBook and millennia unverified |
 | Fall, learn, reseed | LAGOON fixed lesson mapping; EDEN controlled reset | Controlled lesson comparisons; dehydration currently has no mapped lesson |
 | Architect observation | Read-only hypotheses and per-world iteration ledger | Discovering explanations and testing counterfactuals |
@@ -28,8 +28,9 @@ and JSON reload retains subsequent behavior. See `../2026-10-30-experience/`
 for causal tests, versioned experiment evidence and limits. Realized-use units
 are audit fields, not learned action-value or harvesting-skill parameters.
 
-1. Transmit person-held resource knowledge through actual contact/care/teaching,
-   preserving who said it and how stale it is, rather than revealing global facts.
+1. Extend contact-based resource reports (implemented in 2026.10.30.3) to
+   person-held skills/technology and actual care/teaching. Preserve source,
+   age, fallibility and opportunities to learn instead of global revelation.
 2. Broaden experience into danger, trust and relationships; distinguish personal
    inference, witnessed events and communicated claims.
 3. Add explicit decision traces/inference and bounded planning with tests that

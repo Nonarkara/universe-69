@@ -144,8 +144,9 @@ stride follows actual leg size and distance travelled, with a shared stance
 law and frame-rate-independent movement. Sleeping arms now reach their pose,
 bedrolls fit their bodies, and age changes invalidate the sprite cache.
 
-Engine `2026.10.30.2` changes future trajectories through personal resource
-knowledge, corrected fight-scoring age units and physical nursing contact;
+Engine `2026.10.30.3` changes future trajectories through contact-based
+resource knowledge sharing. The `.2` personal memory, maturation and nursing
+corrections remain in force;
 the earlier `2026.10.30.1` resource changes remain in force. The century-per-day clock
 preserves previously completed time when its pace changes. Existing
 `UNIVERSE69_SEC_PER_PART` overrides still take precedence; remove an old
@@ -167,3 +168,9 @@ stale beliefs about distant patches and camp stores instead of reading those
 reserves instantly. Capacity and forgetting are explicit model assumptions;
 this is spatial resource learning, not general human cognition. Newborns and
 reseeded founders do not inherit another person's memories.
+
+Completed conversations/grooming now pass bounded resource reports with the
+original observer/date, sender and relay path. Retelling does not refresh old
+information or grant personal harvesting experience. Reports can be stale;
+technology knowledge still remains world-shared, and general cognition is
+unimplemented. Both worlds use the same contact policy.

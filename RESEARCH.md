@@ -71,14 +71,14 @@ Harari (2011 Hebrew; 2014 English) organizes human history around four revolutio
 | Phase structure: strive (A) → exploit (B, double/55 days to day 315) → stagnate (C, double/145 days) → death (D, peak ~2,200 at ~day 560; last conception ~day 920) [1][2][6] | Hard-code phase detection from growth-rate inflections; growth slows when social roles saturate, long before space does | Growth tracks carrying capacity of the ecology; no role-saturation collapse — groups fission and migrate instead |
 | Behavioral sink: pathology clusters where design concentrates contact; distribution of space/roles, not raw density, drives collapse [4][5] | Model per-location congestion; learned "eat together" habits create hotspots; pathology is contagious by social learning | Spatial dispersal is always available; emigration is the escape valve Calhoun's sealed box removed |
 | Beautiful ones: non-breeding, non-fighting groomers; withdrawn wounded males; maternal neglect; violence [2][3][8] | Agents raised during stagnation permanently lack courtship/parenting behaviors (no re-learning); add non-breeder, hyperaggressor, and neglectful-mother states | Parenting/courtship transmitted by normal socialization; failure modes are external (death of parents, famine), not role-loss |
-| First death precedes second death: no recovery even when density falls; transplants failed to breed [1][4] | Make social-behavior loss irreversible per agent; extinction is certain once no competent breeders remain, regardless of resources | Populations rebound after crashes (disaster, epidemic) as long as a socially intact remnant survives |
+| First death precedes second death: no recovery even when density falls; transplants failed to breed [1][4] | Represent loss of reproductive competence as a candidate mechanism; measure whether each run empties rather than assuming an inevitable endpoint | Recovery may remain possible after a crash when a viable remnant and resources persist; test the outcome in each run |
 | Critiques: inbreeding, disease confounds, failed replications [7][9] | Optionally expose toggles (genetic diversity, hygiene) so the collapse is a scenario, not destiny | Genetic diversity and zoonotic disease are explicit variables from the start |
 | Ice Age: time-compressed observation, non-intervening gods, cyclic reset [11][12] | Observer UI: open-the-freezer sampling of a fast-running world; no intervention controls | Same observer frame; on extinction or transcendence, reseed a primitive population (cyclical universe) |
 | Sapiens: fiction/lore enables cooperation past ~150; gossip stabilizes small bands [13][14] | N/A (mice have no lore — which is precisely why roles can't be reorganized) | Groups without shared lore fission at ~150; a "language/lore" tech unlocks larger stable settlements |
 | Agriculture = biggest fraud / luxury trap: population up, welfare down, irreversible [13][14] | N/A | Agriculture raises carrying capacity sharply but lowers diet quality/health, raises workload and disease; once population overshoots, reverting to foraging causes famine (one-way door) |
 | GGS: Anna Karenina domestication filter; ~14 of 148 mammals; surplus→specialists→states; crowd diseases from livestock; axes [15] | N/A | Tech ladder: fire → tools → fishing → language/lore → agriculture → domestication (only if suitable species spawn locally) → epidemics (triggered by livestock+density) → villages → metallurgy; map geometry affects diffusion speed |
 
-The two universes are deliberately inverted: Universe A removes every material constraint and kills its population through social-role saturation with no recovery path; Universe B keeps all material constraints and lets population climb a tech ladder whose biggest step (agriculture) trades individual welfare and health for aggregate numbers.
+The experiments contrast provisioned material security with social-role constraints against a resource-limited world that can acquire technology. Persistence, recovery and collapse are outcomes to measure in versioned runs. This contrast does not establish a law of human social decline; the proposed agriculture trade-off also remains a model hypothesis.
 
 ---
 
@@ -181,3 +181,36 @@ knowledge, or a claim that memory will prevent extinction. Seasonal change
 and depletion can make old experience misleading. Any population effect
 must be reported as a result of the versioned model, not a measured human
 benefit.
+
+
+## Sharing resource knowledge through contact — primary human evidence (2026-10-30)
+
+King et al. (2011) compared communicating and non-communicating human groups
+in a physical foraging arena with patches of differing quality. Communicating
+groups collected resources more effectively and reached consensus on the
+profitable patch more often. Gesture frequency was associated with consensus;
+the experiment did not isolate a universal gesture-learning coefficient.
+[*Biology Letters* 7:237–240, doi:10.1098/rsbl.2010.0808](https://pmc.ncbi.nlm.nih.gov/articles/PMC3061177/).
+
+Information sharing is not uniformly beneficial. In Deffner et al.'s (2024)
+human immersive-reality resource-search experiment, extensive social
+information use in concentrated environments was associated with individual
+gains and collective losses; incentives changed how selectively people used
+others' information. [*Nature Communications* 15:2683,
+doi:10.1038/s41467-024-47010-3](https://www.nature.com/articles/s41467-024-47010-3).
+
+**Candidate mapping.** Permit a recorded encounter to pass a bounded piece
+of the sender's acquired resource knowledge. A report is evidence from
+another person, not a fresh measurement of the site's current stock. Keep
+personal outcomes and socially received reports distinguishable; retain
+independent exploration and the possibility of stale information or crowding.
+Neither study supports knowledge appearing automatically across a whole
+population without a transmission opportunity.
+
+**Limits.** These tasks support qualitative information use and coordination,
+not this model's contact radius, transfer rate, trust weight, memory capacity
+or forgetting rate. They do not establish historical language requirements,
+parent-to-child inheritance, long-term knowledge fidelity, or an extinction
+benefit in isolated human populations. Any such rules and coefficients remain
+explicit model choices; a local encounter gate is an operational simplification,
+not a measured prehistoric communication range.

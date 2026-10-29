@@ -1,6 +1,10 @@
 # STUDY — measurements from the running universes
 
-**Current version boundary.** Engine `2026.10.30.2` changes resource choices
+**Current version boundary.** Engine `2026.10.30.3` adds actual-contact
+resource reports, preserving original age/provenance without granting supplies
+or personal harvest experience. All older arcs are historical until re-derived.
+
+**Earlier boundary.** Engine `2026.10.30.2` changes resource choices
 through local perception, personal stock/location memory and exploration.
 It also corrects fight-scoring age units and requires physical maternal
 proximity/connected land for nursing; both worlds can change trajectory.
@@ -12,6 +16,42 @@ wildlife replenishment, conception and the default clock. All earlier results
 below are historical; none is evidence for the new trajectory. The model is a
 Sri Lanka coastal-ecology analogue, not an exact island map, physical-scale
 survey, demographic prediction or guaranteed civilizational ladder.
+
+## Contact-based knowledge — 2026.10.30.3
+
+Final frozen-source seed 69 experiment: 36,000 model days (100 years), eight
+founding pairs/world, Python 3.14.6, 691.7 seconds on the workbench. Raw arc,
+compressed exact console bytes, source hashes and checks are retained under
+`docs/audits/2026-10-30-social/`.
+
+| World | Year 100 population / peak | Generation | Retained reports / people holding them | Recorded outcome |
+|---|---:|---:|---:|---|
+| EDEN | 456 / 525 | 6 | 20 / 17 | 239 withdrawn; no extinction/reseed |
+| LAGOON | 34 / 38 | 5 | 0 / 0 |Six technologies, one camp, preserve lesson; no extinction/reseed |
+
+Retained reports appear in 87 of 100 distinct annual EDEN observation years,
+reaching 3 hops and
+at most 99 stored reports in a sample. LAGOON retains reports in samples for
+years 52, 90 and 91 (at most 2 reports, 1 hop), but none at year 100. These are
+point-in-time memories, not cumulative conversations. Direct observation can
+replace a report, so zero retained reports does not prove no communication.
+Integration tests prove actual contact transfer in both worlds; controlled
+LAGOON cases prove a received report changes the later resource destination
+without granting supplies or harvest experience. The raw arc repeats its
+identical year-100 terminal row; distinct-year counts exclude that duplicate.
+
+All existing sampled EDEN columns (apart from new knowledge fields) match the
+prior version. This is sampled demographic/control evidence, not a claim about
+unrecorded state or other seeds. LAGOON's choices/population change; no human
+benefit or isolated intelligence gain is inferred. The registry reports
+12 supported / 1 contradicted / 4 undecided (H-EDEN-POSTS is contradicted).
+No natural human-universe fall occurred in this century; forced lifecycle
+checks cover reset/provenance rules. All 285 tests pass on Apple Python 3.9.6.
+
+The default 100 model years/real day remains a target, not measured MacBook
+throughput. Current tech knowledge is still world-shared, and the ladder ends
+at writing. Source changes alter future trajectories; this is not a complete
+digital-human model or a guarantee of civilization.
 
 ## Personal resource experience — 2026.10.30.2
 
