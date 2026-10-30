@@ -174,3 +174,10 @@ Exact endpoint classifications and qualifications are in `demography.json`,
 with the executed read-only reader. Compressed arcs/logs, source-bound
 provenance and terminal-status qualifications are under `arcs/`.
 The full digital-human/civilization goal remains in progress.
+
+
+Each arc also retains the exact bounded workbench `final-world.json.gz` used
+by the demographic reader, matching its recorded SHA256. These are reproducible
+experiment inputs for later bounded continuation, separate from the instrument's
+live state. The snapshot and raw logs allow future audits without rerunning the
+first century or reconstructing absent parents from a current social bond.
