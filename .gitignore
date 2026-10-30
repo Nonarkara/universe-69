@@ -2,4 +2,8 @@ data/state.json
 data/state.json.tmp
 data/sim.log
 data/web.json
+data/events.ndjson
+data/archive/
+data/postmortems/
+data/history-books/
 __pycache__/
