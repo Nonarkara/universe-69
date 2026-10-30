@@ -1,0 +1,1481 @@
+{
+  "engine": "2026.10.30.4",
+  "seed": 69,
+  "years": 30,
+  "scope": "LAGOON only; exact tick_world RNG derivation; no EDEN ticks",
+  "sources": {
+    "sim/minds.py": "5258216b1b02a21251643d3e042b78bfddfb3cd01fc5903621430721b3c890a0",
+    "sim/server.py": "5e1bfe65ed3a37e8695c190bc8764fe98d6986108c877fead8c4bbf87cf44f4d",
+    "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "sim/needs.py": "1c994a5c333a0743fa4e40319f29d123fefc5d2604a0984b0ab843f85f91e916",
+    "sim/historian.py": "ad0728651b5f6b326fc02cc05ab2c112dfe34506e1ba1af81dacfa3541f30c69",
+    "sim/engine.py": "318ed7e3b9d7734c4c7159e5870caba875eff5a58ff947cc34fe6fb2f590e01e",
+    "sim/animals.py": "5622b0910d185da4e9c8b6f680ce87a1feada111fb5505b483bd3de563864577"
+  },
+  "source_unchanged": true,
+  "comparison": {
+    "raw_state_equal": true,
+    "raw_json_equal": true,
+    "public_state_equal": false,
+    "events_equal": true
+  },
+  "raw_sha256": "5650f98a6ad962dc45ab9c7c65214d11791c668418a5b76f820478a2ee786884",
+  "seconds": {
+    "traced": 54.59783787500055,
+    "plain": 52.70286004100126
+  },
+  "counters": {
+    "fishing:demo_completed_frames": 753,
+    "fishing:demo_frames": 753,
+    "fishing:demo_listeners": 2298,
+    "fishing:demo_missing_prerequisite": 2294,
+    "fishing:demo_unreachable": 4,
+    "fishing:demo_witnesses": 2298,
+    "fishing:holder_arrived_parts": 26933,
+    "fishing:holder_parts": 31680,
+    "fishing:nearby_awake_person_parts": 119744,
+    "fishing:nearby_reachable_person_parts": 119679,
+    "fishing:real_work_calls": 1617,
+    "fishing:teacher_work_calls": 1617,
+    "fishing:work_calls": 1625,
+    "stone_tools:holder_arrived_parts": 28182,
+    "stone_tools:holder_parts": 33120,
+    "stone_tools:nearby_awake_person_parts": 124637,
+    "stone_tools:nearby_eligible_unknown_person_parts": 124572,
+    "stone_tools:nearby_reachable_person_parts": 124572
+  },
+  "holder_actions": {
+    "stone_tools": {
+      "2": 1281,
+      "20": 18450,
+      "17": 2937,
+      "3": 7,
+      "22": 2271,
+      "18": 2285,
+      "12": 273,
+      "8": 74,
+      "4": 4923,
+      "6": 34,
+      "11": 412,
+      "1": 173
+    },
+    "fishing": {
+      "20": 17481,
+      "4": 4923,
+      "22": 2193,
+      "17": 2863,
+      "18": 2159,
+      "2": 1199,
+      "8": 64,
+      "12": 179,
+      "6": 34,
+      "11": 412,
+      "1": 173
+    }
+  },
+  "max_holders": {
+    "stone_tools": 1,
+    "fishing": 1
+  },
+  "transitions": [
+    {
+      "day": 360,
+      "part": 0,
+      "iteration": 1,
+      "id": 13,
+      "name": "Indra",
+      "tech": "fire",
+      "source": "invent",
+      "entry": {
+        "level": 1.0,
+        "learned_day": 360,
+        "teacher": null,
+        "origin": 13,
+        "basis": "invention",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 0,
+      "iteration": 1,
+      "id": 2,
+      "name": "Sita",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 0,
+      "iteration": 1,
+      "id": 3,
+      "name": "Siddhartha",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 0,
+      "iteration": 1,
+      "id": 4,
+      "name": "Parvati",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 0,
+      "iteration": 1,
+      "id": 6,
+      "name": "Ganga",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 0,
+      "iteration": 1,
+      "id": 7,
+      "name": "Shiva",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 0,
+      "iteration": 1,
+      "id": 8,
+      "name": "Tara",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 0,
+      "iteration": 1,
+      "id": 9,
+      "name": "Arjuna",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 0,
+      "iteration": 1,
+      "id": 10,
+      "name": "Radha",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 0,
+      "iteration": 1,
+      "id": 11,
+      "name": "Krishna",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 0,
+      "iteration": 1,
+      "id": 12,
+      "name": "Lakshmi",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 1,
+      "iteration": 1,
+      "id": 14,
+      "name": "Maya",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 1,
+      "iteration": 1,
+      "id": 15,
+      "name": "Rama",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 361,
+      "part": 1,
+      "iteration": 1,
+      "id": 16,
+      "name": "Kali",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 361,
+        "teacher": 13,
+        "origin": 13,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 362,
+      "part": 0,
+      "iteration": 1,
+      "id": 1,
+      "name": "Rahul",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 362,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 362,
+      "part": 0,
+      "iteration": 1,
+      "id": 5,
+      "name": "Ganesh",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 362,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1080,
+      "part": 0,
+      "iteration": 1,
+      "id": 16,
+      "name": "Kali",
+      "tech": "preservation",
+      "source": "invent",
+      "entry": {
+        "level": 1.0,
+        "learned_day": 1080,
+        "teacher": null,
+        "origin": 16,
+        "basis": "invention",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 0,
+      "iteration": 1,
+      "id": 2,
+      "name": "Sita",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": 16,
+        "origin": 16,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 0,
+      "iteration": 1,
+      "id": 3,
+      "name": "Siddhartha",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": 16,
+        "origin": 16,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 0,
+      "iteration": 1,
+      "id": 7,
+      "name": "Shiva",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": 16,
+        "origin": 16,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 0,
+      "iteration": 1,
+      "id": 9,
+      "name": "Arjuna",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": 16,
+        "origin": 16,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 0,
+      "iteration": 1,
+      "id": 10,
+      "name": "Radha",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": 16,
+        "origin": 16,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 0,
+      "iteration": 1,
+      "id": 11,
+      "name": "Krishna",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": 16,
+        "origin": 16,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 0,
+      "iteration": 1,
+      "id": 12,
+      "name": "Lakshmi",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": 16,
+        "origin": 16,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 0,
+      "iteration": 1,
+      "id": 15,
+      "name": "Rama",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": 16,
+        "origin": 16,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 1,
+      "iteration": 1,
+      "id": 4,
+      "name": "Parvati",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 1,
+      "iteration": 1,
+      "id": 5,
+      "name": "Ganesh",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 1,
+      "iteration": 1,
+      "id": 8,
+      "name": "Tara",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 1,
+      "iteration": 1,
+      "id": 13,
+      "name": "Indra",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 1,
+      "iteration": 1,
+      "id": 14,
+      "name": "Maya",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1083,
+      "part": 2,
+      "iteration": 1,
+      "id": 6,
+      "name": "Ganga",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1083,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1982,
+      "part": 0,
+      "iteration": 1,
+      "id": 17,
+      "name": "Drona",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1982,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1983,
+      "part": 0,
+      "iteration": 1,
+      "id": 17,
+      "name": "Drona",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1983,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1996,
+      "part": 0,
+      "iteration": 1,
+      "id": 18,
+      "name": "Chandraprabha",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1996,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 1997,
+      "part": 0,
+      "iteration": 1,
+      "id": 18,
+      "name": "Chandraprabha",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1997,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 2228,
+      "part": 0,
+      "iteration": 1,
+      "id": 19,
+      "name": "Brahma",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 2228,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 2507,
+      "part": 0,
+      "iteration": 1,
+      "id": 20,
+      "name": "Kaikeyi",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 2507,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 2520,
+      "part": 0,
+      "iteration": 1,
+      "id": 16,
+      "name": "Kali",
+      "tech": "stone_tools",
+      "source": "invent",
+      "entry": {
+        "level": 1.0,
+        "learned_day": 2520,
+        "teacher": null,
+        "origin": 16,
+        "basis": "invention",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 2541,
+      "part": 2,
+      "iteration": 1,
+      "id": 20,
+      "name": "Kaikeyi",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 2541,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 2880,
+      "part": 0,
+      "iteration": 1,
+      "id": 16,
+      "name": "Kali",
+      "tech": "fishing",
+      "source": "invent",
+      "entry": {
+        "level": 1.0,
+        "learned_day": 2880,
+        "teacher": null,
+        "origin": 16,
+        "basis": "invention",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 3360,
+      "part": 0,
+      "iteration": 1,
+      "id": 25,
+      "name": "Brahma",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 3360,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 3361,
+      "part": 0,
+      "iteration": 1,
+      "id": 25,
+      "name": "Brahma",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 3361,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 3600,
+      "part": 0,
+      "iteration": 1,
+      "id": 16,
+      "name": "Kali",
+      "tech": "shelter",
+      "source": "invent",
+      "entry": {
+        "level": 1.0,
+        "learned_day": 3600,
+        "teacher": null,
+        "origin": 16,
+        "basis": "invention",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 3743,
+      "part": 0,
+      "iteration": 1,
+      "id": 4,
+      "name": "Parvati",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 3743,
+        "teacher": 16,
+        "origin": 16,
+        "basis": "demonstration",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 3808,
+      "part": 0,
+      "iteration": 1,
+      "id": 5,
+      "name": "Ganesh",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 3808,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 3808,
+      "part": 0,
+      "iteration": 1,
+      "id": 7,
+      "name": "Shiva",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 3808,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 3808,
+      "part": 0,
+      "iteration": 1,
+      "id": 13,
+      "name": "Indra",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 3808,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 3808,
+      "part": 0,
+      "iteration": 1,
+      "id": 15,
+      "name": "Rama",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 3808,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 3808,
+      "part": 0,
+      "iteration": 1,
+      "id": 20,
+      "name": "Kaikeyi",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 3808,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 3808,
+      "part": 0,
+      "iteration": 1,
+      "id": 25,
+      "name": "Brahma",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 3808,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 5071,
+      "part": 0,
+      "iteration": 1,
+      "id": 26,
+      "name": "Maitreya",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 5071,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 5072,
+      "part": 0,
+      "iteration": 1,
+      "id": 26,
+      "name": "Maitreya",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 5072,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 5075,
+      "part": 0,
+      "iteration": 1,
+      "id": 26,
+      "name": "Maitreya",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 5075,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 5592,
+      "part": 0,
+      "iteration": 1,
+      "id": 27,
+      "name": "Drona",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 5592,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 5592,
+      "part": 0,
+      "iteration": 1,
+      "id": 28,
+      "name": "Ananda",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 5592,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 5593,
+      "part": 0,
+      "iteration": 1,
+      "id": 27,
+      "name": "Drona",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 5593,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 5593,
+      "part": 0,
+      "iteration": 1,
+      "id": 28,
+      "name": "Ananda",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 5593,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 5594,
+      "part": 0,
+      "iteration": 1,
+      "id": 27,
+      "name": "Drona",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 5594,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 5594,
+      "part": 0,
+      "iteration": 1,
+      "id": 28,
+      "name": "Ananda",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 5594,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 5727,
+      "part": 0,
+      "iteration": 1,
+      "id": 29,
+      "name": "Devadatta",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 5727,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 5728,
+      "part": 0,
+      "iteration": 1,
+      "id": 29,
+      "name": "Devadatta",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 5728,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 5729,
+      "part": 0,
+      "iteration": 1,
+      "id": 29,
+      "name": "Devadatta",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 5729,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 6917,
+      "part": 0,
+      "iteration": 1,
+      "id": 30,
+      "name": "Kambala",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 6917,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 6918,
+      "part": 0,
+      "iteration": 1,
+      "id": 30,
+      "name": "Kambala",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 6918,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 6919,
+      "part": 0,
+      "iteration": 1,
+      "id": 30,
+      "name": "Kambala",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 6919,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 7425,
+      "part": 0,
+      "iteration": 1,
+      "id": 31,
+      "name": "Kausalya",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 7425,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 7426,
+      "part": 0,
+      "iteration": 1,
+      "id": 31,
+      "name": "Kausalya",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 7426,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 7427,
+      "part": 0,
+      "iteration": 1,
+      "id": 31,
+      "name": "Kausalya",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 7427,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 8213,
+      "part": 0,
+      "iteration": 1,
+      "id": 32,
+      "name": "Tara",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 8213,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 8214,
+      "part": 0,
+      "iteration": 1,
+      "id": 32,
+      "name": "Tara",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 8214,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 8215,
+      "part": 0,
+      "iteration": 1,
+      "id": 32,
+      "name": "Tara",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 8215,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 9362,
+      "part": 0,
+      "iteration": 1,
+      "id": 33,
+      "name": "Parvati",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 9362,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 9363,
+      "part": 0,
+      "iteration": 1,
+      "id": 33,
+      "name": "Parvati",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 9363,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 9364,
+      "part": 0,
+      "iteration": 1,
+      "id": 33,
+      "name": "Parvati",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 9364,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 10203,
+      "part": 0,
+      "iteration": 1,
+      "id": 34,
+      "name": "Bhishma",
+      "tech": "fire",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 10203,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 10204,
+      "part": 0,
+      "iteration": 1,
+      "id": 34,
+      "name": "Bhishma",
+      "tech": "shelter",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 10204,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    },
+    {
+      "day": 10205,
+      "part": 0,
+      "iteration": 1,
+      "id": 34,
+      "name": "Bhishma",
+      "tech": "preservation",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 10205,
+        "teacher": null,
+        "origin": null,
+        "basis": "artifact",
+        "practice_day": null,
+        "uses": 0
+      }
+    }
+  ],
+  "holder_deaths": [],
+  "final": {
+    "day": 10800,
+    "population": 13,
+    "history": [
+      "fire",
+      "preservation",
+      "stone_tools",
+      "fishing",
+      "shelter"
+    ]
+  }
+}

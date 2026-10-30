@@ -1,0 +1,14 @@
+F
+======================================================================
+FAIL: test_compact_hud_uses_world_width_without_duplicate_instruction (instruction_test.TestInstructionView.test_compact_hud_uses_world_width_without_duplicate_instruction)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_instruction_view.py", line 57, in test_compact_hud_uses_world_width_without_duplicate_instruction
+    self.assertNotIn('EXPLAINING STONE TOOLS', result[0])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'EXPLAINING STONE TOOLS' unexpectedly found in "<div class='l1'><span class='identity'><b>LAGOON · U9</b></span><span class='clock'>Y1 · POP 16</span><span class='l2'><span class='ph'> · LIVING</span></span><span class='who'> · ADA, EXPLAINING STONE TOOLS</span></div>\n"
+
+----------------------------------------------------------------------
+Ran 1 test in 0.275s
+
+FAILED (failures=1)

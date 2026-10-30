@@ -1,0 +1,36 @@
+{
+  "counters": {
+    "stone_tools:requested_completed_frames": 1,
+    "stone_tools:requested_listeners": 1,
+    "stone_tools:requested_eligible_unknown": 1,
+    "stone_tools:successful_requested_instruction": 1
+  },
+  "transitions": [
+    {
+      "day": 1,
+      "part": 1,
+      "iteration": 1,
+      "id": 2,
+      "name": "Sita",
+      "tech": "stone_tools",
+      "source": "expose",
+      "entry": {
+        "level": 0.25,
+        "learned_day": 1,
+        "teacher": 1,
+        "origin": 1,
+        "basis": "requested_instruction",
+        "practice_day": null,
+        "uses": 0
+      }
+    }
+  ],
+  "events": [
+    [
+      1,
+      "LAGOON",
+      "culture",
+      "Rahul explains stone tools to Sita, as a first step toward fishing."
+    ]
+  ]
+}

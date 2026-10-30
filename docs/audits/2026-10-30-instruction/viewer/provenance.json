@@ -1,0 +1,170 @@
+{
+  "sourceHTMLSHA256": "5633c739e5f275d6761895c753532b0c31536c0ddfe6d2cc1195111e8fb2b731",
+  "Found": [
+    "At 1024px the duplicate instruction in a 512px world HUD wrapped into a second row and stretched the sibling header from 28 to 47px, taking 19px from each scene."
+  ],
+  "Changed": [
+    "Compact selected-name HUD now depends on each world width <=700px; full instruction remains in the selected card, canvas caption and diary.",
+    "Only active known role/topic/partner contracts override existing activity; absent/cleared/invalid contracts preserve legacy behavior. No added panels or chrome."
+  ],
+  "Verified": {
+    "tests": "7 instruction + 6 camp + 40 style checks pass; original header source fails the new 512px-world regression.",
+    "synthetic": "61/61 at 390\u00d7844, 1024\u00d7768, 1440\u00d7900; explicit injected UI contracts, not model-produced behavior.",
+    "controlled": "Final frozen .5 model controlled mechanism fixture,61/61 at all 3 widths; teacher explains stone tools while learner seeks fishing, before lesson delivery. Explicit fed/rested/trained setup, not a natural trajectory.",
+    "geometry": "At 1024 teaching focus, both headings47\u219228px; totalchrome245.375\u2192226.375px (31.95%\u219229.48%). Per-state bounds/canvas/focus/body metrics in reports.",
+    "hierarchy": "Worlds first, selected person/current activity second, record third. Full activity stays with person; no duplicate compact HUD activity.",
+    "preservation": [
+      "Both worlds visible",
+      "Existing anatomy/terrain/cameras/ticker/pagers",
+      "Native Tab visible focus",
+      "Portrait visible with MORE",
+      "No horizontal overflow/clipped reading areas"
+    ],
+    "sourceProof": "All 8 current bake hashes and all 9 controlled source hashes verified; 7 overlapping entries match. Captured fixture SHA matches retained state; every viewport HTML SHA matches mirrored source5633c739.",
+    "independentReview": "viewer_review independently accepted final source5633,9current controlled sources/8bake hashes/7common entries, retained fixture SHA and61checks at all3widths. Selected phone/tablet/desktop screenshots show visible native focus, unobstructed portraits and no SH/clipping/overlap.",
+    "chromeByViewport": [
+      {
+        "width": 390,
+        "height": 844,
+        "world": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        },
+        "teachingFocus": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        },
+        "seekingMore": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        }
+      },
+      {
+        "width": 1024,
+        "height": 768,
+        "world": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        },
+        "teachingFocus": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        },
+        "seekingMore": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        }
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "world": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        },
+        "teachingFocus": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        },
+        "seekingMore": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        }
+      }
+    ]
+  },
+  "Remaining": [
+    "No unresolved geometry or focus failure in exercised states.",
+    "Synthetic roles are injected; controlled training/contact setup demonstrates mechanism and rendering, not natural frequency, calibrated human-learning outcomes or completed proficiency."
+  ]
+}

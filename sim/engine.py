@@ -20,6 +20,7 @@ import minds
 import needs
 import animals
 import skills
+import learning
 from minds import (DAYS_PER_YEAR, ADULT_AGE, ELDER_AGE, make_name,  # noqa: F401
                    A_IDLE, A_WALK, A_FORAGE, A_HUNT, A_FISH, A_FARM, A_BUILD,
                    A_TALK, A_MATE, A_BIRTH, A_TEND, A_REST, A_EAT, A_WITHDRAW,
@@ -31,7 +32,7 @@ GESTATION = 270
 # The version of the model. Determinism holds per (seed, day, part) only *within* one
 # version, so every published figure and every postmortem must say which
 # version produced it.
-ENGINE_VERSION = "2026.10.30.4"
+ENGINE_VERSION = "2026.10.30.5"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -827,6 +828,8 @@ def eden_assign(u, p, day, rng, crowd):
             hx, hy = hoppers(u)[u.get("sink", 0)]
             p["a"] = A_REST
             p["tx"], p["ty"] = clamp(hx + rng.randint(-3, 4), hy + rng.randint(-3, 4))
+    elif act == A_TALK and (p.get("learning") or p.get("teaching")):
+        pass                       # an explicit meeting keeps its chosen target
     elif act == A_TALK:
         # company gathers on the boardwalks and by the pool
         spot = rng.choice(((c, c - 6), (c - 6, c), (c + 6, c), (c, c + 6), (c, 4)))
@@ -1121,6 +1124,7 @@ def tick_eden(u, rng, events):
         # the day in the pen: eat, court, brawl, or withdraw
         if age_of(p, day) < 3 * DAYS_PER_YEAR:
             follow_mother(p, byid, lambda x, y: pen_clamp(u, x, y))
+        needs.update_learning(u,p)
         if p.get("ad", 0) <= 0 and p["x"] == p["tx"] and p["y"] == p["ty"]:
             eden_assign(u, p, day, rng, crowd)
         arrived = step_toward(p)
@@ -1229,7 +1233,7 @@ def tick_eden(u, rng, events):
 
     if not people:
         record_extinction(u, events)
-    needs.exchange(u, contacts)
+    needs.exchange(u, contacts, events)
     advance_part(u)
 
 
@@ -1574,6 +1578,8 @@ def lagoon_assign(u, p, day, rng, shortfall):
             couple_up(p, q, *at_home(1))
         else:
             p["a"] = A_REST
+    elif act == A_TALK and (p.get("learning") or p.get("teaching")):
+        pass                       # do not replace an instruction meeting with a circle
     elif act in (A_TALK, A_REST):
         # elders sit together, too
         cx, cy = (st["x"] + rng.randint(-3, 3), st["y"] + rng.randint(-3, 3))
@@ -1986,7 +1992,7 @@ def keep_watch(u, people, day, events, part=0, rng=None):
         # Watch cannot cancel a bodily decision to sleep, eat or recover.
         # A lit hearth allows another awake adult to guard while its expert rests.
         available = [q for q in band
-                     if q.get("a") not in (A_SLEEP, A_REST, A_EAT, A_DRINK, A_BIRTH, A_RITE, A_FIGHT)
+                     if needs.instruction_state(u,q) is None and q.get("a") not in (A_SLEEP, A_REST, A_EAT, A_DRINK, A_BIRTH, A_RITE, A_FIGHT)
                      and not q.get("due") and q.get("ene", 1.0) > 0.35
                      and q.get("hun", 0.0) < needs.HUNGRY and q.get("thirst", 0.0) < 1.0]
         keepers = [q for q in available if skills.knows(q, "fire")]
@@ -2416,6 +2422,7 @@ def tick_lagoon(u, rng, events):
         if age_of(p, day) < 3 * DAYS_PER_YEAR:
             follow_mother(p, byid, lambda x, y: (min(LAGOON_SIZE - 2, max(1, x)),
                                                  min(LAGOON_SIZE - 2, max(1, y))))
+        needs.update_learning(u,p)
         if p.get("ad", 0) <= 0 and p["x"] == p["tx"] and p["y"] == p["ty"]:
             p["did"] = 0
             lagoon_assign(u, p, day, rng, shortfall)
@@ -2664,7 +2671,7 @@ def tick_lagoon(u, rng, events):
     if not people:
         record_extinction(u, events)
     finish_boat(u, people, rng, events, day)
-    needs.exchange(u, contacts)
+    needs.exchange(u, contacts, events)
     advance_part(u)
 
 
@@ -2833,6 +2840,8 @@ def summarize(world):
                 "named": bool(u.get("named")),
                 "mind": u.get("mind", [])[-120:],
                 "engine": u.get("engine", ENGINE_VERSION)}
+        info["instruction"] = {str(p["id"]):state for p in u["people"]
+                               for state in [needs.instruction_state(u,p)] if state is not None}
         info["crafts"] = {str(p["id"]): active_craft(u, p)
                           for p in u["people"] if active_craft(u, p)}
         if u["kind"] == "LAGOON":
@@ -3064,6 +3073,7 @@ def migrate(world):
             p.setdefault("carry_water", 0.0)
             memory = p.setdefault("experience", {"sites": [], "trail": []})
             memory.setdefault('heard_on',None)
+            learning.migrate_person(p)
             for note in memory['sites']:
                 note.setdefault('origin',p['id'])
                 note.setdefault('via',None)

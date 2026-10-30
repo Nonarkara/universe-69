@@ -1,0 +1,4452 @@
+{
+  "fixtureSHA256": "662b3f1f0f66be62a23c0f34134479500fc0ffe0cc8a7c90115e560fdaf5134a",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "checks": [
+        {
+          "passed": true,
+          "check": "world: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "world: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "world: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "world: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "world: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "world: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "world: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "Fixture contains both instruction roles"
+        },
+        {
+          "passed": true,
+          "check": "Native Tab reaches seeking details"
+        },
+        {
+          "passed": true,
+          "check": "Visible focus for seeking"
+        },
+        {
+          "passed": true,
+          "check": "seeking label in actual person card"
+        },
+        {
+          "passed": true,
+          "check": "seeking label retained in diary"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "seeking actual canvas caption painted"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "Native Tab reaches teaching details"
+        },
+        {
+          "passed": true,
+          "check": "Visible focus for teaching"
+        },
+        {
+          "passed": true,
+          "check": "teaching label in actual person card"
+        },
+        {
+          "passed": true,
+          "check": "teaching label retained in diary"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "teaching actual canvas caption painted"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "No browser errors"
+        }
+      ],
+      "errors": [],
+      "htmlSHA256": "5633c739e5f275d6761895c753532b0c31536c0ddfe6d2cc1195111e8fb2b731",
+      "surfaces": {
+        "world": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 771,
+            "width": 390,
+            "height": 73,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 72,
+            "clientHeight": 72
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 744,
+            "width": 390,
+            "height": 27,
+            "bottom": 771,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 325.75,
+              "bottom": 388.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 326,
+              "clientHeight": 326
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 418.25,
+              "width": 390,
+              "height": 325.75,
+              "bottom": 744,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 326,
+              "clientHeight": 326
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 390.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 418.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 190.5,
+            "combinedPercent": 22.571090047393366,
+            "bottom": 73,
+            "bottomPercent": 8.649289099526067,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "BODY",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 326,
+              "lit": 1311,
+              "samples": 1311,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 326,
+              "lit": 1311,
+              "samples": 1311,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "seeking-focus": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 771,
+            "width": 390,
+            "height": 73,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 72,
+            "clientHeight": 72
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 744,
+            "width": 390,
+            "height": 27,
+            "bottom": 771,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 325.75,
+              "bottom": 388.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 326,
+              "clientHeight": 326
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 418.25,
+              "width": 390,
+              "height": 325.75,
+              "bottom": 744,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 326,
+              "clientHeight": 326
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 390.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 418.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 190.5,
+            "combinedPercent": 22.571090047393366,
+            "bottom": 73,
+            "bottomPercent": 8.649289099526067,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 618.5,
+                "width": 390,
+                "height": 125.5,
+                "bottom": 744,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 125,
+                "clientHeight": 125
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 418.25,
+                "width": 390,
+                "height": 325.75,
+                "bottom": 744,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 326,
+                "clientHeight": 326
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 326,
+              "lit": 1311,
+              "samples": 1311,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 326,
+              "lit": 1311,
+              "samples": 1311,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 1,
+              "lying": true,
+              "body": {
+                "left": 133.97618817407547,
+                "right": 195.87111376761314,
+                "top": 530.7554892895128,
+                "bottom": 547.9485241766065
+              },
+              "cardTop": 618.5,
+              "sceneTop": 418.25,
+              "sceneBottom": 744,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "seeking-more": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 771,
+            "width": 390,
+            "height": 73,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 72,
+            "clientHeight": 72
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 744,
+            "width": 390,
+            "height": 27,
+            "bottom": 771,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 325.75,
+              "bottom": 388.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 326,
+              "clientHeight": 326
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 418.25,
+              "width": 390,
+              "height": 325.75,
+              "bottom": 744,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 326,
+              "clientHeight": 326
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 390.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 418.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 190.5,
+            "combinedPercent": 22.571090047393366,
+            "bottom": 73,
+            "bottomPercent": 8.649289099526067,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 618.5,
+                "width": 390,
+                "height": 125.5,
+                "bottom": 744,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 125,
+                "clientHeight": 125
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 418.25,
+                "width": 390,
+                "height": 325.75,
+                "bottom": 744,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 326,
+                "clientHeight": 326
+              }
+            }
+          ],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 326,
+              "lit": 1311,
+              "samples": 1311,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 326,
+              "lit": 1311,
+              "samples": 1311,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 1,
+              "lying": true,
+              "body": {
+                "left": 165.20369939652045,
+                "right": 224.79014264160156,
+                "top": 509.9762653629466,
+                "bottom": 526.5280551532469
+              },
+              "cardTop": 618.5,
+              "sceneTop": 418.25,
+              "sceneBottom": 744,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "seeking-expanded": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 771,
+            "width": 390,
+            "height": 73,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 72,
+            "clientHeight": 72
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 744,
+            "width": 390,
+            "height": 27,
+            "bottom": 771,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 325.75,
+              "bottom": 388.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 326,
+              "clientHeight": 326
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 531.3125,
+              "width": 390,
+              "height": 212.6875,
+              "bottom": 744,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 213,
+              "clientHeight": 213
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 390.5,
+              "width": 390,
+              "height": 140.8125,
+              "bottom": 531.3125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 141,
+              "clientHeight": 141
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              140.8125
+            ],
+            "combinedHeight": 303.5625,
+            "combinedPercent": 35.967120853080566,
+            "bottom": 73,
+            "bottomPercent": 8.649289099526067,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 618.5,
+                "width": 390,
+                "height": 125.5,
+                "bottom": 744,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 125,
+                "clientHeight": 125
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 531.3125,
+                "width": 390,
+                "height": 212.6875,
+                "bottom": 744,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 213,
+                "clientHeight": 213
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 326,
+              "lit": 1311,
+              "samples": 1311,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 213,
+              "lit": 857,
+              "samples": 857,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 1,
+              "lying": true,
+              "body": {
+                "left": 172.7585135976335,
+                "right": 217.24142015136607,
+                "top": 584.6029380556237,
+                "bottom": 596.959300987216
+              },
+              "cardTop": 618.5,
+              "sceneTop": 531.3125,
+              "sceneBottom": 744,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "teaching-focus": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 771,
+            "width": 390,
+            "height": 73,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 72,
+            "clientHeight": 72
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 744,
+            "width": 390,
+            "height": 27,
+            "bottom": 771,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 325.75,
+              "bottom": 388.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 326,
+              "clientHeight": 326
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 418.25,
+              "width": 390,
+              "height": 325.75,
+              "bottom": 744,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 326,
+              "clientHeight": 326
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 390.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 418.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 190.5,
+            "combinedPercent": 22.571090047393366,
+            "bottom": 73,
+            "bottomPercent": 8.649289099526067,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 618.5,
+                "width": 390,
+                "height": 125.5,
+                "bottom": 744,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 125,
+                "clientHeight": 125
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 418.25,
+                "width": 390,
+                "height": 325.75,
+                "bottom": 744,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 326,
+                "clientHeight": 326
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 326,
+              "lit": 1311,
+              "samples": 1311,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 326,
+              "lit": 1311,
+              "samples": 1311,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 2,
+              "lying": true,
+              "body": {
+                "left": 184.20379643426796,
+                "right": 258.94671109701216,
+                "top": 491.84398255741144,
+                "bottom": 512.6059032970626
+              },
+              "cardTop": 618.5,
+              "sceneTop": 418.25,
+              "sceneBottom": 744,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "teaching-more": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 771,
+            "width": 390,
+            "height": 73,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 72,
+            "clientHeight": 72
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 744,
+            "width": 390,
+            "height": 27,
+            "bottom": 771,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 325.75,
+              "bottom": 388.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 326,
+              "clientHeight": 326
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 418.25,
+              "width": 390,
+              "height": 325.75,
+              "bottom": 744,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 326,
+              "clientHeight": 326
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 390.5,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 418.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 190.5,
+            "combinedPercent": 22.571090047393366,
+            "bottom": 73,
+            "bottomPercent": 8.649289099526067,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 618.5,
+                "width": 390,
+                "height": 125.5,
+                "bottom": 744,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 125,
+                "clientHeight": 125
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 418.25,
+                "width": 390,
+                "height": 325.75,
+                "bottom": 744,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 326,
+                "clientHeight": 326
+              }
+            }
+          ],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 326,
+              "lit": 1311,
+              "samples": 1311,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 326,
+              "lit": 1311,
+              "samples": 1311,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 2,
+              "lying": true,
+              "body": {
+                "left": 166.5308721043526,
+                "right": 227.17341506967549,
+                "top": 508.71056952627214,
+                "bottom": 525.555720349973
+              },
+              "cardTop": 618.5,
+              "sceneTop": 418.25,
+              "sceneBottom": 744,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "teaching-expanded": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 771,
+            "width": 390,
+            "height": 73,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 72,
+            "clientHeight": 72
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 744,
+            "width": 390,
+            "height": 27,
+            "bottom": 771,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 26,
+            "clientHeight": 26
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 62.75,
+              "width": 390,
+              "height": 325.75,
+              "bottom": 388.5,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 326,
+              "clientHeight": 326
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 531.3125,
+              "width": 390,
+              "height": 212.6875,
+              "bottom": 744,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 213,
+              "clientHeight": 213
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 390,
+              "height": 27.75,
+              "bottom": 62.75,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 390.5,
+              "width": 390,
+              "height": 140.8125,
+              "bottom": 531.3125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 141,
+              "clientHeight": 141
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              140.8125
+            ],
+            "combinedHeight": 303.5625,
+            "combinedPercent": 35.967120853080566,
+            "bottom": 73,
+            "bottomPercent": 8.649289099526067,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 618.5,
+                "width": 390,
+                "height": 125.5,
+                "bottom": 744,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 125,
+                "clientHeight": 125
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 531.3125,
+                "width": 390,
+                "height": 212.6875,
+                "bottom": 744,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 213,
+                "clientHeight": 213
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 326,
+              "lit": 1311,
+              "samples": 1311,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 213,
+              "lit": 857,
+              "samples": 857,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 2,
+              "lying": true,
+              "body": {
+                "left": 172.8089572881941,
+                "right": 217.34058556048,
+                "top": 584.5446321639932,
+                "bottom": 596.9145289062949
+              },
+              "cardTop": 618.5,
+              "sceneTop": 531.3125,
+              "sceneBottom": 744,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        }
+      },
+      "targets": [
+        {
+          "key": "l",
+          "id": 1,
+          "role": "seeking"
+        },
+        {
+          "key": "l",
+          "id": 2,
+          "role": "teaching"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "checks": [
+        {
+          "passed": true,
+          "check": "world: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "world: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "world: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "world: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "world: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "world: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "world: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "Fixture contains both instruction roles"
+        },
+        {
+          "passed": true,
+          "check": "Native Tab reaches seeking details"
+        },
+        {
+          "passed": true,
+          "check": "Visible focus for seeking"
+        },
+        {
+          "passed": true,
+          "check": "seeking label in actual person card"
+        },
+        {
+          "passed": true,
+          "check": "seeking label retained in diary"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "seeking actual canvas caption painted"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "Native Tab reaches teaching details"
+        },
+        {
+          "passed": true,
+          "check": "Visible focus for teaching"
+        },
+        {
+          "passed": true,
+          "check": "teaching label in actual person card"
+        },
+        {
+          "passed": true,
+          "check": "teaching label retained in diary"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "teaching actual canvas caption painted"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "No browser errors"
+        }
+      ],
+      "errors": [],
+      "htmlSHA256": "5633c739e5f275d6761895c753532b0c31536c0ddfe6d2cc1195111e8fb2b731",
+      "surfaces": {
+        "world": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 714,
+            "width": 1024,
+            "height": 54,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 604.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 714,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 541.625,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 542,
+              "clientHeight": 542
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 541.625,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 542,
+              "clientHeight": 542
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 226.375,
+            "combinedPercent": 29.475911458333332,
+            "bottom": 54,
+            "bottomPercent": 7.03125,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "BODY",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 542,
+              "lit": 2856,
+              "samples": 2856,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 542,
+              "lit": 2856,
+              "samples": 2856,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "seeking-focus": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 714,
+            "width": 1024,
+            "height": 54,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 604.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 714,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 541.625,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 542,
+              "clientHeight": 542
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 541.625,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 542,
+              "clientHeight": 542
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 226.375,
+            "combinedPercent": 29.475911458333332,
+            "bottom": 54,
+            "bottomPercent": 7.03125,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 513,
+                "y": 459.625,
+                "width": 272,
+                "height": 145,
+                "bottom": 604.625,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 513,
+                "y": 63,
+                "width": 511,
+                "height": 541.625,
+                "bottom": 604.625,
+                "scrollWidth": 511,
+                "clientWidth": 511,
+                "scrollHeight": 542,
+                "clientHeight": 542
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 542,
+              "lit": 2856,
+              "samples": 2856,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 542,
+              "lit": 2856,
+              "samples": 2856,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 1,
+              "lying": true,
+              "body": {
+                "left": 703.9605324222928,
+                "right": 769.421299687436,
+                "top": 276.83926404723684,
+                "bottom": 295.0228105097766
+              },
+              "cardTop": 459.625,
+              "sceneTop": 63,
+              "sceneBottom": 604.625,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "seeking-more": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 714,
+            "width": 1024,
+            "height": 54,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 604.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 714,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 541.625,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 542,
+              "clientHeight": 542
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 541.625,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 542,
+              "clientHeight": 542
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 226.375,
+            "combinedPercent": 29.475911458333332,
+            "bottom": 54,
+            "bottomPercent": 7.03125,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 513,
+                "y": 459.625,
+                "width": 272,
+                "height": 145,
+                "bottom": 604.625,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 513,
+                "y": 63,
+                "width": 511,
+                "height": 541.625,
+                "bottom": 604.625,
+                "scrollWidth": 511,
+                "clientWidth": 511,
+                "scrollHeight": 542,
+                "clientHeight": 542
+              }
+            }
+          ],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 542,
+              "lit": 2856,
+              "samples": 2856,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 542,
+              "lit": 2856,
+              "samples": 2856,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 1,
+              "lying": true,
+              "body": {
+                "left": 738.6457081590505,
+                "right": 798.2422601640943,
+                "top": 253.26572419900947,
+                "bottom": 269.8203219781883
+              },
+              "cardTop": 459.625,
+              "sceneTop": 63,
+              "sceneBottom": 604.625,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "seeking-expanded": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 714,
+            "width": 1024,
+            "height": 54,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 604.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 714,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 119,
+              "width": 511,
+              "height": 485.625,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 486,
+              "clientHeight": 486
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 119.28125,
+              "width": 511,
+              "height": 485.34375,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 485,
+              "clientHeight": 485
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 84,
+              "bottom": 119,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 84,
+              "clientHeight": 84
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 84.28125,
+              "bottom": 119.28125,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 84,
+              "clientHeight": 84
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              84,
+              84.28125
+            ],
+            "combinedHeight": 282.65625,
+            "combinedPercent": 36.80419921875,
+            "bottom": 54,
+            "bottomPercent": 7.03125,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 513,
+                "y": 459.625,
+                "width": 272,
+                "height": 145,
+                "bottom": 604.625,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 513,
+                "y": 119.28125,
+                "width": 511,
+                "height": 485.34375,
+                "bottom": 604.625,
+                "scrollWidth": 511,
+                "clientWidth": 511,
+                "scrollHeight": 485,
+                "clientHeight": 485
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 486,
+              "lit": 2561,
+              "samples": 2561,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 485,
+              "lit": 2555,
+              "samples": 2555,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 1,
+              "lying": true,
+              "body": {
+                "left": 740.7760996647589,
+                "right": 796.196589814147,
+                "top": 286.66604586689755,
+                "bottom": 302.0606264639498
+              },
+              "cardTop": 459.625,
+              "sceneTop": 119.28125,
+              "sceneBottom": 604.625,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "teaching-focus": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 714,
+            "width": 1024,
+            "height": 54,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 604.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 714,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 541.625,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 542,
+              "clientHeight": 542
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 541.625,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 542,
+              "clientHeight": 542
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 226.375,
+            "combinedPercent": 29.475911458333332,
+            "bottom": 54,
+            "bottomPercent": 7.03125,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 513,
+                "y": 459.625,
+                "width": 272,
+                "height": 145,
+                "bottom": 604.625,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 513,
+                "y": 63,
+                "width": 511,
+                "height": 541.625,
+                "bottom": 604.625,
+                "scrollWidth": 511,
+                "clientWidth": 511,
+                "scrollHeight": 542,
+                "clientHeight": 542
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 542,
+              "lit": 2856,
+              "samples": 2856,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 542,
+              "lit": 2856,
+              "samples": 2856,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 2,
+              "lying": true,
+              "body": {
+                "left": 759.4799904211288,
+                "right": 821.8913253042183,
+                "top": 249.39935900062127,
+                "bottom": 266.73584091259056
+              },
+              "cardTop": 459.625,
+              "sceneTop": 63,
+              "sceneBottom": 604.625,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "teaching-more": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 714,
+            "width": 1024,
+            "height": 54,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 604.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 714,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 511,
+              "height": 541.625,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 542,
+              "clientHeight": 542
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 63,
+              "width": 511,
+              "height": 541.625,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 542,
+              "clientHeight": 542
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 226.375,
+            "combinedPercent": 29.475911458333332,
+            "bottom": 54,
+            "bottomPercent": 7.03125,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 513,
+                "y": 459.625,
+                "width": 272,
+                "height": 145,
+                "bottom": 604.625,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 513,
+                "y": 63,
+                "width": 511,
+                "height": 541.625,
+                "bottom": 604.625,
+                "scrollWidth": 511,
+                "clientWidth": 511,
+                "scrollHeight": 542,
+                "clientHeight": 542
+              }
+            }
+          ],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 542,
+              "lit": 2856,
+              "samples": 2856,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 542,
+              "lit": 2856,
+              "samples": 2856,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 2,
+              "lying": true,
+              "body": {
+                "left": 742.9059927344474,
+                "right": 803.0632741285465,
+                "top": 252.45099288545615,
+                "bottom": 269.16134882826145
+              },
+              "cardTop": 459.625,
+              "sceneTop": 63,
+              "sceneBottom": 604.625,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "teaching-expanded": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 714,
+            "width": 1024,
+            "height": 54,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 604.625,
+            "width": 1024,
+            "height": 109.375,
+            "bottom": 714,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 108,
+            "clientHeight": 108
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 119,
+              "width": 511,
+              "height": 485.625,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 486,
+              "clientHeight": 486
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 119.28125,
+              "width": 511,
+              "height": 485.34375,
+              "bottom": 604.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 485,
+              "clientHeight": 485
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 511,
+              "height": 84,
+              "bottom": 119,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 84,
+              "clientHeight": 84
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 35,
+              "width": 511,
+              "height": 84.28125,
+              "bottom": 119.28125,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 84,
+              "clientHeight": 84
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              84,
+              84.28125
+            ],
+            "combinedHeight": 282.65625,
+            "combinedPercent": 36.80419921875,
+            "bottom": 54,
+            "bottomPercent": 7.03125,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 513,
+                "y": 459.625,
+                "width": 272,
+                "height": 145,
+                "bottom": 604.625,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 513,
+                "y": 119.28125,
+                "width": 511,
+                "height": 485.34375,
+                "bottom": 604.625,
+                "scrollWidth": 511,
+                "clientWidth": 511,
+                "scrollHeight": 485,
+                "clientHeight": 485
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 486,
+              "lit": 2561,
+              "samples": 2561,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 485,
+              "lit": 2555,
+              "samples": 2555,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 2,
+              "lying": true,
+              "body": {
+                "left": 741.2057463805803,
+                "right": 796.6823881957254,
+                "top": 286.5764696599183,
+                "bottom": 301.986647941903
+              },
+              "cardTop": 459.625,
+              "sceneTop": 119.28125,
+              "sceneBottom": 604.625,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        }
+      },
+      "targets": [
+        {
+          "key": "l",
+          "id": 1,
+          "role": "seeking"
+        },
+        {
+          "key": "l",
+          "id": 2,
+          "role": "teaching"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "checks": [
+        {
+          "passed": true,
+          "check": "world: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "world: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "world: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "world: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "world: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "world: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "world: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "Fixture contains both instruction roles"
+        },
+        {
+          "passed": true,
+          "check": "Native Tab reaches seeking details"
+        },
+        {
+          "passed": true,
+          "check": "Visible focus for seeking"
+        },
+        {
+          "passed": true,
+          "check": "seeking label in actual person card"
+        },
+        {
+          "passed": true,
+          "check": "seeking label retained in diary"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "seeking-focus: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "seeking actual canvas caption painted"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "seeking-more: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "seeking-expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "Native Tab reaches teaching details"
+        },
+        {
+          "passed": true,
+          "check": "Visible focus for teaching"
+        },
+        {
+          "passed": true,
+          "check": "teaching label in actual person card"
+        },
+        {
+          "passed": true,
+          "check": "teaching label retained in diary"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "teaching-focus: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "teaching actual canvas caption painted"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "teaching-more: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: no page horizontal overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: one screen without page overflow"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: visible reading content fits its page"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: worlds, instruments, record and cards do not overlap"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: both visible worlds are painted"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: followed bodies remain visible above their cards"
+        },
+        {
+          "passed": true,
+          "check": "teaching-expanded: visible images are decoded"
+        },
+        {
+          "passed": true,
+          "check": "No browser errors"
+        }
+      ],
+      "errors": [],
+      "htmlSHA256": "5633c739e5f275d6761895c753532b0c31536c0ddfe6d2cc1195111e8fb2b731",
+      "surfaces": {
+        "world": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 846,
+            "width": 1440,
+            "height": 54,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 791.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 846,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 728.3125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 728,
+              "clientHeight": 728
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 728.3125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 728,
+              "clientHeight": 728
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 171.6875,
+            "combinedPercent": 19.07638888888889,
+            "bottom": 54,
+            "bottomPercent": 6,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "BODY",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 728,
+              "lit": 5397,
+              "samples": 5397,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 728,
+              "lit": 5397,
+              "samples": 5397,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "visibleImages": []
+        },
+        "seeking-focus": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 846,
+            "width": 1440,
+            "height": 54,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 791.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 846,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 728.3125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 728,
+              "clientHeight": 728
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 728.3125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 728,
+              "clientHeight": 728
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 171.6875,
+            "combinedPercent": 19.07638888888889,
+            "bottom": 54,
+            "bottomPercent": 6,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 721,
+                "y": 646.3125,
+                "width": 272,
+                "height": 145,
+                "bottom": 791.3125,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 721,
+                "y": 63,
+                "width": 719,
+                "height": 728.3125,
+                "bottom": 791.3125,
+                "scrollWidth": 719,
+                "clientWidth": 719,
+                "scrollHeight": 728,
+                "clientHeight": 728
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 728,
+              "lit": 5397,
+              "samples": 5397,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 728,
+              "lit": 5397,
+              "samples": 5397,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 1,
+              "lying": true,
+              "body": {
+                "left": 1017.5462747900667,
+                "right": 1081.3986632449207,
+                "top": 371.24371010443895,
+                "bottom": 388.98048467523176
+              },
+              "cardTop": 646.3125,
+              "sceneTop": 63,
+              "sceneBottom": 791.3125,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "seeking-more": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 846,
+            "width": 1440,
+            "height": 54,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 791.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 846,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 728.3125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 728,
+              "clientHeight": 728
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 728.3125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 728,
+              "clientHeight": 728
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 171.6875,
+            "combinedPercent": 19.07638888888889,
+            "bottom": 54,
+            "bottomPercent": 6,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 721,
+                "y": 646.3125,
+                "width": 272,
+                "height": 145,
+                "bottom": 791.3125,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 721,
+                "y": 63,
+                "width": 719,
+                "height": 728.3125,
+                "bottom": 791.3125,
+                "scrollWidth": 719,
+                "clientWidth": 719,
+                "scrollHeight": 728,
+                "clientHeight": 728
+              }
+            }
+          ],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 728,
+              "lit": 5397,
+              "samples": 5397,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 728,
+              "lit": 5397,
+              "samples": 5397,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 1,
+              "lying": true,
+              "body": {
+                "left": 1045.456322091414,
+                "right": 1105.7180260909474,
+                "top": 350.1856778444217,
+                "bottom": 366.92504006651427
+              },
+              "cardTop": 646.3125,
+              "sceneTop": 63,
+              "sceneBottom": 791.3125,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "seeking-expanded": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 846,
+            "width": 1440,
+            "height": 54,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 791.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 846,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 119,
+              "width": 719,
+              "height": 672.3125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 672,
+              "clientHeight": 672
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 119.28125,
+              "width": 719,
+              "height": 672.03125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 672,
+              "clientHeight": 672
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 84,
+              "bottom": 119,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 84,
+              "clientHeight": 84
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 84.28125,
+              "bottom": 119.28125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 84,
+              "clientHeight": 84
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              84,
+              84.28125
+            ],
+            "combinedHeight": 227.96875,
+            "combinedPercent": 25.32986111111111,
+            "bottom": 54,
+            "bottomPercent": 6,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 721,
+                "y": 646.3125,
+                "width": 272,
+                "height": 145,
+                "bottom": 791.3125,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 721,
+                "y": 119.28125,
+                "width": 719,
+                "height": 672.03125,
+                "bottom": 791.3125,
+                "scrollWidth": 719,
+                "clientWidth": 719,
+                "scrollHeight": 672,
+                "clientHeight": 672
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 672,
+              "lit": 4982,
+              "samples": 4982,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 672,
+              "lit": 4982,
+              "samples": 4982,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 1,
+              "lying": true,
+              "body": {
+                "left": 1051.3853643915086,
+                "right": 1108.0641755225274,
+                "top": 379.2163093809606,
+                "bottom": 394.9604235840214
+              },
+              "cardTop": 646.3125,
+              "sceneTop": 119.28125,
+              "sceneBottom": 791.3125,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "teaching-focus": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 846,
+            "width": 1440,
+            "height": 54,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 791.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 846,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 728.3125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 728,
+              "clientHeight": 728
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 728.3125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 728,
+              "clientHeight": 728
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 171.6875,
+            "combinedPercent": 19.07638888888889,
+            "bottom": 54,
+            "bottomPercent": 6,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 721,
+                "y": 646.3125,
+                "width": 272,
+                "height": 145,
+                "bottom": 791.3125,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 721,
+                "y": 63,
+                "width": 719,
+                "height": 728.3125,
+                "bottom": 791.3125,
+                "scrollWidth": 719,
+                "clientWidth": 719,
+                "scrollHeight": 728,
+                "clientHeight": 728
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 728,
+              "lit": 5397,
+              "samples": 5397,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 728,
+              "lit": 5397,
+              "samples": 5397,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 2,
+              "lying": true,
+              "body": {
+                "left": 1071.34228642826,
+                "right": 1133.2062125180448,
+                "top": 343.35663823228606,
+                "bottom": 360.54106214611517
+              },
+              "cardTop": 646.3125,
+              "sceneTop": 63,
+              "sceneBottom": 791.3125,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "teaching-more": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 846,
+            "width": 1440,
+            "height": 54,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 791.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 846,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 63,
+              "width": 719,
+              "height": 728.3125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 728,
+              "clientHeight": 728
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 63,
+              "width": 719,
+              "height": 728.3125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 728,
+              "clientHeight": 728
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 28,
+              "bottom": 63,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 28,
+              "clientHeight": 28
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 171.6875,
+            "combinedPercent": 19.07638888888889,
+            "bottom": 54,
+            "bottomPercent": 6,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 721,
+                "y": 646.3125,
+                "width": 272,
+                "height": 145,
+                "bottom": 791.3125,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 721,
+                "y": 63,
+                "width": 719,
+                "height": 728.3125,
+                "bottom": 791.3125,
+                "scrollWidth": 719,
+                "clientWidth": 719,
+                "scrollHeight": 728,
+                "clientHeight": 728
+              }
+            }
+          ],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 728,
+              "lit": 5397,
+              "samples": 5397,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 728,
+              "lit": 5397,
+              "samples": 5397,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 2,
+              "lying": true,
+              "body": {
+                "left": 1054.9075533234898,
+                "right": 1114.9574256322524,
+                "top": 345.6404134606147,
+                "bottom": 362.3209335463821
+              },
+              "cardTop": 646.3125,
+              "sceneTop": 63,
+              "sceneBottom": 791.3125,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        },
+        "teaching-expanded": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 846,
+            "width": 1440,
+            "height": 54,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 53,
+            "clientHeight": 53
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 791.3125,
+            "width": 1440,
+            "height": 54.6875,
+            "bottom": 846,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 119,
+              "width": 719,
+              "height": 672.3125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 672,
+              "clientHeight": 672
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 119.28125,
+              "width": 719,
+              "height": 672.03125,
+              "bottom": 791.3125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 672,
+              "clientHeight": 672
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 35,
+              "width": 719,
+              "height": 84,
+              "bottom": 119,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 84,
+              "clientHeight": 84
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 35,
+              "width": 719,
+              "height": 84.28125,
+              "bottom": 119.28125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 84,
+              "clientHeight": 84
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              84,
+              84.28125
+            ],
+            "combinedHeight": 227.96875,
+            "combinedPercent": 25.32986111111111,
+            "bottom": 54,
+            "bottomPercent": 6,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 721,
+                "y": 646.3125,
+                "width": 272,
+                "height": 145,
+                "bottom": 791.3125,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 721,
+                "y": 119.28125,
+                "width": 719,
+                "height": 672.03125,
+                "bottom": 791.3125,
+                "scrollWidth": 719,
+                "clientWidth": 719,
+                "scrollHeight": 672,
+                "clientHeight": 672
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 672,
+              "lit": 4982,
+              "samples": 4982,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 672,
+              "lit": 4982,
+              "samples": 4982,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 2,
+              "lying": true,
+              "body": {
+                "left": 1053.0453651761022,
+                "right": 1109.70891646891,
+                "top": 378.4762497945156,
+                "bottom": 394.21612515362887
+              },
+              "cardTop": 646.3125,
+              "sceneTop": 119.28125,
+              "sceneBottom": 791.3125,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "visibleImages": []
+        }
+      },
+      "targets": [
+        {
+          "key": "l",
+          "id": 1,
+          "role": "seeking"
+        },
+        {
+          "key": "l",
+          "id": 2,
+          "role": "teaching"
+        }
+      ]
+    }
+  ],
+  "failures": []
+}

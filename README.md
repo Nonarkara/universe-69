@@ -144,8 +144,9 @@ stride follows actual leg size and distance travelled, with a shared stance
 law and frame-rate-independent movement. Sleeping arms now reach their pose,
 bedrolls fit their bodies, and age changes invalidate the sprite cache.
 
-Engine `2026.10.30.4` changes future trajectories through personal procedures,
-actual practice and local camp works. The `.3` contact-based resource sharing remains. The `.2` personal memory, maturation and nursing
+Engine `2026.10.30.5` changes future trajectories through purposeful instruction
+from actually witnessed experts. The `.4` personal procedures, practice and local
+camp works remain. The `.3` contact-based resource sharing remains. The `.2` personal memory, maturation and nursing
 corrections remain in force;
 the earlier `2026.10.30.1` resource changes remain in force. The century-per-day clock
 preserves previously completed time when its pace changes. Existing
@@ -183,3 +184,10 @@ Physical fires, prepared food and completed works belong to camps. See
 [the procedure audit](docs/audits/2026-10-30-skills/README.md) for final verification
 and limitations. This remains a finite simulation, not human-level cognition or
 a guarantee that a great civilization will emerge.
+
+
+People can now remember demonstrated expertise, seek the person's last seen
+location and request instruction. The teacher chooses against their own needs.
+Missing foundations are taught at real contact; awareness still needs practice.
+The existing person card shows the intention, while successful instruction
+enters the record. See [the instruction audit](docs/audits/2026-10-30-instruction/README.md).

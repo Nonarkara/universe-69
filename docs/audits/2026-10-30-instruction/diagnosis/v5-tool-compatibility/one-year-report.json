@@ -1,0 +1,79 @@
+{
+  "engine": "2026.10.30.5",
+  "seed": 69,
+  "years": 1,
+  "scope": "LAGOON only; exact tick_world RNG derivation; no EDEN ticks",
+  "sources": {
+    "sim/minds.py": "f9f5451418bc39cc9830bdc3ac5a3f4d98762ab7c2a4305fe977e9e0db68b12f",
+    "sim/server.py": "5e1bfe65ed3a37e8695c190bc8764fe98d6986108c877fead8c4bbf87cf44f4d",
+    "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "sim/needs.py": "eaefd929a409890138690fb9081d5c8be2523219ab5257a33abfef26daf66dfb",
+    "sim/historian.py": "ad0728651b5f6b326fc02cc05ab2c112dfe34506e1ba1af81dacfa3541f30c69",
+    "sim/engine.py": "4f9c8f9e3bac6f35faf9622f1088bee999abf73a56abd4f3a64e6340111186f3",
+    "sim/animals.py": "5622b0910d185da4e9c8b6f680ce87a1feada111fb5505b483bd3de563864577",
+    "sim/learning.py": "b83ddb2818f8e4675eaebc7f0f38526d08aa4ad06e595ef075f1464bad99a5ff"
+  },
+  "source_unchanged": true,
+  "comparison": {
+    "raw_state_equal": true,
+    "raw_json_equal": true,
+    "public_state_equal": true,
+    "events_equal": true
+  },
+  "public_comparison_excludes": [
+    "wall capture timestamp"
+  ],
+  "raw_sha256": "46adb42f2bb11aa9b868946db260c9359f350820c93d5caea0aabc00b535deef",
+  "seconds": {
+    "traced": 1.612066917001357,
+    "plain": 1.4927755420030735
+  },
+  "counter_semantics": {
+    "demo_witnesses": "Captured witness attempts, including rejected prerequisites/contact; not successful delivery",
+    "demo_listeners": "Same attempts when passed to actual teaching evaluation",
+    "eligible_unknown": "Diagnostic gate opportunity, not a guaranteed grant; offers may compete",
+    "transitions": "Actual successful skill grants through original invent/expose functions"
+  },
+  "counters": {},
+  "holder_actions": {
+    "stone_tools": {},
+    "fishing": {}
+  },
+  "activity_codes": {
+    "9": "birth",
+    "6": "build",
+    "22": "drink",
+    "12": "eat",
+    "5": "farm",
+    "14": "fight",
+    "4": "fish",
+    "2": "forage",
+    "21": "groom",
+    "3": "hunt",
+    "0": "idle",
+    "8": "mate",
+    "15": "play",
+    "11": "rest",
+    "16": "rite",
+    "19": "scout",
+    "17": "sleep",
+    "7": "talk",
+    "10": "tend",
+    "1": "walk",
+    "20": "watch",
+    "13": "withdraw",
+    "18": "work"
+  },
+  "max_holders": {
+    "stone_tools": 0,
+    "fishing": 0
+  },
+  "transitions": [],
+  "holder_deaths": [],
+  "final": {
+    "day": 360,
+    "population": 16,
+    "history": []
+  }
+}

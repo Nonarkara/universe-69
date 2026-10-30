@@ -558,6 +558,17 @@ function campVisualKey(u){
     return [c.x,c.y,v.fire,v.granary,v.domestic,v.writing].concat(["granary","domestication","writing"].map(function(k){return Math.round((+w[k]||0)*8);})).join(",");
   }).join(";");
 }
+// Snapshot intent is active instruction, not proof of acquired proficiency.
+function instructionActivity(u,id){
+  var intent=u&&u.instruction&&u.instruction[String(id)];
+  if (!intent || (intent.role!=="seeking" && intent.role!=="teaching") ||
+      !Number.isInteger(intent.other) || intent.other<=0 || intent.other===+id) return "";
+  var topics={fire:1,stone_tools:1,fishing:1,predator_hunt:1,shelter:1,preservation:1,lore:1,
+    agriculture:1,domestication:1,granary:1,seacraft:1,healing:1,metallurgy:1,writing:1};
+  if (typeof intent.tech!=="string" || !Object.prototype.hasOwnProperty.call(topics,intent.tech)) return "";
+  var topic=intent.tech.replace(/_/g," ");
+  return intent.role==="seeking"?"seeking "+topic+" instruction":"explaining "+topic;
+}
 function craftActivity(u,id){
   var craft=u&&u.crafts&&u.crafts[String(id)]; if (!craft) return "";
   var labels={fire:"tending fire",stone_tools:"knapping tools",preservation:"preserving food",
@@ -2474,7 +2485,7 @@ function paintOverlay(key){
     if (cam[key].mode==="walk") continue;
     var chosen=(a.id===sel[key]), news=(!a.moving && (a.act===A_BIRTH||a.act===A_FIGHT));
     if (!chosen && !(news && s>=1.0 && nNews<2)) continue;
-    var lbl=(a.moving?"walking":(craftActivity(u,a.id)||ACT_LABEL[a.act]||"idle"));
+    var lbl=(instructionActivity(u,a.id)||(a.moving?"walking":(craftActivity(u,a.id)||ACT_LABEL[a.act]||"idle")));
     if (chosen && u && u.detail && u.detail[String(a.id)]) lbl=u.detail[String(a.id)][0]+" · "+lbl;
     var wpx=g.measureText(lbl).width;
     var top=py-ts*1.45*STATURE[bodyOf(a).ab]-15*dpr;
@@ -2511,7 +2522,7 @@ function paintOverlay(key){
       // about 1.45 tiles tall at this scale
       var px=(a.x-sx)*ts+ts/2, feet=(a.y-sy)*ts+ts*0.95;
       var top=feet-ts*1.45*STATURE[bodyOf(a).ab]-2*dpr;
-      var l1=d[0]+", "+Math.floor(d[1]), l2=(a.moving?"walking":(craftActivity(u,a.id)||ACT_LABEL[a.act]||"idle"))+(d[8]?" · "+d[8]:"");
+      var l1=d[0]+", "+Math.floor(d[1]), l2=(instructionActivity(u,a.id)||(a.moving?"walking":(craftActivity(u,a.id)||ACT_LABEL[a.act]||"idle")))+(d[8]?" · "+d[8]:"");
       var lines=[l1], line="", maxWidth=ov.width-8*dpr;
       l2.split(" ").forEach(function(word){
         var next=line?line+" "+word:word;
@@ -2968,7 +2979,7 @@ function keepDiary(key, u){
     return;
   }
   diary[key].name=d[0];
-  var what=craftActivity(u,id)||ACT_LABEL[a.act]||"idle";
+  var what=instructionActivity(u,id)||craftActivity(u,id)||ACT_LABEL[a.act]||"idle";
   if (what!==diaryLast[key]){
     diaryLast[key]=what;
     var at=(u.day%360);
@@ -2986,8 +2997,8 @@ function whoInfo(key){
   return {id:id, name:d[0], age:d[1], gen:d[2], flags:d[3],
           hx:d[4], hy:d[5], pid:d[6], hun:d[7], u:u,
           thirst:u.thirst?u.thirst[String(id)]:undefined,
-          craft:craftActivity(u,id),
-          act:a.moving?"walking":(craftActivity(u,id)||ACT_LABEL[a.act]||"idle")};
+          craft:craftActivity(u,id), instruction:instructionActivity(u,id),
+          act:instructionActivity(u,id)||(a.moving?"walking":(craftActivity(u,id)||ACT_LABEL[a.act]||"idle"))};
 }
 function hudText(u, kind){
   var l2 = kind==="e" ? u.phase.toUpperCase()+" · ALWAYS SPRING"
@@ -2996,7 +3007,7 @@ function hudText(u, kind){
   var v=view[kind];
   var sc = "";
   var w=whoInfo(kind);
-  var who = w ? "<span class='who'> · "+escapeHTML(w.name.toUpperCase())+((window.innerWidth<=700&&w.craft)?"":", "+escapeHTML(w.act.toUpperCase()))+"</span>" : "";
+  var who = w ? "<span class='who'> · "+escapeHTML(w.name.toUpperCase())+((document.getElementById(kind==="e"?"w6":"w9").clientWidth<=700&&(w.craft||w.instruction))?"":", "+escapeHTML(w.act.toUpperCase()))+"</span>" : "";
   var key = (kind==="e" && v && v.ts>5) ? "<span class='keys'>  <span class='key' style='border-color:var(--accent)'></span>held "+
             "<span class='key' style='border-color:var(--lagoon)'></span>vacant</span>" : "";
   var clock = u.tod ? " · "+escapeHTML(u.tod.toUpperCase()) : "";

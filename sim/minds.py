@@ -135,7 +135,8 @@ def founders(fseed, iteration, pairs, pool=None):
 
 def new_mind(p, ef=0.5, ag=0.5):
     p.update({"ef": ef, "ag": ag, "vg": 0.5, "pu": 0.6, "bmi": 21.5, "sn": 0.55,
-              "experience": {"sites": [], "trail": [], "heard_on": None},
+              "experience": {"sites": [], "trail": [], "heard_on": None, "mentors": []},
+              "learning": None, "teaching": None, "teaching_day": None, "teaching_ids": [],
               "skills": {}, "skill_day": None, "craft": None, "craft_part": None, "stories": 0.0,
               "inj": 0.0, "gd": 0.0, "gk": 0, "wk": 0, "fe": None})
     return p

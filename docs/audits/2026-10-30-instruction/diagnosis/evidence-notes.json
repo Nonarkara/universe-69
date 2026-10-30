@@ -1,0 +1,52 @@
+{
+  "scope": "Historical engine2026.10.30.4 seed69 first30LAGOONyears; .5 changes are not included.",
+  "counter_semantics": {
+    "demo_witnesses": "Captured witness ATTEMPTS, not successful instruction or acquired knowledge.",
+    "demo_listeners": "Captured attempts passed to actual teaching evaluation; these may fail gates.",
+    "eligible_unknown": "Diagnostic gate opportunity only; offers still compete.",
+    "transitions": "Actual successful original invent/expose calls; entry basis records source."
+  },
+  "findings": {
+    "tool_inventor": {
+      "id": 16,
+      "name": "Kali",
+      "day": 2520
+    },
+    "fishing_inventor": {
+      "id": 16,
+      "name": "Kali",
+      "day": 2880
+    },
+    "tool_work_calls": 0,
+    "tool_demo_frames": 0,
+    "tool_teaching_talk_frames": 0,
+    "fishing_demo_frames": 753,
+    "fishing_witness_attempts": 2298,
+    "missing_tool_prerequisite_attempts": 2294,
+    "unreachable_attempts": 4,
+    "successful_tool_or_fishing_teaching": 0,
+    "holder_deaths_through_day10800": 0
+  },
+  "comparison": "Raw state, canonical raw JSON and events matched in original run. Original public comparison failed solely because summarize.wall records separate capture timestamps. report.json explicitly records corrected comparison recomputed from retained identical raw states excluding only wall. Original pre-correction report and nonzero-run log preserved. No arc rerun.",
+  "raw_world_sha256": "5650f98a6ad962dc45ab9c7c65214d11791c668418a5b76f820478a2ee786884",
+  "evidence_sha256": {
+    "report.json": "e3768ecf5184985d3fe4ea9a0435906d683a0894c960bf084389770f60a8a5a4",
+    "report-before-wall-normalization.json": "0e1a54b1bdedc421d77ff29449e03f9913335beadf85283001489cbbf5255fb3",
+    "original-run.log": "903a4200ec07d90e4d2683c863f0d42e88c4de6c81ef183094fe7785274e608d"
+  },
+  "historical_scratch_path": "/Volumes/Data/agent-scratch/u69-apprenticeship",
+  "retained_raw_evidence": {
+    "traced-world.json": {
+      "file": "traced-world.json.gz",
+      "uncompressed_sha256": "a7a0748cdc892a498444f1ad0b6f10ee8e21070c9a6e9240f798fdf57bb0ed09"
+    },
+    "plain-world.json": {
+      "file": "plain-world.json.gz",
+      "uncompressed_sha256": "a7a0748cdc892a498444f1ad0b6f10ee8e21070c9a6e9240f798fdf57bb0ed09"
+    },
+    "events.json": {
+      "file": "events.json.gz",
+      "uncompressed_sha256": "dcb7341f715d338361d31a06ed5d2ec1c5f7a427ce4209d9755dbd90ea1feb11"
+    }
+  }
+}

@@ -69,6 +69,7 @@ def sample(u, day):
             name: {"aware": sum(skills.knows(p,name) for p in people),
                    "qualified": sum(skills.qualified(p,name) for p in people),
                    "taught": sum(p.get('skills',{}).get(name,{}).get('teacher') is not None for p in people),
+                   "requested": sum(p.get('skills',{}).get(name,{}).get('basis') == 'requested_instruction' for p in people),
                    "practiced": sum(p.get('skills',{}).get(name,{}).get('uses',0)>0 for p in people)}
             for name,_,_,_ in skills.TECH_LADDER
         }
@@ -198,7 +199,7 @@ def main():
     for e in events:
         day, uni, kind, msg = e
         if kind in ("phase", "extinction", "reseed", "lesson", "discovery",
-                    "migration", "feud", "epidemic", "famine"):
+                    "migration", "feud", "epidemic", "famine", "culture"):
             milestones.append({"day": day, "year": day // engine.DAYS_PER_YEAR,
                                "u": uni, "t": kind, "msg": msg})
 

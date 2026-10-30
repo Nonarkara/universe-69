@@ -18,6 +18,31 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
   (now − clock.epoch) / clock.seconds` and catches up. Pace changes preserve
   ticks already due. The universes age while the process is dead.
 
+## Engine 2026.10.30.5: purposeful instruction
+
+This changes future trajectories. The `.4` seed-69 diagnostic ran only LAGOON
+for 30 years, with identical traced/plain states and events. Its sole tool-maker
+never completed a teaching conversation or tool work; fishing demonstrations
+could not bypass learners' missing tool prerequisite. These are observations
+of that code/seed, not a universal explanation of cultural loss.
+
+| Research finding / causal requirement | Mechanic | Qualification |
+| --- | --- | --- |
+| Morgan et al. (2015): instruction can improve real task production; Caldwell & Millen (2009): learning routes depend on the task | A person who actually witnesses a skilled task can remember that person's demonstrated expertise and seek instruction. Seeing fishing does not reveal the teacher's entire skill inventory. | Purposeful seeking and its utility weights are model assumptions, not experimentally calibrated prehistoric behavior. |
+| A method can depend on an unfamiliar prerequisite | At actual voluntary contact, a requested lesson can explain the first unaware prerequisite before the requested method. The fishing witness may learn tools first, then fishing on a later eligible day. | The finite prerequisite graph is predefined; this is bounded subgoal pursuit, not general planning or human intelligence. |
+| Teachers and learners have their own needs | A visible request may reopen a teacher's nonurgent choice. Teaching competes with food/rest/work, never assigns another person's action, and cannot override birth, injury, thirst or sleep. Accepted TALK meetings retain their targets rather than being relocated into a social circle. | Active seeking starts at 12 in the shared decision helper; existing childhood branches still differ between worlds. Passive observation remains available from 3. No privileged EDEN teachers or inherited personal knowledge. |
+| Location knowledge requires perception | Up to 12 detached expertise notes retain demonstrated method/day and last actually seen position/day. Only local awake sight updates positions. Pursuit uses that memory, never the global expert list or a remote current location. | Six-tile direct dry sight and four-tile contact are coarse operational geometry, not optical/acoustic models. Location freshness 30 days, pursuit 8 parts, failed-search retry 7 days are illustrative. Durable procedures do not expire with mentor locations. |
+| Instruction takes attention but is not practice | Requested and incidental verbal instruction share at most 4 unique pupils per teacher/model day. Actual-work observation uses no verbal attention slot; every learner still receives at most one new procedure/day. Frozen facts prevent instant relay. | Exposure remains .25 and actual work supplies later practice. Repeated chat cannot fabricate work, resources or mastery. |
+| The observer must distinguish intention and outcome | Existing person cards/captions show seeking/explaining. Successful requested exposure records `requested_instruction` provenance and one cultural event; logging cannot change the world. | Active goals and retained learned entries are point-in-time facts, not cumulative intelligence or a guarantee of cultural retention. |
+| Old saves cannot contain unrecorded social history | Migration defaults mentor notes, goals, offers and attention budget to independent empty containers. Newborns and reseeded founders start empty. | Existing durable skills/provenance survive unchanged; no historical mentor is invented. |
+
+Readiness uses current hunger below HUNGRY, thirst below 1, energy at least .4,
+and injury at most .45; night and urgent roles stop purposeful seeking/offers. Incidental conversation
+and actual-work observation keep their existing transfer rules. Seeking/offer
+base scores .65/.8 compete in the existing needs loop. All such thresholds
+are explicit model choices. A failed pursuit can remain a failure; the observer
+does not replace a missing teacher, grant a prerequisite or boost invention odds.
+
 ## Engine 2026.10.30.4: personal procedures and local works
 
 | Research finding / modeling choice | Mechanic | Qualification |

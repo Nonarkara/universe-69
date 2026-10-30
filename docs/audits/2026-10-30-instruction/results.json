@@ -1,0 +1,374 @@
+{
+  "engine": "2026.10.30.5",
+  "seed": 69,
+  "days": 36000,
+  "source_hashes_match": true,
+  "hash_checks": {
+    "sim/engine.py": true,
+    "sim/needs.py": true,
+    "sim/minds.py": true,
+    "sim/animals.py": true,
+    "sim/skills.py": true,
+    "sim/learning.py": true,
+    "sim/research.py": true,
+    "tools/lab.py": true
+  },
+  "arc_sha256": "d026f86c9f8a3bfc7cc05effc1965820b628df92b32aea8a224d14dfbdca526e",
+  "endpoint": {
+    "eden": {
+      "day": 36000,
+      "year": 100,
+      "pop": 456,
+      "peak": 525,
+      "gen": 6,
+      "iter": 1,
+      "phase": "exploit",
+      "extinct_day": null,
+      "knowledge": {
+        "notes": 2801,
+        "reported_notes": 20,
+        "people_with_reports": 17,
+        "max_hops": 2
+      },
+      "withdrawn": 239,
+      "homeless": 23,
+      "fertile_f": 35,
+      "competent_m": 43,
+      "ennui": 0.4
+    },
+    "lagoon": {
+      "day": 36000,
+      "year": 100,
+      "pop": 82,
+      "peak": 84,
+      "gen": 6,
+      "iter": 1,
+      "phase": "strive",
+      "extinct_day": null,
+      "knowledge": {
+        "notes": 1968,
+        "reported_notes": 0,
+        "people_with_reports": 0,
+        "max_hops": 0
+      },
+      "tech": [
+        "fire",
+        "preservation",
+        "stone_tools",
+        "fishing",
+        "shelter",
+        "predator_hunt"
+      ],
+      "procedures": {
+        "fire": {
+          "aware": 70,
+          "qualified": 33,
+          "taught": 0,
+          "requested": 0,
+          "practiced": 39
+        },
+        "stone_tools": {
+          "aware": 57,
+          "qualified": 46,
+          "taught": 57,
+          "requested": 0,
+          "practiced": 47
+        },
+        "fishing": {
+          "aware": 57,
+          "qualified": 39,
+          "taught": 57,
+          "requested": 0,
+          "practiced": 47
+        },
+        "predator_hunt": {
+          "aware": 1,
+          "qualified": 1,
+          "taught": 0,
+          "requested": 0,
+          "practiced": 0
+        },
+        "shelter": {
+          "aware": 70,
+          "qualified": 28,
+          "taught": 0,
+          "requested": 0,
+          "practiced": 34
+        },
+        "preservation": {
+          "aware": 70,
+          "qualified": 33,
+          "taught": 0,
+          "requested": 0,
+          "practiced": 49
+        },
+        "lore": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "requested": 0,
+          "practiced": 0
+        },
+        "agriculture": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "requested": 0,
+          "practiced": 0
+        },
+        "domestication": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "requested": 0,
+          "practiced": 0
+        },
+        "granary": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "requested": 0,
+          "practiced": 0
+        },
+        "seacraft": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "requested": 0,
+          "practiced": 0
+        },
+        "healing": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "requested": 0,
+          "practiced": 0
+        },
+        "metallurgy": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "requested": 0,
+          "practiced": 0
+        },
+        "writing": {
+          "aware": 0,
+          "qualified": 0,
+          "taught": 0,
+          "requested": 0,
+          "practiced": 0
+        }
+      },
+      "camp_assets": {
+        "lit_fires": 2,
+        "granaries": 0,
+        "records": 0,
+        "domestic": 0,
+        "prepared_food": 78.04
+      },
+      "tribes": 2,
+      "store": 284.0,
+      "lessons": [
+        "preserve"
+      ],
+      "continent": false,
+      "innocent": false
+    }
+  },
+  "postmortems": {
+    "eden": 0,
+    "lagoon": 0
+  },
+  "sampled_iterations": {
+    "eden": [
+      1
+    ],
+    "lagoon": [
+      1
+    ]
+  },
+  "eden_control": {
+    "all_common_columns_equal": true,
+    "columns": [
+      "competent_m",
+      "day",
+      "ennui",
+      "extinct_day",
+      "fertile_f",
+      "gen",
+      "homeless",
+      "iter",
+      "knowledge",
+      "peak",
+      "phase",
+      "pop",
+      "withdrawn",
+      "year"
+    ],
+    "rows": 101
+  },
+  "procedure_maxima": {
+    "fire": {
+      "aware": 73,
+      "qualified": 34,
+      "taught": 13,
+      "requested": 0,
+      "practiced": 39
+    },
+    "stone_tools": {
+      "aware": 57,
+      "qualified": 46,
+      "taught": 57,
+      "requested": 2,
+      "practiced": 47
+    },
+    "fishing": {
+      "aware": 57,
+      "qualified": 39,
+      "taught": 57,
+      "requested": 0,
+      "practiced": 47
+    },
+    "predator_hunt": {
+      "aware": 1,
+      "qualified": 1,
+      "taught": 0,
+      "requested": 0,
+      "practiced": 0
+    },
+    "shelter": {
+      "aware": 73,
+      "qualified": 28,
+      "taught": 0,
+      "requested": 0,
+      "practiced": 34
+    },
+    "preservation": {
+      "aware": 73,
+      "qualified": 34,
+      "taught": 8,
+      "requested": 0,
+      "practiced": 49
+    },
+    "lore": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "requested": 0,
+      "practiced": 0
+    },
+    "agriculture": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "requested": 0,
+      "practiced": 0
+    },
+    "domestication": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "requested": 0,
+      "practiced": 0
+    },
+    "granary": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "requested": 0,
+      "practiced": 0
+    },
+    "seacraft": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "requested": 0,
+      "practiced": 0
+    },
+    "healing": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "requested": 0,
+      "practiced": 0
+    },
+    "metallurgy": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "requested": 0,
+      "practiced": 0
+    },
+    "writing": {
+      "aware": 0,
+      "qualified": 0,
+      "taught": 0,
+      "requested": 0,
+      "practiced": 0
+    }
+  },
+  "requested_instruction_events": {
+    "count": 4,
+    "first": [
+      {
+        "day": 3245,
+        "year": 9,
+        "u": "LAGOON",
+        "t": "culture",
+        "msg": "Kali explains stone tools to Ganesh, as a first step toward fishing."
+      },
+      {
+        "day": 4151,
+        "year": 11,
+        "u": "LAGOON",
+        "t": "culture",
+        "msg": "Kali explains stone tools to Rama, as a first step toward fishing."
+      },
+      {
+        "day": 16585,
+        "year": 46,
+        "u": "LAGOON",
+        "t": "culture",
+        "msg": "Ganesh explains stone tools to Kaikeyi, as a first step toward fishing."
+      },
+      {
+        "day": 27926,
+        "year": 77,
+        "u": "LAGOON",
+        "t": "culture",
+        "msg": "Arjuna explains stone tools to Meera, as a first step toward fishing."
+      }
+    ],
+    "last": [
+      {
+        "day": 3245,
+        "year": 9,
+        "u": "LAGOON",
+        "t": "culture",
+        "msg": "Kali explains stone tools to Ganesh, as a first step toward fishing."
+      },
+      {
+        "day": 4151,
+        "year": 11,
+        "u": "LAGOON",
+        "t": "culture",
+        "msg": "Kali explains stone tools to Rama, as a first step toward fishing."
+      },
+      {
+        "day": 16585,
+        "year": 46,
+        "u": "LAGOON",
+        "t": "culture",
+        "msg": "Ganesh explains stone tools to Kaikeyi, as a first step toward fishing."
+      },
+      {
+        "day": 27926,
+        "year": 77,
+        "u": "LAGOON",
+        "t": "culture",
+        "msg": "Arjuna explains stone tools to Meera, as a first step toward fishing."
+      }
+    ]
+  },
+  "interpretation": "One seed; annual retained-field maxima are not cumulative learners. Culture instruction events count completed requested exposures, not mastery. Different choices change random paths; not a general survival benefit."
+}

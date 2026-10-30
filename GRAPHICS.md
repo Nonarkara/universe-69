@@ -637,3 +637,16 @@ actual job in the existing details card. Missing `camp_state` is a legacy
 snapshot: the previous fire/wall approximation remains available and is
 explicitly labelled unverified in the expanded world facts. An authoritative
 empty array or a local false value never falls back to global technology.
+
+
+### Active instruction — 2026-10-30
+
+The existing selected-person activity, canvas caption and diary read the
+snapshot's person-specific `instruction` intent. A seeker is “seeking fishing
+instruction”; a teacher is “explaining stone tools”. These describe current
+contact and intent, not completed learning or proficiency. Only known topics,
+seeking/teaching roles and a distinct positive partner ID are accepted; missing,
+empty or malformed legacy data keeps the existing activity. Instruction text
+uses the current card and caption, with no new panel. In worlds at most 700
+CSS pixels wide, the compact HUD keeps the selected name without repeating
+the full activity. This includes each half of a tablet comparison.

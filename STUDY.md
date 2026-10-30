@@ -1,6 +1,12 @@
 # STUDY — measurements from the running universes
 
-**Current version boundary.** Engine `2026.10.30.4` replaces universal
+**Current version boundary.** Engine `2026.10.30.5` adds purposeful, physically
+grounded requests for instruction, prerequisite assessment at contact and finite
+verbal attention. It changes future trajectories; all earlier arcs remain
+historical. Final `.5` measurements belong in the instruction audit and must
+match its exact source hashes. The 100-year-per-real-day clock is unchanged.
+
+**Earlier version boundary.** Engine `2026.10.30.4` replaces universal
 capabilities with person-held procedures and actual practice, and ties camp
 benefits to local works. It changes future trajectories. Old-schema working-age
 survivors keep labelled legacy capabilities; their training history is unknown.
@@ -23,6 +29,53 @@ wildlife replenishment, conception and the default clock. All earlier results
 below are historical; none is evidence for the new trajectory. The model is a
 Sri Lanka coastal-ecology analogue, not an exact island map, physical-scale
 survey, demographic prediction or guaranteed civilizational ladder.
+
+## Purposeful instruction — 2026.10.30.5
+
+Final seed 69, 36,000 model days took 974.7s on the workbench with Python 3.14.6.
+Exact input/output hashes, logs and independent review are retained under
+`docs/audits/2026-10-30-instruction/`. This includes a one-second late-run stack
+sample; elapsed time is not an isolated CPU benchmark or measured MacBook rate.
+
+| World at year 100 | Population | Peak | Highest generation | Camps | Extinctions / reseeds |
+| --- | ---: | ---: | ---: | ---: | --- |
+| EDEN | 456 | 525 | 6 | — | 0 / 0 |
+| LAGOON | 82 | 84 | 6 | 2 | 0 / 0 |
+
+All 101 common sampled EDEN rows match `.4`; the terminal year is duplicated by
+the lab's final append. Both worlds remain in iteration 1. LAGOON retains six
+historical discoveries. At year 100, tools have 57 aware/46 qualified holders;
+fishing 57/39; fire 70/33; preservation 70/33; shelter 70/28; predator hunting 1/1.
+The camps have two lit fires, 284.0 total food and 78.04 prepared units inside
+that total. No agriculture, lore, granary, livestock, seacraft or writing arose.
+
+The natural arc records exactly four requested instruction exposures:
+
+| Model day | Teacher → learner | Actually explained | Requested goal |
+| ---: | --- | --- | --- |
+| 3245 | Kali → Ganesh | Stone tools | Fishing |
+| 4151 | Kali → Rama | Stone tools | Fishing |
+| 16585 | Ganesh → Kaikeyi | Stone tools | Fishing |
+| 27926 | Arjuna → Meera | Stone tools | Fishing |
+
+These are foundational awareness exposures, not mastery, actual catches or four
+direct fishing lessons. Maximum annually sampled retained requested-tool entries
+is 2; at the endpoint it is 0. Other instruction/observation and actual practice
+carry later skill transmission. Retained teacher-linked counts do not count
+lifelong lessons or unique historical learners. The four actual recorded events
+are distinct from those point-in-time fields.
+
+The earlier `.4` outcome was 12 surviving LAGOON people with lost tools/fishing.
+The `.5` choices differ, including random draw paths, attention rules and social
+opportunities. This one-seed contrast does not isolate a population benefit or
+validate the coefficients. Neither great civilization nor millennia are proven.
+Conception's missing encounter gate is an explicit remaining causal defect,
+recorded in the instruction audit; these are toy-model results, not human forecasts.
+
+All 396 tests pass on Apple Python 3.9.6. Controlled pre-delivery seeking/teaching
+states pass 61 visual/interaction checks at 390, 1024 and 1440 px after repairing a
+19px tablet header expansion. That fixture proves intentions; the separate
+unit continuation proves delivered instruction and subsequent real harvesting.
 
 ## Personal procedures and local works — 2026.10.30.4
 

@@ -1,0 +1,57 @@
+{
+  "engine": "2026.10.30.5",
+  "full_goal_complete": false,
+  "full_suite": {
+    "python": "Apple Python 3.9.6",
+    "tests": 396,
+    "seconds": 296.655,
+    "failures": 0,
+    "log": "unittest-python39.log"
+  },
+  "focused_tests": {
+    "tests": 103,
+    "seconds": 9.391,
+    "failures": 0,
+    "log": "focused-tests.log"
+  },
+  "viewer": {
+    "widths": [
+      390,
+      1024,
+      1440
+    ],
+    "controlled_checks_per_viewport": 61,
+    "html_sha256": "5633c739e5f275d6761895c753532b0c31536c0ddfe6d2cc1195111e8fb2b731",
+    "independent_review": "independent-review.md",
+    "natural_instruction_outcomes_verified": false,
+    "natural_instruction_outcomes_scope": "Positive role screenshots are controlled pre-delivery; natural completed-exposure evidence is recorded separately."
+  },
+  "century": {
+    "seed": 69,
+    "days": 36000,
+    "seconds": 974.7,
+    "python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+    "arc_sha256": "d026f86c9f8a3bfc7cc05effc1965820b628df92b32aea8a224d14dfbdca526e",
+    "console_uncompressed_sha256": "36c5150554bcb4822c801042a4bcc28bf8c249b1565c87ed79a1de6007a2baae",
+    "console_log": "lab-36000.log.gz",
+    "requested_instruction_events": 4,
+    "interpretation": "All four are initial tool exposure as a prerequisite toward fishing, not mastery or four direct fishing lessons. One seed; changed choices also change random paths.",
+    "late_stack_sample": {
+      "file": "late-stack-sample.txt.gz",
+      "duration_seconds": 1,
+      "uncompressed_sha256": "588ed399d516fd96eb417367464575ddcf5a392b4f4e5938595061a1d4cc4031",
+      "interpretation": "One late workbench C-stack sample, not a full profile or isolated benchmark."
+    }
+  },
+  "live_state_accessed": false,
+  "macbook_throughput_verified": false,
+  "source_hashes_match": true,
+  "natural_instruction": {
+    "completed_requested_exposure_events": 4,
+    "topics": [
+      "stone_tools"
+    ],
+    "desired_goal": "fishing",
+    "scope": "Natural final century events; not mastery, direct fishing lessons or visual capture of those exact moments."
+  }
+}

@@ -21,7 +21,9 @@ Standard library only, like the engine.
 """
 
 import random
+from typing import Optional
 import skills
+import learning
 
 # The number of parts in a day. The engine owns the truth of this; it is
 # repeated here so that this module stands alone.
@@ -311,11 +313,13 @@ def capture_contact(u, p):
             or _age(u,p) < 3 or (p['x'],p['y']) != (p.get('tx'),p.get('ty'))):
         return None
     observe_sites(u,p)
-    return {'id':p['id'], 'x':p['x'], 'y':p['y'], 'skills':_skill_snapshot(p), 'notes':[
+    return {'id':p['id'], 'x':p['x'], 'y':p['y'], 'skills':_skill_snapshot(p),
+            'request':dict(p['learning']) if p.get('learning') else None,
+            'offer':dict(p['teaching']) if p.get('teaching') else None, 'notes':[
         dict(n, path=list(n.get('path',[p['id']]))) for n in p['experience']['sites']]}
 
 
-def exchange(u, contacts):
+def exchange(u, contacts, events=None):
     """One report per listener/day, using frozen contacts: never a same-part cascade.
 
     Neither inventories nor technology are consulted to verify distant claims.
@@ -389,7 +393,7 @@ def exchange(u, contacts):
             memory['sites'].remove(oldest)
         memory['sites'].append(received)
         memory['heard_on'] = day
-    _teach_frames(u, lesson_frames)
+    _teach_frames(u, lesson_frames, events)
 
 
 def observe_sites(u, p):
@@ -853,6 +857,22 @@ def assign(u, p, day, rng, cond=None, engine=None):
         options.append((want_company * 1.1 * soc * held, E.A_TALK, _home_of(u, p), None))
         options.append((want_company * 0.8 * soc * held, E.A_GROOM, _home_of(u, p), None))
 
+    study_option,teach_option,study_note,offer = None,None,None,None
+    if ready_for_instruction(u,p):
+        goal=p.get('learning')
+        candidates=([dict(goal)] if goal and u.get('parts',0) < goal['until_part']
+                    and not skills.knows(p,goal['tech']) else learning.candidate_notes(p,day))
+        if candidates:
+            study_note=min(candidates,key=lambda n:((n['x']-p['x'])**2+(n['y']-p['y'])**2,n['teacher'],n['tech']))
+            score=.65*(.7+.3*want_company)*(1.-.75*want_food)*(.4+.6*ene)
+            study_option=(score,E.A_TALK,study_target(u,p,study_note),None)
+            options.append(study_option)
+        offer=instruction_request(u,p)
+        if offer:
+            score=.8*(.7+.3*want_company)*(1.-.75*want_food)*(.4+.6*ene)
+            teach_option=(score,E.A_TALK,(p['x'],p['y']),None)
+            options.append(teach_option)
+
     craft_choice = None
     if cond.get('must_work_to_eat') and a >= 12 and at_camp(u,p):
         st = camp_of(u,p)
@@ -973,6 +993,13 @@ def assign(u, p, day, rng, cond=None, engine=None):
         best = top[min(len(top) - 1, int(rng.random() * len(top)))]
 
     score, act, target, site = best
+    if best is study_option:
+        previous=p.get('learning')
+        if not previous or (previous['teacher'],previous['tech']) != (study_note['teacher'],study_note['tech']):
+            learning.start(p,study_note,u.get('parts',0))
+    else:
+        learning.interrupt(p)
+    p['teaching']=offer if best is teach_option else None
     p.pop("was", None)        # a fresh decision replaces any paused stint
     p['craft'] = ({'skill':craft_choice,'x':target[0],'y':target[1]}
                   if craft_choice and act == E.A_WORK else None)
@@ -1488,6 +1515,10 @@ def practice_work(u: dict, p: dict, tech: str, day: int, worked: bool) -> None:
     skills.practice(p, tech, day, worked=True)
     if not skills.can_teach(p, tech):
         return
+    for q in _visible_people(u,p):
+        if (not q.get('w') and _age(u,q) >= 3
+                and q.get('a') not in (minds.A_SLEEP,minds.A_MATE,minds.A_BIRTH,minds.A_FIGHT)):
+            learning.remember_work(q,p['id'],tech,p['x'],p['y'],day)
     # Witnesses are captured now, not after a later walk or camp relocation.
     witnesses = [{'id':q['id'], 'x':q['x'], 'y':q['y'], 'skills':_skill_snapshot(q)}
                  for q in u.get('people', []) if q is not p and not q.get('w') and not q.get('ab')
@@ -1498,7 +1529,7 @@ def practice_work(u: dict, p: dict, tech: str, day: int, worked: bool) -> None:
             {'id':p['id'], 'x':p['x'], 'y':p['y'], 'skills':_skill_snapshot(p), 'topics':[tech]}, witnesses))
 
 
-def _teach_frames(u: dict, frames: list) -> None:
+def _teach_frames(u: dict, frames: list, events: Optional[list] = None) -> None:
     """Instruction grants awareness only; no practice or stock-location reveal."""
     from engine import terrain_of
     dead = (u.get('_ctx') or {}).get('dead', [])
@@ -1520,21 +1551,50 @@ def _teach_frames(u: dict, frames: list) -> None:
                 continue
             frozen_teacher = {'skills':teacher.get('skills', {})}
             frozen_listener = {'skills':listener.get('skills', {})}
+            request=listener.get('request')
+            offer=teacher.get('offer')
+            requested=(teacher.get('topics') is None and request
+                       and request['teacher'] == teacher['id'])
+            if requested:
+                if (not offer or offer.get('until_part',-1) < u.get('parts',0)
+                        or offer['student'] != pid or offer['desired'] != request['tech']
+                        or not skills.can_teach(frozen_teacher,request['tech'])):
+                    continue
+                topic=learning.missing_step(frozen_listener,request['tech'])
+                topics=[topic] if topic == offer['tech'] else []
+            else:
+                topics=[row[0] for row in skills.TECH_LADDER]
             for order,(tech,parent,_,_) in enumerate(skills.TECH_LADDER):
-                if teacher.get('topics') is not None and tech not in teacher['topics']:
+                if tech not in topics or (teacher.get('topics') is not None and tech not in teacher['topics']):
                     continue
                 if (not skills.can_teach(frozen_teacher, tech) or skills.level(frozen_listener, tech) > 0
                         or (parent is not None and not skills.knows(frozen_listener, parent))):
                     continue
-                rank = order, teacher['id']
-                if pid not in offers or rank < offers[pid][0]:
-                    offers[pid] = rank, tech, teacher
+                rank = (0 if requested else 1), order, teacher['id']
+                offers.setdefault(pid,[]).append((rank,tech,teacher,bool(requested)))
                 break
-    for pid,(_,tech,teacher) in sorted(offers.items()):
-        if skills.expose(living[pid], tech, day, teacher=teacher['id'],
-                         basis='demonstration' if teacher.get('topics') else 'instruction',
-                         origin=teacher['skills'][tech].get('origin')):
-            living[pid]['skill_day'] = day
+    for pid in sorted(offers):
+        for _,tech,teacher,requested in sorted(offers[pid],key=lambda item:item[0]):
+            verbal=teacher.get('topics') is None
+            source=living[teacher['id']]
+            if verbal and not learning.can_instruct(source,pid,day):
+                continue
+            if skills.expose(living[pid], tech, day, teacher=teacher['id'],
+                             basis=('demonstration' if not verbal else 'requested_instruction' if requested else 'instruction'),
+                             origin=teacher['skills'][tech].get('origin')):
+                living[pid]['skill_day'] = day
+                if verbal:
+                    learning.record_instruction(source,pid,day)
+                if requested and events is not None:
+                    desired=teacher['offer']['desired']
+                    message=f"{source['n']} explains {tech.replace('_',' ')} to {living[pid]['n']}"
+                    if desired != tech:
+                        message+=f", as a first step toward {desired.replace('_',' ')}"
+                    events.append((day,u['kind'],'culture',message+'.'))
+                goal=living[pid].get('learning')
+                if goal and skills.knows(living[pid],goal['tech']):
+                    learning.interrupt(living[pid])
+                break
 
 
 def perform_craft(u: dict, p: dict, day: int) -> None:
@@ -1599,3 +1659,129 @@ def perform_craft(u: dict, p: dict, day: int) -> None:
             or (tech == 'stone_tools' and skills.qualified(p,tech))):
         p['ad'] = 0
         p['craft'] = None
+
+
+# The student knows a demonstrated method exists, not the teacher's whole mind.
+def ready_for_instruction(u: dict, p: dict) -> bool:
+    import minds
+    return (_age(u,p) >= 12 and not p.get('w') and not p.get('ab')
+            and p not in (u.get('_ctx') or {}).get('dead', [])
+            and u.get('part',0) != PARTS_PER_DAY-1
+            and p.get('hun',0.) < HUNGRY and p.get('thirst',0.) < 1.
+            and p.get('ene',1.) >= .4 and p.get('inj',0.) <= .45
+            and not (p.get('due') and p['due'] <= u.get('day',0))
+            and p.get('a') not in (minds.A_BIRTH,minds.A_FIGHT,minds.A_MATE,
+                                    minds.A_TEND,minds.A_WITHDRAW))
+
+
+def _visible_people(u: dict, p: dict) -> list:
+    from engine import terrain_of
+    dead=(u.get('_ctx') or {}).get('dead',[])
+    terr=terrain_of(u) if u.get('kind') == 'LAGOON' else None
+    return [q for q in u.get('people',[]) if q is not p and q not in dead and not q.get('ab')
+            and (q['x']-p['x'])**2+(q['y']-p['y'])**2 <= SIGHT*SIGHT
+            and (terr is None or reachable_contact(terr,p,q))]
+
+
+def _request_matches(u: dict, teacher: dict, pupil: dict, desired: Optional[str] = None) -> bool:
+    """A current request after the caller has established direct local sight."""
+    import minds
+    goal=pupil.get('learning')
+    return bool(goal and goal.get('until_part',-1) > u.get('parts',0)
+                and goal['teacher'] == teacher['id'] and (desired is None or goal['tech'] == desired)
+                and pupil.get('a') == minds.A_TALK and ready_for_instruction(u,pupil)
+                and (pupil['x'],pupil['y']) == (pupil.get('tx'),pupil.get('ty'))
+                and (pupil['x']-teacher['x'])**2+(pupil['y']-teacher['y'])**2 <= CONTACT_RADIUS**2)
+
+
+def instruction_request(u: dict, teacher: dict) -> Optional[dict]:
+    """An actually nearby communicated request, assessed at contact only."""
+    import minds
+    if (not ready_for_instruction(u,teacher)
+            or not any(skills.can_teach(teacher,t) for t in teacher.get("skills",{}))):
+        return None
+    for q in sorted(_visible_people(u,teacher),key=lambda q:q['id']):
+        goal=q.get('learning')
+        if (not _request_matches(u,teacher,q)
+                or q.get('skill_day') == u.get('day',0)
+                or not skills.can_teach(teacher,goal['tech'])
+                or not learning.can_instruct(teacher,q['id'],u.get('day',0))):
+            continue
+        step=learning.missing_step(q,goal['tech'])
+        if step and skills.can_teach(teacher,step):
+            return {'student':q['id'],'tech':step,'desired':goal['tech'],
+                    'until_part':u.get('parts',0)+1}
+    return None
+
+
+def study_target(u: dict, p: dict, note: dict) -> tuple:
+    """Go beside the last sighting; a remembered person is not remotely tracked."""
+    from engine import terrain_of, dry_neighbors
+    x,y=note['x'],note['y']
+    if (x-p['x'])**2+(y-p['y'])**2 <= (CONTACT_RADIUS-1)**2:
+        return p['x'],p['y']
+    if u.get('kind') == 'LAGOON':
+        choices=list(dry_neighbors(terrain_of(u),x,y))
+        if choices:
+            return min(choices,key=lambda pos:((pos[0]-p['x'])**2+(pos[1]-p['y'])**2,pos))
+    return x,y
+
+
+def update_learning(u: dict, p: dict) -> None:
+    """Refresh only local sightings; needs and failed searches can end a pursuit."""
+    import minds
+    goal=p.get('learning')
+    teaching=p.get('teaching')
+    notes=p.get('experience',{}).get('mentors',[])
+    awake=(not p.get('w') and not p.get('ab')
+           and p.get('a') not in (minds.A_SLEEP,minds.A_BIRTH,minds.A_MATE,minds.A_FIGHT))
+    visible=_visible_people(u,p) if awake and (notes or goal or teaching) else []
+    for q in visible:
+        learning.seen_person(p,q['id'],q['x'],q['y'],u.get('day',0))
+    if goal:
+        stop=False
+        if p.get('a') != minds.A_TALK or not ready_for_instruction(u,p):
+            learning.interrupt(p);stop=True
+        elif skills.knows(p,goal['tech']):
+            learning.interrupt(p);stop=True
+        elif u.get('parts',0) >= goal['until_part']:
+            learning.fail(p,u.get('day',0));stop=True
+        else:
+            seen=next((q for q in visible if q['id'] == goal['teacher']),None)
+            if seen is not None:
+                goal.update(x=seen['x'],y=seen['y'])
+                p['tx'],p['ty']=study_target(u,p,goal)
+            elif (p['x'],p['y']) == (p.get('tx'),p.get('ty')):
+                learning.fail(p,u.get('day',0));stop=True
+        if stop and p.get('a') == minds.A_TALK:
+            p['ad']=0;p['tx'],p['ty']=p['x'],p['y']
+    if teaching:
+        pupil=next((q for q in visible if q['id'] == teaching['student']
+                    and _request_matches(u,p,q,teaching['desired'])),None)
+        # An offer covers its chosen TALK part and the following part, inclusive.
+        if (p.get('a') != minds.A_TALK or not ready_for_instruction(u,p) or pupil is None
+                or u.get('parts',0) > teaching['until_part']):
+            p['teaching']=None
+    # A request is a reason to reconsider one's own nonurgent activity. It
+    # never assigns an activity or destination to the other participant.
+    if (p.get('a') in (minds.A_REST,minds.A_WATCH,minds.A_TALK)
+            and not p.get('learning') and not p.get('teaching')
+            and instruction_request(u,p) is not None):
+        p['ad']=0;p['tx'],p['ty']=p['x'],p['y']
+
+
+def instruction_state(u: dict, p: dict) -> Optional[dict]:
+    """Observer labels describe an active intention, never acquired competence."""
+    import minds
+    if (p.get('a') != minds.A_TALK or not ready_for_instruction(u,p)):
+        return None
+    goal=p.get('learning')
+    if goal and u.get('parts',0) < goal['until_part']:
+        return {'role':'seeking','tech':goal['tech'],'other':goal['teacher']}
+    offer=p.get('teaching')
+    if (offer and u.get('parts',0) <= offer['until_part']
+            and (p['x'],p['y']) == (p.get('tx'),p.get('ty'))
+            and any(q['id'] == offer['student'] and _request_matches(u,p,q,offer['desired'])
+                    for q in _visible_people(u,p))):
+        return {'role':'teaching','tech':offer['tech'],'other':offer['student']}
+    return None

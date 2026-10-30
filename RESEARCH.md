@@ -251,3 +251,16 @@ required teacher counts, forgetting constants or survival multipliers.
 Those are explicit model choices. The tool-making experiment informs a
 hypothesis about teaching and language evolution; it does not establish the
 historical sequence or validate the simulation's technological ladder.
+
+
+**Implementation distinction (engine 2026.10.30.5).** The existing task evidence
+supports separating instruction from real practice; it does not establish that
+prehistoric people used this model's prerequisite graph, mentor list, request
+utility, age gate, sight radius, attention budget or search deadline. Purposeful
+seeking is an explicit candidate mechanism. A fishing observer may ask the
+actual expert and receive foundational tool instruction through a voluntary
+conversation; neither seeing fishing nor asking can grant tool competence.
+Failure to locate or engage a teacher remains possible. Interpret measured
+transmission under this mechanism separately from artifact learning, incidental
+conversation and practical production. One successful controlled lesson does
+not establish population-level cultural accumulation or a survival benefit.

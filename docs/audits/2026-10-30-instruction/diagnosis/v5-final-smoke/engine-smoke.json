@@ -1,0 +1,24 @@
+{
+  "engine": "2026.10.30.5",
+  "parts": 400,
+  "day": 100,
+  "elapsed_seconds": 1.2455105000000002,
+  "populations": {
+    "eden": 16,
+    "lagoon": 16
+  },
+  "events": 1,
+  "plain_json": true,
+  "source_unchanged": true,
+  "sources": {
+    "sim/minds.py": "f9f5451418bc39cc9830bdc3ac5a3f4d98762ab7c2a4305fe977e9e0db68b12f",
+    "sim/server.py": "5e1bfe65ed3a37e8695c190bc8764fe98d6986108c877fead8c4bbf87cf44f4d",
+    "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "sim/needs.py": "eaefd929a409890138690fb9081d5c8be2523219ab5257a33abfef26daf66dfb",
+    "sim/historian.py": "ad0728651b5f6b326fc02cc05ab2c112dfe34506e1ba1af81dacfa3541f30c69",
+    "sim/engine.py": "4f9c8f9e3bac6f35faf9622f1088bee999abf73a56abd4f3a64e6340111186f3",
+    "sim/animals.py": "5622b0910d185da4e9c8b6f680ce87a1feada111fb5505b483bd3de563864577",
+    "sim/learning.py": "b83ddb2818f8e4675eaebc7f0f38526d08aa4ad06e595ef075f1464bad99a5ff"
+  }
+}
