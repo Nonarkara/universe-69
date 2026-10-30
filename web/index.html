@@ -473,7 +473,7 @@ function snowAmount(x,y){
   var fine=hash2(x*13+3,y*17+5);
   return coarse*0.72+fine*0.28;
 }
-var GROUND_MAX=4096;                         // the largest offscreen ground, in device px
+var GROUND_MAX=8192;                         // the largest offscreen ground, in device px
 function groundStep(ts){ return Math.pow(2, Math.ceil(Math.log(ts)/Math.LN2*4)/4); }
 function drawGround(g, key, world, u, sx, sy, hx, hy, W, H){
   var S=world.S, ts=W/(2*hx), tb=groundStep(ts), gr=ground[key], sig=world.sig(u);
@@ -1845,7 +1845,7 @@ function figureSprite(a, act, bucket, moving, s, dress, bedding){
   // cache key when zoomed in; crowds share sprites and stay cheap. The key
   // fixes everything the drawing reads, so a cached figure is never someone
   // else's body.
-  var sq = s>=2 ? Math.round(s) : Math.round(s*8)/8;
+  var sq = Math.max(1.5, s>=2 ? Math.round(s) : Math.round(s*8)/8);
   var vk = s>=2 ? (a.v%20) : (s>=1.25 ? (a.v%4) : 0);
   var bk = s>=1.25 ? bucket : Math.floor(bucket/4)*4;
   var B=bodyOf(a), wk=(act===A_WITHDRAW)?(a.wk||0):0;
@@ -1856,8 +1856,9 @@ function figureSprite(a, act, bucket, moving, s, dress, bedding){
   if (sp) return sp;
   var cap = sq>=3 ? 420 : 1400;
   if (spriteCount>cap){ spriteCache={}; spriteCount=0; }
-  var W=Math.ceil(40*sq), H=Math.ceil(40*sq);
+  var W=Math.ceil(60*sq), H=Math.ceil(60*sq);
   var c=mkCanvas(W,H), g=c.getContext("2d");
+  g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
   drawSketch(g, W/2, H-2*sq, sq, act, bk/(moving?WALK_BUCKETS:12)+(moving?0:0.02), moving, vk, B, a.sex, dress, wk, view, bedding);
   sp={c:c, w:W, h:H, s:sq, view:view}; spriteCache[key]=sp; spriteCount++;
   return sp;
@@ -2303,6 +2304,7 @@ function render(canvas, world, map, key, u){
   var sx=Math.max(0,Math.min(S-2*hx,c.x-hx)), sy=Math.max(0,Math.min(S-2*hy+coveredTiles,c.y-hy));
   view[key]={sx:sx,sy:sy,hx:hx,hy:hy,S:S,canvas:canvas,ts:canvas.width/(2*hx)};
   var g=canvas.getContext("2d");
+  g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
   g.fillStyle=P.surface; g.fillRect(0,0,canvas.width,canvas.height);
   drawGround(g, key, world, u, sx, sy, hx, hy, canvas.width, canvas.height);
   var ts=canvas.width/(2*hx);

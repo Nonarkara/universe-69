@@ -119,7 +119,7 @@ class TestTheResolution(unittest.TestCase):
         body = src.split("function figureSprite(")[-1].split("function ")[0]
         m = re.search(r"Math\.ceil\((\d+)\*sq\)", body)
         self.assertIsNotNone(m)
-        self.assertEqual(int(m.group(1)), 40)
+        self.assertEqual(int(m.group(1)), 60)
 
 
 class TestOneScreen(unittest.TestCase):
