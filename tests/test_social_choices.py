@@ -149,7 +149,7 @@ class TestSocialChoices(unittest.TestCase):
         self.assertNotEqual(self.choose(self.p),engine.A_TEND)
 
     def test_helper_must_be_arrived_awake_and_not_urgently_exhausted(self):
-        from test_procedural_world import grant
+        from tests.test_procedural_world import grant
         self.u.update(kind='LAGOON')
         self.u['settlements'] = [dict(x=10,y=10,r=5,store=500.,water=100.,mouths=2)]
         grant(self.p,'healing')

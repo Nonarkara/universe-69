@@ -222,7 +222,8 @@ class TestProceduralWorld(unittest.TestCase):
         self.assertEqual(p['skills']['fishing']['basis'],'legacy_global_capability')
         self.assertFalse(skills.can_teach(p,'fishing'))
         self.assertEqual(child['skills'],{})
-        with tempfile.TemporaryDirectory(dir='/Volumes/Data/agent-scratch') as d:
+        from tests.scratch_space import scratch_root
+        with tempfile.TemporaryDirectory(dir=scratch_root()) as d:
             path=d+'/fixture.json'
             engine.save_state(w,path)
             restored=engine.load_state(path)

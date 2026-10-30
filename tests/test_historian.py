@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), "sim
 import engine
 import historian
 
-from scratch_space import scratch_root
+from tests.scratch_space import scratch_root
 SCRATCH = scratch_root()
 
 

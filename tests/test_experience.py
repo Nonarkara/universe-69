@@ -11,7 +11,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'sim'))
 import engine
 import needs
-from scratch_space import scratch_root
+from tests.scratch_space import scratch_root
 
 
 class TestExperience(unittest.TestCase):

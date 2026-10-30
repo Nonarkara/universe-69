@@ -3,7 +3,7 @@ import copy
 import random
 import unittest
 from unittest.mock import patch
-from test_procedural_world import grant
+from tests.test_procedural_world import grant
 import engine
 import learning
 import needs
@@ -238,7 +238,7 @@ class TestInstructionContinuation(unittest.TestCase):
         import json
         from pathlib import Path
         import tempfile
-        from scratch_space import scratch_root
+        from tests.scratch_space import scratch_root
         spec=importlib.util.spec_from_file_location('instruction_fixture',Path(__file__).resolve().parents[1]/'tools/controlled_instruction.py')
         fixture=importlib.util.module_from_spec(spec);spec.loader.exec_module(fixture)
         with tempfile.TemporaryDirectory(dir=scratch_root()) as d:
