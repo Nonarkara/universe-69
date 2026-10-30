@@ -2,6 +2,8 @@
 
 Verified against primary and secondary sources, October 2026. Inline numbers refer to the References list at the end.
 
+Sections 6–8 (Slingerland *Drunk*, Malinowski *Argonauts*, Dower *War without Mercy*) added from BOOKS.md third-pass reading notes. These books were gaps in the original shelf reading and are now integrated into the verified secondary literature.
+
 **Current fertility abstraction — engine 2026.10.30.7.** Completed mutual
 encounters supply binary exposed calendar days. One outcome trial after the
 ovulation day uses the best exposed day's clinical-pregnancy benchmark; it is
@@ -95,6 +97,108 @@ The experiments contrast provisioned material security with social-role constrai
 
 ---
 
+## 6. Slingerland, *Drunk: How We Sipped, Danced, and Stumbled Our Way to Civilization* (2021)
+
+Intoxication as a **technology for binding people** — and the book that makes
+the model's night watch legible.
+
+**Intoxication suppresses prefrontal control.** Alcohol lowers executive function,
+and a less-controlled person is *more* trusted and more open. In laboratory
+settings (Sayette 2012), alcohol raises group-level positive affect and
+self-reported bonding, and the effect is pharmacological, not expectancy.
+Smiles spread further in drinking groups, with the contagion strongest in
+male-dominated groups [16].
+
+**The night watch as group vigilance.** Drinking in a group protects against
+the risk alcohol creates: the group watches one another's backs, and a solitary
+drinker is the one in trouble. The model's night watch — one adult per camp
+standing guard while the band sleeps — uses this group-vigilance analogy: the
+turn taken on watch is what makes the night safe for everyone else. The book
+says the group moderates the drinker, not that it watches for predators; the
+analogy is a model choice, not a measured result [16].
+
+**Violence and intoxication.** Alcohol is the only drug but pure stimulants that
+reliably *increases* physical aggression, and it does so in those already
+predisposed. A low-self-control band that gathers is a band whose fights are
+worse. Distillation is a quantum leap in alcohol content: 9,000 years of weak
+beer, then brandy — a technology with a threshold changes the world, not just
+the drinker [16].
+
+**Caveat.** Laboratory findings on social drinkers, not ethnography. The
+pharmacological bonding effect is one study (Sayette 2012). The night-watch
+analogy is a model choice.
+
+---
+
+## 7. Malinowski, *Argonauts of the Western Pacific* (1922)
+
+The founding text of how a working anthropology actually looks at work, magic
+and obligation. The Trobriand Islanders are the people studied.
+
+**The kula.** A long-distance ceremonial exchange: shell necklaces travel one
+way, armbands the other, forever. The gifts are not useful; the obligation is
+the point. A `kula` mechanic would have bands exchange a surplus good in
+opposite directions, and the exchange itself raises the standing of both. Not
+on the tech ladder yet — a candidate for future work. The kula gives the
+tribes a reason to stay in contact rather than only to fission.
+
+**Magic as practical response.** Gardening magic, war magic, healing magic —
+each answers a real worry with a ritual. Every disaster the model already has
+gets a myth; magic is the *response* to a fear, not a cause. The model has
+the response (myths are recorded on disasters), not the worry.
+
+**Dual principles.** The same people hold two principles at once — the
+*competitive* and the *tolerant* — and switch between them by context. A band
+is competitive with strangers and tolerant inside. The violence model needs
+both, not one.
+
+**Division of labour and apprenticeship.** Crafts and trades emerge from what
+a band must have, not from a tech list. Skill is taught because the exchange
+needs it.
+
+**The observer's stance.** The ethnographer works among people who do not know
+they are being studied, and the observer's "rational" explanations are often
+theirs too. A model's hypotheses should be testable by the world — which is
+what the RESEARCH panel now does.
+
+**Caveat.** Ethnography of one society (Trobriand Islanders), early 20th
+century. The kula is not implemented; it is a candidate mechanic.
+
+---
+
+## 8. Dower, *War without Mercy: Race and Power in the Pacific War* (1986)
+
+The violence chapter's missing half: how a group comes to treat people as
+things.
+
+**Dehumanisation is a mechanism, not a metaphor.** It widens the psychological
+distance that makes killing possible, and it reaches the planners, not only
+the soldiers. Being treated as *the other* lowers the threshold for lethal
+violence, for the band as well as for the observer.
+
+**Nonhuman metaphors.** Vermin, insects, herd — these become routine idioms,
+and once routine they are hard to dislodge. A name that turns into a category:
+once a kind of person is a *kind*, the violence against them becomes
+administration. This applies to both worlds: in EDEN, the placeless become
+"surplus"; in LAGOON, a tribe that loses a feud becomes "the other".
+
+**Atrocity and hate feed each other.** A feud that escalates is not a sum of
+grievances but a loop; the grudge decay rate may be too kind. The model's
+grudge decays ~8%/yr — Dower suggests the fuse is longer and the resurfacing
+is delayed.
+
+**Burial of memory.** Most combatants who survived chose not to remember, and
+buried it; the past resurfaces only years later. Unresolved violence has a long
+fuse. The model's `grudge` and `gd` (grudge held against a person) capture
+this partially but do not model the delayed resurfacing.
+
+**Caveat.** War, not a forager band. The dehumanisation mechanic is a
+candidate for future work — a kind of person that the record turns into a
+category, so that killing them becomes routine. It needs calibration in
+`tools/lab.py` before it goes near `DESIGN.md`.
+
+---
+
 ## Corrections from the October 2026 reading of the primaries
 
 - Ramsden & Adams are historians: they *report* Calhoun's own view that design, not density, drove the pathology; they do not test it. Their main argument is that popular retellings reduced the work to "crowding causes madness" and ignored Calhoun's cure: more rooms, controlled contact, and the "creative deviants" among the withdrawn [4].
@@ -119,6 +223,9 @@ The experiments contrast provisioned material security with social-role constrai
 13. Wikipedia, "Sapiens: A Brief History of Humankind." https://en.wikipedia.org/wiki/Sapiens:_A_Brief_History_of_Humankind
 14. Harari, Y.N. *Sapiens* (2014), chs. 1–5 (cognitive revolution, gossip theory, ~150 threshold, "history's biggest fraud," luxury trap) — summarized per [13].
 15. Wikipedia, "Guns, Germs, and Steel." https://en.wikipedia.org/wiki/Guns,_Germs,_and_Steel
+16. Slingerland, E. (2021). *Drunk: How We Sipped, Danced, and Stumbled Our Way to Civilization.* Little, Brown Spark.
+17. Malinowski, B. (1922). *Argonauts of the Western Pacific: An Account of Native Enterprise and Adventure in the Archipelagoes of Melanesian New Guinea.* George Routledge & Sons.
+18. Dower, J.W. (1986). *War without Mercy: Race and Power in the Pacific War.* Pantheon Books.
 
 
 ## Tropical island analogue — 2026-10-30

@@ -179,3 +179,8 @@ which would give the tribes a reason to stay in contact rather than only to
 fissile), and the **dehumanisation** mechanic (a kind of person that the
 record turns into a category, so that killing them becomes routine). Both
 need to be calibrated in `tools/lab.py` before they go near `DESIGN.md`.
+
+**Integration status (2026-10-31).** These three books are now integrated into
+`RESEARCH.md` (sections 6–8) as verified secondary literature, with references
+[16]–[18]. The candidate mechanics remain in `BOOKS.md` above; they are not
+yet in `DESIGN.md` or the engine.
