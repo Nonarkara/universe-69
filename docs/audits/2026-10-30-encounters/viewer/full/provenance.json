@@ -1,0 +1,8 @@
+{
+  "kind": "CONTROLLED/SYNTHETIC fixture, not natural trajectory",
+  "fixture": "../fixtures/eden-nonbond-contact.json",
+  "sourceHTMLSHA256": "529d0594fae4248fcb915154bd2e26a2c584eecd1d3f4e92174251f1c7194a19",
+  "description": "Full reader/control/motion journey uses the same explicitly positioned nonbonded EDEN contact fixture as focused proof. No natural-run inference applies to these screenshots.",
+  "command": "python3 full/verify_capture.py URL --fixture FIXTURE --interact --wait 1 --tag frozen --out SCRATCH",
+  "label": "Harness changes masthead text to CONTROLLED before captures; response HTML and logic remain actual shipped source."
+}

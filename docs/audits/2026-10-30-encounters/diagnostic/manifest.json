@@ -1,0 +1,10 @@
+{
+  "scope": "Exact retained reviewer diagnostic artifacts; EDEN-only seed69 ten model years, not final century or live instrument",
+  "python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "artifacts": {
+    "trace_contacts.py": "4c6cac598af825a715dc98e07c74bf5b8acc4e2fbf52c1c88a72e2bd2006a7e2",
+    "contacts-10yr.json": "e1f481cfe2888ad456144cad979895b060ba298caebd232d3ef795a35b1b9fa4",
+    "social-red.log": "492a31adeebe3dcb33bcd9a6fa62258a45aa34e686f8aee52a7009068ebef1f5",
+    "social-focused.log": "f469ccad9282d8e62cf70b5782a16df4499c2c43a10f46b410814352b69f21ed"
+  }
+}

@@ -9,6 +9,7 @@ import os
 import random
 import sys
 import unittest
+from unittest.mock import patch
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "sim"))
@@ -208,20 +209,25 @@ class TestFounders(unittest.TestCase):
                              "a world has no names at the beginning")
 
     def test_the_first_child_is_the_first_name_anyone_gives(self):
-        import random
-        w = engine.genesis(69)
+        # Pin naming to an actual birth, not an arbitrary seed's former
+        # unconditional pregnancy hazard producing a child within 2000 days.
         for kind in ("eden", "lagoon"):
-            u = w[kind]
-            self.assertFalse(u.get("named"))
-            events = []
-            for _ in range(2000 * engine.PARTS_PER_DAY):
-                engine.tick_world(w, events)
-                if u.get("named"):
-                    break
-            self.assertTrue(u.get("named"),
-                            f"{kind} never gave anyone a name")
-            self.assertTrue(any("first child is named" in e[3] for e in events),
-                            f"{kind} named a child without saying so")
+            with self.subTest(kind=kind):
+                u = engine.genesis(69)[kind]
+                self.assertFalse(u.get("named"))
+                mother = next(p for p in u['people'] if p['s'] == 'f')
+                u['day'], u['part'], u['parts'] = 1, 1, 5
+                mother['due'], mother['mc'] = 1, False
+                events = []
+                rng = random.Random(69)
+                tick = engine.tick_eden if kind == 'eden' else engine.tick_lagoon
+                with patch.object(rng, 'random', return_value=.99):
+                    tick(u, rng, events)
+                self.assertTrue(u.get("named"))
+                children = [p for p in u['people'] if p.get('mom') == mother['id']]
+                self.assertEqual(len(children), 1)
+                self.assertTrue(any("first child is named " + children[0]['n'] in e[3]
+                                    for e in events))
 
 
 if __name__ == "__main__":

@@ -144,8 +144,12 @@ stride follows actual leg size and distance travelled, with a shared stance
 law and frame-rate-independent movement. Sleeping arms now reach their pose,
 bedrolls fit their bodies, and age changes invalidate the sprite cache.
 
-Engine `2026.10.30.5` changes future trajectories through purposeful instruction
-from actually witnessed experts. The `.4` personal procedures, practice and local
+Engine `2026.10.30.6` changes future trajectories: pregnancy requires an actual
+mutual encounter, each person chooses their own response, and actual paternity
+is retained independently of later bonds. Labour becomes visible before delivery.
+The existing fertility coefficients are now contact-conditional assumptions,
+not calibrated per-act rates. The `.5` purposeful instruction from actually
+witnessed experts remains. The `.4` personal procedures, practice and local
 camp works remain. The `.3` contact-based resource sharing remains. The `.2` personal memory, maturation and nursing
 corrections remain in force;
 the earlier `2026.10.30.1` resource changes remain in force. The century-per-day clock
@@ -172,9 +176,9 @@ reseeded founders do not inherit another person's memories.
 
 Completed conversations/grooming now pass bounded resource reports with the
 original observer/date, sender and relay path. Retelling does not refresh old
-information or grant personal harvesting experience. Reports can be stale;
-technology knowledge still remains world-shared, and general cognition is
-unimplemented. Both worlds use the same contact policy.
+information or grant personal harvesting experience. Reports can be stale. This sharing carries resource beliefs; procedures follow
+the personal learning rules below. General cognition remains unimplemented.
+Both worlds use the same contact policy.
 
 
 Historical technology is now a discovery record. Individuals learn procedures
@@ -191,3 +195,9 @@ location and request instruction. The teacher chooses against their own needs.
 Missing foundations are taught at real contact; awareness still needs practice.
 The existing person card shows the intention, while successful instruction
 enters the record. See [the instruction audit](docs/audits/2026-10-30-instruction/README.md).
+
+
+The encounter audit fixes remote conception, forced partner actions and phantom
+coupled poses. Its fresh century trial emptied both worlds, exposing the
+remaining fertility time-basis problem. This is a verified causal/UI increment,
+not a validated civilization simulation. See [the encounter audit](docs/audits/2026-10-30-encounters/README.md).

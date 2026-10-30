@@ -1,0 +1,52 @@
+{
+  "engine": "2026.10.30.5",
+  "purpose": "Deterministic direct hazard probe; forced probability tests eligibility only, NOT population forecast",
+  "cases": [
+    {
+      "case": "remote_sleeping_father",
+      "conceived": true,
+      "father_values": [
+        0.46945717162000467,
+        0.3971250127792261,
+        0.11856335090253672
+      ],
+      "mother_action": 0
+    },
+    {
+      "case": "father_aboard_mother_ashore",
+      "conceived": true,
+      "father_values": [
+        0.46945717162000467,
+        0.3971250127792261,
+        0.11856335090253672
+      ],
+      "mother_action": 0
+    },
+    {
+      "case": "missing_paired_father",
+      "conceived": true,
+      "father_values": null,
+      "mother_action": 0
+    },
+    {
+      "case": "eden_global_sleeping_father",
+      "conceived": true,
+      "father_values": [
+        0.46945717162000467,
+        0.3971250127792261,
+        0.11856335090253672
+      ]
+    }
+  ],
+  "sources": {
+    "/Volumes/Data/Projects/Universe69/sim/minds.py": "f9f5451418bc39cc9830bdc3ac5a3f4d98762ab7c2a4305fe977e9e0db68b12f",
+    "/Volumes/Data/Projects/Universe69/sim/server.py": "5e1bfe65ed3a37e8695c190bc8764fe98d6986108c877fead8c4bbf87cf44f4d",
+    "/Volumes/Data/Projects/Universe69/sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555",
+    "/Volumes/Data/Projects/Universe69/sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "/Volumes/Data/Projects/Universe69/sim/needs.py": "eaefd929a409890138690fb9081d5c8be2523219ab5257a33abfef26daf66dfb",
+    "/Volumes/Data/Projects/Universe69/sim/historian.py": "ad0728651b5f6b326fc02cc05ab2c112dfe34506e1ba1af81dacfa3541f30c69",
+    "/Volumes/Data/Projects/Universe69/sim/engine.py": "4f9c8f9e3bac6f35faf9622f1088bee999abf73a56abd4f3a64e6340111186f3",
+    "/Volumes/Data/Projects/Universe69/sim/animals.py": "5622b0910d185da4e9c8b6f680ce87a1feada111fb5505b483bd3de563864577",
+    "/Volumes/Data/Projects/Universe69/sim/learning.py": "b83ddb2818f8e4675eaebc7f0f38526d08aa4ad06e595ef075f1464bad99a5ff"
+  }
+}

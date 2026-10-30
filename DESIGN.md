@@ -18,6 +18,40 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
   (now − clock.epoch) / clock.seconds` and catches up. Pace changes preserve
   ticks already due. The universes age while the process is dead.
 
+## Engine 2026.10.30.6: embodied reproductive contact
+
+This changes future trajectories, including an already-running instrument.
+The previous unconditional pregnancy hazard could select a remote, sleeping or
+missing father. Earlier population arcs do not predict this version.
+
+| Causal requirement / source | Mechanic | Qualification |
+| --- | --- | --- |
+| Reproduction requires actual reproductive exposure; Wilcox et al. (1995), RESEARCH | Pregnancy trials require a frozen simultaneous mutual mate encounter, captured before activity reassignment. Both participants must actually arrive at their own reciprocal same-session target, on adjacent connected dry ground. | Same-part attribution omits ovulation, sperm persistence and fertile windows. Completion is an operational event boundary, not a clinical act duration. |
+| Each participant acts independently | A local invitation changes only its initiator. A recipient may reconsider a nonurgent task but scores their own food, water, energy, work and company needs. An invitation is not acceptance. | Existing grooming weights remain. Mating additionally reads a personal intimacy need. Single LAGOON adults can now score the same mate option as paired adults, because global automatic pairing is removed. Choices are a bounded utility model, not human consent or general cognition. |
+| Bonds and actual parentage differ | LAGOON singles form a reciprocal bond only at actual mutual contact. EDEN encounters create no permanent bond. Successful conception stores actual father ID and detached hereditary values; children keep that father even if the social bond changes. | Known direct parents/shared parents are excluded from mate candidates; this is a rule over recorded relationships, not a population genetics model. Old pregnancies retain their old hereditary values with unknown father ID. |
+| One interaction cannot fabricate repeated independent trials | Same-part records are limited to one trial per mother, after casualties. Reassignment after a real contact does not erase it; death, withdrawal or departure before resolution prevents a trial. | The old 1/180 and 1/240 daily coefficients are still divided by four, now conditional on actual contact. This changes effective fertility and is **not** a calibrated per-intercourse probability. No parameter is increased to guarantee survival. |
+| Kin recognition / sexual aversion studied by Lieberman et al. (2007), RESEARCH | Recorded direct parents and shared parents exclude a mate candidate. | A categorical design approximation. The engine does not infer kinship from maternal association or co-residence, model genetic load, or claim a universal cultural rule. Perceived kinship remains future work. |
+| Labour precedes delivery; WHO (2020), RESEARCH | One model day before an expected surviving delivery, the mother stops at her actual dry position in BIRTH. Nearby people independently score help; no helper is assigned by the mother. Delivery still occurs when due, with existing hazards. | One day is an illustrative visibility budget, not universal clinical labour duration. Actual qualified arrived healing help retains its existing benefit; a missing/refusing helper cannot postpone delivery. |
+| The picture must distinguish an invitation from a completed encounter | Existing scene and person information use current reciprocal contact, separately from permanent partner identity. | No extra panel, observer intervention or claim of biologically validated movement is introduced. |
+
+The old mate utility was structurally unable to enter the 85% choice band for
+EDEN roleholders: work or food always won. A separate personal `intimacy` need
+now grows from zero by 1/7 per model day (divided across four parts) for adults,
+capped at one. It adds 1.5 times that need to the old mate score, under the same
+hunger/energy/ennui factors and both partners' availability. Actual completed
+mutual contact alone resets it. Seven days and weight 1.5 are explicit
+motivational hypotheses, not fitted libido, intercourse frequency or birth
+rates; neither rejection nor a distant bond can satisfy it. Children start at
+zero and do not accumulate adult desire. Work cannot permanently exclude this
+option, and desire cannot force another body to accept.
+
+Persistent additions `social`, `pregnancy_father`, `dad` and `groom_day` default
+to `None`, and `intimacy` to zero, for new people and legacy saves. No historical intercourse or paternity is invented.
+The 100-year-per-real-day clock, island resources and anatomy rig are unchanged.
+The versioned encounter audit measures one bounded century: both worlds die
+out, exposing the uncalibrated conception time basis. This is an unresolved
+model limitation, not ecological validation or an inevitable human outcome.
+
 ## Engine 2026.10.30.5: purposeful instruction
 
 This changes future trajectories. The `.4` seed-69 diagnostic ran only LAGOON

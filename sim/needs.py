@@ -24,6 +24,7 @@ import random
 from typing import Optional
 import skills
 import learning
+import encounters
 
 # The number of parts in a day. The engine owns the truth of this; it is
 # repeated here so that this module stands alone.
@@ -43,6 +44,8 @@ ENERGY_PER_WORK = 0.055  # a day of work costs this much
 ENERGY_PER_TRAVEL = 0.012
 ENERGY_PER_SOCIAL = 0.008
 SLEEP_PER_PART = 0.2     # one night's sleep gives back three days of work
+INTIMACY_DAYS = 7.0     # illustrative time to full personal social urgency
+INTIMACY_WEIGHT = 1.5   # competes with work; not a fitted reproductive rate
 SOLITUDE_PER_DAY = 0.05  # isolation, if you are alone
 SOLITUDE_CROWDED = 0.02  # and the pressure of too many people, if you are not
 
@@ -312,6 +315,11 @@ def capture_contact(u, p):
     if (p.get('a') not in (minds.A_TALK, minds.A_GROOM) or p.get('w') or p.get('ab')
             or _age(u,p) < 3 or (p['x'],p['y']) != (p.get('tx'),p.get('ty'))):
         return None
+    if p.get('a') == minds.A_GROOM:
+        from engine import terrain_of
+        terrain = terrain_of(u) if u.get('kind') == 'LAGOON' else None
+        if encounters.capture(u,p,{q['id']:q for q in u.get('people',[])},u.get('parts',0),terrain) is None:
+            return None
     observe_sites(u,p)
     return {'id':p['id'], 'x':p['x'], 'y':p['y'], 'skills':_skill_snapshot(p),
             'request':dict(p['learning']) if p.get('learning') else None,
@@ -531,6 +539,8 @@ def meters(u, p, day, rng, cond):
     # divided by the number of parts in a day. (This is the bug that made
     # LAGOON starve in its ninth year, in a different engine.)
     D = PARTS_PER_DAY
+    p['intimacy'] = (min(1.,max(0.,p.get('intimacy',0.))+1./(INTIMACY_DAYS*D))
+                     if _age(u,p) >= 16 else 0.)
 
     # hunger: it comes back whether or not the world is kind
     hun += HUNGER_PER_DAY * (1.0 + 0.6 * _workload(u, p)) / D
@@ -730,6 +740,78 @@ def night(u, p, rng, part):
 
 # ---- the decision --------------------------------------------------------
 
+def _social_person(u, p, kind):
+    """A visible incoming offer is information, never another body's choice."""
+    from engine import terrain_of
+    if not encounters.available(u,p,kind):
+        return None
+    terrain = terrain_of(u) if u.get('kind') == 'LAGOON' else None
+    people = encounters.candidates(u,p,u.get('people',[]),kind,terrain)
+    if kind == 'mate':
+        people = [q for q in people if _age(u,q) <= 45]
+    else:
+        minimum = 12 if u.get('kind') == 'LAGOON' else 16
+        people = [q for q in people if _age(u,q) >= minimum]
+        if u.get('kind') == 'LAGOON':
+            people = [q for q in people if q['id'] in (p.get('p'),p.get('mom'),p.get('dad'))
+                      or q.get('mom') == p['id'] or q.get('dad') == p['id']]
+    if not people:
+        return None
+    incoming = encounters.offer(u,p,{q['id']:q for q in people},kind,terrain)
+    return incoming or min(people,key=lambda q:((q['x']-p['x'])**2+(q['y']-p['y'])**2,q['id']))
+
+
+def _social_target(u, p, q, kind):
+    """Choose one's own dry place beside a locally observed meeting target."""
+    from engine import terrain_of, dry_neighbors, same_land, eden_size
+    incoming = q.get('social')
+    anchor = (incoming['target'] if incoming and incoming['kind'] == kind
+              and incoming['other'] == p['id'] else [q['x'],q['y']])
+    point = {'x':anchor[0],'y':anchor[1]}
+    terrain = terrain_of(u) if u.get('kind') == 'LAGOON' else None
+    if ((p['x']-point['x'])**2+(p['y']-point['y'])**2 <= encounters.CONTACT_SQUARED
+            and (terrain is None or reachable_contact(terrain,p,point))):
+        return p['x'],p['y']
+    if terrain is not None:
+        choices = [xy for xy in dry_neighbors(terrain,*anchor)
+                   if same_land(terrain,p['x'],p['y'],*xy)]
+    else:
+        n = eden_size(u)
+        choices = [(anchor[0]+dx,anchor[1]+dy) for dx,dy in ((-1,0),(1,0),(0,-1),(0,1))
+                   if 0 < anchor[0]+dx < n-1 and 0 < anchor[1]+dy < n-1]
+    return min(choices,key=lambda xy:((xy[0]-p['x'])**2+(xy[1]-p['y'])**2,xy)) if choices else None
+
+
+def update_social(u, p):
+    """An offer can reopen only this actor's own nonurgent decision."""
+    import minds
+    from engine import terrain_of
+    terrain = terrain_of(u) if u.get('kind') == 'LAGOON' else None
+    byid = {q['id']:q for q in u.get('people',[])}
+    own = p.get('social')
+    if own and (encounters.state(u,p,byid,terrain) is None
+                or (p.get('tx'),p.get('ty')) != tuple(own['target'])):
+        p['social'] = None
+        if p.get('a') in (minds.A_MATE,minds.A_GROOM):
+            p['ad'] = 0
+            p['tx'],p['ty'] = p['x'],p['y']
+    if p.get('social') or p.get('a') not in (minds.A_REST,minds.A_WATCH,minds.A_TALK,minds.A_WORK):
+        return
+    if any(encounters.offer(u,p,byid,kind,terrain) is not None for kind in ('mate','groom')):
+        p['ad'] = 0
+        p['tx'],p['ty'] = p['x'],p['y']
+
+
+def can_assist(u, p):
+    """A helper's own bodily priorities remain active during care."""
+    import minds
+    return (_age(u,p) >= 12 and p not in (u.get('_ctx') or {}).get('dead', [])
+            and not p.get('w') and not p.get('ab') and p.get('c',True)
+            and p.get('a') not in (minds.A_SLEEP,minds.A_MATE,minds.A_BIRTH,minds.A_FIGHT,minds.A_WITHDRAW)
+            and p.get('hun',0.) < HUNGRY and p.get('thirst',0.) < 1.
+            and p.get('ene',1.) >= .4 and p.get('inj',0.) <= .45)
+
+
 def assign(u, p, day, rng, cond=None, engine=None):
     """One decision for one person, in either world.
 
@@ -764,6 +846,7 @@ def assign(u, p, day, rng, cond=None, engine=None):
 
     options = []   # (score, activity, target)
     scout = None
+    social_options = {}
 
     # --- fetching freshwater ----------------------------------------------
     if cond.get("must_work_to_eat") and a >= 12:
@@ -855,7 +938,13 @@ def assign(u, p, day, rng, cond=None, engine=None):
         # a hungry person does not stand about talking
         held = 1.0 - 0.6 * want_food
         options.append((want_company * 1.1 * soc * held, E.A_TALK, _home_of(u, p), None))
-        options.append((want_company * 0.8 * soc * held, E.A_GROOM, _home_of(u, p), None))
+        companion = _social_person(u, p, 'groom')
+        if companion is not None:
+            target = _social_target(u, p, companion, 'groom')
+            if target is not None:
+                option = (want_company * 0.8 * soc * held, E.A_GROOM, target, None)
+                options.append(option)
+                social_options[id(option)] = ('groom', companion)
 
     study_option,teach_option,study_note,offer = None,None,None,None
     if ready_for_instruction(u,p):
@@ -889,7 +978,7 @@ def assign(u, p, day, rng, cond=None, engine=None):
         if candidates:
             craft_choice = candidates[0]
             options.append((.9*cond.get('work_drive',.5)*(1.-.7*want_food), E.A_WORK,(st['x'],st['y']),None))
-    if a >= 12 and skills.knows(p,'healing'):
+    if can_assist(u,p) and skills.knows(p,'healing'):
         from engine import terrain_of, same_land
         dead = (u.get('_ctx') or {}).get('dead', [])
         patients = [q for q in u.get('people',[]) if q not in dead and not q.get('ab')
@@ -899,6 +988,13 @@ def assign(u, p, day, rng, cond=None, engine=None):
         if patients:
             q = min(patients,key=lambda q:(q['x']-p['x'])**2+(q['y']-p['y'])**2)
             options.append((.9*(1.-.5*want_food),E.A_TEND,(q['x'],q['y']),None))
+
+    # Labor is a visible need, not permission to assign a helper's body.
+    if a >= 16 and can_assist(u,p):
+        mothers = [q for q in _visible_people(u,p) if q.get('a') == E.A_BIRTH]
+        if mothers:
+            mother = min(mothers,key=lambda q:((q['x']-p['x'])**2+(q['y']-p['y'])**2,q['id']))
+            options.append((.9*(1.-.5*want_food),E.A_TEND,(mother['x'],mother['y']),None))
 
     # --- work --------------------------------------------------------------
     # EDEN's people work for a place to be needed, not for food; LAGOON's
@@ -933,20 +1029,26 @@ def assign(u, p, day, rng, cond=None, engine=None):
                                 (site["x"], site["y"]), site))
 
     # --- mating, for those who can -----------------------------------------
-    if p.get("p") is not None and not u.get("innocent") and 16 <= a <= 45:
+    mate = (_social_person(u,p,'mate') if not u.get('innocent') and 16 <= a <= 45 else None)
+    if mate is not None and (p.get('p') is not None or cond.get('mate') == 'bonded'):
         # an empty belly is not an invitation, and a tired body less of one
-        options.append(((0.3 + 0.3 * want_company) * (1.0 - 0.85 * want_food)
-                        * (0.4 + 0.6 * ene),
-                        E.A_MATE, _home_of(u, p), None))
+        target = _social_target(u,p,mate,'mate')
+        if target is not None:
+            option = ((0.3 + 0.3 * want_company + INTIMACY_WEIGHT*p.get('intimacy',0.)) * (1.0 - 0.85 * want_food)
+                      * (0.4 + 0.6 * ene), E.A_MATE, target, None)
+            options.append(option)
+            social_options[id(option)] = ('mate', mate)
 
-    if cond.get("mate") == "free" and p.get("p") is None and not u.get("innocent") \
-            and 16 <= a <= 45:
+    if cond.get("mate") == "free" and p.get("p") is None and mate is not None:
         # the pen's mating is free of bonds: anyone near will do, while
         # easy pleasure has not yet dulled the wanting of it
-        options.append(((0.3 + 0.3 * want_company) * (1.0 - 0.85 * want_food)
-                        * (0.4 + 0.6 * ene) * (0.4 + p.get("pu", 0.5))
-                        * max(0.2, 1.0 - u.get("ennui", 0.0)),
-                        E.A_MATE, _home_of(u, p), None))
+        target = _social_target(u,p,mate,'mate')
+        if target is not None:
+            option = ((0.3 + 0.3 * want_company + INTIMACY_WEIGHT*p.get('intimacy',0.)) * (1.0 - 0.85 * want_food)
+                      * (0.4 + 0.6 * ene) * (0.4 + p.get("pu", 0.5))
+                      * max(0.2, 1.0 - u.get("ennui", 0.0)), E.A_MATE, target, None)
+            options.append(option)
+            social_options[id(option)] = ('mate', mate)
 
     # --- the placeless -----------------------------------------------------
     # No bed of one's own and no post: the floor is all there is. Milling
@@ -1005,6 +1107,12 @@ def assign(u, p, day, rng, cond=None, engine=None):
                   if craft_choice and act == E.A_WORK else None)
     p["a"] = act
     p["ad"] = _duration(act, rng)
+    social = social_options.get(id(best))
+    if social is not None:
+        kind, companion = social
+        encounters.propose(u,p,companion,kind,u.get('parts',0),target)
+    else:
+        p['social'] = None
     if act == E.A_WALK and scout is not None and target == scout:
         p['ad'] = 0             # look again on arrival, not days of idling
     if target is not None:
@@ -1376,7 +1484,7 @@ def fulfil(u, p, day, rng, act, E=None):
             return 1
         return 0
 
-    if act in (E.A_TALK, E.A_GROOM):
+    if act == E.A_TALK:
         p["sol"] = min(SOLITUDE_MAX, p.get("sol", 0.0) + 0.2)
         for q in u.get("people", []):
             if q is p:
@@ -1496,7 +1604,7 @@ def healing_near(u: dict, p: dict) -> bool:
         u['_healers'] = cached
     dead = (u.get('_ctx') or {}).get('dead', [])
     alive = {q['id'] for q in u.get('people',[])}
-    return any(q['id'] in alive and q not in dead and q.get('a') == minds.A_TEND
+    return any(q['id'] in alive and q not in dead and q.get('a') == minds.A_TEND and can_assist(u,q)
                and not q.get('w') and not q.get('ab') and skills.qualified(q,'healing')
                and abs(q['x']-p['x']) <= 2 and abs(q['y']-p['y']) <= 2
                and (q['x'], q['y']) == (q.get('tx'), q.get('ty'))
@@ -1624,7 +1732,7 @@ def perform_craft(u: dict, p: dict, day: int) -> None:
     amount = body_capacity(p)*skills.level(p, tech)/PARTS_PER_DAY
     worked = False
     if tech == 'healing':
-        worked = any(q not in dead and not q.get('ab') and q.get('inj', 0.) > 0
+        worked = can_assist(u,p) and any(q not in dead and not q.get('ab') and q.get('inj', 0.) > 0
                      and abs(q['x']-p['x']) <= 1 and abs(q['y']-p['y']) <= 1
                      and reachable_contact(terrain_of(u),p,q)
                      for q in u.get('people', []))

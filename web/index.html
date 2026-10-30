@@ -569,6 +569,27 @@ function instructionActivity(u,id){
   var topic=intent.tech.replace(/_/g," ");
   return intent.role==="seeking"?"seeking "+topic+" instruction":"explaining "+topic;
 }
+// A bond is biography; only reciprocal observed contact is a shared scene.
+function contactPartner(u,id,kind){
+  if (kind!=="mate" && kind!=="groom") return 0;
+  var social=u&&u.social, a=social&&social[String(id)];
+  if (!a || a.kind!==kind || !Number.isInteger(a.other) || a.other<=0 ||
+      a.other===+id || a.mutual!==true || a.contact!==true) return 0;
+  var b=social[String(a.other)];
+  return b && b.kind===kind && b.other===+id && b.mutual===true && b.contact===true ? a.other : 0;
+}
+function socialActivity(u,id,act){
+  var kind=act===8?"mate":act===21?"groom":"";
+  if (!kind) return "";
+  return contactPartner(u,id,kind) ? (kind==="mate"?"mating":"grooming together")
+    : (kind==="mate"?"seeking a partner":"seeking grooming contact");
+}
+function socialDrawAct(u,a){
+  if (a.act===8 && !bodyOf(a).adult) return 11;
+  if (!a.moving && (a.act===8 || a.act===21) &&
+      !contactPartner(u,a.id,a.act===8?"mate":"groom")) return 11;
+  return a.act;
+}
 function craftActivity(u,id){
   var craft=u&&u.crafts&&u.crafts[String(id)]; if (!craft) return "";
   var labels={fire:"tending fire",stone_tools:"knapping tools",preservation:"preserving food",
@@ -976,7 +997,7 @@ function drawLiveGround(g, key, u, sx, sy, hx, hy, ts, canvas){
 // by individual.
 
 var ACT_LABEL = ["idle","walking","foraging","hunting","fishing","farming",
-                 "building","talking","making love","giving birth",
+                 "building","talking","making love","in labour",
                  "minding children","resting","eating","withdrawn","fighting",
                  "playing","dancing","sleeping","working","scouting","keeping watch","grooming","fetching water"];
 var A_WALK=1, A_FORAGE=2, A_HUNT=3, A_FISH=4, A_FARM=5, A_BUILD=6, A_TALK=7,
@@ -2003,10 +2024,14 @@ function pickShot(key, list, u, S){
     var near=list.filter(function(a){ return Math.abs(a.x-e[0])<=3 && Math.abs(a.y-e[1])<=3; });
     cands.push({x:e[0]+0.5, y:e[1], n:Math.max(1,near.length), label:lab, w:8, ids:near.map(function(a){return a.id;})});
   });
-  clusters(list, function(a){return a.act===A_BIRTH;}, 3).forEach(function(g){ add(g, "a birth", 6); });
-  list.forEach(function(a){ if (a.act===A_BIRTH) cands.push({x:a.x,y:a.y,n:1,label:"a birth",w:6,ids:[a.id]}); });
+  clusters(list, function(a){return a.act===A_BIRTH;}, 3).forEach(function(g){ add(g, "labour", 6); });
+  list.forEach(function(a){ if (a.act===A_BIRTH) cands.push({x:a.x,y:a.y,n:1,label:"labour",w:6,ids:[a.id]}); });
   clusters(list, function(a){return a.act===A_FIGHT;}, 2).forEach(function(g){ add(g, key==="e"?"a brawl in the pen":"a fight", 4); });
-  clusters(list, function(a){return a.act===A_MATE;}, 1).forEach(function(g){ add(g, "a couple", 2.5); });
+  list.forEach(function(a){
+    if (a.act!==A_MATE) return;
+    var id=contactPartner(u,a.id,"mate"), other=list.find(function(b){return b.id===id;});
+    if (other && a.id<id && other.act===A_MATE) add([a,other],"a couple",2.5);
+  });
   clusters(list, function(a){return a.act===A_TALK;}, 3).forEach(function(g){ if (g.length>=3) add(g, key==="e"?"a huddle by the boxes":"talk at the hearths", 3); });
   clusters(list, function(a){return a.act===A_PLAY;}, 4).forEach(function(g){ if (g.length>=3) add(g, "children at play", 3); });
   clusters(list, function(a){return a.act===A_HUNT;}, 4).forEach(function(g){ if (g.length>=2) add(g, "a hunting party in the woods", 3); });
@@ -2214,7 +2239,7 @@ function render(canvas, world, map, key, u){
   updateActors(map, key==="l"?heat9:null, S);
   var list=[], minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
   Object.keys(map).forEach(function(id){
-    var a=map[id]; list.push(a); a.nudge=0; a.nudgeY=0;
+    var a=map[id]; list.push(a); a.nudge=0; a.nudgeY=0; a.mate=null;
     if(a.x<minx)minx=a.x; if(a.x>maxx)maxx=a.x;
     if(a.y<miny)miny=a.y; if(a.y>maxy)maxy=a.y;
   });
@@ -2230,7 +2255,8 @@ function render(canvas, world, map, key, u){
     var scale=canvas.height/(canvas.clientHeight||canvas.height);
     var cardPixels=card.classList.contains("on")?card.offsetHeight*scale:0;
     var tilePixels=canvas.height/(2*th), body=bodyOf(who);
-    var lying=!who.moving&&(who.act===A_SLEEP||who.act===A_MATE||body.stage===0);
+    var poseAct=socialDrawAct(u,who);
+    var lying=!who.moving&&(poseAct===A_SLEEP||poseAct===A_MATE||body.stage===0);
     var extent=lying?0.5:1.45*STATURE[body.ab];
     tx=who.x+(who.nudge||0)+0.5;
     ty=who.y+(who.nudgeY||0)+0.95-extent/2+cardPixels/(2*tilePixels);
@@ -2300,23 +2326,30 @@ function render(canvas, world, map, key, u){
   var cell={};
   for (var i=0;i<list.length;i++){               // pairs face each other
     var a=list[i];
-    if (a.act!==A_MATE && a.act!==A_FIGHT && a.act!==A_GROOM) continue;
+    if (a.act!==A_FIGHT) continue;
     var k=Math.round(a.x)+","+Math.round(a.y);
     (cell[k]||(cell[k]=[])).push(a);
   }
-  // A couple is one picture — but only the two who are actually partners.
-  // Two unrelated people who happen to be on the same tile are not a scene.
+  // A couple is one picture only when the snapshot records mutual contact.
+  // Neither a social bond nor nearby invitations establish an encounter.
   var byId={};
   list.forEach(function(a){ byId[a.id]=a; });
   var coupled={};
   list.forEach(function(a){
-    if (a.act!==A_MATE || !a.pid || coupled[a.id]) return;
-    var other=byId[a.pid];
-    if (!other || other.act!==A_MATE || other.pid!==a.id ||
+    if (a.act!==A_MATE || coupled[a.id]) return;
+    var other=byId[contactPartner(u,a.id,"mate")];
+    if (!other || other.act!==A_MATE ||
         !bodyOf(a).adult || !bodyOf(other).adult || a.moving || other.moving ||
         Math.hypot(a.x-other.x,a.y-other.y)>1.5) return;
     coupled[a.id]=1; coupled[other.id]=1;
     a.mate=other; other.mate=a;
+  });
+  list.forEach(function(a){
+    if (a.act!==A_GROOM || a.moving) return;
+    var other=byId[contactPartner(u,a.id,"groom")];
+    if (!other || other.act!==A_GROOM || other.moving || Math.hypot(a.x-other.x,a.y-other.y)>1.5) return;
+    a.face=other.x!==a.x?(other.x>a.x?1:-1):(a.id<other.id?1:-1);
+    if (a.x===other.x && a.y===other.y) a.nudge=a.id<other.id?-0.3:0.3;
   });
   Object.keys(cell).forEach(function(k){
     var pr=cell[k].filter(function(a){return !coupled[a.id];});
@@ -2326,7 +2359,7 @@ function render(canvas, world, map, key, u){
   });
   // Recent encounters can orient an armed person; they never change the
   // recorded activity or move somebody into a scene that did not happen.
-  list.forEach(function(a){ a.drawAct=a.act; a.drawFace=0; });
+  list.forEach(function(a){ a.drawAct=socialDrawAct(u,a); a.drawFace=0; });
   if (key==="l") (u.encounters||[]).forEach(function(e){
     if (e[2]!=="fought_off"&&e[2]!=="mauled"&&e[2]!=="cat_hunt"&&e[2]!=="taken") return;
     list.forEach(function(a){ if (a.moving||(a.age||0)<18 || (a.act!==A_HUNT&&a.act!==A_WATCH&&a.act!==A_FIGHT)) return;
@@ -2485,7 +2518,7 @@ function paintOverlay(key){
     if (cam[key].mode==="walk") continue;
     var chosen=(a.id===sel[key]), news=(!a.moving && (a.act===A_BIRTH||a.act===A_FIGHT));
     if (!chosen && !(news && s>=1.0 && nNews<2)) continue;
-    var lbl=(instructionActivity(u,a.id)||(a.moving?"walking":(craftActivity(u,a.id)||ACT_LABEL[a.act]||"idle")));
+    var lbl=(instructionActivity(u,a.id)||socialActivity(u,a.id,a.act)||(a.moving?"walking":(craftActivity(u,a.id)||ACT_LABEL[a.act]||"idle")));
     if (chosen && u && u.detail && u.detail[String(a.id)]) lbl=u.detail[String(a.id)][0]+" · "+lbl;
     var wpx=g.measureText(lbl).width;
     var top=py-ts*1.45*STATURE[bodyOf(a).ab]-15*dpr;
@@ -2522,7 +2555,7 @@ function paintOverlay(key){
       // about 1.45 tiles tall at this scale
       var px=(a.x-sx)*ts+ts/2, feet=(a.y-sy)*ts+ts*0.95;
       var top=feet-ts*1.45*STATURE[bodyOf(a).ab]-2*dpr;
-      var l1=d[0]+", "+Math.floor(d[1]), l2=(instructionActivity(u,a.id)||(a.moving?"walking":(craftActivity(u,a.id)||ACT_LABEL[a.act]||"idle")))+(d[8]?" · "+d[8]:"");
+      var l1=d[0]+", "+Math.floor(d[1]), l2=(instructionActivity(u,a.id)||socialActivity(u,a.id,a.act)||(a.moving?"walking":(craftActivity(u,a.id)||ACT_LABEL[a.act]||"idle")))+(d[8]?" · "+d[8]:"");
       var lines=[l1], line="", maxWidth=ov.width-8*dpr;
       l2.split(" ").forEach(function(word){
         var next=line?line+" "+word:word;
@@ -2923,11 +2956,15 @@ function updateStrip(){
 }
 
 // =========================================================== god panel
-function doingHTML(people){
+function doingHTML(people,u){
   if (!people||!people.length) return "";
   var tally={};
-  for (var i=0;i<people.length;i++){ var act=people[i].length>5?people[i][5]:0; tally[act]=(tally[act]||0)+1; }
-  var rows=Object.keys(tally).map(function(k){ return [ACT_LABEL[k]||"?", tally[k]]; });
+  for (var i=0;i<people.length;i++){
+    var p=people[i], act=p.length>5?p[5]:0;
+    var label=socialActivity(u,p[4],act)||ACT_LABEL[act]||"?";
+    tally[label]=(tally[label]||0)+1;
+  }
+  var rows=Object.keys(tally).map(function(k){ return [k, tally[k]]; });
   rows.sort(function(a,b){ return b[1]-a[1]; });
   return "<span class='now'>NOW "+rows.slice(0,4).map(function(r){ return r[1]+" "+r[0]; }).join(" · ")+"</span>";
 }
@@ -2979,7 +3016,7 @@ function keepDiary(key, u){
     return;
   }
   diary[key].name=d[0];
-  var what=instructionActivity(u,id)||craftActivity(u,id)||ACT_LABEL[a.act]||"idle";
+  var what=instructionActivity(u,id)||socialActivity(u,id,a.act)||craftActivity(u,id)||ACT_LABEL[a.act]||"idle";
   if (what!==diaryLast[key]){
     diaryLast[key]=what;
     var at=(u.day%360);
@@ -2997,8 +3034,8 @@ function whoInfo(key){
   return {id:id, name:d[0], age:d[1], gen:d[2], flags:d[3],
           hx:d[4], hy:d[5], pid:d[6], hun:d[7], u:u,
           thirst:u.thirst?u.thirst[String(id)]:undefined,
-          craft:craftActivity(u,id), instruction:instructionActivity(u,id),
-          act:instructionActivity(u,id)||(a.moving?"walking":(craftActivity(u,id)||ACT_LABEL[a.act]||"idle"))};
+          craft:craftActivity(u,id), instruction:instructionActivity(u,id), social:socialActivity(u,id,a.act),
+          act:instructionActivity(u,id)||socialActivity(u,id,a.act)||(a.moving?"walking":(craftActivity(u,id)||ACT_LABEL[a.act]||"idle"))};
 }
 function hudText(u, kind){
   var l2 = kind==="e" ? u.phase.toUpperCase()+" · ALWAYS SPRING"
@@ -3007,14 +3044,14 @@ function hudText(u, kind){
   var v=view[kind];
   var sc = "";
   var w=whoInfo(kind);
-  var who = w ? "<span class='who'> · "+escapeHTML(w.name.toUpperCase())+((document.getElementById(kind==="e"?"w6":"w9").clientWidth<=700&&(w.craft||w.instruction))?"":", "+escapeHTML(w.act.toUpperCase()))+"</span>" : "";
+  var who = w ? "<span class='who'> · "+escapeHTML(w.name.toUpperCase())+((document.getElementById(kind==="e"?"w6":"w9").clientWidth<=700&&(w.craft||w.instruction||w.social))?"":", "+escapeHTML(w.act.toUpperCase()))+"</span>" : "";
   var key = (kind==="e" && v && v.ts>5) ? "<span class='keys'>  <span class='key' style='border-color:var(--accent)'></span>held "+
             "<span class='key' style='border-color:var(--lagoon)'></span>vacant</span>" : "";
   var clock = u.tod ? " · "+escapeHTML(u.tod.toUpperCase()) : "";
   return "<div class='l1'><span class='identity'><b>"+(kind==="e"?"EDEN · U6":"LAGOON · U9")+"</b></span>"+
          "<span class='clock'>Y"+escapeHTML(u.year)+clock+" · POP "+escapeHTML(u.pop)+"</span>"+
          "<span class='l2'><span class='ph'> · "+escapeHTML(l2)+"</span>"+escapeHTML(hudExtra)+sc+cap+"</span>"+who+"</div>"+
-         doingHTML(u.people)+key+"\n"+statLine(u, kind);
+         doingHTML(u.people,u)+key+"\n"+statLine(u, kind);
 }
 function refreshHud(kind){
   if (!state) return;
@@ -3354,6 +3391,7 @@ function poll(){
     freshness();
     var e=st.u.eden,l=st.u.lagoon;
     updateStrip();
+    updateRecords(st.events);
     if (!document.getElementById("research").hidden) renderResearch();
   }).catch(function(err){
     snapBad=true;

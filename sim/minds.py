@@ -138,7 +138,8 @@ def new_mind(p, ef=0.5, ag=0.5):
               "experience": {"sites": [], "trail": [], "heard_on": None, "mentors": []},
               "learning": None, "teaching": None, "teaching_day": None, "teaching_ids": [],
               "skills": {}, "skill_day": None, "craft": None, "craft_part": None, "stories": 0.0,
-              "inj": 0.0, "gd": 0.0, "gk": 0, "wk": 0, "fe": None})
+              "inj": 0.0, "gd": 0.0, "gk": 0, "wk": 0, "fe": None,
+              "dad": None, "pregnancy_father": None, "social": None, "groom_day": None, "intimacy": 0.0})
     return p
 
 

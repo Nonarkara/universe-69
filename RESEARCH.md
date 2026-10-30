@@ -264,3 +264,48 @@ Failure to locate or engage a teacher remains possible. Interpret measured
 transmission under this mechanism separately from artifact learning, incidental
 conversation and practical production. One successful controlled lesson does
 not establish population-level cultural accumulation or a survival benefit.
+
+
+## Reproductive encounters and observable labour — causal limits (2026-10-30)
+
+Wilcox, Weinberg and Baird (1995) followed women trying to conceive using daily
+intercourse records and urinary hormone measurements. In 625 analyzable cycles,
+conceptions were associated with intercourse in a six-day interval ending on
+estimated ovulation. Exposure and reproductive timing matter; the study does
+not calibrate an untimed population-level hazard or this model's per-part
+coefficients. [*New England Journal of Medicine* 333(23):1517–1521,
+doi:10.1056/NEJM199512073332301](https://www.nejm.org/doi/full/10.1056/NEJM199512073332301).
+
+**Candidate causal boundary.** Require a completed reproductive encounter
+before a conception opportunity, rather than treating a social bond or a
+nearby partner as intercourse. Completion is the model's operational event
+boundary, not a biological duration established by this study. Record the
+model's genetic father from the
+encounter selected by that opportunity, independently of later partnerships.
+This is simulation bookkeeping, not an empirical method of inferring human
+paternity. Same-part conception attribution omits sperm persistence, ovulation,
+the fertile window and competing exposures; a completed encounter is not a
+biological guarantee of fertilization. Retaining existing coefficients while
+changing the exposure gate still changes the trajectory and does not preserve
+a calibrated birth rate. No fertile-window rule or fitted rate is introduced
+by this citation.
+
+WHO's *Labour care guide: user's manual* (2020), Annex 4, recommendations 5–6,
+describes contractions and cervical change before birth and emphasizes that
+latent-stage duration varies. It supports representing labour before delivery,
+not a universal one-day countdown. A visible early-labour interval of one model
+day is an explicit illustrative timing choice, not a clinical estimate or a
+care protocol. [WHO manual](https://www.who.int/publications/b/56119),
+[official recommendation summary, nos. 5–6](https://cdn.who.int/media/docs/default-source/maternal-health/ipc.pdf?sfvrsn=dc30fc00_8).
+
+Kin recognition is another bounded approximation. Lieberman, Tooby and Cosmides
+(2007) tested maternal association and childhood co-residence as cues related
+to sibling-directed altruism and sexual aversion. This supports investigating
+perceived kinship; it does not establish a universal categorical mating rule.
+[*Nature* 445:727–731, doi:10.1038/nature05510](https://www.nature.com/articles/nature05510),
+[primary full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC3581061/).
+The current recorded-parent/shared-parent candidate exclusion is an explicit
+simplification, not a model of those perceptual cues, cultural norms, genetic
+load or every person's behavior. Maternal identity and actual recorded paternal
+identity are bookkeeping facts here. A future human-agency model must distinguish
+perceived kinship from the observer's genealogy and test the resulting choices.

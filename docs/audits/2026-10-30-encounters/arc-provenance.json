@@ -1,0 +1,53 @@
+{
+  "engine": "2026.10.30.6",
+  "seed": 69,
+  "days": 36000,
+  "seconds": 300.598,
+  "source_before": {
+    "sim/animals.py": "5622b0910d185da4e9c8b6f680ce87a1feada111fb5505b483bd3de563864577",
+    "sim/encounters.py": "913e361567a682618c20f8a887eefc695eb77af6ad428591843080141eea4394",
+    "sim/engine.py": "6be8721ef0c7079295b1ea7d13ead43e92f8cbcfce442aa62ee7dcc61bba3db8",
+    "sim/historian.py": "ad0728651b5f6b326fc02cc05ab2c112dfe34506e1ba1af81dacfa3541f30c69",
+    "sim/labor.py": "3f05c805ba8d2e0e113e079709909a5f34f40a066dc3df6b3b587983cb36c1be",
+    "sim/learning.py": "b83ddb2818f8e4675eaebc7f0f38526d08aa4ad06e595ef075f1464bad99a5ff",
+    "sim/minds.py": "c41994125a0ccfad8ae025ae38452179e8640362aa88263659eb983a2f8c04f8",
+    "sim/needs.py": "1d9f69de0b20b71710d529e91d52b2c6e339bc63f48c716f7b9f007e781db6a5",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "sim/server.py": "5e1bfe65ed3a37e8695c190bc8764fe98d6986108c877fead8c4bbf87cf44f4d",
+    "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555"
+  },
+  "source_after": {
+    "sim/animals.py": "5622b0910d185da4e9c8b6f680ce87a1feada111fb5505b483bd3de563864577",
+    "sim/encounters.py": "913e361567a682618c20f8a887eefc695eb77af6ad428591843080141eea4394",
+    "sim/engine.py": "6be8721ef0c7079295b1ea7d13ead43e92f8cbcfce442aa62ee7dcc61bba3db8",
+    "sim/historian.py": "ad0728651b5f6b326fc02cc05ab2c112dfe34506e1ba1af81dacfa3541f30c69",
+    "sim/labor.py": "3f05c805ba8d2e0e113e079709909a5f34f40a066dc3df6b3b587983cb36c1be",
+    "sim/learning.py": "b83ddb2818f8e4675eaebc7f0f38526d08aa4ad06e595ef075f1464bad99a5ff",
+    "sim/minds.py": "c41994125a0ccfad8ae025ae38452179e8640362aa88263659eb983a2f8c04f8",
+    "sim/needs.py": "1d9f69de0b20b71710d529e91d52b2c6e339bc63f48c716f7b9f007e781db6a5",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "sim/server.py": "5e1bfe65ed3a37e8695c190bc8764fe98d6986108c877fead8c4bbf87cf44f4d",
+    "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555"
+  },
+  "sources_unchanged": true,
+  "contacts": {
+    "EDEN:mate": 734,
+    "LAGOON:mate": 10324
+  },
+  "endpoint": {
+    "eden": {
+      "population": 0,
+      "iteration": 1,
+      "known_fathers": 0,
+      "pregnant": 0,
+      "pregnancies_with_father": 0
+    },
+    "lagoon": {
+      "population": 0,
+      "iteration": 1,
+      "known_fathers": 0,
+      "pregnant": 0,
+      "pregnancies_with_father": 0
+    }
+  }
+}

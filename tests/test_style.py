@@ -16,6 +16,9 @@ same commit, where the owner will see it.**
 """
 
 import os
+import json
+import shutil
+import subprocess
 import re
 import unittest
 
@@ -412,6 +415,51 @@ class TestTheMirror(unittest.TestCase):
         with open(RENDERER) as a, open(MIRROR) as b:
             self.assertEqual(a.read(), b.read(),
                              "web/index.html and docs/index.html have diverged")
+
+
+@unittest.skipUnless(shutil.which('node'), 'Node is a workbench-only viewer test runner')
+class TestActualSocialContact(unittest.TestCase):
+    def helper(self, expression):
+        src = read_renderer()
+        self.assertTrue('function contactPartner(' in src, 'Actual-contact helper missing')
+        helper = src[src.index('function contactPartner('):src.index('function craftActivity(')]
+        body = re.search(r'var AGE_BAND=\[[^;]+;', src).group(0) + src[src.index('function ageBand('):src.index('// The rig\'s measurements')]
+        js = helper + body + '\nprocess.stdout.write(JSON.stringify(' + expression + '));'
+        return json.loads(subprocess.run(['node', '-e', js], check=True, capture_output=True, text=True).stdout)
+
+    def test_bond_or_matching_actions_do_not_create_contact(self):
+        self.assertEqual(self.helper("[contactPartner({},1,'mate'),contactPartner({social:{1:{kind:'mate',other:2,mutual:false,contact:false}}},1,'mate')]"), [0,0])
+
+    def test_only_reciprocal_mutual_contact_links_the_actual_pair(self):
+        self.assertEqual(self.helper("contactPartner({social:{1:{kind:'mate',other:3,mutual:true,contact:true},3:{kind:'mate',other:1,mutual:true,contact:true}}},1,'mate')"),3)
+
+    def test_missing_arrival_wrong_partner_kind_and_asymmetric_contact_are_rejected(self):
+        self.assertEqual(self.helper("[{kind:'mate',other:1,mutual:true,contact:false},{kind:'mate',other:9,mutual:true,contact:true},{kind:'groom',other:1,mutual:true,contact:true}].map(function(x){return contactPartner({social:{1:{kind:'mate',other:2,mutual:true,contact:true},2:x}},1,'mate');})"),[0,0,0])
+
+    def test_pending_and_actual_labels_do_not_claim_an_encounter_from_a_bond(self):
+        self.assertEqual(self.helper("[socialActivity({},1,8),socialActivity({},1,21),socialActivity({},1,7),socialActivity({social:{1:{kind:'mate',other:2,mutual:true,contact:true},2:{kind:'mate',other:1,mutual:true,contact:true}}},1,8)]"),['seeking a partner','seeking grooming contact','','mating'])
+
+    def test_expanded_activity_counts_do_not_call_pending_intent_sex(self):
+        src = read_renderer()
+        contact = src[src.index('function contactPartner('):src.index('function craftActivity(')]
+        tally = src[src.index('function doingHTML('):src.index("// The world's own facts")]
+        js = contact + "var ACT_LABEL=[];" + tally + "process.stdout.write(JSON.stringify(doingHTML([[1,1,0,0,1,8],[1,1,0,1,2,8]],{})));"
+        result = json.loads(subprocess.run(['node','-e',js], check=True,capture_output=True,text=True).stdout)
+        self.assertIn('2 seeking a partner', result)
+        self.assertNotIn('making love', result)
+        self.assertNotIn('mating', result)
+
+    def test_first_snapshot_populates_record_before_any_animation_frame(self):
+        src = read_renderer()
+        poll = src[src.index('function poll(){'):src.index('// 30 frames a second')]
+        setup = "var called=false,received=null,packet={events:[],u:{eden:{iter:1,day:0,size:48,people:[],detail:{}},lagoon:{iter:1,day:0,people:[],detail:{}}}},polling=false,SNAP=false,state=null,pollSeq=0,snapBad=false,snapReady=false,worldInfo={},lagoonIter=1,edenSize=0,EM=6,actors6={},actors9={},heat9=null,ground={};var document={getElementById:function(id){return id==='research'?{hidden:true}:null;}};function fetchJSON(){return Promise.resolve(packet);}function hideFail(){}function syncActors(){}function keepDiary(){}function freshness(){}function updateStrip(){}function updateRecords(events){called=true;received=events;}function showFail(){}"
+        js = setup + poll + "poll();setTimeout(function(){process.stdout.write(JSON.stringify([called,received]));},0);"
+        result = json.loads(subprocess.run(['node','-e',js],check=True,capture_output=True,text=True).stdout)
+        self.assertEqual(result,[True,[]])
+
+    def test_unaccepted_intents_use_neutral_pose_without_breaking_walking(self):
+        self.assertEqual(self.helper("[socialDrawAct({}, {id:1,act:8,moving:false,age:18}),socialDrawAct({}, {id:1,act:21,moving:false}),socialDrawAct({}, {id:1,act:8,moving:true,age:18}),socialDrawAct({social:{1:{kind:'mate',other:2,mutual:true,contact:true},2:{kind:'mate',other:1,mutual:true,contact:true}}},{id:1,act:8,moving:false,age:18})]"),[11,11,8,8])
+        self.assertEqual(self.helper("[16,17,18,undefined].map(function(age){return socialDrawAct({social:{1:{kind:'mate',other:2,mutual:true,contact:true},2:{kind:'mate',other:1,mutual:true,contact:true}}},{id:1,act:8,moving:false,age:age});})"),[11,11,8,11])
 
 
 if __name__ == "__main__":

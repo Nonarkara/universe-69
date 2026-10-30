@@ -1,0 +1,10 @@
+import json,hashlib,importlib.util,os
+from pathlib import Path
+root=Path('/Volumes/Data/agent-scratch/u69-encounters-viewer');out=root/'before-proof';out.mkdir(exist_ok=True);temp=out/'browser-temp';temp.mkdir(exist_ok=True);os.environ['TMPDIR']=str(temp)
+spec=importlib.util.spec_from_file_location('shoot','/Volumes/Data/Projects/Universe69/tools/shoot.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);s=json.loads((root/'fixtures/bonded-pending.json').read_text());report={'sourceHTMLSHA256':hashlib.sha256((root/'before.html').read_bytes()).hexdigest(),'case':'bonded-pending','checks':[]}
+with m.sync_playwright() as pw:
+ b=pw.chromium.launch(channel='chrome');c=b.new_context(viewport={'width':1440,'height':900});c.add_init_script("localStorage.setItem('u69-watch-intro','1')");c.route('**/state',lambda r:r.fulfill(status=200,content_type='application/json',body=json.dumps(s)));c.route('**/world',lambda r:r.fulfill(status=200,content_type='application/json',body=json.dumps(s['world'])));c.route('http://127.0.0.1:6975/',lambda r:r.fulfill(status=200,content_type='text/html',body=(root/'before.html').read_text()));p=c.new_page();p.goto('http://127.0.0.1:6975/');p.wait_for_function('state&&view.e&&view.l');p.evaluate("sel.e=1;cam.e.mode='follow';cam.e.follow=1;cam.e.th=rungH('e',2);paintCard('e');refreshHud('e');document.querySelector('#masthead .ttl').textContent='BEFORE'")
+ def check(ok,label):report['checks'].append({'passed':bool(ok),'check':label})
+ m.screenshot(p,out,'1440x900','bonded-pending',report,check)
+ report['oldPairCalls']=p.evaluate("""()=>{var orig=matingSprite,calls=[];try{matingSprite=function(a,b){calls.push([a.id,b.id].sort());return orig.apply(this,arguments);};render(document.getElementById('c6'),compose6(state.u.eden),actors6,'e',state.u.eden);}finally{matingSprite=orig;}return calls;}""");assert [1,2] in report['oldPairCalls'];report['authoritativeSocial']=s['u']['eden']['social'];(out/'report.json').write_text(json.dumps(report,indent=2));b.close()
+print('Before proves phantom bond couple',report['oldPairCalls'])

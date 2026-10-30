@@ -1,0 +1,165 @@
+FF.EEF..EEF.EFFFFFFFE
+======================================================================
+ERROR: test_a_post_holder_can_reopen_work_and_choose_its_own_high_need (test_social_choices.TestSocialChoices.test_a_post_holder_can_reopen_work_and_choose_its_own_high_need)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 74, in test_a_post_holder_can_reopen_work_and_choose_its_own_high_need
+    needs.update_social(self.u,self.q)
+    ^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'needs' has no attribute 'update_social'
+
+======================================================================
+ERROR: test_author_proposes_without_reassigning_the_recipient (test_social_choices.TestSocialChoices.test_author_proposes_without_reassigning_the_recipient)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 35, in test_author_proposes_without_reassigning_the_recipient
+    self.assertEqual(self.p['social']['other'],self.q['id'])
+                     ~~~~~~~~~~~~~~~~^^^^^^^^^
+TypeError: 'NoneType' object is not subscriptable
+
+======================================================================
+ERROR: test_non_social_choice_clears_only_ones_own_stale_offer (test_social_choices.TestSocialChoices.test_non_social_choice_clears_only_ones_own_stale_offer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 122, in test_non_social_choice_clears_only_ones_own_stale_offer
+    needs.update_social(self.u,self.p)
+    ^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'needs' has no attribute 'update_social'
+
+======================================================================
+ERROR: test_offer_cannot_wake_or_retarget_a_sleeping_recipient (test_social_choices.TestSocialChoices.test_offer_cannot_wake_or_retarget_a_sleeping_recipient)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 85, in test_offer_cannot_wake_or_retarget_a_sleeping_recipient
+    needs.update_social(self.u,self.q)
+    ^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'needs' has no attribute 'update_social'
+
+======================================================================
+ERROR: test_recipient_independently_selects_a_reciprocal_meeting (test_social_choices.TestSocialChoices.test_recipient_independently_selects_a_reciprocal_meeting)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 44, in test_recipient_independently_selects_a_reciprocal_meeting
+    self.assertEqual(self.p['social']['token'],self.q['social']['token'])
+                     ~~~~~~~~~~~~~~~~^^^^^^^^^
+TypeError: 'NoneType' object is not subscriptable
+
+======================================================================
+ERROR: test_work_can_win_after_recipient_reopens_its_own_score (test_social_choices.TestSocialChoices.test_work_can_win_after_recipient_reopens_its_own_score)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 64, in test_work_can_win_after_recipient_reopens_its_own_score
+    needs.update_social(self.u,self.q)
+    ^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'needs' has no attribute 'update_social'
+
+======================================================================
+FAIL: test_adult_daily_units_are_shared_by_both_worlds (test_social_choices.TestPersonalIntimacy.test_adult_daily_units_are_shared_by_both_worlds)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 174, in test_adult_daily_units_are_shared_by_both_worlds
+    self.assertAlmostEqual(p['intimacy'],1./7.)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0.0 != 0.14285714285714285 within 7 places (0.14285714285714285 difference)
+
+======================================================================
+FAIL: test_children_have_no_adult_intimacy_need_and_the_meter_is_capped (test_social_choices.TestPersonalIntimacy.test_children_have_no_adult_intimacy_need_and_the_meter_is_capped)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 182, in test_children_have_no_adult_intimacy_need_and_the_meter_is_capped
+    self.assertEqual(child['intimacy'],0.)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1.0 != 0.0
+
+======================================================================
+FAIL: test_helper_must_be_arrived_awake_and_not_urgently_exhausted (test_social_choices.TestSocialChoices.test_helper_must_be_arrived_awake_and_not_urgently_exhausted)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 162, in test_helper_must_be_arrived_awake_and_not_urgently_exhausted
+    self.assertFalse(needs.healing_near(self.u,self.q))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_one_way_grooming_label_grants_no_bilateral_reward (test_social_choices.TestSocialChoices.test_one_way_grooming_label_grants_no_bilateral_reward)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 129, in test_one_way_grooming_label_grants_no_bilateral_reward
+    self.assertEqual([p['sol'] for p in self.u['people']],before)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [0.4, 0.30000000000000004] != [0.2, 0.2]
+
+First differing element 0:
+0.4
+0.2
+
+- [0.4, 0.30000000000000004]
++ [0.2, 0.2]
+
+======================================================================
+FAIL: test_thirst_injury_withdrawal_and_childhood_block_mating (test_social_choices.TestSocialChoices.test_thirst_injury_withdrawal_and_childhood_block_mating) (changes={'thirst': 2.0})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 94, in test_thirst_injury_withdrawal_and_childhood_block_mating
+    self.assertNotEqual(self.p['a'],engine.A_MATE)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 8 == 8
+
+======================================================================
+FAIL: test_thirst_injury_withdrawal_and_childhood_block_mating (test_social_choices.TestSocialChoices.test_thirst_injury_withdrawal_and_childhood_block_mating) (changes={'inj': 0.8})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 94, in test_thirst_injury_withdrawal_and_childhood_block_mating
+    self.assertNotEqual(self.p['a'],engine.A_MATE)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 8 == 8
+
+======================================================================
+FAIL: test_thirst_injury_withdrawal_and_childhood_block_mating (test_social_choices.TestSocialChoices.test_thirst_injury_withdrawal_and_childhood_block_mating) (changes={'w': True})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 94, in test_thirst_injury_withdrawal_and_childhood_block_mating
+    self.assertNotEqual(self.p['a'],engine.A_MATE)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 8 == 8
+
+======================================================================
+FAIL: test_thirst_injury_withdrawal_and_childhood_block_mating (test_social_choices.TestSocialChoices.test_thirst_injury_withdrawal_and_childhood_block_mating) (changes={'b': -3600})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 94, in test_thirst_injury_withdrawal_and_childhood_block_mating
+    self.assertNotEqual(self.p['a'],engine.A_MATE)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 8 == 8
+
+======================================================================
+FAIL: test_thirst_injury_withdrawal_and_childhood_block_mating (test_social_choices.TestSocialChoices.test_thirst_injury_withdrawal_and_childhood_block_mating) (changes={'ab': 1})
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 94, in test_thirst_injury_withdrawal_and_childhood_block_mating
+    self.assertNotEqual(self.p['a'],engine.A_MATE)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 8 == 8
+
+======================================================================
+FAIL: test_unpaired_lagoon_people_can_choose_without_an_assigned_bond (test_social_choices.TestSocialChoices.test_unpaired_lagoon_people_can_choose_without_an_assigned_bond)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 101, in test_unpaired_lagoon_people_can_choose_without_an_assigned_bond
+    self.assertEqual(self.choose(self.p),engine.A_MATE)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 12 != 8
+
+======================================================================
+FAIL: test_visible_labor_can_be_chosen_without_commanding_the_mother (test_social_choices.TestSocialChoices.test_visible_labor_can_be_chosen_without_commanding_the_mother)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_social_choices.py", line 145, in test_visible_labor_can_be_chosen_without_commanding_the_mother
+    self.assertEqual(self.choose(self.p),engine.A_TEND)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 12 != 10
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.098s
+
+FAILED (failures=11, errors=6)

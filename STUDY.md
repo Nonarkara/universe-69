@@ -1,6 +1,14 @@
 # STUDY — measurements from the running universes
 
-**Current version boundary.** Engine `2026.10.30.5` adds purposeful, physically
+**Current version boundary.** Engine `2026.10.30.6` requires actual mutual
+reproductive contact, independent local social choices and persistent actual
+paternity. It exposes labour before delivery. This changes both worlds' future
+trajectories; the earlier unconditional fertility figures are historical.
+The old coefficients now apply only at contact and are not calibrated per-act
+rates. Final measurements belong in `docs/audits/2026-10-30-encounters/`.
+The 100-year-per-real-day clock is unchanged.
+
+**Earlier version boundary.** Engine `2026.10.30.5` adds purposeful, physically
 grounded requests for instruction, prerequisite assessment at contact and finite
 verbal attention. It changes future trajectories; all earlier arcs remain
 historical. Final `.5` measurements belong in the instruction audit and must
@@ -29,6 +37,19 @@ wildlife replenishment, conception and the default clock. All earlier results
 below are historical; none is evidence for the new trajectory. The model is a
 Sri Lanka coastal-ecology analogue, not an exact island map, physical-scale
 survey, demographic prediction or guaranteed civilizational ladder.
+
+## Actual reproductive contact — 2026.10.30.6
+
+Final seed 69, 36,000 model days, unchanged hashed sources, Python 3.14.6:
+EDEN emptied on day 28,555 (year 79.32), peak 16, generation 1; LAGOON emptied
+on day 35,630 (year 98.97), peak 17, generation 2. Neither reseeded within the
+century because the 30-year quiet interval had not elapsed. EDEN recorded only
+founder age deaths; this is not evidence of a Calhoun crowding collapse.
+The old unconditional fertility coefficients are now contact-conditional and
+uncalibrated; these results expose the remaining conception time-basis problem.
+They do not establish ecological inviability or inevitable human extinction.
+Exact data, contact counts, source hashes, diagnostic and independent review:
+`docs/audits/2026-10-30-encounters/`. The larger goal remains in progress.
 
 ## Purposeful instruction — 2026.10.30.5
 

@@ -1,0 +1,285 @@
+{
+  "kind": "read-only bounded EDEN seed69 ten-model-year replay, not live runtime",
+  "days": 3600,
+  "hashes": {
+    "sim/engine.py": "6be8721ef0c7079295b1ea7d13ead43e92f8cbcfce442aa62ee7dcc61bba3db8",
+    "sim/needs.py": "1d9f69de0b20b71710d529e91d52b2c6e339bc63f48c716f7b9f007e781db6a5",
+    "sim/encounters.py": "913e361567a682618c20f8a887eefc695eb77af6ad428591843080141eea4394",
+    "sim/minds.py": "c41994125a0ccfad8ae025ae38452179e8640362aa88263659eb983a2f8c04f8"
+  },
+  "hashes_after": {
+    "sim/engine.py": "6be8721ef0c7079295b1ea7d13ead43e92f8cbcfce442aa62ee7dcc61bba3db8",
+    "sim/needs.py": "1d9f69de0b20b71710d529e91d52b2c6e339bc63f48c716f7b9f007e781db6a5",
+    "sim/encounters.py": "913e361567a682618c20f8a887eefc695eb77af6ad428591843080141eea4394",
+    "sim/minds.py": "c41994125a0ccfad8ae025ae38452179e8640362aa88263659eb983a2f8c04f8"
+  },
+  "counts": {
+    "completed_unique_mate_contacts": 260,
+    "mate_choices": 1012,
+    "new_proposals": 666,
+    "mating_choices_ended": 485,
+    "arrived_capture_attempts": 1061,
+    "raw_mate_frames": 357,
+    "actual_eligible_conception_trials": 260,
+    "summed_conception_probability": 0.3571916666666662,
+    "peer_has_not_reciprocated": 628,
+    "peer_travelling": 76,
+    "pregnancies": 0
+  },
+  "first_raw_mate_frames": [
+    {
+      "day": 92,
+      "part": 370,
+      "ids": [
+        4,
+        9
+      ]
+    },
+    {
+      "day": 92,
+      "part": 371,
+      "ids": [
+        4,
+        9
+      ]
+    },
+    {
+      "day": 104,
+      "part": 417,
+      "ids": [
+        4,
+        7
+      ]
+    },
+    {
+      "day": 104,
+      "part": 417,
+      "ids": [
+        4,
+        7
+      ]
+    },
+    {
+      "day": 104,
+      "part": 418,
+      "ids": [
+        4,
+        7
+      ]
+    },
+    {
+      "day": 150,
+      "part": 602,
+      "ids": [
+        12,
+        15
+      ]
+    },
+    {
+      "day": 150,
+      "part": 603,
+      "ids": [
+        12,
+        15
+      ]
+    },
+    {
+      "day": 163,
+      "part": 655,
+      "ids": [
+        2,
+        9
+      ]
+    },
+    {
+      "day": 163,
+      "part": 655,
+      "ids": [
+        2,
+        9
+      ]
+    },
+    {
+      "day": 164,
+      "part": 656,
+      "ids": [
+        2,
+        9
+      ]
+    },
+    {
+      "day": 181,
+      "part": 725,
+      "ids": [
+        4,
+        7
+      ]
+    },
+    {
+      "day": 181,
+      "part": 725,
+      "ids": [
+        4,
+        7
+      ]
+    },
+    {
+      "day": 181,
+      "part": 726,
+      "ids": [
+        4,
+        7
+      ]
+    },
+    {
+      "day": 196,
+      "part": 785,
+      "ids": [
+        1,
+        6
+      ]
+    },
+    {
+      "day": 196,
+      "part": 785,
+      "ids": [
+        1,
+        6
+      ]
+    },
+    {
+      "day": 196,
+      "part": 785,
+      "ids": [
+        8,
+        11
+      ]
+    },
+    {
+      "day": 196,
+      "part": 785,
+      "ids": [
+        8,
+        11
+      ]
+    },
+    {
+      "day": 196,
+      "part": 786,
+      "ids": [
+        1,
+        6
+      ]
+    },
+    {
+      "day": 196,
+      "part": 786,
+      "ids": [
+        8,
+        11
+      ]
+    },
+    {
+      "day": 238,
+      "part": 953,
+      "ids": [
+        1,
+        4
+      ]
+    },
+    {
+      "day": 238,
+      "part": 954,
+      "ids": [
+        1,
+        4
+      ]
+    },
+    {
+      "day": 246,
+      "part": 986,
+      "ids": [
+        12,
+        15
+      ]
+    },
+    {
+      "day": 246,
+      "part": 986,
+      "ids": [
+        12,
+        15
+      ]
+    },
+    {
+      "day": 246,
+      "part": 987,
+      "ids": [
+        12,
+        15
+      ]
+    },
+    {
+      "day": 249,
+      "part": 999,
+      "ids": [
+        3,
+        14
+      ]
+    },
+    {
+      "day": 249,
+      "part": 999,
+      "ids": [
+        3,
+        14
+      ]
+    },
+    {
+      "day": 250,
+      "part": 1000,
+      "ids": [
+        3,
+        14
+      ]
+    },
+    {
+      "day": 278,
+      "part": 1113,
+      "ids": [
+        4,
+        7
+      ]
+    },
+    {
+      "day": 278,
+      "part": 1113,
+      "ids": [
+        4,
+        7
+      ]
+    },
+    {
+      "day": 278,
+      "part": 1114,
+      "ids": [
+        4,
+        7
+      ]
+    }
+  ],
+  "final": {
+    "population": 16,
+    "named": false,
+    "iteration": 1,
+    "postmortems": 0
+  },
+  "events": [
+    [
+      78,
+      "EDEN",
+      "discovery",
+      "With every hour free, the pairs discover how new life begins."
+    ]
+  ]
+}

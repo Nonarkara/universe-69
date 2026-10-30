@@ -21,6 +21,8 @@ import needs
 import animals
 import skills
 import learning
+import encounters
+import labor
 from minds import (DAYS_PER_YEAR, ADULT_AGE, ELDER_AGE, make_name,  # noqa: F401
                    A_IDLE, A_WALK, A_FORAGE, A_HUNT, A_FISH, A_FARM, A_BUILD,
                    A_TALK, A_MATE, A_BIRTH, A_TEND, A_REST, A_EAT, A_WITHDRAW,
@@ -32,7 +34,7 @@ GESTATION = 270
 # The version of the model. Determinism holds per (seed, day, part) only *within* one
 # version, so every published figure and every postmortem must say which
 # version produced it.
-ENGINE_VERSION = "2026.10.30.5"
+ENGINE_VERSION = "2026.10.30.6"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -399,28 +401,78 @@ def days(n):
     return max(1, int(round(n * PARTS_PER_DAY)))
 
 
-def try_conceive(u, rng, females, p_daily, require_pair=True, byid=None, males=None):
-    """Reproduction is free and pedestrian — until the world makes it not so.
-    EDEN mates without pair-bonds (require_pair=False); LAGOON pairs up.
-    The father's heritable values are carried with the pregnancy."""
-    day = u["day"]
-    for p in females:
-        if p["s"] != "f" or p["due"] or p["w"]:
+def complete_social(u, frames):
+    """Satisfy personal needs only through actual completed live contact."""
+    byid = {p["id"]: p for p in u["people"]}
+    for frame in encounters.deduplicate(frames):
+        if frame.get("part") != u.get("parts", u["day"] * PARTS_PER_DAY + u.get("part", 0)):
             continue
-        if require_pair and p["p"] is None:
+        pair = [byid.get(i) for i in frame["ids"]]
+        if any(p is None or p.get("w") or p.get("ab") or not p.get("c", True) for p in pair):
+            continue
+        for p in pair:
+            if frame["kind"] == "mate":
+                p["intimacy"] = 0.0
+            elif frame["kind"] == "groom" and p.get("groom_day") != u["day"]:
+                p["sol"] = min(1.0, p.get("sol", 0.0) + .3)
+                p["groom_day"] = u["day"]
+
+
+def reproductive_contacts(u, frames):
+    """Resolve frozen actual meetings after casualties, once per mother/part.
+
+    Reassignment after the contact cannot erase it. Death, withdrawal or
+    departure before this part's resolution prevents a conception trial.
+    A LAGOON bond forms only when two singles actually meet voluntarily.
+    """
+    byid = {p["id"]: p for p in u["people"]}
+    seen, eligible = set(), []
+    now = u.get("parts", u["day"] * PARTS_PER_DAY + u.get("part", 0))
+    for frame in frames:
+        if not frame or frame.get("kind") != "mate" or frame.get("part") != now:
+            continue
+        mother, father = byid.get(frame.get("mother")), byid.get(frame.get("father"))
+        if mother is None or father is None or mother["id"] in seen:
+            continue
+        if any(p.get("w") or not p.get("c", True) or p.get("ab") for p in (mother, father)):
+            continue
+        if u["kind"] == "LAGOON":
+            if mother.get("p") is None and father.get("p") is None:
+                mother["p"], father["p"] = father["id"], mother["id"]
+            if mother.get("p") != father["id"] or father.get("p") != mother["id"]:
+                continue
+        seen.add(mother["id"])
+        eligible.append(frame)
+    return eligible
+
+
+def try_conceive(u, rng, females, p_daily, require_pair=True, byid=None, males=None,
+                 contacts=()):
+    """An actual mutual encounter supplies the father, never a global pool.
+
+    The old coefficients remain illustrative per-part probabilities, now
+    conditional on contact. They are NOT calibrated per-intercourse rates.
+    No sperm persistence, ovulation cycle or fertile window is modeled.
+    """
+    day = u["day"]
+    live = {p["id"]: p for p in u["people"]}
+    frames = {f["mother"]: f for f in reproductive_contacts(u, contacts)}
+    for p in females:
+        frame = frames.get(p["id"])
+        fa = live.get(frame["father"]) if frame else None
+        if p["s"] != "f" or p["due"] or p["w"] or fa is None:
+            continue
+        if require_pair and (p.get("p") != fa["id"] or fa.get("p") != p["id"]):
             continue
         a = age_of(p, day)
         if not (ADULT_AGE <= a <= 45 * DAYS_PER_YEAR):
             continue
-        # p_daily is already a per-part rate: the caller divides it once,
-        # for the number of parts in a day, and this is tried once a part
         if rng.random() < p_daily * minds.fertility(p, a, day):
             lost = rng.random() < minds.MISCARRIAGE
             p["due"] = day + (rng.randint(50, 90) if lost else GESTATION)
             p["mc"] = lost
-            fa = (byid or {}).get(p["p"]) if require_pair else (
-                rng.choice(males) if males else None)
-            p["fe"] = [fa.get("ef", 0.5), fa.get("ag", 0.5), fa.get("vg", 0.5)] if fa else None
+            p["pregnancy_father"] = fa["id"]
+            p["fe"] = list(frame["traits"])
 
 
 def clear_widows(people, dead):
@@ -451,15 +503,6 @@ def remove_dead(u, dead):
     clear_widows(people, removed)
     if "_ctx" in u:
         u["_ctx"] = day_context(people, u["day"])
-
-
-def pair_singles(u, rng, adults):
-    singles_m = [p for p in adults if p["s"] == "m" and p["p"] is None and not p["w"]]
-    singles_f = [p for p in adults if p["s"] == "f" and p["p"] is None and not p["w"]]
-    rng.shuffle(singles_m)
-    rng.shuffle(singles_f)
-    for m, f in zip(singles_m, singles_f):
-        m["p"], f["p"] = f["id"], m["id"]
 
 
 # A census row, once a year. The first four are the old contract; the rest
@@ -753,9 +796,7 @@ def eden_assign(u, p, day, rng, crowd):
             p["ad"] = days(rng.randint(2, 5))
             p["tx"], p["ty"] = p["hx"], p["hy"]
         return
-    if p["due"] and p["due"] - day <= 0:
-        p["a"], p["ad"] = A_BIRTH, days(2)
-        p["tx"], p["ty"] = bed()
+    if labor.prepare(u, p):
         return
     if a < ADULT_AGE:
         if a < 3 * DAYS_PER_YEAR:                    # infants: on the mother
@@ -798,30 +839,14 @@ def eden_assign(u, p, day, rng, crowd):
     act = needs.assign(u, p, day, rng, needs.CONDITIONS["EDEN"])
     if act == A_EAT:
         p["tx"], p["ty"] = eden_feed_spot(u, rng)
-    elif act == A_GROOM:
-        near = [q for q in ctx["am"] + ctx["af"] if q is not p and q.get("a") not in (A_MATE, A_GROOM, A_FIGHT)
-                and abs(q["x"] - p["x"]) <= 5 and abs(q["y"] - p["y"]) <= 5]
-        if near:
-            q = rng.choice(near)
-            groom_with(p, q, *clamp(q["x"], q["y"]))
-        else:
-            p["a"], (p["tx"], p["ty"]) = A_REST, bed()
+    elif act in (A_GROOM, A_MATE):
+        pass                       # needs.assign commits only this person's meeting
     elif act == A_SLEEP:
         p["tx"], p["ty"] = bed()
     elif act == A_WORK and role is not None:
         post = u["roles"][role]
         p["ad"] = days(rng.randint(4, 8))
         p["tx"], p["ty"] = clamp(post["x"] + rng.randint(-1, 1), post["y"] + rng.randint(0, 1))
-    elif act == A_MATE:
-        pool = ctx["af"] if p["s"] == "m" else ctx["am"]
-        near = [q for q in pool if q is not p and q.get("a") != A_MATE
-                and q.get("c", True) and not q.get("w")
-                and abs(q["x"] - p["x"]) <= 6 and abs(q["y"] - p["y"]) <= 6]
-        if near:
-            q = rng.choice(near)
-            couple_up(p, q, *clamp(q["x"], q["y"]))
-        else:
-            p["a"], (p["tx"], p["ty"]) = A_SLEEP, bed()
     elif act == A_FIGHT:
         if not pick_fight(u, p, u["people"], rng):
             # nobody near: drift to where the crowd is and brood
@@ -1043,6 +1068,9 @@ def tick_eden(u, rng, events):
     byid = {q["id"]: q for q in people}
     u["_ctx"] = day_context(people, day)
     contacts = []
+    meetings = []
+    for mother in people:
+        labor.prepare(u, mother)
     u['_demos'] = []
     u["_ctx"]["dead"] = dead
     moms = u["_ctx"]["moms"]
@@ -1087,7 +1115,11 @@ def tick_eden(u, rng, events):
         # (Calhoun: stagnation-reared mice never recovered, even moved to
         # empty universes).
         if p["due"] and day >= p["due"]:
+            father_id = p.pop("pregnancy_father", None)
+            p["pregnancy_father"] = None
             p["due"] = 0
+            p["a"], p["ad"] = A_REST, days(1)
+            p["tx"], p["ty"] = p["x"], p["y"]
             if p.pop("mc", False):
                 continue          # lost early; nobody but she ever knew
             p_abandon, p_incompetent = rearing(u, p)
@@ -1106,6 +1138,7 @@ def tick_eden(u, rng, events):
                 c["hx"], c["hy"] = p.get("hx", p["x"]), p.get("hy", p["y"])
                 c["box"] = None                 # claims its own place at adulthood
                 c["mom"] = p["id"]
+                c["dad"] = father_id
                 u["next_id"] += 1
                 born.append(c)
                 if not u.get("named"):
@@ -1125,6 +1158,7 @@ def tick_eden(u, rng, events):
         if age_of(p, day) < 3 * DAYS_PER_YEAR:
             follow_mother(p, byid, lambda x, y: pen_clamp(u, x, y))
         needs.update_learning(u,p)
+        needs.update_social(u,p)
         if p.get("ad", 0) <= 0 and p["x"] == p["tx"] and p["y"] == p["ty"]:
             eden_assign(u, p, day, rng, crowd)
         arrived = step_toward(p)
@@ -1135,6 +1169,10 @@ def tick_eden(u, rng, events):
         if arrived:
             needs.perform_craft(u,p,day)
             contacts.append(needs.capture_contact(u,p))
+            meeting = encounters.capture(u,p,byid,u.get("parts", day * PARTS_PER_DAY + part),
+                                         terrain=terrain_of(u) if u["kind"] == "LAGOON" else None)
+            if meeting:
+                meetings.append(meeting)
             p["ad"] = p.get("ad", 0) - 1
             if p["ad"] <= 0:
                 eden_assign(u, p, day, rng, crowd)
@@ -1144,10 +1182,10 @@ def tick_eden(u, rng, events):
     u["deaths_y"] += len(dead)
     u["births_y"] += len(born)
     people.extend(born)
+    complete_social(u, meetings)
     u["peak"] = max(u["peak"], len(people))
 
-    # mating in the pen is ambient and free — no bonds, no scarcity — as long
-    # as any socially competent adult male remains
+    # Free mating needs an actual mutual meeting; no permanent bond required.
     fertility = 1.0 / 180 / PARTS_PER_DAY
     if crowd >= eden_design(u)["stagnation"]:
         # density suppresses conception (Christian 1950s; Calhoun 1962)
@@ -1169,7 +1207,7 @@ def tick_eden(u, rng, events):
     male_ok = bool(males)
     if male_ok and not u.get("innocent"):
         try_conceive(u, rng, people, fertility, require_pair=False,
-                     males=males)
+                     males=males, contacts=reproductive_contacts(u, meetings))
     elif u.get("innocent") and day > 60 and rng.random() < 1 / (200 * PARTS_PER_DAY):
         # the same discovery as the lagoon's, sooner: there is nothing else to do
         u["innocent"] = False
@@ -1498,21 +1536,9 @@ def lagoon_assign(u, p, day, rng, shortfall):
     def at_home(r=2):
         return clamp(p["hx"] + rng.randint(-r, r), p["hy"] + rng.randint(-r, r))
 
-    # needs that override everything
-    if p["due"] and p["due"] - day <= 0 and not p.get("mc"):
-        p["a"], p["ad"] = A_BIRTH, days(2)
-        p["tx"], p["ty"] = at_home(0)
-        # Human birth is hard: the head is large, the pelvis narrow, the baby
-        # emerges facing away — so women almost never deliver alone. Her
-        # mother, or another woman of the band, kneels with her.
-        helpers = [q for q in u["_ctx"]["af"] if q is not p and q.get("st", 0) == p.get("st", 0)
-                   and abs(q["x"] - p["x"]) <= 8 and abs(q["y"] - p["y"]) <= 8]
-        mom = next((q for q in helpers if q["id"] == p.get("mom")), None)
-        h = mom or (helpers[0] if helpers else None)
-        if h is not None and h.get("a") != A_BIRTH:
-            h["a"], h["ad"] = A_TEND, days(2)
-            h["tx"], h["ty"] = clamp(p["tx"] + 1, p["ty"])
-            h["f"], p["f"] = -1, 1
+    # Labor is a body state, visible before the delivery part. Helpers
+    # decide for themselves; the mother never assigns their actions.
+    if labor.prepare(u, p):
         return
     if p["due"] and 0 < p["due"] - day < 21:
         p["a"], p["ad"] = A_REST, days(6)
@@ -1563,21 +1589,8 @@ def lagoon_assign(u, p, day, rng, shortfall):
     # mind. (needs.py)
     act = needs.assign(u, p, day, rng, needs.CONDITIONS["LAGOON"])
 
-    if act == A_GROOM:
-        kin = [q for q in u["people"] if q is not p and q.get("st", 0) == p.get("st", 0)
-               and (q["id"] in (p.get("p"), p.get("mom")) or q.get("mom") == p["id"])
-               and abs(q["x"] - p["x"]) <= 6 and abs(q["y"] - p["y"]) <= 6
-               and q.get("a") not in (A_MATE, A_BIRTH, A_GROOM)]
-        if kin:
-            groom_with(p, kin[0], *at_home(1))
-        else:
-            p["a"] = A_TALK
-    elif act == A_MATE:
-        q = next((q for q in u["people"] if q["id"] == p.get("p")), None)
-        if q is not None:
-            couple_up(p, q, *at_home(1))
-        else:
-            p["a"] = A_REST
+    if act in (A_GROOM, A_MATE):
+        pass                       # never assign the partner's action
     elif act == A_TALK and (p.get("learning") or p.get("teaching")):
         pass                       # do not replace an instruction meeting with a circle
     elif act in (A_TALK, A_REST):
@@ -1695,23 +1708,6 @@ def pick_fight(u, p, people, rng, reach=9):
     p["a"] = q["a"] = A_FIGHT
     p["ad"] = q["ad"] = days(2)
     return True
-
-
-def groom_with(p, q, x, y):
-    """Primates keep their bonds by grooming; humans do it with hands and
-    talk (Harari's gossip, Dunbar's grooming). Two sit together, one tending
-    the other's hair or skin."""
-    p["tx"], p["ty"], p["f"] = x, y, 1
-    q["tx"], q["ty"], q["f"] = x + 1, y, -1
-    p["a"] = q["a"] = A_GROOM
-    p["ad"] = q["ad"] = days(2)
-
-
-def couple_up(p, q, x, y):
-    p["tx"], p["ty"], p["f"] = x, y, 1
-    q["tx"], q["ty"], q["f"] = x + 1, y, -1
-    p["a"] = q["a"] = A_MATE
-    p["ad"] = q["ad"] = 2       # half a day together, not two
 
 
 def follow_mother(p, byid, clamp):
@@ -1992,7 +1988,7 @@ def keep_watch(u, people, day, events, part=0, rng=None):
         # Watch cannot cancel a bodily decision to sleep, eat or recover.
         # A lit hearth allows another awake adult to guard while its expert rests.
         available = [q for q in band
-                     if needs.instruction_state(u,q) is None and q.get("a") not in (A_SLEEP, A_REST, A_EAT, A_DRINK, A_BIRTH, A_RITE, A_FIGHT)
+                     if needs.instruction_state(u,q) is None and q.get("a") not in (A_SLEEP, A_REST, A_EAT, A_DRINK, A_BIRTH, A_RITE, A_FIGHT, A_MATE, A_GROOM)
                      and not q.get("due") and q.get("ene", 1.0) > 0.35
                      and q.get("hun", 0.0) < needs.HUNGRY and q.get("thirst", 0.0) < 1.0]
         keepers = [q for q in available if skills.knows(q, "fire")]
@@ -2012,7 +2008,7 @@ def keep_watch(u, people, day, events, part=0, rng=None):
             w["hun"] = w.get("hun", 0.0) + 0.5     # a night on watch is a hungry one
             if rng is not None:
                 for q in band:
-                    if q is w or q.get("w"):
+                    if q is w or q.get("w") or q.get("a") in (A_MATE, A_GROOM):
                         continue
                     if q.get("a") in minds.WORK_ACTS:
                         continue                  # anyone out at work: needs.night beds them there
@@ -2312,6 +2308,9 @@ def tick_lagoon(u, rng, events):
     u["_ctx"] = day_context(people, day)
     dead, born, starved = [], [], []
     contacts = []
+    meetings = []
+    for mother in people:
+        labor.prepare(u, mother)
     u['_demos'] = []
     u["_ctx"]["dead"] = dead
     moms = u["_ctx"]["moms"]
@@ -2374,7 +2373,11 @@ def tick_lagoon(u, rng, events):
             continue
         # births
         if p["due"] and day >= p["due"]:
+            father_id = p.pop("pregnancy_father", None)
+            p["pregnancy_father"] = None
             p["due"] = 0
+            p["a"], p["ad"] = A_REST, days(1)
+            p["tx"], p["ty"] = p["x"], p["y"]
             if p.pop("mc", False):
                 continue
             infant_loss = 0.06 if healing else 0.13
@@ -2402,6 +2405,7 @@ def tick_lagoon(u, rng, events):
                                        f"The first child is named {c['n']}. "
                                        f"After this, everyone has a name."))
                     c["mom"] = p["id"]
+                    c["dad"] = father_id
                     u["next_id"] += 1
                     born.append(c)
                 if c["g"] > u["gen_max"] and c["g"] % 5 == 0:
@@ -2423,6 +2427,7 @@ def tick_lagoon(u, rng, events):
             follow_mother(p, byid, lambda x, y: (min(LAGOON_SIZE - 2, max(1, x)),
                                                  min(LAGOON_SIZE - 2, max(1, y))))
         needs.update_learning(u,p)
+        needs.update_social(u,p)
         if p.get("ad", 0) <= 0 and p["x"] == p["tx"] and p["y"] == p["ty"]:
             p["did"] = 0
             lagoon_assign(u, p, day, rng, shortfall)
@@ -2430,6 +2435,10 @@ def tick_lagoon(u, rng, events):
         if arrived:
             needs.perform_craft(u,p,day)
             contacts.append(needs.capture_contact(u,p))
+            meeting = encounters.capture(u,p,byid,u.get("parts", day * PARTS_PER_DAY + part),
+                                         terrain=terrain_of(u) if u["kind"] == "LAGOON" else None)
+            if meeting:
+                meetings.append(meeting)
             # The work happens here and now, and it happens every day they
             # are here: they reach the place, they take what is there, they
             # eat what they need and carry the rest home.
@@ -2453,6 +2462,7 @@ def tick_lagoon(u, rng, events):
     u["deaths_y"] += len(dead)
     u["births_y"] += len(born)
     people.extend(born)
+    complete_social(u, meetings)
     u["peak"] = max(u["peak"], len(people))
 
     u["store"] = sum(st.get("store", 0.0) for st in u.get("settlements", []))
@@ -2466,10 +2476,6 @@ def tick_lagoon(u, rng, events):
             events.append((day, "LAGOON", "discovery",
                            "The pairs discover, as all life does, how new life begins."))
     else:
-        if part == 0 and day % 30 == 0:
-            living_adults = [p for p in people
-                             if ADULT_AGE <= age_of(p, day) < ELDER_AGE]
-            pair_singles(u, rng, living_adults)
         # Preserve the draft's food-sensitive conception hypothesis. These
         # coefficients are illustrative, not fitted demographic estimates;
         # the physical food/water budget constrains the resulting population.
@@ -2480,9 +2486,10 @@ def tick_lagoon(u, rng, events):
             fert *= 1.15
         if shortfall > 0.3:
             fert *= 0.35
+        completed = reproductive_contacts(u, meetings)
         for mother in people:
             local_rate = fert * (1.25 if needs.farming_food(u, mother) else 1.0)
-            try_conceive(u, rng, [mother], local_rate, byid=byid)
+            try_conceive(u, rng, [mother], local_rate, byid=byid, contacts=completed)
 
     # the wild places come back, slowly
     if part == 0:
@@ -2840,6 +2847,14 @@ def summarize(world):
                 "named": bool(u.get("named")),
                 "mind": u.get("mind", [])[-120:],
                 "engine": u.get("engine", ENGINE_VERSION)}
+        byid = {p["id"]: p for p in u["people"]}
+        terrain = terrain_of(u) if u["kind"] == "LAGOON" else None
+        info["social"] = {}
+        for p in u["people"]:
+            state = encounters.state(u, p, byid, terrain)
+            if state is not None:
+                state["contact"] = encounters.capture(u, p, byid, u.get("parts", 0), terrain) is not None
+                info["social"][str(p["id"])] = state
         info["instruction"] = {str(p["id"]):state for p in u["people"]
                                for state in [needs.instruction_state(u,p)] if state is not None}
         info["crafts"] = {str(p["id"]): active_craft(u, p)
@@ -3096,6 +3111,11 @@ def migrate(world):
             p.setdefault("hy", p["y"])
             p.setdefault("f", 1)
             p.setdefault("mom", None)
+            p.setdefault("dad", None)
+            p.setdefault("pregnancy_father", None)
+            p.setdefault("social", None)
+            p.setdefault("groom_day", None)
+            p.setdefault("intimacy", 0.0)
             for k, v in (("ef", 0.5), ("ag", 0.5), ("vg", 0.5), ("pu", 0.5), ("bmi", 22.0),
                          ("sn", 0.5), ("inj", 0.0), ("gd", 0.0), ("gk", 0), ("fe", None)):
                 p.setdefault(k, v)

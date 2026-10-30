@@ -1,0 +1,575 @@
+{
+  "sourceHTMLSHA256": "529d0594fae4248fcb915154bd2e26a2c584eecd1d3f4e92174251f1c7194a19",
+  "kind": "Explicit controlled/synthetic setup using actual engine APIs and summary packets; not a natural trajectory or independent-choice validation.",
+  "Found": [
+    "The preceding viewer joined two nearby A_MATE actors by permanent partner IDs, even when their actual proposals were not reciprocal.",
+    "Pending invitations inherited sexual/grooming poses and activity words before contact.",
+    "First visible snapshot could show a blank default record 111px on phone or 130px on desktop; record initialization waited for the eighth animation frame."
+  ],
+  "Changed": [
+    "Joint mating sprite and documentary couple camera require reciprocal authoritative social contact records, retaining adult, stationary and distance gates. Social bond remains biography only.",
+    "Pending mating/grooming uses the existing neutral rest pose; moving actors retain gait. Captions, person cards, diary and expanded counts distinguish seeking from contact. Grooming orientation requires actual contact.",
+    "Prebirth A_BIRTH reads in labour; real delivery clears it to own REST. No added UI region or CSS geometry.",
+    "Poll initializes the authoritative record immediately, before first world frame; empty content earns 54px including controls, preserving the worlds. Nonadult mating intentions also use the existing neutral rest pose, regardless of contact flags."
+  ],
+  "Verified": {
+    "fullJourneyChecks": [
+      {
+        "width": 390,
+        "passed": 268,
+        "total": 268
+      },
+      {
+        "width": 1024,
+        "passed": 242,
+        "total": 242
+      },
+      {
+        "width": 1440,
+        "passed": 242,
+        "total": 242
+      }
+    ],
+    "focusedChecks": {
+      "passed": 441,
+      "total": 441,
+      "cases": [
+        "bonded-pending",
+        "eden-nonbond-contact",
+        "lagoon-contact",
+        "prebirth-labour",
+        "postpartum-rest"
+      ]
+    },
+    "before": "Preserved old HTML and actual screenshot/renderer-call probe show phantom coupled IDs[1,2] from the same bonded-pending controlled packet; final emits no pair.",
+    "causalPairProof": "Final actual draw path emits IDs[1,4] for EDEN contact despite partner biography1\u21942, and IDs[1,2] for actual LAGOON contact.",
+    "unitChecks": "47 style checks (including first-snapshot poll and 16/17/unknown-age neutral pose) +20 contract checks pass.",
+    "sourceProof": {
+      "sourceFiles": {
+        "sim/minds.py": "c41994125a0ccfad8ae025ae38452179e8640362aa88263659eb983a2f8c04f8",
+        "sim/server.py": "5e1bfe65ed3a37e8695c190bc8764fe98d6986108c877fead8c4bbf87cf44f4d",
+        "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555",
+        "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+        "sim/needs.py": "1d9f69de0b20b71710d529e91d52b2c6e339bc63f48c716f7b9f007e781db6a5",
+        "sim/historian.py": "ad0728651b5f6b326fc02cc05ab2c112dfe34506e1ba1af81dacfa3541f30c69",
+        "sim/engine.py": "6be8721ef0c7079295b1ea7d13ead43e92f8cbcfce442aa62ee7dcc61bba3db8",
+        "sim/labor.py": "3f05c805ba8d2e0e113e079709909a5f34f40a066dc3df6b3b587983cb36c1be",
+        "sim/animals.py": "5622b0910d185da4e9c8b6f680ce87a1feada111fb5505b483bd3de563864577",
+        "sim/learning.py": "b83ddb2818f8e4675eaebc7f0f38526d08aa4ad06e595ef075f1464bad99a5ff",
+        "sim/encounters.py": "913e361567a682618c20f8a887eefc695eb77af6ad428591843080141eea4394"
+      },
+      "fixtureSHA256": "Each focused case matches retained compact fixture; all captured HTML hashes match final mirrored source."
+    },
+    "hierarchy": "Both worlds first; selected person and current activity second; record third. Existing card and captions carry the distinction.",
+    "preservation": [
+      "Both worlds remain visible",
+      "Readable details and native Tab focus",
+      "Portrait remains visible above MORE",
+      "Full paged reading/menu/retry journeys",
+      "Existing cache, body rig, motion and cameras"
+    ],
+    "chromeByState": [
+      {
+        "case": "bonded-pending",
+        "width": 390,
+        "height": 844,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        }
+      },
+      {
+        "case": "bonded-pending",
+        "width": 1024,
+        "height": 768,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        }
+      },
+      {
+        "case": "bonded-pending",
+        "width": 1440,
+        "height": 900,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        }
+      },
+      {
+        "case": "eden-nonbond-contact",
+        "width": 390,
+        "height": 844,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        }
+      },
+      {
+        "case": "eden-nonbond-contact",
+        "width": 1024,
+        "height": 768,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        }
+      },
+      {
+        "case": "eden-nonbond-contact",
+        "width": 1440,
+        "height": 900,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        }
+      },
+      {
+        "case": "lagoon-contact",
+        "width": 390,
+        "height": 844,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        }
+      },
+      {
+        "case": "lagoon-contact",
+        "width": 1024,
+        "height": 768,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        }
+      },
+      {
+        "case": "lagoon-contact",
+        "width": 1440,
+        "height": 900,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        }
+      },
+      {
+        "case": "prebirth-labour",
+        "width": 390,
+        "height": 844,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        }
+      },
+      {
+        "case": "prebirth-labour",
+        "width": 1024,
+        "height": 768,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        }
+      },
+      {
+        "case": "prebirth-labour",
+        "width": 1440,
+        "height": 900,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        }
+      },
+      {
+        "case": "postpartum-rest",
+        "width": 390,
+        "height": 844,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 4.1469194312796205,
+          "worldHeadings": [
+            27.75,
+            27.75
+          ],
+          "combinedHeight": 171.5,
+          "combinedPercent": 20.319905213270143,
+          "bottom": 54,
+          "bottomPercent": 6.398104265402844,
+          "strip": 27,
+          "stripPercent": 3.199052132701422
+        }
+      },
+      {
+        "case": "postpartum-rest",
+        "width": 1024,
+        "height": 768,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 4.557291666666667,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 226.375,
+          "combinedPercent": 29.475911458333332,
+          "bottom": 54,
+          "bottomPercent": 7.03125,
+          "strip": 109.375,
+          "stripPercent": 14.241536458333334
+        }
+      },
+      {
+        "case": "postpartum-rest",
+        "width": 1440,
+        "height": 900,
+        "focus": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        },
+        "more": {
+          "masthead": 35,
+          "mastheadPercent": 3.888888888888889,
+          "worldHeadings": [
+            28,
+            28
+          ],
+          "combinedHeight": 171.6875,
+          "combinedPercent": 19.07638888888889,
+          "bottom": 54,
+          "bottomPercent": 6,
+          "strip": 54.6875,
+          "stripPercent": 6.076388888888889
+        }
+      }
+    ],
+    "independentReview": "Independent engine_audit final529d acceptance: three-width LAGOON focus footers all 54px; pending phone expanded, nonbond EDEN tablet MORE, labour phone focus and postpartum desktop expanded re-viewed. No new SH/clipping/overlap; actual captions/pair identity/neutral pending pose and focus preserved. See ../independent-visual-review.md.",
+    "emptyRecordBeforeAfter": "LAGOON empty-record focus:390px footer111\u219254px;1440px130\u219254px, reclaiming57/76px of world space. Originals under before-footer-fit and before-record-init; final initial snapshot assertions pass."
+  },
+  "Remaining": [
+    "No unresolved geometry or focus failure in exercised states.",
+    "These explicit fed/rested/positioned proposals and due dates demonstrate renderer contracts, not natural encounter frequencies, conception rates, clinical labour timing or human validation."
+  ]
+}

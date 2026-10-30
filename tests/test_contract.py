@@ -53,6 +53,26 @@ class TestSummarizeShape(unittest.TestCase):
                           "iter", "people", "census"):
                 self.assertIn(field, u, f"{key} is missing {field}")
 
+    def test_social_observation_map_names_participants_and_contact(self):
+        for key in ('eden', 'lagoon'):
+            social = self.snap['u'][key]['social']
+            self.assertIsInstance(social, dict)
+            ids = set(self.snap['u'][key]['detail'])
+            for uid, intent in social.items():
+                self.assertIn(uid, ids)
+                self.assertIn(str(intent['other']), ids)
+                self.assertNotEqual(uid, str(intent['other']))
+                self.assertIn(intent['kind'], ('mate', 'groom'))
+                self.assertIsInstance(intent['mutual'], bool)
+                self.assertIsInstance(intent['contact'], bool)
+                if intent['contact']:
+                    peer = social[str(intent['other'])]
+                    self.assertTrue(intent['mutual'])
+                    self.assertEqual(peer['other'], int(uid))
+                    self.assertEqual(peer['kind'], intent['kind'])
+                    self.assertTrue(peer['mutual'])
+                    self.assertTrue(peer['contact'])
+
     def test_eden_specific_fields(self):
         u = self.snap["u"]["eden"]
         for field in ("ennui", "std", "sink", "homeless", "boxes"):
