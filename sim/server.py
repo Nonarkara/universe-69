@@ -245,6 +245,9 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("content-type", ctype)
         self.send_header("content-length", str(len(data)))
         self.send_header("access-control-allow-origin", "*")
+        self.send_header("cache-control", "no-cache, no-store, must-revalidate")
+        self.send_header("pragma", "no-cache")
+        self.send_header("expires", "0")
         self.end_headers()
         self.wfile.write(data)
 
