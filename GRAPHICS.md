@@ -338,7 +338,7 @@ brief, so the next attempt fails the suite instead of the eye:
 
 - the palette, exactly as shipped, and every colour flat;
 - `imageSmoothingEnabled` never true — the figures are pixels;
-- the figure sprite is a 40×40 box, so a "higher resolution" re-skin has to
+- the figure sprite is a 60×60 box, so a "higher resolution" re-skin has to
   be argued for in the test file;
 - an adult is between 7.0 and 8.5 heads tall, computed from the renderer's
   own tables;
@@ -650,3 +650,9 @@ empty or malformed legacy data keeps the existing activity. Instruction text
 uses the current card and caption, with no new panel. In worlds at most 700
 CSS pixels wide, the compact HUD keeps the selected name without repeating
 the full activity. This includes each half of a tablet comparison.
+
+### Resolution overhaul — 2026-10-31
+
+- **Figure sprites**: base canvas size increased from 40 to 60 units (2.25× more pixels per figure). Minimum sprite scale raised from 1.0 to 1.5 so distant figures render at higher resolution. `imageSmoothingEnabled` set to high quality on sprite, ground, and main canvas contexts.
+- **Ground cache**: `GROUND_MAX` increased from 4096 to 8192 device pixels, allowing higher-resolution terrain caching before the cap is hit.
+- **Result**: figures and terrain are noticeably sharper at all zoom levels, especially when zoomed in. The pixelated look is further reduced while maintaining the documentary terrarium aesthetic.
