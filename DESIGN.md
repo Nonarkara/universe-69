@@ -18,6 +18,39 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
   (now − clock.epoch) / clock.seconds` and catches up. Pace changes preserve
   ticks already due. The universes age while the process is dead.
 
+## Engine 2026.10.30.7: exposure days and private reproductive cycles
+
+This changes future trajectories, including existing runs. The `.6` frozen
+century exposed the units error: a former daily pregnancy hazard was tried
+only at actual contact parts. Its EDEN founder attrition is not evidence of
+a Calhoun collapse. This version removes that hazard, rather than fitting it
+to a desired population or restoring pregnancy without physical exposure.
+
+| Finding / causal requirement | Mechanic | Qualification |
+| --- | --- | --- |
+| Li, Wilcox & Dunson (2015), clinical pregnancy benchmarks by intercourse day relative to ovulation | Single exposed-day reference probabilities for O−5 through O are .04, .13, .08, .29, .27, .08. Genuine captured mutual contact records an exposed calendar day and detached actual father/traits. Repeated parts with the same father/day add no extra fertility opportunity. | Clinical-pregnancy endpoint, not fertilization, early hCG pregnancy or live birth. Six calendar-day bins are not a strict 120-hour sperm-survival model. |
+| Daily diary exposure differs from separate independent quarterly trials; Sundaram et al. (2012) | At most one clinical-outcome allocation after the ovulation day's night exposures have been recorded. Multiple exposed days use the maximum applicable single-day benchmark. | Explicit most-fertile-exposure approximation, related to the alternative discussed by Royston & Ferreira (1999). It is neither a fitted joint model nor a proven conservative bound. Marginal day probabilities are not multiplied as independent trials. |
+| Cycles vary; Wilcox et al. (2000), Bull et al. (2019) | Each mature female has a private deterministic phase and independently sampled integer intervals of 24–35 model days. No action or observer query draws her reproductive RNG. | Uniform mean 29.5 days is an illustrative prior, not a fit to app users, within-person variability, hormones, menstruation or anovulation. The end-of-day boundary is operational, not a measured subday ovulation time. |
+| Past physical exposure survives later social changes | Fathers are selected uniformly from the actual records on the best-scoring exposed day(s); later death, withdrawal, departure or a new bond cannot rewrite those records. Only a living mother's body can allocate a pregnancy. | This is model paternity bookkeeping, not a sperm-competition model or human knowledge of genetic paternity. Current male pools and current partner identity do not gate a retained exposure. |
+| Physiology/environment can suppress a healthy reference | Existing age, BMI, nursing, food, crowding, illness and ennui hypotheses scale the cycle benchmark once. The combined modifier is bounded to 0–1. No store/farm bonus exceeds the healthy reference. | These modifiers remain illustrative and uncalibrated for prehistoric populations. Fertility is not divided by four and is not retried each part. |
+| Clinical pregnancy and subsequent loss are distinct | A successful cycle allocates a pregnancy trajectory due O+270, with the existing .14 later recognized-loss hypothesis and O+50–90 loss timing. | No additional hCG-to-clinical loss roll is applied. Rate and timing are unfitted. Allocation at O is advance sampling of a trajectory, not clinical recognition at ovulation. |
+| Old saves cannot supply unrecorded reproductive history | `reproduction` defaults to None. Lazy mature-female initialization draws a fresh phase prior, with empty exposures. Existing due dates, hereditary values and known/unknown pregnancy fathers are preserved. | The private stream is seeded by universe seed, iteration, person, cycle index and purpose; JSON persists the schedule/evaluation marker. Migration itself draws no RNG or historical exposure. |
+
+The bounded history holds at most four distinct fathers per day across six
+calendar days. The intended unit is **an exposed day**, not the social token,
+an inferred number of intercourse acts or repeated geometrical observations.
+A continuously completed mate action on a new day can mark that new day;
+this is an explicit daily behavioral resolution, not a claim of measured
+intercourse frequency. Same-day multipartner records do not raise cycle chance.
+
+LAGOON bond formation remains separate and requires a surviving actual mutual
+meeting. Biological exposure does not retroactively disappear if a father dies
+after such a meeting. At pregnancy, old exposure/scheduling state clears;
+after the pregnancy ends, a fresh phase prior resumes under the existing
+nursing/body modifier. Postpartum cycle physiology is not fully modeled.
+The 100-year-per-real-day clock, independent choices, island and renderer remain.
+Population outcomes must be re-derived across the shipped code and seeds.
+
 ## Engine 2026.10.30.6: embodied reproductive contact
 
 This changes future trajectories, including an already-running instrument.

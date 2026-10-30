@@ -1,6 +1,15 @@
 # STUDY — measurements from the running universes
 
-**Current version boundary.** Engine `2026.10.30.6` requires actual mutual
+**Current version boundary.** Engine `2026.10.30.7` replaces per-part contact
+hazards with genuine exposed days, individual variable cycles and one
+clinical-outcome allocation per cycle. Actual exposure history, not current
+partner survival, supplies the model father. Existing pregnancies are preserved.
+The published single-day benchmark, maximum-day aggregation and phase prior
+are explicit assumptions; no population fit is claimed. All `.6` arcs below
+remain historical. Current source-bound evidence belongs in
+`docs/audits/2026-10-30-fertility/`. The 100-year-per-real-day clock is unchanged.
+
+**Earlier version boundary.** Engine `2026.10.30.6` requires actual mutual
 reproductive contact, independent local social choices and persistent actual
 paternity. It exposes labour before delivery. This changes both worlds' future
 trajectories; the earlier unconditional fertility figures are historical.
@@ -37,6 +46,23 @@ wildlife replenishment, conception and the default clock. All earlier results
 below are historical; none is evidence for the new trajectory. The model is a
 Sri Lanka coastal-ecology analogue, not an exact island map, physical-scale
 survey, demographic prediction or guaranteed civilizational ladder.
+
+## Reproductive cycles — 2026.10.30.7
+
+Frozen, predeclared seeds 7/25/69 each ran 36,000 model days. LAGOON 7 and 25
+reached maternal generation 6 and ended with 30/29 people, including younger
+cohorts and children. LAGOON 69 ended with five men aged 52.56–76.56, not a
+viable breeding population. EDEN 7 emptied on day 35,619; EDEN 25/69 retained
+one elderly woman each. All EDEN cases stopped at generation 2 with only age
+losses; these observations do not demonstrate a Calhoun crowding mechanism.
+
+Actual exposure timing and pregnancy provenance now work across generations,
+but biological/social/ecological calibration and great civilizations remain
+unverified. No coefficient was adjusted to select survivors. The primary
+benchmark is clinical pregnancy; maximum-day aggregation and the phase prior
+remain explicit assumptions. Exact sources, controlled/cross-runtime checks,
+natural checkpoint geometry, raw results and terminal-status qualifications
+are in `docs/audits/2026-10-30-fertility/`.
 
 ## Actual reproductive contact — 2026.10.30.6
 

@@ -1,0 +1,8 @@
+day -5: 396/10000 = 0.03960; expected 0.04; SE 0.00196; z -0.20; paired {'repeatedPartDayIdentical': 10000, 'jsonRoundTripIdentical': 10000, 'modifierAboveOneIdentical': 10000}
+day -4: 1282/10000 = 0.12820; expected 0.13; SE 0.00336; z -0.54; paired {'repeatedPartDayIdentical': 10000, 'jsonRoundTripIdentical': 10000, 'modifierAboveOneIdentical': 10000}
+day -3: 767/10000 = 0.07670; expected 0.08; SE 0.00271; z -1.22; paired {'repeatedPartDayIdentical': 10000, 'jsonRoundTripIdentical': 10000, 'modifierAboveOneIdentical': 10000}
+day -2: 2881/10000 = 0.28810; expected 0.29; SE 0.00454; z -0.42; paired {'repeatedPartDayIdentical': 10000, 'jsonRoundTripIdentical': 10000, 'modifierAboveOneIdentical': 10000}
+day -1: 2653/10000 = 0.26530; expected 0.27; SE 0.00444; z -1.06; paired {'repeatedPartDayIdentical': 10000, 'jsonRoundTripIdentical': 10000, 'modifierAboveOneIdentical': 10000}
+day +0: 767/10000 = 0.07670; expected 0.08; SE 0.00271; z -1.22; paired {'repeatedPartDayIdentical': 10000, 'jsonRoundTripIdentical': 10000, 'modifierAboveOneIdentical': 10000}
+Negative controls: {'noExposure': {'allocations': 0, 'replicas': 10000}, 'outsideWindowOminus6': {'allocations': 0, 'replicas': 10000}}
+Elapsed 13.88s; sourceChanged=False; failures=[]

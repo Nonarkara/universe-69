@@ -23,6 +23,7 @@ import skills
 import learning
 import encounters
 import labor
+import reproduction
 from minds import (DAYS_PER_YEAR, ADULT_AGE, ELDER_AGE, make_name,  # noqa: F401
                    A_IDLE, A_WALK, A_FORAGE, A_HUNT, A_FISH, A_FARM, A_BUILD,
                    A_TALK, A_MATE, A_BIRTH, A_TEND, A_REST, A_EAT, A_WITHDRAW,
@@ -34,7 +35,7 @@ GESTATION = 270
 # The version of the model. Determinism holds per (seed, day, part) only *within* one
 # version, so every published figure and every postmortem must say which
 # version produced it.
-ENGINE_VERSION = "2026.10.30.6"
+ENGINE_VERSION = "2026.10.30.7"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -446,33 +447,28 @@ def reproductive_contacts(u, frames):
     return eligible
 
 
-def try_conceive(u, rng, females, p_daily, require_pair=True, byid=None, males=None,
-                 contacts=()):
-    """An actual mutual encounter supplies the father, never a global pool.
+def try_conceive(u, rng, females, modifier=1.0, contacts=()):
+    """Record genuine exposed days; allocate at most one pregnancy per cycle.
 
-    The old coefficients remain illustrative per-part probabilities, now
-    conditional on contact. They are NOT calibrated per-intercourse rates.
-    No sperm persistence, ovulation cycle or fertile window is modeled.
+    The benchmark is clinical pregnancy, not a per-part fertilization hazard.
+    Its cycle-end allocation is not a same-day clinical diagnosis. Existing
+    later recognized loss remains an illustrative conditional fate.
     """
+    if contacts:
+        reproduction.record(u, contacts)
     day = u["day"]
-    live = {p["id"]: p for p in u["people"]}
-    frames = {f["mother"]: f for f in reproductive_contacts(u, contacts)}
     for p in females:
-        frame = frames.get(p["id"])
-        fa = live.get(frame["father"]) if frame else None
-        if p["s"] != "f" or p["due"] or p["w"] or fa is None:
+        if p["s"] != "f":
             continue
-        if require_pair and (p.get("p") != fa["id"] or fa.get("p") != p["id"]):
+        body = minds.fertility(p, age_of(p, day), day)
+        outcome = reproduction.advance(u, p, modifier * body)
+        if outcome is None:
             continue
-        a = age_of(p, day)
-        if not (ADULT_AGE <= a <= 45 * DAYS_PER_YEAR):
-            continue
-        if rng.random() < p_daily * minds.fertility(p, a, day):
-            lost = rng.random() < minds.MISCARRIAGE
-            p["due"] = day + (rng.randint(50, 90) if lost else GESTATION)
-            p["mc"] = lost
-            p["pregnancy_father"] = fa["id"]
-            p["fe"] = list(frame["traits"])
+        lost = rng.random() < minds.MISCARRIAGE
+        p["due"] = outcome["ovulation_day"] + (rng.randint(50, 90) if lost else GESTATION)
+        p["mc"] = lost
+        p["pregnancy_father"] = outcome["father"]
+        p["fe"] = list(outcome["traits"])
 
 
 def clear_widows(people, dead):
@@ -1185,8 +1181,9 @@ def tick_eden(u, rng, events):
     complete_social(u, meetings)
     u["peak"] = max(u["peak"], len(people))
 
-    # Free mating needs an actual mutual meeting; no permanent bond required.
-    fertility = 1.0 / 180 / PARTS_PER_DAY
+    # Environmental hypotheses modify the clinical cycle benchmark once.
+    # No daily hazard or quarter-part probability is applied to an encounter.
+    fertility = 1.0
     if crowd >= eden_design(u)["stagnation"]:
         # density suppresses conception (Christian 1950s; Calhoun 1962)
         fertility *= max(0.25, 1.0 - crowd)
@@ -1202,13 +1199,10 @@ def tick_eden(u, rng, events):
     if u.get("wary_years", 0) > 0:
         fertility *= 0.7                            # the wary generation
     u["_ctx"] = day_context(people, day)
-    males = [p for p in people if p["s"] == "m" and p["c"] and not p["w"]
-             and age_of(p, day) >= ADULT_AGE]
-    male_ok = bool(males)
-    if male_ok and not u.get("innocent"):
-        try_conceive(u, rng, people, fertility, require_pair=False,
-                     males=males, contacts=reproductive_contacts(u, meetings))
-    elif u.get("innocent") and day > 60 and rng.random() < 1 / (200 * PARTS_PER_DAY):
+    reproductive_contacts(u, meetings)  # social bonds, separate from exposure
+    reproduction.record(u, meetings)  # prune all histories even without new contact
+    try_conceive(u, rng, people, fertility)
+    if u.get("innocent") and day > 60 and rng.random() < 1 / (200 * PARTS_PER_DAY):
         # the same discovery as the lagoon's, sooner: there is nothing else to do
         u["innocent"] = False
         events.append((day, "EDEN", "discovery",
@@ -2475,21 +2469,21 @@ def tick_lagoon(u, rng, events):
             u["innocent"] = False
             events.append((day, "LAGOON", "discovery",
                            "The pairs discover, as all life does, how new life begins."))
-    else:
-        # Preserve the draft's food-sensitive conception hypothesis. These
-        # coefficients are illustrative, not fitted demographic estimates;
-        # the physical food/water budget constrains the resulting population.
-        fert = 1.0 / 240 / PARTS_PER_DAY
-        fed = 1.0 - min(1.0, shortfall * 1.6)
-        fert *= 0.30 + 0.70 * fed
-        if u["store"] > daily_need * 20:
-            fert *= 1.15
-        if shortfall > 0.3:
-            fert *= 0.35
-        completed = reproductive_contacts(u, meetings)
-        for mother in people:
-            local_rate = fert * (1.25 if needs.farming_food(u, mother) else 1.0)
-            try_conceive(u, rng, [mother], local_rate, byid=byid, contacts=completed)
+    # Cycles belong to bodies, even before reproductive knowledge or after
+    # a partner dies. The old food hypotheses remain bounded modifiers, not
+    # extra trials or boosts above the healthy clinical reference.
+    fert = 1.0
+    fed = 1.0 - min(1.0, shortfall * 1.6)
+    fert *= 0.30 + 0.70 * fed
+    if u["store"] > daily_need * 20:
+        fert *= 1.15
+    if shortfall > 0.3:
+        fert *= 0.35
+    reproductive_contacts(u, meetings)
+    reproduction.record(u, meetings)
+    for mother in people:
+        local_modifier = min(1.0, fert * (1.25 if needs.farming_food(u, mother) else 1.0))
+        try_conceive(u, rng, [mother], local_modifier)
 
     # the wild places come back, slowly
     if part == 0:
@@ -3116,6 +3110,7 @@ def migrate(world):
             p.setdefault("social", None)
             p.setdefault("groom_day", None)
             p.setdefault("intimacy", 0.0)
+            reproduction.migrate_person(p)
             for k, v in (("ef", 0.5), ("ag", 0.5), ("vg", 0.5), ("pu", 0.5), ("bmi", 22.0),
                          ("sn", 0.5), ("inj", 0.0), ("gd", 0.0), ("gk", 0), ("fe", None)):
                 p.setdefault(k, v)

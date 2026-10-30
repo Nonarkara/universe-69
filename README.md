@@ -129,75 +129,69 @@ the TERRARIUM palette, Jost for controls and Source Serif 4 for reading.
 `GRAPHICS.md` and `tests/test_style.py` define the rendering contract.
 
 
-## Island and people — 2026-10-30
+## Current model
 
 New LAGOON worlds use a Sri Lanka-inspired tropical coastal analogue: shared
-forest food patches, fish at actual shores, moving game, finite freshwater
-banks and cultivable land. People must reach and work their resources; a new
-camp cannot create another copy of a depleted patch. Wet/dry seasons change
-renewal. Existing saves retain their original terrain and seasonal regime.
-The map is procedural, not a surveyed replica; see RESEARCH.md for sources
-and the model's limits.
+forest food, shore fishing, moving game, finite freshwater and cultivable land.
+People must reach and work their resources; camps cannot duplicate a depleted
+patch. Wet/dry seasons change renewal. Existing saves retain their original
+terrain and seasonal regime. This is a procedural analogue, not a surveyed
+island replica; see RESEARCH.md for sources and limits.
 
-The anatomy rig keeps age/sex proportions and fixed bone lengths. Walking
-stride follows actual leg size and distance travelled, with a shared stance
-law and frame-rate-independent movement. Sleeping arms now reach their pose,
-bedrolls fit their bodies, and age changes invalidate the sprite cache.
+People use an anatomy rig with age/sex proportions and fixed bone lengths.
+Walking stride follows actual leg size and distance travelled, with a planted
+stance law and frame-rate-independent motion. Sleeping poses and bedding fit
+the body; age changes invalidate the sprite cache.
 
-Engine `2026.10.30.6` changes future trajectories: pregnancy requires an actual
-mutual encounter, each person chooses their own response, and actual paternity
-is retained independently of later bonds. Labour becomes visible before delivery.
-The existing fertility coefficients are now contact-conditional assumptions,
-not calibrated per-act rates. The `.5` purposeful instruction from actually
-witnessed experts remains. The `.4` personal procedures, practice and local
-camp works remain. The `.3` contact-based resource sharing remains. The `.2` personal memory, maturation and nursing
-corrections remain in force;
-the earlier `2026.10.30.1` resource changes remain in force. The century-per-day clock
-preserves previously completed time when its pace changes. Existing
-`UNIVERSE69_SEC_PER_PART` overrides still take precedence; remove an old
-explicit override to use 0.6 seconds. A faster clock does not guarantee
-survival or civilization: the current ladder ends at writing.
+People remember locally observed resources, retain stale beliefs about distant
+supplies, scout and exchange bounded reports with original dates and relay
+paths. Newborns do not inherit personal memories. Procedures belong to people:
+observation, instruction and actual practice differ. A witnessed expert can be
+sought at their last seen location; both teacher and learner choose against
+their own needs. Fires, prepared food and completed works belong to camps.
+Historical technology labels record discoveries, not universal competence.
 
-Each extinction now has an independent report in `data/history-books/` and
-a **Runs** view inside Research. It does not wait for both worlds to die.
-Counts describe a cumulative iteration; inherited lessons remain hypotheses,
-not proven remedies. Explicit restarts archive the ledger with the old state.
-This observer change does not change engine trajectories.
+Engine `2026.10.30.7` uses genuine reproductive exposure days and individual
+variable cycles. One clinical-pregnancy outcome is allocated after the model
+ovulation day closes. Duplicate contact parts and reloads add no extra trials.
+Actual father/trait records survive later social changes. Invitations never
+assign the recipient's action; pending poses are neutral, and actual contact
+controls the joint adult picture. Labour appears before delivery and helpers
+choose independently. Existing pregnancies survive migration. **This changes
+future trajectories.** The six-day benchmark, maximum-exposure approximation,
+cycle prior and physiology modifiers remain explicit model assumptions.
 
-The larger digital-human objective remains in progress; see
-[the capability audit](docs/audits/2026-10-30/capabilities.md).
+## Time, records and limits
 
-People now remember locally seen resource locations and quantities, learn
-from physical uses, and scout when known supplies are missing. They retain
-stale beliefs about distant patches and camp stores instead of reading those
-reserves instantly. Capacity and forgetting are explicit model assumptions;
-this is spatial resource learning, not general human cognition. Newborns and
-reseeded founders do not inherit another person's memories.
+The default clock is **100 model years per real day**, with four parts per day
+and 360 days per model year. Pace changes preserve previously completed time.
+An existing `UNIVERSE69_SEC_PER_PART` override still wins; remove an old override
+to use the default 0.6 seconds per part. A faster clock guarantees neither
+survival nor civilization; the predefined technology ladder ends at writing.
 
-Completed conversations/grooming now pass bounded resource reports with the
-original observer/date, sender and relay path. Retelling does not refresh old
-information or grant personal harvesting experience. Reports can be stale. This sharing carries resource beliefs; procedures follow
-the personal learning rules below. General cognition remains unimplemented.
-Both worlds use the same contact policy.
+Each extinction has its own report in `data/history-books/` and a **Runs** view
+inside Research. It does not wait for both worlds to die. Counts describe a
+cumulative iteration; inherited lessons are hypotheses, not proven remedies.
+Explicit restarts archive the ledger and old state.
 
+The digital-human objective remains in progress. This is a finite model of
+candidate dynamics, not general human cognition or a validated population
+forecast. In the frozen `.7` century runs, LAGOON seeds 7/25 reach maternal
+generation six with 30/29 people; seed 69 retains five older men. EDEN stops at
+generation two in all three cases. Younger cohorts support further study;
+positive headcount alone does not prove demographic viability.
 
-Historical technology is now a discovery record. Individuals learn procedures
-through contact, observation and actual practice; new children do not inherit
-them automatically. The old-save capability assumption is explicitly labelled.
-Physical fires, prepared food and completed works belong to camps. See
-[the procedure audit](docs/audits/2026-10-30-skills/README.md) for final verification
-and limitations. This remains a finite simulation, not human-level cognition or
-a guarantee that a great civilization will emerge.
+## Verification
 
+The [reproductive-cycle audit](docs/audits/2026-10-30-fertility/README.md)
+contains primary-source boundaries, controlled/cross-runtime probability checks,
+the three source-bound century runs and natural checkpoint screenshots. The
+phone header keeps the selected name while full activity remains in the card
+and canvas caption, recovering scene space without removing information.
 
-People can now remember demonstrated expertise, seek the person's last seen
-location and request instruction. The teacher chooses against their own needs.
-Missing foundations are taught at real contact; awareness still needs practice.
-The existing person card shows the intention, while successful instruction
-enters the record. See [the instruction audit](docs/audits/2026-10-30-instruction/README.md).
+Earlier versioned evidence remains available:
 
-
-The encounter audit fixes remote conception, forced partner actions and phantom
-coupled poses. Its fresh century trial emptied both worlds, exposing the
-remaining fertility time-basis problem. This is a verified causal/UI increment,
-not a validated civilization simulation. See [the encounter audit](docs/audits/2026-10-30-encounters/README.md).
+- [Capability boundaries](docs/audits/2026-10-30/capabilities.md).
+- [Personal procedures and local works](docs/audits/2026-10-30-skills/README.md).
+- [Purposeful instruction](docs/audits/2026-10-30-instruction/README.md).
+- [Actual encounters and the historical fertility failure](docs/audits/2026-10-30-encounters/README.md).

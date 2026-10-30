@@ -1,0 +1,85 @@
+{
+  "engine": "2026.10.30.7",
+  "python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "seed": 25,
+  "days": 36000,
+  "seconds": 1224.738,
+  "source_before": {
+    "sim/animals.py": "5622b0910d185da4e9c8b6f680ce87a1feada111fb5505b483bd3de563864577",
+    "sim/encounters.py": "913e361567a682618c20f8a887eefc695eb77af6ad428591843080141eea4394",
+    "sim/engine.py": "53415944ef4d5af155462f7af4217053319868a2f6e1abc4cfa952af16b8ee53",
+    "sim/historian.py": "ad0728651b5f6b326fc02cc05ab2c112dfe34506e1ba1af81dacfa3541f30c69",
+    "sim/labor.py": "3f05c805ba8d2e0e113e079709909a5f34f40a066dc3df6b3b587983cb36c1be",
+    "sim/learning.py": "b83ddb2818f8e4675eaebc7f0f38526d08aa4ad06e595ef075f1464bad99a5ff",
+    "sim/minds.py": "95965b717e4e72fa45a79b48c8b5a00904b416406ce0b6e905bcab882c481d0a",
+    "sim/needs.py": "1d9f69de0b20b71710d529e91d52b2c6e339bc63f48c716f7b9f007e781db6a5",
+    "sim/reproduction.py": "20c9c189cba51db418eaa000b3b6cd3b7b68c2f865436bbbb485fe182725e3cf",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "sim/server.py": "5e1bfe65ed3a37e8695c190bc8764fe98d6986108c877fead8c4bbf87cf44f4d",
+    "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555",
+    "tools/lab.py": "0df66f318210a7c106fc31a5874679feb2882c901551b743dddc20b8afb1e0f0"
+  },
+  "source_after": {
+    "sim/animals.py": "5622b0910d185da4e9c8b6f680ce87a1feada111fb5505b483bd3de563864577",
+    "sim/encounters.py": "913e361567a682618c20f8a887eefc695eb77af6ad428591843080141eea4394",
+    "sim/engine.py": "53415944ef4d5af155462f7af4217053319868a2f6e1abc4cfa952af16b8ee53",
+    "sim/historian.py": "ad0728651b5f6b326fc02cc05ab2c112dfe34506e1ba1af81dacfa3541f30c69",
+    "sim/labor.py": "3f05c805ba8d2e0e113e079709909a5f34f40a066dc3df6b3b587983cb36c1be",
+    "sim/learning.py": "b83ddb2818f8e4675eaebc7f0f38526d08aa4ad06e595ef075f1464bad99a5ff",
+    "sim/minds.py": "95965b717e4e72fa45a79b48c8b5a00904b416406ce0b6e905bcab882c481d0a",
+    "sim/needs.py": "1d9f69de0b20b71710d529e91d52b2c6e339bc63f48c716f7b9f007e781db6a5",
+    "sim/reproduction.py": "20c9c189cba51db418eaa000b3b6cd3b7b68c2f865436bbbb485fe182725e3cf",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "sim/server.py": "5e1bfe65ed3a37e8695c190bc8764fe98d6986108c877fead8c4bbf87cf44f4d",
+    "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555",
+    "tools/lab.py": "0df66f318210a7c106fc31a5874679feb2882c901551b743dddc20b8afb1e0f0"
+  },
+  "sources_unchanged": true,
+  "counts": {
+    "EDEN:clinical_allocations": 10,
+    "EDEN:evaluated_cycles": 4334,
+    "EDEN:exposed_cycles": 81,
+    "EDEN:father_day_records": 450,
+    "EDEN:newborn_records": 9,
+    "EDEN:newborn_records_with_father": 9,
+    "LAGOON:clinical_allocations": 136,
+    "LAGOON:evaluated_cycles": 5782,
+    "LAGOON:exposed_cycles": 2149,
+    "LAGOON:father_day_records": 15589,
+    "LAGOON:newborn_records": 99,
+    "LAGOON:newborn_records_with_father": 99
+  },
+  "sum_cycle_probabilities": {
+    "LAGOON": 147.71548750178718,
+    "EDEN": 9.748309240147721
+  },
+  "endpoint": {
+    "eden": {
+      "population": 1,
+      "iteration": 1,
+      "max_generation": 2,
+      "peak": 25,
+      "extinct_day": null,
+      "living_known_fathers": 1,
+      "pending_pregnancies": 0,
+      "historical_discoveries": []
+    },
+    "lagoon": {
+      "population": 29,
+      "iteration": 1,
+      "max_generation": 6,
+      "peak": 51,
+      "extinct_day": null,
+      "living_known_fathers": 29,
+      "pending_pregnancies": 0,
+      "historical_discoveries": [
+        "stone_tools",
+        "fire",
+        "fishing",
+        "shelter",
+        "preservation",
+        "predator_hunt"
+      ]
+    }
+  }
+}

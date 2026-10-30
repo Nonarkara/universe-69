@@ -1,0 +1,228 @@
+{
+  "7": {
+    "state_sha256": "766a1ec2e4b98118148288df06fa91bac48e87e037a82c87fa1a778dd558af6f",
+    "engine": "2026.10.30.7",
+    "endpoint": {
+      "eden": {
+        "iteration": 1,
+        "day": 36000,
+        "peak": 22,
+        "population": 0,
+        "max_maternal_generation": 2,
+        "founders_alive": 0,
+        "descendants_alive": 0,
+        "age_eligible_females": 0,
+        "age_eligible_males": 0,
+        "children_female": 0,
+        "children_male": 0,
+        "pregnancies": 0,
+        "age_range_years": null,
+        "withdrawn": 0,
+        "incompetent_model_flag": 0,
+        "model_death_causes": {
+          "age": 23
+        },
+        "historical_discoveries": [],
+        "living_father_ids_recorded": 0
+      },
+      "lagoon": {
+        "iteration": 1,
+        "day": 36000,
+        "peak": 55,
+        "population": 30,
+        "max_maternal_generation": 6,
+        "founders_alive": 0,
+        "descendants_alive": 30,
+        "age_eligible_females": 7,
+        "age_eligible_males": 4,
+        "children_female": 6,
+        "children_male": 6,
+        "pregnancies": 0,
+        "age_range_years": [
+          0.34,
+          71.95
+        ],
+        "withdrawn": 0,
+        "incompetent_model_flag": 0,
+        "model_death_causes": {
+          "predator": 1,
+          "violence": 34,
+          "infant": 19,
+          "age": 16,
+          "starvation": 25,
+          "accident": 4,
+          "dehydration": 44,
+          "childbirth": 1
+        },
+        "historical_discoveries": [
+          "fire",
+          "stone_tools",
+          "fishing",
+          "shelter",
+          "preservation",
+          "predator_hunt",
+          "lore"
+        ],
+        "living_father_ids_recorded": 30
+      }
+    },
+    "qualifications": [
+      "Age eligibility uses the shipped16..45 model gate for both sexes, not clinical fertility or proof of viable mating.",
+      "Generation is the existing maternal-generation counter.",
+      "Death causes are model counters, not causal identification or human forecasts.",
+      "Positive headcount alone is not demographic viability; eligible ages also do not establish viability."
+    ]
+  },
+  "25": {
+    "state_sha256": "39cf297d45b2ed69abe1733f18827f35937bdaa6e66ba36fb12604f7b355a11e",
+    "engine": "2026.10.30.7",
+    "endpoint": {
+      "eden": {
+        "iteration": 1,
+        "day": 36000,
+        "peak": 25,
+        "population": 1,
+        "max_maternal_generation": 2,
+        "founders_alive": 0,
+        "descendants_alive": 1,
+        "age_eligible_females": 0,
+        "age_eligible_males": 0,
+        "children_female": 0,
+        "children_male": 0,
+        "pregnancies": 0,
+        "age_range_years": [
+          88.41,
+          88.41
+        ],
+        "withdrawn": 0,
+        "incompetent_model_flag": 0,
+        "model_death_causes": {
+          "age": 24
+        },
+        "historical_discoveries": [],
+        "living_father_ids_recorded": 1
+      },
+      "lagoon": {
+        "iteration": 1,
+        "day": 36000,
+        "peak": 51,
+        "population": 29,
+        "max_maternal_generation": 6,
+        "founders_alive": 0,
+        "descendants_alive": 29,
+        "age_eligible_females": 4,
+        "age_eligible_males": 8,
+        "children_female": 9,
+        "children_male": 4,
+        "pregnancies": 0,
+        "age_range_years": [
+          2.75,
+          75.99
+        ],
+        "withdrawn": 0,
+        "incompetent_model_flag": 0,
+        "model_death_causes": {
+          "violence": 34,
+          "predator": 1,
+          "infant": 14,
+          "starvation": 9,
+          "dehydration": 27,
+          "accident": 4,
+          "childbirth": 2,
+          "age": 9
+        },
+        "historical_discoveries": [
+          "stone_tools",
+          "fire",
+          "fishing",
+          "shelter",
+          "preservation",
+          "predator_hunt"
+        ],
+        "living_father_ids_recorded": 29
+      }
+    },
+    "qualifications": [
+      "Age eligibility uses the shipped16..45 model gate for both sexes, not clinical fertility or proof of viable mating.",
+      "Generation is the existing maternal-generation counter.",
+      "Death causes are model counters, not causal identification or human forecasts.",
+      "Positive headcount alone is not demographic viability; eligible ages also do not establish viability."
+    ]
+  },
+  "69": {
+    "state_sha256": "f1e74e4ad65de4dadc1a94c5fd3155b1a36d144a9fe649128ebd0fde54e98ff1",
+    "engine": "2026.10.30.7",
+    "endpoint": {
+      "eden": {
+        "iteration": 1,
+        "day": 36000,
+        "peak": 27,
+        "population": 1,
+        "max_maternal_generation": 2,
+        "founders_alive": 0,
+        "descendants_alive": 1,
+        "age_eligible_females": 0,
+        "age_eligible_males": 0,
+        "children_female": 0,
+        "children_male": 0,
+        "pregnancies": 0,
+        "age_range_years": [
+          82.97,
+          82.97
+        ],
+        "withdrawn": 0,
+        "incompetent_model_flag": 0,
+        "model_death_causes": {
+          "age": 26
+        },
+        "historical_discoveries": [],
+        "living_father_ids_recorded": 1
+      },
+      "lagoon": {
+        "iteration": 1,
+        "day": 36000,
+        "peak": 28,
+        "population": 5,
+        "max_maternal_generation": 3,
+        "founders_alive": 0,
+        "descendants_alive": 5,
+        "age_eligible_females": 0,
+        "age_eligible_males": 0,
+        "children_female": 0,
+        "children_male": 0,
+        "pregnancies": 0,
+        "age_range_years": [
+          52.56,
+          76.56
+        ],
+        "withdrawn": 0,
+        "incompetent_model_flag": 0,
+        "model_death_causes": {
+          "predator": 1,
+          "violence": 11,
+          "childbirth": 3,
+          "age": 13,
+          "dehydration": 10,
+          "accident": 6,
+          "starvation": 1,
+          "infant": 1
+        },
+        "historical_discoveries": [
+          "fire",
+          "stone_tools",
+          "fishing",
+          "shelter",
+          "preservation",
+          "predator_hunt"
+        ],
+        "living_father_ids_recorded": 5
+      }
+    },
+    "qualifications": [
+      "Age eligibility uses the shipped16..45 model gate for both sexes, not clinical fertility or proof of viable mating.",
+      "Generation is the existing maternal-generation counter.",
+      "Death causes are model counters, not causal identification or human forecasts.",
+      "Positive headcount alone is not demographic viability; eligible ages also do not establish viability."
+    ]
+  }
+}

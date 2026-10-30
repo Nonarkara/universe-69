@@ -457,6 +457,20 @@ class TestActualSocialContact(unittest.TestCase):
         result = json.loads(subprocess.run(['node','-e',js],check=True,capture_output=True,text=True).stdout)
         self.assertEqual(result,[True,[]])
 
+    def test_compact_ordinary_sleeping_selection_does_not_duplicate_activity(self):
+        src = read_renderer()
+        hud = src[src.index('function hudText('):src.index('function refreshHud(')]
+        setup = "var width=390,selected=true,document={getElementById:function(){return {clientWidth:width};}},shots={},view={},hudExtra='';function whoInfo(){return selected?{name:'Ganga',act:'sleeping',craft:'',instruction:'',social:''}:null;}function escapeHTML(s){return String(s);}function doingHTML(){return '';}function statLine(){return '';}"
+        js = setup + hud + "var u={phase:'innocence',tech:['preservation'],year:10,pop:25,tod:'night'};var compact=hudText(u,'l');width=720;var wide=hudText(u,'l');selected=false;var unselected=hudText(u,'l');process.stdout.write(JSON.stringify([compact,wide,unselected]));"
+        result = json.loads(subprocess.run(['node','-e',js],check=True,capture_output=True,text=True).stdout)
+        self.assertIn('GANGA', result[0])
+        self.assertNotIn('SLEEPING', result[0])
+        self.assertIn('SLEEPING', result[1])
+        for html in (result[0], result[2]):
+            for status in ('AGE OF PRESERVATION', 'POP 25', 'NIGHT'):
+                self.assertIn(status, html)
+        self.assertNotIn('GANGA', result[2])
+
     def test_unaccepted_intents_use_neutral_pose_without_breaking_walking(self):
         self.assertEqual(self.helper("[socialDrawAct({}, {id:1,act:8,moving:false,age:18}),socialDrawAct({}, {id:1,act:21,moving:false}),socialDrawAct({}, {id:1,act:8,moving:true,age:18}),socialDrawAct({social:{1:{kind:'mate',other:2,mutual:true,contact:true},2:{kind:'mate',other:1,mutual:true,contact:true}}},{id:1,act:8,moving:false,age:18})]"),[11,11,8,8])
         self.assertEqual(self.helper("[16,17,18,undefined].map(function(age){return socialDrawAct({social:{1:{kind:'mate',other:2,mutual:true,contact:true},2:{kind:'mate',other:1,mutual:true,contact:true}}},{id:1,act:8,moving:false,age:age});})"),[11,11,8,11])

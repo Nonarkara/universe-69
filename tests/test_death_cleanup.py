@@ -9,6 +9,8 @@ from unittest.mock import patch
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sim'))
 import engine
 import skills
+import encounters
+import reproduction
 
 
 def rest(u):
@@ -52,15 +54,44 @@ class TestClaims(unittest.TestCase):
         self.assert_released(u)
         self.assertEqual(u['cod'], {'age': 1})
 
-    def test_plague_releases_claims_and_cannot_leave_a_dead_father(self):
+    def test_plague_releases_claims_and_creates_no_unexposed_pregnancy(self):
         u = self.eden_pair()
         u['part'], u['std_years'], u['innocent'] = 1, 1, False
         rng = random.Random(1)
-        with patch.object(rng, 'random', side_effect=[0.0, 1.0]), patch.object(engine, 'try_conceive') as conceive:
+        with patch.object(rng, 'random', side_effect=[0.0, 1.0]):
             engine.tick_eden(u, rng, [])
         self.assert_released(u)
-        conceive.assert_not_called()
         self.assertEqual(u['cod'], {'plague': 1})
+        self.assertEqual(u['people'][0]['due'],0)
+        self.assertIsNone(u['people'][0]['pregnancy_father'])
+
+    def test_a_prior_real_exposure_can_lead_to_pregnancy_after_fathers_plague_death(self):
+        u=self.eden_pair()
+        father,mother=u['people']
+        u.update(day=0,part=3,parts=3,innocent=False)
+        for p,x in ((father,20),(mother,21)):
+            p.update(x=x,y=20,tx=x,ty=20,a=engine.A_REST,hun=0.,thirst=0.,ene=1.)
+        encounters.propose(u,father,mother,'mate',3,(20,20))
+        encounters.propose(u,mother,father,'mate',3,(21,20))
+        fact=encounters.capture(u,father,{p['id']:p for p in u['people']},3)
+        self.assertIsNotNone(fact)
+        self.assertEqual(reproduction.record(u,[fact]),1)
+        mother['reproduction']['next_ovulation']=1
+        u.update(day=1,part=3,parts=7,std_years=1)
+        rest(u)
+        real_rng=reproduction._rng
+        def private_rng(world,p,index,purpose):
+            result=real_rng(world,p,index,purpose)
+            if purpose=='conception':result.random=lambda:0.
+            return result
+        rng=random.Random(1)
+        with patch.object(reproduction,'_rng',side_effect=private_rng), \
+             patch.object(rng,'random',side_effect=[0.,1.,.99]):
+            engine.tick_eden(u,rng,[])
+        self.assert_released(u)
+        self.assertEqual(u['cod'],{'plague':1})
+        self.assertEqual(mother['due'],1+engine.GESTATION)
+        self.assertEqual(mother['pregnancy_father'],father['id'])
 
     def test_repeated_cleanup_does_not_remove_a_survivors_shared_room_claim(self):
         u = self.eden_pair()
@@ -98,15 +129,17 @@ class TestClaims(unittest.TestCase):
         engine.migrate(w)
         self.assertEqual(before, json.dumps(w, sort_keys=True))
 
-    def test_eden_father_pool_excludes_living_withdrawn_males(self):
+    def test_withdrawn_or_available_males_cannot_create_ambient_exposure(self):
         u = engine.genesis()['eden']
         u['part'], u['day'], u['innocent'] = 1, 1, False
         u['people'] = u['people'][:3]
         u['people'][2]['w'] = True
         rest(u)
-        with patch.object(engine, 'try_conceive') as conceive:
-            engine.tick_eden(u, random.Random(1), [])
-        self.assertEqual([p['id'] for p in conceive.call_args.kwargs['males']], [1])
+        engine.tick_eden(u, random.Random(1), [])
+        self.assertTrue(u['people'][2]['w'])
+        self.assertEqual(u['people'][1]['due'],0)
+        self.assertIsNone(u['people'][1]['pregnancy_father'])
+        self.assertEqual(u['people'][1]['reproduction']['exposures'],[])
 
 
 class TestMassDeaths(unittest.TestCase):

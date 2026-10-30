@@ -1,0 +1,9 @@
+{
+  "terminal_artifact_written": true,
+  "exit_code": null,
+  "exit_status_note": "Original worker session became inaccessible after agent capacity failure; final provenance/arc/state written, no process remained. OS exit code not independently recovered.",
+  "compressed_payloads": {
+    "arc.json": "67e3869bd5707263d9efb5155e5d332869f6cadc918825f85a84cae0704781d3",
+    "console.log": "049a1c02a87e62570fd699abb3d4dde091f4d8e46f7802bc00abfbae41c35110"
+  }
+}

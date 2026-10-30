@@ -1,0 +1,9 @@
+{
+  "terminal_artifact_written": true,
+  "exit_code": 0,
+  "exit_status_note": "Worker confirmed exit 0.",
+  "compressed_payloads": {
+    "arc.json": "1a7a87e6e56d99c958f4e737d3bf81a6e0af96d137b1792d93955d7cf366f7d0",
+    "console.log": "1eee7d7b76bd2cbe3d12663eb66fbdb2e727a5c6bd2a5d2a0ab5e92b36578ae8"
+  }
+}

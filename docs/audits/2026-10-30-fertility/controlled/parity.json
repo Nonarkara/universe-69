@@ -1,0 +1,16 @@
+{
+  "runnerSHA256": "b12dd134ad49ba92e634084c541072a4a4e216243ff52d85d349e6f6ef2453f5",
+  "versions": [
+    "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+    "3.9.6 (default, Aug 25 2026, 21:26:21) \n[Clang 21.0.0 (clang-2100.3.34.2)]"
+  ],
+  "exactLagMetricsAndSequenceDigestsMatch": true,
+  "negativeControlsMatch": true,
+  "allSourcesStableWithinBothRuns": true,
+  "resultFilesSHA256": {
+    "results.json": "b92370259243822d479db085b1887b19ba89a0ac5676e58e6087145fbfddd211",
+    "results-python39.json": "aaa8549cd467bb15735ad6d5c3021d1cbdb80514de9ca68f5eb8d36efe6ee384",
+    "run.log": "8a66b08df06854f73baab942af99f08587d623d2bc93f1abe80bb48c8f86aea7",
+    "run-python39.log": "d38c6b39867fd9cd6dfe7b203704fcdb4b348e138be3a1a989e87c1f7e511e1a"
+  }
+}

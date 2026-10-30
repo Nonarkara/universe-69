@@ -2,6 +2,19 @@
 
 Verified against primary and secondary sources, October 2026. Inline numbers refer to the References list at the end.
 
+**Current fertility abstraction — engine 2026.10.30.7.** Completed mutual
+encounters supply binary exposed calendar days. One outcome trial after the
+ovulation day uses the best exposed day's clinical-pregnancy benchmark; it is
+an unfitted joint-exposure approximation, not a fertilization rate or a proven
+conservative bound. Uniform 24–35-day intervals, initial phase, daily bins and
+immediate allocation of the later clinical endpoint are illustrative. The
+existing 0.14 loss probability represents later recognized-pregnancy loss,
+not an added preclinical loss. Rate, timing and physiological modifiers remain
+unfitted. The earlier encounter-only mechanism and its omissions below describe
+engine 2026.10.30.6 historically; the new cycle abstraction does not erase them.
+See [fertility audit](docs/audits/2026-10-30-fertility/research.md) for units,
+primary coefficients and remaining assumptions.
+
 ---
 
 ## 1. John B. Calhoun's "Universe 25" (NIMH, 1968–1973)
@@ -309,3 +322,79 @@ simplification, not a model of those perceptual cues, cultural norms, genetic
 load or every person's behavior. Maternal identity and actual recorded paternal
 identity are bookkeeping facts here. A future human-agency model must distinguish
 perceived kinship from the observer's genealogy and test the resulting choices.
+
+
+## Fertility probabilities: endpoint, cycle and exposure units (2026-10-30)
+
+The Wilcox (1995) result above concerns urinary hCG-detected pregnancy around
+implantation, not direct observation of fertilization. Its estimated
+single-day exposure probabilities range from 0.10 at ovulation day −5 to 0.33
+at day 0; neither is a per-part hazard. Clinical pregnancy and live birth are
+different endpoints. [Original NEJM article](https://www.nejm.org/doi/full/10.1056/NEJM199512073332301).
+
+Li, Wilcox and Dunson (2015), §2.3, explicitly state a single-act **clinical
+pregnancy** benchmark for days −5 through 0 relative to ovulation:
+`[0.04, 0.13, 0.08, 0.29, 0.27, 0.08]`. Their outside-window zero is a modelling
+approximation, not proof of biological impossibility. This is an endpoint-specific
+benchmark, not a fitted fertilization parameter for LAGOON.
+[*Contraception* 91:344–349, doi:10.1016/j.contraception.2015.01.002](https://pmc.ncbi.nlm.nih.gov/articles/PMC4374046/).
+
+Dunson et al. (1999) corrected error in ovulation markers and found the highest
+clinical-pregnancy estimate before ovulation; marker error changes the apparent
+curve. [*Human Reproduction* 14:1835–1839,
+doi:10.1093/humrep/14.7.1835](https://pubmed.ncbi.nlm.nih.gov/10402400/).
+Dunson, Colombo and Baird (2002) compared age groups in healthy natural-family-
+planning couples; this does not supply a universal linear individual age curve.
+[*Human Reproduction* 17:1399–1403,
+doi:10.1093/humrep/17.5.1399](https://scholars.duke.edu/publication/769710).
+Ovulation also varies between cycles, including reported regular cycles; a
+shared 28-day calendar with fixed day-14 ovulation is not an empirical fit.
+[Wilcox et al., *BMJ* 2000;321:1259–1262](https://pmc.ncbi.nlm.nih.gov/articles/PMC27529/).
+
+**Smallest defensible structure, not a calibration claim.** Keep an individual
+cycle/ovulation phase and a bounded set of completed, day-indexed reproductive
+exposures; resolve at most one pregnancy outcome per cycle. Repeated animation
+parts or one ongoing encounter cannot become independent daily exposures.
+Any combination across exposed days needs an explicit dependence model.
+Conditional independence in a viable cycle is a statistical assumption;
+it does not license multiplying failures from marginal single-act probabilities.
+[Sundaram et al., *Biostatistics* 2012;13:4–17,
+doi:10.1093/biostatistics/kxr015](https://pmc.ncbi.nlm.nih.gov/articles/PMC3276273/).
+
+Cycle lengths, phase variation, initial phase, amenorrhoea, endpoint recognition,
+multiple-partner attribution, within-cycle dependence and population modifiers
+remain model choices unless separately estimated. An empirical clinical rate
+cannot silently become a fertilization rate followed by another copy of losses
+already included in that endpoint. No source here validates the current
+per-part coefficient, a new linear fertile-day curve, or prehistoric survival.
+A coarse cycle model may be tested as an explicit hypothesis; it must not be
+called calibrated merely because one of its numbers appears in a paper.
+
+
+**Selected coarse implementation (.7), with primary precedent and limits.**
+Royston and Ferreira proposed an approximate most-fertile-intercourse-day
+model, rather than requiring independent contributions from every intercourse
+day. This supports investigating a best-exposure alternative; directly taking
+the maximum of the 2015 marginal benchmark values is our own unfitted rule,
+not their fitted algorithm. [*Biometrics* 1999;55:1005–1013,
+doi:10.1111/j.0006-341x.1999.01005.x](https://pubmed.ncbi.nlm.nih.gov/11315041/).
+The chosen unit is one exposed day with at least one completed mutual contact;
+additional parts or partners on that day do not add probability. Actual fathers
+from the best day are retained, but choosing among them is a bookkeeping
+assumption, not an estimated sperm-competition mechanism. Six daily bins
+−5…0 do not mean a precisely measured 120-hour lifetime.
+
+The sampled integer interval 24–35 days is illustrative, not a fitted menstrual
+or ovulation generator. Bull et al. (2019), Table 1, report pooled ovulatory-cycle
+length 29.3 ± 5.2 days and luteal length 12.4 ± 2.4 days (mean ± SD) in app data.
+Those pooled summaries do not establish a uniform distribution or individual
+cycle jitter; the sample excludes cycles without detected ovulation.
+[*npj Digital Medicine* 2:83, doi:10.1038/s41746-019-0152-7](https://www.nature.com/articles/s41746-019-0152-7).
+
+Wilcox et al. (1988) distinguish hCG-detected losses before clinical recognition
+from later recognized losses. Thus a clinical-pregnancy benchmark may be
+followed by a separately stated later-loss model, without charging it again
+for preclinical losses. The retained 0.14 probability and 50–90 days after the
+model ovulation date are illustrative later-loss choices, not estimates fitted
+from that paper. [*NEJM* 319:189–194,
+doi:10.1056/NEJM198807283190401](https://pubmed.ncbi.nlm.nih.gov/3393170/).

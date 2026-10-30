@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "compressed_payloads": {
+    "arc.json": "600f96ce7449d333141e2c0d5fdfb91b72e333f5b253b2d4c69077d79e3e28ba",
+    "console.log": "5349869ccbf7cd579991ec2d80b3372536d8c54a40e039fc9f6f20cb36d46c86"
+  }
+}

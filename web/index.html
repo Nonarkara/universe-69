@@ -3044,7 +3044,7 @@ function hudText(u, kind){
   var v=view[kind];
   var sc = "";
   var w=whoInfo(kind);
-  var who = w ? "<span class='who'> · "+escapeHTML(w.name.toUpperCase())+((document.getElementById(kind==="e"?"w6":"w9").clientWidth<=700&&(w.craft||w.instruction||w.social))?"":", "+escapeHTML(w.act.toUpperCase()))+"</span>" : "";
+  var who = w ? "<span class='who'> · "+escapeHTML(w.name.toUpperCase())+((document.getElementById(kind==="e"?"w6":"w9").clientWidth<=700)?"":", "+escapeHTML(w.act.toUpperCase()))+"</span>" : "";
   var key = (kind==="e" && v && v.ts>5) ? "<span class='keys'>  <span class='key' style='border-color:var(--accent)'></span>held "+
             "<span class='key' style='border-color:var(--lagoon)'></span>vacant</span>" : "";
   var clock = u.tod ? " · "+escapeHTML(u.tod.toUpperCase()) : "";

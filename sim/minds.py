@@ -139,7 +139,8 @@ def new_mind(p, ef=0.5, ag=0.5):
               "learning": None, "teaching": None, "teaching_day": None, "teaching_ids": [],
               "skills": {}, "skill_day": None, "craft": None, "craft_part": None, "stories": 0.0,
               "inj": 0.0, "gd": 0.0, "gk": 0, "wk": 0, "fe": None,
-              "dad": None, "pregnancy_father": None, "social": None, "groom_day": None, "intimacy": 0.0})
+              "dad": None, "pregnancy_father": None, "social": None, "groom_day": None, "intimacy": 0.0,
+              "reproduction": None})
     return p
 
 
@@ -262,8 +263,8 @@ def body_words(p, age):
 # ovulation; breastfeeding on demand suppresses it for years, which is why
 # forager births come about four years apart (Howell, Demography of the Dobe
 # !Kung, 1979); roughly one in seven recognised pregnancies miscarries; about
-# one birth in seventy is twins. The engine multiplies its own social rate by
-# this factor, which is 1.0 for a healthy, non-nursing woman of 25.
+# one birth in seventy is twins. The engine multiplies its clinical cycle benchmark by
+# this illustrative factor, which is 1.0 for a healthy, non-nursing woman of 25.
 
 LACTATION_DAYS = {"LAGOON": 3 * DAYS_PER_YEAR, "EDEN": int(1.5 * DAYS_PER_YEAR)}
 MISCARRIAGE = 0.14

@@ -1,0 +1,275 @@
+{
+  "kind": "Actual saved natural workbench checkpoint, not live instrument/current clock",
+  "sourceHTMLSHA256": "dfe1de9aad347e2fea999a4df2bcb93dc3b6249af5b72f3f01592fc44f59675b",
+  "snapshotSHA256": "f234e6889b11c706fd9da2267c647b2f4efd770ae2839199fd75de4caff1c2fa",
+  "Found": {
+    "viewport": "390\u00d7844",
+    "element": "Selected LAGOON heading",
+    "failure": "Ordinary sleeping activity repeated in HUD and wrapped onto an orphan row although the person card and canvas caption already show it.",
+    "heightBeforeSelected": 46.59375,
+    "heightAfterSelected": 27.75,
+    "scenePixelsRecovered": 18.84375,
+    "taskCost": "Duplicated text took 18.84px from the world comparison."
+  },
+  "Changed": "Existing compact world HUD always shows selected name only at world width <=700px; complete activity remains in person card/canvas/diary; unselected orientation and statuses unchanged. No new geometry, clipped text, body or model changes.",
+  "Verified": {
+    "checksByViewport": [
+      {
+        "width": 390,
+        "passed": 40,
+        "total": 40,
+        "selected": {
+          "key": "l",
+          "id": 6,
+          "name": "Ganga",
+          "age": 28,
+          "pregnant": true,
+          "activity": "sleeping",
+          "mode": "follow"
+        }
+      },
+      {
+        "width": 1024,
+        "passed": 40,
+        "total": 40,
+        "selected": {
+          "key": "l",
+          "id": 6,
+          "name": "Ganga",
+          "age": 28,
+          "pregnant": true,
+          "activity": "sleeping",
+          "mode": "follow"
+        }
+      },
+      {
+        "width": 1440,
+        "passed": 39,
+        "total": 39,
+        "selected": {
+          "key": "l",
+          "id": 6,
+          "name": "Ganga",
+          "age": 28,
+          "pregnant": true,
+          "activity": "sleeping",
+          "mode": "follow"
+        }
+      }
+    ],
+    "unitChecks": "48 style +20 contract +7 instruction +6 camp tests pass, including adult-only body gates.",
+    "all 12SimulationSourcesUnchanged": true,
+    "noCheckpointFieldsChanged": true,
+    "selection": "Actual pointer click and native keyboard Tab only; no assigned selection/camera/body/state variables. Ganga 6, age 28,pregnant,sleeping selected from visible actual actors.",
+    "chrome": [
+      {
+        "width": 390,
+        "height": 844,
+        "states": {
+          "first-screen": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 171.5,
+            "combinedPercent": 20.319905213270143,
+            "bottom": 54,
+            "bottomPercent": 6.398104265402844,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "person-focus": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 171.5,
+            "combinedPercent": 20.319905213270143,
+            "bottom": 54,
+            "bottomPercent": 6.398104265402844,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "person-more": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              27.75
+            ],
+            "combinedHeight": 171.5,
+            "combinedPercent": 20.319905213270143,
+            "bottom": 54,
+            "bottomPercent": 6.398104265402844,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          },
+          "expanded-hud": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              27.75,
+              178.5
+            ],
+            "combinedHeight": 322.25,
+            "combinedPercent": 38.18127962085308,
+            "bottom": 54,
+            "bottomPercent": 6.398104265402844,
+            "strip": 27,
+            "stripPercent": 3.199052132701422
+          }
+        }
+      },
+      {
+        "width": 1024,
+        "height": 768,
+        "states": {
+          "first-screen": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 226.375,
+            "combinedPercent": 29.475911458333332,
+            "bottom": 54,
+            "bottomPercent": 7.03125,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "person-focus": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 226.375,
+            "combinedPercent": 29.475911458333332,
+            "bottom": 54,
+            "bottomPercent": 7.03125,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "person-more": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 226.375,
+            "combinedPercent": 29.475911458333332,
+            "bottom": 54,
+            "bottomPercent": 7.03125,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          },
+          "expanded-hud": {
+            "masthead": 35,
+            "mastheadPercent": 4.557291666666667,
+            "worldHeadings": [
+              122,
+              122
+            ],
+            "combinedHeight": 320.375,
+            "combinedPercent": 41.715494791666664,
+            "bottom": 54,
+            "bottomPercent": 7.03125,
+            "strip": 109.375,
+            "stripPercent": 14.241536458333334
+          }
+        }
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "states": {
+          "first-screen": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 171.6875,
+            "combinedPercent": 19.07638888888889,
+            "bottom": 54,
+            "bottomPercent": 6,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "person-focus": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 171.6875,
+            "combinedPercent": 19.07638888888889,
+            "bottom": 54,
+            "bottomPercent": 6,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "person-more": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              28,
+              28
+            ],
+            "combinedHeight": 171.6875,
+            "combinedPercent": 19.07638888888889,
+            "bottom": 54,
+            "bottomPercent": 6,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          },
+          "expanded-hud": {
+            "masthead": 35,
+            "mastheadPercent": 3.888888888888889,
+            "worldHeadings": [
+              84,
+              84.28125
+            ],
+            "combinedHeight": 227.96875,
+            "combinedPercent": 25.32986111111111,
+            "bottom": 54,
+            "bottomPercent": 6,
+            "strip": 54.6875,
+            "stripPercent": 6.076388888888889
+          }
+        }
+      }
+    ],
+    "hierarchy": {
+      "first": "Both natural worlds and their comparison; side-by-side wide, stacked phone.",
+      "second": "Selected inhabitant, actual activity and condition in existing card/caption.",
+      "third": "World instruments and observer record controls; historical events are unavailable in this checkpoint."
+    },
+    "preservation": [
+      "Both worlds remain visible with selected person and controls",
+      "Actual pregnant sleeping body preserved",
+      "Readable type and native visible focus",
+      "MORE and expanded HUD keep portrait visible",
+      "No horizontal overflow, clipped reading area or browser/request errors"
+    ],
+    "independentReview": {
+      "status": "Accepted",
+      "report": "independent-review.md",
+      "scope": "All 12 final screenshots and original phone focus inspected; 119 checks, source/fixture hashes and 18.84375px recovery independently confirmed."
+    }
+  },
+  "Remaining": [
+    "Checkpoint omits event history; the existing record placeholder does not demonstrate an empty natural history. No event array/history was invented.",
+    "Static saved workbench packet and display animation are not the live MacBook instrument or current simulation clock."
+  ],
+  "scope": "Targeted natural-content review. Prior 752-check all-feature proof at 529d source retained separately; current change is one compact-HUD condition."
+}
