@@ -86,7 +86,7 @@ def log_events(evts):
         return
     with open(EVENTS_PATH, "a") as f:
         for (day, uni, kind, msg) in evts:
-            key = (day, uni, msg)
+            key = (day, uni, kind, msg)
             if key in seen_events:
                 continue
             seen_events.add(key)
@@ -142,7 +142,8 @@ def engine_loop():
     last_save = time.time()
     last_test = world.get("research", {}).get("last_day", -research.CADENCE) // research.CADENCE
     while True:
-        behind = target_part() - world["eden"].get("parts", 0)
+        target = target_part()
+        behind = target - max(world["eden"].get("parts", 0), world["lagoon"].get("parts", 0))
         status["behind_days"] = max(0, behind) // engine.PARTS_PER_DAY
         status["catching_up"] = behind > 60 * engine.PARTS_PER_DAY
         if behind > 0:

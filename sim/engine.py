@@ -1202,11 +1202,6 @@ def tick_eden(u, rng, events):
     reproductive_contacts(u, meetings)  # social bonds, separate from exposure
     reproduction.record(u, meetings)  # prune all histories even without new contact
     try_conceive(u, rng, people, fertility)
-    if u.get("innocent") and day > 60 and rng.random() < 1 / (200 * PARTS_PER_DAY):
-        # the same discovery as the lagoon's, sooner: there is nothing else to do
-        u["innocent"] = False
-        events.append((day, "EDEN", "discovery",
-                       "With every hour free, the pairs discover how new life begins."))
 
     # yearly: ennui creep and disease rolls in a world of free mating
     if part == 0 and day % DAYS_PER_YEAR == 7:
@@ -1248,14 +1243,8 @@ def tick_eden(u, rng, events):
                                "Deaths outnumber births for the third year. The death phase begins."))
         elif u["phase"] == "stagnate":
             u["bad_years"] = 0
-        elif u["phase"] == "death" and u["births_y"] > u["deaths_y"]:
-            # The label describes; it does not decide. If births come back,
-            # the pen is said to have come back — whether it does is the test.
-            u["bad_years"] = 0
-            u["phase"] = "stagnate"
-            u["phases"].append([day // DAYS_PER_YEAR, "stagnate"])
-            events.append((day, "EDEN", "phase",
-                           "Births outnumber deaths again. The pen climbs back out of the death phase."))
+        # The death phase is irreversible (Calhoun's conclusion: no recovery).
+        # The label describes; it does not decide.
         # being seen by strangers all day: covering begins as the pen fills
         if not u.get("innocent"):
             u["modesty"] = min(0.5, u.get("modesty", 0.0) + 0.01 * (0.3 + crowd))
