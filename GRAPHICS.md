@@ -651,8 +651,20 @@ uses the current card and caption, with no new panel. In worlds at most 700
 CSS pixels wide, the compact HUD keeps the selected name without repeating
 the full activity. This includes each half of a tablet comparison.
 
-### Resolution overhaul — 2026-10-31
+### Resolution v2 and the real island — 2026-10-31 (same day, second step)
 
-- **Figure sprites**: base canvas size increased from 40 to 60 units (2.25× more pixels per figure). Minimum sprite scale raised from 1.0 to 1.5 so distant figures render at higher resolution. `imageSmoothingEnabled` set to high quality on sprite, ground, and main canvas contexts.
-- **Ground cache**: `GROUND_MAX` increased from 4096 to 8192 device pixels, allowing higher-resolution terrain caching before the cap is hit.
-- **Result**: figures and terrain are noticeably sharper at all zoom levels, especially when zoomed in. The pixelated look is further reduced while maintaining the documentary terrarium aesthetic.
+- **Figure sprites**: base canvas raised again, 60 → 80 units (~3.6× the original 40-box). Minimum sprite scale raised 1.5 → 2.0, so even the most distant figures draw from a sprite built at 160+ device pixels. Pins renamed and re-set in the same commit: `test_a_sprite_is_eighty_units_wide` (80) and a min-scale pin (2.0); onscreen sizing still depends only on zoom, so the larger box changes backing-store resolution, not apparent size.
+- **Ground grain**: the first mottle starts earlier (`tb≥3`, was 6) and a second micro-grain appears at `tb≥12`; mottle colors now follow tile kind (sand / canopy / hill / grass light-and-dark pairs), and every new color enters through `TERRARIUM`-style CSS tokens (`--w-hill`, `--w-hill-l`, `--w-hill-d` → `P.hill`, `P.hillL`, `P.hillD`), keeping the no-raw-hex floor rule.
+- **The island itself (terrain v3, next genesis/resseed only)**: `fields9` gains a `hill` field when the island carries hills; the ground paints a hill rim (0.40) and fill (0.50) over the grass base; the tree pass grows hill scrubs, coconut palms leaning over the open sea, and mangrove clumps holding enclosed lagoon shores (`enclosed()` = water walled by land on ≥3 sides), each in their own stroke colors and frond levels by zoom.
+- **The island is summarized, not invented**: an `islands9` census (land masses after flood-fill, beach/coast counts, hills) is computed once per terrain key and feeds the HUD stat line: `ISLETS n` when more than two land masses exist, `HILL COUNTRY` when hills are substantial. Nothing about ecology is claimed by these labels — they report terrain.
+- **EDEN's amenities in the stat line**: the contract now carries `facilities` (pool/bar/theater/field, 0–1); EDEN's expanded facts show `POOL n% / BAR n% / THEATER n% / FIELD n%` next to the post counts. The labels report levels the resort has built — they claim nothing about what the amenities do to anyone.
+
+### Manga faces and a living sea — 2026-10-31 (third step, MANGA_PLAN.md §B started)
+
+- **The expression system** (`expressionOf`): every activity maps to a readable face — sleep closes the eyes, a fight grits the teeth under a lowered brow, eating opens the mouth, talk lifts the brow, the withdrawn look downcast (the beautiful ones have a face now). Pinned in `test_style.py` (`TestTheFace`): each core activity yields a valid `[brow, lid, mouth, tilt]`, a sleeper's lid is 0, and the eye is layered, not a dot.
+- **The eye is an eye**: sclera, iris, pupil, catch-light, a heavy upper lash and a thin lower lash at hearth zoom; a closed lid is one lash line. The mouth has shapes (closed, soft, talking, eating, gritted, downcast) instead of one line. Nostrils and jaw stubble (adult men) at the closest rung.
+- **Hair moves as hair**: strand clumps stroke the cap — a symmetric part in a front view, back-flow in profile — instead of one solid mass.
+- **A living sea** (`drawLiveGround`, per-frame, outside the cached ground): the swell lands as foam where it did before, plus drifting glints with the light, and on each shore tile's own clock a fish jumps and leaves a widening ring. Cache behavior unchanged: the terrain stays baked; only the water's life is repainted.
+- Costs: faces and hair live inside the sprite cache (zero per-frame cost); the water pass touches only visible shore tiles at camp/hearth zoom (`ts>=6`, splashes `ts>=10`). `web/index.html` and `docs/index.html` byte-identical.
+- Live-run caveat unchanged: the LAGOON in flight keeps its v1 island, so none of this appears on screen until its next reseed; `web/index.html` and `docs/index.html` remain byte-identical (same-commit rule).
+

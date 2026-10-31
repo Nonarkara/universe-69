@@ -154,7 +154,7 @@ class IslandResources(unittest.TestCase):
 
     def test_tropical_climate_has_two_monsoons_and_no_winter(self):
         u = self.world()
-        self.assertEqual(u['terrain_version'],2)
+        self.assertEqual(u['terrain_version'], 3)   # the current genesis stamp
         for day in (0,100,200,280,350):
             u['day'] = day
             self.assertFalse(engine.lagoon_season(day,True)[2])

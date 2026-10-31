@@ -248,6 +248,11 @@ and discovery probabilities remain illustrative model choices. Freshwater
 banks are finite shared resources; ocean and lagoon water are not drinking
 sources. There is no complete hydrological, nutritional or pathogen model.
 Heritable traits are not a genome: kinship genetics and inbreeding depression
+
+2026-10-31: the island analogue gains an explicit hill country, a sand-spit
+estuary and offshore islets (engine 2026.10.31.1, terrain v3, next genesis
+or reseed only); the live LAGOON keeps its earlier island until it falls,
+so the viewer's `TROPICAL ISLAND` / `HILL COUNTRY` labels appear then.
 are not simulated. The current technology ladder ends at writing; it does
 not predict an industrial or modern civilization's arrival date.
 

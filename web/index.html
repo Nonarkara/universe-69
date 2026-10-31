@@ -26,6 +26,7 @@
     --w-deep:#2b5770; --w-sea:#3d7189; --w-shallow:#6fa1ac; --w-glint:#9cc4cc; --w-foam:#e3ece6;
     --w-sand:#d6c294; --w-sand-l:#e3d3ab; --w-sand-d:#bba677; --w-sand-wet:#b9a57a;
     --w-grass:#6d8a4b; --w-grass-d:#5a7740; --w-grass-l:#88a35f; --w-floor:#4a6436;
+    --w-hill:#7e7d4a; --w-hill-l:#9c9a5e; --w-hill-d:#68683c;
     --w-can-d:#2e4a2a; --w-can:#3f6236; --w-can-l:#5b7f45; --w-trunk:#6b4a2e; --w-trunk-d:#4a321d;
     --w-soil:#7f6038; --w-soil-d:#5f4526; --w-path:#a8946c; --w-snow:#eef2f4;
     --w-thatch:#a48a52; --w-thatch-d:#7d6638; --w-door:#2c1f12; --w-stone:#a49c8c;
@@ -388,6 +389,7 @@ var PALETTE_TOKENS={
   waterD:"--w-deep", water:"--w-sea", waterS:"--w-shallow", waterL:"--w-glint", foam:"--w-foam",
   sand:"--w-sand", sandL:"--w-sand-l", sandD:"--w-sand-d", sandWet:"--w-sand-wet",
   grass:"--w-grass", grassD:"--w-grass-d", grassL:"--w-grass-l", floorF:"--w-floor",
+  hill:"--w-hill", hillD:"--w-hill-d", hillL:"--w-hill-l",
   canD:"--w-can-d", can:"--w-can", canL:"--w-can-l", trunk:"--w-trunk", trunkD:"--w-trunk-d",
   soil:"--w-soil", soilD:"--w-soil-d", path:"--w-path", snow:"--w-snow",
   thatch:"--w-thatch", thatchD:"--w-thatch-d", hutdoor:"--w-door", stone:"--w-stone",
@@ -462,6 +464,34 @@ var hudCache={ e:"", l:"" };
 // quarter-octave zoom step, and only repainted when the camera leaves that
 // margin, crosses a zoom step, or the world itself changes.
 var terrainInput9=null, mirrorTerrainKey9=null, mirrorIteration9=null;
+var islands9=null;
+// the island read as a census of its real kinds: hills, shore, enclosed
+// water and the land masses (the island itself + the great land + islets)
+function islandOf(T){
+  var S=T.length, i, hills=0, beach=0, coast=0;
+  for (var y=0;y<S;y++) for (i=0;i<S;i++){
+    var v=T[y][i];
+    if (v===5) hills++;
+    else if (v===3){
+      beach++;
+      if ((i>0&&T[y][i-1]===2)||(i<S-1&&T[y][i+1]===2)||(y>0&&T[y-1][i]===2)||(y<S-1&&T[y+1][i]===2)) coast++;
+    }
+  }
+  var comp=0, seen=new Uint8Array(S*S), stack=[];
+  for (y=0;y<S;y++) for (i=0;i<S;i++){
+    if (T[y][i]===2||seen[y*S+i]) continue;
+    comp++; stack.push(y*S+i); seen[y*S+i]=1;
+    while (stack.length){
+      var q=stack.pop(), qx=q%S, qy=(q/S)|0;
+      [[qx-1,qy],[qx+1,qy],[qx,qy-1],[qx,qy+1]].forEach(function(nq){
+        var nx=nq[0], ny=nq[1];
+        if (nx<0||ny<0||nx>=S||ny>=S||T[ny][nx]===2||seen[ny*S+nx]) return;
+        seen[ny*S+nx]=1; stack.push(ny*S+nx);
+      });
+    }
+  }
+  return {hills:hills, beach:beach, coast:coast, landmasses:comp};
+}
 var terr9=null, terrainKey9=null, heat9=null, pathsSeq=-1, water9=[];
 var ground={ e:null, l:null };
 function nIs(terrain,x,y,k){ var S=terrain.length;
@@ -522,6 +552,8 @@ function buildFields9(T){
     land:     field(function(v){ return v!==2; }, 1),
     green:    field(function(v){ return v===0||v===1; }, 1),
     wood:     field(function(v){ return v===1; }, 1) };
+  if (T.some(function(row){ return row.indexOf(5)>=0; }))
+    fields9.hill=field(function(v){ return v===5; }, 1);
 }
 function fillField(g, F, S, thr, x0, y0, x1, y1){
   function v(x,y){ x=Math.max(0,Math.min(S-1,x)); y=Math.max(0,Math.min(S-1,y)); return F[y*S+x]; }
@@ -657,13 +689,30 @@ var LAGOON_WORLD={
     g.fillStyle=P.sand;    fillField(g, F.land, S, 0.47, x0, y0, x1, y1);
     g.fillStyle=P.grass;   fillField(g, F.green, S, 0.50, x0, y0, x1, y1);
     g.fillStyle=P.floorF;  fillField(g, F.wood, S, 0.50, x0, y0, x1, y1);
-    // the ground is not one colour: a soft mottle, lighter and darker
-    if (tb>=6){
+    // the hill country: drier, yellower land above the coast, a rim of
+    // pale scree where it meets the plain, and its own floor in the valleys
+    if (F.hill){
+      g.fillStyle=P.hillL; fillField(g, F.hill, S, 0.40, x0, y0, x1, y1);
+      g.fillStyle=P.hill;  fillField(g, F.hill, S, 0.50, x0, y0, x1, y1);
+    }
+    // the ground is not one colour: a fine mottle at any useful zoom,
+    // and a second micro-grain when the screen actually has the pixels
+    if (tb>=3){
       for (y=Math.max(0,y0);y<Math.min(S,y1);y++) for (x=Math.max(0,x0);x<Math.min(S,x1);x++){
         v=T[y][x]; if (v===2) continue;
-        var h=hash2(x+7,y+3);
-        if (h<0.10){ g.fillStyle=v===3?P.sandD:(v===1?P.canD:P.grassD); g.globalAlpha=0.06; g.beginPath(); disc(g,x+h*5,y+hash2(y,x),1.1+h*4); g.fill(); }
-        else if (h>0.93){ g.fillStyle=v===3?P.sandL:(v===1?P.can:P.grassL); g.globalAlpha=0.06; g.beginPath(); disc(g,x+0.5,y+0.4,1.0); g.fill(); }
+        var h=hash2(x+7,y+3), d=(v===3?P.sandD:v===1?P.canD:v===5?P.hillD:P.grassD),
+            l=(v===3?P.sandL:v===1?P.can:v===5?P.hillL:P.grassL);
+        if (h<0.10){ g.fillStyle=d; g.globalAlpha=0.06; g.beginPath(); disc(g,x+h*5,y+hash2(y,x),0.9+h*4); g.fill(); }
+        else if (h>0.93){ g.fillStyle=l; g.globalAlpha=0.06; g.beginPath(); disc(g,x+0.5,y+0.4,0.85); g.fill(); }
+      }
+      g.globalAlpha=1;
+    }
+    if (tb>=12){
+      for (y=Math.max(0,y0);y<Math.min(S,y1);y++) for (x=Math.max(0,x0);x<Math.min(S,x1);x++){
+        v=T[y][x]; if (v===2) continue;
+        var h2=hash2(x*13+5,y*7+1);
+        if (h2<0.16){ g.fillStyle=v===3?P.sandD:v===5?P.hillD:P.grassD; g.globalAlpha=0.05;
+          g.beginPath(); disc(g,x+h2*6-1,y+hash2(x,y)*1.4-0.2,0.4+h2); g.fill(); }
       }
       g.globalAlpha=1;
     }
@@ -696,24 +745,85 @@ var LAGOON_WORLD={
     }
     // trees: a shadow thrown to the bottom right, a crown in shade, the lit
     // side of the crown toward the light
-    var trees=[];
+    var trees=[], scrubs=[], palms=[], mangs=[];
+    function enclosed(wx, wy){             // water walled by land = a lagoon
+      var n=0;
+      if (k(wx-1,wy)!==2) n++; if (k(wx+1,wy)!==2) n++;
+      if (k(wx,wy-1)!==2) n++; if (k(wx,wy+1)!==2) n++;
+      return n>=3;
+    }
     for (y=Math.max(1,y0-1);y<Math.min(S-1,y1+1);y++) for (x=Math.max(1,x0-1);x<Math.min(S-1,x1+1);x++){
       v=T[y][x];
       if ((v===1 && hash2(x*3,y*5)>0.42) || (v===0 && hash2(x*7,y*11)>0.985))
         trees.push(x+0.5+(hash2(x,y*3)-0.5)*0.5, y+0.5+(hash2(x*5,y)-0.5)*0.5, 0.62+hash2(x+1,y+2)*0.38);
+      else if (v===5 && hash2(x*17,y*13)>0.90)          // the hill country: scraggle
+        scrubs.push(x+0.5, y+0.5, 0.34+hash2(x+3,y+9)*0.22);
+      else if (v===3 && (k(x-1,y)===2||k(x+1,y)===2||k(x,y-1)===2||k(x,y+1)===2)){
+        var hag=hash2(x*31,y*19);
+        if (hag>0.35){
+          var wenc = (k(x-1,y)===2 && enclosed(x-1,y)) || (k(x+1,y)===2 && enclosed(x+1,y)) ||
+                     (k(x,y-1)===2 && enclosed(x,y-1)) || (k(x,y+1)===2 && enclosed(x,y+1));
+          if (wenc) mangs.push(x+0.5, y+0.5, 0.5+hash2(x+9,y+1)*0.3);
+          else palms.push(x+0.5, y+0.5, 0.75+hash2(x+11,y+3)*0.45);
+        }
+      }
     }
     g.fillStyle=P.shadowSoft; g.beginPath();
     for (i=0;i<trees.length;i+=3) { g.moveTo(trees[i]+0.3+trees[i+2],trees[i+1]+0.35); g.ellipse(trees[i]+0.3,trees[i+1]+0.35,trees[i+2],trees[i+2]*0.75,0,0,6.283); }
+    for (i=0;i<scrubs.length;i+=3) { g.moveTo(scrubs[i]+0.2+scrubs[i+2],scrubs[i+1]+0.25); g.ellipse(scrubs[i]+0.2,scrubs[i+1]+0.25,scrubs[i+2],scrubs[i+2]*0.7,0,0,6.283); }
     g.fill();
     g.fillStyle=P.canD; g.beginPath();
     for (i=0;i<trees.length;i+=3) disc(g, trees[i], trees[i+1], trees[i+2]);
+    for (i=0;i<scrubs.length;i+=3) disc(g, scrubs[i], scrubs[i+1], scrubs[i+2]);
     g.fill();
     g.fillStyle=P.can; g.beginPath();
     for (i=0;i<trees.length;i+=3) disc(g, trees[i]-trees[i+2]*0.18, trees[i+1]-trees[i+2]*0.2, trees[i+2]*0.72);
+    for (i=0;i<scrubs.length;i+=3) disc(g, scrubs[i]-scrubs[i+2]*0.2, scrubs[i+1]-scrubs[i+2]*0.24, scrubs[i+2]*0.6);
     g.fill();
     if (tb>=10){ g.fillStyle=P.canL; g.beginPath();
       for (i=0;i<trees.length;i+=3) disc(g, trees[i]-trees[i+2]*0.34, trees[i+1]-trees[i+2]*0.36, trees[i+2]*0.34);
       g.fill(); }
+    if (tb>=8){ g.fillStyle=P.hillL; g.beginPath();
+      for (i=0;i<scrubs.length;i+=3) disc(g, scrubs[i]-scrubs[i+2]*0.3, scrubs[i+1]-scrubs[i+2]*0.3, scrubs[i+2]*0.4);
+      g.fill(); }
+    // the shore the island actually has: coconut palms lean out over the
+    // sea; mangrove clumps hold the enclosed lagoon's mud
+    if (tb>=2){
+      g.strokeStyle=P.trunk; g.lineWidth=Math.max(px*0.9,0.10); g.lineCap="round";
+      for (i=0;i<palms.length;i+=3){
+        var tx=palms[i], ty=palms[i+1], th=palms[i+2], tg=(hash2(Math.round(tx*7),Math.round(ty*9))-0.5)*1.6;
+        var tipx=tx+tg, tipy=ty-th;
+        g.beginPath(); g.moveTo(tx, ty); g.quadraticCurveTo(tx+tg*0.3, ty-th*0.55, tipx, tipy); g.stroke();
+      }
+      if (tb>=5){ g.strokeStyle=P.palm; g.lineWidth=Math.max(px*0.8,0.09);
+        for (i=0;i<palms.length;i+=3){
+          var tx=palms[i], ty=palms[i+1], th=palms[i+2], tg=(hash2(Math.round(tx*7),Math.round(ty*9))-0.5)*1.6;
+          var tipx=tx+tg, tipy=ty-th, fr;
+          for (fr=0;fr<6;fr++){
+            var aa=-Math.PI+fr*(Math.PI/5)+hash2(Math.round(tx*3)+fr,1)*0.18;
+            var ex2=tipx+Math.cos(aa)*0.85, ey2=tipy+Math.sin(aa)*0.55+0.16;
+            g.beginPath(); g.moveTo(tipx,tipy); g.quadraticCurveTo((tipx+ex2)/2, tipy+Math.sin(aa)*0.3-0.12, ex2, ey2);
+            g.stroke();
+          }
+        }
+      }
+      g.strokeStyle=P.trunkD; g.lineWidth=Math.max(px*0.8,0.09);
+      for (i=0;i<mangs.length;i+=3){
+        var mx2=mangs[i], my2=mangs[i+1], mr=mangs[i+2];
+        [[-mr*0.4,0.3],[0,0.42],[mr*0.38,0.28]].forEach(function(q){
+          g.beginPath(); g.moveTo(mx2+q[0], my2+0.3); g.lineTo(mx2+q[0]*0.4, my2+0.3-mr*0.85); g.stroke();
+        });
+        if (tb>=6){ g.strokeStyle=P.canD; g.globalAlpha=0.9; g.lineWidth=Math.max(px*0.7,0.08);
+          for (var mi=0;mi<3;mi++){
+            var ma=-Math.PI+mi*1.9+hash2(Math.round(mx2*5)+mi,3)*0.3;
+            g.beginPath(); g.moveTo(mx2+Math.cos(ma)*mr*0.75, my2+0.3-mr*0.85);
+            g.quadraticCurveTo(mx2+Math.cos(ma)*mr*1.25, my2+0.2-mr*0.7, mx2+Math.cos(ma)*mr*1.5, my2+0.55-mr*0.55);
+            g.stroke();
+          }
+          g.globalAlpha=1; g.strokeStyle=P.trunkD;
+        }
+      }
+    }
     // each bonded pair raises its own hut by work: the record says where and
     // how far along it is — a frame of poles, then thatch climbing it, then a
     // finished hut with its door. Before shelter they sleep in the open, and
@@ -921,8 +1031,10 @@ function compose9(u, st){
   if (terrainKey9!==terrainKey){
     terrainKey9=terrainKey; terr9=terrain; fields9=null; heat9=new Uint16Array(terrain.length*terrain.length); pathsSeq=-1; ground.l=null;
     water9=[];
-    for (var y=0;y<terrain.length;y++) for (var x=0;x<terrain.length;x++)
+    var x;
+    for (var y=0;y<terrain.length;y++) for (x=0;x<terrain.length;x++)
       if (terrain[y][x]===2 && hash2(x,y)>0.9 && (nIs(terrain,x,y-2,0)||nIs(terrain,x,y-2,3)||nIs(terrain,x-2,y,3)||nIs(terrain,x+2,y,3)||nIs(terrain,x,y+2,3))) water9.push([x,y]);
+    islands9=islandOf(terrain);
   }
   if (pollSeq-pathsSeq>=15) pathsSeq=pollSeq;          // worn paths repaint at most every 15 polls
   LAGOON_WORLD.S=terrain.length;
@@ -972,7 +1084,9 @@ function edenNight(g, u, sx, sy, ts, canvas){
 }
 
 // The parts of the ground that move are painted every frame: light on the
-// water near the shore, and the fire.
+// water near the shore, and the fire. Three readings of the same sea — the
+// swell that lands as foam, the glint that drifts with the light, and now
+// and then a fish that jumps and leaves a widening ring.
 function drawLiveGround(g, key, u, sx, sy, hx, hy, ts, canvas){
   if (key==="e") return;
   if (ts<6) return;
@@ -980,10 +1094,27 @@ function drawLiveGround(g, key, u, sx, sy, hx, hy, ts, canvas){
   for (var i=0;i<water9.length;i++){
     var w=water9[i]; if (w[0]<sx-1||w[0]>sx+2*hx+1||w[1]<sy-1||w[1]>sy+2*hy+1) continue;
     var ph=(tick*0.03+w[0]*0.7+w[1]*1.3)%6.283, a=Math.max(0, Math.sin(ph));
-    if (a<0.2) continue;
-    g.globalAlpha=0.5*a;
     var X=(w[0]-sx+0.2)*ts, Y=(w[1]-sy+0.5)*ts;
-    g.beginPath(); g.moveTo(X,Y); g.lineTo(X+ts*0.5,Y); g.stroke();
+    if (a>0.2){                                   // the break: foam where the swell lands
+      g.globalAlpha=0.5*a;
+      g.beginPath(); g.moveTo(X,Y); g.lineTo(X+ts*0.5,Y); g.stroke();
+    }
+    var gl=hash2(w[0]*3+Math.floor(tick/24), w[1]*5);
+    if (gl>0.62){                                 // a glint, wandering with the light
+      g.globalAlpha=0.35+0.3*Math.sin(tick*0.11+gl*9);
+      g.fillStyle=P.waterL;
+      g.fillRect(Math.round((w[0]-sx+gl*0.8)*ts), Math.round((w[1]-sy+0.3+0.4*hash2(w[1],w[0]))*ts),
+                 Math.max(1,Math.round(ts*0.16)), 1);
+    }
+    var jp=hash2(w[0]*7,w[1]*11);                 // a fish jumps on its own clock
+    if (ts>=10 && ((tick+Math.floor(jp*900))%900)<26){
+      var f2=((tick+Math.floor(jp*900))%900)/26;
+      g.globalAlpha=0.5*(1-f2);
+      g.strokeStyle=P.foam; g.lineWidth=Math.max(1,ts*0.04);
+      g.beginPath(); g.ellipse((w[0]-sx+0.5)*ts,(w[1]-sy+0.5)*ts,
+                               ts*(0.12+0.5*f2), ts*(0.07+0.3*f2), 0, 0, 6.283);
+      g.stroke();
+    }
   }
   g.globalAlpha=1;
 }
@@ -1461,6 +1592,81 @@ function drawTiny(g, J, D, k, tones, dress, v){
   R(cxp-w/2, hip, cxp-w/2+px, foot, tones[1]);              // legs, a pixel apart when there is room
   R(cxp+w/2-px, hip, cxp+w/2, foot, INK);
 }
+// The face reads at a glance: brows set the mood, the lid and the mouth say
+// what the body is doing (MANGA_PLAN.md §1 — expression system). Derived
+// only from sprite-keyed inputs (act, body, wk), so the cache stays sound.
+function expressionOf(act, B, moving, wk){
+  if (act===A_SLEEP) return [0, 0, 0, 0];          // brow, lid 0..1, mouth, brow tilt
+  if (act===A_FIGHT)  return [1, 0.85, 4, -0.5];   // gritted teeth, brow down
+  if (act===A_HUNT || act===A_SCOUT) return [0.6, 1, 1, -0.4];
+  if (act===A_EAT)   return [0.1, 0.8, 3, 0];
+  if (act===A_TALK)  return [-0.5, 0.9, 2, 0.3];
+  if (act===A_WITHDRAW) return [0.6, 0.4, 5, 0.5]; // downcast: the beautiful ones
+  if (act===A_GROOM) return [-0.2, 0.75, 1, 0];
+  if (act===A_MATE || act===A_BIRTH) return [0.15, 0.7, 2, 0];
+  if (B && (B.gaunt || B.hungry)) return [0.45, 0.65, 5, 0.4];
+  if (B && B.stage===4) return [0.3, 0.7, 1, 0.2];
+  return [0, 0.85, 1, 0];
+}
+function drawEyeProfile(g, ex, ey, hr, lid, ink, detail){
+  var ew=hr*0.20, eh=hr*0.16, hh=eh*lid;
+  if (lid<=0.02){                                   // closed: one lash line
+    g.strokeStyle=INK; g.lineWidth=ink*1.1;
+    g.beginPath(); g.moveTo(ex-ew,ey); g.quadraticCurveTo(ex,ey+eh*0.6,ex+ew,ey); g.stroke();
+    return;
+  }
+  g.fillStyle="#f4f0e4"; g.strokeStyle=INK; g.lineWidth=ink*0.7;
+  g.beginPath(); g.ellipse(ex,ey,ew,hh,0,0,6.283); g.fill();      // sclera
+  if (detail){
+    g.fillStyle="#5a4632"; g.beginPath(); g.arc(ex+ew*0.15,ey,hh*0.62,0,6.283); g.fill();   // iris
+    g.fillStyle=INK; g.beginPath(); g.arc(ex+ew*0.15,ey,hh*0.34,0,6.283); g.fill();         // pupil
+    g.fillStyle="#f4f0e4"; g.beginPath(); g.arc(ex+ew*0.02,ey-hh*0.28,hh*0.16,0,6.283); g.fill();  // catch-light
+  } else {
+    g.fillStyle=INK; g.beginPath(); g.arc(ex+ew*0.15,ey,Math.max(0.12,hh*0.6),0,6.283); g.fill();
+  }
+  g.strokeStyle=INK; g.lineWidth=ink*1.3;                          // the upper lash, heavy
+  g.beginPath(); g.moveTo(ex-ew,ey-hh*0.4); g.quadraticCurveTo(ex,ey-hh*1.25,ex+ew,ey-hh*0.35); g.stroke();
+  if (detail){ g.lineWidth=ink*0.6;                                // the lower lash, thin
+    g.beginPath(); g.moveTo(ex-ew*0.7,ey+hh*0.8); g.quadraticCurveTo(ex,ey+hh*1.15,ex+ew*0.9,ey+hh*0.7); g.stroke(); }
+}
+function drawEyeFront(g, ex, ey, hr, lid, ink, detail, side){
+  var ew=hr*0.15, hh=hr*0.13*lid;
+  if (lid<=0.02){
+    g.strokeStyle=INK; g.lineWidth=ink*1.1;
+    g.beginPath(); g.moveTo(ex-ew,ey); g.lineTo(ex+ew,ey); g.stroke();
+    return;
+  }
+  g.fillStyle="#f4f0e4"; g.strokeStyle=INK; g.lineWidth=ink*0.7;
+  g.beginPath(); g.ellipse(ex,ey,ew,hh,0,0,6.283); g.fill();
+  if (detail){
+    g.fillStyle="#5a4632"; g.beginPath(); g.arc(ex,ey+hh*0.05,hh*0.62,0,6.283); g.fill();
+    g.fillStyle=INK; g.beginPath(); g.arc(ex,ey+hh*0.05,hh*0.34,0,6.283); g.fill();
+    g.fillStyle="#f4f0e4"; g.beginPath(); g.arc(ex-hh*0.2,ey-hh*0.25,hh*0.16,0,6.283); g.fill();
+  } else {
+    g.fillStyle=INK; g.beginPath(); g.arc(ex,ey,Math.max(0.12,hh*0.62),0,6.283); g.fill();
+  }
+  g.strokeStyle=INK; g.lineWidth=ink*1.2;
+  g.beginPath(); g.moveTo(ex-ew,ey-hh*0.5); g.quadraticCurveTo(ex,ey-hh*1.3,ex+ew,ey-hh*0.5); g.stroke();
+}
+function drawBrow(g, bx, by, len, tilt, lift, ink){
+  g.strokeStyle=INK; g.lineWidth=ink*1.15;
+  g.beginPath();
+  g.moveTo(bx-len*0.5, by+lift+tilt*len*0.35);
+  g.quadraticCurveTo(bx, by+lift-len*0.10, bx+len*0.5, by+lift-tilt*len*0.45);
+  g.stroke();
+}
+function drawMouthShape(g, mx, my, m, ink, hr, wid){
+  var w=hr*wid;
+  g.strokeStyle=INK; g.fillStyle=INK; g.lineWidth=ink*0.9;
+  if (m===0){ g.beginPath(); g.moveTo(mx-w*0.5,my); g.lineTo(mx+w*0.5,my); g.stroke(); }
+  else if (m===1){ g.beginPath(); g.moveTo(mx-w*0.5,my); g.quadraticCurveTo(mx,my+w*0.22,mx+w*0.5,my); g.stroke(); }
+  else if (m===2){ g.beginPath(); g.ellipse(mx,my,w*0.30,w*0.26,0,0,6.283); g.fill(); }               // talking
+  else if (m===3){ g.beginPath(); g.ellipse(mx,my+w*0.06,w*0.40,w*0.34,0,0,6.283); g.fill();          // eating
+    g.beginPath(); g.moveTo(mx-w*0.40,my-w*0.05); g.quadraticCurveTo(mx,my-w*0.3,mx+w*0.40,my-w*0.05); g.stroke(); }
+  else if (m===4){ g.beginPath(); g.moveTo(mx-w*0.5,my); g.lineTo(mx+w*0.5,my); g.stroke();           // gritted
+    for (var t2=-1;t2<=1;t2++){ g.beginPath(); g.moveTo(mx+t2*w*0.25,my-w*0.14); g.lineTo(mx+t2*w*0.25,my+w*0.14); g.stroke(); } }
+  else { g.beginPath(); g.moveTo(mx-w*0.5,my+w*0.12); g.quadraticCurveTo(mx,my-w*0.18,mx+w*0.5,my+w*0.12); g.stroke(); }  // downcast
+}
 function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view, bedding){
   var fem=(sex===1), adult=B.adult;
   // Sleeping, an infant, and two people making love are drawn lying down —
@@ -1777,26 +1983,58 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
     }
     g.closePath(); g.fill();
     if (s>=2) g.stroke();
+    if (s>=2.5){                                 // strand clumps: hair moves as hair
+      g.strokeStyle=INK; g.lineWidth=ink*0.55;
+      var nstr=front?4:3;
+      for (var st2=0;st2<nstr;st2++){
+        var t3=front ? (st2-1.5)/1.5 : 0.2+st2*0.28;
+        if (front){
+          g.beginPath();
+          g.moveTo(hcx+t3*hr*0.12, hcy-hr*1.04);
+          g.quadraticCurveTo(hcx+t3*hr*0.75, hcy-hr*0.78,
+                             hcx+t3*hr*0.86, hcy-hr*0.12);
+          g.stroke();
+        } else {
+          g.beginPath();
+          g.moveTo(hcx-hr*(0.55-t3*0.9), hcy-hr*1.02);
+          g.quadraticCurveTo(hcx-hr*(1.02-t3*0.75), hcy-hr*(0.55+t3*0.25),
+                             hcx-hr*(0.88-t3*0.55), hcy+hr*(0.02+t3*(longHair?0.5:0.22)));
+          g.stroke();
+        }
+      }
+    }
   }
   if (view===1 && s>=2.2){                       // a face, toward us
-    g.fillStyle=INK;
-    g.beginPath(); g.arc(hcx-hr*0.32, hcy-0.1, 0.24, 0, 6.283); g.fill();
-    g.beginPath(); g.arc(hcx+hr*0.32, hcy-0.1, 0.24, 0, 6.283); g.fill();
-    g.strokeStyle=INK; g.lineWidth=ink*0.7;
-    g.beginPath(); g.moveTo(hcx-0.35,hcy+1.15); g.lineTo(hcx+0.35,hcy+1.15); g.stroke();
+    var e1=expressionOf(act,B,moving,wk);
+    drawEyeFront(g, hcx-hr*0.32, hcy-0.1, hr, e1[1], ink, s>=3.5, -1);
+    drawEyeFront(g, hcx+hr*0.32, hcy-0.1, hr, e1[1], ink, s>=3.5, 1);
+    drawBrow(g, hcx-hr*0.32, hcy-hr*0.30, hr*0.40, -e1[3], -e1[0]*hr*0.10, ink);
+    drawBrow(g, hcx+hr*0.32, hcy-hr*0.30, hr*0.40, e1[3], -e1[0]*hr*0.10, ink);
+    g.strokeStyle=INK; g.lineWidth=ink*0.7;      // the nose: bridge and tip
+    g.beginPath(); g.moveTo(hcx,hcy-hr*0.05); g.lineTo(hcx,hcy+hr*0.38); g.stroke();
+    drawMouthShape(g, hcx, hcy+hr*0.62, e1[2], ink, hr, 0.9);
   }
   if (view){ g.restore(); return; }
   if (s>=4){                                     // close enough for a real face
     g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.6;
     g.beginPath(); g.arc(hcx-hr*0.05, hcy+0.1, hr*0.22, -1.2, 1.4); g.stroke();             // ear
     if (B.stage===4){ g.beginPath(); g.moveTo(hcx+hr*0.2,hcy+0.5); g.lineTo(hcx+hr*0.5,hcy+0.75); g.stroke(); }  // a line of age
+    g.fillStyle=INK_SOFT;                        // a nostril, where the nose ends
+    g.beginPath(); g.arc(hcx+hr*0.80, hcy+hr*0.30, hr*0.055, 0, 6.283); g.fill();
+    if (!fem && adult){                          // stubble along the jaw
+      for (var bd=0;bd<6;bd++){
+        var bq=bd/5;
+        g.beginPath(); g.arc(hcx+hr*(0.55-0.95*bq), hcy+hr*(0.90-0.26*bq), hr*0.05, 0, 6.283); g.fill();
+      }
+    }
   }
   if (s>=2.2){                                   // a face, looking where they face
-    g.fillStyle=INK; g.beginPath(); g.arc(hcx+hr*0.5, hcy-0.1, s>=4?0.2:0.26, 0, 6.283); g.fill();
+    var e0=expressionOf(act,B,moving,wk);
+    drawEyeProfile(g, hcx+hr*0.44, hcy-hr*0.10, hr, e0[1], ink, s>=3.5);
+    drawBrow(g, hcx+hr*0.44, hcy-hr*0.32, hr*0.36, e0[3], -e0[0]*hr*0.10, ink);
     g.strokeStyle=INK; g.lineWidth=ink*0.7;
     g.beginPath(); g.moveTo(hcx+hr*0.86,hcy+0.05); g.lineTo(hcx+hr*0.98,hcy+0.6); g.lineTo(hcx+hr*0.8,hcy+0.65); g.stroke();  // nose
-    var sad = (act===A_WITHDRAW) ? 0.2 : 0;
-    g.beginPath(); g.moveTo(hcx+hr*0.5,hcy+1.1); g.lineTo(hcx+hr*0.72,hcy+1.05+sad); g.stroke();  // mouth
+    drawMouthShape(g, hcx+hr*0.60, hcy+hr*0.60, e0[2], ink, hr, 0.55);
   }
   g.restore();
 }
@@ -1845,7 +2083,7 @@ function figureSprite(a, act, bucket, moving, s, dress, bedding){
   // cache key when zoomed in; crowds share sprites and stay cheap. The key
   // fixes everything the drawing reads, so a cached figure is never someone
   // else's body.
-  var sq = Math.max(1.5, s>=2 ? Math.round(s) : Math.round(s*8)/8);
+  var sq = Math.max(2.0, s>=2 ? Math.round(s) : Math.round(s*8)/8);
   var vk = s>=2 ? (a.v%20) : (s>=1.25 ? (a.v%4) : 0);
   var bk = s>=1.25 ? bucket : Math.floor(bucket/4)*4;
   var B=bodyOf(a), wk=(act===A_WITHDRAW)?(a.wk||0):0;
@@ -1856,7 +2094,7 @@ function figureSprite(a, act, bucket, moving, s, dress, bedding){
   if (sp) return sp;
   var cap = sq>=3 ? 420 : 1400;
   if (spriteCount>cap){ spriteCache={}; spriteCount=0; }
-  var W=Math.ceil(60*sq), H=Math.ceil(60*sq);
+  var W=Math.ceil(80*sq), H=Math.ceil(80*sq);
   var c=mkCanvas(W,H), g=c.getContext("2d");
   g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
   drawSketch(g, W/2, H-2*sq, sq, act, bk/(moving?WALK_BUCKETS:12)+(moving?0:0.02), moving, vk, B, a.sex, dress, wk, view, bedding);
@@ -2977,6 +3215,10 @@ function statLine(u, kind){
   if (u.iter>1) b.push("ITERATION "+u.iter);
   if (kind==="e"){
     if (u.roles) b.push("POSTS "+u.roles[0]+"/"+u.roles[1]);
+    if (u.facilities) {
+      var built=u.facilities;
+      b.push("POOL "+Math.round((built.pool||0)*100)+"%","BAR "+Math.round((built.bar||0)*100)+"%","THEATER "+Math.round((built.theater||0)*100)+"%","FIELD "+Math.round((built.field||0)*100)+"%");
+    }
     if (u.sink>45) b.push("SINK "+u.sink+"% AT ONE BAR");
     if (u.homeless>0) b.push(u.homeless+" PLACELESS");
     if (u.std) b.push("OUTBREAK");
@@ -2988,6 +3230,8 @@ function statLine(u, kind){
     else {var camps=u.camp_state;b.push("GRAIN STORES "+camps.filter(function(c){return c.granary;}).length, "RECORD CAMPS "+camps.filter(function(c){return c.writing;}).length, "DOMESTIC STOCK "+camps.reduce(function(n,c){return n+(+c.domestic||0);},0));}
     if (u.water!==undefined) b.push("WATER "+Math.round(u.water)+" PERSON-DAYS");
     if (u.climate==="tropical") b.push("TROPICAL ISLAND");
+    if (islands9 && islands9.landmasses>2) b.push("ISLETS "+(islands9.landmasses-2));
+    if (islands9 && islands9.hills>40) b.push("HILL COUNTRY");
     if (u.dry) b.push("DROUGHT");
     if (u.myths&&u.myths.length) b.push(u.myths.length+" MYTHS");
     if (u.lessons&&u.lessons.length) b.push("INSTINCTS "+u.lessons.join(", ").toUpperCase());

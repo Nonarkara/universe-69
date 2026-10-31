@@ -113,13 +113,22 @@ class TestTheResolution(unittest.TestCase):
         self.assertIn("function fillField(", src)         # smooth coasts, not tile steps
         self.assertIn("devicePixelRatio", src)
 
-    def test_a_sprite_is_forty_units_wide(self):
-        """The figure sprite is a fixed box in figure units."""
+    def test_a_sprite_is_eighty_units_wide(self):
+        """The figure sprite is a fixed box in figure units, sized for
+        resolution: 80 units so a fitted pair and a close-up hand keep
+        their edges (60 was the 2026-10-30 step, 40 the original)."""
         src = read_renderer()
         body = src.split("function figureSprite(")[-1].split("function ")[0]
         m = re.search(r"Math\.ceil\((\d+)\*sq\)", body)
         self.assertIsNotNone(m)
-        self.assertEqual(int(m.group(1)), 60)
+        self.assertEqual(int(m.group(1)), 80)
+
+    def test_the_min_sprite_scale_keeps_distant_people_sharp(self):
+        src = read_renderer()
+        body = src.split("function figureSprite(")[-1].split("function ")[0]
+        m = re.search(r"Math\.max\(([\d.]+), s>=2", body)
+        self.assertIsNotNone(m)
+        self.assertEqual(float(m.group(1)), 2.0)
 
 
 class TestOneScreen(unittest.TestCase):
@@ -415,6 +424,44 @@ class TestTheMirror(unittest.TestCase):
         with open(RENDERER) as a, open(MIRROR) as b:
             self.assertEqual(a.read(), b.read(),
                              "web/index.html and docs/index.html have diverged")
+
+
+class TestTheFace(unittest.TestCase):
+    """Manga-grade faces (MANGA_PLAN.md §B): every core activity maps to a
+    readable expression — brows, lid, mouth — and the eye is layered."""
+
+    def setUp(self):
+        self.src = read_renderer()
+
+    @unittest.skipUnless(shutil.which('node'), 'Node is a workbench-only viewer test runner')
+    def test_every_activity_maps_to_a_readable_expression(self):
+        body = self.src.split("function expressionOf(")[-1].split("\nfunction ")[0]
+        js = ("var A_WALK=1,A_SLEEP=17,A_FIGHT=14,A_HUNT=3,A_SCOUT=19,A_EAT=12,"
+              "A_TALK=7,A_WITHDRAW=13,A_GROOM=21,A_MATE=8,A_BIRTH=9;function expressionOf("
+              + body +
+              "\nvar acts=[A_SLEEP,A_FIGHT,A_HUNT,A_SCOUT,A_EAT,A_TALK,A_WITHDRAW,A_GROOM,A_MATE,A_BIRTH,A_WALK];"
+              "\nvar out=acts.map(function(a){return expressionOf(a,{stage:2,hungry:false,gaunt:false},false,0);});"
+              "\nvar ok=out.every(function(e){return e.length===4 && e[0]>=-1 && e[0]<=1"
+              " && e[1]>=0 && e[1]<=1 && e[2]>=0 && e[2]<=5;});"
+              "\nconsole.log(JSON.stringify({ok:ok, sleepLid:expressionOf(A_SLEEP,{},false,0)[1]}));")
+        out = subprocess.run(['node', '-e', js], capture_output=True, text=True)
+        self.assertEqual(out.returncode, 0, out.stderr)
+        res = json.loads(out.stdout)
+        self.assertTrue(res["ok"], "every core activity yields a valid [brow, lid, mouth, tilt]")
+        self.assertEqual(res["sleepLid"], 0, "a sleeper's eyes are closed")
+
+    def test_the_eye_is_layered_not_a_dot(self):
+        body = self.src.split("function drawEyeProfile(")[-1].split("\nfunction ")[0]
+        self.assertIn("iris", body)
+        self.assertIn("pupil", body)
+
+    def test_the_mouth_has_its_shapes(self):
+        body = self.src.split("function drawMouthShape(")[-1].split("\nfunction ")[0]
+        for shape in ("talking", "eating", "gritted", "downcast"):
+            self.assertIn(shape, body, f"mouth shape '{shape}' missing")
+
+    def test_hair_moves_as_hair(self):
+        self.assertIn("strand clumps", self.src)
 
 
 @unittest.skipUnless(shutil.which('node'), 'Node is a workbench-only viewer test runner')

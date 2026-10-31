@@ -165,7 +165,7 @@ def make_sites(u, rng=None, camps=None):
             woods, shores = [], []
             for y in range(by, min(by + 8, n - 2)):
                 for x in range(bx, min(bx + 8, n - 2)):
-                    if terr[y][x] == 1:
+                    if terr[y][x] in (1, 5):       # woods and the hillcountry
                         woods.append((x, y))
                     if terr[y][x] == 3 and any(terr[y+dy][x+dx] == 2
                             for dx, dy in ((1,0), (-1,0), (0,1), (0,-1))):
@@ -195,11 +195,15 @@ def water_sources(u):
         for bx in range(2, n-2, 24):
             candidates = [(x, y) for y in range(by, min(by+24, n-2))
                           for x in range(bx, min(bx+24, n-2))
-                          if terr[y][x] in (0,1) and all(
+                          if terr[y][x] in (0, 1, 5) and all(
                               terr[y+dy][x+dx] != 2 for dx,dy in
                               ((2,0),(-2,0),(0,2),(0,-2)))]
             if candidates:
-                x, y = min(candidates, key=lambda q: (q[0]-bx-12)**2 + (q[1]-by-12)**2)
+                # the hill country catches the rain: a bank prefers a
+                # hillside seep, otherwise the ground closest to the cell
+                x, y = min(candidates,
+                           key=lambda q: ((q[0]-bx-12)**2 + (q[1]-by-12)**2)
+                                         - (400 if terr[q[1]][q[0]] == 5 else 0))
                 sites.append({"x":x, "y":y, "kind":"water", "left":180.,
                               "max":180., "regrow":24., "provisioned":False})
     return sites

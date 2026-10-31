@@ -18,6 +18,27 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
   (now − clock.epoch) / clock.seconds` and catches up. Pace changes preserve
   ticks already due. The universes age while the process is dead.
 
+## Engine 2026.10.31.1: human founding cohorts and the real island (v3)
+
+A repair plus two founder-visible changes. Trajectory determinism now holds
+per (seed, day, part) **within one engine version**: old versions remain
+reproducible by their version tag, and 2026.10.31.1 changes the trajectory
+of every world generated or reseeded at it. Everything here applies to
+genesis and reseed only — the run in flight keeps its own island, cohort and
+ages until it falls.
+
+| Change | Mechanic | Qualification |
+| --- | --- | --- |
+| A field belongs to its island (`land_field`) | The cache stores `(terr, field)` and refuses an entry whose stored terrain is not the caller's terrain object, so a recycled `id()` can no longer return a field computed over another island's tiles. | Authored for correctness of the field cache; identical-output on every live path (verified pin). No claim about external caches. |
+| The 8 founder pairs are a human cohort (`minds.founders`) | Ages 18–48 model years (mean 29, sd 6.5), whole-year births; partners within ±8 years (pair-link sd 3.5); BMI dimorphic (m 23.0 / f 22.2, sd 2.3, clipped 16.5–29); strength dimorphic (sn 0.58 / 0.47, sd 0.13); purpose pu 0.25–0.95; mild assortative executive function. Both worlds receive the identical cohort, as before. | Model cohorts resembling small founding bands, not a measured population. Heritable traits keep the existing [0,1] priors; the cohort spread is an illustrative prior, not a survey. The flat "born 18 days-in × year" rewrite at reseeds is retired on both paths, so a reseeded band keeps the ages the cohort has. |
+| EDEN builds hedonistic amenities when crowded and bored | Yearly roll (crowd ≥ stagnation and ennui > 0.05): the resort builds or upgrades one amenity — pool, bar, theater, field — by a step of 0.25, capped at 1.0. Each facility level adds 0.002 to the annual ennui creep: easy pleasure dulls appetite faster the more of it the resort offers. Levels are stamped on the universe (`facilities`), migrate with a zero default, and reach the viewer through `summarize`. | The human-scale reading of U25's provisions (nesting boxes, dispensers, bottles, wheels): amenities give places to go and pleasure to have, never meaning. Inert for an uncrowded pen — nothing is built, and at facility sum 0 the creep formula is identical to before, so the live death-phase EDEN (crowd ≈ 0.004) is unaffected until a future reseed grows crowded. The amenity roll is annual with a build event on the record (`EDEN amenity`). |
+| LAGOON's next island is a real analogue (terrain v3) | New genesis builds the v2 coastal forest, then paints a hill country (tile 5, south-west massifs) over open grass only, thickens the north-east shore into a sand-spit estuary sector, and raises two bare islets in the strait. Tile 5 joins the woods economy: plant patches grow on hills, `_woods` sites and settable ground read (1,5), freshwater banks may sit at hillside seeps and prefer them, wild animals range the hill woods. The day/night, seasons and pace are untouched. | v2 (and v1) remain reproducible via the version argument for postmortems of those eras; `terrain_version=3` is stamped at genesis. No mid-life intervention: the live LAGOON keeps its `terrain_version=1` island until its next reseed, so `TROPICAL ISLAND` / `HILL COUNTRY` labels appear only then. The islets are land; reaching them remains a boat question, not a terrain change. |
+
+The renderer side of v3 is documented in GRAPHICS.md (same commit); the
+bounded-lab verdicts must be re-run per seed for 2026.10.31.1 before any
+population claim is made about future runs (`tools/lab.py`, seeds 69/7/123/5).
+Test pins: `tests/test_founders.py`, `tests/test_island_v3.py`.
+
 ## Engine 2026.10.30.7: exposure days and private reproductive cycles
 
 This changes future trajectories, including existing runs. The `.6` frozen

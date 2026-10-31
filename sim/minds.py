@@ -44,6 +44,15 @@ TRAIT_SD = 0.15            # founders' spread
 MUTATION_SD = 0.06         # equilibrium sd ≈ 0.085 once mid-parent averaging bites
 MALE_AG_SHIFT = 0.08       # ≈ half an sd: a distribution shift, never a rule (Pinker ch.18)
 
+# The founding cohort, drawn as human cohorts are: a spread of adult ages
+# with most in the twenties, partners close in years, bodies across the
+# human range, and no two people alike.
+FOUNDER_AGE_MEAN = 29.0    # model years at founding
+FOUNDER_AGE_SD = 6.5
+FOUNDER_AGE_MIN = 18.0
+FOUNDER_AGE_MAX = 48.0
+FOUNDER_AGE_LINK = 3.5     # sd of the year-gap within a pair
+
 SYLLABLES = ["ka", "ra", "no", "ta", "mi", "lu", "se", "an", "ko", "ri",
              "ve", "sha", "on", "ba", "ni", "tu", "ma", "ilo", "ess", "ur"]
 
@@ -107,6 +116,11 @@ def clamp01(x):
     return 0.0 if x < 0.0 else 1.0 if x > 1.0 else x
 
 
+def clampf(x, lo, hi):
+    """A real quantity bounded to a human range, not a trait in [0,1]."""
+    return lo if x < lo else hi if x > hi else x
+
+
 def founders(fseed, iteration, pairs, pool=None):
     """The same people, for both universes.
 
@@ -117,19 +131,49 @@ def founders(fseed, iteration, pairs, pool=None):
 
     EDEN begins with Adam and Eve; LAGOON begins with Rahul and Sita.
     Each world receives eight pairs, as on every reseed.
+
+    The founders are drawn as people are, not as a clone of 16 identical
+    18-year-olds: a founding cohort is of mixed age and body, partners are
+    of roughly matching years (±8), and temperaments range the [0,1] the
+    trait rows in RESEARCH.md describe.
     """
     rng = random.Random(fseed * 1009 + iteration)
     out = []
-    for i in range(pairs * 2):
-        sex = "m" if i % 2 == 0 else "f"
+    for i in range(pairs):
+        # an age cohort, not a uniform: most founders are young adults, a
+        # few middle-aged; partners keep to the same decade of life
+        age_m = clampf(rng.gauss(FOUNDER_AGE_MEAN, FOUNDER_AGE_SD),
+                       FOUNDER_AGE_MIN, FOUNDER_AGE_MAX)
+        age_f = clampf(age_m + rng.gauss(0, FOUNDER_AGE_LINK),
+                       FOUNDER_AGE_MIN, FOUNDER_AGE_MAX)
+        # temperaments: one partner's self-control anchors the other's a
+        # half-step (mild assortative mating), the rest by nature
+        ef_m = clamp01(rng.gauss(0.5, TRAIT_SD))
+        ef_f = clamp01(0.5 * ef_m + 0.5 * rng.gauss(0.5, TRAIT_SD))
+        ag_m = clamp01(rng.gauss(0.5, TRAIT_SD))
+        ag_f = clamp01(rng.gauss(0.5, TRAIT_SD))
+        vg_m = clamp01(rng.gauss(0.5, TRAIT_SD))
+        vg_f = clamp01(rng.gauss(0.5, TRAIT_SD))
+        # bodies: the two sexes differ in build, strength and want as
+        # people do; individuals differ within each sex
+        pu_m = clampf(rng.gauss(0.62, 0.12), 0.25, 0.95)
+        pu_f = clampf(rng.gauss(0.62, 0.12), 0.25, 0.95)
+        bmi_m = clampf(rng.gauss(23.0, 2.3), 16.5, 29.0)
+        bmi_f = clampf(rng.gauss(22.2, 2.3), 16.5, 29.0)
+        sn_m = clampf(rng.gauss(0.58, 0.13), 0.15, 0.95)
+        sn_f = clampf(rng.gauss(0.47, 0.13), 0.15, 0.95)
         if pool:
-            nm = make_name(rng, pool, index=i // 2, sex=sex)
+            nm_m = make_name(rng, pool, index=i, sex="m")
+            nm_f = make_name(rng, pool, index=i, sex="f")
         else:
-            nm = make_name(rng)
-        out.append({"n": nm, "s": sex,
-                    "ef": clamp01(rng.gauss(0.5, TRAIT_SD)),
-                    "ag": clamp01(rng.gauss(0.5, TRAIT_SD)),
-                    "vg": clamp01(rng.gauss(0.5, TRAIT_SD))})
+            nm_m = make_name(rng)
+            nm_f = make_name(rng)
+        out.append({"n": nm_m, "s": "m", "b": -int(round(age_m)) * DAYS_PER_YEAR,
+                    "ef": ef_m, "ag": ag_m, "vg": vg_m,
+                    "pu": pu_m, "bmi": bmi_m, "sn": sn_m})
+        out.append({"n": nm_f, "s": "f", "b": -int(round(age_f)) * DAYS_PER_YEAR,
+                    "ef": ef_f, "ag": ag_f, "vg": vg_f,
+                    "pu": pu_f, "bmi": bmi_f, "sn": sn_f})
     return out
 
 

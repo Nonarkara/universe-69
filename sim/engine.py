@@ -35,7 +35,16 @@ GESTATION = 270
 # The version of the model. Determinism holds per (seed, day, part) only *within* one
 # version, so every published figure and every postmortem must say which
 # version produced it.
-ENGINE_VERSION = "2026.10.30.7"
+# 2026.10.31.1 — land_field's cache no longer trusts a recycled terrain id
+# (a field computed for another island could be returned); the founding
+# cohort is drawn as a spread of ages and bodies instead of 16 identical
+# 18-year-olds; LAGOON's next genesis builds a real island analogue (the
+# hill country, a sand-spit estuary, palmed and mangrove coasts); EDEN
+# builds hedonistic amenities (pool, bar, theater, field) when crowded and
+# bored, and each level of easy pleasure dulls appetite faster — inert for
+# a run whose pen is not crowded, so the live death-phase world is
+# unaffected. The run in flight keeps its own geography until it falls.
+ENGINE_VERSION = "2026.10.31.1"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -55,6 +64,16 @@ EDEN_SIZE = 48
 EDEN_CAP = 900          # nominal capacity of the pen
 EDEN_STAGNATION = 0.35  # crowding level where the behavioral sink begins
 EDEN_BOX_CAP = 7        # how many may share one nest box
+
+# The resort's hedonistic amenities — human-scale equivalents of U25's
+# mouse provisions (nesting boxes, food dispensers, water bottles, wheels).
+# Everything is provided; nothing is earned. Each facility level (0-1)
+# gives the pen another place to go, and another source of easy pleasure
+# that dulls appetite: the more the resort offers, the faster ennui grows.
+EDEN_FACILITIES = ("pool", "bar", "theater", "field")
+EDEN_FACILITY_STEP = 0.25     # a facility is built / upgraded by this much
+EDEN_FACILITY_BORED = 0.05    # ennui must pass this before anything is built
+EDEN_FACILITY_ENNUI = 0.002   # extra ennui creep per facility level, per year
 
 LAGOON_SIZE = 160   # an island off the coast of a greater land
 RESEED_YEARS = 30       # quiet years before the Observers reseed (Ice Age cycle)
@@ -235,6 +254,54 @@ def make_lagoon_terrain(seed, version=1):
             for x in range(2, s - 2):
                 if t[y][x] == 0 and forest.random() < 0.48:
                     t[y][x] = 1
+    if version >= 3:
+        # A real island analogue: the hill country rises in the island's
+        # south-west; the estuary near the north-east coast is penned
+        # behind a wide sand spit, as coastal lagoons are; the islets sit
+        # in the strait. Tiles the record walks and eats stay their own
+        # kinds: woods, plain, shore — only where land already is.
+        rnd = random.Random(f"{seed}:island-v3")
+        # the hill country: two ragged massifs; hills take only open
+        # grass, so the woods they had stay woods
+        def paint_hill(hx, hy, hr):
+            for y in range(max(0, hy - hr), min(s, hy + hr + 1)):
+                for x in range(max(0, hx - hr), min(s, hx + hr + 1)):
+                    if t[y][x] != 0:
+                        continue
+                    d = math.hypot(x - hx, y - hy)
+                    if d <= hr * (0.88 + 0.12 * math.sin(
+                            math.atan2(y - hy, x - hx) * 5 + hx)):
+                        t[y][x] = 5
+        paint_hill(86, 112, 16)
+        paint_hill(95, 102, 11)
+        # the wide sand spit fronting the estuary (angle 0.69 from the
+        # island's middle): here the shore band thickens over the grass
+        # and pushes a little way into the sea, the way a spit forms
+        for y in range(s):
+            for x in range(s):
+                a = math.atan2(y - cy, x - cx)
+                if math.cos(a - 0.69) < 0.70:
+                    continue                    # seaward NE only
+                d = math.hypot(x - cx, y - cy)
+                r = R * coast[int((a % (2 * math.pi)) / (2 * math.pi) * 72) % 72]
+                if t[y][x] == 0 and r - 5.5 < d < r - 2.5:
+                    t[y][x] = 3                 # the spit's land side
+                elif t[y][x] == 2 and r <= d < r + 4.5:
+                    t[y][x] = 3                 # the spit's root in the sea
+        # the islets: a walk to them is already a boat, and until the boat
+        # they are two bare rocks out in the strait
+        for ix, iy, ir in ((46, 22, 3), (146, 146, 2)):
+            if t[iy][ix] != 2:
+                continue
+            for dy in range(-ir, ir + 1):
+                for dx in range(-ir, ir + 1):
+                    if not (0 <= ix + dx < s and 0 <= iy + dy < s):
+                        continue
+                    d = math.hypot(dx, dy)
+                    if d < ir - 0.6:
+                        t[iy + dy][ix + dx] = 0
+                    elif d < ir:
+                        t[iy + dy][ix + dx] = 3
     return t
 
 
@@ -260,10 +327,11 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None,
         u["ennui"] = 0.0      # hedonic adaptation: easy pleasure dulls appetite
         u["std_years"] = 0    # years an STD outbreak has left to run
         u["wary_years"] = 0   # post-outbreak generation keeps its distance
+        u["facilities"] = {k: 0.0 for k in EDEN_FACILITIES}  # hedonistic amenities
         cx = cy = EDEN_SIZE // 2
     else:
         u["terrain_seed"] = seed
-        u["terrain_version"] = 2
+        u["terrain_version"] = 3
         # Legacy observer fields. Each tick mirrors the actual patch and
         # animal stocks; these initial values do not supply meals.
         u["stocks"] = {"plants": 60000.0, "game": 2500.0,
@@ -291,8 +359,11 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None,
     for i, f in enumerate(minds.founders(fseed, iteration, pairs, pool)):
         x = cx + (i % 4) - 2 + (1 if i % 4 >= 2 else 0)
         y = cy + (i // 4) - pairs // 4
-        p = person(u["next_id"], f["n"], f["s"], -18 * DAYS_PER_YEAR, 1, x, y)
+        # The founders arrive as the people they are: each pair carries its
+        # own years, build, strength and temper from minds.founders.
+        p = person(u["next_id"], f["n"], f["s"], f["b"], 1, x, y)
         p["ef"], p["ag"], p["vg"] = f["ef"], f["ag"], f["vg"]
+        p["pu"], p["bmi"], p["sn"] = f["pu"], f["bmi"], f["sn"]
         if kind == "LAGOON":
             p["st"] = 0
         u["people"].append(p)
@@ -1011,8 +1082,7 @@ def tick_eden(u, rng, events):
             fresh["founded_day"] = day
             fresh["part"], fresh["parts"] = part, u.get("parts", day * PARTS_PER_DAY + part)
             fresh["engine_history"] = list(u.get("engine_history", []))
-            for p in fresh["people"]:
-                p["b"] = day - 18 * DAYS_PER_YEAR  # young again
+            # as they were: the same cohort, at the ages it has
             u.clear()
             u.update(fresh)
             events.append((day, "EDEN", "reseed",
@@ -1202,17 +1272,41 @@ def tick_eden(u, rng, events):
     reproductive_contacts(u, meetings)  # social bonds, separate from exposure
     reproduction.record(u, meetings)  # prune all histories even without new contact
     try_conceive(u, rng, people, fertility)
+    if u.get("innocent") and day > 60 and rng.random() < 1 / (200 * PARTS_PER_DAY):
+        # the same discovery as the lagoon's, sooner: there is nothing else to do.
+        # Deleted by accident with the death-phase recovery block (d13963b);
+        # without it a fresh pen never learns what bodies are for and ages
+        # out childless. Restored 2026-10-31.
+        u["innocent"] = False
+        events.append((day, "EDEN", "discovery",
+                       "With every hour free, the pairs discover how new life begins."))
 
     # yearly: ennui creep and disease rolls in a world of free mating
     if part == 0 and day % DAYS_PER_YEAR == 7:
         old = u["ennui"]
-        u["ennui"] = min(0.7, u["ennui"] + 0.004)
+        # easy pleasure dulls appetite; every amenity speeds the dulling
+        u["ennui"] = min(0.7, u["ennui"] + 0.004
+                         + EDEN_FACILITY_ENNUI * sum(u["facilities"].values()))
         for threshold, msg in ((0.25, "Easy pleasure begins to dull — the pen "
                                       "grows bored of what costs nothing."),
                                (0.5, "Whole cohorts now barely seek each other "
                                      "out. Abundance has made desire optional.")):
             if old < threshold <= u["ennui"]:
                 events.append((day, "EDEN", "ennui", msg))
+        # when the pen is crowded and bored, the resort builds another amenity:
+        # a pool, a bar, a theater, a field — human-scale versions of the
+        # provisions U25's mice never had to work for. Nothing earned, nothing
+        # scarce except space and meaning.
+        if (crowd >= eden_design(u)["stagnation"]
+                and u["ennui"] > EDEN_FACILITY_BORED):
+            for key in EDEN_FACILITIES:
+                if u["facilities"][key] < 1.0:
+                    u["facilities"][key] = min(1.0,
+                                               u["facilities"][key] + EDEN_FACILITY_STEP)
+                    events.append((day, "EDEN", "amenity",
+                                   f"The resort builds a {key} — pleasure "
+                                   f"that costs nothing."))
+                    break
         if u["std_years"] > 0:
             u["std_years"] -= 1
             if u["std_years"] == 0:
@@ -1434,7 +1528,7 @@ def settlement_sites(u, si):
             if not (1 <= x < LAGOON_SIZE - 1 and 1 <= y < LAGOON_SIZE - 1):
                 continue
             k = terr[y][x]
-            if k == 1:
+            if k in (1, 5):                      # woods and the hill country
                 woods.append((x, y))
             elif k == 0:
                 open_.append((x, y))
@@ -1737,9 +1831,12 @@ def land_field(terr, tx, ty):
     flood, so a walk around the inner lagoon is a walk, not a dead end.
     Cached per target and rebuilt freely; it is derived, never state."""
     key = (id(terr), tx, ty)
-    f = _FIELDS.get(key)
-    if f is not None:
-        return f
+    entry = _FIELDS.get(key)
+    # A terrain that was evicted can have its id recycled by another island:
+    # the cached field belongs to the object it was computed for, or it is
+    # rebuilt (same identity check as _LAND_COMPONENTS).
+    if entry is not None and entry[0] is terr:
+        return entry[1]
     n = len(terr)
     far = n * n
     f = [far] * (n * n)
@@ -1754,7 +1851,7 @@ def land_field(terr, tx, ty):
                     q.append((nx, ny))
     if len(_FIELDS) >= _FIELDS_MAX:
         _FIELDS.pop(next(iter(_FIELDS)))
-    _FIELDS[key] = f
+    _FIELDS[key] = (terr, f)
     return f
 
 
@@ -2225,8 +2322,7 @@ def tick_lagoon(u, rng, events):
             fresh["founded_day"] = day
             fresh["part"], fresh["parts"] = part, u.get("parts", day * PARTS_PER_DAY + part)
             fresh["engine_history"] = list(u.get("engine_history", []))
-            for p in fresh["people"]:
-                p["b"] = day - 18 * DAYS_PER_YEAR  # young again
+            # as they were: the same castaways, at the ages they have
             # a "preserve" lesson is kept as a habit: their stores rot
             # slower (needs.keep_stores), not as food from nowhere
             u.clear()
@@ -2896,6 +2992,8 @@ def summarize(world):
                              u["tech"][-1] if u["tech"] else "foragers")
         else:
             info["ennui"] = round(u.get("ennui", 0.0), 3)
+            info["facilities"] = {k: round(v, 2) for k, v in
+                                  (u.get("facilities") or {}).items()}
             info["size"] = eden_size(u)
             roles = u.get("roles", [])
             info["roles"] = [sum(1 for r in roles if r["who"]), len(roles)]
@@ -3014,6 +3112,7 @@ def migrate(world):
             u.setdefault("ennui", 0.0)
             u.setdefault("std_years", 0)
             u.setdefault("wary_years", 0)
+            u.setdefault("facilities", {k: 0.0 for k in EDEN_FACILITIES})
         if u.get("kind") == "EDEN":
             u.setdefault("box_occ", {})
             u.setdefault("hop_n", [1, 1, 1, 1])

@@ -103,6 +103,34 @@ class TestGenesis(unittest.TestCase):
         self.assertEqual(lag["tech"], [])
         self.assertEqual(len(lag["settlements"]), 1)
 
+    def test_eden_discovers_its_own_bodies_and_mating_reaches_the_record(self):
+        """The innocence roll deleted with the death-phase block (d13963b)
+        left fresh pens childless forever: nobody ever sought a mate. The
+        discovery must land within a few years, and once it does, actual
+        mate contact must reach the reproductive record — the gate the
+        roll opens. Conception timing is ovulation-window luck and is not
+        pinned here."""
+        import reproduction
+        w = engine.genesis(seed=69)
+        u = w["eden"]
+        events = []
+        added = {"n": 0}
+        orig_record = reproduction.record
+        def spy(u_, frames):
+            added["n"] += orig_record(u_, frames)
+        reproduction.record = spy
+        try:
+            for _ in range(6 * engine.DAYS_PER_YEAR):
+                engine.tick_world(w, events)
+        finally:
+            reproduction.record = orig_record
+        self.assertFalse(u["innocent"],
+                         "six years of free pleasure and no discovery of sex")
+        self.assertTrue(any(e[2] == "discovery" and e[1] == "EDEN" for e in events),
+                        "the discovery is on the record")
+        self.assertGreater(added["n"], 0,
+                           "after innocence ends, mate contact reaches the record")
+
 
 class TestDeterminism(unittest.TestCase):
     def test_same_seed_gives_the_same_world(self):
@@ -672,7 +700,8 @@ class TestResortAndIsland(unittest.TestCase):
         self.assertNotIn("voyage", u)
         self.assertTrue(u["continent"])
         self.assertTrue(u["boats"])
-        self.assertTrue(all(not p.get("ab") and p["st"] == 1 for p in aboard))
+        new_i = len(u["settlements"]) - 1   # the settlement the voyage just founded
+        self.assertTrue(all(not p.get("ab") and p["st"] == new_i for p in aboard))
         self.assertTrue(all((p["x"], p["y"]) == (v["x1"], v["y"]) for p in aboard))
         self.assertNotEqual(engine.terrain_of(u)[v["y"]][v["x1"]], 2)
         self.assertTrue(any("lands on the greater shore" in e[3] for e in events))

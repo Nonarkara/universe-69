@@ -57,7 +57,7 @@ def _land(terr, x, y):
 
 def _woods(terr):
     return [(x, y) for y in range(len(terr)) for x in range(len(terr))
-            if terr[y][x] == 1]
+            if terr[y][x] in (1, 5)]           # woods and the hill country
 
 
 def ensure(u, rng, terr):
