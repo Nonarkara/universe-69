@@ -384,12 +384,19 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None,
     return u
 
 
-def genesis(seed=69):
+def genesis(seed=69, attempt=1):
+    """Two sealed worlds, founded at day 0.
+
+    `attempt` is the honest count of fresh starts this instrument has made
+    (the server derives it from its own archive): it stamps both universes'
+    iteration, which the viewer shows, and draws that attempt's own founding
+    cohort — the same people for both worlds, as always.
+    """
     now = time.time()
-    return {"epoch": now, "sec_per_day": SEC_PER_DAY, "seed": seed,
+    return {"epoch": now, "sec_per_day": SEC_PER_DAY, "seed": seed, "attempt": attempt,
             "clock": {"epoch": now, "parts": 0, "seconds": SEC_PER_PART},
-            "eden": genesis_universe("EDEN", seed * 7 + 6, fseed=seed),
-            "lagoon": genesis_universe("LAGOON", seed * 7 + 9, fseed=seed)}
+            "eden": genesis_universe("EDEN", seed * 7 + 6, iteration=attempt, fseed=seed),
+            "lagoon": genesis_universe("LAGOON", seed * 7 + 9, iteration=attempt, fseed=seed)}
 
 
 # ---------------------------------------------------------------- shared

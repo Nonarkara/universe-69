@@ -26,6 +26,38 @@ def archive_run(data):
     return folder
 
 
+LESSON_VOCABULARY = ("preserve", "vigilance", "cleanliness", "unity")
+
+
+def count_runs(data):
+    """How many fresh starts this instrument has archived so far."""
+    archive = os.path.join(data, "archive")
+    if not os.path.isdir(archive):
+        return 0
+    return len([n for n in os.listdir(archive) if n.startswith("run-")])
+
+
+def lessons_from_archive(archive_folder):
+    """The lessons the dead run holds, for a fresh LAGOON to inherit.
+
+    The dead iterations' postmortems name what their deaths taught. A reseed
+    carries them; an explicit fresh start honors the same law. EDEN never
+    inherits — each of its runs repeats the fatal conditions innocent, and
+    that asymmetry is the experiment."""
+    import glob
+    lessons = []
+    for path in sorted(glob.glob(os.path.join(archive_folder, "postmortems", "u9-*.json"))):
+        try:
+            with open(path) as f:
+                pm = json.load(f)
+        except (OSError, ValueError):
+            continue
+        for les in ([pm.get("lesson")] if pm.get("lesson") else []) + (pm.get("lessons_held") or []):
+            if les in LESSON_VOCABULARY and les not in lessons:
+                lessons.append(les)
+    return lessons
+
+
 def compile_book(world, root=None, data=None):
     """Write a history book if both universes are extinct. Return path or None."""
     root = root or ROOT

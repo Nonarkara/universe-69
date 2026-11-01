@@ -48,10 +48,17 @@ status = {"catching_up": False, "behind_days": 0, "started": time.time()}
 
 # `--genesis` starts both worlds over from the shared founders. The old world
 # is archived, never deleted: its numbers belong to the engine that made them.
+# A fresh start is the Nth attempt, derived from the archive, and LAGOON
+# inherits the lessons the dead iterations hold — EDEN never does, because
+# each of its runs must repeat the fatal conditions innocent (the asymmetry
+# is the experiment).
+attempt = 1
 if "--genesis" in sys.argv:
     archived = historian.archive_run(DATA)
     if archived:
         print(f"[universe69] archived the old run to {archived}")
+    attempt = historian.count_runs(DATA) + 1
+    print(f"[universe69] fresh start — attempt {attempt}")
 
 if os.path.exists(STATE_PATH):
     try:
@@ -67,11 +74,17 @@ if os.path.exists(STATE_PATH):
             print(f"[universe69] state.json unreadable ({exc}); archived to {bad}")
         except OSError:
             print(f"[universe69] state.json unreadable ({exc})")
-        world = engine.genesis(seed=69)
+        world = engine.genesis(seed=69, attempt=attempt)
         print("[universe69] GENESIS — two universes created")
 else:
-    world = engine.genesis(seed=69)
-    print("[universe69] GENESIS — two universes created")
+    world = engine.genesis(seed=69, attempt=attempt)
+    print(f"[universe69] GENESIS — two universes created (attempt {attempt})")
+    if attempt > 1:
+        lessons = historian.lessons_from_archive(archived) if archived else []
+        if lessons:
+            world["lagoon"]["lessons"] = lessons
+            print(f"[universe69] LAGOON carries the dead attempts' lessons: "
+                  f"{', '.join(lessons)}")
 
 engine.set_clock_pace(world, SEC_PER_PART)
 

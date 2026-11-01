@@ -96,6 +96,48 @@ class TestGenesis(unittest.TestCase):
         self.assertTrue(w["eden"]["innocent"])
         self.assertTrue(w["lagoon"]["innocent"])
 
+    def test_an_attempt_is_stamped_on_both_universes(self):
+        """A fresh start knows which attempt it is (the owner's instruction,
+        2026-11-01: attempt 2 begins knowing the first died). The stamp
+        drives the iteration counters the viewer shows and draws each
+        attempt's own founding cohort — the same people for both worlds."""
+        w1 = engine.genesis(seed=69, attempt=1)
+        w2 = engine.genesis(seed=69, attempt=2)
+        self.assertEqual(w1["attempt"], 1)
+        self.assertEqual(w2["attempt"], 2)
+        for key in ("eden", "lagoon"):
+            self.assertEqual(w2[key]["iteration"], 2)
+            self.assertEqual(w2[key]["day"], 0)
+        # a different draw, but still one cohort shared by both worlds
+        key1 = [(p["s"], p["b"]) for p in w2["lagoon"]["people"]]
+        key2 = [(p["s"], p["b"]) for p in w2["eden"]["people"]]
+        self.assertEqual(key1, key2)
+        self.assertNotEqual([(p["s"], p["b"]) for p in w1["lagoon"]["people"]], key1)
+
+    def test_lagoon_inherits_lessons_from_a_fresh_start(self):
+        """The dead attempts teach: LAGOON carries their lessons across an
+        explicit fresh start, EDEN never does. That asymmetry is the
+        experiment (AGENTS.md)."""
+        import historian
+        import tempfile, json as _json, os as _os
+        with tempfile.TemporaryDirectory() as d:
+            arc = _os.path.join(d, "postmortems")
+            _os.makedirs(arc)
+            with open(_os.path.join(arc, "u9-iteration-001.json"), "w") as f:
+                _json.dump({"lesson": "preserve", "lessons_held": ["cleanliness"]}, f)
+            with open(_os.path.join(arc, "u6-iteration-001.json"), "w") as f:
+                _json.dump({"lesson": "vigilance", "lessons_held": ["unity"]}, f)
+            with open(_os.path.join(arc, "u9-iteration-002.json"), "w") as f:
+                _json.dump({"lesson": None, "lessons_held": ["preserve"]}, f)
+            lessons = historian.lessons_from_archive(d)
+            self.assertEqual(lessons, ["preserve", "cleanliness"],
+                             "LAGOON's lessons only, in the archive's order, no repeats")
+            w = engine.genesis(seed=69, attempt=2)
+            w["lagoon"]["lessons"] = lessons
+            self.assertEqual(w["lagoon"]["lessons"], ["preserve", "cleanliness"])
+            self.assertEqual(w["eden"]["lessons"], [],
+                             "EDEN starts innocent of what other runs learned")
+
     def test_lagoon_starts_innocent_and_without_technology(self):
         w = engine.genesis(seed=69)
         lag = w["lagoon"]
