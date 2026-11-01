@@ -44,7 +44,13 @@ GESTATION = 270
 # bored, and each level of easy pleasure dulls appetite faster — inert for
 # a run whose pen is not crowded, so the live death-phase world is
 # unaffected. The run in flight keeps its own geography until it falls.
-ENGINE_VERSION = "2026.10.31.1"
+# 2026.10.31.2 — the reseed rebase: founding births are anchored at the
+# world's founding day. Removing the flat "young again" rewrite had also
+# removed the only thing rebasing founders onto the running day, so
+# iteration 2's founders arrived 366 years old and died of age in 2.3
+# years (U9's actual extinction). Reseed outcomes change; founded-at-day-0
+# worlds do not.
+ENGINE_VERSION = "2026.10.31.2"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -312,7 +318,7 @@ LESSON_TECH = {"preserve": ("preservation", "fishing"),
 
 
 def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None,
-                     fseed=None):
+                     fseed=None, founding_day=0):
     rng = random.Random(seed)
     fseed = seed if fseed is None else fseed
     u = {"kind": kind, "seed": seed, "iteration": iteration, "day": 0,
@@ -360,8 +366,12 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None,
         x = cx + (i % 4) - 2 + (1 if i % 4 >= 2 else 0)
         y = cy + (i // 4) - pairs // 4
         # The founders arrive as the people they are: each pair carries its
-        # own years, build, strength and temper from minds.founders.
-        p = person(u["next_id"], f["n"], f["s"], f["b"], 1, x, y)
+        # own years, build, strength and temper from minds.founders, and
+        # their births are anchored at the world's founding day — a reseed
+        # in a world 366 years old must not found a band that is 366 years
+        # old with it (the retired "young again" line was, secretly, this
+        # rebase; it is back, now carrying the cohort's own ages).
+        p = person(u["next_id"], f["n"], f["s"], founding_day + f["b"], 1, x, y)
         p["ef"], p["ag"], p["vg"] = f["ef"], f["ag"], f["vg"]
         p["pu"], p["bmi"], p["sn"] = f["pu"], f["bmi"], f["sn"]
         if kind == "LAGOON":
@@ -1077,7 +1087,8 @@ def tick_eden(u, rng, events):
             fresh = genesis_universe("EDEN", u["seed"] + u["iteration"],
                                      u["iteration"] + 1,
                                      postmortems=u["postmortems"],
-                                     fseed=u.get("fseed"))
+                                     fseed=u.get("fseed"),
+                                     founding_day=day)
             fresh["day"] = day
             fresh["founded_day"] = day
             fresh["part"], fresh["parts"] = part, u.get("parts", day * PARTS_PER_DAY + part)
@@ -2317,7 +2328,8 @@ def tick_lagoon(u, rng, events):
             fresh = genesis_universe("LAGOON", u["seed"] + u["iteration"],
                                      u["iteration"] + 1,
                                      postmortems=u["postmortems"],
-                                     lessons=lessons, fseed=u.get("fseed"))
+                                     lessons=lessons, fseed=u.get("fseed"),
+                                     founding_day=day)
             fresh["day"] = day
             fresh["founded_day"] = day
             fresh["part"], fresh["parts"] = part, u.get("parts", day * PARTS_PER_DAY + part)
@@ -3059,10 +3071,36 @@ def save_state(world, path):
     os.replace(tmp, path)
 
 
+def validate_world(world):
+    """A loaded state must be a world this engine can tick, or say why not.
+
+    migrate() fills missing fields, but it cannot invent a universe. The
+    server archives an unreadable state and starts again rather than
+    crash-looping: a corrupt file must never kill the universes."""
+    if not isinstance(world, dict):
+        raise ValueError("state.json: top level is not an object")
+    for key in ("eden", "lagoon"):
+        u = world.get(key)
+        if not isinstance(u, dict):
+            raise ValueError(f"state.json: universe '{key}' is missing or not an object")
+        if not isinstance(u.get("people"), list):
+            raise ValueError(f"state.json: universe '{key}' has no people list")
+        day = u.get("day")
+        if not isinstance(day, int) or isinstance(day, bool) or day < 0:
+            raise ValueError(f"state.json: universe '{key}' has no valid day")
+        for p in u["people"][:3]:
+            if not isinstance(p, dict) or "id" not in p:
+                raise ValueError(f"state.json: universe '{key}' people are not person records")
+    clock = world.get("clock")
+    if clock is not None and not isinstance(clock, dict):
+        raise ValueError("state.json: clock is not an object")
+    return world
+
+
 def load_state(path):
     with open(path) as f:
         world = json.load(f)
-    return migrate(world)
+    return migrate(validate_world(world))
 
 
 def migrate(world):

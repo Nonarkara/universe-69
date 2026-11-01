@@ -93,6 +93,43 @@ class TestFounders(unittest.TestCase):
         self.assertEqual(ages, [f + 1 for f in founding])   # a year has passed
         self.assertGreater(len(set(founding)), 3)
 
+    def test_a_reseed_into_a_running_world_founds_a_young_cohort(self):
+        """The reseed rebase (engine 2026.10.31.2): births anchor at the
+        founding day. Without it a world 366 years old is joined by a band
+        366 years old, which dies of age in 2.3 years — U9's actual
+        iteration-2 extinction. The cohort keeps its own human ages."""
+        import engine
+        day = 366 * engine.DAYS_PER_YEAR
+        u = engine.genesis_universe("LAGOON", 9, iteration=2, fseed=69,
+                                    founding_day=day)
+        u["day"] = day
+        ages = [engine.age_of(p, day) // engine.DAYS_PER_YEAR for p in u["people"]]
+        for a in ages:
+            self.assertGreaterEqual(a, 18)
+            self.assertLessEqual(a, 48)
+        self.assertGreater(len(set(ages)), 3,
+                           "a reseeded band is still a cohort, not a uniform")
+
+    def test_the_tick_reseed_path_delivers_the_young_cohort(self):
+        """End to end: a world extinct past the quiet years reseeds on the
+        next tick, and the band that steps ashore is young again."""
+        import engine
+        w = engine.genesis(seed=69)
+        u = w["lagoon"]
+        day = 400 * engine.DAYS_PER_YEAR
+        u["day"] = u.get("day", day)
+        u["day"] = day
+        u["people"] = []
+        u["extinct_day"] = day - (engine.RESEED_YEARS * engine.DAYS_PER_YEAR + 10)
+        events = []
+        engine.tick_world(w, events)
+        self.assertEqual(u["iteration"], 2, "the quiet years ended: reseeded")
+        self.assertGreater(len(u["people"]), 0)
+        ages = [engine.age_of(p, u["day"]) // engine.DAYS_PER_YEAR
+                for p in u["people"]]
+        self.assertTrue(all(16 <= a <= 50 for a in ages),
+                        f"a reseeded band is young again, not {ages}")
+
 
 if __name__ == "__main__":
     unittest.main()

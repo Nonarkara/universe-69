@@ -165,6 +165,37 @@ class TestDeterminism(unittest.TestCase):
 
 
 class TestPersistence(unittest.TestCase):
+    def test_a_corrupt_state_is_rejected_with_a_readable_reason(self):
+        """The server must never crash-loop on a bad file, and a repaired
+        world must never be silently invented: load_state says exactly why
+        a state is not a world (the server then archives it and reseeds)."""
+        w = engine.genesis(seed=69)
+        run(w, 40)
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as d:
+            good = os.path.join(d, "state.json")
+            engine.save_state(w, good)
+            cases = {
+                "not an object": lambda: [1, 2, 3],
+                "missing lagoon": lambda: {"eden": w["eden"]},
+                "no people": lambda: {"eden": {"day": 5}, "lagoon": w["lagoon"]},
+                "no day": lambda: {"eden": {"people": []}, "lagoon": w["lagoon"]},
+                "people not records": lambda: {
+                    "eden": {"day": 5, "people": [1, 2]}, "lagoon": w["lagoon"]},
+            }
+            for why, mk in cases.items():
+                bad = os.path.join(d, "bad.json")
+                with open(bad, "w") as f:
+                    json.dump(mk(), f)
+                with self.assertRaises(ValueError, msg=why) as cm:
+                    engine.load_state(bad)
+                self.assertIn("state.json", str(cm.exception))
+            with open(bad, "w") as f:
+                f.write("{not json at all")
+            with self.assertRaises(ValueError):
+                engine.load_state(bad)
+            # the good state still loads: validation does not mistrust health
+            engine.load_state(good)
+
     def test_save_load_round_trip_preserves_the_world(self):
         """save -> load -> save must converge, then stay byte-identical.
 

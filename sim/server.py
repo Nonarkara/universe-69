@@ -54,8 +54,21 @@ if "--genesis" in sys.argv:
         print(f"[universe69] archived the old run to {archived}")
 
 if os.path.exists(STATE_PATH):
-    world = engine.load_state(STATE_PATH)
-    print(f"[universe69] resumed state at day {world['eden']['day']}")
+    try:
+        world = engine.load_state(STATE_PATH)
+        print(f"[universe69] resumed state at day {world['eden']['day']}")
+    except (ValueError, KeyError, TypeError, OSError) as exc:
+        # A corrupt state must never kill the service: archive what was
+        # there and start again. The old file is kept, never destroyed.
+        stamp = time.strftime("%Y%m%d-%H%M%S")
+        bad = STATE_PATH + f".corrupt-{stamp}"
+        try:
+            os.replace(STATE_PATH, bad)
+            print(f"[universe69] state.json unreadable ({exc}); archived to {bad}")
+        except OSError:
+            print(f"[universe69] state.json unreadable ({exc})")
+        world = engine.genesis(seed=69)
+        print("[universe69] GENESIS — two universes created")
 else:
     world = engine.genesis(seed=69)
     print("[universe69] GENESIS — two universes created")
@@ -147,7 +160,11 @@ def engine_loop():
         status["behind_days"] = max(0, behind) // engine.PARTS_PER_DAY
         status["catching_up"] = behind > 60 * engine.PARTS_PER_DAY
         if behind > 0:
-            batch = min(behind, 8000)
+            # A batch is how long the viewer's lock is held at a stretch.
+            # 8000 parts (2000 days) froze the page for over a minute on the
+            # 2016 MacBook; 2000 parts (500 days) keeps each freeze under
+            # ten seconds. The tick sequence is identical either way.
+            batch = min(behind, 2000)
             evts = []
             with lock:
                 for _ in range(batch):

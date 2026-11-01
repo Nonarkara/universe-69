@@ -72,6 +72,18 @@ nursing/body modifier. Postpartum cycle physiology is not fully modeled.
 The 100-year-per-real-day clock, independent choices, island and renderer remain.
 Population outcomes must be re-derived across the shipped code and seeds.
 
+## Engine 2026.10.31.2: the reseed rebase
+
+A repair of 2026.10.31.1's founder change, found in the wild: iteration 2 of
+U9 was founded 366 years old and died of age in 2.3 years, because the retired
+"young again" rewrite had also been the only thing anchoring founding births
+onto the running day. Founding births are now anchored at the world's founding
+day (`genesis_universe(..., founding_day=day)` at both reseed sites), so a
+reseeded band keeps its own human ages at the day it steps ashore. Worlds
+founded at day 0 are unchanged; only reseed outcomes move, which is why the
+version moves. Pins: `tests/test_founders.py` (rebase, and the end-to-end
+tick-path reseed).
+
 ## Engine 2026.10.30.6: embodied reproductive contact
 
 This changes future trajectories, including an already-running instrument.
