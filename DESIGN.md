@@ -281,7 +281,7 @@ calibration, checked with `tools/lab.py`.
 | Anomie: nothing regulated, nothing asked (Durkheim, *Suicide*) | A competent EDEN adult with purpose < 0.25 may withdraw for good; self-control is the brake | `tick_eden` |
 | Universe 25's withdrawn were three kinds (RESEARCH.md [2][3]) | Placeless losers pool listless in the middle of the floor and are attacked there; the beautiful ones (born into the sink) groom alone in a corner; lone women retreat to the top row of cabanas. All feed at the hopper nobody else uses, and never join a circle, a couple or a fight | `withdraw`, `withdrawn_home` |
 | Revenge, the moralization gap (Pinker *Better Angels* ch.8) | A killing gives the victim's kin a grudge (decays ~8%/yr); revenge when restraint fails | `lagoon_violence` |
-| Young unpaired men kill (Pinker ch.2, ch.10) | LAGOON homicide hazard for men 16–30, ×2 unpaired, × temper × (1.2 − self-control) | `lagoon_violence` |
+| Young unpaired men kill, and a quarrel's target is the man who has what the aggressor lacks (Pinker ch.2, ch.10) | LAGOON homicide hazard for men 16–30, ×2 unpaired, × temper × (1.2 − self-control) × (1 + 2 × camp hunger shortfall); among same-camp candidates, a partnered man is 3× as likely to be chosen as an unpartnered one | `lagoon_violence` |
 | Leviathan: a third party with standing (Pinker ch.2–3) | Band 0.1, tribe 0.35, chiefdom 0.65 arbiter (+0.15 with writing): damps violence, exiles or executes killers | `organise` |
 | Band → tribe → chiefdom (Diamond ch.14) | At 50 and (with a granary) 300 people, with hysteresis | `organise` |
 | Collective effervescence (Durkheim, *Elementary Forms*) | With lore, each settlement dances at midsummer for its totem; cohesion +0.5, decays 0.25/yr; a hungry year skips it | `hold_rites` |
@@ -484,8 +484,29 @@ pairs, every trajectory differs from earlier engines; STUDY.md's
 2026.10.28.3 baseline is the first figure from this model.
 
 The day-counter fatigue is gone from LAGOON's assigner and the old
-phase-gated scripts are gone from EDEN. **Not yet done:** LAGOON's homicide
-model (`lagoon_violence`) is still a per-person hazard, unchanged.
+phase-gated scripts are gone from EDEN.
+
+## Engine 2026.11.01.1 — the quarrel has a cause
+
+`lagoon_violence`'s "quarrel" branch was a flat per-person hazard with a
+uniformly random victim among nearby same-camp adults — the one mechanic the
+2026.10.29.1 audit flagged as still unchanged. Two things the already-cited
+finding implies but the code did not do:
+
+- **Scarcity raises the odds.** The trigger probability now carries a
+  `(1 + 2 × shortfall)` factor, where `shortfall` is the same camp-hunger
+  fraction `tick_lagoon` already computes for food-seeking and discovery. A
+  starving camp is up to three times as quarrelsome as a fed one.
+- **The target is specific, not anonymous.** When the aggressor has no
+  partner, a same-camp candidate who does is weighted 3× over one who does
+  not — the "unmated" half of the Pinker citation made victim-specific
+  instead of only trigger-frequency-specific. An aggressor who already has a
+  partner weighs every candidate equally, as before.
+
+This changes the live run's trajectory (house rule #4): `lagoon_violence`
+tick-sequence output after this commit cannot be compared to an earlier
+engine's. Verified with `tools/lab.py` before merge; see STUDY.md for the
+before/after arc.
 
 ## Engine 2026.10.29.1 — audit of needs, wildlife, naming and restart boundaries
 

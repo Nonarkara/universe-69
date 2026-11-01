@@ -205,6 +205,60 @@ class TestStagedDeathsAndBirths(unittest.TestCase):
         self.assertEqual(u['cod'], {})
         self.assertEqual(p['gd'], 0)
 
+    def test_quarrel_trigger_scales_with_camp_hunger(self):
+        # DESIGN.md: "too many young unmated men" already scaled aggression
+        # by pairing status; it did not scale with whether anyone was fed.
+        # A fixed roll of 0.001 sits between a fed camp's threshold (4.8e-4)
+        # and a starving one's (1.44e-3), so only the hungry camp kills.
+        u = population(4)
+        p = u['people'][0]
+        p['p'] = None
+        with patch.object(engine.minds, 'aggression', return_value=1.0), \
+             patch.object(engine.minds, 'self_control', return_value=0.0):
+            rng = random.Random(1)
+            with patch.object(rng, 'random', return_value=0.001):
+                fed = engine.lagoon_violence(
+                    u, p, engine.age_of(p, 0), u['people'],
+                    {q['id']: q for q in u['people']}, {}, [], rng, [],
+                    shortfall=0.0)
+            self.assertFalse(fed)
+            self.assertEqual(u['cod'], {})
+            dead = []
+            rng2 = random.Random(1)
+            with patch.object(rng2, 'random', side_effect=[0.001, 0.0, 0.9, 0.9]), \
+                 patch.object(rng2, 'sample', return_value=u['people'][1:]):
+                engine.lagoon_violence(
+                    u, p, engine.age_of(p, 0), u['people'],
+                    {q['id']: q for q in u['people']}, {}, dead, rng2, [],
+                    shortfall=1.0)
+            self.assertEqual(len(dead), 1)
+            self.assertEqual(u['cod'].get('violence'), 1)
+
+    def test_quarrel_targets_a_rival_with_a_partner_over_a_random_neighbour(self):
+        # An unpaired aggressor's quarrel used to fall on the first name in
+        # an unweighted sample. It now prefers the candidate who has what
+        # the aggressor does not: a partner (BOOKS.md "too many young
+        # unmated men" read as status/mate rivalry, not anonymous murder).
+        u = population(6)
+        p, _, paired_rival, _, lone_bystander, _ = u['people']
+        p['p'] = None
+        lone_bystander['p'] = None
+        rng = random.Random(1)
+        dead = []
+        # trigger roll (~0) fires regardless of shortfall; the weighted pick
+        # (0.5 of a total weight of 4 = 1.0+3.0) lands past the unpaired
+        # bystander's share (1.0) and into the paired rival's (3.0) — the
+        # opposite of picking near[0], which would have been the bystander.
+        with patch.object(engine.minds, 'aggression', return_value=1.0), \
+             patch.object(engine.minds, 'self_control', return_value=0.0), \
+             patch.object(rng, 'random', side_effect=[0.0, 0.5, 0.9, 0.9]), \
+             patch.object(rng, 'sample', return_value=[lone_bystander, paired_rival]):
+            engine.lagoon_violence(
+                u, p, engine.age_of(p, 0), u['people'],
+                {q['id']: q for q in u['people']}, {}, dead, rng, [],
+                shortfall=0.0)
+        self.assertEqual(dead, [paired_rival])
+
     def test_exile_breaks_bonds_on_both_sides(self):
         u = population(4)
         u['settlements'][0]['arb'] = 1

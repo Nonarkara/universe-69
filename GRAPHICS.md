@@ -356,11 +356,21 @@ and made the shoulder line read. Nothing else.
 
 This is the honest list. Each line is a defect, not a design.
 
-1. **Crowds interpenetrate.** There is no depth sorting beyond `y`, and two
-   people on the same tile are drawn over each other with no occlusion. In
-   EDEN's death phase (1,600 people) the pen becomes a wall of overlapping
-   figures. *Fixing this needs a per-tile sort and a decision about which
-   figure wins the tile — not just a bigger sort buffer.*
+1. **Crowds interpenetrate.** *(partially fixed 2026-11-01)* The same-tile
+   spiral already existed, but its spread was capped at a 0.46-tile radius
+   and every figure stayed life-size regardless of how many shared the tile
+   — fine for a hopper queue of five, not for the sixty or more that pile
+   into one in EDEN's death phase. The radius is now uncapped
+   (`0.17·√n`, so a packed tile of 40 spreads past a full tile into its
+   neighbours' space) and each figure in a crowd of more than ~9 shrinks
+   toward a 0.4× floor as a function of `n`. The decision this makes is
+   "nobody is hidden; a packed crowd reads as smaller, denser bodies, the
+   way a real packed room does" — not true occlusion, and not yet audited
+   against the live 1,600-person death phase itself (`tools/lab.py`
+   confirms the model's numbers; it does not render anything). *Still
+   missing: occlusion between people who are NOT on the same tile but
+   whose grown or shrunk sprites still overlap at extreme local density,
+   and any depth ordering against the world's own geometry (see 6 below).*
 2. **A crowded establishing shot cannot supply portraits.** It frames the
    largest camp; documentary close shots and manual zoom provide individual
    detail. Very crowded populations still
@@ -414,6 +424,17 @@ and is drawn at both near and far detail levels.
 ## 8. Changelog
 
 Every change to the drawing gets a line here, newest first.
+
+- **2026-11-01 — a crowd spreads instead of stacking.** The per-tile spiral
+  (§6 item 1) no longer caps its radius at 0.46 tiles or keeps every figure
+  at life size regardless of crowd size: radius grows as `0.17·√n`
+  uncapped, and figures in a tile holding more than ~9 people shrink
+  toward 0.4× scale, shadow included. A hopper queue of three still looks
+  like three life-size people; a death-phase pileup of forty now reads as
+  a dense, legible crowd instead of a wall of identical overlapping
+  bodies. Nobody is removed from the draw list — the fix is spacing and
+  scale, not occlusion. `tests/test_style.py` does not pin the spiral's
+  constants, so this did not need a style-test change.
 
 - **2026-10-29 — finish the terrarium audit.** Identity, body caches, mirrored
   terrain reuse, aligned night light, document pagination, source escaping,

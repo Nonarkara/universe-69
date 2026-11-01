@@ -2478,7 +2478,7 @@ function render(canvas, world, map, key, u){
   updateActors(map, key==="l"?heat9:null, S);
   var list=[], minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
   Object.keys(map).forEach(function(id){
-    var a=map[id]; list.push(a); a.nudge=0; a.nudgeY=0; a.mate=null;
+    var a=map[id]; list.push(a); a.nudge=0; a.nudgeY=0; a.mate=null; a.crowdScale=1;
     if(a.x<minx)minx=a.x; if(a.x>maxx)maxx=a.x;
     if(a.y<miny)miny=a.y; if(a.y>maxy)maxy=a.y;
   });
@@ -2609,15 +2609,22 @@ function render(canvas, world, map, key, u){
   // were drawn on one spot and read as one figure. They are fanned out
   // inside their tile on a sunflower spiral — display only, the record's
   // position is untouched — and drawn back to front.
+  // A crowd this dense cannot fit at life size (GRAPHICS.md #1: "a decision
+  // about which figure wins the tile"). The decision made here is that
+  // nobody is hidden — everybody still gets drawn, each still a distinct
+  // body — but a tile holding many people spreads its spiral past its own
+  // edge and each body shrinks to the room a true crowd actually leaves a
+  // person: shoulder to shoulder, not life-size and stacked.
   var crowd={};
   list.forEach(function(a){ if (a.moving||coupled[a.id]||a.nudge) return;
     var k=Math.round(a.x)+","+Math.round(a.y); (crowd[k]||(crowd[k]=[])).push(a); });
   Object.keys(crowd).forEach(function(k){
     var c=crowd[k]; if (c.length<2) return;
     c.sort(function(p,q){ return p.id-q.id; });
-    var r=Math.min(0.46, 0.17*Math.sqrt(c.length));
+    var r=0.17*Math.sqrt(c.length);                 // uncapped: a real crowd spills past its tile
+    var shrink=Math.max(0.4, Math.min(1, 1.5/Math.sqrt(c.length)));
     c.forEach(function(a,i){ var ang=i*2.39996, rr=r*Math.sqrt((i+0.5)/c.length);
-      a.nudge=Math.cos(ang)*rr; a.nudgeY=Math.sin(ang)*rr*0.7; });
+      a.nudge=Math.cos(ang)*rr; a.nudgeY=Math.sin(ang)*rr*0.7; a.crowdScale=shrink; });
   });
   list.sort(function(a,b){ return (a.y+a.nudgeY)-(b.y+b.nudgeY); });
   var sh=shadowSprite(ts);
@@ -2648,7 +2655,8 @@ function render(canvas, world, map, key, u){
       }
       continue;
     }
-    g.drawImage(sh.c, Math.round(px+ts*0.12-sh.w/2), Math.round(py-ts*0.02-sh.h/2));
+    var shw=sh.w*(a.crowdScale||1), shh=sh.h*(a.crowdScale||1);
+    g.drawImage(sh.c, Math.round(px+ts*0.12-shw/2), Math.round(py-ts*0.02-shh/2), Math.round(shw), Math.round(shh));
     var dact=a.drawAct===undefined?a.act:a.drawAct;
     var period=PERIOD[dact]||200, c0=moving0(a)?a.walkc:((tick+a.v*7)%period)/period;
     var buckets=moving0(a)?WALK_BUCKETS:12;
@@ -2657,7 +2665,7 @@ function render(canvas, world, map, key, u){
     var dress=dressOf(a), bedding=key==="e"||dress==="hide"||dress==="fur";
     var sp=figureSprite(a, dact, bucket, moving, s, dress, bedding);
     var facing=a.drawFace||a.face;
-    var scale=s/sp.s;
+    var scale=s*(a.crowdScale||1)/sp.s;
     var dw=sp.w*scale, dh=sp.h*scale;
     if (facing>=0 || sp.view){ g.drawImage(sp.c, Math.round(px-dw/2), Math.round(py-dh+2*sp.s*scale), Math.round(dw), Math.round(dh)); }
     else { g.save(); g.translate(Math.round(px), Math.round(py-dh+2*sp.s*scale)); g.scale(-1,1);

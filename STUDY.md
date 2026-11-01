@@ -1,6 +1,24 @@
 # STUDY — measurements from the running universes
 
-**Current version boundary.** Engine `2026.10.30.7` replaces per-part contact
+**Current version boundary.** Engine `2026.11.01.1` changes LAGOON's
+"quarrel" violence: the trigger now scales with the camp's real hunger
+shortfall (up to 3x when starving, a flat rate before), and victim selection
+among same-camp candidates weights a partnered man 3x over an unpartnered
+one when the aggressor has no partner (DESIGN.md, "the quarrel has a
+cause"). EDEN is untouched — it never calls `lagoon_violence` — and a
+seed-69, 60,000-day (166-year) arc confirms EDEN's trajectory is bit-for-bit
+identical before and after. LAGOON's RNG stream diverges from the first
+quarrel roll onward, as it must (house rule #4); it does not diverge into a
+different regime: violence's death share was 0.215 before this change and
+0.185 after, both inside the ≤30% calibration target `BOOKS.md` draws from
+Pinker ch.2. Nothing else observed — technology count, hunger, self-control,
+pairing rate, EDEN's extinction day and peak — moved outside the range
+already seen run to run on this seed. Full before/after arcs are not
+preserved as files (no `--json` run was kept); re-derive with
+`tools/lab.py --days 60000 --seed 69` against this commit and its parent
+if the comparison needs to be repeated.
+
+**Earlier version boundary.** Engine `2026.10.30.7` replaces per-part contact
 hazards with genuine exposed days, individual variable cycles and one
 clinical-outcome allocation per cycle. Actual exposure history, not current
 partner survival, supplies the model father. Existing pregnancies are preserved.

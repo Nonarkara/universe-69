@@ -50,7 +50,14 @@ GESTATION = 270
 # iteration 2's founders arrived 366 years old and died of age in 2.3
 # years (U9's actual extinction). Reseed outcomes change; founded-at-day-0
 # worlds do not.
-ENGINE_VERSION = "2026.10.31.2"
+# 2026.11.01.1 — the quarrel has a cause: lagoon_violence's "quarrel" hazard
+# now scales with the camp's real hunger shortfall (up to 3x when starving,
+# not a flat rate), and among same-camp candidates a partnered man is 3x as
+# likely to be the target of an unpaired aggressor as an unpartnered one —
+# the mate/status-rivalry half of the already-cited "young unmated men"
+# finding made victim-specific instead of only frequency-specific. Changes
+# every LAGOON trajectory past the first quarrel roll.
+ENGINE_VERSION = "2026.11.01.1"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -2160,15 +2167,26 @@ def tell_myth(u, cause, events, day):
                    f"a story told by {speakers[0]['n']}."))
 
 
-def lagoon_violence(u, p, a, people, byid, gone, dead, rng, events):
+def lagoon_violence(u, p, a, people, byid, gone, dead, rng, events, shortfall=0.0):
     """Killing among the people, and the revenge that follows it.
 
     Young unpaired men with hot tempers and little restraint kill; marriage,
     a third party with standing (the arbiter) and a shared rite damp it. A
     killing leaves the victim's kin a grudge against the killer that decays
     over years and is acted on when restraint fails (BOOKS.md: Pinker ch.2,
-    ch.8; Freud §V on the narcissism of small differences). Returns True if
-    p died here.
+    ch.8; Freud §V on the narcissism of small differences).
+
+    Two causes the book's own citation already names were not yet wired into
+    *who* dies or *how often*: real hunger ("too many young unmated men",
+    ch.2, read with Pinker's resource-stress discussion of forager violence)
+    and the status asymmetry of mate competition (the same citation's
+    "unmated" clause — an unpaired man's rival is specifically a man who has
+    what he does not). `shortfall` makes the trigger itself scale with the
+    camp's actual hunger instead of firing at a constant rate regardless of
+    whether anyone is fed; victim selection among same-camp adults is now
+    weighted toward a paired man when the aggressor has no partner, rather
+    than the first name drawn from an unweighted sample. Returns True if p
+    died here.
     """
     sts = u["settlements"]
     st = sts[min(p.get("st", 0), len(sts) - 1)]
@@ -2183,13 +2201,26 @@ def lagoon_violence(u, p, a, people, byid, gone, dead, rng, events):
             victim, why = k, "revenge"
     if (victim is None and p["s"] == "m" and ADULT_AGE <= a < 30 * DAYS_PER_YEAR
             and rng.random() < 1e-4 * (2.0 if p["p"] is None else 1.0)
-            * minds.aggression(p) * 2 * (1.2 - ef) * damp):
+            * minds.aggression(p) * 2 * (1.2 - ef) * damp
+            * (1.0 + 2.0 * shortfall)):
         near = [q for q in rng.sample(people, min(12, len(people)))
                 if q is not p and q["id"] not in gone and q not in dead
                 and q.get("st", 0) == p.get("st", 0)
                 and age_of(q, u["day"]) >= ADULT_AGE]
         if near:
-            victim, why = near[0], "quarrel"
+            unpaired = p["p"] is None
+            weights = [3.0 if (unpaired and q.get("p") is not None) else 1.0
+                       for q in near]
+            total = sum(weights)
+            r = rng.random() * total
+            for q, w in zip(near, weights):
+                r -= w
+                if r <= 0:
+                    victim = q
+                    break
+            if victim is None:
+                victim = near[-1]
+            why = "quarrel"
     if victim is None:
         return False
     gone[victim["id"]] = True
@@ -2467,7 +2498,7 @@ def tick_lagoon(u, rng, events):
             minds.tend_purpose(p, a, 0.35, p["p"] is not None, p["id"] in moms, True)
         if p.get("a") == A_HUNT and rng.random() < 0.0015 / PARTS_PER_DAY:
             minds.hurt(p, rng.uniform(0.2, 0.6))     # gored, fallen, cut
-        if part == 0 and lagoon_violence(u, p, a, people, byid, gone, dead, rng, events):
+        if part == 0 and lagoon_violence(u, p, a, people, byid, gone, dead, rng, events, shortfall):
             continue
         # births
         if p["due"] and day >= p["due"]:
