@@ -1141,6 +1141,12 @@ var A_WALK=1, A_FORAGE=2, A_HUNT=3, A_FISH=4, A_FARM=5, A_BUILD=6, A_TALK=7,
     A_MATE=8, A_BIRTH=9, A_TEND=10, A_REST=11, A_EAT=12, A_WITHDRAW=13,
     A_FIGHT=14, A_PLAY=15, A_RITE=16, A_SLEEP=17, A_WORK=18, A_SCOUT=19, A_WATCH=20, A_GROOM=21, A_DRINK=22;
 var WALK_STANCE=0.62, WALK_SWEEP=10.0, WALK_BUCKETS=48;
+// A standing gesture — hoeing, casting a line, talking with the hands — used
+// to loop through 12 positions (GRAPHICS.md §6 item 8): close up, a
+// two-handed swing read as a stutter of discrete poses, not a motion. 24
+// halves the angular jump between frames for the same reason WALK_BUCKETS
+// is 48 and not 12: a cycle is only as smooth as its coarsest step.
+var GESTURE_BUCKETS=24;
 var PERIOD = [240,22,100,110,160,90,110,80,60,130,130,240,80,180,40,26,34,300,70,22,260,90];
 
 var SKINS = [ ["#f1d2b0","#c9a079","#f9e4cf"], ["#e3b88c","#b98c5f","#f0cfa8"],
@@ -2103,7 +2109,7 @@ function figureSprite(a, act, bucket, moving, s, dress, bedding){
   var W=Math.ceil(80*sq), H=Math.ceil(80*sq);
   var c=mkCanvas(W,H), g=c.getContext("2d");
   g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
-  drawSketch(g, W/2, H-2*sq, sq, act, bk/(moving?WALK_BUCKETS:12)+(moving?0:0.02), moving, vk, B, a.sex, dress, wk, view, bedding);
+  drawSketch(g, W/2, H-2*sq, sq, act, bk/(moving?WALK_BUCKETS:GESTURE_BUCKETS)+(moving?0:0.02), moving, vk, B, a.sex, dress, wk, view, bedding);
   sp={c:c, w:W, h:H, s:sq, view:view}; spriteCache[key]=sp; spriteCount++;
   return sp;
 }
@@ -2673,7 +2679,7 @@ function render(canvas, world, map, key, u){
     g.drawImage(sh.c, Math.round(px+ts*0.12-shw/2), Math.round(py-ts*0.02-shh/2), Math.round(shw), Math.round(shh));
     var dact=a.drawAct===undefined?a.act:a.drawAct;
     var period=PERIOD[dact]||200, c0=moving0(a)?a.walkc:((tick+a.v*7)%period)/period;
-    var buckets=moving0(a)?WALK_BUCKETS:12;
+    var buckets=moving0(a)?WALK_BUCKETS:GESTURE_BUCKETS;
     var bucket=Math.floor(c0*buckets)%buckets;
     var moving=a.moving;
     var dress=dressOf(a), bedding=key==="e"||dress==="hide"||dress==="fur";

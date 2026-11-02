@@ -426,6 +426,21 @@ class TestTheMirror(unittest.TestCase):
                              "web/index.html and docs/index.html have diverged")
 
 
+class TestTheGesture(unittest.TestCase):
+    """GRAPHICS.md §6 item 8: a standing gesture used to loop through 12
+    positions — a stutter at close zoom, not motion. Both places that chose
+    a bucket count for a non-walking pose must agree, and must not have
+    quietly regressed back to the old number."""
+
+    def test_both_bucket_sites_use_the_named_constant_not_the_old_number(self):
+        src = read_renderer()
+        self.assertIn('GESTURE_BUCKETS=24', src.replace(' ', ''))
+        self.assertNotIn('WALK_BUCKETS:12', src)
+        self.assertNotIn(':WALK_BUCKETS:12', src)
+        self.assertIn('moving?WALK_BUCKETS:GESTURE_BUCKETS', src.replace(' ', ''))
+        self.assertIn('WALK_BUCKETS:GESTURE_BUCKETS)', src.replace(' ', ''))
+
+
 class TestTheFace(unittest.TestCase):
     """Manga-grade faces (MANGA_PLAN.md §B): every core activity maps to a
     readable expression — brows, lid, mouth — and the eye is layered."""

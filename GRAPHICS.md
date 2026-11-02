@@ -388,8 +388,11 @@ This is the honest list. Each line is a defect, not a design.
    are standing behind it.
 7. *(fixed 2026-10-28: children have their own proportions by age band.)*
    The current pair uses two calls to the same rigged body painter.
-8. **The animation budget is 12 buckets per activity.** At close zoom a
-   two-handed gesture reads as a loop of twelve positions, not as motion.
+8. *(fixed 2026-11-02: a standing activity's animation budget doubled from
+   12 to 24 buckets (`GESTURE_BUCKETS`), halving the angular jump between
+   frames of a hoe swing, a cast, a talking gesture — the same reasoning
+   `WALK_BUCKETS=48` already used for walking. Still not continuous: a
+   gesture is a cycle of discrete poses either way, just a finer one.)*
 
 ---
 
@@ -424,6 +427,19 @@ and is drawn at both near and far detail levels.
 ## 8. Changelog
 
 Every change to the drawing gets a line here, newest first.
+
+- **2026-11-02 — a gesture gets its own cycle, not the walk's leftovers.**
+  §6 item 8: standing activities (farming, fishing, talking, grooming,
+  birth) shared the walk cycle's old 12-position budget. They now have
+  their own named constant, `GESTURE_BUCKETS=24`, used everywhere a
+  non-walking pose is picked — doubling the frames in a hoe swing or a
+  cast without touching how long the whole cycle takes (`PERIOD[act]` is
+  unchanged; only the steps inside it got finer).
+  `tests/test_style.py::TestTheGesture` pins both call sites against a
+  silent regression back to the old number. Found by re-reading GRAPHICS.md's
+  own "what does not work (yet)" list after a monitoring pass that turned
+  up no live bugs — the system was healthy; this was the next thing on the
+  list, not a fix for an incident.
 
 - **2026-11-02 — two honest speeds.** The default view is a timelapse and
   now looks like one: `timeSpeedup()` returns 8× in the default (century-a-
