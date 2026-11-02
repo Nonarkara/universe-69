@@ -720,3 +720,49 @@ the full activity. This includes each half of a tablet comparison.
 - Costs: faces and hair live inside the sprite cache (zero per-frame cost); the water pass touches only visible shore tiles at camp/hearth zoom (`ts>=6`, splashes `ts>=10`). `web/index.html` and `docs/index.html` byte-identical.
 - Live-run caveat unchanged: the LAGOON in flight keeps its v1 island, so none of this appears on screen until its next reseed; `web/index.html` and `docs/index.html` remain byte-identical (same-commit rule).
 
+
+### The VR viewer — 2026-11-02
+
+`web/vr.html` is the Meta Quest build (byte-identical to `docs/vr.html`). It
+is the same record seen from inside the terrarium, not a second simulation:
+it reads `/state` and `/world` (or the published gist via `config.js`), and
+draws the terrain, settlements, huts, animals and people the model reports.
+Three.js **r160** is vendored as `web/three.module.min.js` (MIT, copied
+byte-for-byte to `docs/`); there is no CDN, import map or build step.
+
+- **Two places to stand.** TABLE sets both universes side by side as lit
+  dioramas on one dark table, EDEN left and LAGOON right, each with a
+  record-label sprite above it. INSIDE puts the viewer at human scale in one
+  world: the island/pen ground is walked with WASD on a desktop, or with a
+  controller stick and teleport in a headset. Teleport refuses open water.
+- **The clock.** The record runs at its own 100-years-per-real-day pace. The
+  viewer fetches a fresh snapshot every 1.2 s locally (15 s on the gist
+  mirror) and animates the gap: the crowd catches up at 9–11 world units/s,
+  roughly eight times a walk, and keeps roaming around its record position
+  between snapshots. That is the timelapse — people visibly busy, a year of
+  errands in the time the record gives them. It is a drawing behaviour, not
+  a faster engine, and the engine's `sec_per_day` is untouched.
+- **REAL-TIME / CONTINUE.** REAL-TIME holds the applied snapshot and plays
+  the held moment at human walking speed (1.15 units/s, normal arm swing).
+  The viewer keeps polling while held, keeps the newest snapshot in
+  `pendingState`, and says so in the HUD. CONTINUE applies that newest
+  snapshot and the timelapse catches up. The button never calls `/pace`,
+  never posts, and never changes the sealed world; it is a viewing clock.
+- **Graphics.** ACES tone mapping with PCF soft shadows; a procedural sky
+  with dawn/day/dusk/night, sun, stars and drifting cloud; a water shader
+  with swell, foam and glints; flickering firelight from camps; instanced
+  people (head, hair, torso, arm segments, leg segments, hands, feet,
+  trunks) with the same age/sex/stature/BMI proportions as the 2D rig;
+  instanced beasts; a grain-textured ground. EDEN's pool, bar, theater and
+  field are drawn only when `facilities` is above zero, and LAGOON's huts,
+  wood, game and boats only when the record carries them. A sprite label
+  in TABLE and an in-headset slate report year, time of day, population,
+  camp/hut/animal counts, facilities and the current clock.
+- **Pins.** `tests/test_vr.py` holds the mirror equality, local-only assets,
+  three.js revision, WebXR session/controller/slate strings, both clocks,
+  the timelapse-vs-real-time speed ratio, the TERRARIUM tokens and the two
+  server routes. Runtime checks used headless Chrome at 960×640; a headset
+  test on a Quest is still outstanding, and one SwiftShader run crashed at
+  1100×760 when entering LAGOON. WebXR needs a secure page: GitHub Pages is
+  HTTPS; on a local network use `adb reverse tcp:6969 tcp:6969` and open
+  `http://localhost:6969/vr.html` in the headset browser.

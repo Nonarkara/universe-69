@@ -292,6 +292,12 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/" or path == "/index.html":
             with open(os.path.join(WEB, "index.html"), "rb") as f:
                 self._send(200, f.read(), "text/html; charset=utf-8")
+        elif path == "/vr.html":
+            with open(os.path.join(WEB, "vr.html"), "rb") as f:
+                self._send(200, f.read(), "text/html; charset=utf-8")
+        elif path == "/three.module.min.js":
+            with open(os.path.join(WEB, "three.module.min.js"), "rb") as f:
+                self._send(200, f.read(), "text/javascript; charset=utf-8")
         elif path == "/config.js":
             self._send(200, "// local mode\n", "text/javascript")
         elif path == "/state":
