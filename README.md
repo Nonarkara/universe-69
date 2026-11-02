@@ -99,6 +99,19 @@ The record, Research, Book and First Run archive use Prev/Next pages, arrow
 keys and swipes. Both worlds remain on the first screen: side by side on
 wide screens, stacked on phones.
 
+**REAL-TIME.** The default pace is a timelapse — a day takes 2.4 real
+seconds, a year takes 14.4 real minutes — and people move sped up to match
+(`TIMELAPSE_SPEEDUP` in `web/index.html`), the way any timelapse shows faster
+motion than the thing it is time-lapsing. Click **REAL-TIME** and the
+instrument's actual clock slows to a day taking a day — dawn, day, dusk and
+night each a real six hours — and people are drawn at the walker's own
+tuned, ordinary pace: no speed-up, because none is claimed. Click
+**CONTINUE** to resume the timelapse. This is a toggle on the instrument
+itself (`POST /pace {"mode":"realtime"|"default"}`, `sim/server.py`), not a
+rendering trick: every other open tab, and the web mirror once it next
+pushes, see the same slowed world. A LaunchAgent restart always resumes at
+the default pace, so an unattended system can never get stuck slow.
+
 24/7 via launchd:
 
 ```sh

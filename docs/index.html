@@ -286,6 +286,7 @@
   <button id="walkbtn" title="Walk into the world you last touched">WALK</button>
   <button type="button" id="bookbtn" title="The book: how these two worlds came to be">BOOK</button>
   <button type="button" id="resbtn" title="What the books say, and what this world says">RESEARCH</button>
+  <button type="button" id="timebtn" title="Slow the world to the pace a day actually takes">REAL-TIME</button>
   <button type="button" id="veilbtn" title="What you are watching">?</button>
 </div>
 <div id="banner" class="banner" hidden></div>
@@ -382,6 +383,11 @@
 <script src="config.js"></script>
 <script>
 var SNAP = window.SNAPSHOT_URL || null;
+// 'default' is the century-a-day timelapse; 'realtime' is a real day
+// taking a real day — set by /pace, read from the polled state so a mirror
+// viewer (which cannot POST) still renders at the pace the instrument was
+// actually running when it pushed.
+var timeMode="default";
 var EM = 12;          // EDEN resort margin (tiles) around the pen
 
 // ---- the palette lives on :root (TERRARIUM, GRAPHICS.md §1); the canvas reads it
@@ -2152,6 +2158,14 @@ function walkerOf(a){
   var stride=WALK_SWEEP*((D.thigh+D.shin)/13.4)*(1.45/32)*Hs/WALK_STANCE;
   return {pace:pace, stride:stride, ph0:h};
 }
+// Real-Time plays people at the walker's own tuned, believable pace. The
+// default century-a-day view needs its own honesty: at that compression a
+// person's errand would be invisible if it moved at a real walking pace, so
+// it is shown sped up, the way any timelapse is — not because the engine's
+// clock ran any faster, but because nobody would recognise a year of a
+// life playing at the speed a life is actually lived.
+var TIMELAPSE_SPEEDUP=8;
+function timeSpeedup(){ return timeMode==="realtime"?1:TIMELAPSE_SPEEDUP; }
 var actorClocks=new WeakMap(), frameSeconds=1/30;
 function updateActors(map, heat, S, seconds){
   var left=(actorClocks.get(map)||0)+Math.max(0,Math.min(0.25,seconds===undefined?frameSeconds:seconds));
@@ -2170,7 +2184,7 @@ function updateActorsStep(map, heat, S){
     if (d>14){ a.x=a.tx; a.y=a.ty; a.vx=a.vy=0; d=0; }  // a move of camp: cut, don't glide
     var want=0;
     if (a.wait>0) a.wait--;
-    else if (d>0.03) want=Math.min(a.wk_.pace*1.35,Math.max(a.wk_.pace,d/52))*Math.min(1,d/0.7);  // bounded catch-up; ease into the destination
+    else if (d>0.03) want=Math.min(a.wk_.pace*1.35,Math.max(a.wk_.pace,d/52))*Math.min(1,d/0.7)*timeSpeedup();  // bounded catch-up; ease into the destination; sped up unless real time is on
     var ux=d>0?dx/d:0, uy=d>0?dy/d:0;
     a.vx+=(ux*want-a.vx)*0.12; a.vy+=(uy*want-a.vy)*0.12;  // no instant starts or stops
     var v=Math.hypot(a.vx,a.vy);
@@ -2976,6 +2990,36 @@ document.querySelectorAll(".worldhead").forEach(function(h){
 document.getElementById("walkbtn").addEventListener("click", function(){
   if (cam[activeWorld].mode==="walk") leaveWalk(); else enterWalk(activeWorld);
 });
+// REAL-TIME: the century-a-day timelapse is the instrument's working pace;
+// this is the honest alternative, not a convenience — the button does not
+// pretend to be fast. A mirror viewer has no server to ask, so it can only
+// ever show whichever pace the instrument itself was actually running.
+var timePending=false;
+function updateTimeUI(){
+  var btn=document.getElementById("timebtn");
+  if (!btn) return;
+  if (SNAP){ btn.disabled=true; btn.textContent=timeMode==="realtime"?"REAL TIME NOW":"REAL-TIME";
+             btn.title="Real time is set on the instrument, not on this mirror"; return; }
+  btn.disabled=timePending;
+  btn.classList.toggle("on", timeMode==="realtime");
+  btn.textContent=timeMode==="realtime"?"CONTINUE":"REAL-TIME";
+  btn.title=timeMode==="realtime"
+    ?"Resume the century-a-day pace"
+    :"Slow the world to the pace a day actually takes — dawn to night is six real hours each";
+}
+document.getElementById("timebtn").addEventListener("click", function(){
+  if (SNAP||timePending) return;
+  var next=timeMode==="realtime"?"default":"realtime";
+  timePending=true; updateTimeUI();
+  fetch("/pace",{method:"POST",headers:{"content-type":"application/json"},
+                 body:JSON.stringify({mode:next})})
+    .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+    .then(function(st){
+      state=st; timeMode=(st.status&&st.status.time_mode)||next;
+    })
+    .catch(function(){ /* the button reverts; the next poll tells the truth */ })
+    .then(function(){ timePending=false; updateTimeUI(); });
+});
 document.addEventListener("keydown", function(e){
   if (document.querySelector('#research:not([hidden]), #book:not([hidden]), #veil:not([hidden]), #fail:not([hidden])')) return;
   if (e.target.closest('button') && (e.key===" " || e.key==="Enter")) return;
@@ -3625,8 +3669,12 @@ function poll(){
       if (state.u.lagoon.iter!==st.u.lagoon.iter || st.u.lagoon.day<state.u.lagoon.day) resetIteration("l");
     }
     state=st; pollSeq++; snapBad=false; snapReady=true;
+    timeMode=(st.status&&st.status.time_mode)||"default";
+    updateTimeUI();
     var pace=document.getElementById("pace"), years=st.pace&&+st.pace.years_per_real_day;
-    if(pace) pace.textContent=years>0?(+years.toPrecision(3))+" years / real day · observed, never helped":"two sealed worlds · observed, never helped";
+    if(pace) pace.textContent=timeMode==="realtime"
+      ?"real time · a day takes a day · observed, never helped"
+      :years>0?(+years.toPrecision(3))+" years / real day · observed, never helped":"two sealed worlds · observed, never helped";
     if (SNAP) snapWall=+st.wall||0;
     hideFail();
     if (!SNAP&&!worldInfo) loadWorld().then(function(){ ground.l=null; });

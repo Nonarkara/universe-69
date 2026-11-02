@@ -38,13 +38,19 @@ PORT = int(os.environ.get("UNIVERSE69_PORT", "6969"))
 # this sets how fast the year goes by: default 100 model years of 360 days
 # per real day, retaining dawn/day/dusk/night as separate ticks.
 SEC_PER_PART = float(os.environ.get("UNIVERSE69_SEC_PER_PART", engine.SEC_PER_PART))
+# Real-Time: a day actually takes a day. Dawn, day, dusk and night each take
+# a real six hours, so the people move at the pace they would move at if you
+# were standing there — nothing sped up to make it watchable. That is the
+# point: the default pace is the one that needs the apology, not this one.
+REALTIME_SEC_PER_PART = 6.0 * 3600.0
 EVENTS_IN_VIEW = 500          # how much of the record the console is given
 
 os.makedirs(DATA, exist_ok=True)
 
 lock = threading.Lock()
 recent_events = deque(maxlen=4000)
-status = {"catching_up": False, "behind_days": 0, "started": time.time()}
+status = {"catching_up": False, "behind_days": 0, "started": time.time(),
+          "time_mode": "default"}
 
 # `--genesis` starts both worlds over from the shared founders. The old world
 # is archived, never deleted: its numbers belong to the engine that made them.
@@ -315,6 +321,29 @@ class Handler(BaseHTTPRequestHandler):
                 self._send(404, '{"err":"not found"}')
         else:
             self._send(404, '{"err":"not found"}')
+
+    def do_POST(self):
+        path = self.path.split("?")[0]
+        if path != "/pace":
+            self._send(404, '{"err":"not found"}')
+            return
+        length = int(self.headers.get("content-length", 0) or 0)
+        raw = self.rfile.read(length) if length else b"{}"
+        try:
+            body = json.loads(raw or b"{}")
+        except ValueError:
+            self._send(400, '{"err":"bad json"}')
+            return
+        mode = body.get("mode")
+        if mode not in ("default", "realtime"):
+            self._send(400, '{"err":"mode must be default or realtime"}')
+            return
+        seconds = REALTIME_SEC_PER_PART if mode == "realtime" else SEC_PER_PART
+        with lock:
+            engine.set_clock_pace(world, seconds)
+            status["time_mode"] = mode
+        print(f"[universe69] time mode -> {mode} ({seconds}s/part)")
+        self._send(200, json.dumps(snapshot(), separators=(",", ":")))
 
     def log_message(self, *a):
         pass

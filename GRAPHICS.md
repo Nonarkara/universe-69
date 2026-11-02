@@ -425,6 +425,21 @@ and is drawn at both near and far detail levels.
 
 Every change to the drawing gets a line here, newest first.
 
+- **2026-11-02 — two honest speeds.** The default view is a timelapse and
+  now looks like one: `timeSpeedup()` returns 8× in the default (century-a-
+  day) mode and feeds into `updateActorsStep`'s walk calculation, so people
+  cover ground fast enough to be seen doing something inside a short
+  viewing window instead of creeping at a real walking pace no one would
+  notice against the clock. The **REAL-TIME** button (`timebtn`) asks the
+  instrument's own clock to slow to a day taking a day
+  (`POST /pace`, `sim/server.py`) and `timeSpeedup()` returns 1 — nobody is
+  drawn faster than the walker was ever tuned to look. The button is
+  disabled on the web mirror, which has no server to ask; it still shows
+  whichever pace the instrument was actually running when it last pushed
+  a snapshot. `tests/test_style.py::TestRealTime` pins the multiplier, the
+  walk step actually consulting it, and the button's label/pressed-state/
+  mirror-disabled behaviour.
+
 - **2026-11-01 — a crowd spreads instead of stacking.** The per-tile spiral
   (§6 item 1) no longer caps its radius at 0.46 tiles or keeps every figure
   at life size regardless of crowd size: radius grows as `0.17·√n`

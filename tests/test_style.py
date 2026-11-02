@@ -499,7 +499,7 @@ class TestActualSocialContact(unittest.TestCase):
     def test_first_snapshot_populates_record_before_any_animation_frame(self):
         src = read_renderer()
         poll = src[src.index('function poll(){'):src.index('// 30 frames a second')]
-        setup = "var called=false,received=null,packet={events:[],u:{eden:{iter:1,day:0,size:48,people:[],detail:{}},lagoon:{iter:1,day:0,people:[],detail:{}}}},polling=false,SNAP=false,state=null,pollSeq=0,snapBad=false,snapReady=false,worldInfo={},lagoonIter=1,edenSize=0,EM=6,actors6={},actors9={},heat9=null,ground={};var document={getElementById:function(id){return id==='research'?{hidden:true}:null;}};function fetchJSON(){return Promise.resolve(packet);}function hideFail(){}function syncActors(){}function keepDiary(){}function freshness(){}function updateStrip(){}function updateRecords(events){called=true;received=events;}function showFail(){}"
+        setup = "var called=false,received=null,packet={events:[],u:{eden:{iter:1,day:0,size:48,people:[],detail:{}},lagoon:{iter:1,day:0,people:[],detail:{}}}},polling=false,SNAP=false,state=null,pollSeq=0,snapBad=false,snapReady=false,worldInfo={},lagoonIter=1,edenSize=0,EM=6,actors6={},actors9={},heat9=null,ground={};var document={getElementById:function(id){return id==='research'?{hidden:true}:null;}};function fetchJSON(){return Promise.resolve(packet);}function hideFail(){}function syncActors(){}function keepDiary(){}function freshness(){}function updateStrip(){}function updateRecords(events){called=true;received=events;}function showFail(){}function updateTimeUI(){}"
         js = setup + poll + "poll();setTimeout(function(){process.stdout.write(JSON.stringify([called,received]));},0);"
         result = json.loads(subprocess.run(['node','-e',js],check=True,capture_output=True,text=True).stdout)
         self.assertEqual(result,[True,[]])
@@ -521,6 +521,46 @@ class TestActualSocialContact(unittest.TestCase):
     def test_unaccepted_intents_use_neutral_pose_without_breaking_walking(self):
         self.assertEqual(self.helper("[socialDrawAct({}, {id:1,act:8,moving:false,age:18}),socialDrawAct({}, {id:1,act:21,moving:false}),socialDrawAct({}, {id:1,act:8,moving:true,age:18}),socialDrawAct({social:{1:{kind:'mate',other:2,mutual:true,contact:true},2:{kind:'mate',other:1,mutual:true,contact:true}}},{id:1,act:8,moving:false,age:18})]"),[11,11,8,8])
         self.assertEqual(self.helper("[16,17,18,undefined].map(function(age){return socialDrawAct({social:{1:{kind:'mate',other:2,mutual:true,contact:true},2:{kind:'mate',other:1,mutual:true,contact:true}}},{id:1,act:8,moving:false,age:age});})"),[11,11,8,11])
+
+
+@unittest.skipUnless(shutil.which('node'), 'Node is a workbench-only viewer test runner')
+class TestRealTime(unittest.TestCase):
+    """The default pace is a timelapse (GRAPHICS.md); Real-Time is the one
+    mode that plays people at the walker's own tuned, believable speed —
+    the button's name must not be a sped-up lie (see server.py /pace)."""
+
+    def setUp(self):
+        self.src = read_renderer()
+
+    def test_default_mode_is_sped_up_and_realtime_plays_at_the_tuned_pace(self):
+        body = self.src[self.src.index('var TIMELAPSE_SPEEDUP='):self.src.index('var actorClocks=')]
+        js = (body +
+              "var out={};timeMode='default';out.timelapse=timeSpeedup();"
+              "timeMode='realtime';out.realtime=timeSpeedup();"
+              "process.stdout.write(JSON.stringify(out));")
+        result = json.loads(subprocess.run(['node', '-e', js], check=True, capture_output=True, text=True).stdout)
+        self.assertEqual(result["realtime"], 1, "real time must not be quietly sped up")
+        self.assertGreater(result["timelapse"], 1, "the default pace must read faster than a real walk")
+
+    def test_the_walk_step_actually_applies_the_speedup(self):
+        step = self.src[self.src.index('function updateActorsStep('):self.src.index('// ---- particles')]
+        self.assertIn('timeSpeedup()', step, "the walk calculation stopped consulting the mode")
+
+    def test_button_label_and_pressed_state_follow_the_server_not_a_guess(self):
+        fn = self.src[self.src.index('function updateTimeUI(){'):self.src.index('document.getElementById("timebtn").addEventListener')]
+        setup = ("var SNAP=false,timeMode='default',timePending=false;"
+                 "function mkBtn(){return {disabled:false,title:'',textContent:'',_on:false,"
+                 "classList:{toggle:function(name,v){this.own=v;}}};}"
+                 "var btn=mkBtn();var document={getElementById:function(){return btn;}};")
+        js = (setup + fn +
+              "var out=[];updateTimeUI();out.push([btn.textContent,btn.classList.own,btn.disabled]);"
+              "timeMode='realtime';updateTimeUI();out.push([btn.textContent,btn.classList.own,btn.disabled]);"
+              "SNAP=true;updateTimeUI();out.push([btn.textContent,btn.disabled]);"
+              "process.stdout.write(JSON.stringify(out));")
+        result = json.loads(subprocess.run(['node', '-e', js], check=True, capture_output=True, text=True).stdout)
+        self.assertEqual(result[0], ["REAL-TIME", False, False])
+        self.assertEqual(result[1], ["CONTINUE", True, False])
+        self.assertEqual(result[2], ["REAL TIME NOW", True], "a mirror has no server to ask; it must not offer a live toggle")
 
 
 if __name__ == "__main__":
