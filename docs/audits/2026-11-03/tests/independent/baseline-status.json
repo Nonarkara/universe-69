@@ -1,0 +1,15 @@
+{
+  "status": "Interrupted by parent request",
+  "exit": 130,
+  "reason": "Mixed-source test cannot validate baseline; competing frozen suites/labs",
+  "afterHashScope": "Tracked Python/HTML/JS/shell source excluding historical audit artifacts",
+  "changedSourceFiles": [
+    "docs/index.html",
+    "sim/engine.py",
+    "sim/needs.py",
+    "tests/test_style.py",
+    "tests/test_vr.py",
+    "web/index.html"
+  ],
+  "testLog": "unittest-python39.log"
+}

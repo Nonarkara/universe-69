@@ -1,0 +1,6 @@
+low_purpose_role {'unpaired': {'action': 18, 'mate_in_band': False, 'band': 0.918, 'mate_score': [0.735]}, 'paired': {'action': 8, 'mate_in_band': True, 'band': 0.918, 'mate_score': [1.05]}}
+purpose_neutral_multiplier {'unpaired': {'action': 8, 'mate_in_band': True, 'band': 1.071, 'mate_score': [1.2]}, 'paired': {'action': 8, 'mate_in_band': True, 'band': 1.071, 'mate_score': [1.2]}}
+high_purpose_reverses_effect {'unpaired': {'action': 8, 'mate_in_band': True, 'band': 1.275, 'mate_score': [1.47]}, 'paired': {'action': 18, 'mate_in_band': False, 'band': 1.275, 'mate_score': [1.05]}}
+ennui_unpaired_only {'unpaired': {'action': 18, 'mate_in_band': False, 'band': 1.071, 'mate_score': [0.6]}, 'paired': {'action': 8, 'mate_in_band': True, 'band': 1.071, 'mate_score': [1.2]}}
+no_post_both_can_choose {'unpaired': {'action': 8, 'mate_in_band': True, 'band': 0.62475, 'mate_score': [0.735]}, 'paired': {'action': 8, 'mate_in_band': True, 'band': 0.8925, 'mate_score': [1.05]}}
+source unchanged; peer unchanged; matched only biography pointers; pregnancy code not called

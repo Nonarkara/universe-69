@@ -1,0 +1,21 @@
+{
+  "model": "2026.11.03.1",
+  "tests_each": 602,
+  "Python3.14": {
+    "exit": 0,
+    "seconds": 197.642
+  },
+  "ApplePython3.9": {
+    "exit": 0,
+    "seconds": 347.883
+  },
+  "release_sources_unchanged": true,
+  "century_process_exits": {
+    "7": 0,
+    "25": 0,
+    "69": 0
+  },
+  "century_horizon_days": 36000,
+  "font_http_cases_each_runtime": 3,
+  "viewer_scope": "2D real three-width static packet; VR 1fps static/native keyboard; production VR cadence and Quest unverified"
+}

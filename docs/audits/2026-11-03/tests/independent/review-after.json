@@ -1,0 +1,9 @@
+{
+  "sim/drives.py": "070a521f8d57339d15f3d21c84259aa0dbdb8e7aeff866492050219ef1e4fe5e",
+  "sim/needs.py": "6f32bee2f03cfcf5792d7d515b42ddb4f11161d32bbbedfc413c778ff59645a9",
+  "sim/engine.py": "1ec2e88db8edd3e4256e73771c843886675781b6ce1e4078b031403a6ac927fc",
+  "tests/test_drives.py": "590a399bb8f0e07faf49ff54b2b7e1c9a76ecdf06fc9d922acaaeb39355fa9ec",
+  "tests/test_fuzzy_choices.py": "e098a18d84878048ce8fca083433276ecc535540b031eeeeb7c03ff08a639d45",
+  "tests/test_choice_readiness.py": "b2123dabc2e6e0923e8701faaea60187fe897a9c1a7af02d5dbea81b601bff19",
+  "tests/test_watch_agency.py": "c42af4223a79b669f9538d18f15f513781b1784eb3034a70c28be5e0e3aa48d7"
+}

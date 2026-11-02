@@ -1,0 +1,39 @@
+{
+  "seed": 7,
+  "days": 36000,
+  "seconds": 6197.439,
+  "python": "3.14.6 (main, Jun 10 2026, 10:03:53) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "source_before": {
+    "sim/animals.py": "bda509d76b40b7c66ba7e5a6a68df12952dc0feeea59f30d5ca8f3c3191fdaa4",
+    "sim/drives.py": "070a521f8d57339d15f3d21c84259aa0dbdb8e7aeff866492050219ef1e4fe5e",
+    "sim/encounters.py": "913e361567a682618c20f8a887eefc695eb77af6ad428591843080141eea4394",
+    "sim/engine.py": "1ec2e88db8edd3e4256e73771c843886675781b6ce1e4078b031403a6ac927fc",
+    "sim/historian.py": "b3721561ee77c828ff447568eb022350ec4be0257c6514e9e8e31e37dfa74483",
+    "sim/labor.py": "3f05c805ba8d2e0e113e079709909a5f34f40a066dc3df6b3b587983cb36c1be",
+    "sim/learning.py": "b83ddb2818f8e4675eaebc7f0f38526d08aa4ad06e595ef075f1464bad99a5ff",
+    "sim/minds.py": "8f5d0cefc3388a91eb7d5d591878c9b38e11cbc68a654e6af3d8ac375158d320",
+    "sim/needs.py": "6f32bee2f03cfcf5792d7d515b42ddb4f11161d32bbbedfc413c778ff59645a9",
+    "sim/reproduction.py": "20c9c189cba51db418eaa000b3b6cd3b7b68c2f865436bbbb485fe182725e3cf",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "sim/server.py": "02e05369a4fd8e9ad23085520a6c084531fcc5d58b7c03ea125275ac467ec869",
+    "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555",
+    "tools/lab.py": "0df66f318210a7c106fc31a5874679feb2882c901551b743dddc20b8afb1e0f0"
+  },
+  "source_after": {
+    "sim/animals.py": "bda509d76b40b7c66ba7e5a6a68df12952dc0feeea59f30d5ca8f3c3191fdaa4",
+    "sim/drives.py": "070a521f8d57339d15f3d21c84259aa0dbdb8e7aeff866492050219ef1e4fe5e",
+    "sim/encounters.py": "913e361567a682618c20f8a887eefc695eb77af6ad428591843080141eea4394",
+    "sim/engine.py": "1ec2e88db8edd3e4256e73771c843886675781b6ce1e4078b031403a6ac927fc",
+    "sim/historian.py": "b3721561ee77c828ff447568eb022350ec4be0257c6514e9e8e31e37dfa74483",
+    "sim/labor.py": "3f05c805ba8d2e0e113e079709909a5f34f40a066dc3df6b3b587983cb36c1be",
+    "sim/learning.py": "b83ddb2818f8e4675eaebc7f0f38526d08aa4ad06e595ef075f1464bad99a5ff",
+    "sim/minds.py": "8f5d0cefc3388a91eb7d5d591878c9b38e11cbc68a654e6af3d8ac375158d320",
+    "sim/needs.py": "6f32bee2f03cfcf5792d7d515b42ddb4f11161d32bbbedfc413c778ff59645a9",
+    "sim/reproduction.py": "20c9c189cba51db418eaa000b3b6cd3b7b68c2f865436bbbb485fe182725e3cf",
+    "sim/research.py": "a0afcd7055afa28777f4c8721a7d5b1fbd70c9c5bbae198f5eae03d4bdca54e4",
+    "sim/server.py": "02e05369a4fd8e9ad23085520a6c084531fcc5d58b7c03ea125275ac467ec869",
+    "sim/skills.py": "5588dad50dd1a925d30a08bb35907cc7cc6c6dc23ab31ca58597aa6eddd74555",
+    "tools/lab.py": "0df66f318210a7c106fc31a5874679feb2882c901551b743dddc20b8afb1e0f0"
+  },
+  "sources_unchanged": true
+}

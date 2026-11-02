@@ -1,0 +1,4 @@
+390x844: 41/41; selected {'key': 'e', 'id': 18, 'name': 'Zillah', 'age': 23.4, 'generation': 2, 'sex': 1, 'pregnant': False, 'activity': 'working', 'mode': 'follow'}
+1024x768: 40/41; selected {'key': 'e', 'id': 18, 'name': 'Zillah', 'age': 23.4, 'generation': 2, 'sex': 1, 'pregnant': False, 'activity': 'working', 'mode': 'follow'}
+1440x900: 39/40; selected {'key': 'e', 'id': 17, 'name': 'Eve', 'age': 23.9, 'generation': 2, 'sex': 1, 'pregnant': False, 'activity': 'minding children', 'mode': 'follow'}
+['1024x768: Expanding one world does not stretch the other world heading', '1440x900: Expanding one world does not stretch the other world heading']

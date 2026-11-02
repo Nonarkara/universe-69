@@ -510,3 +510,24 @@ for preclinical losses. The retained 0.14 probability and 50–90 days after the
 model ovulation date are illustrative later-loss choices, not estimates fitted
 from that paper. [*NEJM* 319:189–194,
 doi:10.1056/NEJM198807283190401](https://pubmed.ncbi.nlm.nih.gov/3393170/).
+
+
+## Fuzzy needs: mathematical structure, not human calibration (2026-11-03)
+
+Zadeh's graded membership supplies the mathematical vocabulary for urgency
+between zero and one; it does not identify probability or establish human
+behavioral parameters. [Zadeh, *Fuzzy Sets*, 1965, Information and Control8:338–353,
+doi:10.1016/S0019-9958(65)90241-X](https://www.sciencedirect.com/science/article/abs/pii/S001999586590241X).
+The normalized weighted singleton output is a zero-order Sugeno construction;
+see the [primary implementation documentation](https://www.mathworks.com/help/fuzzy/fuzzy-inference-process.html).
+Three memberships and the [.44,.56] midpoint interval are our transparent
+illustrative choice. No evidence cited here estimates prehistoric individual
+preferences, proves human-like cognition or guarantees viable populations.
+
+Adult sexual activity and reproductive eligibility remain distinct. Lindau et
+al.'s sample of3,005 US adults aged57–85 includes continuing sexual activity in
+each age group; it contradicts a universal behavioral zero at45, without fitting
+prehistoric frequency or male fertility. [*NEJM*357:762–774,
+doi:10.1056/NEJMoa067423](https://pubmed.ncbi.nlm.nih.gov/17715410/).
+The existing female clinical gate is unchanged. The inherited-trait model is
+separate from identity-derived sensitivity; no appetite gene is inferred.

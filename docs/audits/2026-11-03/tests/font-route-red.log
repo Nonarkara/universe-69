@@ -1,0 +1,45 @@
+.
+======================================================================
+FAIL: test_actual_vendored_font_bytes_and_licenses_arrive_with_the_right_type (test_font_delivery.TestFontDelivery) (asset='Jost-OFL.txt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_font_delivery.py", line 58, in test_actual_vendored_font_bytes_and_licenses_arrive_with_the_right_type
+    self.assertEqual(status, 200)
+AssertionError: 404 != 200
+
+======================================================================
+FAIL: test_actual_vendored_font_bytes_and_licenses_arrive_with_the_right_type (test_font_delivery.TestFontDelivery) (asset='Jost-latin-variable.woff2')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_font_delivery.py", line 58, in test_actual_vendored_font_bytes_and_licenses_arrive_with_the_right_type
+    self.assertEqual(status, 200)
+AssertionError: 404 != 200
+
+======================================================================
+FAIL: test_actual_vendored_font_bytes_and_licenses_arrive_with_the_right_type (test_font_delivery.TestFontDelivery) (asset='SourceSerif4-OFL.txt')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_font_delivery.py", line 58, in test_actual_vendored_font_bytes_and_licenses_arrive_with_the_right_type
+    self.assertEqual(status, 200)
+AssertionError: 404 != 200
+
+======================================================================
+FAIL: test_actual_vendored_font_bytes_and_licenses_arrive_with_the_right_type (test_font_delivery.TestFontDelivery) (asset='SourceSerif4-latin-italic-variable.woff2')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_font_delivery.py", line 58, in test_actual_vendored_font_bytes_and_licenses_arrive_with_the_right_type
+    self.assertEqual(status, 200)
+AssertionError: 404 != 200
+
+======================================================================
+FAIL: test_actual_vendored_font_bytes_and_licenses_arrive_with_the_right_type (test_font_delivery.TestFontDelivery) (asset='SourceSerif4-latin-normal-variable.woff2')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_font_delivery.py", line 58, in test_actual_vendored_font_bytes_and_licenses_arrive_with_the_right_type
+    self.assertEqual(status, 200)
+AssertionError: 404 != 200
+
+----------------------------------------------------------------------
+Ran 2 tests in 13.145s
+
+FAILED (failures=5)

@@ -16,6 +16,21 @@ seasons — nothing given, everything earned.
   10 min). `universe.nonarkara.org` is an optional vanity hostname; its
   current DNS and Pages deployment were not verified in this code audit.
 
+## Current audit — 2026-11-03
+
+Pulled the island, crowd movement and VR work through `a559b63` before
+integration. Engine `2026.11.03.1` gives each person a small fixed sensitivity
+for food, rest, company and intimacy under the same bounded fuzzy rules.
+Extreme bodily needs, locality and mutual contact still constrain choice.
+These are explicit model assumptions, not validated human psychology. The
+agency corrections and new responses **change future trajectories**; existing
+pregnancies and the default clock are preserved.
+
+The [Nov3 audit](docs/audits/2026-11-03/README.md) contains the math, source-bound
+runs, visual evidence and public death records. It preserves the observed
+calendar discontinuity and reused iteration ID rather than blending histories.
+The older audit draft is retained separately as historical evidence.
+
 ## Time
 
 Dawn, day, dusk and night take 0.6 real seconds each: 2.4 seconds per

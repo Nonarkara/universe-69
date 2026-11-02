@@ -5,9 +5,10 @@
 <title>UNIVERSE 69</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='8' height='16' fill='%23a8c0f0'/><rect x='8' width='8' height='16' fill='%23a0e898'/></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
 <style>
+  @font-face { font-family:"Jost"; src:url("fonts/Jost-latin-variable.woff2") format("woff2"); font-style:normal; font-weight:100 900; font-display:swap; }
+  @font-face { font-family:"Source Serif 4"; src:url("fonts/SourceSerif4-latin-normal-variable.woff2") format("woff2"); font-style:normal; font-weight:200 900; font-display:swap; }
+  @font-face { font-family:"Source Serif 4"; src:url("fonts/SourceSerif4-latin-italic-variable.woff2") format("woff2"); font-style:italic; font-weight:200 900; font-display:swap; }
   /* ---- the palette: TERRARIUM -------------------------------------------
      A dark, warm room looking into two lit worlds. The console is near-black
      with a brown undertone (a room at night, not a screen), paper-white ink,
@@ -48,7 +49,7 @@
          font-size:13px; line-height:1.4; display:flex; flex-direction:column;
          font-variant-numeric:tabular-nums; }
   button { font:inherit; color:var(--ink); background:var(--surface-2); border:1px solid var(--line);
-           border-radius:2px; padding:2px 9px; min-height:28px; cursor:pointer; }
+           border-radius:2px; padding:2px 9px; min-height:28px; min-width:28px; cursor:pointer; }
   button:hover { border-color:var(--muted); }
   button[aria-pressed="true"], button.on { color:var(--surface); background:var(--accent); border-color:var(--accent); }
   button[aria-disabled="true"] { color:var(--dim); cursor:default; border-color:var(--line); background:none; }
@@ -62,10 +63,10 @@
               border-bottom:1px solid var(--line); }
   #masthead .ttl { font-weight:600; letter-spacing:0.18em; font-size:11px; white-space:nowrap; }
   #masthead .sub { color:var(--muted); white-space:nowrap; font-size:11px; }
-  #masthead .hint { margin-left:auto; color:var(--muted); white-space:nowrap; font-size:10px; }
+  #masthead .hint { margin-left:auto; color:var(--muted); white-space:nowrap; font-size:11px; }
   #walkbtn { margin-left:8px; }
   #walkbtn.on { color:var(--surface); background:var(--accent); border-color:var(--accent); }
-  #banner { flex:0 0 auto; padding:1px 6px; color:var(--surface); background:var(--accent); font-size:10px; }
+  #banner { flex:0 0 auto; padding:1px 6px; color:var(--surface); background:var(--accent); font-size:11px; }
   #banner.bad { color:var(--ink); background:#6a2f28; }
 
   /* ---- 1. the two worlds --------------------------------------------------- */
@@ -76,8 +77,8 @@
   .scene { position:relative; flex:1; min-height:60px; background:#000; }
   canvas.view { position:absolute; inset:0; width:100%; height:100%; display:block; }
   canvas.overlay { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
-  .hud { padding:1px 6px; line-height:1.3; pointer-events:none; font-size:11px; }
-  .hud b { font-size:12px; font-weight:600; letter-spacing:0.06em; }
+  .hud { padding:1px 6px; line-height:1.3; pointer-events:none; font-size:12px; }
+  .hud b { font-size:13px; font-weight:600; letter-spacing:0.06em; }
   #hud6 b { color:var(--eden); } #hud9 b { color:var(--lagoon); }
   .hud .identity, .hud .clock { display:inline; }
   .hud .clock::before { content:" · "; color:var(--dim); }
@@ -99,7 +100,7 @@
   .personpage p { margin:0 0 4px; }
   .personpage p:last-child { margin-bottom:0; }
   .personpager { display:flex; align-items:center; gap:4px; margin-top:4px; }
-  .personpager button { min-height:24px; padding:0 7px; }
+  .personpager button { min-height:28px; min-width:28px; padding:0 7px; }
   .personpager .pageind { margin:0 auto; }
 
 
@@ -111,26 +112,26 @@
            padding:1px 4px 2px; min-width:0; min-height:0; display:flex; flex-direction:column; gap:0; }
   .gauge:last-child { border-right:0; }
   .gauge[aria-pressed="true"] { background:var(--surface-3); color:var(--ink); }
-  .gauge .gl { font-size:9px; color:var(--muted); letter-spacing:0.04em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .gr { display:flex; align-items:center; gap:3px; line-height:10px; }
-  .gw { flex:none; font-size:8px; }
-  .gv { flex:none; min-width:4ch; white-space:nowrap; font-size:10px; }
+  .gauge .gl { font-size:11px; color:var(--muted); letter-spacing:0.04em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .gr { display:flex; align-items:center; gap:4px; line-height:16px; }
+  .gw { flex:none; font-size:11px; }
+  .gv { flex:none; min-width:4ch; white-space:nowrap; font-size:12px; }
   .gv b { font-weight:600; }
   .gv.off { color:var(--warn); }
   .gs { flex:1 1 auto; min-width:0; height:6px; display:block; }
-  #gnote { padding:1px 6px 2px; line-height:1.3; border-top:1px solid var(--line); font-size:10px; }
+  #gnote { padding:1px 6px 2px; line-height:1.3; border-top:1px solid var(--line); font-size:12px; }
   #gnote b { color:var(--accent); font-weight:500; }
 
   /* ---- 3. the record: read in pages ----------------------------------------- */
   #god { flex:0 0 auto; border-top:1px solid var(--line); }
   #records { display:flex; flex-direction:column; min-width:0; }
   #rechead { flex:0 0 auto; padding:1px 6px; display:flex; flex-wrap:wrap; gap:2px 4px; align-items:center; }
-  #records h2 { font-size:10px; font-weight:600; letter-spacing:0.14em; margin-right:2px; }
+  #records h2 { font-size:11px; font-weight:600; letter-spacing:0.14em; margin-right:2px; }
   #filters { display:inline-flex; flex-wrap:wrap; gap:4px; }
-  #filters button, #rechead button { min-height:16px; padding:0 4px; font-size:10px; }
+  #filters button, #rechead button { min-height:28px; min-width:28px; padding:0 5px; font-size:12px; }
   .pagerbar { display:inline-flex; align-items:center; gap:2px; margin-left:auto; }
-  .pageind { color:var(--muted); min-width:5ch; text-align:center; font-size:10px; }
-  #reclines { height:calc(3 * 14px + 2px); overflow:hidden; padding:0 6px 2px; line-height:14px; font-size:10px; }
+  .pageind { flex:0 0 auto; white-space:nowrap; color:var(--muted); min-width:5ch; text-align:center; font-size:12px; }
+  #reclines { height:calc(3 * 18px + 4px); overflow:hidden; padding:0 6px 4px; line-height:18px; font-size:12px; }
   #god.tall #reclines { height:20vh; }
   #reclines .row { color:var(--ink); }
   #reclines .row .yr { color:var(--dim); }
@@ -231,7 +232,7 @@
     .gauge:nth-child(n+5) { border-top:1px solid var(--line); }
   }
   @media (max-width: 760px) {
-    #masthead { padding:3px 8px; gap:6px; }
+    #masthead { padding:3px 8px; gap:4px; }
     #masthead .sub { display:none; }
     button { padding:2px 7px; }
     .modal { padding:0; }
@@ -242,7 +243,7 @@
     .read h1 { font-size:25px; }
     .read figure img { height:auto; max-height:min(34vh, 280px); width:100%; max-width:100%; }
     #records h2 .long { display:none; }
-    #reclines { height:calc(4 * 19px + 4px); padding:0 8px 4px; }
+    #reclines { height:calc(4 * 18px + 4px); padding:0 8px 4px; }
     #rechead { padding:3px 8px; }
     .pagerbar { margin-left:0; }
   }
@@ -256,7 +257,7 @@
     .hud .l2 { display:none; }
     .worldhead.open .hud .l2 { display:block; }
     #stripbar { display:block; width:100%; text-align:left; white-space:nowrap; background:none; border:0;
-                border-radius:0; padding:3px 8px; min-height:26px; }
+                border-radius:0; padding:3px 8px; min-height:28px; }
     #stripbar .gl { color:var(--muted); font-size:11px; margin-right:4px; letter-spacing:0.06em; }
     #gauges, #gnote { display:none; }
     #strip.open #gauges { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); }
@@ -266,15 +267,15 @@
     .card { width:100%; max-width:100%; pointer-events:auto; }
     /* the record's controls in one row: the filters, then the pager */
     #records h2 { display:none; }
-    #rechead { flex-wrap:nowrap; gap:3px; }
-    #filters { gap:3px; flex-wrap:nowrap; }
-    #filters button, #rechead button { padding:0 5px; font-size:11.5px; }
+    #rechead { flex-wrap:nowrap; gap:2px; }
+    #filters { gap:2px; flex-wrap:nowrap; }
+    #filters button, #rechead button { padding:0 4px; font-size:12px; }
     .pagerbar { margin-left:auto; gap:2px; }
-    .pageind { min-width:3.5ch; font-size:11px; }
+    .pageind { min-width:3.5ch; font-size:12px; }
   }
   @media (max-height: 520px) and (orientation: landscape) {
     #masthead .sub, #masthead .hint { display:none; }
-    #reclines { height:calc(3 * 19px + 4px); }
+    #reclines { height:calc(3 * 18px + 4px); }
   }
 </style>
 </head>
@@ -533,6 +534,19 @@ function drawGround(g, key, world, u, sx, sy, hx, hy, W, H){
   g.drawImage(gr.c, (sx-gr.x0)*gr.tb, (sy-gr.y0)*gr.tb, 2*hx*gr.tb, 2*hy*gr.tb, 0, 0, W, H);
 }
 function disc(g, x, y, r){ g.moveTo(x+r, y); g.arc(x, y, r, 0, 6.283); }
+function crown(g, x, y, r, seed){
+  var pts=[], n=9;
+  for (var j=0;j<n;j++){
+    var a=j*6.283/n, rr=r*(0.88+0.12*Math.sin(j*2.7+seed*6.283));
+    pts.push([x+Math.cos(a)*rr,y+Math.sin(a)*rr*0.9]);
+  }
+  g.moveTo((pts[n-1][0]+pts[0][0])/2,(pts[n-1][1]+pts[0][1])/2);
+  for (j=0;j<n;j++){
+    var q=pts[j], next=pts[(j+1)%n];
+    g.quadraticCurveTo(q[0],q[1],(q[0]+next[0])/2,(q[1]+next[1])/2);
+  }
+  g.closePath();
+}
 // Smooth fields over the tile grid, one per material, sampled at tile
 // centres: a tile's own membership weighs most, its neighbours less. The
 // ground is filled where a field crosses its threshold (marching squares),
@@ -708,8 +722,8 @@ var LAGOON_WORLD={
         v=T[y][x]; if (v===2) continue;
         var h=hash2(x+7,y+3), d=(v===3?P.sandD:v===1?P.canD:v===5?P.hillD:P.grassD),
             l=(v===3?P.sandL:v===1?P.can:v===5?P.hillL:P.grassL);
-        if (h<0.10){ g.fillStyle=d; g.globalAlpha=0.06; g.beginPath(); disc(g,x+h*5,y+hash2(y,x),0.9+h*4); g.fill(); }
-        else if (h>0.93){ g.fillStyle=l; g.globalAlpha=0.06; g.beginPath(); disc(g,x+0.5,y+0.4,0.85); g.fill(); }
+        if (h<0.10){ g.fillStyle=d; g.globalAlpha=0.085; g.beginPath(); disc(g,x+h*5,y+hash2(y,x),0.9+h*4); g.fill(); }
+        else if (h>0.93){ g.fillStyle=l; g.globalAlpha=0.10; g.beginPath(); disc(g,x+0.5,y+0.4,0.85); g.fill(); }
       }
       g.globalAlpha=1;
     }
@@ -717,7 +731,7 @@ var LAGOON_WORLD={
       for (y=Math.max(0,y0);y<Math.min(S,y1);y++) for (x=Math.max(0,x0);x<Math.min(S,x1);x++){
         v=T[y][x]; if (v===2) continue;
         var h2=hash2(x*13+5,y*7+1);
-        if (h2<0.16){ g.fillStyle=v===3?P.sandD:v===5?P.hillD:P.grassD; g.globalAlpha=0.05;
+        if (h2<0.16){ g.fillStyle=v===3?P.sandD:v===5?P.hillD:P.grassD; g.globalAlpha=0.075;
           g.beginPath(); disc(g,x+h2*6-1,y+hash2(x,y)*1.4-0.2,0.4+h2); g.fill(); }
       }
       g.globalAlpha=1;
@@ -779,15 +793,15 @@ var LAGOON_WORLD={
     for (i=0;i<scrubs.length;i+=3) { g.moveTo(scrubs[i]+0.2+scrubs[i+2],scrubs[i+1]+0.25); g.ellipse(scrubs[i]+0.2,scrubs[i+1]+0.25,scrubs[i+2],scrubs[i+2]*0.7,0,0,6.283); }
     g.fill();
     g.fillStyle=P.canD; g.beginPath();
-    for (i=0;i<trees.length;i+=3) disc(g, trees[i], trees[i+1], trees[i+2]);
+    for (i=0;i<trees.length;i+=3) crown(g, trees[i], trees[i+1], trees[i+2],hash2(trees[i],trees[i+1]));
     for (i=0;i<scrubs.length;i+=3) disc(g, scrubs[i], scrubs[i+1], scrubs[i+2]);
     g.fill();
     g.fillStyle=P.can; g.beginPath();
-    for (i=0;i<trees.length;i+=3) disc(g, trees[i]-trees[i+2]*0.18, trees[i+1]-trees[i+2]*0.2, trees[i+2]*0.72);
+    for (i=0;i<trees.length;i+=3) crown(g, trees[i]-trees[i+2]*0.13, trees[i+1]-trees[i+2]*0.16, trees[i+2]*0.78,hash2(trees[i],trees[i+1]));
     for (i=0;i<scrubs.length;i+=3) disc(g, scrubs[i]-scrubs[i+2]*0.2, scrubs[i+1]-scrubs[i+2]*0.24, scrubs[i+2]*0.6);
     g.fill();
     if (tb>=10){ g.fillStyle=P.canL; g.beginPath();
-      for (i=0;i<trees.length;i+=3) disc(g, trees[i]-trees[i+2]*0.34, trees[i+1]-trees[i+2]*0.36, trees[i+2]*0.34);
+      for (i=0;i<trees.length;i+=3) crown(g, trees[i]-trees[i+2]*0.26, trees[i+1]-trees[i+2]*0.3, trees[i+2]*0.39,hash2(trees[i]+3,trees[i+1]));
       g.fill(); }
     if (tb>=8){ g.fillStyle=P.hillL; g.beginPath();
       for (i=0;i<scrubs.length;i+=3) disc(g, scrubs[i]-scrubs[i+2]*0.3, scrubs[i+1]-scrubs[i+2]*0.3, scrubs[i+2]*0.4);
@@ -2125,7 +2139,7 @@ function shadowSprite(ts){                      // one soft ellipse per zoom lev
   return (shadowCache[k]={c:c,w:w,h:h});
 }
 
-// ---- actors: the people keep living between observations ----------------
+// ---- actors: interpolate only grounded recorded locomotion ----------------
 var actors6={}, actors9={};
 function syncActors(map, people, ox, detail){
   var seen={};
@@ -2150,8 +2164,8 @@ function syncActors(map, people, ox, detail){
   Object.keys(map).forEach(function(id){ if(!seen[id]) delete map[id]; });
 }
 // Movement. Each person is their own walker: when the record gives them a
-// new place to be, they set off after their own small hesitation, at their
-// own pace (age, build, injury, a little temperament), speed up and slow
+// new reachable place during a locomotor activity, they set off after their
+// own small hesitation, at their own pace (age, build, injury, a little temperament), speed up and slow
 // down instead of snapping, and their legs step in time with the ground
 // they actually cover — so a crowd never marches in step.
 function walkerOf(a){
@@ -2178,16 +2192,41 @@ function updateActors(map, heat, S, seconds){
   while(left+1e-9>=1/30){ updateActorsStep(map,heat,S); left-=1/30; }
   actorClocks.set(map,Math.max(0,left));
 }
+function recordedLocomotion(a){
+  return a.act===A_WALK || a.act===A_FORAGE || a.act===A_HUNT || a.act===A_SCOUT;
+}
+function dryActorChord(T, x0, y0, x1, y1){
+  // Actor coordinates locate tile centres (the painter adds half a tile).
+  // An unknown gap is not a path: reject water and diagonal corner cuts.
+  if (!T) return false;
+  function dry(x,y){ return !!T[y] && x>=0 && x<T[y].length && T[y][x]!==2; }
+  var steps=Math.max(1,Math.ceil(Math.max(Math.abs(x1-x0),Math.abs(y1-y0))*5));
+  var px=Math.floor(x0+0.5), py=Math.floor(y0+0.5);
+  if (!dry(px,py)) return false;
+  for (var i=1;i<=steps;i++){
+    var x=Math.floor(x0+(x1-x0)*i/steps+0.5), y=Math.floor(y0+(y1-y0)*i/steps+0.5);
+    if (!dry(x,y) || (x!==px && y!==py && (!dry(px,y)||!dry(x,py)))) return false;
+    px=x; py=y;
+  }
+  return true;
+}
+function cutActorToRecord(a){
+  a.x=a.tx; a.y=a.ty; a.vx=a.vy=0; a.moving=false;
+  a.face=a.eface||a.face; a.wait=0; a.ltx=a.tx; a.lty=a.ty;
+}
 function updateActorsStep(map, heat, S){
   Object.keys(map).forEach(function(id){
     var a=map[id];
+    if (!recordedLocomotion(a) || (map===actors9 && !dryActorChord(terr9,a.x,a.y,a.tx,a.ty))){
+      cutActorToRecord(a); return;
+    }
     if (!a.wk_){ a.wk_=walkerOf(a); a.vx=a.vy=0; a.dist=a.wk_.ph0*a.wk_.stride; a.wait=0; }
     if (a.tx!==a.ltx || a.ty!==a.lty){              // a new place to be
       a.ltx=a.tx; a.lty=a.ty;
       a.wait=Math.floor(Math.abs(a.id*7919+a.tx*17+a.ty*31)%5);  // nobody leaves on the same beat
     }
     var dx=a.tx-a.x, dy=a.ty-a.y, d=Math.hypot(dx,dy);
-    if (d>14){ a.x=a.tx; a.y=a.ty; a.vx=a.vy=0; d=0; }  // a move of camp: cut, don't glide
+    if (d>14){ cutActorToRecord(a); return; }  // a move of camp: cut, don't glide
     var want=0;
     if (a.wait>0) a.wait--;
     else if (d>0.03) want=Math.min(a.wk_.pace*1.35,Math.max(a.wk_.pace,d/52))*Math.min(1,d/0.7)*timeSpeedup();  // bounded catch-up; ease into the destination; sped up unless real time is on
@@ -3002,16 +3041,19 @@ document.getElementById("walkbtn").addEventListener("click", function(){
 // ever show whichever pace the instrument itself was actually running.
 var timePending=false;
 function updateTimeUI(){
+  var compact=typeof window!=="undefined" && window.innerWidth<700;
   var btn=document.getElementById("timebtn");
   if (!btn) return;
-  if (SNAP){ btn.disabled=true; btn.textContent=timeMode==="realtime"?"REAL TIME NOW":"REAL-TIME";
-             btn.title="Real time is set on the instrument, not on this mirror"; return; }
+  if (SNAP){ btn.disabled=true; btn.textContent=compact?"TIME":(timeMode==="realtime"?"REAL TIME NOW":"REAL-TIME");
+             btn.title="Real time is set on the instrument, not on this mirror";
+             btn.setAttribute("aria-label",(timeMode==="realtime"?"Real-time instrument clock. ":"Timelapse instrument clock. ")+btn.title); return; }
   btn.disabled=timePending;
   btn.classList.toggle("on", timeMode==="realtime");
-  btn.textContent=timeMode==="realtime"?"CONTINUE":"REAL-TIME";
+  btn.textContent=compact?(timeMode==="realtime"?"FAST":"1×"):(timeMode==="realtime"?"CONTINUE":"REAL-TIME");
   btn.title=timeMode==="realtime"
     ?"Resume the century-a-day pace"
     :"Slow the world to the pace a day actually takes — dawn to night is six real hours each";
+  btn.setAttribute("aria-label",btn.title);
 }
 document.getElementById("timebtn").addEventListener("click", function(){
   if (SNAP||timePending) return;
@@ -3096,18 +3138,18 @@ var GAUGES=[
     note:"Births minus deaths per 100 adults a year. Tick 0: below it the population shrinks, as in Calhoun's phase D." },
   { key:"inf", label:"YEARLINGS / PRIOR BIRTHS", lo:0, hi:1,
     series:function(rows){ return col(rows,"infant_survival"); },
-    now:function(u, s){ var g=u.gauges; return (g && g.infant_survival!==undefined && g.infant_survival!==null) ? g.infant_survival : last(s); },
+    now:function(u, s){ var g=u.gauges; return (g && g.infant_survival!==undefined) ? g.infant_survival : last(s); },
     fmt:function(v){ return v===null?"–":Math.round(v*100)+"%"; },
     out:function(){ return false; },
-    note:"Current one-to-two-year-olds divided by births in the last annual record, capped at 100%. These are different cohorts: this is a rough ratio, not infant survival. No survival reference band applies." },
-  { key:"brd", label:"BREEDERS · WITHDRAWN", lo:0,
+    note:"Current one-to-two-year-olds divided by births in the last annual record, capped at 100%. These are different cohorts: this is a rough ratio, not infant survival. Without a prior birth cohort, the ratio is shown as –. No survival reference band applies." },
+  { key:"brd", label:"16–45 COHORT · WITHDRAWN", lo:0,
     series:function(rows){ return col(rows,"breeders"); },
     now:function(u, s){ var g=u.gauges; return g ? g.breeders : last(s); },
     fmt:function(v, u){ var g=u&&u.gauges; if (v===null) return "–";
       var w=(g&&g.adults)?Math.round(100*g.withdrawn/g.adults):null;
       return "<b>"+escapeHTML(v)+"</b>"+(w===null?"":" · "+w+"%"); },
     out:function(v){ return v!==null && v<10; },
-    note:"Adults still breeding · share of adults withdrawn. No tick: this is the extinction clock — at 0 there is no recovery. Coloured under 10." },
+    note:"Competent, non-withdrawn people aged 16–45, both sexes, and the share of adults withdrawn. This age cohort is not clinical fertility, willingness or a viable-pair count. Under 10 is a descriptive alert, not an extinction rule." },
   { key:"clm", label:"CLAIMANTS / PLACE", ticks:[1], lo:0,
     series:function(rows){ return col(rows,"claimants"); },
     now:function(u, s){ var g=u.gauges; return g ? g.claimants : last(s); },
@@ -3138,7 +3180,7 @@ var stripBuilt=false, gaugeOpen=-1, stripSeq="";
 function buildStrip(){
   var host=document.getElementById("gauges"); if (!host) return;
   host.innerHTML=GAUGES.map(function(G,i){
-    return "<button type='button' class='gauge' data-g='"+i+"' aria-pressed='false'>"+
+    return "<button type='button' class='gauge' data-g='"+i+"' aria-pressed='false' title='"+escapeHTML(G.note)+"' aria-description='"+escapeHTML(G.note)+"'>"+
       "<span class='gl'>"+G.label+"</span>"+
       ["e","l"].map(function(k){
         return "<span class='gr'><span class='gw "+(k==="e"?"u6":"u9")+"'>"+(k==="e"?"U6":"U9")+"</span>"+
@@ -3248,9 +3290,11 @@ function updateStrip(){
     });
   });
   var bar=document.getElementById("stripbar"), g=U.e.gauges||{}, h=U.l.gauges||{};
-  bar.innerHTML="<span class='gl'>INSTRUMENTS</span> breeders <span class='u6'>U6</span> <b>"+escapeHTML(g.breeders===undefined?"–":g.breeders)+
+  var cohortNote=GAUGES.find(function(G){ return G.key==="brd"; }).note;
+  bar.title=cohortNote; bar.setAttribute("aria-description",cohortNote);
+  bar.innerHTML="<span class='gl'>INSTRUMENTS</span> cohort 16–45 <span class='u6'>U6</span> <b>"+escapeHTML(g.breeders===undefined?"–":g.breeders)+
     "</b> · <span class='u9'>U9</span> <b>"+escapeHTML(h.breeders===undefined?"–":h.breeders)+"</b>"+
-    (outs.length?" · <span class='off'>"+outs.length+" off reference</span>":"")+" <span class='dim'>▾</span>";
+    (outs.length?" · <span class='off'>"+outs.length+" alerts</span>":"")+" <span class='dim'>▾</span>";
 }
 
 // =========================================================== god panel
@@ -3384,7 +3428,7 @@ function paintCard(key){
                              "withdrawn — alone in an upper cabana"][(wa&&wa.wk)||0]);
   if (w.flags&2)  bits.push("incompetent — born into the sink");
   if (w.flags&4)  bits.push("pregnant");
-  if (w.flags&8)  bits.push("minding an infant");
+  if (w.flags&8)  bits.push("has a child under 3");
   if (w.flags&16) bits.push("no territory");
   if (w.flags&32) bits.push("hungry");
   if (w.flags&64) bits.push("elder");
@@ -3395,7 +3439,7 @@ function paintCard(key){
   }
   var d=w.u.detail[String(w.id)]||[];
 
-  if (d.length>11) bits.push("purpose "+Math.round(d[9]*100)+"% · self-control "+Math.round(d[10]*100)+"% · temper "+Math.round(d[11]*100)+"%");
+  if (d.length>11) bits.push("purpose\u00a0"+Math.round(d[9]*100)+"% · self\u2011control\u00a0"+Math.round(d[10]*100)+"% · temper\u00a0"+Math.round(d[11]*100)+"%");
     title="<span class='nm'>"+escapeHTML(w.name)+"</span> · "+escapeHTML(w.act);
     blocks=["<p>"+escapeHTML(w.age)+" years · generation "+escapeHTML(w.gen)+" · "+escapeHTML(w.hun)+" hunger</p>",
       "<p>"+escapeHTML(key==="e"?"Nest box at "+w.hx+","+w.hy:"Hearth at "+w.hx+","+w.hy)+" · "+escapeHTML(pname)+"</p>"];
@@ -3481,7 +3525,8 @@ function updateRecords(events){
     var g=eventClass(conEvents[i]);
     if (g) rows.push({e:conEvents[i], g:g});
   }
-  if (!pagers.rec){ pagers.rec=new Pager(el, el, document.getElementById("recpager"), ""); pagers.rec.fromEnd=true; }
+  if (!pagers.rec){ pagers.rec=new Pager(el, el, document.getElementById("recpager"), ""); pagers.rec.fromEnd=true;
+    pagers.rec.label=function(i,n){ return n>1?(i+1)+"/"+n:""; }; }
   if (!rows.length){ el.style.height=""; pagers.rec.set(["<div class='empty'>Nothing recorded under this filter.</div>"], "last"); fitRecordBox(el); return; }
   var runs=[];
   for (var k=0;k<rows.length;k++){
@@ -3555,14 +3600,12 @@ window.addEventListener("error", function(ev){
   reportError("page", (ev && ev.message) ? ev : {message:String(ev)});
 });
 function alignWorldHeads(){
-  var heads=Array.from(document.querySelectorAll('.worldhead'));
-  heads.forEach(function(el){ el.style.minHeight=""; });
-  if (window.innerWidth<=700) return;
-  var height=Math.max.apply(null, heads.map(function(el){return el.offsetHeight;}));
-  heads.forEach(function(el){ el.style.minHeight=height+"px"; });
+  // Each world's facts earn only its own height. A sibling title is not a spacer.
+  document.querySelectorAll('.worldhead').forEach(function(el){ el.style.minHeight=""; });
 }
 function fit(){
   alignWorldHeads();
+  if (typeof timeMode!=="undefined") updateTimeUI();
   var dpr=Math.min(window.devicePixelRatio||1, 2.5);
   ["c6","c9"].forEach(function(id){
     var cv=document.getElementById(id);
@@ -3604,13 +3647,11 @@ function agoLabel(sec){
   return d+(d===1?" DAY AGO":" DAYS AGO");
 }
 function mirrorNote(){
-  var age=snapWall?(Date.now()/1000-snapWall):0;
-  if (!SNAP) return snapBad?"  ·  LINK DOWN · RETRYING":"";
-  if (snapBad) return "  ·  MIRROR UNREACHABLE"+(snapWall?" · LAST SEEN "+agoLabel(age):"");
-  if (!snapReady) return "";
-  if (!snapWall) return "  ·  LAST SEEN UNKNOWN";
-  if (age>STALE_SEC) return "  ·  LAST SEEN "+agoLabel(age);
-  return "  ·  "+agoLabel(age);
+  // A stale/unreachable bundle already has one dated global banner. Do not
+  // repeat it in each world's title and displace the selected person's name.
+  if (!SNAP || !snapReady || snapBad || !snapWall) return "";
+  var age=Math.max(0,Date.now()/1000-snapWall);
+  return age>STALE_SEC ? "" : "  ·  "+agoLabel(age);
 }
 function freshness(){
   hudExtra=(state&&state.status&&state.status.catching_up)
@@ -3848,7 +3889,7 @@ function paginate(box, cls, blocks, fromEnd){
   do {
     again=false; pages=[];
     meas.innerHTML=blocks.map(function(b,i){ return "<div class='pb' data-i='"+i+"'>"+b+"</div>"; }).join("");
-    var kids=meas.children, start=0, cur=[], avail=Math.max(20,B.h*0.98-4);
+    var kids=meas.children, start=0, cur=[], avail=box.id==="reclines"?B.h:Math.max(20,B.h*0.98-4);
     for (var j=0;j<kids.length;j++){
       if (kids[j].offsetHeight<=avail+1) continue;
       var split=splitBlock(blocks[j]);

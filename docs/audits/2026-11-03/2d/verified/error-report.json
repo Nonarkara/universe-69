@@ -1,0 +1,77 @@
+[
+  {
+    "width": 390,
+    "height": 844,
+    "simulatedGETFailure": 503,
+    "layout": {
+      "sheet": {
+        "x": 12,
+        "y": 335.859375,
+        "width": 366,
+        "height": 172.28125,
+        "top": 335.859375,
+        "right": 378,
+        "bottom": 508.140625,
+        "left": 12
+      },
+      "contentFits": true,
+      "target": {
+        "width": 60.03125,
+        "height": 28
+      },
+      "focused": true
+    },
+    "retryRecovered": true,
+    "jsErrors": []
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "simulatedGETFailure": 503,
+    "layout": {
+      "sheet": {
+        "x": 252,
+        "y": 297.859375,
+        "width": 520,
+        "height": 172.28125,
+        "top": 297.859375,
+        "right": 772,
+        "bottom": 470.140625,
+        "left": 252
+      },
+      "contentFits": true,
+      "target": {
+        "width": 64.03125,
+        "height": 28
+      },
+      "focused": true
+    },
+    "retryRecovered": true,
+    "jsErrors": []
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "simulatedGETFailure": 503,
+    "layout": {
+      "sheet": {
+        "x": 460,
+        "y": 363.859375,
+        "width": 520,
+        "height": 172.28125,
+        "top": 363.859375,
+        "right": 980,
+        "bottom": 536.140625,
+        "left": 460
+      },
+      "contentFits": true,
+      "target": {
+        "width": 64.03125,
+        "height": 28
+      },
+      "focused": true
+    },
+    "retryRecovered": true,
+    "jsErrors": []
+  }
+]

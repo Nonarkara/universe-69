@@ -1,0 +1,9 @@
+test_actual_vendored_font_bytes_and_licenses_arrive_with_the_right_type (test_font_delivery.TestFontDelivery) ... ok
+test_existing_book_and_archive_routes_keep_their_bytes_and_types (test_font_delivery.TestFontDelivery) ... ok
+test_missing_unlisted_traversal_and_symlink_assets_stay_private (test_font_delivery.TestFontDelivery) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.041s
+
+OK
+PREPARED PATCH ONLY; production server.py still frozen for bounded runs

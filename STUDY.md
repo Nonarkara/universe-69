@@ -1,6 +1,28 @@
 # STUDY — measurements from the running universes
 
-**Current version boundary.** Engine `2026.11.01.1` changes LAGOON's
+**2026-11-03 boundary.** Engine `2026.11.03.1` adds bounded individual fuzzy
+need sensitivity and repairs fresh-choice readiness, partner-dependent desire
+and care preemption. It changes future trajectories. All prior numbers remain
+version-specific history. The public death audit preserves the observed clock/
+lineage discontinuity rather than combining reused iteration IDs. New tests and
+bounded results belong in `docs/audits/2026-11-03/`; the default remains 100 model
+years per real day. No instrument restart is claimed.
+
+## Current frozen centuries — 2026.11.03.1
+
+Declared seeds 7/25/69, each 36,000 days, complete exit0: EDEN populations 250/198/239
+(peaks255/229/240), maximum maternal generations6/6/7; LAGOON 26/64/21
+(peaks102/64/35), generation 6 in all three. No extinction/reseed, and no agriculture or
+writing in this horizon. LAGOON7's decline from 102 to 26 matters; headcount is not
+viability. Standard arcs omit full final worlds/LAGOON age-sex cohorts, so those
+are unverified. Exact sources, results, limitations and reproduction commands:
+`docs/audits/2026-11-03/arcs/`. No isolated fuzzy-effect or human forecast claim.
+
+## Historical version boundaries
+
+**Earlier version boundary (upstream report, not re-derived in this audit).**
+The following `.11.01.1` comparison has no retained raw arcs and is historical
+source commentary, not evidence for `.11.03.1`. Engine `2026.11.01.1` changes LAGOON's
 "quarrel" violence: the trigger now scales with the camp's real hunger
 shortfall (up to 3x when starving, a flat rate before), and victim selection
 among same-camp candidates weights a partnered man 3x over an unpartnered

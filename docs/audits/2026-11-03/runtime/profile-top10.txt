@@ -1,0 +1,36 @@
+         103638452 function calls (103534204 primitive calls) in 93.591 seconds
+
+   Ordered by: internal time
+   List reduced from 333 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+ 80386916   30.722    0.000   30.722    0.000 {method 'get' of 'dict' objects}
+  5901989   29.313    0.000   51.995    0.000 /Volumes/Data/Projects/Universe69/sim/encounters.py:28(available)
+  3086383    7.467    0.000   64.956    0.000 /Volumes/Data/Projects/Universe69/sim/encounters.py:43(_compatible)
+    18582    2.045    0.000   67.076    0.004 /Volumes/Data/Projects/Universe69/sim/encounters.py:72(<listcomp>)
+     9682    1.396    0.000    3.140    0.000 /Volumes/Data/Projects/Universe69/sim/needs.py:1798(<listcomp>)
+410233/323197    1.363    0.000   45.584    0.000 {built-in method builtins.any}
+    53600    1.184    0.000    1.184    0.000 /Volumes/Data/Projects/Universe69/sim/needs.py:793(<dictcomp>)
+    53600    0.911    0.000    5.802    0.000 /Volumes/Data/Projects/Universe69/sim/needs.py:536(meters)
+    55657    0.854    0.000    3.151    0.000 /Volumes/Data/Projects/Universe69/sim/needs.py:412(observe_sites)
+      200    0.848    0.004   80.194    0.401 /Volumes/Data/Projects/Universe69/sim/engine.py:1098(tick_eden)
+
+
+         103638452 function calls (103534204 primitive calls) in 93.591 seconds
+
+   Ordered by: cumulative time
+   List reduced from 333 to 10 due to restriction <10>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      200    0.010    0.000   93.591    0.468 /Volumes/Data/Projects/Universe69/sim/engine.py:2826(tick_world)
+      200    0.848    0.004   80.194    0.401 /Volumes/Data/Projects/Universe69/sim/engine.py:1098(tick_eden)
+    18582    0.032    0.000   67.108    0.004 /Volumes/Data/Projects/Universe69/sim/encounters.py:69(candidates)
+    18582    2.045    0.000   67.076    0.004 /Volumes/Data/Projects/Universe69/sim/encounters.py:72(<listcomp>)
+  3086383    7.467    0.000   64.956    0.000 /Volumes/Data/Projects/Universe69/sim/encounters.py:43(_compatible)
+  5901989   29.313    0.000   51.995    0.000 /Volumes/Data/Projects/Universe69/sim/encounters.py:28(available)
+410233/323197    1.363    0.000   45.584    0.000 {built-in method builtins.any}
+    53600    0.299    0.000   44.486    0.001 /Volumes/Data/Projects/Universe69/sim/needs.py:788(update_social)
+    13832    0.076    0.000   43.203    0.003 /Volumes/Data/Projects/Universe69/sim/encounters.py:76(offer)
+    16055    0.025    0.000   42.735    0.003 /Volumes/Data/Projects/Universe69/sim/needs.py:803(<genexpr>)
+
+

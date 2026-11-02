@@ -1,0 +1,3 @@
+/Volumes/Data/agent-scratch/u69-nov3-viewer/capture_units.py:15: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+  units=page.locator('#card9 .personpage').evaluate('''e=>{var p=Array.from(e.querySelectorAll('p')).find(p=>p.textContent.includes('temper'));if(!p)return [];var t=p.textContent;return Array.from(t.matchAll(/(?:purpose|self\u2011control|temper)\u00a0\d+%/g)).map(m=>{var r=document.createRange();r.setStart(p.firstChild,m.index);r.setEnd(p.firstChild,m.index+m[0].length);return {text:m[0],rects:Array.from(r.getClientRects()).map(x=>x.toJSON())};});}''')
+COMPLETE 3/3

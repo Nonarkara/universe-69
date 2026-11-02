@@ -1,0 +1,17 @@
+{
+  "status": "Applied after all three fixed horizons completed with exit0 and unchanged hashes",
+  "server_before_sha256": "02e05369a4fd8e9ad23085520a6c084531fcc5d58b7c03ea125275ac467ec869",
+  "server_prepared_sha256": "fe85bc31b66dae949b6015834e6171348eb0d13bb96540a04d4128564c44ab7e",
+  "only_changed_ast_scope": "Handler.do_GET",
+  "all_other_runtime_ast_identical": true,
+  "prepared_http_tests": 3,
+  "production_font_route": "200 exact bytes/MIME; invalid/traversal/symlink404; existing book/archive unchanged",
+  "server_final_sha256": "fe85bc31b66dae949b6015834e6171348eb0d13bb96540a04d4128564c44ab7e",
+  "only_post_horizon_source_delta": [
+    "sim/server.py"
+  ],
+  "actual_http_tests": {
+    "Apple Python3.9": 3,
+    "Python3.14": 3
+  }
+}

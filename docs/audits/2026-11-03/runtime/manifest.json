@@ -1,0 +1,34 @@
+{
+  "kind": "Bounded old-cohort continuation diagnostic; not live instrument",
+  "input": "docs/audits/2026-10-30-agency/arcs/seed-69/final-world.json.gz",
+  "inputGzipSHA256": "b46d67175d5fe589fceac00fd61c76ad76e7e3075044c31e1cba4d856d3bd33d",
+  "inputUncompressedSHA256": "60d7e141b8361a084dcf41711dc956dc504dac99ebcebad4f70b157d2c228743",
+  "runtimeEngine": "2026.11.03.1",
+  "sourcesUnchanged": true,
+  "files": {
+    "README.md": {
+      "bytes": 5151,
+      "SHA256": "e3191d84416a8113d35c5b7f9e1131a479c07464aa22554a7f61b720716125f2"
+    },
+    "profile_runtime.py": {
+      "bytes": 7150,
+      "SHA256": "58463d47188120b78cc2744abce54d7b98e9fa26b9871362f9c144276b44daed"
+    },
+    "results.json": {
+      "bytes": 27283,
+      "SHA256": "52128c9b1a10feeba6a9fb93bf4ea2836512f03935ed6595bca780239ce6f2cc"
+    },
+    "engine-200parts.prof": {
+      "bytes": 55919,
+      "SHA256": "8ac97a4e934af3be0754ce3b7f116911475b0866b1131dfbd56b090aea6bba41"
+    },
+    "profile-top10.txt": {
+      "bytes": 2609,
+      "SHA256": "8f959a12f574bd1fe46040c7037168f9bcef0334ee63764d631b6151e1437c66"
+    },
+    "run.log": {
+      "bytes": 99,
+      "SHA256": "555a3ca569f4a513d074fb540706145334ed1481a03500af18c76ef8fa979248"
+    }
+  }
+}

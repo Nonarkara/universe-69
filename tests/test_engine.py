@@ -856,24 +856,28 @@ class TestDayAndNight(unittest.TestCase):
                                 "the lagoon is empty in the fifteenth year")
 
     def test_a_person_keeps_the_same_job_for_the_length_of_a_day(self):
-        """A stint of seven days is seven days, not seven ticks.
+        """A seven-day commitment survives the night, rather than seven ticks.
 
-        If the durations are not converted, everybody changes what they
-        are doing four times a day, and no activity means anything.
+        A population's fraction of changed action labels is not a duration
+        contract: sleep, thirst and freely reconsidered choices may change it.
+        Exercise the actual stint conversion and night/dawn restoration instead.
         """
+        from unittest.mock import Mock
+        import needs
         import random
-        u = engine.genesis_universe("LAGOON", 69)
-        rng = random.Random(69)
-        for _ in range(60 * engine.PARTS_PER_DAY):
-            engine.tick_lagoon(u, rng, [])
-        before = {p["id"]: p.get("a") for p in u["people"]}
-        for _ in range(engine.PARTS_PER_DAY):
-            engine.tick_lagoon(u, rng, [])
-        changed = sum(1 for p in u["people"]
-                      if before.get(p["id"]) not in (None, p.get("a")))
-        self.assertLessEqual(changed, max(1, len(u["people"]) // 4),
-                              "%d of %d people changed their job inside one "
-                              "day" % (changed, len(u["people"])))
+        u = self._lagoon()
+        p = u['people'][0]
+        duration = needs._duration(engine.A_FORAGE, Mock(randint=lambda a, b: 7))
+        self.assertEqual(duration, 7 * engine.PARTS_PER_DAY)
+        p.update(a=engine.A_FORAGE, ad=duration, hun=0., ene=1., thirst=0.,
+                 tx=p['x'], ty=p['y'])
+        target = (p['tx'], p['ty'])
+        needs.night(u, p, random.Random(69), engine.PART_NIGHT)
+        self.assertEqual(p['a'], engine.A_SLEEP)
+        self.assertEqual(p['was'], [engine.A_FORAGE, *target, duration])
+        needs.night(u, p, random.Random(69), 0)
+        self.assertEqual((p['a'], p['ad']), (engine.A_FORAGE, duration))
+        self.assertEqual((p['tx'], p['ty']), target)
 
     def test_at_night_the_band_comes_in_to_the_fire(self):
         import random

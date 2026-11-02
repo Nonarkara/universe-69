@@ -1,0 +1,20 @@
+..........F.........................................................
+======================================================================
+FAIL: test_current_unknown_yearling_ratio_does_not_reuse_historical_value (test_style.TestContentSizedWorlds)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Volumes/Data/Projects/Universe69/tests/test_style.py", line 616, in test_current_unknown_yearling_ratio_does_not_reuse_historical_value
+    self.assertEqual(result, [None, 0, .7, 1, .7, None, '–'])
+AssertionError: Lists differ: [1, 0, 0.7, 1, 0.7, None, '–'] != [None, 0, 0.7, 1, 0.7, None, '–']
+
+First differing element 0:
+1
+None
+
+- [1, 0, 0.7, 1, 0.7, None, '–']
++ [None, 0, 0.7, 1, 0.7, None, '–']
+
+----------------------------------------------------------------------
+Ran 68 tests in 1.161s
+
+FAILED (failures=1)

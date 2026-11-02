@@ -1,0 +1,65 @@
+{
+  "sourceSHA256": "9ec50254fa0f3e165d77ef7a48b24c01566ccee103c81e88bbab10de2d0f7684",
+  "servedSHA256": "f84e937730755bd03f3f32be1232b41a8a4a228199d6a9f948ef6b4861e2c74b",
+  "testsSHA256": "e21f3e04fac6d2ba6daceacf28c8e7809eb73e020dc43b6d6f3f07f73fd2dcd5",
+  "packetSHA256": "c4637d15ec6cc30b7304b24e59c6be9b69d838af74532563f774d2e50e6c2ec5",
+  "packetEngine": "2026.11.01.1",
+  "packetWall": 1793645452.3907478,
+  "packetScope": {
+    "eden": {
+      "iter": 3,
+      "day": 53460,
+      "year": 148,
+      "pop": 15
+    },
+    "lagoon": {
+      "iter": 2,
+      "day": 53460,
+      "year": 148,
+      "pop": 5
+    }
+  },
+  "mode": "static geometry / native interaction probe; harness cadence 1fps; production animation performance unverified",
+  "interactions": "native browser pointer/keyboard; delayed first packet only for R-at-boot check; no model fields edited",
+  "captureCommandExitCode": 0,
+  "limits": [
+    "production animation/input performance unverified after intermittent native dispatch timeout",
+    "Quest/headset unverified",
+    "capsule articulation is not full planted-foot 3D IK"
+  ],
+  "files": {
+    "before/390-eden.png": "59d1a895bc7025829d4f17b9f0e93e1bf7cf6cc4d35625fe1ff82e418a9ad7e4",
+    "before/1440-held.png": "81db43e6bbdacac44fe40202112e3225986889b86cefbcd2cf06a03d9a035db2",
+    "before/1440-table.png": "67e436286129414c0b7a2e3d285f3d9db571c21094140eb608a378882ff25cf8",
+    "before/1024-held.png": "6e9e05a71f9fcdb48029d3ee023bcbf5be6ec16ba1b8053ac6e4b7a020841a9a",
+    "before/390-table.png": "1f0bde9693ce2d674d435ee185443c9a003ba5acab8a9db8979ed329f5adf650",
+    "before/1440-lagoon.png": "c6841e2123f4f49cb95b6763555250399a382f07dc10512831017f63bb7eb913",
+    "before/1440-eden.png": "de64dd876d4be9d22365cb4a97033e9bcc5d60fa36594940e184712b22e32d88",
+    "before/1024-lagoon.png": "ad2df0f7a64495af9965a55e23dafd111c1ce250e7f81abadda975c070b32c25",
+    "before/390-held.png": "3da9865428bf4c1760874c928615970a27954488ad9c4b65e4de50c77ae8b24f",
+    "before/390-lagoon.png": "4bdf73e16f9cb50811b6ca6fdac9a4c90edb990dd5e52216fac9fef860d05084",
+    "before/1024-table.png": "873a5013ea2e7cb9575ba612d7107691f2525f07ad84dafdb57ec2c6a00b063f",
+    "before/1024-eden.png": "9fdad53f5b128f029eec7184c5fe404f8b7a75a923b190166beb50702f34b974",
+    "after/390-eden.png": "d7241526da47fa64adc80ebaf177fce53191592de168a01f5dccd0eda46d52c7",
+    "after/1440-record-next.png": "2ea018e834a2cd3eed32ca76081137d9597b04d3ffd393772a94a9fbec41a2b5",
+    "after/1024-record-next.png": "6c068bf192e4bb3bd5f94252f6800f60624307c1c98fe3226fb005bb3b89f9ef",
+    "after/390-record-next.png": "fcfe13e3cacf228af147746e7eed7236c40997b6154965f830423d1322870424",
+    "after/1440-held.png": "4e4c9214d95484c5a9b42f42e78a5563bf0ccc871cece9b5c3dc3faaef3bceba",
+    "after/1440-table.png": "1b932c38e2ce89a7ca5b0412ec557f7d739d17f1022e0efb59c97ef97165853d",
+    "after/390-keyboard-table-record.png": "769cf06c0f607062ad63c60b1ab49c1bc489c95c01c6f84ef4b3424baa4e09bf",
+    "after/1024-keyboard-table-record.png": "22e0e64acc445533445586a26cec1440a9b34fd1919756a7d586dfd1936f8e6e",
+    "after/1024-held.png": "12a4d8b82443a29a1e175c5d0eb2aa6a15e079d57693df284393e3f8abcc0303",
+    "after/390-table.png": "4658c5d6975c4eada1562c7745c36d11e83acfd38deeac54d7e6ed9bc3bd0a19",
+    "after/1024-record-focus.png": "40407766d0c0ac8323a3447a3abde7eb69f55bdb8e0ff3e8efd388c70f7c3670",
+    "after/1440-lagoon.png": "16475ee7113f8a9e20e28bf4c3467a0bbf2cc544419f6b3c8e80910b4b4fe7ff",
+    "after/1440-record-focus.png": "e02594599f3db17e11b48ae7c98600a8a19c6bdb45c1b51598e5e2df847dca53",
+    "after/1440-eden.png": "92cdd4e5ff6fea2021b31f49d3a04e819b1e8a4e4f881501d98909f54acc7b46",
+    "after/1024-lagoon.png": "23dcef0da2e24631bee51edccf26d9ca88e2842f42a7ddf21e506ecd02583075",
+    "after/1440-keyboard-table-record.png": "a9591dd5f6f7dd8b73eac98fa3efd2011e374ca395722e9b43f8cb0168fc21a1",
+    "after/390-held.png": "80f6ea839d35de1f13fccd31cd33754c44edc67faf69477597ae2789ba6c9b07",
+    "after/390-lagoon.png": "85808e67c41c4188f61f40ad1c45938e3f45f9d3f686ec5f14d97d28e6afd7fc",
+    "after/1024-table.png": "2da0632e7d55886c86e98df1d8a037eda69f9a68fbe9c2ba1462baaa478b617c",
+    "after/1024-eden.png": "f398fe57f2ce4e7291cec7c8a4546c6444f4d5d86d69eb2bcf52e0b6c578effc",
+    "after/390-record-focus.png": "64f1bbe0be1ac6016adc684b8c83f5885c71eee391a445859ed2d9fa768be899"
+  }
+}

@@ -57,7 +57,13 @@ GESTATION = 270
 # the mate/status-rivalry half of the already-cited "young unmated men"
 # finding made victim-specific instead of only frequency-specific. Changes
 # every LAGOON trajectory past the first quarrel roll.
-ENGINE_VERSION = "2026.11.01.1"
+# 2026.11.03.1 — fresh choices clear only finished self-activity; watch
+# cannot displace care or explicit instruction. Shared bodily desire no
+# longer depends on a biography partner pointer. Adult intimacy is separate
+# from the unchanged female clinical age gate. Small identity-stable fuzzy
+# need responses vary voluntary choices without adding RNG draws or fields.
+# These are illustrative sensitivities, not fitted human psychology.
+ENGINE_VERSION = "2026.11.03.1"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -515,11 +521,12 @@ def complete_social(u, frames):
 
 
 def reproductive_contacts(u, frames):
-    """Resolve frozen actual meetings after casualties, once per mother/part.
+    """Resolve frozen meetings into optional social bonds, once per mother/part.
 
-    Reassignment after the contact cannot erase it. Death, withdrawal or
-    departure before this part's resolution prevents a conception trial.
-    A LAGOON bond forms only when two singles actually meet voluntarily.
+    LAGOON singles bond only after actual voluntary contact and only while
+    both still survive here. This is not a conception gate: the separate
+    reproductive recorder retains genuine exposures despite a father's
+    later death, withdrawal or departure.
     """
     byid = {p["id"]: p for p in u["people"]}
     seen, eligible = set(), []
@@ -1842,9 +1849,8 @@ def play_with(u, p, kids, rng, clamp):
         p["tx"], p["ty"] = clamp(p["hx"] + rng.randint(-2, 2), p["hy"] + rng.randint(-2, 2))
 
 
-WALK_SPEED = 3          # tiles covered in a day's travel
-LAGOON_WALK = 6         # foragers range farther in a day than resort guests
-                        # stroll: travel should be a share of the day, not all of it
+WALK_SPEED = 3          # tiles covered per active simulation part
+LAGOON_WALK = 6         # tiles per active part; foragers range farther
 
 
 _FIELDS = {}          # (id of terrain, target) -> distance field; a cache, never saved
@@ -1881,9 +1887,10 @@ def land_field(terr, tx, ty):
 
 
 def step_toward(p, terr=None, speed=WALK_SPEED):
-    """Travel toward the target; True once standing on it. A day is a long
-    time to walk — covering only one tile per day would leave everyone
-    permanently in transit and never anywhere."""
+    """Travel up to speed tiles this part; True once standing on the target.
+
+    The caller runs this once per active part, not once per calendar day.
+    """
     for _ in range(speed):
         dx = p["tx"] - p["x"]
         dy = p["ty"] - p["y"]
@@ -2075,10 +2082,10 @@ def keep_watch(u, people, day, events, part=0, rng=None):
     up in the dark. The watcher does not sleep that night and is hungrier
     for it in the morning.
 
-    At night the band also *comes in*: the hunters who are still out stay
-    out, but everyone else converges on the fire. A camp that has a fire
-    is a camp that spends its dark hours together, which is the thing that
-    turns a band into a society."""
+    At night uncommitted camp activity can converge on the fire. Work,
+    rest, care and explicit meetings keep their own targets. A camp with
+    a fire can spend its dark hours together without commandeering those
+    already occupied with another need."""
     night = (part == PART_NIGHT)
     by_st = {}
     for q in people:
@@ -2093,7 +2100,9 @@ def keep_watch(u, people, day, events, part=0, rng=None):
         # Watch cannot cancel a bodily decision to sleep, eat or recover.
         # A lit hearth allows another awake adult to guard while its expert rests.
         available = [q for q in band
-                     if needs.instruction_state(u,q) is None and q.get("a") not in (A_SLEEP, A_REST, A_EAT, A_DRINK, A_BIRTH, A_RITE, A_FIGHT, A_MATE, A_GROOM)
+                     if not q.get("learning") and not q.get("teaching")
+                     and needs.instruction_state(u,q) is None
+                     and q.get("a") not in (A_SLEEP, A_REST, A_EAT, A_DRINK, A_BIRTH, A_TEND, A_RITE, A_FIGHT, A_MATE, A_GROOM)
                      and not q.get("due") and q.get("ene", 1.0) > 0.35
                      and q.get("hun", 0.0) < needs.HUNGRY and q.get("thirst", 0.0) < 1.0]
         keepers = [q for q in available if skills.knows(q, "fire")]
@@ -2113,14 +2122,15 @@ def keep_watch(u, people, day, events, part=0, rng=None):
             w["hun"] = w.get("hun", 0.0) + 0.5     # a night on watch is a hungry one
             if rng is not None:
                 for q in band:
-                    if q is w or q.get("w") or q.get("a") in (A_MATE, A_GROOM):
+                    # Background gathering can orient only uncommitted camp
+                    # activity. Bodies, care and explicit meetings keep their
+                    # targets until their own decision/need processing ends them.
+                    if (q is w or q.get("w") or q.get("a") not in (A_IDLE, A_WALK, A_TALK)
+                            or q.get("learning") or q.get("teaching")):
                         continue
-                    if q.get("a") in minds.WORK_ACTS:
-                        continue                  # anyone out at work: needs.night beds them there
                     q["tx"], q["ty"] = fx + rng.randint(-2, 2), fy + rng.randint(-1, 2)
-                    if q.get("a") in (A_IDLE, A_WALK, A_TALK):
-                        q["a"] = A_TALK if rng.random() < 0.6 else A_SLEEP
-                        q["ad"] = days(2)
+                    q["a"] = A_TALK if rng.random() < 0.6 else A_SLEEP
+                    q["ad"] = days(2)
         talking = [q for q in band if needs.fire_lit(u, st) and q.get("a") == A_TALK
                    and (q["x"], q["y"]) == (q.get("tx"), q.get("ty"))
                    and (q["x"]-fx)**2+(q["y"]-fy)**2 <= 16

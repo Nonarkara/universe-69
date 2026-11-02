@@ -1,0 +1,244 @@
+{
+  "7": {
+    "state_sha256": "c45e5dd70bf043902bbfed64e7b723de083a7f8b94bd7e0f3f217287a6953c99",
+    "engine": "2026.10.30.8",
+    "endpoint": {
+      "eden": {
+        "iteration": 1,
+        "day": 36000,
+        "peak": 269,
+        "population": 268,
+        "max_maternal_generation": 6,
+        "founders_alive": 0,
+        "descendants_alive": 268,
+        "clinical_age_females": 81,
+        "adult_males": 66,
+        "children_female": 21,
+        "children_male": 27,
+        "pregnancies": 5,
+        "age_range_years": [
+          0.04,
+          77.19
+        ],
+        "withdrawn": 91,
+        "incompetent_model_flag": 95,
+        "model_death_causes": {
+          "age": 42,
+          "starvation": 7,
+          "infant": 239,
+          "violence": 95
+        },
+        "historical_discoveries": [],
+        "living_father_ids_recorded": 268
+      },
+      "lagoon": {
+        "iteration": 1,
+        "day": 36000,
+        "peak": 106,
+        "population": 31,
+        "max_maternal_generation": 6,
+        "founders_alive": 0,
+        "descendants_alive": 31,
+        "clinical_age_females": 5,
+        "adult_males": 13,
+        "children_female": 7,
+        "children_male": 5,
+        "pregnancies": 1,
+        "age_range_years": [
+          2.07,
+          78.08
+        ],
+        "withdrawn": 0,
+        "incompetent_model_flag": 0,
+        "model_death_causes": {
+          "infant": 19,
+          "violence": 21,
+          "age": 31,
+          "accident": 9,
+          "childbirth": 1,
+          "starvation": 13,
+          "dehydration": 81
+        },
+        "historical_discoveries": [
+          "fire",
+          "stone_tools",
+          "fishing",
+          "predator_hunt",
+          "shelter",
+          "preservation",
+          "lore",
+          "agriculture"
+        ],
+        "living_father_ids_recorded": 31
+      }
+    },
+    "qualifications": [
+      "Female age band is the shipped clinical cycle gate; male adults have no behavioral upper-age cutoff.",
+      "Age counts omit bodily readiness, locality, consent, kinship and partnership availability; they are not viable-mating estimates.",
+      "Generation is the existing maternal-generation counter.",
+      "Death counters do not identify causes of trajectory differences or forecast people.",
+      "Positive headcount and young cohorts alone do not prove long-term viability."
+    ]
+  },
+  "25": {
+    "state_sha256": "85e7e4a6ad3f520772ef9cae1ac8de0ec6e47f35e3436f45380ec79a72c05091",
+    "engine": "2026.10.30.8",
+    "endpoint": {
+      "eden": {
+        "iteration": 1,
+        "day": 36000,
+        "peak": 252,
+        "population": 244,
+        "max_maternal_generation": 6,
+        "founders_alive": 0,
+        "descendants_alive": 244,
+        "clinical_age_females": 78,
+        "adult_males": 45,
+        "children_female": 20,
+        "children_male": 21,
+        "pregnancies": 7,
+        "age_range_years": [
+          0.38,
+          96.46
+        ],
+        "withdrawn": 80,
+        "incompetent_model_flag": 82,
+        "model_death_causes": {
+          "infant": 255,
+          "violence": 108,
+          "age": 58
+        },
+        "historical_discoveries": [],
+        "living_father_ids_recorded": 244
+      },
+      "lagoon": {
+        "iteration": 1,
+        "day": 36000,
+        "peak": 79,
+        "population": 78,
+        "max_maternal_generation": 6,
+        "founders_alive": 0,
+        "descendants_alive": 78,
+        "clinical_age_females": 17,
+        "adult_males": 19,
+        "children_female": 22,
+        "children_male": 16,
+        "pregnancies": 1,
+        "age_range_years": [
+          0.59,
+          87.84
+        ],
+        "withdrawn": 0,
+        "incompetent_model_flag": 0,
+        "model_death_causes": {
+          "infant": 19,
+          "childbirth": 5,
+          "violence": 37,
+          "accident": 7,
+          "starvation": 11,
+          "dehydration": 9,
+          "age": 9
+        },
+        "historical_discoveries": [
+          "stone_tools",
+          "fire",
+          "fishing",
+          "shelter",
+          "preservation",
+          "predator_hunt",
+          "lore"
+        ],
+        "living_father_ids_recorded": 78
+      }
+    },
+    "qualifications": [
+      "Female age band is the shipped clinical cycle gate; male adults have no behavioral upper-age cutoff.",
+      "Age counts omit bodily readiness, locality, consent, kinship and partnership availability; they are not viable-mating estimates.",
+      "Generation is the existing maternal-generation counter.",
+      "Death counters do not identify causes of trajectory differences or forecast people.",
+      "Positive headcount and young cohorts alone do not prove long-term viability."
+    ]
+  },
+  "69": {
+    "state_sha256": "60d7e141b8361a084dcf41711dc956dc504dac99ebcebad4f70b157d2c228743",
+    "engine": "2026.10.30.8",
+    "endpoint": {
+      "eden": {
+        "iteration": 1,
+        "day": 36000,
+        "peak": 253,
+        "population": 243,
+        "max_maternal_generation": 6,
+        "founders_alive": 0,
+        "descendants_alive": 243,
+        "clinical_age_females": 75,
+        "adult_males": 53,
+        "children_female": 27,
+        "children_male": 38,
+        "pregnancies": 5,
+        "age_range_years": [
+          0.11,
+          80.42
+        ],
+        "withdrawn": 78,
+        "incompetent_model_flag": 96,
+        "model_death_causes": {
+          "infant": 262,
+          "violence": 111,
+          "age": 49,
+          "starvation": 4,
+          "plague": 4
+        },
+        "historical_discoveries": [],
+        "living_father_ids_recorded": 243
+      },
+      "lagoon": {
+        "iteration": 1,
+        "day": 36000,
+        "peak": 74,
+        "population": 25,
+        "max_maternal_generation": 6,
+        "founders_alive": 0,
+        "descendants_alive": 25,
+        "clinical_age_females": 4,
+        "adult_males": 10,
+        "children_female": 3,
+        "children_male": 6,
+        "pregnancies": 0,
+        "age_range_years": [
+          1.36,
+          92.64
+        ],
+        "withdrawn": 0,
+        "incompetent_model_flag": 0,
+        "model_death_causes": {
+          "predator": 1,
+          "violence": 12,
+          "infant": 26,
+          "dehydration": 85,
+          "starvation": 14,
+          "accident": 12,
+          "childbirth": 3,
+          "age": 8
+        },
+        "historical_discoveries": [
+          "fire",
+          "shelter",
+          "stone_tools",
+          "fishing",
+          "preservation",
+          "predator_hunt",
+          "lore"
+        ],
+        "living_father_ids_recorded": 25
+      }
+    },
+    "qualifications": [
+      "Female age band is the shipped clinical cycle gate; male adults have no behavioral upper-age cutoff.",
+      "Age counts omit bodily readiness, locality, consent, kinship and partnership availability; they are not viable-mating estimates.",
+      "Generation is the existing maternal-generation counter.",
+      "Death counters do not identify causes of trajectory differences or forecast people.",
+      "Positive headcount and young cohorts alone do not prove long-term viability."
+    ]
+  }
+}

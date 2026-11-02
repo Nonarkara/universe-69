@@ -1,0 +1,1956 @@
+[
+  {
+    "width": 390,
+    "height": 844,
+    "errors": [],
+    "bootRBeforeFirstRecordIgnored": true,
+    "states": {
+      "table": {
+        "width": 390,
+        "height": 844,
+        "held": false,
+        "drawCalls": 124,
+        "triangles": 926959,
+        "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+        "readout": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nEDEN \u00b7 Y148 \u00b7 15 people \u00b7 night\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night",
+        "error": "",
+        "chrome": [
+          {
+            "text": "UNIVERSE 69",
+            "rect": {
+              "x": 18,
+              "y": 8,
+              "width": 115.53125,
+              "height": 19,
+              "top": 8,
+              "right": 133.53125,
+              "bottom": 27,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE\nEDEN\nLAGOON\nREAL-TIME\nRECORD",
+            "rect": {
+              "x": 10,
+              "y": 34,
+              "width": 370,
+              "height": 34,
+              "top": 34,
+              "right": 380,
+              "bottom": 68,
+              "left": 10
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nEDEN \u00b7 Y148 \u00b7 15 people \u00b7 night\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night",
+            "rect": {
+              "x": 18,
+              "y": 760.4375,
+              "width": 318.203125,
+              "height": 73.5625,
+              "top": 760.4375,
+              "right": 336.203125,
+              "bottom": 834,
+              "left": 18
+            }
+          }
+        ]
+      },
+      "eden": {
+        "width": 390,
+        "height": 844,
+        "held": false,
+        "drawCalls": 21,
+        "triangles": 31464,
+        "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+        "readout": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nEDEN \u00b7 Y148 \u00b7 15 people \u00b7 night\n15 sleeping",
+        "error": "",
+        "chrome": [
+          {
+            "text": "UNIVERSE 69",
+            "rect": {
+              "x": 18,
+              "y": 8,
+              "width": 115.53125,
+              "height": 19,
+              "top": 8,
+              "right": 133.53125,
+              "bottom": 27,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE\nEDEN\nLAGOON\nREAL-TIME\nRECORD",
+            "rect": {
+              "x": 10,
+              "y": 34,
+              "width": 370,
+              "height": 34,
+              "top": 34,
+              "right": 380,
+              "bottom": 68,
+              "left": 10
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nEDEN \u00b7 Y148 \u00b7 15 people \u00b7 night\n15 sleeping",
+            "rect": {
+              "x": 18,
+              "y": 760.4375,
+              "width": 318.203125,
+              "height": 73.5625,
+              "top": 760.4375,
+              "right": 336.203125,
+              "bottom": 834,
+              "left": 18
+            }
+          }
+        ]
+      },
+      "lagoon": {
+        "width": 390,
+        "height": 844,
+        "held": false,
+        "drawCalls": 29,
+        "triangles": 893867,
+        "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+        "readout": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night\n3 sleeping \u00b7 1 watching \u00b7 1 drinking",
+        "error": "",
+        "chrome": [
+          {
+            "text": "UNIVERSE 69",
+            "rect": {
+              "x": 18,
+              "y": 8,
+              "width": 115.53125,
+              "height": 19,
+              "top": 8,
+              "right": 133.53125,
+              "bottom": 27,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE\nEDEN\nLAGOON\nREAL-TIME\nRECORD",
+            "rect": {
+              "x": 10,
+              "y": 34,
+              "width": 370,
+              "height": 34,
+              "top": 34,
+              "right": 380,
+              "bottom": 68,
+              "left": 10
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night\n3 sleeping \u00b7 1 watching \u00b7 1 drinking",
+            "rect": {
+              "x": 18,
+              "y": 760.4375,
+              "width": 318.203125,
+              "height": 73.5625,
+              "top": 760.4375,
+              "right": 336.203125,
+              "bottom": 834,
+              "left": 18
+            }
+          }
+        ]
+      },
+      "held": {
+        "width": 390,
+        "height": 844,
+        "held": true,
+        "drawCalls": 29,
+        "triangles": 893867,
+        "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+        "readout": "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night\n3 sleeping \u00b7 1 watching \u00b7 1 drinking",
+        "error": "",
+        "chrome": [
+          {
+            "text": "UNIVERSE 69",
+            "rect": {
+              "x": 18,
+              "y": 8,
+              "width": 115.53125,
+              "height": 19,
+              "top": 8,
+              "right": 133.53125,
+              "bottom": 27,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE\nEDEN\nLAGOON\nCONTINUE\nRECORD",
+            "rect": {
+              "x": 10,
+              "y": 34,
+              "width": 370,
+              "height": 34,
+              "top": 34,
+              "right": 380,
+              "bottom": 68,
+              "left": 10
+            }
+          },
+          {
+            "text": "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night\n3 sleeping \u00b7 1 watching \u00b7 1 drinking",
+            "rect": {
+              "x": 18,
+              "y": 760.4375,
+              "width": 260.34375,
+              "height": 73.5625,
+              "top": 760.4375,
+              "right": 278.34375,
+              "bottom": 834,
+              "left": 18
+            }
+          }
+        ]
+      }
+    },
+    "duplicateHeldPoll": {
+      "deliveriesBefore": 2,
+      "deliveriesAfter": 3,
+      "pending": false
+    },
+    "matrices": [
+      {
+        "world": "eden",
+        "mesh": "head",
+        "count": 15,
+        "bad": 0,
+        "minDeterminant": 0.007434436235327595
+      },
+      {
+        "world": "eden",
+        "mesh": "hair",
+        "count": 15,
+        "bad": 0,
+        "minDeterminant": 0.008123807795018848
+      },
+      {
+        "world": "eden",
+        "mesh": "torso",
+        "count": 30,
+        "bad": 0,
+        "minDeterminant": 0.0009762121468810273
+      },
+      {
+        "world": "eden",
+        "mesh": "arms",
+        "count": 60,
+        "bad": 0,
+        "minDeterminant": 0.0004257706008929234
+      },
+      {
+        "world": "eden",
+        "mesh": "legs",
+        "count": 60,
+        "bad": 0,
+        "minDeterminant": 0.0012237475082432555
+      },
+      {
+        "world": "eden",
+        "mesh": "hands",
+        "count": 90,
+        "bad": 0,
+        "minDeterminant": 0.00040084700103086546
+      },
+      {
+        "world": "eden",
+        "mesh": "feet",
+        "count": 60,
+        "bad": 0,
+        "minDeterminant": 0.0004281683750681829
+      },
+      {
+        "world": "eden",
+        "mesh": "trunks",
+        "count": 15,
+        "bad": 0,
+        "minDeterminant": 0.008856931988233766
+      },
+      {
+        "world": "lagoon",
+        "mesh": "head",
+        "count": 5,
+        "bad": 0,
+        "minDeterminant": 0.00854297975757912
+      },
+      {
+        "world": "lagoon",
+        "mesh": "hair",
+        "count": 5,
+        "bad": 0,
+        "minDeterminant": 0.00933514422535446
+      },
+      {
+        "world": "lagoon",
+        "mesh": "torso",
+        "count": 10,
+        "bad": 0,
+        "minDeterminant": 0.0010627442214152251
+      },
+      {
+        "world": "lagoon",
+        "mesh": "arms",
+        "count": 20,
+        "bad": 0,
+        "minDeterminant": 0.0005825812947706129
+      },
+      {
+        "world": "lagoon",
+        "mesh": "legs",
+        "count": 20,
+        "bad": 0,
+        "minDeterminant": 0.0016570321781572428
+      },
+      {
+        "world": "lagoon",
+        "mesh": "hands",
+        "count": 30,
+        "bad": 0,
+        "minDeterminant": 0.0006232708935041385
+      },
+      {
+        "world": "lagoon",
+        "mesh": "feet",
+        "count": 20,
+        "bad": 0,
+        "minDeterminant": 0.0006657525396589154
+      },
+      {
+        "world": "lagoon",
+        "mesh": "trunks",
+        "count": 0,
+        "bad": 0,
+        "minDeterminant": null
+      }
+    ],
+    "heldActors": [
+      {
+        "world": "eden",
+        "id": 1,
+        "act": 17,
+        "x": 6,
+        "y": 37,
+        "px": 6,
+        "py": 37
+      },
+      {
+        "world": "eden",
+        "id": 3,
+        "act": 17,
+        "x": 19,
+        "y": 8,
+        "px": 19,
+        "py": 8
+      },
+      {
+        "world": "eden",
+        "id": 4,
+        "act": 17,
+        "x": 5,
+        "y": 4,
+        "px": 5,
+        "py": 4
+      },
+      {
+        "world": "eden",
+        "id": 5,
+        "act": 17,
+        "x": 13,
+        "y": 8,
+        "px": 13,
+        "py": 8
+      },
+      {
+        "world": "eden",
+        "id": 6,
+        "act": 17,
+        "x": 37,
+        "y": 7,
+        "px": 37,
+        "py": 7
+      },
+      {
+        "world": "eden",
+        "id": 7,
+        "act": 17,
+        "x": 37,
+        "y": 38,
+        "px": 37,
+        "py": 38
+      },
+      {
+        "world": "eden",
+        "id": 8,
+        "act": 17,
+        "x": 11,
+        "y": 37,
+        "px": 11,
+        "py": 37
+      },
+      {
+        "world": "eden",
+        "id": 9,
+        "act": 17,
+        "x": 6,
+        "y": 8,
+        "px": 6,
+        "py": 8
+      },
+      {
+        "world": "eden",
+        "id": 10,
+        "act": 17,
+        "x": 6,
+        "y": 8,
+        "px": 6,
+        "py": 8
+      },
+      {
+        "world": "eden",
+        "id": 13,
+        "act": 17,
+        "x": 37,
+        "y": 37,
+        "px": 37,
+        "py": 37
+      },
+      {
+        "world": "eden",
+        "id": 14,
+        "act": 17,
+        "x": 6,
+        "y": 10,
+        "px": 6,
+        "py": 10
+      },
+      {
+        "world": "eden",
+        "id": 15,
+        "act": 17,
+        "x": 10,
+        "y": 37,
+        "px": 10,
+        "py": 37
+      },
+      {
+        "world": "eden",
+        "id": 16,
+        "act": 17,
+        "x": 36,
+        "y": 7,
+        "px": 36,
+        "py": 7
+      },
+      {
+        "world": "eden",
+        "id": 17,
+        "act": 17,
+        "x": 42,
+        "y": 38,
+        "px": 42,
+        "py": 38
+      },
+      {
+        "world": "eden",
+        "id": 18,
+        "act": 17,
+        "x": 42,
+        "y": 25,
+        "px": 42,
+        "py": 25
+      },
+      {
+        "world": "lagoon",
+        "id": 68,
+        "act": 20,
+        "x": 136,
+        "y": 110,
+        "px": 136,
+        "py": 110
+      },
+      {
+        "world": "lagoon",
+        "id": 73,
+        "act": 22,
+        "x": 138,
+        "y": 109,
+        "px": 138,
+        "py": 109
+      },
+      {
+        "world": "lagoon",
+        "id": 75,
+        "act": 17,
+        "x": 136,
+        "y": 110,
+        "px": 136,
+        "py": 110
+      },
+      {
+        "world": "lagoon",
+        "id": 76,
+        "act": 17,
+        "x": 136,
+        "y": 110,
+        "px": 136,
+        "py": 110
+      },
+      {
+        "world": "lagoon",
+        "id": 78,
+        "act": 17,
+        "x": 143,
+        "y": 119,
+        "px": 143,
+        "py": 119
+      }
+    ],
+    "openRecordAfterIdle": {
+      "opacity": 1,
+      "focusVisible": true
+    },
+    "record": "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\n25 HUTS \u00b7 569 ANIMALS \u00b7 0 BOATS \u00b7 0 FARMS\nINSTINCTS PRESERVE, CLEANLINESS\n3 sleeping \u00b7 1 watching \u00b7 1 drinking\n\u2190\n2 / 2\n\u2192",
+    "keyboard": {
+      "first": {
+        "id": "recordnext",
+        "visible": true
+      },
+      "afterEnter": {
+        "id": "recordprev",
+        "visible": true,
+        "text": "\u2190\n2 / 2\n\u2192"
+      },
+      "tablePages": [
+        "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nEDEN \u00b7 RECORD\nY148 \u00b7 NIGHT \u00b7 POP 15 \u00b7 ITER 3\nEXPLOIT \u00b7 ALWAYS SPRING \u00b7 2 COMPETENT ADULTS 16\u201345 (NOT FERTILITY)\n\u2190\n1 / 4\n\u2192",
+        "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nEDEN \u00b7 RECORD\nPOOL 0% \u00b7 BAR 0% \u00b7 THEATER 0% \u00b7 FIELD 0%\nPOSTS 14/22\n15 sleeping\n\u2190\n2 / 4\n\u2192",
+        "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\nY148 \u00b7 NIGHT \u00b7 POP 5 \u00b7 ITER 2\nDRY SEASON \u00b7 PRESERVATION \u00b7 1 CAMP\n\u2190\n3 / 4\n\u2192",
+        "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\n25 HUTS \u00b7 569 ANIMALS \u00b7 0 BOATS \u00b7 0 FARMS\nINSTINCTS PRESERVE, CLEANLINESS\n3 sleeping \u00b7 1 watching \u00b7 1 drinking\n\u2190\n4 / 4\n\u2192"
+      ],
+      "geometry": {
+        "fontLoaded": true,
+        "bodyWidth": 390,
+        "bodyHeight": 844,
+        "readout": {
+          "x": 18,
+          "y": 680.0625,
+          "width": 354,
+          "height": 153.9375,
+          "top": 680.0625,
+          "right": 372,
+          "bottom": 834,
+          "left": 18
+        },
+        "pager": [
+          {
+            "id": "recordprev",
+            "rect": {
+              "x": 26,
+              "y": 794,
+              "width": 32.875,
+              "height": 34,
+              "top": 794,
+              "right": 58.875,
+              "bottom": 828,
+              "left": 26
+            },
+            "font": "12px"
+          },
+          {
+            "id": "recordnext",
+            "rect": {
+              "x": 108.65625,
+              "y": 794,
+              "width": 32.875,
+              "height": 34,
+              "top": 794,
+              "right": 141.53125,
+              "bottom": 828,
+              "left": 108.65625
+            },
+            "font": "12px"
+          }
+        ],
+        "active": "recordnext",
+        "focusVisible": true
+      }
+    }
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "errors": [],
+    "bootRBeforeFirstRecordIgnored": true,
+    "states": {
+      "table": {
+        "width": 1024,
+        "height": 768,
+        "held": false,
+        "drawCalls": 126,
+        "triangles": 926963,
+        "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+        "readout": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nEDEN \u00b7 Y148 \u00b7 15 people \u00b7 night\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night",
+        "error": "",
+        "chrome": [
+          {
+            "text": "UNIVERSE 69\nVR \u00b7 TWO SEALED WORLDS \u00b7 OBSERVED, NEVER HELPED",
+            "rect": {
+              "x": 18,
+              "y": 14,
+              "width": 341.4375,
+              "height": 37,
+              "top": 14,
+              "right": 359.4375,
+              "bottom": 51,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE\nEDEN\nLAGOON\nREAL-TIME\nRECORD",
+            "rect": {
+              "x": 654.84375,
+              "y": 12,
+              "width": 355.15625,
+              "height": 34,
+              "top": 12,
+              "right": 1010,
+              "bottom": 46,
+              "left": 654.84375
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 a hundred years a day, the way the record runs. REAL-TIME holds recorded positions and actions while you look around. Drag to look \u00b7 WASD to walk \u00b7 click a world to enter it.",
+            "rect": {
+              "x": 18,
+              "y": 52,
+              "width": 330,
+              "height": 51.140625,
+              "top": 52,
+              "right": 348,
+              "bottom": 103.140625,
+              "left": 18
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nEDEN \u00b7 Y148 \u00b7 15 people \u00b7 night\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night",
+            "rect": {
+              "x": 18,
+              "y": 678.4375,
+              "width": 318.203125,
+              "height": 73.5625,
+              "top": 678.4375,
+              "right": 336.203125,
+              "bottom": 752,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE: drag \u00b7 wheel zoom \u00b7 EDEN/LAGOON to enter\nINSIDE: WASD + drag \u00b7 R real-time \u00b7 T table \u00b7 H slate",
+            "rect": {
+              "x": 779.359375,
+              "y": 718,
+              "width": 228.640625,
+              "height": 34,
+              "top": 718,
+              "right": 1008,
+              "bottom": 752,
+              "left": 779.359375
+            }
+          }
+        ]
+      },
+      "eden": {
+        "width": 1024,
+        "height": 768,
+        "held": false,
+        "drawCalls": 47,
+        "triangles": 32040,
+        "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+        "readout": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nEDEN \u00b7 Y148 \u00b7 15 people \u00b7 night\n15 sleeping",
+        "error": "",
+        "chrome": [
+          {
+            "text": "UNIVERSE 69\nVR \u00b7 TWO SEALED WORLDS \u00b7 OBSERVED, NEVER HELPED",
+            "rect": {
+              "x": 18,
+              "y": 14,
+              "width": 341.4375,
+              "height": 37,
+              "top": 14,
+              "right": 359.4375,
+              "bottom": 51,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE\nEDEN\nLAGOON\nREAL-TIME\nRECORD",
+            "rect": {
+              "x": 654.84375,
+              "y": 12,
+              "width": 355.15625,
+              "height": 34,
+              "top": 12,
+              "right": 1010,
+              "bottom": 46,
+              "left": 654.84375
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 a hundred years a day, the way the record runs. REAL-TIME holds recorded positions and actions while you look around. Drag to look \u00b7 WASD to walk \u00b7 click a world to enter it.",
+            "rect": {
+              "x": 18,
+              "y": 52,
+              "width": 330,
+              "height": 51.140625,
+              "top": 52,
+              "right": 348,
+              "bottom": 103.140625,
+              "left": 18
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nEDEN \u00b7 Y148 \u00b7 15 people \u00b7 night\n15 sleeping",
+            "rect": {
+              "x": 18,
+              "y": 678.4375,
+              "width": 318.203125,
+              "height": 73.5625,
+              "top": 678.4375,
+              "right": 336.203125,
+              "bottom": 752,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE: drag \u00b7 wheel zoom \u00b7 EDEN/LAGOON to enter\nINSIDE: WASD + drag \u00b7 R real-time \u00b7 T table \u00b7 H slate",
+            "rect": {
+              "x": 779.359375,
+              "y": 718,
+              "width": 228.640625,
+              "height": 34,
+              "top": 718,
+              "right": 1008,
+              "bottom": 752,
+              "left": 779.359375
+            }
+          }
+        ]
+      },
+      "lagoon": {
+        "width": 1024,
+        "height": 768,
+        "held": false,
+        "drawCalls": 30,
+        "triangles": 894587,
+        "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+        "readout": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night\n3 sleeping \u00b7 1 watching \u00b7 1 drinking",
+        "error": "",
+        "chrome": [
+          {
+            "text": "UNIVERSE 69\nVR \u00b7 TWO SEALED WORLDS \u00b7 OBSERVED, NEVER HELPED",
+            "rect": {
+              "x": 18,
+              "y": 14,
+              "width": 341.4375,
+              "height": 37,
+              "top": 14,
+              "right": 359.4375,
+              "bottom": 51,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE\nEDEN\nLAGOON\nREAL-TIME\nRECORD",
+            "rect": {
+              "x": 654.84375,
+              "y": 12,
+              "width": 355.15625,
+              "height": 34,
+              "top": 12,
+              "right": 1010,
+              "bottom": 46,
+              "left": 654.84375
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 a hundred years a day, the way the record runs. REAL-TIME holds recorded positions and actions while you look around. Drag to look \u00b7 WASD to walk \u00b7 click a world to enter it.",
+            "rect": {
+              "x": 18,
+              "y": 52,
+              "width": 330,
+              "height": 51.140625,
+              "top": 52,
+              "right": 348,
+              "bottom": 103.140625,
+              "left": 18
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night\n3 sleeping \u00b7 1 watching \u00b7 1 drinking",
+            "rect": {
+              "x": 18,
+              "y": 678.4375,
+              "width": 318.203125,
+              "height": 73.5625,
+              "top": 678.4375,
+              "right": 336.203125,
+              "bottom": 752,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE: drag \u00b7 wheel zoom \u00b7 EDEN/LAGOON to enter\nINSIDE: WASD + drag \u00b7 R real-time \u00b7 T table \u00b7 H slate",
+            "rect": {
+              "x": 779.359375,
+              "y": 718,
+              "width": 228.640625,
+              "height": 34,
+              "top": 718,
+              "right": 1008,
+              "bottom": 752,
+              "left": 779.359375
+            }
+          }
+        ]
+      },
+      "held": {
+        "width": 1024,
+        "height": 768,
+        "held": true,
+        "drawCalls": 30,
+        "triangles": 894587,
+        "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+        "readout": "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night\n3 sleeping \u00b7 1 watching \u00b7 1 drinking",
+        "error": "",
+        "chrome": [
+          {
+            "text": "UNIVERSE 69\nVR \u00b7 TWO SEALED WORLDS \u00b7 OBSERVED, NEVER HELPED",
+            "rect": {
+              "x": 18,
+              "y": 14,
+              "width": 341.4375,
+              "height": 37,
+              "top": 14,
+              "right": 359.4375,
+              "bottom": 51,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE\nEDEN\nLAGOON\nCONTINUE\nRECORD",
+            "rect": {
+              "x": 651.203125,
+              "y": 12,
+              "width": 358.796875,
+              "height": 34,
+              "top": 12,
+              "right": 1010,
+              "bottom": 46,
+              "left": 651.203125
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 a hundred years a day, the way the record runs. REAL-TIME holds recorded positions and actions while you look around. Drag to look \u00b7 WASD to walk \u00b7 click a world to enter it.",
+            "rect": {
+              "x": 18,
+              "y": 52,
+              "width": 330,
+              "height": 51.140625,
+              "top": 52,
+              "right": 348,
+              "bottom": 103.140625,
+              "left": 18
+            }
+          },
+          {
+            "text": "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night\n3 sleeping \u00b7 1 watching \u00b7 1 drinking",
+            "rect": {
+              "x": 18,
+              "y": 678.4375,
+              "width": 260.34375,
+              "height": 73.5625,
+              "top": 678.4375,
+              "right": 278.34375,
+              "bottom": 752,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE: drag \u00b7 wheel zoom \u00b7 EDEN/LAGOON to enter\nINSIDE: WASD + drag \u00b7 R real-time \u00b7 T table \u00b7 H slate",
+            "rect": {
+              "x": 779.359375,
+              "y": 718,
+              "width": 228.640625,
+              "height": 34,
+              "top": 718,
+              "right": 1008,
+              "bottom": 752,
+              "left": 779.359375
+            }
+          }
+        ]
+      }
+    },
+    "duplicateHeldPoll": {
+      "deliveriesBefore": 1,
+      "deliveriesAfter": 2,
+      "pending": false
+    },
+    "matrices": [
+      {
+        "world": "eden",
+        "mesh": "head",
+        "count": 15,
+        "bad": 0,
+        "minDeterminant": 0.007434436235327595
+      },
+      {
+        "world": "eden",
+        "mesh": "hair",
+        "count": 15,
+        "bad": 0,
+        "minDeterminant": 0.008123807795018848
+      },
+      {
+        "world": "eden",
+        "mesh": "torso",
+        "count": 30,
+        "bad": 0,
+        "minDeterminant": 0.0009762121468810273
+      },
+      {
+        "world": "eden",
+        "mesh": "arms",
+        "count": 60,
+        "bad": 0,
+        "minDeterminant": 0.0004257706008929234
+      },
+      {
+        "world": "eden",
+        "mesh": "legs",
+        "count": 60,
+        "bad": 0,
+        "minDeterminant": 0.0012237475082432555
+      },
+      {
+        "world": "eden",
+        "mesh": "hands",
+        "count": 90,
+        "bad": 0,
+        "minDeterminant": 0.00040084700103086546
+      },
+      {
+        "world": "eden",
+        "mesh": "feet",
+        "count": 60,
+        "bad": 0,
+        "minDeterminant": 0.0004281683750681829
+      },
+      {
+        "world": "eden",
+        "mesh": "trunks",
+        "count": 15,
+        "bad": 0,
+        "minDeterminant": 0.008856931988233766
+      },
+      {
+        "world": "lagoon",
+        "mesh": "head",
+        "count": 5,
+        "bad": 0,
+        "minDeterminant": 0.00854297975757912
+      },
+      {
+        "world": "lagoon",
+        "mesh": "hair",
+        "count": 5,
+        "bad": 0,
+        "minDeterminant": 0.00933514422535446
+      },
+      {
+        "world": "lagoon",
+        "mesh": "torso",
+        "count": 10,
+        "bad": 0,
+        "minDeterminant": 0.0010627442214152251
+      },
+      {
+        "world": "lagoon",
+        "mesh": "arms",
+        "count": 20,
+        "bad": 0,
+        "minDeterminant": 0.0005825812947706129
+      },
+      {
+        "world": "lagoon",
+        "mesh": "legs",
+        "count": 20,
+        "bad": 0,
+        "minDeterminant": 0.0016570321781572428
+      },
+      {
+        "world": "lagoon",
+        "mesh": "hands",
+        "count": 30,
+        "bad": 0,
+        "minDeterminant": 0.0006232708935041385
+      },
+      {
+        "world": "lagoon",
+        "mesh": "feet",
+        "count": 20,
+        "bad": 0,
+        "minDeterminant": 0.0006657525396589154
+      },
+      {
+        "world": "lagoon",
+        "mesh": "trunks",
+        "count": 0,
+        "bad": 0,
+        "minDeterminant": null
+      }
+    ],
+    "heldActors": [
+      {
+        "world": "eden",
+        "id": 1,
+        "act": 17,
+        "x": 6,
+        "y": 37,
+        "px": 6,
+        "py": 37
+      },
+      {
+        "world": "eden",
+        "id": 3,
+        "act": 17,
+        "x": 19,
+        "y": 8,
+        "px": 19,
+        "py": 8
+      },
+      {
+        "world": "eden",
+        "id": 4,
+        "act": 17,
+        "x": 5,
+        "y": 4,
+        "px": 5,
+        "py": 4
+      },
+      {
+        "world": "eden",
+        "id": 5,
+        "act": 17,
+        "x": 13,
+        "y": 8,
+        "px": 13,
+        "py": 8
+      },
+      {
+        "world": "eden",
+        "id": 6,
+        "act": 17,
+        "x": 37,
+        "y": 7,
+        "px": 37,
+        "py": 7
+      },
+      {
+        "world": "eden",
+        "id": 7,
+        "act": 17,
+        "x": 37,
+        "y": 38,
+        "px": 37,
+        "py": 38
+      },
+      {
+        "world": "eden",
+        "id": 8,
+        "act": 17,
+        "x": 11,
+        "y": 37,
+        "px": 11,
+        "py": 37
+      },
+      {
+        "world": "eden",
+        "id": 9,
+        "act": 17,
+        "x": 6,
+        "y": 8,
+        "px": 6,
+        "py": 8
+      },
+      {
+        "world": "eden",
+        "id": 10,
+        "act": 17,
+        "x": 6,
+        "y": 8,
+        "px": 6,
+        "py": 8
+      },
+      {
+        "world": "eden",
+        "id": 13,
+        "act": 17,
+        "x": 37,
+        "y": 37,
+        "px": 37,
+        "py": 37
+      },
+      {
+        "world": "eden",
+        "id": 14,
+        "act": 17,
+        "x": 6,
+        "y": 10,
+        "px": 6,
+        "py": 10
+      },
+      {
+        "world": "eden",
+        "id": 15,
+        "act": 17,
+        "x": 10,
+        "y": 37,
+        "px": 10,
+        "py": 37
+      },
+      {
+        "world": "eden",
+        "id": 16,
+        "act": 17,
+        "x": 36,
+        "y": 7,
+        "px": 36,
+        "py": 7
+      },
+      {
+        "world": "eden",
+        "id": 17,
+        "act": 17,
+        "x": 42,
+        "y": 38,
+        "px": 42,
+        "py": 38
+      },
+      {
+        "world": "eden",
+        "id": 18,
+        "act": 17,
+        "x": 42,
+        "y": 25,
+        "px": 42,
+        "py": 25
+      },
+      {
+        "world": "lagoon",
+        "id": 68,
+        "act": 20,
+        "x": 136,
+        "y": 110,
+        "px": 136,
+        "py": 110
+      },
+      {
+        "world": "lagoon",
+        "id": 73,
+        "act": 22,
+        "x": 138,
+        "y": 109,
+        "px": 138,
+        "py": 109
+      },
+      {
+        "world": "lagoon",
+        "id": 75,
+        "act": 17,
+        "x": 136,
+        "y": 110,
+        "px": 136,
+        "py": 110
+      },
+      {
+        "world": "lagoon",
+        "id": 76,
+        "act": 17,
+        "x": 136,
+        "y": 110,
+        "px": 136,
+        "py": 110
+      },
+      {
+        "world": "lagoon",
+        "id": 78,
+        "act": 17,
+        "x": 143,
+        "y": 119,
+        "px": 143,
+        "py": 119
+      }
+    ],
+    "openRecordAfterIdle": {
+      "opacity": 1,
+      "focusVisible": true
+    },
+    "record": "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\n25 HUTS \u00b7 569 ANIMALS \u00b7 0 BOATS \u00b7 0 FARMS\nINSTINCTS PRESERVE, CLEANLINESS\n3 sleeping \u00b7 1 watching \u00b7 1 drinking\n\u2190\n2 / 2\n\u2192",
+    "keyboard": {
+      "first": {
+        "id": "recordnext",
+        "visible": true
+      },
+      "afterEnter": {
+        "id": "recordprev",
+        "visible": true,
+        "text": "\u2190\n2 / 2\n\u2192"
+      },
+      "tablePages": [
+        "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nEDEN \u00b7 RECORD\nY148 \u00b7 NIGHT \u00b7 POP 15 \u00b7 ITER 3\nEXPLOIT \u00b7 ALWAYS SPRING \u00b7 2 COMPETENT ADULTS 16\u201345 (NOT FERTILITY)\n\u2190\n1 / 4\n\u2192",
+        "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nEDEN \u00b7 RECORD\nPOOL 0% \u00b7 BAR 0% \u00b7 THEATER 0% \u00b7 FIELD 0%\nPOSTS 14/22\n15 sleeping\n\u2190\n2 / 4\n\u2192",
+        "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\nY148 \u00b7 NIGHT \u00b7 POP 5 \u00b7 ITER 2\nDRY SEASON \u00b7 PRESERVATION \u00b7 1 CAMP\n\u2190\n3 / 4\n\u2192",
+        "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\n25 HUTS \u00b7 569 ANIMALS \u00b7 0 BOATS \u00b7 0 FARMS\nINSTINCTS PRESERVE, CLEANLINESS\n3 sleeping \u00b7 1 watching \u00b7 1 drinking\n\u2190\n4 / 4\n\u2192"
+      ],
+      "geometry": {
+        "fontLoaded": true,
+        "bodyWidth": 1024,
+        "bodyHeight": 768,
+        "readout": {
+          "x": 18,
+          "y": 617.25,
+          "width": 416.71875,
+          "height": 134.75,
+          "top": 617.25,
+          "right": 434.71875,
+          "bottom": 752,
+          "left": 18
+        },
+        "pager": [
+          {
+            "id": "recordprev",
+            "rect": {
+              "x": 26,
+              "y": 712,
+              "width": 32.875,
+              "height": 34,
+              "top": 712,
+              "right": 58.875,
+              "bottom": 746,
+              "left": 26
+            },
+            "font": "12px"
+          },
+          {
+            "id": "recordnext",
+            "rect": {
+              "x": 108.65625,
+              "y": 712,
+              "width": 32.875,
+              "height": 34,
+              "top": 712,
+              "right": 141.53125,
+              "bottom": 746,
+              "left": 108.65625
+            },
+            "font": "12px"
+          }
+        ],
+        "active": "recordnext",
+        "focusVisible": true
+      }
+    }
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "errors": [],
+    "bootRBeforeFirstRecordIgnored": true,
+    "states": {
+      "table": {
+        "width": 1440,
+        "height": 900,
+        "held": false,
+        "drawCalls": 126,
+        "triangles": 926963,
+        "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+        "readout": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nEDEN \u00b7 Y148 \u00b7 15 people \u00b7 night\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night",
+        "error": "",
+        "chrome": [
+          {
+            "text": "UNIVERSE 69\nVR \u00b7 TWO SEALED WORLDS \u00b7 OBSERVED, NEVER HELPED",
+            "rect": {
+              "x": 18,
+              "y": 14,
+              "width": 341.4375,
+              "height": 37,
+              "top": 14,
+              "right": 359.4375,
+              "bottom": 51,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE\nEDEN\nLAGOON\nREAL-TIME\nRECORD",
+            "rect": {
+              "x": 1070.84375,
+              "y": 12,
+              "width": 355.15625,
+              "height": 34,
+              "top": 12,
+              "right": 1426,
+              "bottom": 46,
+              "left": 1070.84375
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 a hundred years a day, the way the record runs. REAL-TIME holds recorded positions and actions while you look around. Drag to look \u00b7 WASD to walk \u00b7 click a world to enter it.",
+            "rect": {
+              "x": 18,
+              "y": 52,
+              "width": 330,
+              "height": 51.140625,
+              "top": 52,
+              "right": 348,
+              "bottom": 103.140625,
+              "left": 18
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nEDEN \u00b7 Y148 \u00b7 15 people \u00b7 night\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night",
+            "rect": {
+              "x": 18,
+              "y": 810.4375,
+              "width": 318.203125,
+              "height": 73.5625,
+              "top": 810.4375,
+              "right": 336.203125,
+              "bottom": 884,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE: drag \u00b7 wheel zoom \u00b7 EDEN/LAGOON to enter\nINSIDE: WASD + drag \u00b7 R real-time \u00b7 T table \u00b7 H slate",
+            "rect": {
+              "x": 1195.359375,
+              "y": 850,
+              "width": 228.640625,
+              "height": 34,
+              "top": 850,
+              "right": 1424,
+              "bottom": 884,
+              "left": 1195.359375
+            }
+          }
+        ]
+      },
+      "eden": {
+        "width": 1440,
+        "height": 900,
+        "held": false,
+        "drawCalls": 49,
+        "triangles": 32096,
+        "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+        "readout": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nEDEN \u00b7 Y148 \u00b7 15 people \u00b7 night\n15 sleeping",
+        "error": "",
+        "chrome": [
+          {
+            "text": "UNIVERSE 69\nVR \u00b7 TWO SEALED WORLDS \u00b7 OBSERVED, NEVER HELPED",
+            "rect": {
+              "x": 18,
+              "y": 14,
+              "width": 341.4375,
+              "height": 37,
+              "top": 14,
+              "right": 359.4375,
+              "bottom": 51,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE\nEDEN\nLAGOON\nREAL-TIME\nRECORD",
+            "rect": {
+              "x": 1070.84375,
+              "y": 12,
+              "width": 355.15625,
+              "height": 34,
+              "top": 12,
+              "right": 1426,
+              "bottom": 46,
+              "left": 1070.84375
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 a hundred years a day, the way the record runs. REAL-TIME holds recorded positions and actions while you look around. Drag to look \u00b7 WASD to walk \u00b7 click a world to enter it.",
+            "rect": {
+              "x": 18,
+              "y": 52,
+              "width": 330,
+              "height": 51.140625,
+              "top": 52,
+              "right": 348,
+              "bottom": 103.140625,
+              "left": 18
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nEDEN \u00b7 Y148 \u00b7 15 people \u00b7 night\n15 sleeping",
+            "rect": {
+              "x": 18,
+              "y": 810.4375,
+              "width": 318.203125,
+              "height": 73.5625,
+              "top": 810.4375,
+              "right": 336.203125,
+              "bottom": 884,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE: drag \u00b7 wheel zoom \u00b7 EDEN/LAGOON to enter\nINSIDE: WASD + drag \u00b7 R real-time \u00b7 T table \u00b7 H slate",
+            "rect": {
+              "x": 1195.359375,
+              "y": 850,
+              "width": 228.640625,
+              "height": 34,
+              "top": 850,
+              "right": 1424,
+              "bottom": 884,
+              "left": 1195.359375
+            }
+          }
+        ]
+      },
+      "lagoon": {
+        "width": 1440,
+        "height": 900,
+        "held": false,
+        "drawCalls": 30,
+        "triangles": 894587,
+        "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+        "readout": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night\n3 sleeping \u00b7 1 watching \u00b7 1 drinking",
+        "error": "",
+        "chrome": [
+          {
+            "text": "UNIVERSE 69\nVR \u00b7 TWO SEALED WORLDS \u00b7 OBSERVED, NEVER HELPED",
+            "rect": {
+              "x": 18,
+              "y": 14,
+              "width": 341.4375,
+              "height": 37,
+              "top": 14,
+              "right": 359.4375,
+              "bottom": 51,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE\nEDEN\nLAGOON\nREAL-TIME\nRECORD",
+            "rect": {
+              "x": 1070.84375,
+              "y": 12,
+              "width": 355.15625,
+              "height": 34,
+              "top": 12,
+              "right": 1426,
+              "bottom": 46,
+              "left": 1070.84375
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 a hundred years a day, the way the record runs. REAL-TIME holds recorded positions and actions while you look around. Drag to look \u00b7 WASD to walk \u00b7 click a world to enter it.",
+            "rect": {
+              "x": 18,
+              "y": 52,
+              "width": 330,
+              "height": 51.140625,
+              "top": 52,
+              "right": 348,
+              "bottom": 103.140625,
+              "left": 18
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 100 YEARS / REAL DAY \u00b7 record 1h old\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night\n3 sleeping \u00b7 1 watching \u00b7 1 drinking",
+            "rect": {
+              "x": 18,
+              "y": 810.4375,
+              "width": 318.203125,
+              "height": 73.5625,
+              "top": 810.4375,
+              "right": 336.203125,
+              "bottom": 884,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE: drag \u00b7 wheel zoom \u00b7 EDEN/LAGOON to enter\nINSIDE: WASD + drag \u00b7 R real-time \u00b7 T table \u00b7 H slate",
+            "rect": {
+              "x": 1195.359375,
+              "y": 850,
+              "width": 228.640625,
+              "height": 34,
+              "top": 850,
+              "right": 1424,
+              "bottom": 884,
+              "left": 1195.359375
+            }
+          }
+        ]
+      },
+      "held": {
+        "width": 1440,
+        "height": 900,
+        "held": true,
+        "drawCalls": 30,
+        "triangles": 894587,
+        "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)",
+        "readout": "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night\n3 sleeping \u00b7 1 watching \u00b7 1 drinking",
+        "error": "",
+        "chrome": [
+          {
+            "text": "UNIVERSE 69\nVR \u00b7 TWO SEALED WORLDS \u00b7 OBSERVED, NEVER HELPED",
+            "rect": {
+              "x": 18,
+              "y": 14,
+              "width": 341.4375,
+              "height": 37,
+              "top": 14,
+              "right": 359.4375,
+              "bottom": 51,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE\nEDEN\nLAGOON\nCONTINUE\nRECORD",
+            "rect": {
+              "x": 1067.203125,
+              "y": 12,
+              "width": 358.796875,
+              "height": 34,
+              "top": 12,
+              "right": 1426,
+              "bottom": 46,
+              "left": 1067.203125
+            }
+          },
+          {
+            "text": "TIMELAPSE \u00b7 a hundred years a day, the way the record runs. REAL-TIME holds recorded positions and actions while you look around. Drag to look \u00b7 WASD to walk \u00b7 click a world to enter it.",
+            "rect": {
+              "x": 18,
+              "y": 52,
+              "width": 330,
+              "height": 51.140625,
+              "top": 52,
+              "right": 348,
+              "bottom": 103.140625,
+              "left": 18
+            }
+          },
+          {
+            "text": "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 Y148 \u00b7 5 people \u00b7 night\n3 sleeping \u00b7 1 watching \u00b7 1 drinking",
+            "rect": {
+              "x": 18,
+              "y": 810.4375,
+              "width": 260.34375,
+              "height": 73.5625,
+              "top": 810.4375,
+              "right": 278.34375,
+              "bottom": 884,
+              "left": 18
+            }
+          },
+          {
+            "text": "TABLE: drag \u00b7 wheel zoom \u00b7 EDEN/LAGOON to enter\nINSIDE: WASD + drag \u00b7 R real-time \u00b7 T table \u00b7 H slate",
+            "rect": {
+              "x": 1195.359375,
+              "y": 850,
+              "width": 228.640625,
+              "height": 34,
+              "top": 850,
+              "right": 1424,
+              "bottom": 884,
+              "left": 1195.359375
+            }
+          }
+        ]
+      }
+    },
+    "duplicateHeldPoll": {
+      "deliveriesBefore": 1,
+      "deliveriesAfter": 2,
+      "pending": false
+    },
+    "matrices": [
+      {
+        "world": "eden",
+        "mesh": "head",
+        "count": 15,
+        "bad": 0,
+        "minDeterminant": 0.007434436235327595
+      },
+      {
+        "world": "eden",
+        "mesh": "hair",
+        "count": 15,
+        "bad": 0,
+        "minDeterminant": 0.008123807795018848
+      },
+      {
+        "world": "eden",
+        "mesh": "torso",
+        "count": 30,
+        "bad": 0,
+        "minDeterminant": 0.0009762121468810273
+      },
+      {
+        "world": "eden",
+        "mesh": "arms",
+        "count": 60,
+        "bad": 0,
+        "minDeterminant": 0.0004257706008929234
+      },
+      {
+        "world": "eden",
+        "mesh": "legs",
+        "count": 60,
+        "bad": 0,
+        "minDeterminant": 0.0012237475082432555
+      },
+      {
+        "world": "eden",
+        "mesh": "hands",
+        "count": 90,
+        "bad": 0,
+        "minDeterminant": 0.00040084700103086546
+      },
+      {
+        "world": "eden",
+        "mesh": "feet",
+        "count": 60,
+        "bad": 0,
+        "minDeterminant": 0.0004281683750681829
+      },
+      {
+        "world": "eden",
+        "mesh": "trunks",
+        "count": 15,
+        "bad": 0,
+        "minDeterminant": 0.008856931988233766
+      },
+      {
+        "world": "lagoon",
+        "mesh": "head",
+        "count": 5,
+        "bad": 0,
+        "minDeterminant": 0.00854297975757912
+      },
+      {
+        "world": "lagoon",
+        "mesh": "hair",
+        "count": 5,
+        "bad": 0,
+        "minDeterminant": 0.00933514422535446
+      },
+      {
+        "world": "lagoon",
+        "mesh": "torso",
+        "count": 10,
+        "bad": 0,
+        "minDeterminant": 0.0010627442214152251
+      },
+      {
+        "world": "lagoon",
+        "mesh": "arms",
+        "count": 20,
+        "bad": 0,
+        "minDeterminant": 0.0005825812947706129
+      },
+      {
+        "world": "lagoon",
+        "mesh": "legs",
+        "count": 20,
+        "bad": 0,
+        "minDeterminant": 0.0016570321781572428
+      },
+      {
+        "world": "lagoon",
+        "mesh": "hands",
+        "count": 30,
+        "bad": 0,
+        "minDeterminant": 0.0006232708935041385
+      },
+      {
+        "world": "lagoon",
+        "mesh": "feet",
+        "count": 20,
+        "bad": 0,
+        "minDeterminant": 0.0006657525396589154
+      },
+      {
+        "world": "lagoon",
+        "mesh": "trunks",
+        "count": 0,
+        "bad": 0,
+        "minDeterminant": null
+      }
+    ],
+    "heldActors": [
+      {
+        "world": "eden",
+        "id": 1,
+        "act": 17,
+        "x": 6,
+        "y": 37,
+        "px": 6,
+        "py": 37
+      },
+      {
+        "world": "eden",
+        "id": 3,
+        "act": 17,
+        "x": 19,
+        "y": 8,
+        "px": 19,
+        "py": 8
+      },
+      {
+        "world": "eden",
+        "id": 4,
+        "act": 17,
+        "x": 5,
+        "y": 4,
+        "px": 5,
+        "py": 4
+      },
+      {
+        "world": "eden",
+        "id": 5,
+        "act": 17,
+        "x": 13,
+        "y": 8,
+        "px": 13,
+        "py": 8
+      },
+      {
+        "world": "eden",
+        "id": 6,
+        "act": 17,
+        "x": 37,
+        "y": 7,
+        "px": 37,
+        "py": 7
+      },
+      {
+        "world": "eden",
+        "id": 7,
+        "act": 17,
+        "x": 37,
+        "y": 38,
+        "px": 37,
+        "py": 38
+      },
+      {
+        "world": "eden",
+        "id": 8,
+        "act": 17,
+        "x": 11,
+        "y": 37,
+        "px": 11,
+        "py": 37
+      },
+      {
+        "world": "eden",
+        "id": 9,
+        "act": 17,
+        "x": 6,
+        "y": 8,
+        "px": 6,
+        "py": 8
+      },
+      {
+        "world": "eden",
+        "id": 10,
+        "act": 17,
+        "x": 6,
+        "y": 8,
+        "px": 6,
+        "py": 8
+      },
+      {
+        "world": "eden",
+        "id": 13,
+        "act": 17,
+        "x": 37,
+        "y": 37,
+        "px": 37,
+        "py": 37
+      },
+      {
+        "world": "eden",
+        "id": 14,
+        "act": 17,
+        "x": 6,
+        "y": 10,
+        "px": 6,
+        "py": 10
+      },
+      {
+        "world": "eden",
+        "id": 15,
+        "act": 17,
+        "x": 10,
+        "y": 37,
+        "px": 10,
+        "py": 37
+      },
+      {
+        "world": "eden",
+        "id": 16,
+        "act": 17,
+        "x": 36,
+        "y": 7,
+        "px": 36,
+        "py": 7
+      },
+      {
+        "world": "eden",
+        "id": 17,
+        "act": 17,
+        "x": 42,
+        "y": 38,
+        "px": 42,
+        "py": 38
+      },
+      {
+        "world": "eden",
+        "id": 18,
+        "act": 17,
+        "x": 42,
+        "y": 25,
+        "px": 42,
+        "py": 25
+      },
+      {
+        "world": "lagoon",
+        "id": 68,
+        "act": 20,
+        "x": 136,
+        "y": 110,
+        "px": 136,
+        "py": 110
+      },
+      {
+        "world": "lagoon",
+        "id": 73,
+        "act": 22,
+        "x": 138,
+        "y": 109,
+        "px": 138,
+        "py": 109
+      },
+      {
+        "world": "lagoon",
+        "id": 75,
+        "act": 17,
+        "x": 136,
+        "y": 110,
+        "px": 136,
+        "py": 110
+      },
+      {
+        "world": "lagoon",
+        "id": 76,
+        "act": 17,
+        "x": 136,
+        "y": 110,
+        "px": 136,
+        "py": 110
+      },
+      {
+        "world": "lagoon",
+        "id": 78,
+        "act": 17,
+        "x": 143,
+        "y": 119,
+        "px": 143,
+        "py": 119
+      }
+    ],
+    "openRecordAfterIdle": {
+      "opacity": 1,
+      "focusVisible": true
+    },
+    "record": "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\n25 HUTS \u00b7 569 ANIMALS \u00b7 0 BOATS \u00b7 0 FARMS\nINSTINCTS PRESERVE, CLEANLINESS\n3 sleeping \u00b7 1 watching \u00b7 1 drinking\n\u2190\n2 / 2\n\u2192",
+    "keyboard": {
+      "first": {
+        "id": "recordnext",
+        "visible": true
+      },
+      "afterEnter": {
+        "id": "recordprev",
+        "visible": true,
+        "text": "\u2190\n2 / 2\n\u2192"
+      },
+      "tablePages": [
+        "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nEDEN \u00b7 RECORD\nY148 \u00b7 NIGHT \u00b7 POP 15 \u00b7 ITER 3\nEXPLOIT \u00b7 ALWAYS SPRING \u00b7 2 COMPETENT ADULTS 16\u201345 (NOT FERTILITY)\n\u2190\n1 / 4\n\u2192",
+        "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nEDEN \u00b7 RECORD\nPOOL 0% \u00b7 BAR 0% \u00b7 THEATER 0% \u00b7 FIELD 0%\nPOSTS 14/22\n15 sleeping\n\u2190\n2 / 4\n\u2192",
+        "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\nY148 \u00b7 NIGHT \u00b7 POP 5 \u00b7 ITER 2\nDRY SEASON \u00b7 PRESERVATION \u00b7 1 CAMP\n\u2190\n3 / 4\n\u2192",
+        "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\n25 HUTS \u00b7 569 ANIMALS \u00b7 0 BOATS \u00b7 0 FARMS\nINSTINCTS PRESERVE, CLEANLINESS\n3 sleeping \u00b7 1 watching \u00b7 1 drinking\n\u2190\n4 / 4\n\u2192"
+      ],
+      "geometry": {
+        "fontLoaded": true,
+        "bodyWidth": 1440,
+        "bodyHeight": 900,
+        "readout": {
+          "x": 18,
+          "y": 749.25,
+          "width": 416.71875,
+          "height": 134.75,
+          "top": 749.25,
+          "right": 434.71875,
+          "bottom": 884,
+          "left": 18
+        },
+        "pager": [
+          {
+            "id": "recordprev",
+            "rect": {
+              "x": 26,
+              "y": 844,
+              "width": 32.875,
+              "height": 34,
+              "top": 844,
+              "right": 58.875,
+              "bottom": 878,
+              "left": 26
+            },
+            "font": "12px"
+          },
+          {
+            "id": "recordnext",
+            "rect": {
+              "x": 108.65625,
+              "y": 844,
+              "width": 32.875,
+              "height": 34,
+              "top": 844,
+              "right": 141.53125,
+              "bottom": 878,
+              "left": 108.65625
+            },
+            "font": "12px"
+          }
+        ],
+        "active": "recordnext",
+        "focusVisible": true
+      }
+    }
+  }
+]

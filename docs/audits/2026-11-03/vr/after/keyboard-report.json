@@ -1,0 +1,244 @@
+{
+  "sourceSHA256": "9ec50254fa0f3e165d77ef7a48b24c01566ccee103c81e88bbab10de2d0f7684",
+  "servedSHA256": "f84e937730755bd03f3f32be1232b41a8a4a228199d6a9f948ef6b4861e2c74b",
+  "mode": "static geometry / native interaction probe; harness cadence 1fps; production animation performance unverified",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "errors": [],
+      "bootRBeforeFirstRecordIgnored": true,
+      "duplicateHeldPoll": {
+        "deliveriesBefore": 2,
+        "deliveriesAfter": 3,
+        "pending": false
+      },
+      "openRecordAfterIdle": {
+        "opacity": 1,
+        "focusVisible": true
+      },
+      "keyboard": {
+        "first": {
+          "id": "recordnext",
+          "visible": true
+        },
+        "afterEnter": {
+          "id": "recordprev",
+          "visible": true,
+          "text": "\u2190\n2 / 2\n\u2192"
+        },
+        "tablePages": [
+          "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nEDEN \u00b7 RECORD\nY148 \u00b7 NIGHT \u00b7 POP 15 \u00b7 ITER 3\nEXPLOIT \u00b7 ALWAYS SPRING \u00b7 2 COMPETENT ADULTS 16\u201345 (NOT FERTILITY)\n\u2190\n1 / 4\n\u2192",
+          "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nEDEN \u00b7 RECORD\nPOOL 0% \u00b7 BAR 0% \u00b7 THEATER 0% \u00b7 FIELD 0%\nPOSTS 14/22\n15 sleeping\n\u2190\n2 / 4\n\u2192",
+          "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\nY148 \u00b7 NIGHT \u00b7 POP 5 \u00b7 ITER 2\nDRY SEASON \u00b7 PRESERVATION \u00b7 1 CAMP\n\u2190\n3 / 4\n\u2192",
+          "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\n25 HUTS \u00b7 569 ANIMALS \u00b7 0 BOATS \u00b7 0 FARMS\nINSTINCTS PRESERVE, CLEANLINESS\n3 sleeping \u00b7 1 watching \u00b7 1 drinking\n\u2190\n4 / 4\n\u2192"
+        ],
+        "geometry": {
+          "fontLoaded": true,
+          "bodyWidth": 390,
+          "bodyHeight": 844,
+          "readout": {
+            "x": 18,
+            "y": 680.0625,
+            "width": 354,
+            "height": 153.9375,
+            "top": 680.0625,
+            "right": 372,
+            "bottom": 834,
+            "left": 18
+          },
+          "pager": [
+            {
+              "id": "recordprev",
+              "rect": {
+                "x": 26,
+                "y": 794,
+                "width": 32.875,
+                "height": 34,
+                "top": 794,
+                "right": 58.875,
+                "bottom": 828,
+                "left": 26
+              },
+              "font": "12px"
+            },
+            {
+              "id": "recordnext",
+              "rect": {
+                "x": 108.65625,
+                "y": 794,
+                "width": 32.875,
+                "height": 34,
+                "top": 794,
+                "right": 141.53125,
+                "bottom": 828,
+                "left": 108.65625
+              },
+              "font": "12px"
+            }
+          ],
+          "active": "recordnext",
+          "focusVisible": true
+        }
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "errors": [],
+      "bootRBeforeFirstRecordIgnored": true,
+      "duplicateHeldPoll": {
+        "deliveriesBefore": 1,
+        "deliveriesAfter": 2,
+        "pending": false
+      },
+      "openRecordAfterIdle": {
+        "opacity": 1,
+        "focusVisible": true
+      },
+      "keyboard": {
+        "first": {
+          "id": "recordnext",
+          "visible": true
+        },
+        "afterEnter": {
+          "id": "recordprev",
+          "visible": true,
+          "text": "\u2190\n2 / 2\n\u2192"
+        },
+        "tablePages": [
+          "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nEDEN \u00b7 RECORD\nY148 \u00b7 NIGHT \u00b7 POP 15 \u00b7 ITER 3\nEXPLOIT \u00b7 ALWAYS SPRING \u00b7 2 COMPETENT ADULTS 16\u201345 (NOT FERTILITY)\n\u2190\n1 / 4\n\u2192",
+          "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nEDEN \u00b7 RECORD\nPOOL 0% \u00b7 BAR 0% \u00b7 THEATER 0% \u00b7 FIELD 0%\nPOSTS 14/22\n15 sleeping\n\u2190\n2 / 4\n\u2192",
+          "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\nY148 \u00b7 NIGHT \u00b7 POP 5 \u00b7 ITER 2\nDRY SEASON \u00b7 PRESERVATION \u00b7 1 CAMP\n\u2190\n3 / 4\n\u2192",
+          "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\n25 HUTS \u00b7 569 ANIMALS \u00b7 0 BOATS \u00b7 0 FARMS\nINSTINCTS PRESERVE, CLEANLINESS\n3 sleeping \u00b7 1 watching \u00b7 1 drinking\n\u2190\n4 / 4\n\u2192"
+        ],
+        "geometry": {
+          "fontLoaded": true,
+          "bodyWidth": 1024,
+          "bodyHeight": 768,
+          "readout": {
+            "x": 18,
+            "y": 617.25,
+            "width": 416.71875,
+            "height": 134.75,
+            "top": 617.25,
+            "right": 434.71875,
+            "bottom": 752,
+            "left": 18
+          },
+          "pager": [
+            {
+              "id": "recordprev",
+              "rect": {
+                "x": 26,
+                "y": 712,
+                "width": 32.875,
+                "height": 34,
+                "top": 712,
+                "right": 58.875,
+                "bottom": 746,
+                "left": 26
+              },
+              "font": "12px"
+            },
+            {
+              "id": "recordnext",
+              "rect": {
+                "x": 108.65625,
+                "y": 712,
+                "width": 32.875,
+                "height": 34,
+                "top": 712,
+                "right": 141.53125,
+                "bottom": 746,
+                "left": 108.65625
+              },
+              "font": "12px"
+            }
+          ],
+          "active": "recordnext",
+          "focusVisible": true
+        }
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "errors": [],
+      "bootRBeforeFirstRecordIgnored": true,
+      "duplicateHeldPoll": {
+        "deliveriesBefore": 1,
+        "deliveriesAfter": 2,
+        "pending": false
+      },
+      "openRecordAfterIdle": {
+        "opacity": 1,
+        "focusVisible": true
+      },
+      "keyboard": {
+        "first": {
+          "id": "recordnext",
+          "visible": true
+        },
+        "afterEnter": {
+          "id": "recordprev",
+          "visible": true,
+          "text": "\u2190\n2 / 2\n\u2192"
+        },
+        "tablePages": [
+          "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nEDEN \u00b7 RECORD\nY148 \u00b7 NIGHT \u00b7 POP 15 \u00b7 ITER 3\nEXPLOIT \u00b7 ALWAYS SPRING \u00b7 2 COMPETENT ADULTS 16\u201345 (NOT FERTILITY)\n\u2190\n1 / 4\n\u2192",
+          "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nEDEN \u00b7 RECORD\nPOOL 0% \u00b7 BAR 0% \u00b7 THEATER 0% \u00b7 FIELD 0%\nPOSTS 14/22\n15 sleeping\n\u2190\n2 / 4\n\u2192",
+          "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\nY148 \u00b7 NIGHT \u00b7 POP 5 \u00b7 ITER 2\nDRY SEASON \u00b7 PRESERVATION \u00b7 1 CAMP\n\u2190\n3 / 4\n\u2192",
+          "REAL-TIME \u00b7 RECORD HELD \u00b7 record 1h old\nLAGOON \u00b7 RECORD\n25 HUTS \u00b7 569 ANIMALS \u00b7 0 BOATS \u00b7 0 FARMS\nINSTINCTS PRESERVE, CLEANLINESS\n3 sleeping \u00b7 1 watching \u00b7 1 drinking\n\u2190\n4 / 4\n\u2192"
+        ],
+        "geometry": {
+          "fontLoaded": true,
+          "bodyWidth": 1440,
+          "bodyHeight": 900,
+          "readout": {
+            "x": 18,
+            "y": 749.25,
+            "width": 416.71875,
+            "height": 134.75,
+            "top": 749.25,
+            "right": 434.71875,
+            "bottom": 884,
+            "left": 18
+          },
+          "pager": [
+            {
+              "id": "recordprev",
+              "rect": {
+                "x": 26,
+                "y": 844,
+                "width": 32.875,
+                "height": 34,
+                "top": 844,
+                "right": 58.875,
+                "bottom": 878,
+                "left": 26
+              },
+              "font": "12px"
+            },
+            {
+              "id": "recordnext",
+              "rect": {
+                "x": 108.65625,
+                "y": 844,
+                "width": 32.875,
+                "height": 34,
+                "top": 844,
+                "right": 141.53125,
+                "bottom": 878,
+                "left": 108.65625
+              },
+              "font": "12px"
+            }
+          ],
+          "active": "recordnext",
+          "focusVisible": true
+        }
+      }
+    }
+  ]
+}

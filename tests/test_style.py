@@ -564,7 +564,7 @@ class TestRealTime(unittest.TestCase):
     def test_button_label_and_pressed_state_follow_the_server_not_a_guess(self):
         fn = self.src[self.src.index('function updateTimeUI(){'):self.src.index('document.getElementById("timebtn").addEventListener')]
         setup = ("var SNAP=false,timeMode='default',timePending=false;"
-                 "function mkBtn(){return {disabled:false,title:'',textContent:'',_on:false,"
+                 "function mkBtn(){return {disabled:false,title:'',textContent:'',_on:false,setAttribute:function(k,v){this[k]=v;},"
                  "classList:{toggle:function(name,v){this.own=v;}}};}"
                  "var btn=mkBtn();var document={getElementById:function(){return btn;}};")
         js = (setup + fn +
@@ -576,6 +576,125 @@ class TestRealTime(unittest.TestCase):
         self.assertEqual(result[0], ["REAL-TIME", False, False])
         self.assertEqual(result[1], ["CONTINUE", True, False])
         self.assertEqual(result[2], ["REAL TIME NOW", True], "a mirror has no server to ask; it must not offer a live toggle")
+
+
+class TestContentSizedWorlds(unittest.TestCase):
+    def setUp(self):
+        self.src = read_renderer()
+
+    def test_opening_one_world_cannot_impose_its_heading_height_on_the_other(self):
+        fn = self.src[self.src.index('function alignWorldHeads(){'):self.src.index('function fit(){')]
+        self.assertIn('el.style.minHeight=""', fn)
+        self.assertNotIn('offsetHeight', fn)
+        self.assertNotIn('height+"px"', fn)
+
+    def test_console_reading_sizes_and_control_targets_do_not_shrink_to_fit(self):
+        floors = {'.gauge .gl': 11, '.gw': 11, '.gv': 12, '#reclines': 12}
+        for selector, floor in floors.items():
+            rules = re.findall(re.escape(selector) + r"\s*\{([^}]+)\}", self.src)
+            self.assertTrue(rules, selector)
+            for rule in rules:
+                match = re.search(r"font-size:\s*([\d.]+)px", rule)
+                if match:
+                    self.assertGreaterEqual(float(match.group(1)), floor, selector)
+        controls = re.search(r"button\s*\{([^}]+)\}", self.src).group(1)
+        self.assertIn('min-height:28px', controls)
+        self.assertIn('min-width:28px', controls)
+        self.assertNotIn('min-height:16px', self.src)
+        self.assertIn('line-height:18px; font-size:12px', self.src)
+
+    def test_current_unknown_yearling_ratio_does_not_reuse_historical_value(self):
+        spec = self.src[self.src.index('{ key:"inf"'):self.src.index('{ key:"brd"')].strip().rstrip(',')
+        last_fn = re.search(r'function last\(a\)\{[^\n]*', self.src).group(0)
+        js = (last_fn + "var G=" + spec + ";var out=["
+              "G.now({gauges:{infant_survival:null}},[1]),"
+              "G.now({gauges:{infant_survival:0}},[1]),"
+              "G.now({gauges:{infant_survival:.7}},[1]),"
+              "G.now({gauges:{}},[1]),G.now({},[.7]),G.now({gauges:{}},[]),G.fmt(null)];"
+              "process.stdout.write(JSON.stringify(out));")
+        result = json.loads(subprocess.run(['node', '-e', js], check=True, capture_output=True, text=True).stdout)
+        self.assertEqual(result, [None, 0, .7, 1, .7, None, '–'])
+
+    def test_age_cohort_is_not_claimed_as_clinical_fertility(self):
+        gauge = self.src[self.src.index('{ key:"brd"'):self.src.index('{ key:"clm"')]
+        self.assertIn('16–45 COHORT', gauge)
+        self.assertIn('not clinical fertility', gauge)
+        self.assertIn('not an extinction rule', gauge)
+        self.assertIn('col(rows,"breeders")', gauge)
+        self.assertNotIn('at 0 there is no recovery', self.src)
+        self.assertIn('aria-description', self.src)
+
+    def test_stale_bundle_age_is_not_repeated_in_world_titles(self):
+        block = self.src[self.src.index('var STALE_SEC='):self.src.index('function freshness(){')]
+        js = ("var SNAP=true;Date.now=function(){return 2000000;};" + block +
+              "snapReady=true;snapWall=800;var out=[mirrorNote()];snapWall=1940;out.push(mirrorNote());"
+              "snapBad=true;out.push(mirrorNote());process.stdout.write(JSON.stringify(out));")
+        result = json.loads(subprocess.run(['node', '-e', js], check=True, capture_output=True, text=True).stdout)
+        self.assertEqual(result, ['', '  ·  1 MIN AGO', ''])
+        self.assertIn('white-space:nowrap', re.search(r'(?m)^  \.pageind \{([^}]+)', self.src).group(1))
+        self.assertIn('pagers.rec.label=function(i,n)', self.src)
+
+    def test_parenthood_is_not_presented_as_an_actual_care_action(self):
+        card = self.src[self.src.index('function paintCard('):self.src.index('function alignWorldHeads(){')]
+        self.assertIn('if (w.flags&8)  bits.push("has a child under 3")', card)
+        self.assertNotIn('bits.push("minding an infant")', card)
+        self.assertIn('temper\\u00a0', card)
+        self.assertIn('self\\u2011control\\u00a0', card)
+
+    def test_phone_clock_has_a_compact_label_and_full_accessible_meaning(self):
+        fn = self.src[self.src.index('function updateTimeUI(){'):self.src.index('document.getElementById("timebtn").addEventListener')]
+        setup = ("var window={innerWidth:390},SNAP=false,timeMode='default',timePending=false;"
+                 "var btn={classList:{toggle:function(){}},setAttribute:function(k,v){this[k]=v;}};"
+                 "var document={getElementById:function(){return btn;}};")
+        js = (setup + fn + "var out=[];updateTimeUI();out.push([btn.textContent,btn['aria-label']]);"
+              "SNAP=true;updateTimeUI();out.push([btn.textContent,btn.disabled,btn['aria-label']]);"
+              "process.stdout.write(JSON.stringify(out));")
+        result = json.loads(subprocess.run(['node', '-e', js], check=True, capture_output=True, text=True).stdout)
+        self.assertEqual(result[0][0], '1×')
+        self.assertIn('Slow the world', result[0][1])
+        self.assertEqual(result[1][:2], ['TIME', True])
+        self.assertIn('instrument', result[1][2])
+
+
+@unittest.skipUnless(shutil.which('node'), 'Node is a workbench-only viewer test runner')
+class TestRecordedActorMotion(unittest.TestCase):
+    def probe(self, code):
+        src = read_renderer()
+        block = src[src.index('function syncActors('):src.index('// ---- particles')]
+        setup = ("var actors6={},actors9={},terr9=null,tick=0,timeMode='realtime';"
+                 "var A_WALK=1,A_FORAGE=2,A_HUNT=3,A_SCOUT=19;"
+                 "function actor(act,x,y,tx,ty){return {id:1,x:x,y:y,tx:tx,ty:ty,act:act,"
+                 "ltx:tx,lty:ty,wk_:{pace:.03,stride:.7,ph0:0},vx:0,vy:0,dist:0,wait:0,face:1,eface:1};}")
+        js = setup + block + code
+        return json.loads(subprocess.run(['node', '-e', js], check=True, capture_output=True, text=True).stdout)
+
+    def test_stationary_recorded_actions_cut_to_new_record_instead_of_walking(self):
+        result = self.probe("var out=[8,9,10,11,12,13,17,21,22].map(function(act){var a=actor(act,1,1,4,1);"
+                            "a.vx=.2;actors6={1:a};updateActorsStep(actors6,null,8);return [a.x,a.y,a.act,a.moving,a.vx];});"
+                            "process.stdout.write(JSON.stringify(out));")
+        for act, row in zip([8,9,10,11,12,13,17,21,22], result):
+            self.assertEqual(row, [4,1,act,False,0])
+
+    def test_lagoon_water_and_dry_diagonal_corner_gaps_are_not_walked(self):
+        result = self.probe("var out=[];for(var diagonal of [false,true]){terr9=Array.from({length:6},()=>Array(6).fill(0));"
+                            "terr9[1][2]=2;if(diagonal)terr9[2][1]=2;var a=actor(1,1,1,diagonal?3:4,diagonal?3:1);"
+                            "actors9={1:a};updateActorsStep(actors9,null,6);out.push([a.x,a.y,a.moving,a.act]);}"
+                            "process.stdout.write(JSON.stringify(out));")
+        self.assertEqual(result, [[4,1,False,1],[3,3,False,1]])
+
+    def test_missing_lagoon_terrain_is_not_permission_to_invent_a_route(self):
+        result = self.probe("var a=actor(1,1,1,4,1);actors9={1:a};updateActorsStep(actors9,null,6);"
+                            "process.stdout.write(JSON.stringify([a.x,a.moving,a.act]));")
+        self.assertEqual(result, [4,False,1])
+
+    def test_known_dry_recorded_walk_keeps_easing_and_distance_driven_phase(self):
+        result = self.probe("terr9=Array.from({length:6},()=>Array(6).fill(0));var a=actor(1,1,1,4,1);actors9={1:a};"
+                            "for(var i=0;i<30;i++)updateActorsStep(actors9,null,6);"
+                            "process.stdout.write(JSON.stringify([a.x,a.y,a.moving,a.act,a.walkc]));")
+        self.assertGreater(result[0], 1)
+        self.assertLess(result[0], 4)
+        self.assertEqual(result[1:4], [1,True,1])
+        self.assertGreater(result[4], 0)
 
 
 if __name__ == "__main__":

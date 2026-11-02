@@ -1,0 +1,83 @@
+{
+  "retrievedOn": "2026-11-03",
+  "retainedAtUTC": "2026-11-02T18:56:18.874613+00:00",
+  "retainedAtBangkok": "2026-11-03T01:56:18.874613+07:00",
+  "configuredURL": "https://gist.githubusercontent.com/Nonarkara/4f22e527b4daf39c97d88e1fc1d37b6e/raw/snapshot.json",
+  "retrieval": "Read-only gh api configured gist and its commit history; API content encoded UTF-8 without JSON reserialization",
+  "latestGistCommit": "ccdd9c04750d0e35a6be55684a36d402f31d7318",
+  "latestRawURL": "https://gist.githubusercontent.com/Nonarkara/4f22e527b4daf39c97d88e1fc1d37b6e/raw/4aedd1d9c3cd722d67f914b68b12f075575fc242/snapshot.json",
+  "latestSnapshotWallUTC": "2026-11-02T18:50:52.390748+00:00",
+  "latestSnapshotWallBangkok": "2026-11-03T01:50:52.390748+07:00",
+  "historyIndexCount": 941,
+  "files": [
+    {
+      "file": "snapshot.json.gz",
+      "uncompressedBytes": 115766,
+      "uncompressedSHA256": "c4637d15ec6cc30b7304b24e59c6be9b69d838af74532563f774d2e50e6c2ec5",
+      "gzipBytes": 21161,
+      "gzipSHA256": "fa74a51d754a67728836e2b75a02bc0c06f30958956c69227da5202147748dc7"
+    },
+    {
+      "file": "history-1d66af6fae87e78beb527e3ed206a464c0e80bd9.json.gz",
+      "uncompressedBytes": 109876,
+      "uncompressedSHA256": "a876b504240430fdd59b81b2911432d02e722fc079a223d1d4dcf514963f312c",
+      "gzipBytes": 19612,
+      "gzipSHA256": "6446f3369ecc6b93e760e2de000975648fce02856f035762f69b09f3aa71b209"
+    },
+    {
+      "file": "history-259035a00683ed74efe310477a6d8418da8edcb3.json.gz",
+      "uncompressedBytes": 161196,
+      "uncompressedSHA256": "2782c67255c0c33abc67b765025b46fa864d6b2dcb1b5854a215358fec0106d9",
+      "gzipBytes": 26692,
+      "gzipSHA256": "3011b932244d79d798dc3fe97e0aa8064a8b4b5922980ea6c732ea9055c70f4c"
+    },
+    {
+      "file": "history-276305697d59d7f5d54d61ef44021713f67a2287.json.gz",
+      "uncompressedBytes": 142025,
+      "uncompressedSHA256": "88ccabbfc5d54b75d87f4c6502614d6a1ff2aaab26571d9e0f5b1107a33cd67a",
+      "gzipBytes": 25524,
+      "gzipSHA256": "f4ed9408c01e07c3dc80de529db45154d706a81a1e4b369fb80172ebaba38253"
+    },
+    {
+      "file": "history-3243645c7d73800d6e54c6d48197781db807d85b.json.gz",
+      "uncompressedBytes": 191316,
+      "uncompressedSHA256": "2f6d6ec52c660c156554905ea08bdd5a2b51a942e596f598990eefc1e5601f97",
+      "gzipBytes": 28977,
+      "gzipSHA256": "08b75d453838ebe0d4de8252d9992c3c1a424c3e1b52f1f093aa4579ce10b009"
+    },
+    {
+      "file": "history-3358f6eb8ff8f4ea9532545285ac6e3f06df78eb.json.gz",
+      "uncompressedBytes": 188965,
+      "uncompressedSHA256": "2529bf525276f72eaf9a9f14c8846c4ce21617c8b69375d6fcabe77942a72e0f",
+      "gzipBytes": 27054,
+      "gzipSHA256": "c684590c77d218e1c6586ad3769698518305a04d60d47b26c90135c4ba06e06e"
+    },
+    {
+      "file": "history-b45d07152204b8b07b2c201846a8b678f5ea1043.json.gz",
+      "uncompressedBytes": 153592,
+      "uncompressedSHA256": "ec3667fa491cd52b9c0a54662ba92e8f16ad289a483031b8cd9635ed9e45171f",
+      "gzipBytes": 26391,
+      "gzipSHA256": "b7c06bcade16b8f5cc1caef7f20f24dd296197507170d5b90eff74f78cce2c95"
+    },
+    {
+      "file": "history-fd45231b39c1c97dfaece865a3a67a7480f5c2fa.json.gz",
+      "uncompressedBytes": 58013,
+      "uncompressedSHA256": "3f895913e66fa30bccb191c40e9dde62304a84b8c9a483bcd0e8ee2f30ba5fb0",
+      "gzipBytes": 3668,
+      "gzipSHA256": "7b6cfc3792c18529b5d4beaa7cb6c65085292c94e0b4e6ef9140728773e55d7b"
+    },
+    {
+      "file": "commits.json.gz",
+      "uncompressedBytes": 1101341,
+      "uncompressedSHA256": "4fc3be43856c8deadafff54279799a4a7f1cfeda3753442a81910a599e8f2fd0",
+      "gzipBytes": 39244,
+      "gzipSHA256": "fa6289be4a75f7b8e4df99e8a3872cd0a12227821e50175c3ad8405d3d12bdd4"
+    }
+  ],
+  "limits": [
+    "Public versioned gist projections only; no live database, service or local postmortem-file access",
+    "Fetched on Nov3; packet clock is Nov2UTC, not live/current proof",
+    "Seven historical snapshots sampled; not an exhaustive reconstruction of941revisions",
+    "No duplicate world file: terrain stays inside original packets"
+  ]
+}

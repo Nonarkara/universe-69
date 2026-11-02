@@ -1,0 +1,277 @@
+[lab] genesis, seed 25
+
+=== UNIVERSE 6 · EDEN ===
+   yr   pop  peak  gen phase      extra                       
+    1    16    16    1 strive     withdrawn   0 fertF   8 compM   8
+    2    16    16    1 strive     withdrawn   0 fertF   8 compM   8
+    3    16    16    1 strive     withdrawn   0 fertF   8 compM   8
+    4    19    19    2 exploit    withdrawn   0 fertF   7 compM   8
+    5    21    21    2 exploit    withdrawn   0 fertF   6 compM   8
+    6    23    23    2 exploit    withdrawn   0 fertF   6 compM   8
+    7    23    23    2 exploit    withdrawn   0 fertF   6 compM   8
+    8    24    24    2 exploit    withdrawn   0 fertF   6 compM   8
+    9    26    26    2 exploit    withdrawn   0 fertF   6 compM   8
+   10    29    29    2 exploit    withdrawn   0 fertF   6 compM   8
+   11    30    30    2 exploit    withdrawn   0 fertF   6 compM   8
+   12    30    30    2 exploit    withdrawn   0 fertF   6 compM   8
+   13    30    30    2 exploit    withdrawn   0 fertF   5 compM   8
+   14    32    32    2 exploit    withdrawn   0 fertF   4 compM   8
+   15    34    34    2 exploit    withdrawn   0 fertF   4 compM   8
+   16    34    34    2 exploit    withdrawn   0 fertF   4 compM   8
+   17    34    34    2 exploit    withdrawn   0 fertF   4 compM   8
+   18    35    35    2 exploit    withdrawn   0 fertF   4 compM   8
+   19    35    36    2 exploit    withdrawn   0 fertF   4 compM   8
+   20    35    36    2 exploit    withdrawn   0 fertF   5 compM  10
+   21    35    36    2 exploit    withdrawn   0 fertF   5 compM  11
+   22    37    37    3 exploit    withdrawn   0 fertF   7 compM  11
+   23    38    38    3 exploit    withdrawn   0 fertF   7 compM  11
+   24    39    39    3 exploit    withdrawn   0 fertF   8 compM  11
+   25    39    39    3 exploit    withdrawn   0 fertF   8 compM  12
+   26    40    40    3 exploit    withdrawn   0 fertF   8 compM  14
+   27    42    42    3 exploit    withdrawn   0 fertF   9 compM  14
+   28    44    44    3 exploit    withdrawn   0 fertF   8 compM  14
+   29    46    46    3 exploit    withdrawn   0 fertF   8 compM  14
+   30    48    48    3 exploit    withdrawn   0 fertF   9 compM  15
+   31    52    52    3 exploit    withdrawn   0 fertF  10 compM  16
+   32    54    54    3 exploit    withdrawn   0 fertF  10 compM  16
+   33    55    55    3 exploit    withdrawn   0 fertF  10 compM  16
+   34    59    59    3 exploit    withdrawn   0 fertF  10 compM  17
+   35    60    61    3 exploit    withdrawn   0 fertF  11 compM  16
+   36    63    63    3 exploit    withdrawn   0 fertF  11 compM  16
+   37    64    64    3 exploit    withdrawn   0 fertF  11 compM  16
+   38    68    68    3 exploit    withdrawn   0 fertF  11 compM  17
+   39    70    70    3 exploit    withdrawn   0 fertF  12 compM  17
+   40    76    76    3 exploit    withdrawn   0 fertF  12 compM  18
+   41    75    76    3 exploit    withdrawn   0 fertF  12 compM  18
+   42    75    76    3 exploit    withdrawn   0 fertF  13 compM  16
+   43    75    76    3 exploit    withdrawn   0 fertF  14 compM  17
+   44    78    78    4 exploit    withdrawn   0 fertF  16 compM  16
+   45    83    83    4 exploit    withdrawn   0 fertF  18 compM  15
+   46    85    85    4 exploit    withdrawn   0 fertF  18 compM  17
+   47    86    86    4 exploit    withdrawn   0 fertF  20 compM  19
+   48    92    92    4 exploit    withdrawn   1 fertF  19 compM  20
+   49    94    94    4 exploit    withdrawn   1 fertF  19 compM  20
+   50    97    97    4 exploit    withdrawn   1 fertF  21 compM  22
+   51   102   102    4 exploit    withdrawn   1 fertF  20 compM  23
+   52   107   107    4 exploit    withdrawn   1 fertF  21 compM  25
+   53   109   109    4 exploit    withdrawn   1 fertF  21 compM  25
+   54   113   113    4 exploit    withdrawn   1 fertF  23 compM  26
+   55   120   120    4 exploit    withdrawn   1 fertF  24 compM  26
+   56   125   125    4 exploit    withdrawn   1 fertF  27 compM  28
+   57   127   128    4 exploit    withdrawn   1 fertF  27 compM  24
+   58   127   128    4 exploit    withdrawn   1 fertF  28 compM  23
+   59   130   130    4 exploit    withdrawn   1 fertF  28 compM  23
+   60   136   137    4 exploit    withdrawn   3 fertF  28 compM  24
+   61   142   142    4 exploit    withdrawn   3 fertF  31 compM  26
+   62   147   147    5 exploit    withdrawn   3 fertF  33 compM  27
+   63   153   153    5 exploit    withdrawn   3 fertF  33 compM  28
+   64   156   156    5 exploit    withdrawn   5 fertF  36 compM  29
+   65   165   165    5 exploit    withdrawn   5 fertF  37 compM  28
+   66   172   172    5 exploit    withdrawn   5 fertF  39 compM  29
+   67   177   177    5 exploit    withdrawn   5 fertF  41 compM  30
+   68   182   182    5 exploit    withdrawn   6 fertF  40 compM  30
+   69   183   183    5 exploit    withdrawn   6 fertF  41 compM  27
+   70   184   185    5 exploit    withdrawn   6 fertF  43 compM  26
+   71   185   186    5 exploit    withdrawn   7 fertF  44 compM  26
+   72   189   190    5 exploit    withdrawn   7 fertF  45 compM  26
+   73   193   193    5 exploit    withdrawn   7 fertF  44 compM  28
+   74   195   196    5 exploit    withdrawn   8 fertF  43 compM  26
+   75   199   199    5 exploit    withdrawn   8 fertF  44 compM  26
+   76   203   203    5 exploit    withdrawn  12 fertF  44 compM  27
+   77   199   203    5 exploit    withdrawn  14 fertF  46 compM  24
+   78   206   207    5 exploit    withdrawn  15 fertF  49 compM  23
+   79   211   212    5 exploit    withdrawn  19 fertF  47 compM  22
+   80   212   213    5 exploit    withdrawn  19 fertF  48 compM  21
+   81   220   220    5 exploit    withdrawn  22 fertF  50 compM  25
+   82   227   227    5 exploit    withdrawn  25 fertF  50 compM  28
+   83   227   229    6 exploit    withdrawn  28 fertF  49 compM  24
+   84   223   229    6 exploit    withdrawn  30 fertF  50 compM  24
+   85   219   229    6 exploit    withdrawn  32 fertF  45 compM  22
+   86   211   229    6 exploit    withdrawn  33 fertF  48 compM  15
+   87   208   229    6 exploit    withdrawn  35 fertF  47 compM  14
+   88   210   229    6 exploit    withdrawn  37 fertF  49 compM  16
+   89   205   229    6 exploit    withdrawn  40 fertF  51 compM  13
+   90   201   229    6 exploit    withdrawn  41 fertF  49 compM  10
+   91   204   229    6 exploit    withdrawn  43 fertF  47 compM  12
+   92   199   229    6 exploit    withdrawn  44 fertF  48 compM  11
+   93   202   229    6 exploit    withdrawn  44 fertF  47 compM  12
+   94   202   229    6 exploit    withdrawn  49 fertF  48 compM  11
+   95   202   229    6 exploit    withdrawn  51 fertF  48 compM  13
+   96   198   229    6 exploit    withdrawn  52 fertF  46 compM  11
+   97   199   229    6 exploit    withdrawn  57 fertF  50 compM  11
+   98   199   229    6 exploit    withdrawn  61 fertF  52 compM  11
+   99   196   229    6 exploit    withdrawn  65 fertF  51 compM  11
+  100   198   229    6 exploit    withdrawn  67 fertF  49 compM  11
+  100   198   229    6 exploit    withdrawn  67 fertF  49 compM  11
+
+=== UNIVERSE 9 · LAGOON ===
+   yr   pop  peak  gen phase      extra                       
+    1    15    16    1 strive     discoveries 0 tribes 1      
+    2    15    16    1 strive     discoveries 1 tribes 1      
+    3    20    20    2 strive     discoveries 2 tribes 1      
+    4    21    21    2 strive     discoveries 3 tribes 1      
+    5    22    22    2 strive     discoveries 3 tribes 1      
+    6    22    22    2 strive     discoveries 4 tribes 1      
+    7    24    24    2 strive     discoveries 4 tribes 1      
+    8    26    26    2 strive     discoveries 4 tribes 1      
+    9    27    27    2 strive     discoveries 5 tribes 1      
+   10    27    27    2 strive     discoveries 5 tribes 1      
+   11    28    28    2 strive     discoveries 5 tribes 1      
+   12    29    29    2 strive     discoveries 6 tribes 1      
+   13    30    30    2 strive     discoveries 6 tribes 1      
+   14    32    33    2 strive     discoveries 6 tribes 1      
+   15    32    33    2 strive     discoveries 6 tribes 1      
+   16    32    33    2 strive     discoveries 6 tribes 1      
+   17    34    34    2 strive     discoveries 6 tribes 1      
+   18    35    35    2 strive     discoveries 6 tribes 1      
+   19    35    35    2 strive     discoveries 6 tribes 1      
+   20    38    38    3 strive     discoveries 6 tribes 1      
+   21    41    41    3 strive     discoveries 6 tribes 1      
+   22    41    41    3 strive     discoveries 6 tribes 1      
+   23    39    41    3 strive     discoveries 7 tribes 1      
+   24    42    42    3 strive     discoveries 7 tribes 1      
+   25    44    44    3 strive     discoveries 7 tribes 1      
+   26    29    44    3 strive     discoveries 7 tribes 1      
+   27    29    44    3 strive     discoveries 7 tribes 1      
+   28    30    44    3 strive     discoveries 7 tribes 1      
+   29    32    44    3 strive     discoveries 7 tribes 1      
+   30    34    44    3 strive     discoveries 7 tribes 1      
+   31    36    44    3 strive     discoveries 7 tribes 1      
+   32    38    44    3 strive     discoveries 7 tribes 1      
+   33    39    44    3 strive     discoveries 7 tribes 1      
+   34    40    44    3 strive     discoveries 7 tribes 1      
+   35    40    44    3 strive     discoveries 7 tribes 1      
+   36    41    44    3 strive     discoveries 7 tribes 1      
+   37    44    44    3 strive     discoveries 7 tribes 1      
+   38    43    44    3 strive     discoveries 7 tribes 1      
+   39    43    44    3 strive     discoveries 7 tribes 1      
+   40    46    46    3 strive     discoveries 7 tribes 1      
+   41    46    46    3 strive     discoveries 7 tribes 1      
+   42    28    46    3 strive     discoveries 7 tribes 1      
+   43    28    46    3 strive     discoveries 7 tribes 1      
+   44    28    46    4 strive     discoveries 7 tribes 1      
+   45    28    46    4 strive     discoveries 7 tribes 1      
+   46    28    46    4 strive     discoveries 7 tribes 1      
+   47    31    46    4 strive     discoveries 7 tribes 1      
+   48    28    46    4 strive     discoveries 7 tribes 1      
+   49    26    46    4 strive     discoveries 7 tribes 1      
+   50    28    46    4 strive     discoveries 7 tribes 1      
+   51    29    46    4 strive     discoveries 7 tribes 1      
+   52    27    46    4 strive     discoveries 7 tribes 1      
+   53    24    46    4 strive     discoveries 7 tribes 1      
+   54    24    46    4 strive     discoveries 7 tribes 1      
+   55    26    46    4 strive     discoveries 7 tribes 1      
+   56    26    46    4 strive     discoveries 7 tribes 1      
+   57    26    46    4 strive     discoveries 7 tribes 1      
+   58    26    46    4 strive     discoveries 7 tribes 1      
+   59    26    46    4 strive     discoveries 7 tribes 1      
+   60    28    46    4 strive     discoveries 7 tribes 1      
+   61    28    46    4 strive     discoveries 7 tribes 1      
+   62    28    46    4 strive     discoveries 7 tribes 1      
+   63    28    46    4 strive     discoveries 7 tribes 1      
+   64    25    46    4 strive     discoveries 7 tribes 1      
+   65    25    46    4 strive     discoveries 7 tribes 1      
+   66    28    46    4 strive     discoveries 7 tribes 1      
+   67    27    46    4 strive     discoveries 7 tribes 1      
+   68    28    46    5 strive     discoveries 7 tribes 1      
+   69    28    46    5 strive     discoveries 7 tribes 1      
+   70    29    46    5 strive     discoveries 7 tribes 1      
+   71    28    46    5 strive     discoveries 7 tribes 1      
+   72    30    46    5 strive     discoveries 7 tribes 1      
+   73    30    46    5 strive     discoveries 7 tribes 1      
+   74    30    46    5 strive     discoveries 7 tribes 1      
+   75    30    46    5 strive     discoveries 7 tribes 1      
+   76    31    46    5 strive     discoveries 7 tribes 1      
+   77    31    46    5 strive     discoveries 7 tribes 1      
+   78    33    46    5 strive     discoveries 7 tribes 1      
+   79    35    46    5 strive     discoveries 7 tribes 1      
+   80    35    46    5 strive     discoveries 7 tribes 1      
+   81    37    46    5 strive     discoveries 7 tribes 1      
+   82    38    46    5 strive     discoveries 7 tribes 1      
+   83    38    46    5 strive     discoveries 7 tribes 1      
+   84    37    46    5 strive     discoveries 7 tribes 1      
+   85    41    46    5 strive     discoveries 7 tribes 1      
+   86    42    46    5 strive     discoveries 7 tribes 1      
+   87    43    46    6 strive     discoveries 7 tribes 1      
+   88    43    46    6 strive     discoveries 7 tribes 1      
+   89    44    46    6 strive     discoveries 7 tribes 1      
+   90    45    46    6 strive     discoveries 7 tribes 1      
+   91    46    46    6 strive     discoveries 7 tribes 1      
+   92    47    47    6 strive     discoveries 7 tribes 1      
+   93    47    47    6 strive     discoveries 7 tribes 1      
+   94    47    47    6 strive     discoveries 7 tribes 1      
+   95    51    51    6 strive     discoveries 7 tribes 1      
+   96    53    54    6 strive     discoveries 7 tribes 1      
+   97    55    55    6 strive     discoveries 7 tribes 1      
+   98    58    58    6 strive     discoveries 7 tribes 1      
+   99    62    62    6 strive     discoveries 7 tribes 1      
+  100    64    64    6 strive     discoveries 7 tribes 1      
+  100    64    64    6 strive     discoveries 7 tribes 1      
+
+================================================================
+[lab] 36000 sim-days in 5332.9s (7 days/s)
+================================================================
+
+EDEN: NEVER EMPTIED — still in phase 'exploit' with 198 people after 100 years. No postmortem, no reseed, no Ice-Age cycle.
+
+LAGOON: Current iteration alive. 7 historical discoveries, 0 lesson(s) carried, 1 tribe(s).
+  never discovered: agriculture, domestication, granary, seacraft, healing, metallurgy, writing
+
+--- milestones ---
+  Y1    LAGOON  [discovery] Year 1: Parvati discovers fire is tamed.
+  Y1    LAGOON  [discovery] The pairs discover, as all life does, how new life begins.
+  Y2    LAGOON  [discovery] Year 2: Parvati discovers stone tools are knapped.
+  Y2    EDEN    [discovery] With every hour free, the pairs discover how new life begins.
+  Y2    LAGOON  [discovery] The first child is named Brahma. After this, everyone has a name.
+  Y3    LAGOON  [discovery] Year 3: Parvati discovers fishing is learned.
+  Y3    LAGOON  [culture] Parvati explains stone tools to Siddhartha, as a first step toward fishing.
+  Y3    LAGOON  [culture] Parvati explains stone tools to Lakshmi, as a first step toward fishing.
+  Y3    EDEN    [discovery] The first child is named Jacob. After this, everyone has a name.
+  Y3    EDEN    [phase] First child born in the pen. The exploit phase begins.
+  Y3    LAGOON  [culture] Lakshmi explains fishing to Tara.
+  Y5    LAGOON  [discovery] Year 5: Ganesh discovers shelters are raised.
+  Y8    LAGOON  [discovery] Year 8: Parvati discovers food can be kept.
+  Y11   LAGOON  [discovery] Year 11: Siddhartha discovers the hunters learn to kill the big cat.
+  Y14   LAGOON  [culture] Tara explains stone tools to Kaikeyi, as a first step toward fishing.
+  Y18   LAGOON  [discovery] Year 18: Ganga rediscovers the hunters learn to kill the big cat.
+  Y22   LAGOON  [discovery] Year 22: Ganesh discovers shared stories bind the bands.
+  Y22   LAGOON  [culture] Drona gathers at midsummer and dances for the fig — the first rite. They go home closer than the
+  Y25   LAGOON  [famine] Kambala starves in the lean season.
+  Y33   LAGOON  [discovery] Year 33: Brahma rediscovers the hunters learn to kill the big cat.
+  Y36   LAGOON  [culture] Krishna explains stone tools to Chandraprabha, as a first step toward fishing.
+  Y41   LAGOON  [famine] Sita starves in the lean season.
+  Y41   LAGOON  [famine] Nakula starves in the lean season.
+  Y41   LAGOON  [famine] Devadatta starves in the lean season.
+  Y46   LAGOON  [culture] Ganesh explains stone tools to Ganga, as a first step toward fishing.
+  Y59   LAGOON  [culture] Year 59: with food enough and nothing to fear, cave paintings appear — first made by Ananda.
+  Y69   LAGOON  [discovery] Year 69: Ganesh rediscovers the hunters learn to kill the big cat.
+  Y69   LAGOON  [culture] Hanuman explains stone tools to Chandraprabha, as a first step toward fishing.
+  Y74   LAGOON  [culture] Chandraprabha explains stone tools to Kishnadevi, as a first step toward fishing.
+  Y77   LAGOON  [culture] Sati explains stone tools to Drona, as a first step toward fishing.
+  Y82   LAGOON  [culture] Sahadeva explains stone tools to Amrapali, as a first step toward fishing.
+  Y83   LAGOON  [famine] Upananda starves in the lean season.
+  Y84   LAGOON  [culture] Hanuman explains stone tools to Ananda, as a first step toward fishing.
+  Y95   LAGOON  [phase] Drona is a tribe now, 51 strong; Kishnadevi speaks for it.
+  Y98   LAGOON  [culture] Kausalya explains stone tools to Krishna, as a first step toward fishing.
+
+--- hypotheses ---
+  yes H-EDEN-BMI                     31.183  EDEN's adults fatten: their BMI reaches 30 or more.
+  yes H-EDEN-PURPOSE                  0.263  EDEN's adults have almost nothing to live for: purpose fal
+  yes H-EDEN-WITHDRAWN                0.411  In EDEN some adults withdraw for good and never come back.
+   .. H-EDEN-SINK-YEAR                 None  EDEN's behavioural sink appears between 40 and 140 years a
+   .. H-EDEN-SINK-GAP                  None  Once the sink appears, the death phase follows within 30 y
+  yes H-EDEN-COLLAPSE-BELOW-CAP       0.254  EDEN's peak population stays below the pen's nominal capac
+  yes H-EDEN-POSTS                    1.000  EDEN's fixed posts fill up, and stay filled.
+   .. H-LAGOON-VIOLENCE               0.097  Violence accounts for at most 30% of LAGOON's deaths.
+   .. H-LAGOON-FAMINE            dehydration  In LAGOON, hunger is what kills: starvation is the dominan
+  yes H-LAGOON-BMI                   21.999  LAGOON's adults stay lean: their BMI sits between 18 and 2
+  yes H-LAGOON-PURPOSE                0.866  LAGOON's adults are asked for something: purpose stays at 
+  yes H-LAGOON-TECH                   7.000  LAGOON climbs the ladder: it reaches five technologies, pa
+   .. H-LAGOON-DUNBAR                  None  A settlement without shared lore never grows past 150.
+  yes H-LAGOON-HUNGER                 3.426  LAGOON's adults are hungry most of the time, but not starv
+  yes H-LAGOON-EF                     0.567  LAGOON's mean self-control stays in a narrow band, 0.3 to 
+  yes H-LAGOON-CHILDREN              12.903  LAGOON's last yearly births exceed five per hundred adults
+  yes H-LAGOON-PAIRED                 0.968  Most of LAGOON's adults are paired: at least half.
+  12 supported, 0 contradicted, 5 undecided
+
+[lab] arc written to /Volumes/Data/agent-scratch/u69-nov3-integration/seed-25/arc.json

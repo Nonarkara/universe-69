@@ -18,6 +18,30 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
   (now − clock.epoch) / clock.seconds` and catches up. Pace changes preserve
   ticks already due. The universes age while the process is dead.
 
+## Engine 2026.11.03.1: shared instincts, personal fuzzy sensitivity
+
+This changes both worlds' future trajectories, including existing saves. No
+clinical probability, clock or resource coefficient changes; no new saved fields.
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| Shared bodily needs with slight individual variation (owner's fuzzy-logic brief) | `sim/drives.py` uses three overlapping memberships at 0, personal midpoint m, and 1 with outputs 0, .5, 1. The same normalized Sugeno rule scores food, rest, company and intimacy. m is in [.44,.56], fixed by shared founding seed, iteration, person ID and need. | Illustrative nonheritable sensitivity, not a personality test, neural model, gene association or fitted human parameter. Membership is urgency, not probability. |
+| A personal threshold must not become changing random motivation | Stable SHA-256 identity mapping adds no RNG draws, hidden learning, survival feedback or persistent fields. Matched founder IDs receive the same sensitivity in both worlds. | Descendants remain distinct people by iteration/ID; no claim this preference is genetically inherited. Existing inherited traits keep their separate meanings. |
+| Belly hunger differs from perceived camp scarcity | Transform own normalized hunger first; eating uses that same personal response. Gathering then competes against the existing max of own hunger and perceived larder demand. | Camp shortfall cannot make a fed belly hungry. Absolute urgency/body guards remain outside voluntary fuzzy scoring. |
+| A finished activity must allow a fresh own decision | Normalize only an arrived actor's completed stint before scoring; ongoing birth/withdrawal and peers' activity remain protected. | Removes stale SLEEP/care/groom labels; does not wake continuing sleepers or manufacture contact. |
+| Biography partner pointers are not bodily desire | One mating utility core; free-world ennui applies regardless of stored partner. Existing local compatibility and independent acceptance remain. | No pregnancy-rate increase; hard minor/availability/clinical guards remain. |
+| Intimacy is distinct from clinical reproductive eligibility | Adult behavioral choice no longer universally stops at 45; existing female 16–45 clinical cycle gate stays unchanged. | Older-adult frequency, male reproductive aging and menopause remain uncalibrated. |
+| Care and explicit instruction should retain their destinations | Watch excludes caregivers and active learning/teaching; night gathering retargets only uncommitted idle/walk/talk. | Existing selection among eligible guards remains a background policy, not a complete voluntary institution. |
+
+For x clamped to [0,1], response is x/(2m) when x≤m, otherwise
+.5+(x−m)/(2(1−m)). Memberships sum to one. Response is continuous, monotone,
+exactly 0/1 at endpoints and differs from x by at most .06. At m=.5 it is
+exactly identity. Final activity selection remains discrete, with the existing
+85% near-tie band; smooth urgency does not imply continuously changing actions.
+Sources, controlled cases, public death records and bounded runs are in
+`docs/audits/2026-11-03/`. Movement is grid steps per active part; metres and
+human time-use calibration remain unverified.
+
 ## Engine 2026.10.31.1: human founding cohorts and the real island (v3)
 
 A repair plus two founder-visible changes. Trajectory determinism now holds

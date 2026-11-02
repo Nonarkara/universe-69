@@ -1,0 +1,1163 @@
+{
+  "snapshotSHA256": "c4637d15ec6cc30b7304b24e59c6be9b69d838af74532563f774d2e50e6c2ec5",
+  "beforeSHA256": "6671ffd78bfd2d8d9f1d4d4ba53f5cb9c7922587619d39a1d3ee9d434b1c2400",
+  "afterSHA256": "9ec50254fa0f3e165d77ef7a48b24c01566ccee103c81e88bbab10de2d0f7684",
+  "afterServedSHA256": "f84e937730755bd03f3f32be1232b41a8a4a228199d6a9f948ef6b4861e2c74b",
+  "finalCaptureCommandExitCode": 0,
+  "mode": "static geometry / native interaction probe; harness cadence 1fps; production animation performance unverified",
+  "results": {
+    "before": [
+      {
+        "width": 390,
+        "height": 844,
+        "states": {
+          "table": {
+            "topChrome": 64,
+            "bottomChrome": 217.53125,
+            "chromePercent": 33.35678317535545,
+            "readoutHeight": 207.53125,
+            "drawCalls": 124,
+            "triangles": 920639,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "eden": {
+            "topChrome": 64,
+            "bottomChrome": 217.53125,
+            "chromePercent": 33.35678317535545,
+            "readoutHeight": 207.53125,
+            "drawCalls": 21,
+            "triangles": 26724,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "lagoon": {
+            "topChrome": 64,
+            "bottomChrome": 217.53125,
+            "chromePercent": 33.35678317535545,
+            "readoutHeight": 207.53125,
+            "drawCalls": 29,
+            "triangles": 892287,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "held": {
+            "topChrome": 64,
+            "bottomChrome": 217.53125,
+            "chromePercent": 33.35678317535545,
+            "readoutHeight": 207.53125,
+            "drawCalls": 29,
+            "triangles": 892287,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          }
+        },
+        "peopleCompared": 20,
+        "heldMismatches": [
+          {
+            "world": "eden",
+            "id": 1,
+            "record": [
+              6,
+              37,
+              17
+            ],
+            "actor": [
+              6.570936855271483,
+              37.04774821647989,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 3,
+            "record": [
+              19,
+              8,
+              17
+            ],
+            "actor": [
+              18.083063282286183,
+              8.385687202546505,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 4,
+            "record": [
+              5,
+              4,
+              17
+            ],
+            "actor": [
+              4.667689647660037,
+              5.058706599059366,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 5,
+            "record": [
+              13,
+              8,
+              17
+            ],
+            "actor": [
+              12.644063893510378,
+              9.133975821489162,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 6,
+            "record": [
+              37,
+              7,
+              17
+            ],
+            "actor": [
+              37.20700670761811,
+              7.597422443433831,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 7,
+            "record": [
+              37,
+              38,
+              17
+            ],
+            "actor": [
+              36.66178225880408,
+              38.64486810428208,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 8,
+            "record": [
+              11,
+              37,
+              17
+            ],
+            "actor": [
+              10.52302946459108,
+              37.7390919033033,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 9,
+            "record": [
+              6,
+              8,
+              17
+            ],
+            "actor": [
+              5.376302876813711,
+              8.966452767287484,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 10,
+            "record": [
+              6,
+              8,
+              17
+            ],
+            "actor": [
+              6.63978556595815,
+              9.021769629931153,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 13,
+            "record": [
+              37,
+              37,
+              17
+            ],
+            "actor": [
+              36.27192955879979,
+              37.343691134479364,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 14,
+            "record": [
+              6,
+              10,
+              17
+            ],
+            "actor": [
+              4.944552648576556,
+              10.498231870251448,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 15,
+            "record": [
+              10,
+              37,
+              17
+            ],
+            "actor": [
+              9.952283116131444,
+              37.64776487201119,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 16,
+            "record": [
+              36,
+              7,
+              17
+            ],
+            "actor": [
+              35.27825066425294,
+              7.791736883066191,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 17,
+            "record": [
+              42,
+              38,
+              17
+            ],
+            "actor": [
+              42.128779336136795,
+              38.92824452099525,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 18,
+            "record": [
+              42,
+              25,
+              17
+            ],
+            "actor": [
+              41.567055081354304,
+              25.831132182984458,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 68,
+            "record": [
+              136,
+              110,
+              20
+            ],
+            "actor": [
+              136.95396943583387,
+              110.06729421332822,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 73,
+            "record": [
+              138,
+              109,
+              22
+            ],
+            "actor": [
+              137.44159051204375,
+              109.73057008932109,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 75,
+            "record": [
+              136,
+              110,
+              17
+            ],
+            "actor": [
+              136.9046760755606,
+              110.24450604589991,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 76,
+            "record": [
+              136,
+              110,
+              17
+            ],
+            "actor": [
+              136.58235127365307,
+              110.10719539293834,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 78,
+            "record": [
+              143,
+              119,
+              17
+            ],
+            "actor": [
+              142.27080731294194,
+              118.01626870763674,
+              1
+            ]
+          }
+        ],
+        "badMatrices": 0,
+        "pageErrors": []
+      },
+      {
+        "width": 1024,
+        "height": 768,
+        "states": {
+          "table": {
+            "topChrome": 120.1875,
+            "bottomChrome": 145.171875,
+            "chromePercent": 34.552001953125,
+            "readoutHeight": 129.171875,
+            "drawCalls": 126,
+            "triangles": 920643,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "eden": {
+            "topChrome": 120.1875,
+            "bottomChrome": 145.171875,
+            "chromePercent": 34.552001953125,
+            "readoutHeight": 129.171875,
+            "drawCalls": 47,
+            "triangles": 27300,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "lagoon": {
+            "topChrome": 120.1875,
+            "bottomChrome": 145.171875,
+            "chromePercent": 34.552001953125,
+            "readoutHeight": 129.171875,
+            "drawCalls": 30,
+            "triangles": 893007,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "held": {
+            "topChrome": 120.1875,
+            "bottomChrome": 145.171875,
+            "chromePercent": 34.552001953125,
+            "readoutHeight": 129.171875,
+            "drawCalls": 30,
+            "triangles": 893007,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          }
+        },
+        "peopleCompared": 20,
+        "heldMismatches": [
+          {
+            "world": "eden",
+            "id": 1,
+            "record": [
+              6,
+              37,
+              17
+            ],
+            "actor": [
+              5.305835276202205,
+              37.40306652829869,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 3,
+            "record": [
+              19,
+              8,
+              17
+            ],
+            "actor": [
+              18.268056715157094,
+              8.981542985184477,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 4,
+            "record": [
+              5,
+              4,
+              17
+            ],
+            "actor": [
+              3.9835141984352997,
+              4.87556858281177,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 5,
+            "record": [
+              13,
+              8,
+              17
+            ],
+            "actor": [
+              14.413246346709807,
+              8.118191691215868,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 6,
+            "record": [
+              37,
+              7,
+              17
+            ],
+            "actor": [
+              37.57309961497533,
+              7.615648327674995,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 7,
+            "record": [
+              37,
+              38,
+              17
+            ],
+            "actor": [
+              36.11878671277871,
+              38.37066100749308,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 8,
+            "record": [
+              11,
+              37,
+              17
+            ],
+            "actor": [
+              10.673509986500088,
+              38.04016359823099,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 9,
+            "record": [
+              6,
+              8,
+              17
+            ],
+            "actor": [
+              4.8444308821462165,
+              8.749511047183335,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 10,
+            "record": [
+              6,
+              8,
+              17
+            ],
+            "actor": [
+              6.470565629643436,
+              9.358054874126106,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 13,
+            "record": [
+              37,
+              37,
+              17
+            ],
+            "actor": [
+              37.53908479482213,
+              37.86094544893648,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 14,
+            "record": [
+              6,
+              10,
+              17
+            ],
+            "actor": [
+              4.886911245102594,
+              10.846116287905678,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 15,
+            "record": [
+              10,
+              37,
+              17
+            ],
+            "actor": [
+              9.175724983516625,
+              37.245997433322664,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 16,
+            "record": [
+              36,
+              7,
+              17
+            ],
+            "actor": [
+              34.77978588598236,
+              7.3999558024912755,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 17,
+            "record": [
+              42,
+              38,
+              17
+            ],
+            "actor": [
+              40.94476063897728,
+              38.4981336868165,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 18,
+            "record": [
+              42,
+              25,
+              17
+            ],
+            "actor": [
+              43.114705879630534,
+              25.345105898109654,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 68,
+            "record": [
+              136,
+              110,
+              20
+            ],
+            "actor": [
+              137.16379987299644,
+              110.08507135009233,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 73,
+            "record": [
+              138,
+              109,
+              22
+            ],
+            "actor": [
+              137.92779558011526,
+              109.61512171448952,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 75,
+            "record": [
+              136,
+              110,
+              17
+            ],
+            "actor": [
+              137.15184541022236,
+              110.18686741273604,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 76,
+            "record": [
+              136,
+              110,
+              17
+            ],
+            "actor": [
+              136.6974672186797,
+              110.39732451329775,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 78,
+            "record": [
+              143,
+              119,
+              17
+            ],
+            "actor": [
+              142.45571442137387,
+              117.66977510854794,
+              1
+            ]
+          }
+        ],
+        "badMatrices": 0,
+        "pageErrors": []
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "states": {
+          "table": {
+            "topChrome": 120.1875,
+            "bottomChrome": 145.171875,
+            "chromePercent": 29.484375,
+            "readoutHeight": 129.171875,
+            "drawCalls": 126,
+            "triangles": 920643,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "eden": {
+            "topChrome": 120.1875,
+            "bottomChrome": 145.171875,
+            "chromePercent": 29.484375,
+            "readoutHeight": 129.171875,
+            "drawCalls": 49,
+            "triangles": 27356,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "lagoon": {
+            "topChrome": 120.1875,
+            "bottomChrome": 145.171875,
+            "chromePercent": 29.484375,
+            "readoutHeight": 129.171875,
+            "drawCalls": 30,
+            "triangles": 893007,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "held": {
+            "topChrome": 120.1875,
+            "bottomChrome": 145.171875,
+            "chromePercent": 29.484375,
+            "readoutHeight": 129.171875,
+            "drawCalls": 30,
+            "triangles": 893007,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          }
+        },
+        "peopleCompared": 20,
+        "heldMismatches": [
+          {
+            "world": "eden",
+            "id": 1,
+            "record": [
+              6,
+              37,
+              17
+            ],
+            "actor": [
+              4.924605801892769,
+              37.605824449930566,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 3,
+            "record": [
+              19,
+              8,
+              17
+            ],
+            "actor": [
+              17.86101568285945,
+              8.661350885110942,
+              17
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 4,
+            "record": [
+              5,
+              4,
+              17
+            ],
+            "actor": [
+              5.762877308013531,
+              5.404108934186827,
+              17
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 5,
+            "record": [
+              13,
+              8,
+              17
+            ],
+            "actor": [
+              12.225522139262862,
+              9.038582260578265,
+              17
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 6,
+            "record": [
+              37,
+              7,
+              17
+            ],
+            "actor": [
+              36.02708036508985,
+              7.8380420706484415,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 7,
+            "record": [
+              37,
+              38,
+              17
+            ],
+            "actor": [
+              38.39422275823672,
+              38.116600722946345,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 8,
+            "record": [
+              11,
+              37,
+              17
+            ],
+            "actor": [
+              12.044727531690354,
+              38.12229137998792,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 9,
+            "record": [
+              6,
+              8,
+              17
+            ],
+            "actor": [
+              4.554296998298566,
+              8.608099921911231,
+              17
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 10,
+            "record": [
+              6,
+              8,
+              17
+            ],
+            "actor": [
+              5.442521745919959,
+              9.776068371841875,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 13,
+            "record": [
+              37,
+              37,
+              17
+            ],
+            "actor": [
+              36.323404275431066,
+              38.29004173679758,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 14,
+            "record": [
+              6,
+              10,
+              17
+            ],
+            "actor": [
+              5.001037001243411,
+              11.547947743664263,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 15,
+            "record": [
+              10,
+              37,
+              17
+            ],
+            "actor": [
+              10.691722751570742,
+              38.10471591966741,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 16,
+            "record": [
+              36,
+              7,
+              17
+            ],
+            "actor": [
+              34.6267205689013,
+              8.043900667746424,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 17,
+            "record": [
+              42,
+              38,
+              17
+            ],
+            "actor": [
+              40.45712907674056,
+              38.460455890910325,
+              1
+            ]
+          },
+          {
+            "world": "eden",
+            "id": 18,
+            "record": [
+              42,
+              25,
+              17
+            ],
+            "actor": [
+              40.703093126615094,
+              25.425093779314867,
+              17
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 68,
+            "record": [
+              136,
+              110,
+              20
+            ],
+            "actor": [
+              137.42790482383438,
+              110.74401487040531,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 73,
+            "record": [
+              138,
+              109,
+              22
+            ],
+            "actor": [
+              136.4632292116887,
+              110.58969525293307,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 75,
+            "record": [
+              136,
+              110,
+              17
+            ],
+            "actor": [
+              134.46867059376274,
+              109.50250571570469,
+              1
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 76,
+            "record": [
+              136,
+              110,
+              17
+            ],
+            "actor": [
+              136.12080097838458,
+              110.09111517874092,
+              17
+            ]
+          },
+          {
+            "world": "lagoon",
+            "id": 78,
+            "record": [
+              143,
+              119,
+              17
+            ],
+            "actor": [
+              141.93357717949203,
+              117.4537999886897,
+              1
+            ]
+          }
+        ],
+        "badMatrices": 0,
+        "pageErrors": []
+      }
+    ],
+    "after": [
+      {
+        "width": 390,
+        "height": 844,
+        "states": {
+          "table": {
+            "topChrome": 68,
+            "bottomChrome": 83.5625,
+            "chromePercent": 17.957642180094787,
+            "readoutHeight": 73.5625,
+            "drawCalls": 124,
+            "triangles": 926959,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "eden": {
+            "topChrome": 68,
+            "bottomChrome": 83.5625,
+            "chromePercent": 17.957642180094787,
+            "readoutHeight": 73.5625,
+            "drawCalls": 21,
+            "triangles": 31464,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "lagoon": {
+            "topChrome": 68,
+            "bottomChrome": 83.5625,
+            "chromePercent": 17.957642180094787,
+            "readoutHeight": 73.5625,
+            "drawCalls": 29,
+            "triangles": 893867,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "held": {
+            "topChrome": 68,
+            "bottomChrome": 83.5625,
+            "chromePercent": 17.957642180094787,
+            "readoutHeight": 73.5625,
+            "drawCalls": 29,
+            "triangles": 893867,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          }
+        },
+        "peopleCompared": 20,
+        "heldMismatches": [],
+        "badMatrices": 0,
+        "pageErrors": [],
+        "bootRBeforeFirstRecordIgnored": true,
+        "duplicateHeldPoll": {
+          "deliveriesBefore": 2,
+          "deliveriesAfter": 3,
+          "pending": false
+        },
+        "openRecordAfterIdle": {
+          "opacity": 1,
+          "focusVisible": true
+        }
+      },
+      {
+        "width": 1024,
+        "height": 768,
+        "states": {
+          "table": {
+            "topChrome": 103.140625,
+            "bottomChrome": 89.5625,
+            "chromePercent": 25.091552734375,
+            "readoutHeight": 73.5625,
+            "drawCalls": 126,
+            "triangles": 926963,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "eden": {
+            "topChrome": 103.140625,
+            "bottomChrome": 89.5625,
+            "chromePercent": 25.091552734375,
+            "readoutHeight": 73.5625,
+            "drawCalls": 47,
+            "triangles": 32040,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "lagoon": {
+            "topChrome": 103.140625,
+            "bottomChrome": 89.5625,
+            "chromePercent": 25.091552734375,
+            "readoutHeight": 73.5625,
+            "drawCalls": 30,
+            "triangles": 894587,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "held": {
+            "topChrome": 103.140625,
+            "bottomChrome": 89.5625,
+            "chromePercent": 25.091552734375,
+            "readoutHeight": 73.5625,
+            "drawCalls": 30,
+            "triangles": 894587,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          }
+        },
+        "peopleCompared": 20,
+        "heldMismatches": [],
+        "badMatrices": 0,
+        "pageErrors": [],
+        "bootRBeforeFirstRecordIgnored": true,
+        "duplicateHeldPoll": {
+          "deliveriesBefore": 1,
+          "deliveriesAfter": 2,
+          "pending": false
+        },
+        "openRecordAfterIdle": {
+          "opacity": 1,
+          "focusVisible": true
+        }
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "states": {
+          "table": {
+            "topChrome": 103.140625,
+            "bottomChrome": 89.5625,
+            "chromePercent": 21.411458333333332,
+            "readoutHeight": 73.5625,
+            "drawCalls": 126,
+            "triangles": 926963,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "eden": {
+            "topChrome": 103.140625,
+            "bottomChrome": 89.5625,
+            "chromePercent": 21.411458333333332,
+            "readoutHeight": 73.5625,
+            "drawCalls": 49,
+            "triangles": 32096,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "lagoon": {
+            "topChrome": 103.140625,
+            "bottomChrome": 89.5625,
+            "chromePercent": 21.411458333333332,
+            "readoutHeight": 73.5625,
+            "drawCalls": 30,
+            "triangles": 894587,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          },
+          "held": {
+            "topChrome": 103.140625,
+            "bottomChrome": 89.5625,
+            "chromePercent": 21.411458333333332,
+            "readoutHeight": 73.5625,
+            "drawCalls": 30,
+            "triangles": 894587,
+            "webglRenderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3, Unspecified Version)"
+          }
+        },
+        "peopleCompared": 20,
+        "heldMismatches": [],
+        "badMatrices": 0,
+        "pageErrors": [],
+        "bootRBeforeFirstRecordIgnored": true,
+        "duplicateHeldPoll": {
+          "deliveriesBefore": 1,
+          "deliveriesAfter": 2,
+          "pending": false
+        },
+        "openRecordAfterIdle": {
+          "opacity": 1,
+          "focusVisible": true
+        }
+      }
+    ]
+  }
+}

@@ -6,6 +6,7 @@
 <title>Universe 69 — VR</title>
 <script src="config.js"></script>
 <style>
+  @font-face{font-family:Jost;src:url("fonts/Jost-latin-variable.woff2") format("woff2");font-style:normal;font-weight:100 900;font-display:swap}
   :root{
     --surface:#14130f; --surface-2:#1c1a15; --ink:#ede6d6; --muted:#a39b88;
     --dim:#8a8372; --line:#37332a; --accent:#e4b456; --eden:#8ec5d6;
@@ -29,10 +30,13 @@
   #nav button.on{border-color:var(--accent);color:var(--accent)}
   #nav button[hidden]{display:none}
   #nav button.time{border-color:#5d5440;color:var(--accent)}
-  #readout{position:absolute;left:18px;bottom:16px;max-width:min(620px,78vw);
+  #readout{position:absolute;left:18px;bottom:16px;max-width:min(620px,calc(100vw - 36px));
     font-size:12px;line-height:1.6;color:var(--muted);pointer-events:none;
-    background:linear-gradient(90deg,rgba(20,19,15,.9),rgba(20,19,15,0));padding:6px 30px 4px 0}
+    background:rgba(20,19,15,.88);padding:6px 8px}
   #readout .row{display:block}
+  #recordpager{display:flex;align-items:center;gap:12px;margin-top:6px;pointer-events:auto}
+  #recordpager button{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);padding:6px 10px;min-height:34px;cursor:pointer}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   #readout .row + .row{margin-top:2px}
   #readout .now{color:var(--dim)}
   #readout b{font-weight:500;letter-spacing:.06em}
@@ -57,10 +61,10 @@
   .keys{position:absolute;right:16px;bottom:16px;font-size:10px;line-height:1.7;
     color:var(--dim);text-align:right;pointer-events:none}
   @media (max-width:700px){
-    #readout{font-size:11px;bottom:10px} #hint{display:none} .keys{display:none}
+    #readout{font-size:12px;bottom:10px} #hint{display:none} .keys{display:none}
     .brand{top:8px} .brand span{display:none}
     #nav{top:34px;left:10px;right:10px;max-width:none;justify-content:flex-start}
-    #nav button{padding:6px 7px;min-height:30px;font-size:10px}
+    #nav button{padding:6px 7px;min-height:34px;font-size:11px}
   }
 </style>
 </head>
@@ -72,11 +76,12 @@
     <button type="button" id="bTable" class="on">TABLE</button>
     <button type="button" id="bEden">EDEN</button>
     <button type="button" id="bLagoon">LAGOON</button>
-    <button type="button" id="bTime" class="time" title="Slow the viewing clock to human speed; the record holds until CONTINUE">REAL-TIME</button>
+    <button type="button" id="bTime" class="time" title="Hold the recorded positions and actions; CONTINUE applies the newest snapshot">REAL-TIME</button>
+    <button type="button" id="bRecord" aria-expanded="false">RECORD</button>
     <button type="button" id="bVR" hidden>ENTER VR</button>
   </div>
   <div id="hint"><b>TIMELAPSE</b> · a hundred years a day, the way the record runs.
-    <b>REAL-TIME</b> holds the record and brings the last moment to human speed.
+    <b>REAL-TIME</b> holds recorded positions and actions while you look around.
     Drag to look · WASD to walk · click a world to enter it.</div>
   <div id="readout">connecting…</div>
   <div class="keys">TABLE: drag · wheel zoom · EDEN/LAGOON to enter<br>
@@ -103,8 +108,8 @@ import * as THREE from './three.module.min.js';
    Two clocks:
      TIMELAPSE  the record's own pace (~100 years per real day). People move
                 briskly, the light turns, a year goes by while you watch.
-     REAL-TIME  the record is held; the last moment is played at human speed
-                so you can walk among them. CONTINUE applies the newest
+     REAL-TIME  the record is held; recorded positions and actions remain fixed
+                while you walk among them. CONTINUE applies the newest
                 snapshot and the timelapse resumes. This is a viewing clock,
                 never a change to the sealed world.
    Everything here is standard library + one vendored three.js build. No
@@ -153,7 +158,7 @@ async function poll(force) {
     const st = SNAP ? await getJSON(SNAP) : await getJSON("/state");
     if (!st || !st.u || !st.u.eden || !st.u.lagoon) throw new Error("snapshot has no worlds");
     let w = st.world || null;
-    if (!SNAP && (!worldInfo || st.u.lagoon.iter !== worldInfo.lagoon_iter)) {
+    if (!SNAP && !w && shouldFetchWorld(st, pendingState || state, pendingWorld || worldInfo)) {
       w = await getJSON("/world");
     }
     lastOK = Date.now(); loadError = "";
@@ -162,8 +167,11 @@ async function poll(force) {
       setTimeout(() => { const b = $("boot"); if (b) b.classList.add("gone"); }, 300);
     }
     if (held.on) {
-      // still look, but do not spend the morning we are standing in
-      pendingState = st; pendingWorld = w || pendingWorld;
+      // Transport freshness alone is not a changed world. Preserve its latest
+      // metadata without inventing a pending moment or moving the held people.
+      const next = heldRecordUpdate(state, worldInfo, pendingState, pendingWorld, st, w);
+      state = next.applied; worldInfo = next.world;
+      pendingState = next.pending; pendingWorld = next.pendingWorld;
       updateHUD();
       return;
     }
@@ -376,7 +384,7 @@ function worldSig(key, u) {
   }));
   const camp = (u.camp_state || []).map((c) =>
     c ? [c.fire ? 1 : 0, c.granary ? 1 : 0, c.writing ? 1 : 0].join("") : "-").join(".");
-  return [worldInfo && worldInfo.lagoon_iter, (u.settlements || []).length,
+  return [terrainIdentity(worldInfo), (u.settlements || []).length,
           huts.join("."), camp, (u.boats || []).length, (u.farms || []).length,
           Math.ceil((u.animals || []).length / 128)].join("|");
 }
@@ -1265,6 +1273,11 @@ function updateBeasts(g, u) {
 // ---- the people: one instanced body per person, driven by the record ----------
 const PEOPLE = {};
 const STATURE = [0.30, 0.46, 0.56, 0.67, 0.78, 0.87, 0.96, 1.0, 0.97];
+const HEADS = [4.0,4.5,5.0,6.0,6.5,7.0,7.3,7.6,7.5];
+const LEG_FRAC = [.38,.41,.44,.46,.48,.495,.51,.52,.515];
+const ARM_FRAC = [.29,.295,.30,.305,.31,.315,.32,.32,.32];
+const SH_FRAC = [.150,.145,.135,.125,.120,.115];
+const HP_FRAC = [.130,.125,.115,.105,.100,.100];
 const AGE_BAND = [0, 1.5, 3, 6, 9, 12, 15, 18, 60];
 const A = { WALK: 1, FORAGE: 2, HUNT: 3, FISH: 4, FARM: 5, BUILD: 6, TALK: 7,
   MATE: 8, BIRTH: 9, TEND: 10, REST: 11, EAT: 12, WITHDRAW: 13, FIGHT: 14,
@@ -1275,6 +1288,129 @@ function ageBand(age) {
   return 0;
 }
 function stature(age) { return STATURE[ageBand(age)]; }
+
+function timelineReset(before, after) {
+  return !!before && (before.iter !== after.iter || after.day < before.day ||
+    (after.day === before.day && after.part < before.part));
+}
+
+function shouldFetchWorld(packet, previous, world) {
+  const current = packet.u.lagoon;
+  return !world || current.iter !== world.lagoon_iter ||
+    timelineReset(previous && previous.u.lagoon, current);
+}
+
+function terrainIdentity(world) {
+  // Exact content, not a potentially colliding short hash or iteration alone.
+  return world ? JSON.stringify([world.lagoon_iter, world.terrain_seed,
+    world.terrain_version, world.terrain]) : "";
+}
+
+function modelRecordIdentity(packet, world) {
+  const w = world || packet.world;
+  return JSON.stringify([packet.engine, packet.u, packet.pace, packet.sec_per_day,
+    w && w.eden_size, w && w.lagoon_size, terrainIdentity(w)]);
+}
+
+function heldRecordUpdate(applied, world, pending, pendingWorld, incoming, incomingWorld) {
+  const latest = pending || applied;
+  // A late response cannot replace a more recently observed record. A newer
+  // wall can legitimately contain a calendar rewind, which remains available.
+  if (Number.isFinite(latest.wall) && Number.isFinite(incoming.wall) && incoming.wall < latest.wall)
+    return {applied,world,pending,pendingWorld};
+  const nextWorld = incomingWorld || incoming.world || pendingWorld || world;
+  if (modelRecordIdentity(applied, world) === modelRecordIdentity(incoming, nextWorld))
+    return {applied:incoming,world:nextWorld,pending:null,pendingWorld:null};
+  return {applied,world,pending:incoming,pendingWorld:nextWorld};
+}
+
+function lyingSupport(headR, torsoR, limbR) {
+  // Local z becomes world height when lying. Support the actual outer skin,
+  // including the large infant skull, rather than lifting by an adult fraction.
+  return Math.max(headR, torsoR, 1.2 * limbR);
+}
+
+// Only interpolate an observed straight dry segment. A rejected segment jumps to
+// its recorded endpoint: the observer has no evidence for an alternative route.
+function canInterpolateRecord(terrain, x0, y0, x1, y1) {
+  if (!terrain || !terrain.length) return false;
+  const dry = (x, y) => y >= 0 && y < terrain.length && x >= 0 &&
+    x < terrain[y].length && terrain[y][x] !== 2;
+  let px = Math.floor(x0), py = Math.floor(y0);
+  if (!dry(px, py)) return false;
+  const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) * 5));
+  for (let i = 1; i <= n; i++) {
+    const x = Math.floor(x0 + (x1 - x0) * i / n);
+    const y = Math.floor(y0 + (y1 - y0) * i / n);
+    if (!dry(x, y) || (x !== px && y !== py && (!dry(x, py) || !dry(px, y)))) return false;
+    px = x; py = y;
+  }
+  return true;
+}
+
+function recordedStep(key, a, dt, heldOn, terrain) {
+  const dx = a.x - a.px, dy = a.y - a.py, d = Math.hypot(dx, dy);
+  a.moving = false;
+  // A held record freezes positions as well as intentions. Missing terrain or
+  // an obstructed chord never licenses fabricated motion through the sea.
+  const locomotion = a.act === A.WALK || a.act === A.FORAGE || a.act === A.HUNT || a.act === A.SCOUT;
+  if (heldOn || !locomotion || (key === "lagoon" && !canInterpolateRecord(terrain, a.px, a.py, a.x, a.y))) {
+    a.px = a.x; a.py = a.y;
+  } else if (d > .001) {
+    const step = Math.min(d, 9 * Math.max(0, dt));
+    a.px += dx / d * step; a.py += dy / d * step;
+    a.yaw = Math.atan2(dx, dy);
+    a.moving = step > 0;
+  }
+  if (!a.moving) a.yaw = (a.face || 1) < 0 ? Math.PI : 0;
+}
+
+// Every landmark is a fraction of this body's height, including infants at
+// rest. Shared joints keep the torso, arms and pelvis connected in each pose.
+function bodyDimensions(age, sex) {
+  const i = ageBand(age), female = sex === 1;
+  const dm = i >= 7 ? 1 : i === 6 ? .6 : i === 5 ? .25 : 0;
+  const H = 1.72 * STATURE[i] * (female ? 1 - .07 * dm : 1);
+  const blend = (a, b) => a + (b - a) * dm;
+  const headH = H / HEADS[i], hipY = LEG_FRAC[i] * H;
+  const shY = H - headH * (1 + (i <= 1 ? .12 : .30));
+  const leg = (LEG_FRAC[i] - 1.1 / 32) * H;
+  return {H, dm, hipY, shY, headY:H - headH / 2,
+    torsoFactor:blend(.101, female ? .093 : .101),
+    headR:headH / 2.12, shHalf:blend(SH_FRAC[Math.min(i,5)], female ? .104 : .118) * H,
+    hipHalf:blend(HP_FRAC[Math.min(i,5)], female ? .110 : .094) * H,
+    upper:ARM_FRAC[i] * H * .58, fore:ARM_FRAC[i] * H * .42,
+    thigh:leg * .53, shin:leg * .47};
+}
+
+function bodyRadii(D, fat, strong) {
+  return {headR:D.headR, torsoR:D.torsoFactor * D.H * Math.sqrt(fat) * (1 + .06 * strong),
+    limbR:.030 * D.H * (.82 + .30 * strong)};
+}
+
+function bodyLandmarks(D, lying, sitting) {
+  const torso = D.shY - D.hipY, neckHead = D.headY - D.shY;
+  const hipY = lying ? 0 : sitting ? D.shin + .034375 * D.H : D.hipY;
+  const shY = hipY + torso, headY = shY + neckHead;
+  return {hipY,shY,headY,
+    ky:lying ? -D.thigh : sitting ? hipY : hipY - D.thigh,
+    kz:sitting ? D.thigh : 0,
+    ay:lying ? -D.thigh-D.shin : .034375 * D.H,
+    az:sitting ? D.thigh : 0};
+}
+
+// Pose hints choose direction; the canonical age-specific bones choose length.
+// This is an articulated chain, not the 2D rig's full planted-foot IK solver.
+function limbChain(root, middleHint, endHint, first, second) {
+  const offset = (a, b, length) => {
+    const dx=b.x-a.x, dy=b.y-a.y, dz=b.z-a.z, d=Math.hypot(dx,dy,dz) || 1;
+    return {x:a.x+dx/d*length,y:a.y+dy/d*length,z:a.z+dz/d*length};
+  };
+  const middle=offset(root,middleHint,first);
+  const direction={x:middle.x+endHint.x-middleHint.x,
+    y:middle.y+endHint.y-middleHint.y,z:middle.z+endHint.z-middleHint.z};
+  return {middle,end:offset(middle,direction,second)};
+}
 
 const _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _q2 = new THREE.Quaternion(), _v = new THREE.Vector3();
 const _a = new THREE.Vector3(), _b = new THREE.Vector3(), _mid = new THREE.Vector3();
@@ -1301,11 +1437,11 @@ class Crowd {
     const cap = this.cap;
     this.head = inst(new THREE.SphereGeometry(0.5, 7, 6), cap);
     this.hair = inst(new THREE.SphereGeometry(0.5, 6, 5), cap);
-    this.torso = inst(new THREE.CapsuleGeometry(0.5, 1, 3, 6), cap);
+    this.torso = inst(new THREE.CapsuleGeometry(0.5, 1, 3, 6), cap * 2);
     this.arms = inst(new THREE.CapsuleGeometry(0.5, 1, 3, 5), cap * 4);
     this.legs = inst(new THREE.CapsuleGeometry(0.5, 1, 3, 5), cap * 4);
-    this.hands = inst(new THREE.SphereGeometry(0.5, 5, 4), cap * 2);
-    this.feet = inst(new THREE.SphereGeometry(0.5, 5, 3), cap * 2);
+    this.hands = inst(new THREE.SphereGeometry(0.5, 5, 4), cap * 6);
+    this.feet = inst(new THREE.SphereGeometry(0.5, 5, 3), cap * 4);
     const trunkGeo = new THREE.CapsuleGeometry(0.5, 0.4, 2, 6);
     this.trunks = inst(trunkGeo, cap, { roughness: 0.8 });
     this.shadow = new THREE.InstancedMesh(new THREE.CircleGeometry(0.5, 8),
@@ -1323,7 +1459,11 @@ class Crowd {
   }
 
   setSource(u) {
+    const terrainKey = this.key === "lagoon" ? terrainIdentity(worldInfo) : null;
+    if (this.u && (timelineReset(this.u, u) || terrainKey !== this.terrainKey)) this.actors.clear();
+    this.terrainKey = terrainKey;
     this.u = u;
+    this.size = worldSize(this.key);
     const seen = new Set();
     (u.people || []).forEach((r) => {
       const p = personRow(r);
@@ -1331,98 +1471,27 @@ class Crowd {
       let a = this.actors.get(p.id);
       if (!a) {
         a = { ...p, px: p.x, py: p.y, tx: p.x, ty: p.y, yaw: 0,
-              phase: hash(p.id, 7) * 6.283, wx: p.x, wy: p.y, wt: 0,
-              anchor: null, baseAct: p.act };
+              phase: hash(p.id, 7) * 6.283, moving: false };
         this.actors.set(p.id, a);
       } else {
-        a.x = p.x; a.y = p.y; a.tx = p.x; a.ty = p.y;
-        a.act = p.act; a.baseAct = p.act; a.face = p.face; a.age = p.age;
-        a.bmi = p.bmi; a.sn = p.sn; a.inj = p.inj; a.hun = p.hun; a.carry = p.carry;
+        Object.assign(a, p);
+        a.tx = p.x; a.ty = p.y;
       }
-      if (a.wt === 0) { a.wx = a.px; a.wy = a.py; }
     });
     for (const id of this.actors.keys()) if (!seen.has(id)) this.actors.delete(id);
   }
 
-  hold() {                                  // the viewing clock holds still
-    this.heldAt = performance.now();
-    this.actors.forEach((a) => {
-      a.anchor = this.nearestAnchor(a);
-      a.wx = a.px; a.wy = a.py; a.wt = 0;
-    });
-  }
-
-  release() { this.actors.forEach((a) => { a.anchor = null; a.wx = a.px; a.wy = a.py; }); }
-
-  nearestAnchor(a) {
-    const camps = (this.u.settlements || []);
-    if (this.key === "eden" || !camps.length) return [a.px, a.py];
-    let best = camps[0], bd = 1e9;
-    camps.forEach((c) => {
-      const d = Math.hypot(c.x - a.px, c.y - a.py);
-      if (d < bd) { bd = d; best = c; }
-    });
-    return bd < 14 ? [best.x, best.y] : [a.px, a.py];
-  }
+  hold() { this.actors.forEach((a) => { a.px = a.x; a.py = a.y; }); }
+  release() {} // the next applied snapshot supplies the only movement target
 
   update(dt, t, heldOn) {
     const big = this.big;
     const c = { n: 0, na: 0, nl: 0, nh: 0, nhair: 0, nf: 0, nt: 0, ns: 0 };
     const size = this.size;
     const fast = !heldOn;
-    const speed = fast ? Math.max(9, size * 0.07) : 2.0;
     this.actors.forEach((a) => {
       if (c.n >= this.cap) return;
-      // position: follow the record, or walk a slow circle while held
-      let dx = 0, dy = 0;
-      if (heldOn) {
-        if (a.wt === 0) { a.wt = t + hash(a.id, 3) * 1.4; }
-        const dist = Math.hypot(a.wx - a.px, a.wy - a.py);
-        if (dist < 0.12 && t > a.wt) {
-          const anchor = a.anchor || [a.px, a.py];
-          const ang = hash(a.id + Math.floor(t), 9) * 6.283;
-          const rr = 1.2 + hash(a.id, Math.floor(t)) * 3.4;
-          a.wx = clamp(anchor[0] + Math.cos(ang) * rr, 1, size - 2);
-          a.wy = clamp(anchor[1] + Math.sin(ang) * rr, 1, size - 2);
-          a.wt = t + 5 + hash(a.id, Math.floor(t) + 2) * 10;
-        }
-        dx = a.wx - a.px; dy = a.wy - a.py;
-        const d = Math.hypot(dx, dy);
-        if (d > 0.001) {
-          const step = Math.min(d, 1.15 * dt);
-          a.px += dx / d * step; a.py += dy / d * step;
-          a.yaw = Math.atan2(dx, dy);
-          a.act = A.WALK;
-        } else {
-          a.act = a.baseAct || a.act;
-        }
-      } else {
-        dx = a.tx - a.px; dy = a.ty - a.py;
-        const d = Math.hypot(dx, dy);
-        if (d > 0.001) {
-          const step = Math.min(d, speed * dt);
-          a.px += dx / d * step; a.py += dy / d * step;
-          a.yaw = Math.atan2(dx, dy);
-        } else {
-          a.yaw = ((a.face || 1) < 0 ? Math.PI : 0);
-          // a busy year: even while the record has them at a spot, they
-          // keep moving about it, the way a timelapse shows a camp
-          const roam = a.act === A.WALK || a.act === A.FORAGE || a.act === A.HUNT ||
-            a.act === A.FISH || a.act === A.FARM || a.act === A.BUILD ||
-            a.act === A.SCOUT || a.act === A.PLAY || a.act === A.TALK ||
-            a.act === A.GROOM || a.act === A.DRINK;
-          if (roam) {
-            a.rt = (a.rt || 0) + dt;
-            if (a.rt > 0.55 + hash(a.id, Math.floor(t / 2)) * 1.2) {
-              const ang = hash(a.id + Math.floor(t), 13) * 6.283;
-              const rr = 0.7 + hash(a.id, Math.floor(t) + 5) * 2.6;
-              a.tx = clamp(a.x + Math.cos(ang) * rr, 1, size - 2);
-              a.ty = clamp(a.y + Math.sin(ang) * rr, 1, size - 2);
-              a.rt = 0;
-            }
-          }
-        }
-      }
+      recordedStep(this.key, a, dt, heldOn, worldInfo && worldInfo.terrain);
       const gy = surfaceY(this.key, a.px, a.py);
       const root = new THREE.Vector3(a.px - size / 2, gy + 0.004, a.py - size / 2);
       this.drawBody(a, root, t, big, fast, c);
@@ -1439,7 +1508,7 @@ class Crowd {
       if (m.instanceColor) m.instanceColor.needsUpdate = true;
     });
     this.shadow.instanceMatrix.needsUpdate = true;
-    this.head.count = c.n; this.hair.count = c.nhair; this.torso.count = c.n;
+    this.head.count = c.n; this.hair.count = c.nhair; this.torso.count = c.n * 2;
     this.arms.count = c.na; this.legs.count = c.nl;
     this.hands.count = c.nh; this.feet.count = c.nf;
     this.trunks.count = c.nt; this.shadow.count = c.ns;
@@ -1447,7 +1516,7 @@ class Crowd {
 
   drawBody(a, root, t, big, fast, c) {
     const key = this.key;
-    const H = 1.72 * stature(a.age) * (a.sex ? 0.93 : 1.0);
+    const D = bodyDimensions(a.age, a.sex), H = D.H;
     const fat = clamp((a.bmi || 22) / 22, 0.78, 1.55);
     const strong = clamp((a.sn || 5) / 10, 0.2, 1.0);
     const lying = a.act === A.SLEEP || a.act === A.MATE || a.act === A.BIRTH ||
@@ -1460,11 +1529,9 @@ class Crowd {
       const qx = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2);
       bodyQ = yawQ.clone().multiply(qx);
     }
-    const shHalf = (a.sex ? 0.101 : 0.118) * H * Math.sqrt(fat) * (1 + 0.05 * strong);
-    const hipHalf = (a.sex ? 0.099 : 0.091) * H * Math.sqrt(fat);
-    const torsoR = (a.sex ? 0.093 : 0.101) * H * Math.sqrt(fat) * (1 + 0.06 * strong);
-    const limbR = 0.030 * H * (0.82 + 0.30 * strong);
-    const headR = H / 15.2 * (a.age < 15 ? 1.16 : 1.0);
+    const shHalf = D.shHalf * Math.sqrt(fat) * (1 + 0.05 * strong);
+    const hipHalf = D.hipHalf * Math.sqrt(fat);
+    const {torsoR, limbR, headR} = bodyRadii(D, fat, strong);
     const skin = PAL.skin[a.id % 4];
     const hairC = a.age >= 60 ? 0xd9d9d9 : PAL.hair[(a.id * 3) % 5];
     const cloth = key === "eden"
@@ -1473,40 +1540,39 @@ class Crowd {
     const legCloth = key === "eden" ? skin : cloth;
 
     // local points: x right, y up, z forward; the body quaternion maps them
-    let hipY, shY, headY;
-    if (lying) { hipY = 0.24; shY = 0.86; headY = 1.03; }
-    else if (sitting) { hipY = 0.45; shY = 0.91; headY = 1.04; }
-    else { hipY = 0.52 * H; shY = 0.82 * H; headY = 0.935 * H; }
-    const rootLift = lying ? 0.13 * big : 0;
+    const pose = bodyLandmarks(D, lying, sitting);
+    const { hipY, shY, headY } = pose;
+    const rootLift = lying ? lyingSupport(headR, torsoR, limbR) * big : 0;
     const base = root;
     const P = (x, y, z) => new THREE.Vector3(x * big, y * big, z * big)
       .applyQuaternion(bodyQ).add(base).add(_v.set(0, rootLift, 0));
-    const swing = Math.sin(t * (fast ? 9.0 : 5.2) + a.phase) * (0.085 * H);
+    const swing = a.moving ? Math.sin(t * (fast ? 9.0 : 5.2) + a.phase) * (0.085 * H) : 0;
     let hipC, shC, headC;
     if (lying) {
-      hipC = P(0, 0.0, 0);
-      shC = P(0, 0.62, 0);
-      headC = P(0, 0.82, 0);
+      hipC = P(0, hipY, 0);
+      shC = P(0, shY, 0);
+      headC = P(0, headY, 0);
     } else if (sitting) {
       hipC = P(0, hipY, 0);
-      shC = P(0, shY, 0.02);
-      headC = P(0, headY, 0.03);
+      shC = P(0, shY, .012 * H);
+      headC = P(0, headY, .018 * H);
     } else {
       hipC = P(0, hipY, 0);
       shC = P(0, shY, 0);
       headC = P(0, headY, 0);
     }
     // torso
-    seg(this.torso, c.n, hipC, shC, torsoR * big, cloth);
+    seg(this.torso, c.n * 2, hipC, shC, torsoR * big, cloth);
+    seg(this.torso, c.n * 2 + 1, shC, headC, .035 * H * big, skin);
     // head and hair
     ball(this.head, c.n, headC, headR * big, skin);
     if (a.age >= 3 && hash(a.id, 2) < 0.88) {
-      const back = lying ? P(0, 0.74, -0.04) : P(0, headY + 0.015, -0.025);
+      const back = P(0, headY + .12 * headR, -.18 * headR);
       ball(this.hair, c.nhair++, back, headR * 1.03 * big, hairC);
     }
     // trunks (EDEN): a short brief over the pelvis
     if (key === "eden") {
-      const cp = lying ? P(0, 0.02, -0.01) : P(0, hipY - 0.03, 0);
+      const cp = lying ? P(0, .012 * H, -.006 * H) : P(0, hipY - .018 * H, 0);
       _q2.identity();
       _m.compose(cp, bodyQ, _s.set(hipHalf * 1.5 * big, 0.10 * H * big, hipHalf * 1.15 * big));
       this.trunks.setMatrixAt(c.nt, _m);
@@ -1520,11 +1586,11 @@ class Crowd {
       const sx = side * shHalf * 0.94;
       let ex, ey, ez, hx, hy, hz;
       if (lying) {
-        ex = side * shHalf * 1.05; ey = 0.50; ez = -0.01;
-        hx = side * shHalf * 1.10; hy = 0.06; hz = -0.01;
+        ex = side * shHalf * 1.05; ey = shY - .16 * H; ez = -.006 * H;
+        hx = side * shHalf * 1.10; hy = shY - .31 * H; hz = -.006 * H;
       } else if (sitting) {
-        ex = side * shHalf * 1.18; ey = shY - 0.16 * H; ez = 0.16;
-        hx = side * shHalf * 1.22; hy = shY - 0.30 * H; hz = 0.34;
+        ex = side * shHalf * 1.18; ey = shY - 0.16 * H; ez = .093 * H;
+        hx = side * shHalf * 1.22; hy = shY - 0.30 * H; hz = .198 * H;
       } else if (armUp) {
         ex = side * (shHalf + 0.06 * H); ey = shY - 0.02 * H; ez = 0.16 * H;
         hx = side * (shHalf + 0.10 * H); hy = shY + 0.10 * H; hz = 0.30 * H;
@@ -1533,9 +1599,13 @@ class Crowd {
         ex = side * (shHalf + 0.015 * H); ey = shY - 0.16 * H; ez = sw;
         hx = side * (shHalf + 0.025 * H); hy = shY - 0.31 * H; hz = sw * 1.5;
       }
-      const shp = P(sx, shY, 0), el = P(ex, ey, ez), hd = P(hx, hy, hz);
+      const chain = limbChain({x:sx,y:shY,z:0}, {x:ex,y:ey,z:ez}, {x:hx,y:hy,z:hz}, D.upper, D.fore);
+      const shp = P(sx, shY, 0), el = P(chain.middle.x,chain.middle.y,chain.middle.z),
+        hd = P(chain.end.x,chain.end.y,chain.end.z);
       seg(this.arms, c.na++, shp, el, limbR * 0.92 * big, skin);
       seg(this.arms, c.na++, el, hd, limbR * 0.78 * big, skin);
+      ball(this.hands, c.nh++, shp, limbR * .95 * big, skin);
+      ball(this.hands, c.nh++, el, limbR * .90 * big, skin);
       ball(this.hands, c.nh, hd, limbR * 0.95 * big, skin);
       c.nh++;
     }
@@ -1543,20 +1613,21 @@ class Crowd {
     for (let side = -1; side <= 1; side += 2) {
       const hx = side * hipHalf * 0.92;
       let kx = hx, ky, kz, ax = hx, ay, az;
-      if (lying) {
-        ky = -0.42; kz = 0.0; ay = -0.80; az = 0.0;
-      } else if (sitting) {
-        ky = 0.47; kz = 0.40; ay = 0.09; az = 0.52;
+      if (lying || sitting) {
+        ky = pose.ky; kz = pose.kz; ay = pose.ay; az = pose.az;
       } else {
         const sw = swing * side * 1.5;
         ky = hipY - 0.24 * H; kz = sw;
-        ay = 0.055; az = sw * 1.65;
-        if (a.act === A.HUNT) { ky = hipY - 0.22 * H; kz = 0.10 * H; ay = 0.06; az = 0.18 * H; }
+        ay = .032 * H; az = sw * 1.65;
+        if (a.act === A.HUNT) { ky = hipY - 0.22 * H; kz = 0.10 * H; ay = .035 * H; az = 0.18 * H; }
       }
-      const hp = P(hx, hipY, 0), kn = P(kx, ky, kz), an = P(ax, ay, az);
+      const chain = limbChain({x:hx,y:hipY,z:0}, {x:kx,y:ky,z:kz}, {x:ax,y:ay,z:az}, D.thigh, D.shin);
+      const hp = P(hx, hipY, 0), kn = P(chain.middle.x,chain.middle.y,chain.middle.z),
+        an = P(chain.end.x,chain.end.y,chain.end.z);
       seg(this.legs, c.nl++, hp, kn, limbR * 1.18 * big, legCloth);
       seg(this.legs, c.nl++, kn, an, limbR * 1.02 * big, legCloth);
-      const foot = P(ax, ay, az + (lying ? 0.0 : 0.10));
+      ball(this.feet, c.nf++, kn, limbR * 1.10 * big, legCloth);
+      const foot = P(chain.end.x, chain.end.y, chain.end.z + (lying ? 0.0 : .058 * H));
       ball(this.feet, c.nf++, foot, limbR * 0.92 * big, skin);
     }
   }
@@ -1599,7 +1670,7 @@ function worldLines(key, u) {
       "Y" + u.year + " · " + String(u.tod || "").toUpperCase() +
         " · POP " + u.pop + " · ITER " + u.iter,
       String(u.phase || "").toUpperCase() + " · ALWAYS SPRING · " +
-        ((u.gauges && u.gauges.breeders) || 0) + " BREEDERS",
+        ((u.gauges && u.gauges.breeders) || 0) + " COMPETENT ADULTS 16–45 (NOT FERTILITY)",
       built,
       ((u.homeless || 0) > 0 ? u.homeless + " PLACELESS · " : "") +
         ((u.roles && u.roles[1]) ? "POSTS " + u.roles[0] + "/" + u.roles[1] : "THE PEN IS OPEN")];
@@ -1630,7 +1701,7 @@ function labelLines(key, u) {
     return [head, at,
       "POOL " + pct(f.pool) + " · BAR " + pct(f.bar) + " · THEATER " + pct(f.theater),
       String(u.phase || "").toUpperCase() + " · " +
-        ((u.gauges && u.gauges.breeders) || 0) + " BREEDERS"];
+        ((u.gauges && u.gauges.breeders) || 0) + " COMPETENT ADULTS 16–45 (NOT FERTILITY)"];
   }
   const camps = (u.settlements || []).length;
   let huts = 0;
@@ -1673,7 +1744,7 @@ function paintLabel(L, key, u) {
   g.fillRect(0, 0, 8, H);
   g.textBaseline = "middle";
   const fit = (txt, size, weight, keep) => {
-    g.font = weight + " " + size + 'px system-ui, -apple-system, sans-serif';
+    g.font = weight + " " + size + 'px Jost, sans-serif';
     let s = txt;
     if (g.measureText(s).width > W - 44) {
       while (s.length > 4 && g.measureText(s + "…").width > W - 44) s = s.slice(0, -1);
@@ -1739,7 +1810,7 @@ function topActs(u) {
     .slice(0, 3).map((k) => tally[k] + " " + k).join(" · ");
 }
 
-let hudLast = "";
+let hudLast = "", showRecord = false, recordPage = 0;
 function updateHUD() {
   const el = $("readout");
   if (!el) return;
@@ -1754,17 +1825,49 @@ function updateHUD() {
     : "INSIDE " + String(mode.active || "").toUpperCase();
   const clock = heldNow ? "REAL-TIME · RECORD HELD"
     : "TIMELAPSE · " + (+years.toPrecision(3)) + " YEARS / REAL DAY";
-  const age = state.wall ? Math.max(0, Math.floor(Date.now() / 1000 - state.wall)) : 0;
+  const ageSeconds = state.wall ? Math.max(0, Math.floor(Date.now() / 1000 - state.wall)) : null;
+  const age = ageSeconds === null ? "age unknown" : ageSeconds >= 86400
+    ? Math.floor(ageSeconds / 86400) + "d old" : ageSeconds >= 3600
+    ? Math.floor(ageSeconds / 3600) + "h old" : ageSeconds >= 60
+    ? Math.floor(ageSeconds / 60) + "m old" : ageSeconds + "s old";
   const wait = heldNow && pendingState
-    ? " · a newer moment is waiting at Y" + pendingState.u.eden.year : "";
-  const html =
-    '<div class="row"><span class="mode">' + viewName + '</span> · <span class="mode">' +
-      clock + '</span> · record ' + age + "s old" + wait + "</div>" +
-    '<div class="row"><b class="e">EDEN</b> ' + esc(worldLines("eden", e).slice(1).join(" · ")) +
-      (topActs(e) ? ' · <span class="now">' + esc(topActs(e)) + "</span>" : "") + "</div>" +
-    '<div class="row"><b class="l">LAGOON</b> ' + esc(worldLines("lagoon", l).slice(1).join(" · ")) +
-      (topActs(l) ? ' · <span class="now">' + esc(topActs(l)) + "</span>" : "") + "</div>";
-  if (html !== hudLast) { hudLast = html; el.innerHTML = html; }
+    ? " · an updated record is available" : "";
+  const summary = (key, u) => '<div class="row"><b class="' + (key === 'eden' ? 'e' : 'l') + '">' +
+    key.toUpperCase() + '</b> · Y' + u.year + ' · ' + u.pop + ' people · ' + esc(u.tod || '') + '</div>';
+  let html = '<div class="row"><span class="mode">' + clock + '</span> · record ' + age + wait + '</div>';
+  if (showRecord) {
+    const keys = mode.view === "table" ? ["eden", "lagoon"] : [mode.active];
+    const pages = keys.flatMap(key => {
+      const u = state.u[key], lines = worldLines(key, u).slice(1).concat(topActs(u));
+      return [lines.slice(0, 2), lines.slice(2)].map(lines => ({key, lines}));
+    });
+    recordPage = Math.max(0, Math.min(recordPage, pages.length - 1));
+    const page = pages[recordPage];
+    html += '<div class="row"><b>' + page.key.toUpperCase() + ' · RECORD</b></div>' +
+      page.lines.map(line => '<div class="row">' + esc(line) + '</div>').join('') +
+      '<div id="recordpager"><button id="recordprev" type="button" aria-label="Previous record page" ' +
+      (recordPage ? '' : 'disabled') + '>←</button><span>' + (recordPage + 1) + ' / ' + pages.length +
+      '</span><button id="recordnext" type="button" aria-label="Next record page" ' +
+      (recordPage < pages.length - 1 ? '' : 'disabled') + '>→</button></div>';
+  } else if (mode.view === "table") {
+    html += summary('eden', e) + summary('lagoon', l);
+  } else {
+    const key = mode.active, u = state.u[key];
+    html += summary(key, u) + '<div class="row">' + esc(topActs(u)) + '</div>';
+  }
+  if (html !== hudLast) {
+    const focusId = document.activeElement && document.activeElement.id;
+    hudLast = html; el.innerHTML = html;
+    const prev = $("recordprev"), next = $("recordnext");
+    if (prev) prev.onclick = () => { recordPage--; updateHUD(); };
+    if (next) next.onclick = () => { recordPage++; updateHUD(); };
+    if (focusId === 'recordprev' || focusId === 'recordnext') {
+      const target = $(focusId), fallback = focusId === 'recordprev' ? next : prev;
+      if (target && !target.disabled) target.focus({preventScroll:true});
+      else if (fallback && !fallback.disabled) fallback.focus({preventScroll:true});
+    }
+  }
+  $("bRecord").setAttribute('aria-expanded', String(showRecord));
   updateNav();
 }
 
@@ -1816,22 +1919,22 @@ function updateSlate() {
   g.strokeStyle = "#37332a"; g.lineWidth = 3; g.strokeRect(2, 2, W - 4, H - 4);
   g.fillStyle = "#e4b456"; g.fillRect(0, 0, 10, H);
   g.textBaseline = "middle";
-  g.font = '600 40px system-ui, -apple-system, sans-serif'; g.fillStyle = "#ede6d6";
+  g.font = '600 40px Jost, sans-serif'; g.fillStyle = "#ede6d6";
   g.fillText("UNIVERSE 69 · " + viewName, 34, 52);
-  g.font = '400 30px system-ui, -apple-system, sans-serif'; g.fillStyle = "#e4b456";
+  g.font = '400 30px Jost, sans-serif'; g.fillStyle = "#e4b456";
   g.fillText(when, 34, 104);
-  g.fillStyle = "#8ec5d6"; g.font = '600 28px system-ui, -apple-system, sans-serif';
+  g.fillStyle = "#8ec5d6"; g.font = '600 28px Jost, sans-serif';
   g.fillText("EDEN", 34, 158);
   g.fillStyle = "#ede6d6";
   g.fillText("Y" + e.year + " " + String(e.tod || "").toUpperCase() + " · POP " + e.pop +
              " · " + String(e.phase || "").toUpperCase(), 132, 158);
   g.fillStyle = "#a6c98a";
-  g.font = '600 28px system-ui, -apple-system, sans-serif'; g.fillText("LAGOON", 34, 204);
-  g.fillStyle = "#ede6d6"; g.font = '400 28px system-ui, -apple-system, sans-serif';
+  g.font = '600 28px Jost, sans-serif'; g.fillText("LAGOON", 34, 204);
+  g.fillStyle = "#ede6d6"; g.font = '400 28px Jost, sans-serif';
   g.fillText("Y" + l.year + " " + String(l.tod || "").toUpperCase() + " · POP " + l.pop +
              " · " + String(l.season || "").toUpperCase() + " · " +
              (l.settlements || []).length + " CAMP", 180, 204);
-  g.fillStyle = "#a39b88"; g.font = '400 24px system-ui, -apple-system, sans-serif';
+  g.fillStyle = "#a39b88"; g.font = '400 24px Jost, sans-serif';
   g.fillText(held.on ? "A/X continue · trigger teleport · B/Y world"
                      : "A/X real-time · trigger teleport · B/Y world", 34, 268);
   slate.tex.needsUpdate = true;
@@ -1929,8 +2032,8 @@ function placeCamera() {
     player.position.set(0, 0, 0);
     player.rotation.y = 0;
     const portrait = tablePortrait();
-    const d = Math.max(orbit.dist, portrait ? 4.7 : 3.85);
-    const p = portrait ? Math.max(orbit.pitch, 0.90) : orbit.pitch;
+    const d = Math.max(orbit.dist, portrait ? 4.0 : 3.85);
+    const p = portrait ? Math.max(orbit.pitch, 1.30) : orbit.pitch;
     camera.position.set(Math.sin(orbit.yaw) * Math.cos(p) * d,
                         Math.sin(p) * d + 0.18,
                         Math.cos(orbit.yaw) * Math.cos(p) * d);
@@ -2077,6 +2180,7 @@ function updateSky(t) {
 
 // ---- REAL-TIME / CONTINUE: a viewing clock, never a change to the record ----
 function setHeld(on) {
+  if (on && !state) return; // there is no record to hold during initial loading
   if (on === held.on) return;
   held.on = on;
   if (on) {
@@ -2131,6 +2235,15 @@ function pickWorld(e) {
     if (o === worlds.eden) { enter("eden"); return; }
     if (o === worlds.lagoon) { enter("lagoon"); return; }
   }
+}
+
+function updateChromeIdle(lastMove, now = Date.now()) {
+  const c = $("chrome");
+  if (!c) return;
+  // Reading an open record and seeing keyboard focus are active tasks, even
+  // when the reader is not moving a pointer. Only the unoccupied camera dims.
+  const reading = showRecord || c.querySelector(':focus-visible');
+  c.classList.toggle('idle', now - lastMove > 14000 && !reading);
 }
 
 function bindInput() {
@@ -2195,6 +2308,7 @@ function bindInput() {
   $("bLagoon").addEventListener("click", () => enter("lagoon"));
   $("bTime").addEventListener("click", () => setHeld(!held.on));
   $("bVR").addEventListener("click", startVR);
+  $("bRecord").addEventListener("click", () => { showRecord = !showRecord; recordPage = 0; updateHUD(); });
 
   let lastMove = Date.now();
   ["pointermove", "pointerdown", "keydown"].forEach((ev) =>
@@ -2202,10 +2316,7 @@ function bindInput() {
       lastMove = Date.now();
       const c = $("chrome"); if (c) c.classList.remove("idle");
     }));
-  setInterval(() => {
-    const c = $("chrome");
-    if (c && Date.now() - lastMove > 14000) c.classList.add("idle");
-  }, 3000);
+  setInterval(() => updateChromeIdle(lastMove), 3000);
 
   window.addEventListener("resize", () => {
     if (renderer.xr.isPresenting) return;
@@ -2455,6 +2566,12 @@ window.VR = {
 };
 
 init();
+document.fonts.load('400 14px Jost').then(() => {
+  Object.values(labels).forEach(label => { label.sig = ""; });
+  updateLabels();
+  if (slate) slate.sig = "";
+  updateSlate();
+});
 
 </script>
 </body>

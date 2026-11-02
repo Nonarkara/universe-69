@@ -1,0 +1,5827 @@
+{
+  "snapshotSHA256": "c4637d15ec6cc30b7304b24e59c6be9b69d838af74532563f774d2e50e6c2ec5",
+  "htmlSHA256": "92faf70db87328aefaeabfa725de99d761d0b2f791cea1ae8fbbbd93a628b73a",
+  "kind": "2D actual public saved packet; viewer-only selections, no simulation server",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "errors": [],
+      "consoleErrors": [],
+      "requestFailures": [],
+      "2d": {
+        "first": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 704,
+            "width": 390,
+            "height": 29,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 28,
+            "clientHeight": 28
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 73.28125,
+              "width": 390,
+              "height": 303.90625,
+              "bottom": 377.1875,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 304,
+              "clientHeight": 304
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 400.078125,
+              "width": 390,
+              "height": 303.921875,
+              "bottom": 704,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 304,
+              "clientHeight": 304
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 52.390625,
+              "width": 390,
+              "height": 20.890625,
+              "bottom": 73.28125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 379.1875,
+              "width": 390,
+              "height": 20.890625,
+              "bottom": 400.078125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              20.890625,
+              20.890625
+            ],
+            "combinedHeight": 234.171875,
+            "combinedPercent": 27.745482819905213,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 29,
+            "stripPercent": 3.4360189573459716,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "veilbtn",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 304,
+              "lit": 1223,
+              "samples": 1223,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 304,
+              "lit": 1223,
+              "samples": 1223,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 49.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 51.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 78.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 42.921875,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "stripbar",
+                "label": "INSTRUMENTS cohort 16\u201345 U6 2 \u00b7 U9 4 \u00b7 4 alerts \u25be",
+                "width": 390,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 28.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 30.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 51.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 34.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "MORE",
+                "width": 42.53125,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 165.171875,
+                "left": 115.8125
+              },
+              {
+                "right": 220.3125,
+                "left": 169.171875
+              },
+              {
+                "right": 303.078125,
+                "left": 224.3125
+              },
+              {
+                "right": 350,
+                "left": 307.078125
+              },
+              {
+                "right": 382,
+                "left": 354
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "21/21",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 34,
+            "scroll": 34
+          }
+        },
+        "expanded": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 704,
+            "width": 390,
+            "height": 29,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 28,
+            "clientHeight": 28
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 151.25,
+              "width": 390,
+              "height": 225.9375,
+              "bottom": 377.1875,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 226,
+              "clientHeight": 226
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 400.078125,
+              "width": 390,
+              "height": 303.921875,
+              "bottom": 704,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 304,
+              "clientHeight": 304
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 52.390625,
+              "width": 390,
+              "height": 98.859375,
+              "bottom": 151.25,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 99,
+              "clientHeight": 99
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 379.1875,
+              "width": 390,
+              "height": 20.890625,
+              "bottom": 400.078125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              98.859375,
+              20.890625
+            ],
+            "combinedHeight": 312.140625,
+            "combinedPercent": 36.98348637440758,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 29,
+            "stripPercent": 3.4360189573459716,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 226,
+              "lit": 909,
+              "samples": 909,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 304,
+              "lit": 1223,
+              "samples": 1223,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 49.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 51.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 78.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 42.921875,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "stripbar",
+                "label": "INSTRUMENTS cohort 16\u201345 U6 2 \u00b7 U9 4 \u00b7 4 alerts \u25be",
+                "width": 390,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 28.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 30.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 51.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 34.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "MORE",
+                "width": 42.53125,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 165.171875,
+                "left": 115.8125
+              },
+              {
+                "right": 220.3125,
+                "left": 169.171875
+              },
+              {
+                "right": 303.078125,
+                "left": 224.3125
+              },
+              {
+                "right": 350,
+                "left": 307.078125
+              },
+              {
+                "right": 382,
+                "left": 354
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "21/21",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 34,
+            "scroll": 34
+          }
+        },
+        "person": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 704,
+            "width": 390,
+            "height": 29,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 28,
+            "clientHeight": 28
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 73.28125,
+              "width": 390,
+              "height": 303.90625,
+              "bottom": 377.1875,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 304,
+              "clientHeight": 304
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 400.078125,
+              "width": 390,
+              "height": 303.921875,
+              "bottom": 704,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 304,
+              "clientHeight": 304
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 52.390625,
+              "width": 390,
+              "height": 20.890625,
+              "bottom": 73.28125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 379.1875,
+              "width": 390,
+              "height": 20.890625,
+              "bottom": 400.078125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              20.890625,
+              20.890625
+            ],
+            "combinedHeight": 234.171875,
+            "combinedPercent": 27.745482819905213,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 29,
+            "stripPercent": 3.4360189573459716,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 578.5,
+                "width": 390,
+                "height": 125.5,
+                "bottom": 704,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 125,
+                "clientHeight": 125
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 400.078125,
+                "width": 390,
+                "height": 303.921875,
+                "bottom": 704,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 304,
+                "clientHeight": 304
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 304,
+              "lit": 1223,
+              "samples": 1223,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 304,
+              "lit": 1223,
+              "samples": 1223,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 68,
+              "lying": false,
+              "body": {
+                "left": 185.73792505826395,
+                "right": 212.2206836789536,
+                "top": 465.07812500002467,
+                "bottom": 513.0781250000247
+              },
+              "cardTop": 578.5,
+              "sceneTop": 400.078125,
+              "sceneBottom": 704,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 49.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 51.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 78.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 42.921875,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "stripbar",
+                "label": "INSTRUMENTS cohort 16\u201345 U6 2 \u00b7 U9 4 \u00b7 4 alerts \u25be",
+                "width": 390,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 28.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 30.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 51.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 34.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "MORE",
+                "width": 42.53125,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 165.171875,
+                "left": 115.8125
+              },
+              {
+                "right": 220.3125,
+                "left": 169.171875
+              },
+              {
+                "right": 303.078125,
+                "left": 224.3125
+              },
+              {
+                "right": 350,
+                "left": 307.078125
+              },
+              {
+                "right": 382,
+                "left": 354
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "21/21",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 34,
+            "scroll": 34
+          }
+        },
+        "more": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 555.8125,
+            "width": 390,
+            "height": 288.1875,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 287,
+            "clientHeight": 287
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 526.8125,
+            "width": 390,
+            "height": 29,
+            "bottom": 555.8125,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 28,
+            "clientHeight": 28
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 73.28125,
+              "width": 390,
+              "height": 215.3125,
+              "bottom": 288.59375,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 215,
+              "clientHeight": 215
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 311.484375,
+              "width": 390,
+              "height": 215.328125,
+              "bottom": 526.8125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 215,
+              "clientHeight": 215
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 52.390625,
+              "width": 390,
+              "height": 20.890625,
+              "bottom": 73.28125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 290.59375,
+              "width": 390,
+              "height": 20.890625,
+              "bottom": 311.484375,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              20.890625,
+              20.890625
+            ],
+            "combinedHeight": 411.359375,
+            "combinedPercent": 48.739262440758296,
+            "bottom": 288.1875,
+            "bottomPercent": 34.14543838862559,
+            "strip": 29,
+            "stripPercent": 3.4360189573459716,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 401.3125,
+                "width": 390,
+                "height": 125.5,
+                "bottom": 526.8125,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 125,
+                "clientHeight": 125
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 311.484375,
+                "width": 390,
+                "height": 215.328125,
+                "bottom": 526.8125,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 215,
+                "clientHeight": 215
+              }
+            }
+          ],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 215,
+              "lit": 865,
+              "samples": 865,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 215,
+              "lit": 865,
+              "samples": 865,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 68,
+              "lying": false,
+              "body": {
+                "left": 185.7379251016187,
+                "right": 212.22068359834492,
+                "top": 331.98437540724007,
+                "bottom": 379.9843751825563
+              },
+              "cardTop": 401.3125,
+              "sceneTop": 311.484375,
+              "sceneBottom": 526.8125,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 49.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 51.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 78.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 42.921875,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "stripbar",
+                "label": "INSTRUMENTS cohort 16\u201345 U6 2 \u00b7 U9 4 \u00b7 4 alerts \u25be",
+                "width": 390,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 28.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 30.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 51.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 34.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "LESS",
+                "width": 35.15625,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 165.171875,
+                "left": 115.8125
+              },
+              {
+                "right": 220.3125,
+                "left": 169.171875
+              },
+              {
+                "right": 303.078125,
+                "left": 224.3125
+              },
+              {
+                "right": 350,
+                "left": 307.078125
+              },
+              {
+                "right": 382,
+                "left": 354
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "7/7",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 25,
+            "scroll": 25
+          }
+        },
+        "person-expanded": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 704,
+            "width": 390,
+            "height": 29,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 28,
+            "clientHeight": 28
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 73.28125,
+              "width": 390,
+              "height": 303.90625,
+              "bottom": 377.1875,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 304,
+              "clientHeight": 304
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 509.234375,
+              "width": 390,
+              "height": 194.765625,
+              "bottom": 704,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 195,
+              "clientHeight": 195
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 52.390625,
+              "width": 390,
+              "height": 20.890625,
+              "bottom": 73.28125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 379.1875,
+              "width": 390,
+              "height": 130.046875,
+              "bottom": 509.234375,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 130,
+              "clientHeight": 130
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              20.890625,
+              130.046875
+            ],
+            "combinedHeight": 343.328125,
+            "combinedPercent": 40.67868779620853,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 29,
+            "stripPercent": 3.4360189573459716,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 587.5,
+                "width": 390,
+                "height": 116.5,
+                "bottom": 704,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 116,
+                "clientHeight": 116
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 509.234375,
+                "width": 390,
+                "height": 194.765625,
+                "bottom": 704,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 195,
+                "clientHeight": 195
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 304,
+              "lit": 1223,
+              "samples": 1223,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 195,
+              "lit": 785,
+              "samples": 785,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 68,
+              "lying": false,
+              "body": {
+                "left": 185.73792505826623,
+                "right": 212.2206836789495,
+                "top": 524.2343750000091,
+                "bottom": 572.2343749999975
+              },
+              "cardTop": 587.5,
+              "sceneTop": 509.234375,
+              "sceneBottom": 704,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 49.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 51.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 78.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 42.921875,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Previous person details",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Next person details",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "stripbar",
+                "label": "INSTRUMENTS cohort 16\u201345 U6 2 \u00b7 U9 4 \u00b7 4 alerts \u25be",
+                "width": 390,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 28.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 30.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 51.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 34.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "MORE",
+                "width": 42.53125,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 165.171875,
+                "left": 115.8125
+              },
+              {
+                "right": 220.3125,
+                "left": 169.171875
+              },
+              {
+                "right": 303.078125,
+                "left": 224.3125
+              },
+              {
+                "right": 350,
+                "left": 307.078125
+              },
+              {
+                "right": 382,
+                "left": 354
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "21/21",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 34,
+            "scroll": 34
+          }
+        },
+        "instruments": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 498.4375,
+            "width": 390,
+            "height": 234.5625,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 234,
+            "clientHeight": 234
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 73.28125,
+              "width": 390,
+              "height": 201.125,
+              "bottom": 274.40625,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 201,
+              "clientHeight": 201
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 297.296875,
+              "width": 390,
+              "height": 201.140625,
+              "bottom": 498.4375,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 201,
+              "clientHeight": 201
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 52.390625,
+              "width": 390,
+              "height": 20.890625,
+              "bottom": 73.28125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 276.40625,
+              "width": 390,
+              "height": 20.890625,
+              "bottom": 297.296875,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              20.890625,
+              20.890625
+            ],
+            "combinedHeight": 439.734375,
+            "combinedPercent": 52.10122926540284,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 234.5625,
+            "stripPercent": 27.791765402843602,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 378.34375,
+                "width": 390,
+                "height": 120.09375,
+                "bottom": 498.4375,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 119,
+                "clientHeight": 119
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 297.296875,
+                "width": 390,
+                "height": 201.140625,
+                "bottom": 498.4375,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 201,
+                "clientHeight": 201
+              }
+            }
+          ],
+          "focus": "stripbar",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 201,
+              "lit": 809,
+              "samples": 809,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 201,
+              "lit": 809,
+              "samples": 809,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 68,
+              "lying": false,
+              "body": {
+                "left": 185.73792505825242,
+                "right": 212.22068367897583,
+                "top": 313.7968749999564,
+                "bottom": 361.7968750000176
+              },
+              "cardTop": 378.34375,
+              "sceneTop": 297.296875,
+              "sceneBottom": 498.4375,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 49.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 51.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 78.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 42.921875,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Previous person details",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Next person details",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "stripbar",
+                "label": "INSTRUMENTS cohort 16\u201345 U6 2 \u00b7 U9 4 \u00b7 4 alerts \u25be",
+                "width": 390,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "POPULATION\nU6\n15\nU9\n5",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "BIRTHS\u2212DEATHS /100 ADULTS\nU6\n0.0\nU9\n0.0",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "YEARLINGS / PRIOR BIRTHS\nU6\n100%\nU9\n100%",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "16\u201345 COHORT \u00b7 WITHDRAWN\nU6\n2 \u00b7 0%\nU9\n4 \u00b7 0%",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "CLAIMANTS / PLACE\nU6\n0.68\nU9\n2.50",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "SINK\nU6\n100%\nU9\n0%",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "FOOD IN STORE\nU6\n\u221e\nU9\n143 d",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "VIOLENT DEATHS /100K\nU6\n0.0\nU9\n0.0",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 28.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 30.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 51.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 34.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "MORE",
+                "width": 42.53125,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 165.171875,
+                "left": 115.8125
+              },
+              {
+                "right": 220.3125,
+                "left": 169.171875
+              },
+              {
+                "right": 303.078125,
+                "left": 224.3125
+              },
+              {
+                "right": 350,
+                "left": 307.078125
+              },
+              {
+                "right": 382,
+                "left": 354
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "21/21",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 34,
+            "scroll": 34
+          }
+        },
+        "cohort-note": {
+          "hidden": false,
+          "width": 390,
+          "height": 844,
+          "documentWidth": 390,
+          "documentHeight": 844,
+          "bodyHeight": 844,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 35,
+            "bottom": 35,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 34,
+            "clientHeight": 34
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 733,
+            "width": 390,
+            "height": 111,
+            "bottom": 844,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 110,
+            "clientHeight": 110
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 416.46875,
+            "width": 390,
+            "height": 316.53125,
+            "bottom": 733,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "scrollHeight": 316,
+            "clientHeight": 316
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 73.28125,
+              "width": 390,
+              "height": 160.140625,
+              "bottom": 233.421875,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 160,
+              "clientHeight": 160
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 256.3125,
+              "width": 390,
+              "height": 160.15625,
+              "bottom": 416.46875,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 160,
+              "clientHeight": 160
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 52.390625,
+              "width": 390,
+              "height": 20.890625,
+              "bottom": 73.28125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 0,
+              "y": 235.421875,
+              "width": 390,
+              "height": 20.890625,
+              "bottom": 256.3125,
+              "scrollWidth": 390,
+              "clientWidth": 390,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 35,
+            "mastheadPercent": 4.1469194312796205,
+            "worldHeadings": [
+              20.890625,
+              20.890625
+            ],
+            "combinedHeight": 521.703125,
+            "combinedPercent": 61.813166469194314,
+            "bottom": 111,
+            "bottomPercent": 13.151658767772512,
+            "strip": 316.53125,
+            "stripPercent": 37.50370260663507,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 0,
+                "y": 328.96875,
+                "width": 390,
+                "height": 87.5,
+                "bottom": 416.46875,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 87,
+                "clientHeight": 87
+              },
+              "scene": {
+                "id": "",
+                "x": 0,
+                "y": 256.3125,
+                "width": 390,
+                "height": 160.15625,
+                "bottom": 416.46875,
+                "scrollWidth": 390,
+                "clientWidth": 390,
+                "scrollHeight": 160,
+                "clientHeight": 160
+              }
+            }
+          ],
+          "focus": "BUTTON",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 390,
+              "height": 160,
+              "lit": 644,
+              "samples": 644,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 390,
+              "height": 160,
+              "lit": 644,
+              "samples": 644,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 68,
+              "lying": false,
+              "body": {
+                "left": 185.73792505826387,
+                "right": 212.22068367895352,
+                "top": 268.3124999999989,
+                "bottom": 316.3124999999989
+              },
+              "cardTop": 328.96875,
+              "sceneTop": 256.3125,
+              "sceneBottom": 416.46875,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 49.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 51.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 78.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 42.921875,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Previous person details",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Next person details",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "stripbar",
+                "label": "INSTRUMENTS cohort 16\u201345 U6 2 \u00b7 U9 4 \u00b7 4 alerts \u25be",
+                "width": 390,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "POPULATION\nU6\n15\nU9\n5",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "BIRTHS\u2212DEATHS /100 ADULTS\nU6\n0.0\nU9\n0.0",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "YEARLINGS / PRIOR BIRTHS\nU6\n100%\nU9\n100%",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "16\u201345 COHORT \u00b7 WITHDRAWN\nU6\n2 \u00b7 0%\nU9\n4 \u00b7 0%",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "CLAIMANTS / PLACE\nU6\n0.68\nU9\n2.50",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "SINK\nU6\n100%\nU9\n0%",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "FOOD IN STORE\nU6\n\u221e\nU9\n143 d",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "VIOLENT DEATHS /100K\nU6\n0.0\nU9\n0.0",
+                "width": 195,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 28.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 30.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 51.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 34.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "MORE",
+                "width": 42.53125,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 165.171875,
+                "left": 115.8125
+              },
+              {
+                "right": 220.3125,
+                "left": 169.171875
+              },
+              {
+                "right": 303.078125,
+                "left": 224.3125
+              },
+              {
+                "right": 350,
+                "left": 307.078125
+              },
+              {
+                "right": 382,
+                "left": 354
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "21/21",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 34,
+            "scroll": 34
+          }
+        }
+      },
+      "vr": {},
+      "selected": {
+        "id": 68,
+        "age": 56,
+        "act": 20
+      },
+      "nativeTabCount": 2,
+      "recordPaging": {
+        "pages": 7,
+        "clipped": []
+      },
+      "researchPages": {
+        "origin": {
+          "pages": 12,
+          "clipped": [],
+          "textPreserved": true
+        },
+        "tests": {
+          "pages": 6,
+          "clipped": [],
+          "textPreserved": true
+        },
+        "runs": {
+          "pages": 2,
+          "clipped": [],
+          "textPreserved": true
+        },
+        "books": {
+          "pages": 7,
+          "clipped": [],
+          "textPreserved": true
+        }
+      }
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "errors": [],
+      "consoleErrors": [],
+      "requestFailures": [],
+      "2d": {
+        "first": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 31,
+            "bottom": 31,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 30,
+            "clientHeight": 30
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 679,
+            "width": 1024,
+            "height": 89,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 88,
+            "clientHeight": 88
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 576.21875,
+            "width": 1024,
+            "height": 102.78125,
+            "bottom": 679,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 102,
+            "clientHeight": 102
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 69.28125,
+              "width": 511,
+              "height": 506.9375,
+              "bottom": 576.21875,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 507,
+              "clientHeight": 507
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 69.28125,
+              "width": 511,
+              "height": 506.9375,
+              "bottom": 576.21875,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 507,
+              "clientHeight": 507
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 48.390625,
+              "width": 511,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 48.390625,
+              "width": 511,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 31,
+            "mastheadPercent": 4.036458333333333,
+            "worldHeadings": [
+              20.890625,
+              20.890625
+            ],
+            "combinedHeight": 261.0625,
+            "combinedPercent": 33.992513020833336,
+            "bottom": 89,
+            "bottomPercent": 11.588541666666666,
+            "strip": 102.78125,
+            "stripPercent": 13.382975260416666,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "BODY",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 507,
+              "lit": 2671,
+              "samples": 2671,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 507,
+              "lit": 2671,
+              "samples": 2671,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 53.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 55.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 82.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 78.5,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "POPULATION\nU6\n15\nU9\n5",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "BIRTHS\u2212DEATHS /100 ADULTS\nU6\n0.0\nU9\n0.0",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "YEARLINGS / PRIOR BIRTHS\nU6\n100%\nU9\n100%",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "16\u201345 COHORT \u00b7 WITHDRAWN\nU6\n2 \u00b7 0%\nU9\n4 \u00b7 0%",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "CLAIMANTS / PLACE\nU6\n0.68\nU9\n2.50",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "SINK\nU6\n100%\nU9\n0%",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "FOOD IN STORE\nU6\n\u221e\nU9\n143 d",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "VIOLENT DEATHS /100K\nU6\n0.0\nU9\n0.0",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 30.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 32.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 53.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 36.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "MORE",
+                "width": 44.53125,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 747.59375,
+                "left": 694.234375
+              },
+              {
+                "right": 808.734375,
+                "left": 753.59375
+              },
+              {
+                "right": 897.5,
+                "left": 814.734375
+              },
+              {
+                "right": 982,
+                "left": 903.5
+              },
+              {
+                "right": 1016,
+                "left": 988
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "19/19",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 36,
+            "scroll": 36
+          }
+        },
+        "expanded": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 31,
+            "bottom": 31,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 30,
+            "clientHeight": 30
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 679,
+            "width": 1024,
+            "height": 89,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 88,
+            "clientHeight": 88
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 576.21875,
+            "width": 1024,
+            "height": 102.78125,
+            "bottom": 679,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 102,
+            "clientHeight": 102
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 131.65625,
+              "width": 511,
+              "height": 444.5625,
+              "bottom": 576.21875,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 445,
+              "clientHeight": 445
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 69.28125,
+              "width": 511,
+              "height": 506.9375,
+              "bottom": 576.21875,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 507,
+              "clientHeight": 507
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 48.390625,
+              "width": 511,
+              "height": 83.265625,
+              "bottom": 131.65625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 83,
+              "clientHeight": 83
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 48.390625,
+              "width": 511,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 31,
+            "mastheadPercent": 4.036458333333333,
+            "worldHeadings": [
+              83.265625,
+              20.890625
+            ],
+            "combinedHeight": 323.4375,
+            "combinedPercent": 42.1142578125,
+            "bottom": 89,
+            "bottomPercent": 11.588541666666666,
+            "strip": 102.78125,
+            "stripPercent": 13.382975260416666,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 445,
+              "lit": 2345,
+              "samples": 2345,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 507,
+              "lit": 2671,
+              "samples": 2671,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 53.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 55.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 82.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 78.5,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "POPULATION\nU6\n15\nU9\n5",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "BIRTHS\u2212DEATHS /100 ADULTS\nU6\n0.0\nU9\n0.0",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "YEARLINGS / PRIOR BIRTHS\nU6\n100%\nU9\n100%",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "16\u201345 COHORT \u00b7 WITHDRAWN\nU6\n2 \u00b7 0%\nU9\n4 \u00b7 0%",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "CLAIMANTS / PLACE\nU6\n0.68\nU9\n2.50",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "SINK\nU6\n100%\nU9\n0%",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "FOOD IN STORE\nU6\n\u221e\nU9\n143 d",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "VIOLENT DEATHS /100K\nU6\n0.0\nU9\n0.0",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 30.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 32.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 53.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 36.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "MORE",
+                "width": 44.53125,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 747.59375,
+                "left": 694.234375
+              },
+              {
+                "right": 808.734375,
+                "left": 753.59375
+              },
+              {
+                "right": 897.5,
+                "left": 814.734375
+              },
+              {
+                "right": 982,
+                "left": 903.5
+              },
+              {
+                "right": 1016,
+                "left": 988
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "19/19",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 36,
+            "scroll": 36
+          }
+        },
+        "person": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 31,
+            "bottom": 31,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 30,
+            "clientHeight": 30
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 679,
+            "width": 1024,
+            "height": 89,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 88,
+            "clientHeight": 88
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 576.21875,
+            "width": 1024,
+            "height": 102.78125,
+            "bottom": 679,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 102,
+            "clientHeight": 102
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 69.28125,
+              "width": 511,
+              "height": 506.9375,
+              "bottom": 576.21875,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 507,
+              "clientHeight": 507
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 69.28125,
+              "width": 511,
+              "height": 506.9375,
+              "bottom": 576.21875,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 507,
+              "clientHeight": 507
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 48.390625,
+              "width": 511,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 48.390625,
+              "width": 511,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 31,
+            "mastheadPercent": 4.036458333333333,
+            "worldHeadings": [
+              20.890625,
+              20.890625
+            ],
+            "combinedHeight": 261.0625,
+            "combinedPercent": 33.992513020833336,
+            "bottom": 89,
+            "bottomPercent": 11.588541666666666,
+            "strip": 102.78125,
+            "stripPercent": 13.382975260416666,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 513,
+                "y": 431.21875,
+                "width": 272,
+                "height": 145,
+                "bottom": 576.21875,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 513,
+                "y": 69.28125,
+                "width": 511,
+                "height": 506.9375,
+                "bottom": 576.21875,
+                "scrollWidth": 511,
+                "clientWidth": 511,
+                "scrollHeight": 507,
+                "clientHeight": 507
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 507,
+              "lit": 2671,
+              "samples": 2671,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 507,
+              "lit": 2671,
+              "samples": 2671,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 68,
+              "lying": false,
+              "body": {
+                "left": 759.2379250582642,
+                "right": 785.720683678954,
+                "top": 226.28125000000165,
+                "bottom": 274.28125000000165
+              },
+              "cardTop": 431.21875,
+              "sceneTop": 69.28125,
+              "sceneBottom": 576.21875,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 53.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 55.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 82.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 78.5,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "POPULATION\nU6\n15\nU9\n5",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "BIRTHS\u2212DEATHS /100 ADULTS\nU6\n0.0\nU9\n0.0",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "YEARLINGS / PRIOR BIRTHS\nU6\n100%\nU9\n100%",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "16\u201345 COHORT \u00b7 WITHDRAWN\nU6\n2 \u00b7 0%\nU9\n4 \u00b7 0%",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "CLAIMANTS / PLACE\nU6\n0.68\nU9\n2.50",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "SINK\nU6\n100%\nU9\n0%",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "FOOD IN STORE\nU6\n\u221e\nU9\n143 d",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "VIOLENT DEATHS /100K\nU6\n0.0\nU9\n0.0",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 30.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 32.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 53.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 36.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "MORE",
+                "width": 44.53125,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 747.59375,
+                "left": 694.234375
+              },
+              {
+                "right": 808.734375,
+                "left": 753.59375
+              },
+              {
+                "right": 897.5,
+                "left": 814.734375
+              },
+              {
+                "right": 982,
+                "left": 903.5
+              },
+              {
+                "right": 1016,
+                "left": 988
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "19/19",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 36,
+            "scroll": 36
+          }
+        },
+        "more": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 31,
+            "bottom": 31,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 30,
+            "clientHeight": 30
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 583.40625,
+            "width": 1024,
+            "height": 184.59375,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 184,
+            "clientHeight": 184
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 480.625,
+            "width": 1024,
+            "height": 102.78125,
+            "bottom": 583.40625,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 102,
+            "clientHeight": 102
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 69.28125,
+              "width": 511,
+              "height": 411.34375,
+              "bottom": 480.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 411,
+              "clientHeight": 411
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 69.28125,
+              "width": 511,
+              "height": 411.34375,
+              "bottom": 480.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 411,
+              "clientHeight": 411
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 48.390625,
+              "width": 511,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 48.390625,
+              "width": 511,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 31,
+            "mastheadPercent": 4.036458333333333,
+            "worldHeadings": [
+              20.890625,
+              20.890625
+            ],
+            "combinedHeight": 356.65625,
+            "combinedPercent": 46.439615885416664,
+            "bottom": 184.59375,
+            "bottomPercent": 24.03564453125,
+            "strip": 102.78125,
+            "stripPercent": 13.382975260416666,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 513,
+                "y": 335.625,
+                "width": 272,
+                "height": 145,
+                "bottom": 480.625,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 513,
+                "y": 69.28125,
+                "width": 511,
+                "height": 411.34375,
+                "bottom": 480.625,
+                "scrollWidth": 511,
+                "clientWidth": 511,
+                "scrollHeight": 411,
+                "clientHeight": 411
+              }
+            }
+          ],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 411,
+              "lit": 2166,
+              "samples": 2166,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 411,
+              "lit": 2166,
+              "samples": 2166,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 68,
+              "lying": false,
+              "body": {
+                "left": 759.237963654527,
+                "right": 785.7206119181403,
+                "top": 178.28165212796665,
+                "bottom": 226.28145210576585
+              },
+              "cardTop": 335.625,
+              "sceneTop": 69.28125,
+              "sceneBottom": 480.625,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 53.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 55.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 82.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 78.5,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "POPULATION\nU6\n15\nU9\n5",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "BIRTHS\u2212DEATHS /100 ADULTS\nU6\n0.0\nU9\n0.0",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "YEARLINGS / PRIOR BIRTHS\nU6\n100%\nU9\n100%",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "16\u201345 COHORT \u00b7 WITHDRAWN\nU6\n2 \u00b7 0%\nU9\n4 \u00b7 0%",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "CLAIMANTS / PLACE\nU6\n0.68\nU9\n2.50",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "SINK\nU6\n100%\nU9\n0%",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "FOOD IN STORE\nU6\n\u221e\nU9\n143 d",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "VIOLENT DEATHS /100K\nU6\n0.0\nU9\n0.0",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 30.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 32.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 53.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 36.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "LESS",
+                "width": 37.15625,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 747.59375,
+                "left": 694.234375
+              },
+              {
+                "right": 808.734375,
+                "left": 753.59375
+              },
+              {
+                "right": 897.5,
+                "left": 814.734375
+              },
+              {
+                "right": 982,
+                "left": 903.5
+              },
+              {
+                "right": 1016,
+                "left": 988
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "7/7",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 36,
+            "scroll": 36
+          }
+        },
+        "person-expanded": {
+          "hidden": false,
+          "width": 1024,
+          "height": 768,
+          "documentWidth": 1024,
+          "documentHeight": 768,
+          "bodyHeight": 768,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1024,
+            "height": 31,
+            "bottom": 31,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 30,
+            "clientHeight": 30
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 583.40625,
+            "width": 1024,
+            "height": 184.59375,
+            "bottom": 768,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 184,
+            "clientHeight": 184
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 480.625,
+            "width": 1024,
+            "height": 102.78125,
+            "bottom": 583.40625,
+            "scrollWidth": 1024,
+            "clientWidth": 1024,
+            "scrollHeight": 102,
+            "clientHeight": 102
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 69.28125,
+              "width": 511,
+              "height": 411.34375,
+              "bottom": 480.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 411,
+              "clientHeight": 411
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 131.65625,
+              "width": 511,
+              "height": 348.96875,
+              "bottom": 480.625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 349,
+              "clientHeight": 349
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 48.390625,
+              "width": 511,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 513,
+              "y": 48.390625,
+              "width": 511,
+              "height": 83.265625,
+              "bottom": 131.65625,
+              "scrollWidth": 511,
+              "clientWidth": 511,
+              "scrollHeight": 83,
+              "clientHeight": 83
+            }
+          ],
+          "chrome": {
+            "masthead": 31,
+            "mastheadPercent": 4.036458333333333,
+            "worldHeadings": [
+              20.890625,
+              83.265625
+            ],
+            "combinedHeight": 419.03125,
+            "combinedPercent": 54.561360677083336,
+            "bottom": 184.59375,
+            "bottomPercent": 24.03564453125,
+            "strip": 102.78125,
+            "stripPercent": 13.382975260416666,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 513,
+                "y": 335.625,
+                "width": 272,
+                "height": 145,
+                "bottom": 480.625,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 513,
+                "y": 131.65625,
+                "width": 511,
+                "height": 348.96875,
+                "bottom": 480.625,
+                "scrollWidth": 511,
+                "clientWidth": 511,
+                "scrollHeight": 349,
+                "clientHeight": 349
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 511,
+              "height": 411,
+              "lit": 2166,
+              "samples": 2166,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 511,
+              "height": 349,
+              "lit": 1839,
+              "samples": 1839,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 68,
+              "lying": false,
+              "body": {
+                "left": 759.2385924802047,
+                "right": 785.7194427623986,
+                "top": 209.66320375687673,
+                "bottom": 257.6597448933529
+              },
+              "cardTop": 335.625,
+              "sceneTop": 131.65625,
+              "sceneBottom": 480.625,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 53.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 55.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 82.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 78.5,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "POPULATION\nU6\n15\nU9\n5",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "BIRTHS\u2212DEATHS /100 ADULTS\nU6\n0.0\nU9\n0.0",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "YEARLINGS / PRIOR BIRTHS\nU6\n100%\nU9\n100%",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "16\u201345 COHORT \u00b7 WITHDRAWN\nU6\n2 \u00b7 0%\nU9\n4 \u00b7 0%",
+                "width": 256,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "CLAIMANTS / PLACE\nU6\n0.68\nU9\n2.50",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "SINK\nU6\n100%\nU9\n0%",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "FOOD IN STORE\nU6\n\u221e\nU9\n143 d",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "VIOLENT DEATHS /100K\nU6\n0.0\nU9\n0.0",
+                "width": 256,
+                "height": 51.390625
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 30.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 32.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 53.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 36.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "LESS",
+                "width": 37.15625,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 747.59375,
+                "left": 694.234375
+              },
+              {
+                "right": 808.734375,
+                "left": 753.59375
+              },
+              {
+                "right": 897.5,
+                "left": 814.734375
+              },
+              {
+                "right": 982,
+                "left": 903.5
+              },
+              {
+                "right": 1016,
+                "left": 988
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "7/7",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 36,
+            "scroll": 36
+          }
+        }
+      },
+      "vr": {},
+      "selected": {
+        "id": 68,
+        "age": 56,
+        "act": 20
+      },
+      "nativeTabCount": 2,
+      "recordPaging": {
+        "pages": 7,
+        "clipped": []
+      },
+      "researchPages": {
+        "origin": {
+          "pages": 10,
+          "clipped": [],
+          "textPreserved": true
+        },
+        "tests": {
+          "pages": 6,
+          "clipped": [],
+          "textPreserved": true
+        },
+        "runs": {
+          "pages": 2,
+          "clipped": [],
+          "textPreserved": true
+        },
+        "books": {
+          "pages": 6,
+          "clipped": [],
+          "textPreserved": true
+        }
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "errors": [],
+      "consoleErrors": [],
+      "requestFailures": [],
+      "2d": {
+        "first": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 31,
+            "bottom": 31,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 30,
+            "clientHeight": 30
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 811,
+            "width": 1440,
+            "height": 89,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 88,
+            "clientHeight": 88
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 759.609375,
+            "width": 1440,
+            "height": 51.390625,
+            "bottom": 811,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 50,
+            "clientHeight": 50
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 69.28125,
+              "width": 719,
+              "height": 690.328125,
+              "bottom": 759.609375,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 690,
+              "clientHeight": 690
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 69.28125,
+              "width": 719,
+              "height": 690.328125,
+              "bottom": 759.609375,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 690,
+              "clientHeight": 690
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 48.390625,
+              "width": 719,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 48.390625,
+              "width": 719,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 31,
+            "mastheadPercent": 3.4444444444444446,
+            "worldHeadings": [
+              20.890625,
+              20.890625
+            ],
+            "combinedHeight": 209.671875,
+            "combinedPercent": 23.296875,
+            "bottom": 89,
+            "bottomPercent": 9.88888888888889,
+            "strip": 51.390625,
+            "stripPercent": 5.710069444444445,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "BODY",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 690,
+              "lit": 5115,
+              "samples": 5115,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 690,
+              "lit": 5115,
+              "samples": 5115,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 53.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 55.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 82.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 78.5,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "POPULATION\nU6\n15\nU9\n5",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "BIRTHS\u2212DEATHS /100 ADULTS\nU6\n0.0\nU9\n0.0",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "YEARLINGS / PRIOR BIRTHS\nU6\n100%\nU9\n100%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "16\u201345 COHORT \u00b7 WITHDRAWN\nU6\n2 \u00b7 0%\nU9\n4 \u00b7 0%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "CLAIMANTS / PLACE\nU6\n0.68\nU9\n2.50",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "SINK\nU6\n100%\nU9\n0%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "FOOD IN STORE\nU6\n\u221e\nU9\n143 d",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "VIOLENT DEATHS /100K\nU6\n0.0\nU9\n0.0",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 30.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 32.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 53.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 36.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "MORE",
+                "width": 44.53125,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 1163.59375,
+                "left": 1110.234375
+              },
+              {
+                "right": 1224.734375,
+                "left": 1169.59375
+              },
+              {
+                "right": 1313.5,
+                "left": 1230.734375
+              },
+              {
+                "right": 1398,
+                "left": 1319.5
+              },
+              {
+                "right": 1432,
+                "left": 1404
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "19/19",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 36,
+            "scroll": 36
+          }
+        },
+        "expanded": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 31,
+            "bottom": 31,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 30,
+            "clientHeight": 30
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 811,
+            "width": 1440,
+            "height": 89,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 88,
+            "clientHeight": 88
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 759.609375,
+            "width": 1440,
+            "height": 51.390625,
+            "bottom": 811,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 50,
+            "clientHeight": 50
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 116.0625,
+              "width": 719,
+              "height": 643.546875,
+              "bottom": 759.609375,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 644,
+              "clientHeight": 644
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 69.28125,
+              "width": 719,
+              "height": 690.328125,
+              "bottom": 759.609375,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 690,
+              "clientHeight": 690
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 48.390625,
+              "width": 719,
+              "height": 67.671875,
+              "bottom": 116.0625,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 68,
+              "clientHeight": 68
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 48.390625,
+              "width": 719,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 31,
+            "mastheadPercent": 3.4444444444444446,
+            "worldHeadings": [
+              67.671875,
+              20.890625
+            ],
+            "combinedHeight": 256.453125,
+            "combinedPercent": 28.494791666666668,
+            "bottom": 89,
+            "bottomPercent": 9.88888888888889,
+            "strip": 51.390625,
+            "stripPercent": 5.710069444444445,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 644,
+              "lit": 4774,
+              "samples": 4774,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 690,
+              "lit": 5115,
+              "samples": 5115,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 53.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 55.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 82.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 78.5,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "POPULATION\nU6\n15\nU9\n5",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "BIRTHS\u2212DEATHS /100 ADULTS\nU6\n0.0\nU9\n0.0",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "YEARLINGS / PRIOR BIRTHS\nU6\n100%\nU9\n100%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "16\u201345 COHORT \u00b7 WITHDRAWN\nU6\n2 \u00b7 0%\nU9\n4 \u00b7 0%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "CLAIMANTS / PLACE\nU6\n0.68\nU9\n2.50",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "SINK\nU6\n100%\nU9\n0%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "FOOD IN STORE\nU6\n\u221e\nU9\n143 d",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "VIOLENT DEATHS /100K\nU6\n0.0\nU9\n0.0",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 30.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 32.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 53.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 36.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "MORE",
+                "width": 44.53125,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 1163.59375,
+                "left": 1110.234375
+              },
+              {
+                "right": 1224.734375,
+                "left": 1169.59375
+              },
+              {
+                "right": 1313.5,
+                "left": 1230.734375
+              },
+              {
+                "right": 1398,
+                "left": 1319.5
+              },
+              {
+                "right": 1432,
+                "left": 1404
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "19/19",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 36,
+            "scroll": 36
+          }
+        },
+        "person": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 31,
+            "bottom": 31,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 30,
+            "clientHeight": 30
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 811,
+            "width": 1440,
+            "height": 89,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 88,
+            "clientHeight": 88
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 759.609375,
+            "width": 1440,
+            "height": 51.390625,
+            "bottom": 811,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 50,
+            "clientHeight": 50
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 69.28125,
+              "width": 719,
+              "height": 690.328125,
+              "bottom": 759.609375,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 690,
+              "clientHeight": 690
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 69.28125,
+              "width": 719,
+              "height": 690.328125,
+              "bottom": 759.609375,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 690,
+              "clientHeight": 690
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 48.390625,
+              "width": 719,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 48.390625,
+              "width": 719,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 31,
+            "mastheadPercent": 3.4444444444444446,
+            "worldHeadings": [
+              20.890625,
+              20.890625
+            ],
+            "combinedHeight": 209.671875,
+            "combinedPercent": 23.296875,
+            "bottom": 89,
+            "bottomPercent": 9.88888888888889,
+            "strip": 51.390625,
+            "stripPercent": 5.710069444444445,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 721,
+                "y": 614.609375,
+                "width": 272,
+                "height": 145,
+                "bottom": 759.609375,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 721,
+                "y": 69.28125,
+                "width": 719,
+                "height": 690.328125,
+                "bottom": 759.609375,
+                "scrollWidth": 719,
+                "clientWidth": 719,
+                "scrollHeight": 690,
+                "clientHeight": 690
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 690,
+              "lit": 5115,
+              "samples": 5115,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 690,
+              "lit": 5115,
+              "samples": 5115,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 68,
+              "lying": false,
+              "body": {
+                "left": 1071.2379250582642,
+                "right": 1097.720683678954,
+                "top": 317.7812500000677,
+                "bottom": 365.7812500000677
+              },
+              "cardTop": 614.609375,
+              "sceneTop": 69.28125,
+              "sceneBottom": 759.609375,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 53.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 55.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 82.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 78.5,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "POPULATION\nU6\n15\nU9\n5",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "BIRTHS\u2212DEATHS /100 ADULTS\nU6\n0.0\nU9\n0.0",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "YEARLINGS / PRIOR BIRTHS\nU6\n100%\nU9\n100%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "16\u201345 COHORT \u00b7 WITHDRAWN\nU6\n2 \u00b7 0%\nU9\n4 \u00b7 0%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "CLAIMANTS / PLACE\nU6\n0.68\nU9\n2.50",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "SINK\nU6\n100%\nU9\n0%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "FOOD IN STORE\nU6\n\u221e\nU9\n143 d",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "VIOLENT DEATHS /100K\nU6\n0.0\nU9\n0.0",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 30.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 32.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 53.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 36.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "MORE",
+                "width": 44.53125,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 1163.59375,
+                "left": 1110.234375
+              },
+              {
+                "right": 1224.734375,
+                "left": 1169.59375
+              },
+              {
+                "right": 1313.5,
+                "left": 1230.734375
+              },
+              {
+                "right": 1398,
+                "left": 1319.5
+              },
+              {
+                "right": 1432,
+                "left": 1404
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "19/19",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 36,
+            "scroll": 36
+          }
+        },
+        "more": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 31,
+            "bottom": 31,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 30,
+            "clientHeight": 30
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 689,
+            "width": 1440,
+            "height": 211,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 210,
+            "clientHeight": 210
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 637.609375,
+            "width": 1440,
+            "height": 51.390625,
+            "bottom": 689,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 50,
+            "clientHeight": 50
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 69.28125,
+              "width": 719,
+              "height": 568.328125,
+              "bottom": 637.609375,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 568,
+              "clientHeight": 568
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 69.28125,
+              "width": 719,
+              "height": 568.328125,
+              "bottom": 637.609375,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 568,
+              "clientHeight": 568
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 48.390625,
+              "width": 719,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 48.390625,
+              "width": 719,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            }
+          ],
+          "chrome": {
+            "masthead": 31,
+            "mastheadPercent": 3.4444444444444446,
+            "worldHeadings": [
+              20.890625,
+              20.890625
+            ],
+            "combinedHeight": 331.671875,
+            "combinedPercent": 36.85243055555556,
+            "bottom": 211,
+            "bottomPercent": 23.444444444444443,
+            "strip": 51.390625,
+            "stripPercent": 5.710069444444445,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 721,
+                "y": 492.609375,
+                "width": 272,
+                "height": 145,
+                "bottom": 637.609375,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 721,
+                "y": 69.28125,
+                "width": 719,
+                "height": 568.328125,
+                "bottom": 637.609375,
+                "scrollWidth": 719,
+                "clientWidth": 719,
+                "scrollHeight": 568,
+                "clientHeight": 568
+              }
+            }
+          ],
+          "focus": "more",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 568,
+              "lit": 4211,
+              "samples": 4211,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 568,
+              "lit": 4211,
+              "samples": 4211,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 68,
+              "lying": false,
+              "body": {
+                "left": 1071.2410024663184,
+                "right": 1097.7149619512636,
+                "top": 256.81331299659007,
+                "bottom": 304.7973645630533
+              },
+              "cardTop": 492.609375,
+              "sceneTop": 69.28125,
+              "sceneBottom": 637.609375,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 53.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 55.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 82.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 78.5,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "POPULATION\nU6\n15\nU9\n5",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "BIRTHS\u2212DEATHS /100 ADULTS\nU6\n0.0\nU9\n0.0",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "YEARLINGS / PRIOR BIRTHS\nU6\n100%\nU9\n100%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "16\u201345 COHORT \u00b7 WITHDRAWN\nU6\n2 \u00b7 0%\nU9\n4 \u00b7 0%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "CLAIMANTS / PLACE\nU6\n0.68\nU9\n2.50",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "SINK\nU6\n100%\nU9\n0%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "FOOD IN STORE\nU6\n\u221e\nU9\n143 d",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "VIOLENT DEATHS /100K\nU6\n0.0\nU9\n0.0",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 30.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 32.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 53.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 36.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "LESS",
+                "width": 37.15625,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 1163.59375,
+                "left": 1110.234375
+              },
+              {
+                "right": 1224.734375,
+                "left": 1169.59375
+              },
+              {
+                "right": 1313.5,
+                "left": 1230.734375
+              },
+              {
+                "right": 1398,
+                "left": 1319.5
+              },
+              {
+                "right": 1432,
+                "left": 1404
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "7/7",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 36,
+            "scroll": 36
+          }
+        },
+        "person-expanded": {
+          "hidden": false,
+          "width": 1440,
+          "height": 900,
+          "documentWidth": 1440,
+          "documentHeight": 900,
+          "bodyHeight": 900,
+          "top": {
+            "id": "masthead",
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 31,
+            "bottom": 31,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 30,
+            "clientHeight": 30
+          },
+          "bottom": {
+            "id": "god",
+            "x": 0,
+            "y": 689,
+            "width": 1440,
+            "height": 211,
+            "bottom": 900,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 210,
+            "clientHeight": 210
+          },
+          "strip": {
+            "id": "strip",
+            "x": 0,
+            "y": 637.609375,
+            "width": 1440,
+            "height": 51.390625,
+            "bottom": 689,
+            "scrollWidth": 1440,
+            "clientWidth": 1440,
+            "scrollHeight": 50,
+            "clientHeight": 50
+          },
+          "scenes": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 69.28125,
+              "width": 719,
+              "height": 568.328125,
+              "bottom": 637.609375,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 568,
+              "clientHeight": 568
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 131.65625,
+              "width": 719,
+              "height": 505.953125,
+              "bottom": 637.609375,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 506,
+              "clientHeight": 506
+            }
+          ],
+          "worldHeads": [
+            {
+              "id": "",
+              "x": 0,
+              "y": 48.390625,
+              "width": 719,
+              "height": 20.890625,
+              "bottom": 69.28125,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 21,
+              "clientHeight": 21
+            },
+            {
+              "id": "",
+              "x": 721,
+              "y": 48.390625,
+              "width": 719,
+              "height": 83.265625,
+              "bottom": 131.65625,
+              "scrollWidth": 719,
+              "clientWidth": 719,
+              "scrollHeight": 83,
+              "clientHeight": 83
+            }
+          ],
+          "chrome": {
+            "masthead": 31,
+            "mastheadPercent": 3.4444444444444446,
+            "worldHeadings": [
+              20.890625,
+              83.265625
+            ],
+            "combinedHeight": 394.046875,
+            "combinedPercent": 43.782986111111114,
+            "bottom": 211,
+            "bottomPercent": 23.444444444444443,
+            "strip": 51.390625,
+            "stripPercent": 5.710069444444445,
+            "notice": 17.390625
+          },
+          "overlays": [],
+          "dialogChrome": [],
+          "clippedReadingAreas": [],
+          "flowFailures": [],
+          "cards": [
+            {
+              "card": {
+                "id": "card9",
+                "x": 721,
+                "y": 492.609375,
+                "width": 272,
+                "height": 145,
+                "bottom": 637.609375,
+                "scrollWidth": 272,
+                "clientWidth": 272,
+                "scrollHeight": 144,
+                "clientHeight": 144
+              },
+              "scene": {
+                "id": "",
+                "x": 721,
+                "y": 131.65625,
+                "width": 719,
+                "height": 505.953125,
+                "bottom": 637.609375,
+                "scrollWidth": 719,
+                "clientWidth": 719,
+                "scrollHeight": 506,
+                "clientHeight": 506
+              }
+            }
+          ],
+          "focus": "DIV",
+          "canvases": [
+            {
+              "id": "c6",
+              "width": 719,
+              "height": 568,
+              "lit": 4211,
+              "samples": 4211,
+              "imageRendering": "auto"
+            },
+            {
+              "id": "c9",
+              "width": 719,
+              "height": 506,
+              "lit": 3751,
+              "samples": 3751,
+              "imageRendering": "auto"
+            }
+          ],
+          "selectedBodies": [
+            {
+              "world": "l",
+              "id": 68,
+              "lying": false,
+              "body": {
+                "left": 1071.2380458882099,
+                "right": 1097.720459023648,
+                "top": 288.15750890687065,
+                "bottom": 336.1568827148524
+              },
+              "cardTop": 492.609375,
+              "sceneTop": 131.65625,
+              "sceneBottom": 637.609375,
+              "coveredByCard": false,
+              "visible": true
+            }
+          ],
+          "reading": {
+            ".gauge .gl": 11,
+            ".gw": 11,
+            ".gv": 12,
+            "#reclines": 12,
+            ".hud": 12,
+            "targets": [
+              {
+                "id": "walkbtn",
+                "label": "WALK",
+                "width": 53.359375,
+                "height": 28
+              },
+              {
+                "id": "bookbtn",
+                "label": "BOOK",
+                "width": 55.140625,
+                "height": 28
+              },
+              {
+                "id": "resbtn",
+                "label": "RESEARCH",
+                "width": 82.765625,
+                "height": 28
+              },
+              {
+                "id": "timebtn",
+                "label": "Timelapse instrument clock. Real time is set on the instrument, not on this mirror",
+                "width": 78.5,
+                "height": 28
+              },
+              {
+                "id": "veilbtn",
+                "label": "?",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "POPULATION\nU6\n15\nU9\n5",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "BIRTHS\u2212DEATHS /100 ADULTS\nU6\n0.0\nU9\n0.0",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "YEARLINGS / PRIOR BIRTHS\nU6\n100%\nU9\n100%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "16\u201345 COHORT \u00b7 WITHDRAWN\nU6\n2 \u00b7 0%\nU9\n4 \u00b7 0%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "CLAIMANTS / PLACE\nU6\n0.68\nU9\n2.50",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "SINK\nU6\n100%\nU9\n0%",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "FOOD IN STORE\nU6\n\u221e\nU9\n143 d",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "VIOLENT DEATHS /100K\nU6\n0.0\nU9\n0.0",
+                "width": 180,
+                "height": 50.390625
+              },
+              {
+                "id": "",
+                "label": "ALL",
+                "width": 30.734375,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U6",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "U9",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "LIFE",
+                "width": 32.953125,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "WORLD",
+                "width": 53.46875,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "END",
+                "width": 36.0625,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Earlier records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "",
+                "label": "Later records",
+                "width": 28,
+                "height": 28
+              },
+              {
+                "id": "more",
+                "label": "LESS",
+                "width": 37.15625,
+                "height": 28
+              }
+            ],
+            "masthead": [
+              {
+                "right": 1163.59375,
+                "left": 1110.234375
+              },
+              {
+                "right": 1224.734375,
+                "left": 1169.59375
+              },
+              {
+                "right": 1313.5,
+                "left": 1230.734375
+              },
+              {
+                "right": 1398,
+                "left": 1319.5
+              },
+              {
+                "right": 1432,
+                "left": 1404
+              }
+            ],
+            "fonts": [
+              [
+                "13px Jost",
+                true
+              ],
+              [
+                "17px \"Source Serif 4\"",
+                false
+              ]
+            ]
+          },
+          "pagerLine": {
+            "text": "7/7",
+            "height": 16.796875,
+            "line": 16.8,
+            "width": 36,
+            "scroll": 36
+          }
+        }
+      },
+      "vr": {},
+      "selected": {
+        "id": 68,
+        "age": 56,
+        "act": 20
+      },
+      "nativeTabCount": 2,
+      "recordPaging": {
+        "pages": 7,
+        "clipped": []
+      },
+      "researchPages": {
+        "origin": {
+          "pages": 10,
+          "clipped": [],
+          "textPreserved": true
+        },
+        "tests": {
+          "pages": 6,
+          "clipped": [],
+          "textPreserved": true
+        },
+        "runs": {
+          "pages": 2,
+          "clipped": [],
+          "textPreserved": true
+        },
+        "books": {
+          "pages": 6,
+          "clipped": [],
+          "textPreserved": true
+        }
+      }
+    }
+  ]
+}

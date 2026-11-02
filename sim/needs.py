@@ -25,6 +25,7 @@ from typing import Optional
 import skills
 import learning
 import encounters
+import drives
 
 # The number of parts in a day. The engine owns the truth of this; it is
 # repeated here so that this module stands alone.
@@ -751,9 +752,7 @@ def _social_person(u, p, kind):
         return None
     terrain = terrain_of(u) if u.get('kind') == 'LAGOON' else None
     people = encounters.candidates(u,p,u.get('people',[]),kind,terrain)
-    if kind == 'mate':
-        people = [q for q in people if _age(u,q) <= 45]
-    else:
+    if kind != 'mate':
         minimum = 12 if u.get('kind') == 'LAGOON' else 16
         people = [q for q in people if _age(u,q) >= minimum]
         if u.get('kind') == 'LAGOON':
@@ -831,22 +830,33 @@ def assign(u, p, day, rng, cond=None, engine=None):
     if E is None:
         import engine as E
 
+    # A finished stint is a prior action, not a veto on this actor's
+    # fresh choice. Birth/withdrawal are continuing bodily states; ongoing
+    # activities and every other person's state remain protected.
+    if (p.get("ad", 0) <= 0 and p.get("a") not in (E.A_BIRTH, E.A_WITHDRAW)
+            and (p.get("x"), p.get("y")) == (p.get("tx"), p.get("ty"))):
+        p["a"] = E.A_IDLE
+
     a = _age(u, p)
     hun = p.get("hun", 0.0)
     ene = p.get("ene", 1.0)
     sol = p.get("sol", 1.0)
     reach = REACH.get(u.get("kind"), 24)
 
-    # What the body wants, as three numbers between 0 and 1. Food is
+    # Shared fuzzy rules, slightly different fixed personal sensitivity.
+    # These are urgency grades, not probabilities. Absolute bodily guards
+    # still operate outside this voluntary scorer. Food is
     # wanted twice over: by this belly, and by a camp whose store is low.
     # Foragers do not wait to starve before they go out; they go because
     # the band will eat tomorrow what is brought in today, and the larder
     # is everyone's to keep (Lee and DeVore, Man the Hunter, 1968).
-    want_food = min(1.0, hun / HUNGRY)
+    body_food = drives.response(u, p, "food", hun / HUNGRY)
+    want_food = body_food
     if cond.get("must_work_to_eat") and a >= 12:
         want_food = max(want_food, 0.75 * larder_short(u, p))
-    want_rest = 1.0 - ene
-    want_company = 1.0 - sol
+    want_rest = drives.response(u, p, "rest", 1.0 - ene)
+    want_company = drives.response(u, p, "company", 1.0 - sol)
+    want_intimacy = drives.response(u, p, "intimacy", p.get("intimacy", 0.0))
 
     options = []   # (score, activity, target)
     scout = None
@@ -919,7 +929,7 @@ def assign(u, p, day, rng, cond=None, engine=None):
     if store > 0 and at_camp(u, p):
         # what is in the camp is worth less than going to get more
         # eating is for this belly only: the larder does not make you hungry
-        eat_w = min(1.0, hun / HUNGRY) * 1.6
+        eat_w = body_food * 1.6
         if cond.get("comfort_eat") and hun > 2:
             # with nothing asked of you, a meal is something to do
             # (BOOKS.md: Frankl's existential vacuum; Freud on substitutes)
@@ -1033,24 +1043,19 @@ def assign(u, p, day, rng, cond=None, engine=None):
                                 (site["x"], site["y"]), site))
 
     # --- mating, for those who can -----------------------------------------
-    mate = (_social_person(u,p,'mate') if not u.get('innocent') and 16 <= a <= 45 else None)
-    if mate is not None and (p.get('p') is not None or cond.get('mate') == 'bonded'):
-        # an empty belly is not an invitation, and a tired body less of one
+    mate = (_social_person(u,p,'mate') if not u.get('innocent') and a >= 16
+            and cond.get('mate') in ('free','bonded') else None)
+    if mate is not None:
         target = _social_target(u,p,mate,'mate')
         if target is not None:
-            option = ((0.3 + 0.3 * want_company + INTIMACY_WEIGHT*p.get('intimacy',0.)) * (1.0 - 0.85 * want_food)
-                      * (0.4 + 0.6 * ene), E.A_MATE, target, None)
-            options.append(option)
-            social_options[id(option)] = ('mate', mate)
-
-    if cond.get("mate") == "free" and p.get("p") is None and mate is not None:
-        # the pen's mating is free of bonds: anyone near will do, while
-        # easy pleasure has not yet dulled the wanting of it
-        target = _social_target(u,p,mate,'mate')
-        if target is not None:
-            option = ((0.3 + 0.3 * want_company + INTIMACY_WEIGHT*p.get('intimacy',0.)) * (1.0 - 0.85 * want_food)
-                      * (0.4 + 0.6 * ene) * (0.4 + p.get("pu", 0.5))
-                      * max(0.2, 1.0 - u.get("ennui", 0.0)), E.A_MATE, target, None)
+            # Bodily desire does not change merely because the biography
+            # stores a bond. Local compatibility and the peer's own choice
+            # still determine whether an encounter can happen.
+            score = ((0.3 + 0.3 * want_company + INTIMACY_WEIGHT*want_intimacy)
+                     * (1.0 - 0.85 * want_food) * (0.4 + 0.6 * ene))
+            if cond.get("mate") == "free":
+                score *= max(0.2, 1.0 - u.get("ennui", 0.0))
+            option = (score, E.A_MATE, target, None)
             options.append(option)
             social_options[id(option)] = ('mate', mate)
 
@@ -1135,7 +1140,7 @@ def assign(u, p, day, rng, cond=None, engine=None):
 
 
 def _duration(act, rng):
-    """How long a stint lasts, in days, for the work that matters."""
+    """Stint length in parts; longer work durations are specified in days."""
     from engine import days
     if act == 3:                # hunt: a day or two on a herd's trail
         return days(rng.randint(1, 2))
@@ -1149,7 +1154,7 @@ def _duration(act, rng):
         return days(1)
     if act == 17:               # sleep
         return days(rng.randint(1, 2))
-    if act in (8, 7, 21):       # mate, talk, groom: an hour, not a week
+    if act in (8, 7, 21):       # mate, talk, groom: one or two parts
         return rng.randint(1, 2)
     return days(rng.randint(1, 3))
 
