@@ -35,8 +35,8 @@ EVENTS_PATH = os.path.join(DATA, "events.ndjson")
 WEBCFG_PATH = os.path.join(DATA, "web.json")
 PORT = int(os.environ.get("UNIVERSE69_PORT", "6969"))
 # How long one part of a day takes in real seconds. A day is four parts, so
-# this sets how fast the year goes by: default 100 model years of 360 days
-# per real day, retaining dawn/day/dusk/night as separate ticks.
+# this sets how fast the year goes by: default one 360-day model year
+# per real hour, retaining dawn/day/dusk/night as separate engine ticks.
 SEC_PER_PART = float(os.environ.get("UNIVERSE69_SEC_PER_PART", engine.SEC_PER_PART))
 # Real-Time: a day actually takes a day. Dawn, day, dusk and night each take
 # a real six hours, so the people move at the pace they would move at if you

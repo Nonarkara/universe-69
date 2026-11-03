@@ -282,7 +282,7 @@
 <body>
 <div id="masthead">
   <span class="ttl">UNIVERSE 69</span>
-  <span class="sub" id="pace">100 years / real day · observed, never helped</span>
+  <span class="sub" id="pace">1 year / real hour · observed, never helped</span>
   <span class="hint">wheel zoom · drag pan · click to follow · WASD walk in · esc</span>
   <button id="walkbtn" title="Walk into the world you last touched">WALK</button>
   <button type="button" id="bookbtn" title="The book: how these two worlds came to be">BOOK</button>
@@ -332,8 +332,8 @@
     <div class="page" id="intropage">
     <p><b class="eden">EDEN</b> is universe 6: a sealed resort where it is always spring. Food, water, and a bed are free. The only scarce things are room and a place to be needed.</p>
     <p><b class="lagoon">LAGOON</b> is universe 9: a Sri Lanka-inspired tropical island of woods, fish, freshwater and predators, shaped by wet and dry seasons. Nothing is given.</p>
-    <p>Watch only. You cannot feed them or step in. They keep living while you are away — by default, a whole day and a night every 2.4 seconds — 100 simulated years in one real day.</p>
-    <p>The light turns: dawn, day, dusk, night. In LAGOON the band comes in to the fire after dark and takes turns keeping watch. EDEN never closes, but it goes to bed.</p>
+    <p>Watch only. You cannot feed them or step in. They keep living while you are away — by default, one year in one real hour.</p>
+    <p>Timelapse runs one 360-day year per real hour: a day every ten seconds. The display light turns four times per year, rather than flashing through every model night. The clock label still reports the actual model time. In real-time mode, light follows the actual dawn, day, dusk and night. In LAGOON the band comes in to the fire after dark and takes turns keeping watch. EDEN never closes, but it goes to bed.</p>
     <p class="dim">THE FIRST RUN keeps the record of the original two universes: what they did, what we missed, what failed.</p>
     <p class="dim">Wheel to look closer, drag to pan, click a person to follow, 1 · 2 · 3 for island, camp and hearth, WASD to walk in among them. BOOK and RESEARCH read in pages: ‹ › or the arrow keys.</p>
     </div>
@@ -384,12 +384,25 @@
 <script src="config.js"></script>
 <script>
 var SNAP = window.SNAPSHOT_URL || null;
-// 'default' is the century-a-day timelapse; 'realtime' is a real day
+// 'default' is the year-an-hour timelapse; 'realtime' is a real day
 // taking a real day — set by /pace, read from the polled state so a mirror
 // viewer (which cannot POST) still renders at the pace the instrument was
 // actually running when it pushed.
 var timeMode="default";
 var EM = 12;          // EDEN resort margin (tiles) around the pen
+
+// Four legible display light cycles per model year. This never changes sleep,
+// seasons, actions or the model clock; the HUD continues to show actual tod.
+function displayLight(u){
+  if (timeMode==="realtime") return {tod:u.tod||"day", night:!!u.night,
+    dark:u.night?1:0, dawn:u.tod==="dawn"?1:0, dusk:u.tod==="dusk"?1:0};
+  var phase=((((u.day||0)+(u.part||0)/4)%90)+90)%90/90;
+  var dark=(1-Math.sin(phase*Math.PI*2))/2;
+  return {tod:phase<.125||phase>=.875?"dawn":phase<.375?"day":phase<.625?"dusk":"night",
+    night:dark>.5, dark:dark*dark,
+    dawn:Math.max(0,Math.cos((phase-.05)*Math.PI*2))*.35,
+    dusk:Math.max(0,Math.cos((phase-.65)*Math.PI*2))*.35};
+}
 
 // ---- the palette lives on :root (TERRARIUM, GRAPHICS.md §1); the canvas reads it
 var PALETTE_TOKENS={
@@ -437,9 +450,9 @@ var view={ e:null, l:null };      // the viewport each frame drew, for input mat
 var sel={ e:0, l:0 };             // the person the viewer picked
 var MIN_H=1.2, MAX_H=90;         // half-height in tiles: 1.2 is face-close
 // The zoom ladder, named by how tall an adult stands on screen in CSS pixels:
-// the island (6), the camp (18), the hearth (48). The documentary eye moves
+// the island (6), the camp (18), the hearth (84). The documentary eye moves
 // between these rungs; the wheel may still stop anywhere between them.
-var RUNG_PX=[6,18,48], RUNG_NAME=["island","camp","hearth"];
+var RUNG_PX=[6,18,84], RUNG_NAME=["island","camp","hearth"];
 function rungH(key, r){
   var cv=document.getElementById(key==="e"?"c6":"c9"), hc=(cv&&cv.clientHeight)||300;
   return Math.max(MIN_H, Math.min(MAX_H, 1.45*hc/(2*RUNG_PX[r])));
@@ -1069,7 +1082,7 @@ function compose6(u){
 // lit stage in the dark: the windows of the lodgings, the glow that falls
 // out of them, and the pool with its own light under the water.
 function edenNight(g, u, sx, sy, ts, canvas){
-  var tod=u.tod||"day";
+  var tod=displayLight(u).tod;
   if (tod!=="night" && tod!=="dusk") return;
   var lit=tod==="night"?0.65:0.32, S=u.size||48;
   var boxes=(u.boxes_xy&&u.boxes_xy.length)?u.boxes_xy:EDEN_BOXES_FALLBACK;
@@ -1530,9 +1543,8 @@ function drawFar(g, J, D, k, tones, dress, v, B, fem, P){
   var shW=Math.max(D.shW, 2.2*px), hpW=Math.max(D.hpW, 1.8*px), waW=Math.max(D.waW*0.9, 1.4*px);
   var lw=Math.max(D.limbW*1.05, 1.0*px), aw=Math.max(D.limbW*0.6, 0.9*px);
   function stroke(p,q,r,w,col){
-    g.lineCap="round"; g.lineJoin="round";
-    g.strokeStyle=INK; g.lineWidth=w+edge*2; g.beginPath(); g.moveTo(p[0],p[1]); g.lineTo(q[0],q[1]); if (r) g.lineTo(r[0],r[1]); g.stroke();
-    g.strokeStyle=col; g.lineWidth=w; g.beginPath(); g.moveTo(p[0],p[1]); g.lineTo(q[0],q[1]); if (r) g.lineTo(r[0],r[1]); g.stroke();
+    if(r){ paintForm(g,limbOutline(p,q,r,[w*1.12,w,w*.9,w*.64,w*.80,w*.70,w*.45]),[col,col],edge,.18); }
+    else {g.strokeStyle=col;g.lineWidth=w;g.beginPath();g.moveTo(p[0],p[1]);g.lineTo(q[0],q[1]);g.stroke();}
   }
   var legCol=dress==="fur"?DRESS.furD:null;
   // legs apart at the hip by at least a pixel, so the gap shows
@@ -1557,7 +1569,12 @@ function drawFar(g, J, D, k, tones, dress, v, B, fem, P){
   stroke([J.shR[0]+aoff*0.3,J.shR[1]], [J.elbR[0]+aoff,J.elbR[1]], [J.wriR[0]+aoff,J.wriR[1]], aw, tones[0]);
   g.fillStyle=tones[0]; g.strokeStyle=INK; g.lineWidth=edge*1.4;
   var hr=Math.max(D.hr, 1.3*px);
-  g.beginPath(); g.arc(J.head[0], J.head[1], hr, 0, 6.283); g.fill(); g.stroke();
+  // Neck, jaw and hair survive camp scale; a round disc reads as a toy.
+  g.fillStyle=tones[1];g.fillRect(J.neck[0]-hr*.30,J.head[1]+hr*.55,hr*.60,hr);
+  g.fillStyle=tones[0];g.beginPath();g.ellipse(J.head[0],J.head[1],hr*.82,hr,0,0,6.283);g.fill();g.stroke();
+  g.fillStyle=B.stage===4?ELDER_HAIR:HAIRS[(v*7+3)%HAIRS.length];
+  g.beginPath();g.ellipse(J.head[0]-hr*.12,J.head[1]-hr*.43,hr*.84,hr*.65,-.2,Math.PI*.8,Math.PI*2.1);g.fill();
+  [J.ankL,J.ankR].forEach(function(a,i){g.fillStyle=tones[i?0:1];g.beginPath();g.ellipse(a[0]+D.headH*.18,a[1]+.25,D.headH*.43,Math.max(.28,px*.3),0,0,6.283);g.fill();});
   drawHeld(g, J, D, P||{}, B, Math.max(px*1.1, 0.6), true);
 }
 // What a person holds or carries, at any size: a spear, a hoe, a basket, a
@@ -1854,6 +1871,13 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
     g.beginPath(); g.moveTo(shX+shW*0.3, chestY+1.6+breast*0.9); g.quadraticCurveTo(shX+shW*0.75, chestY+2.1+breast, shX+shW*0.97+breast*0.8, chestY+1.1+breast*0.9); g.stroke();
   }
 
+  if (s>=2 && B.ab>=5 && dress!=="fur"){
+    g.strokeStyle=INK_SOFT;g.lineWidth=ink*.65;
+    // Clavicles root at the neck; rib cage and oblique follow the waist.
+    g.beginPath();g.moveTo(nkx-nw,shY+.5);g.quadraticCurveTo(shX-shW*.55,shY+.6,shX-shW*.84,shY+1.3);
+    g.moveTo(nkx+nw,shY+.5);g.quadraticCurveTo(shX+shW*.55,shY+.6,shX+shW*.84,shY+1.3);g.stroke();
+    if(!view){g.beginPath();g.moveTo(shX+shW*.55,chestY+2);g.quadraticCurveTo(wx+waW*.55,waY-.4,hipX+hpW*.65,hipY-.5);g.stroke();}
+  }
   var bare = !dress || dress==="swim";
   if (s>=2 && B.ab>=5){
     g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.8;
@@ -2179,7 +2203,7 @@ function walkerOf(a){
   return {pace:pace, stride:stride, ph0:h};
 }
 // Real-Time plays people at the walker's own tuned, believable pace. The
-// default century-a-day view needs its own honesty: at that compression a
+// default year-an-hour view needs its own honesty: at that compression a
 // person's errand would be invisible if it moved at a real walking pace, so
 // it is shown sped up, the way any timelapse is — not because the engine's
 // clock ran any faster, but because nobody would recognise a year of a
@@ -2735,10 +2759,10 @@ function render(canvas, world, map, key, u){
   // It is painted AFTER the people, so a figure at night is as dark as the
   // ground it stands on — and the fire, painted after the grade, lights the
   // ones sitting in its circle and nobody in the woods.
-  var tod=u.tod||"day", night=!!u.night;
-  if (tod==="dawn"){ g.fillStyle="rgba(255,168,120,0.11)"; g.fillRect(0,0,canvas.width,canvas.height); }
-  else if (tod==="dusk"){ g.fillStyle="rgba(228,118,64,0.17)"; g.fillRect(0,0,canvas.width,canvas.height); }
-  else if (night){ g.fillStyle=P.night; g.fillRect(0,0,canvas.width,canvas.height); }
+  var light=displayLight(u), night=light.night;
+  if (light.dawn){ g.fillStyle="rgba(255,168,120,"+(0.11*light.dawn)+")"; g.fillRect(0,0,canvas.width,canvas.height); }
+  if (light.dusk){ g.fillStyle="rgba(228,118,64,"+(0.17*light.dusk)+")"; g.fillRect(0,0,canvas.width,canvas.height); }
+  if (light.dark){ g.save();g.globalAlpha=light.dark;g.fillStyle=P.night;g.fillRect(0,0,canvas.width,canvas.height);g.restore(); }
   if (key==="l"){
     if (u.season==="winter"){ g.fillStyle="rgba(186,202,236,0.16)"; g.fillRect(0,0,canvas.width,canvas.height); }
     else if (u.season==="summer"){ g.fillStyle="rgba(255,214,140,0.07)"; g.fillRect(0,0,canvas.width,canvas.height); }
@@ -2828,7 +2852,9 @@ function paintOverlay(key){
     var lbl=(instructionActivity(u,a.id)||socialActivity(u,a.id,a.act)||(a.moving?"walking":(craftActivity(u,a.id)||ACT_LABEL[a.act]||"idle")));
     if (chosen && u && u.detail && u.detail[String(a.id)]) lbl=u.detail[String(a.id)][0]+" · "+lbl;
     var wpx=g.measureText(lbl).width;
-    var top=py-ts*1.45*STATURE[bodyOf(a).ab]-15*dpr;
+    var body=bodyOf(a), lying=!a.moving&&(a.act===A_SLEEP||a.act===A_MATE||body.stage===0);
+    var seated=!a.moving&&(a.act===A_REST||a.act===A_GROOM||a.act===A_BIRTH);
+    var top=py-ts*(lying?.40:seated?.85:1.45)*STATURE[body.ab]-15*dpr;
     var bw=wpx+6*dpr, bh=12*dpr;
     var bx=Math.max(0,Math.min(ov.width-bw,px-wpx/2-3*dpr)), by=Math.max(0,top);
     if (bw>ov.width || by+bh>ov.height) continue;
@@ -2899,7 +2925,6 @@ function paintOverlay(key){
     var fx=(f.x+(f.nudge||0)-sx)*ts+ts/2, fy=(f.y+(f.nudgeY||0)-sy)*ts+ts*0.95;
     g.strokeStyle=P.accent; g.lineWidth=Math.max(1,Math.round(1.5*dpr));
     g.beginPath(); g.ellipse(fx,fy,ts*0.85,ts*0.36,0,0,6.283); g.stroke();
-    g.beginPath(); g.arc(fx, fy-ts*2.3, ts*1.4, 0, 6.283); g.stroke();
   }
 }
 
@@ -3035,7 +3060,7 @@ document.querySelectorAll(".worldhead").forEach(function(h){
 document.getElementById("walkbtn").addEventListener("click", function(){
   if (cam[activeWorld].mode==="walk") leaveWalk(); else enterWalk(activeWorld);
 });
-// REAL-TIME: the century-a-day timelapse is the instrument's working pace;
+// REAL-TIME: the year-an-hour timelapse is the instrument's working pace;
 // this is the honest alternative, not a convenience — the button does not
 // pretend to be fast. A mirror viewer has no server to ask, so it can only
 // ever show whichever pace the instrument itself was actually running.
@@ -3051,7 +3076,7 @@ function updateTimeUI(){
   btn.classList.toggle("on", timeMode==="realtime");
   btn.textContent=compact?(timeMode==="realtime"?"FAST":"1×"):(timeMode==="realtime"?"CONTINUE":"REAL-TIME");
   btn.title=timeMode==="realtime"
-    ?"Resume the century-a-day pace"
+    ?"Resume one model year per real hour"
     :"Slow the world to the pace a day actually takes — dawn to night is six real hours each";
   btn.setAttribute("aria-label",btn.title);
 }
@@ -3721,7 +3746,7 @@ function poll(){
     var pace=document.getElementById("pace"), years=st.pace&&+st.pace.years_per_real_day;
     if(pace) pace.textContent=timeMode==="realtime"
       ?"real time · a day takes a day · observed, never helped"
-      :years>0?(+years.toPrecision(3))+" years / real day · observed, never helped":"two sealed worlds · observed, never helped";
+      :years>0?(+(years/24).toPrecision(3))+" year"+(years===24?"":"s")+" / real hour · observed, never helped":"two sealed worlds · observed, never helped";
     if (SNAP) snapWall=+st.wall||0;
     hideFail();
     if (!SNAP&&!worldInfo) loadWorld().then(function(){ ground.l=null; });

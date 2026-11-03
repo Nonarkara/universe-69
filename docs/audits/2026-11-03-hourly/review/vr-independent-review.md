@@ -1,0 +1,27 @@
+# Independent VR graphics / MSH review
+
+Task: compare both worlds, enter one at human height and inspect complete inhabitants while retaining clear time and navigation controls. Reading priority: worlds/inhabitants, current world and record time, navigation and optional record details.
+
+Reviewed the implementer's actual production-loop screenshots at 390×844, 1024×768 and 1440×900, the 1440×900 standing and seated synthetic anatomy studios using actual Crowd.drawBody, and the 2880×1800 drawing buffer at 1440×900 CSS size. Geometry packet source: c2fe5de4837a816de6e9ecb20ef8e2f2bc613b8217d08540ee007fd547a38ec2. The final fcd727b13c106b8d39fbffa107034e13410a7c5178622387056fef6f6658ac9f changes only the record-age text from dim to muted; geometry is identical. These are workbench Chrome/Apple M3 Metal captures, not a 2016 MacBook or Quest performance test.
+
+Found: the phone table's LAGOON plane originally extended to about y804 beneath the readout starting y760.44, obscuring roughly 44px of its southern edge. Changed: the portrait camera target shifts the world composition upward without reducing world size or changing text. Verified: final 390 screenshot puts EDEN below navigation and LAGOON's lower edge at about y733, leaving 27px before the readout. Desktop and tablet planes remain clear of their HUD. No page overflow, clipped controls or unearned spacer was visible in the inspected normal views. The desktop/tablet perspective table retains surrounding context for orbiting and entering the worlds; it is a scene, not a stretched empty content panel.
+
+| Viewport | Upper overlay extent | Lower readout | Task visibility |
+| --- | --- | --- | --- |
+| 390×844 | navigation ends y68, 8.06% of height | 73.56px, 8.72% | Both entire world planes and all five navigation choices visible together |
+| 1024×768 | left brand/instructions end y146, 19.01%; navigation ends y46 | 73.56px, 9.58% | Both planes, world labels and choices visible together |
+| 1440×900 | left brand/instructions end y146, 16.22%; navigation ends y46 | 73.56px, 8.17% | Both planes, world labels and choices visible together |
+
+These extents are partial corner overlays, not full-width occupied bars. The phone removes desktop-only instruction copy and duplicates, retaining world names/populations in its bottom readout. Controls remain 34px high with readable labels. Inside views intentionally show the human-height horizon and nearby inhabitants; sky and ground are camera space rather than invented UI padding.
+
+Anatomy: studio male, female and child figures have connected heads, necks, torsos, upper/lower limbs, hands and feet in standing and seated poses. The new caps and joint volumes remove the open-ring gaps; no half-body, missing lower limbs or floating feet was visible. Feet remain legible at DPR2. These are stylized articulated humans, not photoreal anatomy. Actual THREE geometry floor bounds for 126 synthetic age/sex/BMI/pose cases are positive, minimum +0.00131709 scene units. That supports the sampled floor-clearance claim; it does not establish physical units or all moving poses.
+
+Independent source/math review caught face-down lying orientation, the old neutral-foot clearance mismatch and six feet instances per person exceeding a four-instance allocation. All were repaired before the final geometry packet. Lathe ±1 length conventions, scaling of skull geometry with radius 0.5 and neck segment length now agree. The walk is an articulated motion hint, not full planted-foot 3D IK.
+
+Contrast: record age used #8a8372 at 12px. With its 88%-opaque dark overlay over white, the conservative contrast was about 3.55:1. Root changed this status to the existing muted #a39b88; the same worst-case bound is 4.85:1. Ink and accent also exceed 4.5:1 at that bound. This is a palette/compositing calculation plus rendered inspection, not a full accessibility audit of every scene texture.
+
+Keyboard verification: independently launched unmodified production renderer, captured exact final response SHA256 fcd727b13c106b8d39fbffa107034e13410a7c5178622387056fef6f6658ac9f at 390 and 1440, and verified source stable through the run. Five native Tab presses focus RECORD with a clearly visible 2px gold outline; Enter opens the record. Six final screenshots and received-source/DOM measurements are retained in `vr-final-keyboard/`. Both reports contain zero browser errors, no page overflow, and readable 34px-high navigation and pager controls. Normal phone view keeps both world planes clear of the readout. Expanded phone RECORD is 153.94px high (18.24% of viewport), remains within y680.06–834, and intentionally overlays part of the lower scene while reading; closing it restores the complete comparison. At 1440 the expanded record stays clear of both planes. This optional evidence is useful content rather than blank expansion.
+
+Verdict: pass for the inspected fixture, final-source controls/contrast and source-bounded anatomy/MSH states. This is a scoped rendering and keyboard pass, not a claim that every inhabitant/action or target device is validated.
+
+Remaining: Quest, MacBook production throughput, all action/crowd combinations, touch locomotion and full 3D planted-foot gait remain unverified. The studio fixtures are explicitly synthetic; the normal world fixture is generated for audit and is not the live instrument. Inspection holds a read-only record; it is not biological slow motion or a change to the simulation clock. No live worlds or services were changed by this review.

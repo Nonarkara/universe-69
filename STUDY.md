@@ -1,3 +1,11 @@
+# Current clock boundary — 2026-11-03
+
+Engine `2026.11.03.2` changes the default to one 360-day model year per real
+hour (2.5 seconds per part). Per-part biological rules and RNG are unchanged.
+The figures below are version-specific historical trials, not runtime capacity
+measurements or observations of a restarted instrument. Current graphics/clock
+verification: [hourly audit](docs/audits/2026-11-03-hourly/README.md).
+
 # STUDY — measurements from the running universes
 
 **2026-11-03 boundary.** Engine `2026.11.03.1` adds bounded individual fuzzy
@@ -5,8 +13,8 @@ need sensitivity and repairs fresh-choice readiness, partner-dependent desire
 and care preemption. It changes future trajectories. All prior numbers remain
 version-specific history. The public death audit preserves the observed clock/
 lineage discontinuity rather than combining reused iteration IDs. New tests and
-bounded results belong in `docs/audits/2026-11-03/`; the default remains 100 model
-years per real day. No instrument restart is claimed.
+bounded results belong in `docs/audits/2026-11-03/`; that release used 100 model
+years per real day (superseded by the clock boundary above). No instrument restart is claimed.
 
 ## Current frozen centuries — 2026.11.03.1
 

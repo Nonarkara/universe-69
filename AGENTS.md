@@ -153,14 +153,17 @@ core is repeated inline below so an agent that skips the pointer still gets it.
 - The viewer is a *documentary camera*, not a surveillance map: it finds
   something worth watching (a birth, a brawl, a hunting party) and closes in on
   it, then pulls back to the largest camp. Its zoom ladder is three rungs —
-  island, camp, hearth — at about 6, 18 and 48 CSS px of adult height. Do not turn it into a dashboard of
+  island, camp, hearth — at about 6, 18 and 84 CSS px of adult height. Do not turn it into a dashboard of
   charts that a human was never going to read.
 - The two universes are always shown **together on the first screen**: side
   by side on a wide screen, stacked one above the other under ~700 px. The
   comparison *is* the product; splitting them across pages or behind a tab
   destroys the experiment.
-- A day is **four parts** — dawn, day, dusk, night — and the light turns with
-  them. The tick is a part, not a day.
+- A model day is **four parts** — dawn, day, dusk, night. The tick is a part,
+  not a day. Default clock: **one 360-day year per real hour** (2.5 seconds per
+  part). The timelapse display light cycles four times per model year;
+  actual daily behavior and time remain in the record. Slow instrument mode
+  uses actual model light. Inspection holds a record; it never fabricates life.
 
 ### Anti-regression
 

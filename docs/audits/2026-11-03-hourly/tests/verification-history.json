@@ -1,0 +1,24 @@
+{
+  "intermediate_full": {
+    "tests": 607,
+    "failures": 2,
+    "cause": "VR test code was imported before the renderer phase/hair changes; assertion against earlier source. Not final-release evidence."
+  },
+  "intermediate_capacity": {
+    "tests": 610,
+    "failures": 1,
+    "cause": "Full run imported cap*6 expectation before ankle connections required cap*8; final renderer and current test both use cap*8."
+  },
+  "apple_focused": {
+    "tests": 202,
+    "failures": 0,
+    "python": "3.9.6",
+    "elapsed_seconds": 1253.471
+  },
+  "final_viewer": {
+    "tests": 103,
+    "failures": 0,
+    "note": "Fresh import after final CSS-only contrast correction; 71 style and 32 VR tests."
+  },
+  "final_full": "See release-full-tests.log and release-status.json after completion."
+}

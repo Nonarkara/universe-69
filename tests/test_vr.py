@@ -128,7 +128,40 @@ class TestTheTwoClocks(unittest.TestCase):
     def test_the_pace_is_read_from_the_record_not_hardcoded(self):
         src = read(VR)
         self.assertIn("years_per_real_day", src)
-        self.assertIn("YEARS / REAL DAY", src)
+        self.assertIn("YEARS / REAL HOUR", src)
+
+    def test_representative_light_does_not_flash_each_model_day(self):
+        src=read(VR)
+        function=src[src.index('function displayTime('):src.index('function lightPreset(')]
+        script=function+"""
+const assert=require('node:assert/strict');
+for(let d=0;d<360;d++){
+ assert.equal(displayTime({day:d,part:0,tod:'night'},false),
+   ['dawn','day','dusk','night'][Math.floor(((d%90)/90+.125)%1*4)]);
+ assert.equal(displayTime({day:d,tod:'night'},true),'night');
+}
+assert.equal(displayTime({day:22,part:1},false),'day');
+assert.equal(displayTime({day:22,part:2},false),'day');
+"""
+        if shutil.which('node'):
+            result=subprocess.run([shutil.which('node')],input=script,text=True,capture_output=True)
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        self.assertIn('smooth(phase-Math.floor(phase))',src)
+        self.assertNotIn('tod === "night" || (u && u.night)',src)
+
+    def test_connected_anatomy_and_face_are_instanced(self):
+        src=read(VR)
+        self.assertIn('this.torso = inst(torsoGeometry(), cap)',src)
+        self.assertIn('this.head = inst(skullGeometry(), cap)',src)
+        self.assertIn('this.face.count = c.nface',src)
+        self.assertIn('this.feet = inst(new THREE.SphereGeometry(0.5, 12, 8), cap * 8)',src)
+        self.assertNotIn('lamps.visible = !!u.night',src)
+        self.assertNotIn('lamps.visible = !!(state && state.u.eden.night)',src)
+        self.assertIn('Math.PI*2, 0, 1.25',src)
+        self.assertIn('inst(limbGeometry(), cap * 4)',src)
+        self.assertIn('limbR*3.0*big',src)
+        self.assertIn('new THREE.Vector3(1, 0, 0), -Math.PI / 2);',src)
+        self.assertIn('if (mode.view === "inside")',src)
 
     def test_real_time_holds_the_applied_state(self):
         src = read(VR)
@@ -268,7 +301,7 @@ for (const age of [0,1,2,4,7,10,13,16,25,70]) for(const sex of [0,1]) {
  for(const fat of [.78,1,1.55]) for(const strong of [.2,1]) {
   const {torsoR,limbR,headR}=bodyRadii(D,fat,strong);
   const lift=lyingSupport(headR,torsoR,limbR);
-  for(const low of [lift-headR,lift-torsoR,lift-1.18*limbR,lift-1.10*limbR,
+  for(const low of [lift-headR,lift-torsoR,lift-1.5*limbR,lift-1.10*limbR,
     lift+.18*headR-1.03*headR,lift+.006*D.H-.95*limbR]) assert(low>=-1e-12);
  }
 }

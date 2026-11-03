@@ -1,0 +1,33 @@
+{
+  "engine": "2026.11.03.2",
+  "base": "edaa698",
+  "full_suite": {
+    "tests": 610,
+    "failures": 0,
+    "exit_code": 0,
+    "python": "3.14.6",
+    "seconds": 225.765
+  },
+  "apple_focused": {
+    "tests": 202,
+    "failures": 0,
+    "exit_code": 0,
+    "python": "3.9.6",
+    "seconds": 1253.471
+  },
+  "viewer_focused": {
+    "tests": 103,
+    "failures": 0,
+    "exit_code": 0
+  },
+  "frozen_source_files": 56,
+  "source_hashes_unchanged": true,
+  "mirrors_byte_identical": true,
+  "instrument_touched": false,
+  "remaining": [
+    "2016 MacBook throughput",
+    "Quest input/performance",
+    "full 3D planted-foot gait",
+    "photoreal human anatomy"
+  ]
+}

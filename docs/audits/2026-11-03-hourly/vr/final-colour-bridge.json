@@ -1,0 +1,6 @@
+{
+  "captured_source_sha256": "c2fe5de4837a816de6e9ecb20ef8e2f2bc613b8217d08540ee007fd547a38ec2",
+  "final_source_sha256": "fcd727b13c106b8d39fbffa107034e13410a7c5178622387056fef6f6658ac9f",
+  "only_delta": "#readout .now color var(--dim) -> var(--muted)",
+  "outside_delta_byte_identical": true
+}

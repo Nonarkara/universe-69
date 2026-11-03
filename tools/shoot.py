@@ -219,7 +219,7 @@ def verify_helpers(page, check, item):
     results = page.evaluate("""fixture => {
       var worldPayload=fixture.world;
       var years=state.pace&&+state.pace.years_per_real_day;
-      var expectedPace=years>0?(+years.toPrecision(3))+" years / real day · observed, never helped":"two sealed worlds · observed, never helped";
+      var expectedPace=years>0?(+(years/24).toPrecision(3))+" year"+(years===24?"":"s")+" / real hour · observed, never helped":"two sealed worlds · observed, never helped";
       var out={eventYearsPresent:(state.events||[]).every(e=>Number.isFinite(e.y)),clockMatchesRuntime:document.getElementById('pace').textContent===expectedPace,
         waterActionLabel:ACT_LABEL[22]==='fetching water'},
         savedDraw=drawMating, savedCache=pairCache, savedCount=pairCount;

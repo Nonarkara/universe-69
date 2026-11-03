@@ -697,5 +697,30 @@ class TestRecordedActorMotion(unittest.TestCase):
         self.assertGreater(result[4], 0)
 
 
+
+
+@unittest.skipUnless(shutil.which('node'), 'Node is a workbench-only viewer test runner')
+class TestDisplayLight(unittest.TestCase):
+    def light(self, mode, days):
+        src=read_renderer()
+        helper=src[src.index('function displayLight('):src.index('// ---- the palette lives')]
+        js='var timeMode='+json.dumps(mode)+';'+helper+';process.stdout.write(JSON.stringify('+json.dumps(days)+'.map(day=>displayLight({day,part:0,tod:"night",night:true}))));'
+        return json.loads(subprocess.run(['node','-e',js],check=True,capture_output=True,text=True).stdout)
+
+    def test_four_cycles_per_year_with_daylight_at_day_and_dark_at_night(self):
+        a=self.light('default',[0,22.5,45,67.5,90,112.5,157.5,247.5,337.5,360])
+        self.assertEqual(a[1]['tod'],'day');self.assertEqual(a[1]['dark'],0)
+        self.assertEqual(a[3]['tod'],'night');self.assertEqual(a[3]['dark'],1)
+        self.assertEqual(a[0],a[4]);self.assertEqual(a[0],a[-1])
+        for i in [6,7,8]:self.assertEqual(a[i]['dark'],1)
+
+    def test_slow_mode_uses_actual_recorded_light(self):
+        a=self.light('realtime',[0,22.5,67.5])
+        self.assertTrue(all(v['tod']=='night' and v['dark']==1 for v in a))
+
+    def test_hearth_camera_resolves_a_whole_person(self):
+        self.assertEqual(numbers_in(read_renderer(),'RUNG_PX'),[6,18,84])
+
+
 if __name__ == "__main__":
     unittest.main()

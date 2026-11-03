@@ -24,7 +24,9 @@ for food, rest, company and intimacy under the same bounded fuzzy rules.
 Extreme bodily needs, locality and mutual contact still constrain choice.
 These are explicit model assumptions, not validated human psychology. The
 agency corrections and new responses **change future trajectories**; existing
-pregnancies and the default clock are preserved.
+pregnancies are preserved. The subsequent `2026.11.03.2` release changes only
+the default clock to **one model year per real hour**, preserving pending
+history and per-part model rules.
 
 The [Nov3 audit](docs/audits/2026-11-03/README.md) contains the math, source-bound
 runs, visual evidence and public death records. It preserves the observed
@@ -33,9 +35,11 @@ The older audit draft is retained separately as historical evidence.
 
 ## Time
 
-Dawn, day, dusk and night take 0.6 real seconds each: 2.4 seconds per
-simulated day, **100 simulated 360-day years per real day**. A millennium
-takes ten real days at this pace. Eight pairs found each world at day zero;
+One real hour is **one simulated 360-day year**: 10 real seconds per model
+day, 2.5 seconds per dawn/day/dusk/night engine part, or 24 years per real day.
+A millennium takes 1,000 real hours at this target pace. The viewer groups
+lighting into slower representative cycles so the window remains readable;
+model sleep and calendars retain all four parts of each day. Eight pairs found each world at day zero;
 their descendants replace them through actual births, aging and deaths. The saved cumulative clock
 catches up after sleep or restart. `UNIVERSE69_SEC_PER_PART` changes the pace
 without replaying completed time.
@@ -76,7 +80,7 @@ with scratch data under `/Volumes/Data/agent-scratch/`; never use live `data/`.
 ## Working on the model
 
 The live run advances through dawn, day, dusk and night: one part every
-0.6 real seconds, 2.4 seconds per simulated day. Test changes with the
+2.5 real seconds, 10 seconds per simulated day. Test changes with the
 lab bench; century runs can take minutes, depending on population:
 
 ```sh
@@ -114,8 +118,8 @@ The record, Research, Book and First Run archive use Prev/Next pages, arrow
 keys and swipes. Both worlds remain on the first screen: side by side on
 wide screens, stacked on phones.
 
-**REAL-TIME.** The default pace is a timelapse — a day takes 2.4 real
-seconds, a year takes 14.4 real minutes — and people move sped up to match
+**REAL-TIME.** The default pace is a timelapse — a day takes 10 real
+seconds, a year takes one real hour — and people move sped up to match
 (`TIMELAPSE_SPEEDUP` in `web/index.html`), the way any timelapse shows faster
 motion than the thing it is time-lapsing. Click **REAL-TIME** and the
 instrument's actual clock slows to a day taking a day — dawn, day, dusk and
@@ -191,10 +195,10 @@ cycle prior and physiology modifiers remain explicit model assumptions.
 
 ## Time, records and limits
 
-The default clock is **100 model years per real day**, with four parts per day
+The default clock is **one model year per real hour**, with four parts per day
 and 360 days per model year. Pace changes preserve previously completed time.
 An existing `UNIVERSE69_SEC_PER_PART` override still wins; remove an old override
-to use the default 0.6 seconds per part. A faster clock guarantees neither
+to use the default 2.5 seconds per part. A faster clock guarantees neither
 survival nor civilization; the predefined technology ladder ends at writing.
 
 Each extinction has its own report in `data/history-books/` and a **Runs** view

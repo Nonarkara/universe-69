@@ -92,16 +92,16 @@ class IslandResources(unittest.TestCase):
         self.assertEqual(needs.drink(u,p),0)
         self.assertEqual(p['thirst'],2.)
 
-    def test_clock_hundred_years_per_real_day_preserves_old_pending_parts(self):
+    def test_clock_year_per_real_hour_preserves_old_pending_parts(self):
         w = engine.genesis(69)
-        self.assertAlmostEqual(engine.SEC_PER_PART, .6)
-        self.assertAlmostEqual(86400/engine.SEC_PER_DAY/360, 100)
+        self.assertAlmostEqual(engine.SEC_PER_PART, 2.5)
+        self.assertAlmostEqual(3600/engine.SEC_PER_DAY/360, 1)
         w['clock'] = {'epoch':1000.,'parts':400.,'seconds':3.}
         engine.migrate(w)
         engine.set_clock_pace(w,engine.SEC_PER_PART,now=1030.)
         self.assertEqual(w['clock']['parts'],410.)
         self.assertEqual(engine.target_parts(w,1030.),410)
-        self.assertEqual(engine.target_parts(w,1036.),420)
+        self.assertEqual(engine.target_parts(w,1055.),420)
 
     def test_water_fetch_depletes_source_then_physically_reaches_camp(self):
         u = self.world()

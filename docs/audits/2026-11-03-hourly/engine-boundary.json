@@ -1,0 +1,8 @@
+{
+  "base": "edaa698",
+  "changed_functions": [
+    "summarize"
+  ],
+  "engine_version": "2026.11.03.2",
+  "note": "Only summarize additive pace field; default pace/version top-level constants differ. Per-part model functions unchanged."
+}

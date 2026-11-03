@@ -63,7 +63,9 @@ GESTATION = 270
 # from the unchanged female clinical age gate. Small identity-stable fuzzy
 # need responses vary voluntary choices without adding RNG draws or fields.
 # These are illustrative sensitivities, not fitted human psychology.
-ENGINE_VERSION = "2026.11.03.1"
+# 2026.11.03.2 changes only the default wall-clock mapping: one model
+# year per real hour. Per-part biological and behavioral rules are unchanged.
+ENGINE_VERSION = "2026.11.03.2"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -73,7 +75,7 @@ PARTS_PER_DAY = 4
 # How long a part of a day takes in real seconds. A day is four parts, so a
 # sim-day is four times this. The value is here so the server and the engine
 # agree; the server may override the pace with UNIVERSE69_SEC_PER_PART.
-SEC_PER_PART = 86400.0 / (100 * DAYS_PER_YEAR * PARTS_PER_DAY)
+SEC_PER_PART = 3600.0 / (DAYS_PER_YEAR * PARTS_PER_DAY)
 SEC_PER_DAY = SEC_PER_PART * PARTS_PER_DAY
 
 PART_NAMES = ("dawn", "day", "dusk", "night")
@@ -2944,6 +2946,7 @@ def summarize(world):
            "engine": ENGINE_VERSION, "u": {}}
     seconds = (world.get("clock") or {}).get("seconds", world["sec_per_day"] / PARTS_PER_DAY)
     out["pace"] = {"seconds_per_part": seconds,
+                   "years_per_real_hour": 3600.0 / (seconds * PARTS_PER_DAY * DAYS_PER_YEAR),
                    "years_per_real_day": 86400.0 / (seconds * PARTS_PER_DAY * DAYS_PER_YEAR)}
     for key in ("eden", "lagoon"):
         u = world[key]

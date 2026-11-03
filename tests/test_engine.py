@@ -1003,6 +1003,41 @@ class TestDayAndNight(unittest.TestCase):
 
 
 class TestQuarterDayAudit(unittest.TestCase):
+    def test_default_clock_lives_exactly_one_model_year_per_real_hour(self):
+        w = engine.genesis(seed=69)
+        start = w["clock"]["epoch"]
+        self.assertEqual(engine.SEC_PER_PART, 2.5)
+        self.assertEqual(engine.SEC_PER_DAY, 10)
+        self.assertEqual(engine.target_parts(w, start + 3600),
+                         engine.DAYS_PER_YEAR * engine.PARTS_PER_DAY)
+        self.assertEqual(engine.summarize(w)["pace"], {
+            "seconds_per_part": 2.5, "years_per_real_hour": 1,
+            "years_per_real_day": 24})
+
+    def test_new_pace_keeps_old_fractional_backlog_and_state_on_restart(self):
+        w = engine.genesis(seed=69)
+        w["clock"] = {"epoch": 1000, "parts": 400, "seconds": 0.6}
+        bodies = json.dumps([w["eden"], w["lagoon"]], sort_keys=True)
+        engine.set_clock_pace(w, engine.SEC_PER_PART, now=1006.15)
+        self.assertAlmostEqual(w["clock"]["parts"], 410.25)
+        self.assertEqual(engine.target_parts(w, now=1006.15), 410)
+        self.assertEqual(engine.target_parts(w, now=1008.026), 411)
+        self.assertEqual(bodies, json.dumps([w["eden"], w["lagoon"]], sort_keys=True))
+        with tempfile.TemporaryDirectory(dir=SCRATCH) as td:
+            path = os.path.join(td, "state.json")
+            engine.save_state(w, path)
+            back = engine.load_state(path)
+        self.assertEqual(back["clock"], w["clock"])
+        self.assertEqual(engine.target_parts(back, now=1008.026), 411)
+
+    def test_real_time_can_resume_without_replaying_the_slow_interval(self):
+        w = engine.genesis(seed=69)
+        w["clock"] = {"epoch": 1000, "parts": 400, "seconds": engine.SEC_PER_PART}
+        engine.set_clock_pace(w, 21600, now=1010)
+        self.assertEqual(engine.target_parts(w, now=1010 + 86400), 408)
+        engine.set_clock_pace(w, engine.SEC_PER_PART, now=1010 + 86400)
+        self.assertEqual(engine.target_parts(w, now=1010 + 86400 + 10), 412)
+
     def test_empty_worlds_keep_time_and_reseed_without_resetting_the_clock(self):
         w = engine.genesis(seed=69)
         day = engine.RESEED_YEARS * engine.DAYS_PER_YEAR + 1

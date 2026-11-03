@@ -7,16 +7,30 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
 
 ## Time
 
-- 1 tick = **one part of a day** (dawn, day, dusk, night). A part is
-  **0.6 real seconds**, so a sim-day is **2.4 real seconds**.
-- → 1 real day = 36,000 sim-days = **100 sim-years** (360-day model years).
-- The pace is set by `UNIVERSE69_SEC_PER_PART`. It was one day per two
-  seconds before the day and the night were modelled. This release changes
-  only the default wall-clock pace; overrides still apply.
+- **One real hour = one 360-day model year** (owner, 2026-11-03).
+  One model day therefore takes **10 real seconds**, and each of its four
+  dawn/day/dusk/night ticks takes **2.5 seconds**. This is 24 years per real day.
+  One model day per real second would instead mean a year in six minutes;
+  the hour-per-year instruction determines the clock.
+- `UNIVERSE69_SEC_PER_PART` overrides the default. Real-time mode still uses
+  21,600 seconds per part: a model day takes a real day.
 - A persistent clock anchors cumulative parts to elapsed real time. On restart
-  or wake the engine computes `target_parts = clock.parts +
-  (now − clock.epoch) / clock.seconds` and catches up. Pace changes preserve
-  ticks already due. The universes age while the process is dead.
+  or wake `target_parts = clock.parts + (now − clock.epoch) / clock.seconds`.
+  Changing pace preserves every fractional tick already due at the old rate,
+  including catch-up backlog; it neither resets calendars nor reseeds people.
+- Viewer lighting may compress the presentation into slower representative
+  day/night cycles. It never changes the four engine parts, age, sleep,
+  resource accounting or the record's actual model time.
+
+## Engine 2026.11.03.2: an hour per year
+
+Only the default wall-clock mapping changes from 0.6 to 2.5 seconds per part.
+Per-part model rules and RNG consumption are unchanged. Existing saves retain
+all people, ages, pregnancies, terrain and pending history; the server selects
+this new default on restart unless explicitly overridden. Future model events
+arrive at different real times. Previous century trials remain historical
+per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
+release. This target is not a measured 2016 MacBook capacity claim.
 
 ## Engine 2026.11.03.1: shared instincts, personal fuzzy sensitivity
 
@@ -274,7 +288,8 @@ Eight founding pairs remain unchanged.
 | Old runs must resume without duplicate grants | Migration merges duplicate legacy patches using the minimum remaining stock, rejects dry inland fishing places, adds missing freshwater banks once, and defaults thirst/carry/camp water. Existing terrain is preserved | These repairs change future food availability; old trajectory forecasts no longer apply |
 | Food-sensitive conception was already drafted | Retained 1/240 daily base, food-shortfall multiplier, 1.15 stored-food bonus and farming modifier | These coefficients are hypotheses; removed unsupported claims that these rates reproduce a universal forager growth target |
 
-The clock defaults to `86400 / (100 * 360 * 4) = 0.6` seconds per part.
+At the 2026.10.29 release the clock default was
+`86400 / (100 * 360 * 4) = 0.6` seconds per part (superseded above).
 Changing pace preserves cumulative ticks already due with the existing clock
 anchor; it does not replay the old world's calendar. This is a target pace,
 not a measured throughput claim for the 2016 MacBook.
@@ -695,7 +710,7 @@ tribes*: peacefully after lore exists, as a deadly feud before it.
   paginated. The RESEARCH dialog opens on "From Universe 25 to here"
   (`book/origin.json`) before the hypotheses.
 - **The camera** is a documentary eye on a three-rung ladder — island, camp,
-  hearth (~6, 18, 48 CSS px of adult height). The establishing shot is the
+  hearth (~6, 18, 84 CSS px of adult height). The establishing shot is the
   camp rung on the densest cluster of people; EDEN's eye stays inside the
   pen. Close shots (a birth, a fight, a hunting party, or where most people
   are) use the hearth rung; a shot far from the last one is a cut, not a

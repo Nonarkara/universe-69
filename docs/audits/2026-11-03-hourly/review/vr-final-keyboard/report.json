@@ -1,0 +1,262 @@
+{
+  "sourceSHA256": "fcd727b13c106b8d39fbffa107034e13410a7c5178622387056fef6f6658ac9f",
+  "sourceStable": true,
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "receivedSHA256": "fcd727b13c106b8d39fbffa107034e13410a7c5178622387056fef6f6658ac9f",
+      "focus": {
+        "id": "bRecord",
+        "focus": true,
+        "outline": "rgb(228, 180, 86) solid 2px"
+      },
+      "record": {
+        "readout": {
+          "x": 18,
+          "y": 680.0625,
+          "width": 354,
+          "height": 153.9375,
+          "top": 680.0625,
+          "right": 372,
+          "bottom": 834,
+          "left": 18
+        },
+        "body": [
+          390,
+          844
+        ],
+        "text": "TIMELAPSE \u00b7 1 YEAR / REAL HOUR \u00b7 record 21m old\nEDEN \u00b7 RECORD\nY0 \u00b7 DAY \u00b7 POP 16 \u00b7 ITER 1\nSTRIVE \u00b7 ALWAYS SPRING \u00b7 16 COMPETENT ADULTS 16\u201345 (NOT FERTILITY)\n\u2190\n1 / 4\n\u2192",
+        "controls": [
+          {
+            "id": "bTable",
+            "label": "TABLE",
+            "rect": {
+              "x": 10,
+              "y": 34,
+              "width": 48.828125,
+              "height": 34,
+              "top": 34,
+              "right": 58.828125,
+              "bottom": 68,
+              "left": 10
+            }
+          },
+          {
+            "id": "bEden",
+            "label": "EDEN",
+            "rect": {
+              "x": 64.828125,
+              "y": 34,
+              "width": 47.625,
+              "height": 34,
+              "top": 34,
+              "right": 112.453125,
+              "bottom": 68,
+              "left": 64.828125
+            }
+          },
+          {
+            "id": "bLagoon",
+            "label": "LAGOON",
+            "rect": {
+              "x": 118.453125,
+              "y": 34,
+              "width": 67.921875,
+              "height": 34,
+              "top": 34,
+              "right": 186.375,
+              "bottom": 68,
+              "left": 118.453125
+            }
+          },
+          {
+            "id": "bTime",
+            "label": "INSPECT",
+            "rect": {
+              "x": 192.375,
+              "y": 34,
+              "width": 63.8125,
+              "height": 34,
+              "top": 34,
+              "right": 256.1875,
+              "bottom": 68,
+              "left": 192.375
+            }
+          },
+          {
+            "id": "bRecord",
+            "label": "RECORD",
+            "rect": {
+              "x": 262.1875,
+              "y": 34,
+              "width": 63.359375,
+              "height": 34,
+              "top": 34,
+              "right": 325.546875,
+              "bottom": 68,
+              "left": 262.1875
+            }
+          },
+          {
+            "id": "recordprev",
+            "label": "\u2190",
+            "rect": {
+              "x": 26,
+              "y": 794,
+              "width": 32.875,
+              "height": 34,
+              "top": 794,
+              "right": 58.875,
+              "bottom": 828,
+              "left": 26
+            }
+          },
+          {
+            "id": "recordnext",
+            "label": "\u2192",
+            "rect": {
+              "x": 108.65625,
+              "y": 794,
+              "width": 32.875,
+              "height": 34,
+              "top": 794,
+              "right": 141.53125,
+              "bottom": 828,
+              "left": 108.65625
+            }
+          }
+        ]
+      },
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "receivedSHA256": "fcd727b13c106b8d39fbffa107034e13410a7c5178622387056fef6f6658ac9f",
+      "focus": {
+        "id": "bRecord",
+        "focus": true,
+        "outline": "rgb(228, 180, 86) solid 2px"
+      },
+      "record": {
+        "readout": {
+          "x": 18,
+          "y": 749.25,
+          "width": 415.671875,
+          "height": 134.75,
+          "top": 749.25,
+          "right": 433.671875,
+          "bottom": 884,
+          "left": 18
+        },
+        "body": [
+          1440,
+          900
+        ],
+        "text": "TIMELAPSE \u00b7 1 YEAR / REAL HOUR \u00b7 record 21m old\nEDEN \u00b7 RECORD\nY0 \u00b7 DAY \u00b7 POP 16 \u00b7 ITER 1\nSTRIVE \u00b7 ALWAYS SPRING \u00b7 16 COMPETENT ADULTS 16\u201345 (NOT FERTILITY)\n\u2190\n1 / 4\n\u2192",
+        "controls": [
+          {
+            "id": "bTable",
+            "label": "TABLE",
+            "rect": {
+              "x": 1080.453125,
+              "y": 12,
+              "width": 54.828125,
+              "height": 34,
+              "top": 12,
+              "right": 1135.28125,
+              "bottom": 46,
+              "left": 1080.453125
+            }
+          },
+          {
+            "id": "bEden",
+            "label": "EDEN",
+            "rect": {
+              "x": 1141.28125,
+              "y": 12,
+              "width": 53.625,
+              "height": 34,
+              "top": 12,
+              "right": 1194.90625,
+              "bottom": 46,
+              "left": 1141.28125
+            }
+          },
+          {
+            "id": "bLagoon",
+            "label": "LAGOON",
+            "rect": {
+              "x": 1200.90625,
+              "y": 12,
+              "width": 73.921875,
+              "height": 34,
+              "top": 12,
+              "right": 1274.828125,
+              "bottom": 46,
+              "left": 1200.90625
+            }
+          },
+          {
+            "id": "bTime",
+            "label": "INSPECT",
+            "rect": {
+              "x": 1280.828125,
+              "y": 12,
+              "width": 69.8125,
+              "height": 34,
+              "top": 12,
+              "right": 1350.640625,
+              "bottom": 46,
+              "left": 1280.828125
+            }
+          },
+          {
+            "id": "bRecord",
+            "label": "RECORD",
+            "rect": {
+              "x": 1356.640625,
+              "y": 12,
+              "width": 69.359375,
+              "height": 34,
+              "top": 12,
+              "right": 1426,
+              "bottom": 46,
+              "left": 1356.640625
+            }
+          },
+          {
+            "id": "recordprev",
+            "label": "\u2190",
+            "rect": {
+              "x": 26,
+              "y": 844,
+              "width": 32.875,
+              "height": 34,
+              "top": 844,
+              "right": 58.875,
+              "bottom": 878,
+              "left": 26
+            }
+          },
+          {
+            "id": "recordnext",
+            "label": "\u2192",
+            "rect": {
+              "x": 108.65625,
+              "y": 844,
+              "width": 32.875,
+              "height": 34,
+              "top": 844,
+              "right": 141.53125,
+              "bottom": 878,
+              "left": 108.65625
+            }
+          }
+        ]
+      },
+      "errors": []
+    }
+  ]
+}

@@ -793,3 +793,49 @@ same-person continuity without animating an ancestor into a new founder.
 Jost and SourceSerif4 are vendored, unmodified, with SIL Open Font Licenses and
 origin/SHA256 records in `web/fonts/README.md`, mirrored under `docs/fonts/`.
 Typography therefore survives an offline instrument/viewer without a font CDN.
+
+
+## 2026-11-03: an hour per year, a closer documentary camera
+
+The default instrument clock is 2.5 seconds per part: ten seconds per day,
+360 days per real hour. The 2D viewer keeps the actual model time in its HUD,
+but grades the scene through four representative light cycles per model year.
+This display clock never changes sleep, biological age or a recorded action.
+At real-time instrument pace, the light follows the actual model part. Held
+records do not extrapolate light beyond their recorded day.
+
+The 2D hearth rung now gives an adult 84 CSS pixels (formerly 48), so a
+person's anatomy, condition and activity can be inspected without guessing.
+Island and camp remain 6 and 18 pixels. Existing wheel zoom, skeleton lengths,
+planted-foot walk, camera, body cache, particles and paired contact survive.
+Far figures gain tapered limbs, neck, jaw/hair silhouette and feet; close
+figures gain restrained clavicle and oblique landmarks tied to the skeleton.
+These are illustrative drawings, not calibrated anthropometry.
+
+### 2026-11-03 — human-scale volumes and a readable viewing light
+
+The VR crowd now uses one connected lathed shoulder/rib-cage/waist/pelvis
+surface rather than a uniform capsule. Twenty radial sides give the trunk a
+smooth contour. The skull has a tapered jaw, twenty longitudinal segments and
+sixteen latitude segments; a scalp hemisphere replaces the full hair sphere
+that obscured the face. Human-scale views add ears, eyes, nose and mouth from
+shared instanced geometry. Twelve-sided tapered limb volumes, elongated hands
+and feet replace round-ended uniform limbs and ball feet. Age/sex dimensions,
+recorded action/position, instancing, and child protections are preserved.
+The lying support includes the actual elongated foot depth. This is procedural
+anatomy, not a scanned or photorealistic human; the existing fixed-length limb
+chain is still not a full planted-foot 3D inverse-kinematic gait.
+
+The default instrument pace is now one model year per real hour (360 days,
+1,440 parts, 2.5 seconds per part). In the normal VR view, illumination is an
+explicit representative montage: four smooth dawn/day/dusk/night cycles per
+model year, with anchors at phases 0, ¼, ½, ¾. This avoids a night flash every
+ten seconds; the bodies still sleep and act on their actual model day. Slow
+instrument time and INSPECT use the recorded actual time of day. INSPECT holds
+the applied record and lets the observer walk around it; it does not pause or
+slow the instrument. CONTINUE applies the newest record. The former REAL-TIME
+button has been renamed INSPECT to make that distinction visible.
+
+The device-resolution cap rises from 2 to 2.5. Extra face geometry is enabled
+only inside a world; crowds still share draw calls. MacBook/Quest frame rate
+must be measured on those devices before any performance claim.
