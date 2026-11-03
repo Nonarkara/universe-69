@@ -1218,10 +1218,10 @@ function solvePose(act, c, moving, v){
     P.lean=1.1+stance*0.25; P.twist=stance*0.5;
     // the arms swing against the leg on the same side
     var sw=Math.sin(ph)*2.3;
-    P.handLx=-3.9-sw; P.handLy=18.4-Math.abs(sw)*0.35;
-    P.handRx= 3.9+sw; P.handRy=18.4-Math.abs(sw)*0.35;
-    P.elbLx=-4.6-sw*0.42; P.elbRx=4.6+sw*0.42;
-    P.elbLy=13.1+Math.abs(sw)*0.3; P.elbRy=P.elbLy;
+    P.handLx=-4.1-sw; P.handLy=18.8-Math.abs(sw)*0.18;
+    P.handRx= 4.1+sw; P.handRy=18.8-Math.abs(sw)*0.18;
+    P.elbLx=-4.2-sw*0.48; P.elbRx=4.2+sw*0.48;
+    P.elbLy=13.7; P.elbRy=13.7;
     if (act===A_HUNT){ P.tool=1; P.toolAng=-0.3; P.handRx=4.2; P.handRy=14; P.elbRy=11; P.drop+=0.8; P.lean=2; }
     if (act===A_SCOUT){ P.handRx=3.0; P.handRy=4.2; P.elbRx=4.8; P.elbRy=8.6; P.headTilt=-0.5; P.lean=1.6; }  // shading the eyes
     if (act===A_FORAGE||act===A_PLAY) P.basket=(act===A_FORAGE)?1:0;
@@ -1355,7 +1355,7 @@ var RIG_PARENT={ pelvis:null, spine:"pelvis", chest:"spine", neck:"chest", head:
 function ageBand(age){ for (var i=AGE_BAND.length-1;i>0;i--) if (age>=AGE_BAND[i]) return i; return 0; }
 function bodyOf(a){
   var b=a.bmi||22, age=(a.age===undefined)?30:a.age, sn=(a.sn===undefined)?5:a.sn;
-  return { adult: typeof a.age==="number" && a.age>=18,
+  return { adult: Number.isFinite(a.age) && a.age>=18,
            stage: age<3?0: age<12?1: age<16?2: age<58?3:4,
            ab: ageBand(age),
            fat: b<15?0: b<18.5?1: b<25?2: b<30?3:4,
@@ -1710,13 +1710,42 @@ function drawMouthShape(g, mx, my, m, ink, hr, wid){
     for (var t2=-1;t2<=1;t2++){ g.beginPath(); g.moveTo(mx+t2*w*0.25,my-w*0.14); g.lineTo(mx+t2*w*0.25,my+w*0.14); g.stroke(); } }
   else { g.beginPath(); g.moveTo(mx-w*0.5,my+w*0.12); g.quadraticCurveTo(mx,my-w*0.18,mx+w*0.5,my+w*0.12); g.stroke(); }  // downcast
 }
+// Neutral life-study contours, separated from clothing and action drawing.
+// Explicit external anatomy requires known adult age, uncovered hips and a
+// non-intimate pose. Unknown age and all minors fail closed at every zoom.
+function externalAnatomyVisible(B, view, s, dress, private_){
+  return B.adult===true && s>=2 && !dress && !private_ && view!==2;
+}
+function drawExternalAnatomy(g,J,D,B,sex,view,s,dress,private_,ink){
+  if (!externalAnatomyVisible(B,view,s,dress,private_)) return false;
+  var x=J.pelvis[0]+(view===1?0:D.hpW*.28),y=J.pelvis[1]+D.crotch*.85;
+  var h=D.headH*.36,w=h*.28;
+  g.save();g.strokeStyle=INK_SOFT;g.lineWidth=ink*.70;g.lineCap="round";
+  if(sex===0){
+    // Resting external male anatomy: shaft contour with the scrotum at root.
+    g.beginPath();g.moveTo(x-w*.7,y-.15);
+    g.quadraticCurveTo(x-w*.95,y+h*.40,x-w*.45,y+h*.90);
+    g.quadraticCurveTo(x,y+h*1.04,x+w*.46,y+h*.87);
+    g.quadraticCurveTo(x+w*.72,y+h*.40,x+w*.60,y-.1);g.stroke();
+    g.beginPath();g.moveTo(x-w*.85,y+h*.15);
+    g.bezierCurveTo(x-w*1.8,y+h*.30,x-w*1.5,y+h*.77,x-w*.40,y+h*.68);g.stroke();
+  }else{
+    // External vulva: a quiet paired labial contour and central cleft.
+    g.beginPath();g.moveTo(x,y-.1);
+    g.bezierCurveTo(x-w*1.5,y+h*.20,x-w*.95,y+h*.66,x,y+h*.80);
+    g.bezierCurveTo(x+w*.95,y+h*.66,x+w*1.5,y+h*.20,x,y-.1);g.stroke();
+    g.beginPath();g.moveTo(x,y+h*.12);g.quadraticCurveTo(x-w*.18,y+h*.43,x,y+h*.67);g.stroke();
+  }
+  g.restore();return true;
+}
+
 function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view, bedding){
   var fem=(sex===1), adult=B.adult;
   // Sleeping, an infant, and two people making love are drawn lying down —
   // but only once they are there: nobody slides across the ground lying.
   // Lovemaking is shown as two adults lying together, nothing more explicit.
   var lying = !moving && (act===A_SLEEP || act===A_MATE || B.stage===0);
-  view = moving ? (view||0) : 0;               // 0 profile, 1 coming toward us, 2 going away
+  view = lying ? 0 : (view||0);               // 0 profile, 1 coming toward us, 2 going away
   var private_ = (act===A_MATE || act===A_BIRTH);
   var poseAct = lying ? 0 : ((act===A_WITHDRAW && wk) ? 100+wk : act);
   var P=solvePose(poseAct, c, moving, v);
@@ -1732,7 +1761,7 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
   if (!lying && !P.sit && B.carry===2 && !P.tool){
     P.keepArms=1; P.handLx=-2.4; P.handLy=5.6; P.elbLx=-5.2; P.elbLy=9.5; P.handRx=3.4; P.handRy=5.4; P.elbRx=5.4; P.elbRy=9.2;
   }
-  if (view){                                    // walking toward or away: a front view
+  if (view && moving){                           // walking toward or away: a front view
     var st2=Math.sin(c*Math.PI*2);
     P.rest=0; P.lean=0; P.cx=0; P.headTilt=0; P.tool=0; P.basket=0; P.carry=0; P.twist=0; P.shDx=0; P.hipDx=0;
     P.footLx=-1.6; P.footRx=1.6; P.kneeLx=-1.5; P.kneeRx=1.5;
@@ -1753,7 +1782,12 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
       P.handRx=2.2; P.handRy=7.4; P.elbRx=4.0; P.elbRy=12.6;   // under the head
       P.handLx=-2.2; P.handLy=21.5; P.elbLx=-3.2; P.elbLy=15.0; // along the body
     } }
-  var D=rigDims(B, sex), J=buildRig(P, D, view);
+  var D=rigDims(B, sex);
+  // A three-quarter body has less projected breadth than a front elevation.
+  // Bone lengths and stride remain canonical; the roots share this projection
+  // so arms attach to shoulders rather than float outside a narrowed trunk.
+  if(!view) D=Object.assign({},D,{shW:D.shW*.76,waW:D.waW*.76,hpW:D.hpW*.76});
+  var J=buildRig(P, D, view);
   var Hs=STATURE[B.ab]*(fem?1-0.07*D.dm:1), k=s*Hs;      // a woman ~7% shorter, from puberty
   var skin=SKINS[v%4], SK=skin[0], SKD=skin[1];
   var tones=[skin[0], skin[1]], shadeT=[skin[1], skin[1]];
@@ -1780,7 +1814,7 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
   }
   g.scale(k,k);
   g.lineCap="round"; g.lineJoin="round";
-  var ink=Math.max(0.32, 0.95/k);             // a fine pen: about one device pixel
+  var ink=Math.max(0.10, 0.82/k);             // a fine pen: about one device pixel
   var shX=J.chest[0], shY=J.shL[1]-0.9+(J.shR[1]-J.shL[1])/2, hipX=J.pelvis[0], hipY=J.pelvis[1];
 
   if (32*k<10 && !lying){ drawTiny(g, J, D, k, tones, dress, v); g.restore(); return; }
@@ -1844,7 +1878,7 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
     [nkx-nw, shY-0.15],
     [shX-shW*0.7, shY+tl*0.7],                                  // the shoulder line, level
     [shX-shW-dl, shY+0.8+tl],                                   // the left deltoid
-    [shX-shW*0.97, chestY+0.6],                                 // the ribcage at its widest
+    [shX-shW*0.86, chestY+0.8],                                 // the ribcage at its widest
     [wx-waW*(starving?0.88:1), waY],                            // the waist
     [hipX-hpW-0.2, hipY-0.4+(J.hipL[1]-hipY-0.3)],              // the hip
     [hipX-hpW*0.7, hipY+D.crotch*0.75],
@@ -1852,7 +1886,7 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
     [hipX+hpW*0.7, hipY+D.crotch*0.75],
     [hipX+hpW+0.2+belly*0.15, hipY-0.4+(J.hipR[1]-hipY-0.3)],
     [wx+waW+belly*0.6, waY+belly*0.1],
-    [shX+shW*0.97+breast, chestY+0.6+breast*0.9],               // the breast, from the ribcage
+    [shX+shW*0.86+breast, chestY+0.8+breast*0.9],               // the breast, from the ribcage
     [shX+shW+dl, shY+0.8-tl],
     [shX+shW*0.7, shY-tl*0.7],
     [nkx+nw, shY-0.15]
@@ -1861,7 +1895,7 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
   g.save(); g.clip();
   var o=shW*0.30;
   g.fillStyle=tones[0];
-  g.beginPath(); g.ellipse(shX-o, chestY+0.2-o*0.3, shW*0.98, (waY-shY)*0.62+0.6, 0, 0, 6.283); g.fill();   // the ribcage
+  g.beginPath(); g.ellipse(shX-o, chestY+0.2-o*0.3, shW*0.86, (waY-shY)*0.60+0.6, 0, 0, 6.283); g.fill();   // the ribcage
   g.beginPath(); g.moveTo(hipX-hpW-0.6-o, waY+0.8); g.lineTo(hipX+hpW-o*1.2, waY+0.8);                   // the pelvis
   g.lineTo(hipX+hpW*0.5-o, crotchY-0.2); g.lineTo(hipX-hpW*0.2-o, crotchY+0.4); g.lineTo(hipX-hpW-0.6-o, hipY+0.6); g.closePath(); g.fill();
   g.restore();
@@ -1878,6 +1912,22 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
     g.moveTo(nkx+nw,shY+.5);g.quadraticCurveTo(shX+shW*.55,shY+.6,shX+shW*.84,shY+1.3);g.stroke();
     if(!view){g.beginPath();g.moveTo(shX+shW*.55,chestY+2);g.quadraticCurveTo(wx+waW*.55,waY-.4,hipX+hpW*.65,hipY-.5);g.stroke();}
   }
+  if (s>=2 && B.ab>=5 && dress!=="fur"){
+    g.strokeStyle=INK_SOFT;g.lineWidth=ink*.60;
+    // Costal arch and iliac crest follow the same rig as the silhouette.
+    g.beginPath();g.moveTo(shX-shW*.67,chestY+2.0);
+    g.quadraticCurveTo(wx-shW*.30,waY-.1,wx,waY-1.0);
+    g.quadraticCurveTo(wx+shW*.30,waY-.1,shX+shW*.67,chestY+2.0);g.stroke();
+    g.beginPath();g.moveTo(hipX-hpW*.83,hipY-.45);
+    g.quadraticCurveTo(hipX-hpW*.48,hipY-.95,hipX-hpW*.18,hipY-.20);
+    g.moveTo(hipX+hpW*.83,hipY-.45);
+    g.quadraticCurveTo(hipX+hpW*.48,hipY-.95,hipX+hpW*.18,hipY-.20);g.stroke();
+    if (!fem && !starving && B.fat<3){
+      g.beginPath();g.moveTo(shX-shW*.72,chestY+.65);
+      g.quadraticCurveTo(shX-shW*.25,chestY+1.8,shX,chestY+1.2);
+      g.quadraticCurveTo(shX+shW*.25,chestY+1.8,shX+shW*.72,chestY+.65);g.stroke();
+    }
+  }
   var bare = !dress || dress==="swim";
   if (s>=2 && B.ab>=5){
     g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.8;
@@ -1890,30 +1940,12 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
     }
     if (s>=3){ g.fillStyle=INK_SOFT; g.beginPath(); g.arc(wx+waW*0.2+belly*0.4, waY+1.0, 0.25, 0, 6.283); g.fill(); }   // navel
   }
-  // the body as it is: adults only, and only where nothing covers it
-  if (view===2) bare=false;                    // from behind there is only a back
-  if (adult && s>=2 && bare && !private_ && view===1){
-    g.strokeStyle=INK; g.fillStyle=SKD; g.lineWidth=ink*0.8;
-    if (fem){
-      var bs1=0.8+0.3*(B.fat-2)+(B.preg?0.3:0);
-      g.beginPath(); g.arc(shX-shW*0.42, chestY+1.6, bs1*1.1, 0.25, 2.9); g.stroke();
-      g.beginPath(); g.arc(shX+shW*0.42, chestY+1.6, bs1*1.1, 0.25, 2.9); g.stroke();
-    }
-    if (dress!=="swim"){
-      for (var h1=0;h1<5;h1++){ g.beginPath(); g.moveTo(hipX-1.0+h1*0.5,hipY+0.4); g.lineTo(hipX-0.8+h1*0.5,hipY+1.2); g.stroke(); }
-      if (!fem){ g.fillStyle=SKD; g.beginPath(); g.ellipse(hipX, crotchY+0.6, 0.5, 1.0, 0, 0, 6.283); g.fill(); g.stroke(); }
-    }
-  } else if (adult && s>=2 && bare && !private_){
-    g.strokeStyle=INK; g.fillStyle=SKD; g.lineWidth=ink*0.8;
-    if (fem && s>=3){ g.beginPath(); g.arc(shX+shW*0.97+breast*0.8, chestY+0.9+breast*0.8, 0.28, 0, 6.283); g.fill(); }
-    if (dress!=="swim"){
-      // pubic hair as a few short strokes, genitals as a plain contour
-      g.strokeStyle=INK; g.lineWidth=ink*0.7;
-      var px0=hipX+hpW*0.35, py0=hipY+D.crotch*1.4;
-      for (var h=0;h<4;h++){ g.beginPath(); g.moveTo(px0-0.9+h*0.5,py0-0.3); g.lineTo(px0-0.6+h*0.5,py0+0.5); g.stroke(); }
-      if (!fem){
-        g.fillStyle=SKD; g.beginPath(); g.ellipse(px0+0.4, py0+1.3, 0.5, 1.0, -0.25, 0, 6.283); g.fill(); g.stroke();
-      }
+  // Adult breast landmarks are never painted through a top or over a child.
+  if (adult && s>=2 && dress!=="fur" && dress!=="swim" && !private_ && view!==2 && fem){
+    g.strokeStyle=INK_SOFT;g.lineWidth=ink*.7;
+    if(view===1){
+      var bs=Math.max(.45,.75+.25*(B.fat-2)+(B.preg?.25:0));
+      [-1,1].forEach(function(side){g.beginPath();g.arc(shX+side*shW*.42,chestY+1.0,bs,0.15,Math.PI-.15);g.stroke();});
     }
   }
   // what covers it, if anything: resort wear in EDEN, a wrap of hide in
@@ -1955,6 +1987,7 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
 
   // the near leg and arm, rooted inside the trunk so the joints read as joints
   bone(J.hipR, J.kneeR, J.ankR, limbW*1.3, legDress||tones, true);
+  drawExternalAnatomy(g,J,D,B,sex,view,s,dress,private_,ink);
   bone(J.shR, J.elbR, J.wriR, limbW*0.66, tones, false);
   if (B.hurt>0){                                          // a bandage, and where it bled
     var bx=(J.hipR[0]+J.kneeR[0])/2, by=(J.hipR[1]+J.kneeR[1])/2;
@@ -3411,7 +3444,7 @@ function whoInfo(key){
           act:instructionActivity(u,id)||socialActivity(u,id,a.act)||(a.moving?"walking":(craftActivity(u,id)||ACT_LABEL[a.act]||"idle"))};
 }
 function hudText(u, kind){
-  var l2 = kind==="e" ? u.phase.toUpperCase()+" · ALWAYS SPRING"
+  var l2 = u.pop===0 ? "EMPTY · AWAITING NATURAL RESEED" : kind==="e" ? u.phase.toUpperCase()+" · ALWAYS SPRING"
     : (u.tech&&u.tech.length?"AGE OF "+u.tech[u.tech.length-1].replace("_"," ").toUpperCase():u.phase.toUpperCase());
   var sh=shots[kind], cap = (sh && !sh.wide && sh.label) ? "<span class='shot'> · "+escapeHTML(sh.label.toUpperCase())+"</span>" : "";
   var v=view[kind];

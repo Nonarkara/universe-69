@@ -1,0 +1,22 @@
+{
+  "full_suite": {
+    "tests": 617,
+    "failures": 0,
+    "exit_code": 0,
+    "python": "3.14.6",
+    "seconds": 335.288
+  },
+  "fresh_final_viewer": {
+    "tests": 110,
+    "failures": 0,
+    "python3_9_seconds": 8.607,
+    "python3_14_seconds": 4.695
+  },
+  "engine_and_test_sources_unchanged_through_run": true,
+  "html_changed_early_during_full_run": [
+    "web/vr.html",
+    "docs/vr.html"
+  ],
+  "changes": "VR geometry-only corrections: attach clinical landmarks to actual torso surface, counter-swing arm against same foot. No test methods, simulation rules or saved fields changed. Final fresh viewer tests and final production captures cover final HTML.",
+  "instrument_touched": false
+}

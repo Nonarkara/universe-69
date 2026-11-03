@@ -1,0 +1,154 @@
+{
+  "first_observation": {
+    "packet_wall": {
+      "utc": "2026-11-03T15:16:44.305117+00:00",
+      "bangkok": "2026-11-03T22:16:44.305117+07:00"
+    },
+    "engine": "2026.11.01.1",
+    "pace": {
+      "seconds_per_part": 0.6,
+      "years_per_real_day": 100.0
+    },
+    "status": {
+      "catching_up": false,
+      "behind_days": 0,
+      "started": 1793636052.322756,
+      "time_mode": "default",
+      "last_upload": 1793718704.1686678
+    },
+    "worlds": {
+      "eden": {
+        "day": 84106,
+        "part": 1,
+        "iter": 3,
+        "pop": 0,
+        "peak": 18,
+        "gen": 2,
+        "cod": {
+          "age": 18
+        }
+      },
+      "lagoon": {
+        "day": 84106,
+        "part": 1,
+        "iter": 3,
+        "pop": 24,
+        "peak": 24,
+        "gen": 2,
+        "cod": {
+          "violence": 1,
+          "childbirth": 1,
+          "age": 1,
+          "infant": 1,
+          "accident": 1
+        }
+      }
+    }
+  },
+  "intermediate_observation": {
+    "packet_wall": {
+      "utc": "2026-11-03T15:21:47.156838+00:00",
+      "bangkok": "2026-11-03T22:21:47.156838+07:00"
+    },
+    "engine": "2026.11.01.1",
+    "pace": {
+      "seconds_per_part": 0.6,
+      "years_per_real_day": 100.0
+    },
+    "status": {
+      "catching_up": false,
+      "behind_days": 0,
+      "started": 1793636052.322756,
+      "time_mode": "default",
+      "last_upload": 1793719006.983379
+    },
+    "worlds": {
+      "eden": {
+        "day": 84232,
+        "part": 1,
+        "iter": 3,
+        "pop": 0,
+        "peak": 18,
+        "gen": 2,
+        "cod": {
+          "age": 18
+        }
+      },
+      "lagoon": {
+        "day": 84232,
+        "part": 1,
+        "iter": 3,
+        "pop": 24,
+        "peak": 24,
+        "gen": 2,
+        "cod": {
+          "violence": 1,
+          "childbirth": 1,
+          "age": 1,
+          "infant": 1,
+          "accident": 1
+        }
+      }
+    }
+  },
+  "latest_observation": {
+    "packet_wall": {
+      "utc": "2026-11-03T15:26:49.799819+00:00",
+      "bangkok": "2026-11-03T22:26:49.799819+07:00"
+    },
+    "engine": "2026.11.01.1",
+    "pace": {
+      "seconds_per_part": 0.6,
+      "years_per_real_day": 100.0
+    },
+    "status": {
+      "catching_up": false,
+      "behind_days": 0,
+      "started": 1793636052.322756,
+      "time_mode": "default",
+      "last_upload": 1793719309.678866
+    },
+    "worlds": {
+      "eden": {
+        "day": 84358,
+        "part": 2,
+        "iter": 4,
+        "pop": 16,
+        "peak": 16,
+        "gen": 1,
+        "cod": {}
+      },
+      "lagoon": {
+        "day": 84358,
+        "part": 2,
+        "iter": 3,
+        "pop": 24,
+        "peak": 24,
+        "gen": 2,
+        "cod": {
+          "violence": 1,
+          "childbirth": 1,
+          "age": 1,
+          "infant": 1,
+          "accident": 1
+        }
+      }
+    }
+  },
+  "observed_eden_reseed": {
+    "d": 84263,
+    "y": 234,
+    "u": "EDEN",
+    "t": "reseed",
+    "msg": "The Observers reseed the pen. Iteration 4 begins under the same controlled conditions.",
+    "wall": 1793719380.395547,
+    "wall_times": {
+      "utc": "2026-11-03T15:23:00.395547+00:00",
+      "bangkok": "2026-11-03T22:23:00.395547+07:00"
+    }
+  },
+  "latest_fetch": "2026-11-03T15:27:54.097685+00:00",
+  "first_audit_unchanged": true,
+  "instrument_accessed": false,
+  "intervention_performed": false
+}

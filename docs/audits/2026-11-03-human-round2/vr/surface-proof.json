@@ -1,0 +1,195 @@
+{
+  "sourceSHA256": "d47dd0e3253acd5d2a34dd50674a82dc047f731884f5fb612d838dbf4451702a",
+  "gate": [
+    {
+      "age": "undefined",
+      "sex": 0,
+      "modesty": 0,
+      "anatomyInstances": 0
+    },
+    {
+      "age": "undefined",
+      "sex": 0,
+      "modesty": 1,
+      "anatomyInstances": 1
+    },
+    {
+      "age": "null",
+      "sex": 0,
+      "modesty": 0,
+      "anatomyInstances": 0
+    },
+    {
+      "age": "null",
+      "sex": 0,
+      "modesty": 1,
+      "anatomyInstances": 1
+    },
+    {
+      "age": "NaN",
+      "sex": 0,
+      "modesty": 0,
+      "anatomyInstances": 0
+    },
+    {
+      "age": "NaN",
+      "sex": 0,
+      "modesty": 1,
+      "anatomyInstances": 1
+    },
+    {
+      "age": "17.99",
+      "sex": 0,
+      "modesty": 0,
+      "anatomyInstances": 0
+    },
+    {
+      "age": "17.99",
+      "sex": 0,
+      "modesty": 1,
+      "anatomyInstances": 1
+    },
+    {
+      "age": "18",
+      "sex": 0,
+      "modesty": 0,
+      "anatomyInstances": 3
+    },
+    {
+      "age": "18",
+      "sex": 0,
+      "modesty": 1,
+      "anatomyInstances": 1
+    },
+    {
+      "age": "30",
+      "sex": 0,
+      "modesty": 0,
+      "anatomyInstances": 3
+    },
+    {
+      "age": "30",
+      "sex": 0,
+      "modesty": 1,
+      "anatomyInstances": 1
+    },
+    {
+      "age": "undefined",
+      "sex": 1,
+      "modesty": 0,
+      "anatomyInstances": 0
+    },
+    {
+      "age": "undefined",
+      "sex": 1,
+      "modesty": 1,
+      "anatomyInstances": 1
+    },
+    {
+      "age": "null",
+      "sex": 1,
+      "modesty": 0,
+      "anatomyInstances": 0
+    },
+    {
+      "age": "null",
+      "sex": 1,
+      "modesty": 1,
+      "anatomyInstances": 1
+    },
+    {
+      "age": "NaN",
+      "sex": 1,
+      "modesty": 0,
+      "anatomyInstances": 0
+    },
+    {
+      "age": "NaN",
+      "sex": 1,
+      "modesty": 1,
+      "anatomyInstances": 1
+    },
+    {
+      "age": "17.99",
+      "sex": 1,
+      "modesty": 0,
+      "anatomyInstances": 0
+    },
+    {
+      "age": "17.99",
+      "sex": 1,
+      "modesty": 1,
+      "anatomyInstances": 2
+    },
+    {
+      "age": "18",
+      "sex": 1,
+      "modesty": 0,
+      "anatomyInstances": 4
+    },
+    {
+      "age": "18",
+      "sex": 1,
+      "modesty": 1,
+      "anatomyInstances": 2
+    },
+    {
+      "age": "30",
+      "sex": 1,
+      "modesty": 0,
+      "anatomyInstances": 4
+    },
+    {
+      "age": "30",
+      "sex": 1,
+      "modesty": 1,
+      "anatomyInstances": 2
+    }
+  ],
+  "surfaces": [
+    {
+      "part": "adult nipple",
+      "center": [
+        -0.07332246750593185,
+        1.1660242080688477,
+        0.12089692801237106
+      ],
+      "back": 0.11449852818623185,
+      "front": 0.12729532783851027,
+      "bodyFront": 0.11595550166109711
+    },
+    {
+      "part": "adult nipple",
+      "center": [
+        0.07332246750593185,
+        1.1660242080688477,
+        0.12089692801237106
+      ],
+      "back": 0.11449852818623185,
+      "front": 0.12729532783851027,
+      "bodyFront": 0.1156912536191902
+    },
+    {
+      "part": "adult pubic fold",
+      "center": [
+        -0.006398399826139212,
+        0.7758060097694397,
+        0.0551612451672554
+      ],
+      "back": 0.03365222795846262,
+      "front": 0.07667026237604818,
+      "bodyFront": 0.051774334778767486
+    },
+    {
+      "part": "adult pubic fold",
+      "center": [
+        0.006398399826139212,
+        0.7758060097694397,
+        0.0551612451672554
+      ],
+      "back": 0.03365222795846262,
+      "front": 0.07667026237604818,
+      "bodyFront": 0.0518152825779357
+    }
+  ]
+}

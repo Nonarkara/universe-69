@@ -448,3 +448,78 @@ class TestTheServerServesVR(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+@unittest.skipUnless(shutil.which('node'), 'optional workbench JS execution')
+class TestHumanAnatomyAndGait(unittest.TestCase):
+    def execute(self, script):
+        src=read(VR)
+        helpers=src[src.index('const STATURE ='):src.index('const _m =')]
+        result=subprocess.run([shutil.which('node')],input=helpers+script,text=True,capture_output=True)
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+
+    def test_explicit_detail_requires_known_adult_bare_body_and_no_sexual_act(self):
+        self.execute("""
+const assert=require('node:assert/strict');
+for(const age of [undefined,null,NaN,Infinity,'30',0,6,12,17.99])
+ assert.equal(visibleAdultAnatomy({age,sex:0,act:0},'',true),false);
+for(const sex of [0,1])for(const age of [18,30,70]) {
+ const a={age,sex,act:0};assert.equal(visibleAdultAnatomy(a,'',true),true);
+ for(const dress of ['swim','hide','fur'])assert.equal(visibleAdultAnatomy(a,dress,true),false);
+ assert.equal(visibleAdultAnatomy(a,'',false),false);
+ for(const act of [A.MATE,A.BIRTH])assert.equal(visibleAdultAnatomy({...a,act},'',true),false);
+}
+assert.equal(visibleAdultAnatomy({age:30,act:0},'',true),false);
+for(const key of ['eden','lagoon']) {
+ assert.equal(clothingOf({age:30,id:7},key,{modesty:0}), '');
+ assert.equal(clothingOf({age:30,id:7},key,{modesty:1}),key==='eden'?'swim':'hide');
+ assert.equal(clothingOf({age:6,id:7},key,{modesty:1}), '');
+}
+assert.equal(clothingOf({age:6,id:7},'lagoon',{season:'winter',modesty:0}), 'fur');
+""")
+
+    def test_stance_is_distance_driven_and_leg_bones_do_not_stretch(self):
+        self.execute("""
+const assert=require('node:assert/strict');
+for(const age of [3,6,12,18,30,70])for(const sex of [0,1]) {
+ const D=bodyDimensions(age,sex),H=D.H,cycle=.58*H,L=D.thigh+D.shin;
+ for(let i=0;i<100;i++) {
+  const distance=i/100*cycle,feet=[-1,1].map(s=>gaitFoot(distance,H,s));
+  const allowed=Math.min(...feet.filter(f=>f.stance).map(f=>.034375*H+Math.sqrt(L*L-f.z*f.z)));
+  const hip=Math.min(D.hipY,allowed-1e-5);
+  for(const f of feet) {
+   const a={x:0,y:hip,z:0},target={x:0,y:.034375*H+f.lift,z:f.z};
+   const j=legIK(a,target,D.thigh,D.shin);
+   assert(Math.abs(Math.hypot(j.middle.y-a.y,j.middle.z-a.z)-D.thigh)<1e-8);
+   assert(Math.abs(Math.hypot(j.end.y-j.middle.y,j.end.z-j.middle.z)-D.shin)<1e-8);
+   if(f.stance)assert(Math.abs(j.end.y-target.y)<1e-7&&Math.abs(j.end.z-target.z)<1e-7);
+  }
+ }
+ for(const side of [-1,1]) {
+  const phaseOffset=side>0?.5:0;
+  const distance=(side>0?.6:.1)*cycle;
+  const a=gaitFoot(distance,H,side),b=gaitFoot(distance+.001,H,side);
+  assert(a.stance&&b.stance);assert(Math.abs(distance+a.z-(distance+.001+b.z))<1e-9);
+ }
+}
+""")
+
+    def test_meshes_keep_sex_shape_and_neutral_children_separate(self):
+        src=read(VR)
+        self.assertIn('this.torsoFemale = inst(torsoGeometry(true), cap)',src)
+        self.assertIn('this.torsoChild = inst(torsoGeometry(false,true), cap)',src)
+        self.assertIn('const torsoMesh=!adult?this.torsoChild',src)
+        self.assertIn('visibleAdultAnatomy(a,dress,true)',src)
+        self.assertIn('a.walkDistance = (a.walkDistance || 0) + step',src)
+        self.assertNotIn('Math.sin(t * (fast ? 9.0',src)
+
+
+    def test_arm_ik_handles_collinear_hints_without_changing_bone_length(self):
+        self.execute("""
+const assert=require('node:assert/strict');
+for(const target of [{x:0,y:0,z:0},{x:0,y:-.4,z:0},{x:.2,y:.1,z:.2}]) {
+ const root={x:0,y:0,z:0},j=armIK(root,target,{x:0,y:0,z:0},.3,.2);
+ const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z);
+ assert(Math.abs(dist(root,j.middle)-.3)<1e-8);assert(Math.abs(dist(j.middle,j.end)-.2)<1e-8);
+}
+""")

@@ -1,0 +1,443 @@
+{
+  "source_sha256": "d47dd0e3253acd5d2a34dd50674a82dc047f731884f5fb612d838dbf4451702a",
+  "cases": [
+    {
+      "age": 6,
+      "sex": 0,
+      "leg_length_ranges": [
+        2.9368616816238813e-08,
+        1.5270391867661104e-08,
+        2.4870223769291044e-08,
+        1.6160556171040952e-08
+      ],
+      "arm_length_ranges": [
+        1.573615787675564e-08,
+        1.4809314941022222e-08,
+        1.4555249755465738e-08,
+        1.4468697545622078e-08
+      ],
+      "planted_runs": [
+        {
+          "side": "left",
+          "samples": 34,
+          "distance_start": 0,
+          "distance_end": 0.41250000000000003,
+          "world_z_drift": 2.60770320892334e-08
+        },
+        {
+          "side": "left",
+          "samples": 27,
+          "distance_start": 0.675,
+          "distance_end": 1,
+          "world_z_drift": 5.774199962615967e-08
+        },
+        {
+          "side": "right",
+          "samples": 7,
+          "distance_start": 0,
+          "distance_end": 0.07500000000000001,
+          "world_z_drift": 3.725290298461914e-09
+        },
+        {
+          "side": "right",
+          "samples": 33,
+          "distance_start": 0.3375,
+          "distance_end": 0.7375,
+          "world_z_drift": 5.587935447692871e-08
+        }
+      ],
+      "arm_leg_counter_swing": [
+        {
+          "side": "left",
+          "correlation": -0.9998974453838344
+        },
+        {
+          "side": "right",
+          "correlation": -0.9999129312745508
+        }
+      ]
+    },
+    {
+      "age": 6,
+      "sex": 1,
+      "leg_length_ranges": [
+        2.9368616816238813e-08,
+        1.5270391867661104e-08,
+        2.4870223769291044e-08,
+        1.6160556171040952e-08
+      ],
+      "arm_length_ranges": [
+        1.573615787675564e-08,
+        1.4809314941022222e-08,
+        1.4555249755465738e-08,
+        1.4468697545622078e-08
+      ],
+      "planted_runs": [
+        {
+          "side": "left",
+          "samples": 34,
+          "distance_start": 0,
+          "distance_end": 0.41250000000000003,
+          "world_z_drift": 2.60770320892334e-08
+        },
+        {
+          "side": "left",
+          "samples": 27,
+          "distance_start": 0.675,
+          "distance_end": 1,
+          "world_z_drift": 5.774199962615967e-08
+        },
+        {
+          "side": "right",
+          "samples": 7,
+          "distance_start": 0,
+          "distance_end": 0.07500000000000001,
+          "world_z_drift": 3.725290298461914e-09
+        },
+        {
+          "side": "right",
+          "samples": 33,
+          "distance_start": 0.3375,
+          "distance_end": 0.7375,
+          "world_z_drift": 5.587935447692871e-08
+        }
+      ],
+      "arm_leg_counter_swing": [
+        {
+          "side": "left",
+          "correlation": -0.9998974453838344
+        },
+        {
+          "side": "right",
+          "correlation": -0.9999129312745508
+        }
+      ]
+    },
+    {
+      "age": 18,
+      "sex": 0,
+      "leg_length_ranges": [
+        2.9475181073657097e-08,
+        3.046890451052775e-08,
+        2.9039769366967505e-08,
+        2.9096203613132587e-08
+      ],
+      "arm_length_ranges": [
+        2.7803141955384802e-08,
+        1.4987104918207095e-08,
+        2.8464208934320112e-08,
+        1.443113109567129e-08
+      ],
+      "planted_runs": [
+        {
+          "side": "left",
+          "samples": 50,
+          "distance_start": 0,
+          "distance_end": 0.6125,
+          "world_z_drift": 2.8870999813079834e-08
+        },
+        {
+          "side": "right",
+          "samples": 10,
+          "distance_start": 0,
+          "distance_end": 0.1125,
+          "world_z_drift": 7.450580596923828e-09
+        },
+        {
+          "side": "right",
+          "samples": 41,
+          "distance_start": 0.5,
+          "distance_end": 1,
+          "world_z_drift": 5.611218512058258e-08
+        }
+      ],
+      "arm_leg_counter_swing": [
+        {
+          "side": "left",
+          "correlation": -0.9999714161334861
+        },
+        {
+          "side": "right",
+          "correlation": -0.9999698597172948
+        }
+      ]
+    },
+    {
+      "age": 18,
+      "sex": 1,
+      "leg_length_ranges": [
+        2.8522078587833732e-08,
+        3.084586946977552e-08,
+        3.0299457109972394e-08,
+        2.882313254737312e-08
+      ],
+      "arm_length_ranges": [
+        2.7610335906480543e-08,
+        1.4191933378482346e-08,
+        2.7610652597598317e-08,
+        1.4396262126847859e-08
+      ],
+      "planted_runs": [
+        {
+          "side": "left",
+          "samples": 47,
+          "distance_start": 0,
+          "distance_end": 0.5750000000000001,
+          "world_z_drift": 2.9802322387695312e-08
+        },
+        {
+          "side": "left",
+          "samples": 6,
+          "distance_start": 0.9375,
+          "distance_end": 1,
+          "world_z_drift": 1.043081283569336e-07
+        },
+        {
+          "side": "right",
+          "samples": 9,
+          "distance_start": 0,
+          "distance_end": 0.1,
+          "world_z_drift": 7.450580596923828e-09
+        },
+        {
+          "side": "right",
+          "samples": 43,
+          "distance_start": 0.47500000000000003,
+          "distance_end": 1,
+          "world_z_drift": 5.774199962615967e-08
+        }
+      ],
+      "arm_leg_counter_swing": [
+        {
+          "side": "left",
+          "correlation": -0.9999696670690573
+        },
+        {
+          "side": "right",
+          "correlation": -0.9999439355882234
+        }
+      ]
+    },
+    {
+      "age": 30,
+      "sex": 0,
+      "leg_length_ranges": [
+        2.9475181073657097e-08,
+        3.046890451052775e-08,
+        2.9039769366967505e-08,
+        2.9096203613132587e-08
+      ],
+      "arm_length_ranges": [
+        2.7803141955384802e-08,
+        1.4987104918207095e-08,
+        2.8464208934320112e-08,
+        1.443113109567129e-08
+      ],
+      "planted_runs": [
+        {
+          "side": "left",
+          "samples": 50,
+          "distance_start": 0,
+          "distance_end": 0.6125,
+          "world_z_drift": 2.8870999813079834e-08
+        },
+        {
+          "side": "right",
+          "samples": 10,
+          "distance_start": 0,
+          "distance_end": 0.1125,
+          "world_z_drift": 7.450580596923828e-09
+        },
+        {
+          "side": "right",
+          "samples": 41,
+          "distance_start": 0.5,
+          "distance_end": 1,
+          "world_z_drift": 5.611218512058258e-08
+        }
+      ],
+      "arm_leg_counter_swing": [
+        {
+          "side": "left",
+          "correlation": -0.9999714161334861
+        },
+        {
+          "side": "right",
+          "correlation": -0.9999698597172948
+        }
+      ]
+    },
+    {
+      "age": 30,
+      "sex": 1,
+      "leg_length_ranges": [
+        2.8522078587833732e-08,
+        3.084586946977552e-08,
+        3.0299457109972394e-08,
+        2.882313254737312e-08
+      ],
+      "arm_length_ranges": [
+        2.7610335906480543e-08,
+        1.4191933378482346e-08,
+        2.7610652597598317e-08,
+        1.4396262126847859e-08
+      ],
+      "planted_runs": [
+        {
+          "side": "left",
+          "samples": 47,
+          "distance_start": 0,
+          "distance_end": 0.5750000000000001,
+          "world_z_drift": 2.9802322387695312e-08
+        },
+        {
+          "side": "left",
+          "samples": 6,
+          "distance_start": 0.9375,
+          "distance_end": 1,
+          "world_z_drift": 1.043081283569336e-07
+        },
+        {
+          "side": "right",
+          "samples": 9,
+          "distance_start": 0,
+          "distance_end": 0.1,
+          "world_z_drift": 7.450580596923828e-09
+        },
+        {
+          "side": "right",
+          "samples": 43,
+          "distance_start": 0.47500000000000003,
+          "distance_end": 1,
+          "world_z_drift": 5.774199962615967e-08
+        }
+      ],
+      "arm_leg_counter_swing": [
+        {
+          "side": "left",
+          "correlation": -0.9999696670690573
+        },
+        {
+          "side": "right",
+          "correlation": -0.9999439355882234
+        }
+      ]
+    },
+    {
+      "age": 70,
+      "sex": 0,
+      "leg_length_ranges": [
+        3.0198364142641765e-08,
+        2.9612261087663683e-08,
+        3.006553478401841e-08,
+        2.8387792727624372e-08
+      ],
+      "arm_length_ranges": [
+        3.0019884744714176e-08,
+        1.3824900946257657e-08,
+        2.690394762527859e-08,
+        1.46517951382652e-08
+      ],
+      "planted_runs": [
+        {
+          "side": "left",
+          "samples": 48,
+          "distance_start": 0,
+          "distance_end": 0.5875,
+          "world_z_drift": 2.9802322387695312e-08
+        },
+        {
+          "side": "left",
+          "samples": 3,
+          "distance_start": 0.9750000000000001,
+          "distance_end": 1,
+          "world_z_drift": 5.960464477539063e-08
+        },
+        {
+          "side": "right",
+          "samples": 10,
+          "distance_start": 0,
+          "distance_end": 0.1125,
+          "world_z_drift": 1.1175870895385742e-08
+        },
+        {
+          "side": "right",
+          "samples": 42,
+          "distance_start": 0.48750000000000004,
+          "distance_end": 1,
+          "world_z_drift": 5.4016709327697754e-08
+        }
+      ],
+      "arm_leg_counter_swing": [
+        {
+          "side": "left",
+          "correlation": -0.9999476521719469
+        },
+        {
+          "side": "right",
+          "correlation": -0.999973208054842
+        }
+      ]
+    },
+    {
+      "age": 70,
+      "sex": 1,
+      "leg_length_ranges": [
+        2.979702928840311e-08,
+        2.860859771303126e-08,
+        2.9418397329283863e-08,
+        2.7874427210861086e-08
+      ],
+      "arm_length_ranges": [
+        2.613186711464266e-08,
+        1.4517552660020527e-08,
+        2.5660605695865257e-08,
+        1.4650275215188913e-08
+      ],
+      "planted_runs": [
+        {
+          "side": "left",
+          "samples": 45,
+          "distance_start": 0,
+          "distance_end": 0.55,
+          "world_z_drift": 2.9802322387695312e-08
+        },
+        {
+          "side": "left",
+          "samples": 9,
+          "distance_start": 0.9,
+          "distance_end": 1,
+          "world_z_drift": 8.195638656616211e-08
+        },
+        {
+          "side": "right",
+          "samples": 9,
+          "distance_start": 0,
+          "distance_end": 0.1,
+          "world_z_drift": 0.0
+        },
+        {
+          "side": "right",
+          "samples": 45,
+          "distance_start": 0.45,
+          "distance_end": 1,
+          "world_z_drift": 5.81239874009043e-08
+        }
+      ],
+      "arm_leg_counter_swing": [
+        {
+          "side": "left",
+          "correlation": -0.9999739464708737
+        },
+        {
+          "side": "right",
+          "correlation": -0.9999732858302034
+        }
+      ]
+    }
+  ],
+  "max_leg_length_range": 3.084586946977552e-08,
+  "max_arm_length_range": 3.0019884744714176e-08,
+  "max_grounded_run_world_drift": 1.043081283569336e-07,
+  "highest_same_side_arm_leg_correlation": -0.9998974453838344
+}

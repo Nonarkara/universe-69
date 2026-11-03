@@ -22,6 +22,32 @@ Naming: Universe **6** = EDEN, Universe **9** = LAGOON. 6 + 9 → Universe 69.
   day/night cycles. It never changes the four engine parts, age, sleep,
   resource accounting or the record's actual model time.
 
+## 2026-11-03: anatomy and movement, second visual pass
+
+This is a renderer change, not a biological model change. Engine version and
+clock remain 2026.11.03.2 and one year per real hour. No births, survival odds,
+state migrations, founder cohorts or reseed rules change.
+
+The 2D three-quarter silhouette projects shoulder, waist and hip breadth
+at 0.76 of the frontal canon, with limb roots on that same projection and
+unchanged bone lengths/stride. The walking arms hang beside the upper thighs
+and swing against the legs; requested stationary front/back studies are no
+longer forced into a profile head on a frontal trunk. Costal and iliac
+landmarks describe existing body masses rather than inventing strength.
+
+A single external-anatomy painter handles neutral adult male and female
+contours. Known finite age at least 18 is required; every garment covering
+the hips, back view, small scale, or intimate/labour action suppresses the
+detail. The same gate is tested against actual canvas calls, including
+unknown/nonfinite ages. Children never receive external genital detail.
+These are illustrative life studies, not medical measurement or diagnostic
+images. The display follows recorded clothing/modesty rather than removing
+clothes to expose anatomy.
+
+An empty world is labelled EMPTY in the observer header instead of retaining
+its previous growth phase. The observer does not guess its death cause or
+intervene in its scheduled reseed.
+
 ## Engine 2026.11.03.2: an hour per year
 
 Only the default wall-clock mapping changes from 0.6 to 2.5 seconds per part.

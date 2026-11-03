@@ -1,0 +1,229 @@
+{
+  "fetched_at_utc": "2026-11-03T15:17:21.202089+00:00",
+  "packet_wall": {
+    "utc": "2026-11-03T15:16:44.305117+00:00",
+    "bangkok": "2026-11-03T22:16:44.305117+07:00"
+  },
+  "engine": "2026.11.01.1",
+  "pace": {
+    "seconds_per_part": 0.6,
+    "years_per_real_day": 100.0
+  },
+  "status": {
+    "catching_up": false,
+    "behind_days": 0,
+    "started": 1793636052.322756,
+    "time_mode": "default",
+    "last_upload": 1793718704.1686678
+  },
+  "worlds": {
+    "eden": {
+      "day": 84106,
+      "part": 1,
+      "iter": 3,
+      "pop": 0,
+      "gen": 2,
+      "peak": 18,
+      "cod": {
+        "age": 18
+      },
+      "phase": "exploit",
+      "engine": "2026.11.01.1",
+      "gauges": {
+        "adults": 0,
+        "withdrawn": 0,
+        "breeders": 0,
+        "infant_survival": null,
+        "claimants": 0.0,
+        "sink": 0,
+        "food_days": null
+      },
+      "row_counts": {
+        "total": 0,
+        "age_ge_18": 0,
+        "age_lt_18": 0,
+        "male_age_ge_18": 0,
+        "female_age_ge_18": 0,
+        "age16_to45_both_sexes": 0
+      }
+    },
+    "lagoon": {
+      "day": 84106,
+      "part": 1,
+      "iter": 3,
+      "pop": 24,
+      "gen": 2,
+      "peak": 24,
+      "cod": {
+        "violence": 1,
+        "childbirth": 1,
+        "age": 1,
+        "infant": 1,
+        "accident": 1
+      },
+      "phase": "shelter",
+      "engine": "2026.11.01.1",
+      "gauges": {
+        "adults": 13,
+        "withdrawn": 0,
+        "breeders": 11,
+        "infant_survival": null,
+        "claimants": 1.08,
+        "sink": 12,
+        "food_days": 18.1
+      },
+      "row_counts": {
+        "total": 24,
+        "age_ge_18": 13,
+        "age_lt_18": 11,
+        "male_age_ge_18": 7,
+        "female_age_ge_18": 6,
+        "age16_to45_both_sexes": 11
+      }
+    }
+  },
+  "relevant_events": [
+    {
+      "d": 31080,
+      "y": 86,
+      "u": "EDEN",
+      "t": "extinction",
+      "msg": "UNIVERSE 6 HAS DIED. The pen is empty. Peak population was 20, generation 2. The food hoppers are still full.",
+      "wall": 1793591741.339185,
+      "wall_times": {
+        "utc": "2026-11-02T03:55:41.339185+00:00",
+        "bangkok": "2026-11-02T10:55:41.339185+07:00"
+      }
+    },
+    {
+      "d": 31080,
+      "y": 86,
+      "u": "EDEN",
+      "t": "lesson",
+      "msg": "Postmortem, iteration 2: dominant cause was age. EDEN inherits no lesson by experimental design; this record does not establish that the collapse was inevitable.",
+      "wall": 1793591741.339256,
+      "wall_times": {
+        "utc": "2026-11-02T03:55:41.339256+00:00",
+        "bangkok": "2026-11-02T10:55:41.339256+07:00"
+      }
+    },
+    {
+      "d": 41881,
+      "y": 116,
+      "u": "EDEN",
+      "t": "reseed",
+      "msg": "The Observers reseed the pen. Iteration 3 begins under the same controlled conditions.",
+      "wall": 1793617663.5307488,
+      "wall_times": {
+        "utc": "2026-11-02T11:07:43.530749+00:00",
+        "bangkok": "2026-11-02T18:07:43.530749+07:00"
+      }
+    },
+    {
+      "d": 69481,
+      "y": 193,
+      "u": "LAGOON",
+      "t": "extinction",
+      "msg": "UNIVERSE 9 HAS DIED. The lagoon is quiet again. Peak population 29, generation 8.",
+      "wall": 1793683903.4966452,
+      "wall_times": {
+        "utc": "2026-11-03T05:31:43.496645+00:00",
+        "bangkok": "2026-11-03T12:31:43.496645+07:00"
+      }
+    },
+    {
+      "d": 73462,
+      "y": 204,
+      "u": "EDEN",
+      "t": "extinction",
+      "msg": "UNIVERSE 6 HAS DIED. The pen is empty. Peak population was 18, generation 2. The food hoppers are still full.",
+      "wall": 1793693457.866805,
+      "wall_times": {
+        "utc": "2026-11-03T08:10:57.866805+00:00",
+        "bangkok": "2026-11-03T15:10:57.866805+07:00"
+      }
+    },
+    {
+      "d": 73462,
+      "y": 204,
+      "u": "EDEN",
+      "t": "lesson",
+      "msg": "Postmortem, iteration 3: dominant cause was age. EDEN inherits no lesson by experimental design; this record does not establish that the collapse was inevitable.",
+      "wall": 1793693457.866889,
+      "wall_times": {
+        "utc": "2026-11-03T08:10:57.866889+00:00",
+        "bangkok": "2026-11-03T15:10:57.866889+07:00"
+      }
+    },
+    {
+      "d": 80282,
+      "y": 223,
+      "u": "LAGOON",
+      "t": "reseed",
+      "msg": "New castaways reach the lagoon. Iteration 3 begins. They carry the old lessons: preserve, cleanliness.",
+      "wall": 1793709825.9766898,
+      "wall_times": {
+        "utc": "2026-11-03T12:43:45.976690+00:00",
+        "bangkok": "2026-11-03T19:43:45.976690+07:00"
+      }
+    }
+  ],
+  "previous_packet": {
+    "wall": {
+      "utc": "2026-11-02T18:50:52.390748+00:00",
+      "bangkok": "2026-11-03T01:50:52.390748+07:00"
+    },
+    "sha256": "c4637d15ec6cc30b7304b24e59c6be9b69d838af74532563f774d2e50e6c2ec5",
+    "engine": "2026.11.01.1",
+    "worlds": {
+      "eden": {
+        "day": 53460,
+        "part": 3,
+        "iter": 3,
+        "pop": 15,
+        "gen": 2,
+        "peak": 18,
+        "cod": {
+          "age": 3
+        }
+      },
+      "lagoon": {
+        "day": 53460,
+        "part": 3,
+        "iter": 2,
+        "pop": 5,
+        "gen": 7,
+        "peak": 29,
+        "cod": {
+          "violence": 19,
+          "infant": 13,
+          "dehydration": 16,
+          "starvation": 2,
+          "accident": 14,
+          "age": 21,
+          "childbirth": 1
+        }
+      }
+    }
+  },
+  "summary_omits_fields": [
+    "extinct_day",
+    "postmortems",
+    "founded_day"
+  ],
+  "repo_commit_at_audit": "523e7b5",
+  "repo_engine": "2026.11.03.2",
+  "instrument_accessed": false,
+  "eden_nominal_reseed": {
+    "extinction_day": 73462,
+    "quiet_years": 30,
+    "days_per_year": 360,
+    "strict_rule": "day - extinct_day > 30 * 360",
+    "first_eligible_day": 84263,
+    "packet_day": 84106,
+    "packet_part": 1,
+    "parts_remaining": 627,
+    "nominal_seconds_at_packet_pace": 376.2,
+    "qualification": "Derived from checked-out engine rule and last observed event; not a live guarantee or private-state inspection."
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "independent-vr-review.md": "1b6369676eae0c2b771484963b872e7a27b21ce97fe9763edbba08a61ba1d865",
+  "vr-matrix-review.json": "ed5274390ecb861bc8b67eae2ac83f5fbbddf516da816aac813f8f5b5fef5f32",
+  "analyze_vr.py": "fbe2eb69275a897c6d4a5d975aa89a16bffa446697de38c0cbbfe830bfa52e2d",
+  "capture_vr_ui.py": "33e613c335e27a19d14268d98c2495ba35d78e1df3bcd950f2617843c2b0abe9",
+  "ui/390-record.png": "051a464a676a81b198d4d0c68db773a159cba97ce1c3364af3ea174f8c1d242c",
+  "ui/report.json": "fdf54fda437011c302d3ad58eb9aa5ce06a33f3b9c192aa816f0c1ffb9ee71dc",
+  "ui/1440-record.png": "38fd92f9648b1c6149e40f5baafb5979e6e03c66ee77855c1764413f4ebd1353",
+  "ui/390-focus.png": "7352d0e516412d5e3cb3557cd5108054f945740a838d682e5c98b3ff52e2c7e2",
+  "ui/1440-focus.png": "2374e0749e9ea4556d8ce3a7a362bfe1ca80472a51f7f8176928cfbb9dd42349"
+}

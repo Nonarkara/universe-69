@@ -839,3 +839,70 @@ button has been renamed INSPECT to make that distinction visible.
 The device-resolution cap rises from 2 to 2.5. Extra face geometry is enabled
 only inside a world; crowds still share draw calls. MacBook/Quest frame rate
 must be measured on those devices before any performance claim.
+
+### 2026-11-03 — human anatomy, clothing and distance-driven 3D gait
+
+The second human pass replaces the shared rotational hourglass with a closed
+ring surface with independent lateral widths and anterior/posterior depths.
+Adult male and female meshes differ through rib cage, waist and pelvis;
+juveniles use a neutral surface. Dimensions remain on the canonical age/sex
+skeleton. Hip roots now lie at 0.52 of the half-pelvis width, inside the pelvic
+mass, rather than 0.92 (which put the thighs outside the trunk). Shoulder
+roots lie below the shoulder contour; palms follow their forearms and have a
+small thumb rather than remaining vertical ellipsoids. Brow, sclera, pupil,
+nose and mouth landmarks retain each body's pose and orientation.
+
+Clothing now follows the same recorded modesty/identity/season rule as the 2D
+viewer: an EDEN swimsuit, a LAGOON hide wrap, or winter fur. A garment covers
+its region rather than turning the entire skin green or brown. Bare adult
+figures in a close human-scale view have restrained external anatomical
+landmarks, including non-erect male anatomy and female pubic contours.
+Explicit external detail requires a finite numeric age of at least 18 and
+known sex; missing/unknown ages and minors never receive it. Covered bodies
+and records of mating or birth do not receive that detail. Adult clinical
+front/profile fixtures are separate from neutral child proportion fixtures.
+Female nipple positions follow the same torso-ring front surface, avoiding
+floating markers or details hidden inside the skin.
+
+A walking phase now follows distance actually interpolated along a permitted
+recorded path; wall time no longer advances the feet independently of travel.
+During 62% stance, local foot travel cancels body displacement. A two-bone leg
+solver preserves thigh/shin lengths and drops the pelvis enough to reach the
+planted ankle. The same-side hand counter-swings against that foot. This is a
+straight-segment planted-ankle rig, not a full contact/turning/terrain dynamics
+solver. Arm IK likewise preserves bone lengths while rendering observed
+walking, eating, drinking, talking, grooming and gathering poses. Quiet thorax
+breathing continues while inspecting a held record; none of these gestures
+changes an action, intention, body location or biological clock.
+
+The actual drawBody instance matrices, not a reimplemented rig formula, are
+sampled across age/sex/walk phases for bone lengths, planted ankle drift and
+counter-swing. Actual transformed geometry bounds cover standing, seated and
+lying bodies. These tests and the clinical surface ray intersections are
+retained with production-loop captures in the human-round2 audit. This remains
+procedural, stylized anatomy; it is not a scanned human or a physiological
+motion capture model. MacBook/Quest performance still requires target testing.
+
+### Second 2D life-study pass
+
+Three-quarter bodies now project frontal shoulder/waist/hip breadth at0.76,
+including the attached limb roots. The canonical bone lengths and stride stay
+unchanged. Supplied stationary front/back views are honored instead of being
+forced into profile. Walking arms hang beside the thighs and counter-swing;
+the ribcage and pelvic crest follow the rig. Close ink no longer thickens into
+black goggles and heavy body contours as the figure is enlarged.
+
+Neutral adult external male/female anatomy is one separate painter. It requires
+known finite age>=18, uncovered hips, an appropriate view/scale and a non-intimate
+pose. The painter sits after the nearer leg but before the nearer arm, so the
+anatomy survives the thigh pass while the hand can still occlude it. Unknown
+ages, all minors, clothing and private actions fail closed. Actual pixel
+comparisons verify visible bare-adult detail and zero changes for minors or
+covered bodies. Clinical diagnostic sheets contain only explicitly aged adults.
+
+Independent actual-render probes cover944 age/sex/phase cases. Bone-length
+error stays below6.3e-15 logical units and straight-stance drift is below.003CSSpx
+at the84px hearth rung. This is a projection/illustration improvement, not new
+physiology or a claim to surveyed human anatomy. Empty observer headings now
+say EMPTY instead of retaining an earlier growth phase; the engine and its
+natural reseed rules are untouched.

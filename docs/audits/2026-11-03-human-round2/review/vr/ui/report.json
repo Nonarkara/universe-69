@@ -1,0 +1,155 @@
+{
+  "source_sha256": "d47dd0e3253acd5d2a34dd50674a82dc047f731884f5fb612d838dbf4451702a",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "errors": [],
+      "native_tab_sequence": [
+        "bTable",
+        "bEden",
+        "bLagoon",
+        "bTime",
+        "bRecord"
+      ],
+      "focus": {
+        "id": "bRecord",
+        "outline": "rgb(228, 180, 86) solid 2px",
+        "rect": {
+          "x": 262.1875,
+          "y": 34,
+          "width": 63.359375,
+          "height": 34,
+          "top": 34,
+          "right": 325.546875,
+          "bottom": 68,
+          "left": 262.1875
+        }
+      },
+      "expanded": {
+        "page": [
+          390,
+          844
+        ],
+        "viewport": [
+          390,
+          844
+        ],
+        "readout": {
+          "x": 18,
+          "y": 680.0625,
+          "width": 354,
+          "height": 153.9375,
+          "top": 680.0625,
+          "right": 372,
+          "bottom": 834,
+          "left": 18
+        },
+        "text": "TIMELAPSE \u00b7 1 YEAR / REAL HOUR \u00b7 record 8h old\nEDEN \u00b7 RECORD\nY0 \u00b7 DAY \u00b7 POP 16 \u00b7 ITER 1\nSTRIVE \u00b7 ALWAYS SPRING \u00b7 16 COMPETENT ADULTS 16\u201345 (NOT FERTILITY)\n\u2190\n1 / 4\n\u2192",
+        "controls": [
+          {
+            "text": "\u2190",
+            "rect": {
+              "x": 26,
+              "y": 794,
+              "width": 32.875,
+              "height": 34,
+              "top": 794,
+              "right": 58.875,
+              "bottom": 828,
+              "left": 26
+            }
+          },
+          {
+            "text": "\u2192",
+            "rect": {
+              "x": 108.65625,
+              "y": 794,
+              "width": 32.875,
+              "height": 34,
+              "top": 794,
+              "right": 141.53125,
+              "bottom": 828,
+              "left": 108.65625
+            }
+          }
+        ]
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "errors": [],
+      "native_tab_sequence": [
+        "bTable",
+        "bEden",
+        "bLagoon",
+        "bTime",
+        "bRecord"
+      ],
+      "focus": {
+        "id": "bRecord",
+        "outline": "rgb(228, 180, 86) solid 2px",
+        "rect": {
+          "x": 1356.640625,
+          "y": 12,
+          "width": 69.359375,
+          "height": 34,
+          "top": 12,
+          "right": 1426,
+          "bottom": 46,
+          "left": 1356.640625
+        }
+      },
+      "expanded": {
+        "page": [
+          1440,
+          900
+        ],
+        "viewport": [
+          1440,
+          900
+        ],
+        "readout": {
+          "x": 18,
+          "y": 749.25,
+          "width": 415.671875,
+          "height": 134.75,
+          "top": 749.25,
+          "right": 433.671875,
+          "bottom": 884,
+          "left": 18
+        },
+        "text": "TIMELAPSE \u00b7 1 YEAR / REAL HOUR \u00b7 record 8h old\nEDEN \u00b7 RECORD\nY0 \u00b7 DAY \u00b7 POP 16 \u00b7 ITER 1\nSTRIVE \u00b7 ALWAYS SPRING \u00b7 16 COMPETENT ADULTS 16\u201345 (NOT FERTILITY)\n\u2190\n1 / 4\n\u2192",
+        "controls": [
+          {
+            "text": "\u2190",
+            "rect": {
+              "x": 26,
+              "y": 844,
+              "width": 32.875,
+              "height": 34,
+              "top": 844,
+              "right": 58.875,
+              "bottom": 878,
+              "left": 26
+            }
+          },
+          {
+            "text": "\u2192",
+            "rect": {
+              "x": 108.65625,
+              "y": 844,
+              "width": 32.875,
+              "height": 34,
+              "top": 844,
+              "right": 141.53125,
+              "bottom": 878,
+              "left": 108.65625
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

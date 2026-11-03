@@ -227,10 +227,11 @@ class TestTheBody(unittest.TestCase):
     def test_children_never_get_genital_detail(self):
         """Every genital stroke sits behind the adult gate."""
         src = read_renderer()
-        body = src.split("function drawSketch(")[1].split("\nfunction ")[0]
-        self.assertEqual(body.count("pubic hair") + body.count("h1<5"), 2)
-        self.assertEqual(body.count("adult && s>=2 && bare && !private_"), 2,
-                         "anatomical detail is drawn outside the adult gate")
+        helper = src[src.index("function externalAnatomyVisible("):src.index("function drawSketch(")]
+        self.assertIn("B.adult===true", helper)
+        self.assertIn("!dress && !private_ && view!==2", helper)
+        self.assertIn("if (!externalAnatomyVisible(", helper)
+        self.assertIn("adult: Number.isFinite(a.age) && a.age>=18", src)
 
     def test_the_head_has_a_jaw(self):
         """A plain oval is an egg, not a head."""
@@ -720,6 +721,32 @@ class TestDisplayLight(unittest.TestCase):
 
     def test_hearth_camera_resolves_a_whole_person(self):
         self.assertEqual(numbers_in(read_renderer(),'RUNG_PX'),[6,18,84])
+
+
+
+
+@unittest.skipUnless(shutil.which('node'), 'Node is a workbench-only viewer test runner')
+class TestClinicalAnatomy(unittest.TestCase):
+    def evaluate(self, expression):
+        src=read_renderer()
+        tables=src[src.index('var AGE_BAND='):src.index('// The skeleton.')]
+        body=src[src.index('function ageBand('):src.index('// The rig\'s measurements')]
+        helper=src[src.index('function externalAnatomyVisible('):src.index('function drawSketch(')]
+        js=tables+body+'var INK_SOFT="black";'+helper+';process.stdout.write(JSON.stringify('+expression+'));'
+        return json.loads(subprocess.run(['node','-e',js],check=True,capture_output=True,text=True).stdout)
+
+    def test_unknown_nonfinite_and_minor_ages_never_enable_external_detail(self):
+        got=self.evaluate("[undefined,null,NaN,Infinity,-1,0,6,12,17,17.999,18,30,70].map(age=>externalAnatomyVisible(bodyOf({age}),1,4,'',false))")
+        self.assertEqual(got,[False]*10+[True]*3)
+
+    def test_clothing_private_actions_back_view_and_small_scale_occlude(self):
+        got=self.evaluate("[['',false,1,4],['swim',false,1,4],['hide',false,1,4],['fur',false,1,4],['',true,1,4],['',false,2,4],['',false,1,1]].map(([dress,private_,view,s])=>externalAnatomyVisible(bodyOf({age:30}),view,s,dress,private_))")
+        self.assertEqual(got,[True]+[False]*6)
+
+    def test_actual_painter_stops_before_any_canvas_call_for_a_minor(self):
+        got=self.evaluate("(()=>{let calls=0;const g=new Proxy({},{get:()=>()=>{calls++},set:()=>true}),J={pelvis:[0,16]},D={hpW:3,crotch:1,headH:4};let minor=drawExternalAnatomy(g,J,D,bodyOf({age:17}),0,1,4,'',false,.3),before=calls;let adult=drawExternalAnatomy(g,J,D,bodyOf({age:30}),1,1,4,'',false,.3);return {minor,before,adult,calls};})()")
+        self.assertFalse(got['minor']);self.assertEqual(got['before'],0)
+        self.assertTrue(got['adult']);self.assertGreater(got['calls'],0)
 
 
 if __name__ == "__main__":

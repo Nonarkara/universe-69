@@ -1,0 +1,73 @@
+{
+  "sourceSHA256": "d47dd0e3253acd5d2a34dd50674a82dc047f731884f5fb612d838dbf4451702a",
+  "floor": {
+    "cases": 162,
+    "minimum": 0.001317090354859829
+  },
+  "walk": [
+    {
+      "age": 6,
+      "sex": 0,
+      "samples": 81,
+      "plantedAnkleWorldDriftMax": 5.774199962615967e-08,
+      "boneLengthRangeMax": 2.9368616816238813e-08,
+      "sameSideHandFootProductMax": -2.3777315281110487e-07
+    },
+    {
+      "age": 6,
+      "sex": 1,
+      "samples": 81,
+      "plantedAnkleWorldDriftMax": 5.774199962615967e-08,
+      "boneLengthRangeMax": 2.9368616816238813e-08,
+      "sameSideHandFootProductMax": -2.3777315281110487e-07
+    },
+    {
+      "age": 18,
+      "sex": 0,
+      "samples": 81,
+      "plantedAnkleWorldDriftMax": 5.611218512058258e-08,
+      "boneLengthRangeMax": 3.046890451052775e-08,
+      "sameSideHandFootProductMax": -7.103409146698688e-06
+    },
+    {
+      "age": 18,
+      "sex": 1,
+      "samples": 81,
+      "plantedAnkleWorldDriftMax": 1.043081283569336e-07,
+      "boneLengthRangeMax": 3.084586946977552e-08,
+      "sameSideHandFootProductMax": -7.884390986950839e-09
+    },
+    {
+      "age": 30,
+      "sex": 0,
+      "samples": 81,
+      "plantedAnkleWorldDriftMax": 5.611218512058258e-08,
+      "boneLengthRangeMax": 3.046890451052775e-08,
+      "sameSideHandFootProductMax": -7.103409146698688e-06
+    },
+    {
+      "age": 30,
+      "sex": 1,
+      "samples": 81,
+      "plantedAnkleWorldDriftMax": 1.043081283569336e-07,
+      "boneLengthRangeMax": 3.084586946977552e-08,
+      "sameSideHandFootProductMax": -7.884390986950839e-09
+    },
+    {
+      "age": 70,
+      "sex": 0,
+      "samples": 81,
+      "plantedAnkleWorldDriftMax": 5.960464477539063e-08,
+      "boneLengthRangeMax": 3.0198364142641765e-08,
+      "sameSideHandFootProductMax": -3.173719558755077e-10
+    },
+    {
+      "age": 70,
+      "sex": 1,
+      "samples": 81,
+      "plantedAnkleWorldDriftMax": 8.195638656616211e-08,
+      "boneLengthRangeMax": 2.979702928840311e-08,
+      "sameSideHandFootProductMax": -1.0517318071928922e-05
+    }
+  ]
+}

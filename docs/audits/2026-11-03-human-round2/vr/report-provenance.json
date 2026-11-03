@@ -1,0 +1,8 @@
+{
+  "source_sha256": "d47dd0e3253acd5d2a34dd50674a82dc047f731884f5fb612d838dbf4451702a",
+  "raw_sha256": "66bce2806992ca1d6663390cc743631da870500095f1940c5a43de2c39027615",
+  "raw_bytes": 2294741,
+  "gzip_sha256": "353ca8f6f39a324182edb8ebc99758a1799cfe3899ea35e93835151fb95651c0",
+  "gzip_bytes": 267546,
+  "note": "Gunzip report.json.gz to report.json for analyze.py. This is compression only, exact raw bytes preserved."
+}

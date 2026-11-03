@@ -1361,6 +1361,7 @@ function recordedStep(key, a, dt, heldOn, terrain) {
     a.px += dx / d * step; a.py += dy / d * step;
     a.yaw = Math.atan2(dx, dy);
     a.moving = step > 0;
+    a.walkDistance = (a.walkDistance || 0) + step;
   }
   if (!a.moving) a.yaw = (a.face || 1) < 0 ? Math.PI : 0;
 }
@@ -1381,6 +1382,50 @@ function bodyDimensions(age, sex) {
     hipHalf:blend(HP_FRAC[Math.min(i,5)], female ? .110 : .094) * H,
     upper:ARM_FRAC[i] * H * .58, fore:ARM_FRAC[i] * H * .42,
     thigh:leg * .53, shin:leg * .47};
+}
+
+// Clothing follows the observed society, not a renderer-imposed uniform.
+function clothingOf(a, key, u) {
+  if (key === "lagoon" && u && u.season === "winter") return "fur";
+  if (Number.isFinite(a.age) && a.age < 12) return "";
+  const modesty = (u && u.modesty) || 0;
+  return (((a.id * 2654435761) >>> 0) % 1000) / 1000 < modesty
+    ? key === "eden" ? "swim" : "hide" : "";
+}
+function visibleAdultAnatomy(a, dress, inside) {
+  return inside && Number.isFinite(a.age) && a.age >= 18 && (a.sex===0 || a.sex===1) && !dress &&
+    a.act !== A.MATE && a.act !== A.BIRTH;
+}
+// The phase belongs to distance actually traversed along a recorded segment.
+// A stance foot moves backward by exactly the body's forward displacement.
+function gaitFoot(distance, height, side) {
+  const cycle = .58 * height, stance = .62, sweep = cycle * stance;
+  const phase = (((distance / cycle + (side > 0 ? .5 : 0)) % 1) + 1) % 1;
+  if (phase < stance) return {z:sweep/2-cycle*phase, lift:0, phase, stance:true};
+  const t=(phase-stance)/(1-stance);
+  return {z:-sweep/2+sweep*t, lift:Math.sin(Math.PI*t)*.065*height, phase, stance:false};
+}
+// Two bone IK in the forward/up plane, with a knee hint toward +z.
+function legIK(root, ankle, thigh, shin) {
+  const dy=ankle.y-root.y, dz=ankle.z-root.z, raw=Math.hypot(dy,dz)||1e-9;
+  const d=Math.max(Math.abs(thigh-shin)+1e-8,Math.min(thigh+shin-1e-8,raw));
+  const uy=dy/raw,uz=dz/raw,along=(thigh*thigh-shin*shin+d*d)/(2*d);
+  const bend=Math.sqrt(Math.max(0,thigh*thigh-along*along));
+  return {middle:{x:root.x,y:root.y+uy*along+uz*bend,z:root.z+uz*along-uy*bend},
+    end:{x:root.x,y:root.y+uy*d,z:root.z+uz*d}};
+}
+
+function armIK(root, target, hint, upper, fore) {
+  const sub=(a,b)=>[a.x-b.x,a.y-b.y,a.z-b.z],dot=(a,b)=>a.reduce((v,n,i)=>v+n*b[i],0);
+  const v=sub(target,root),raw=Math.hypot(...v),axis=raw>1e-9?v.map(n=>n/raw):[0,-1,0];
+  const h=sub(hint,root),projection=dot(h,axis);
+  let bend=h.map((n,i)=>n-axis[i]*projection);
+  if(Math.hypot(...bend)<1e-8)bend=Math.abs(axis[0])<.9?[0,axis[2],-axis[1]]:[-axis[2],0,axis[0]];
+  const length=Math.hypot(...bend),normal=bend.map(n=>n/length);
+  const d=Math.max(Math.abs(upper-fore)+1e-8,Math.min(upper+fore-1e-8,raw));
+  const along=(upper*upper-fore*fore+d*d)/(2*d),height=Math.sqrt(Math.max(0,upper*upper-along*along));
+  const point=(a,b)=>({x:root.x+axis[0]*a+normal[0]*b,y:root.y+axis[1]*a+normal[1]*b,z:root.z+axis[2]*a+normal[2]*b});
+  return {middle:point(along,height),end:point(d,0)};
 }
 
 function bodyRadii(D, fat, strong) {
@@ -1419,11 +1464,41 @@ const _up = new THREE.Vector3(0, 1, 0);
 
 // Smooth anatomical volumes share instances across the crowd. Profile radii
 // describe rib cage, waist and pelvis, rather than one capsule from hip to neck.
-function torsoGeometry() {
-  return new THREE.LatheGeometry([
-    [0,-1.04],[.47,-1],[.49,-.82],[.46,-.57],[.44,-.20],
-    [.40,.15],[.51,.54],[.55,.79],[.44,1],[.16,1.04],[0,1.04]
-  ].map(([r,y]) => new THREE.Vector2(r,y)), 20);
+function torsoRings(female=false, juvenile=false) {
+  // x is half shoulder width; z is torso depth. The posterior pelvis and
+  // anterior rib cage are distinct volumes, not a surface of revolution.
+  const hip=juvenile?.87:female?1.06:.80, waist=juvenile?.80:female?.68:.78;
+  return [[-1.38,.08,.10],[-1.16,hip*.62,.50],[-.92,hip,.73],
+    [-.55,hip*.97,.76],[-.18,waist,.68],[.18,waist*1.04,.79],
+    [.50,.92,.98],[.78,1.0,.89],[1.0,.93,.62],[1.15,.38,.38],[1.26,.22,.31]];
+}
+function torsoFront(female, x, y) {
+  const rings=torsoRings(female,false);let i=0;
+  while(i<rings.length-2&&rings[i+1][0]<y)i++;
+  const a=rings[i],b=rings[i+1],f=Math.max(0,Math.min(1,(y-a[0])/(b[0]-a[0])));
+  const width=a[1]+(b[1]-a[1])*f,depth=a[2]+(b[2]-a[2])*f;
+  const front=Math.sqrt(Math.max(0,1-(x/width)**2));
+  const breast=female?.17*Math.exp(-Math.pow((y-.42)/.27,2))*front:0;
+  return front*(depth+breast);
+}
+function torsoGeometry(female=false, juvenile=false) {
+  const rings=torsoRings(female,juvenile),pts=[], idx=[], n=28;
+  rings.forEach(([y,w,d])=>{
+    for(let j=0;j<=n;j++) {
+      const a=j/n*Math.PI*2, ca=Math.cos(a), sa=Math.sin(a);
+      const front=Math.max(0,sa), back=Math.max(0,-sa);
+      // Anatomical chest contour is part of the skin, not two attached balls.
+      const breast=female&&!juvenile ? .17*Math.exp(-Math.pow((y-.42)/.27,2))*front : 0;
+      const butt=.09*Math.exp(-Math.pow((y+.83)/.25,2))*back;
+      pts.push(ca*w,y,sa*(d+breast+butt));
+    }
+  });
+  for(let i=0;i<rings.length-1;i++)for(let j=0;j<n;j++) {
+    const a=i*(n+1)+j,b=a+n+1;idx.push(a,b,a+1,b,b+1,a+1);
+  }
+  // Close the neck/crotch ends. Torso caps must not become open rings.
+  for(let j=1;j<n-1;j++){idx.push(0,j+1,j);const a=(rings.length-1)*(n+1);idx.push(a,a+j,a+j+1);}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));g.setIndex(idx);g.computeVertexNormals();return g;
 }
 function limbGeometry() {
   return new THREE.LatheGeometry([
@@ -1460,11 +1535,14 @@ class Crowd {
     this.head = inst(skullGeometry(), cap);
     this.hair = inst(new THREE.SphereGeometry(0.5, 18, 12, 0, Math.PI*2, 0, 1.25), cap);
     this.torso = inst(torsoGeometry(), cap);
+    this.torsoFemale = inst(torsoGeometry(true), cap);
+    this.torsoChild = inst(torsoGeometry(false,true), cap);
+    this.anatomy = inst(new THREE.SphereGeometry(.5,16,12), cap * 24);
     this.neck = inst(new THREE.CapsuleGeometry(0.5, 1, 4, 12), cap);
-    this.face = inst(new THREE.SphereGeometry(.5, 12, 8), cap * 8);
+    this.face = inst(new THREE.SphereGeometry(.5, 16, 12), cap * 16);
     this.arms = inst(limbGeometry(), cap * 4);
     this.legs = inst(limbGeometry(), cap * 4);
-    this.hands = inst(new THREE.SphereGeometry(0.5, 12, 8), cap * 6);
+    this.hands = inst(new THREE.SphereGeometry(0.5, 12, 8), cap * 8);
     this.feet = inst(new THREE.SphereGeometry(0.5, 12, 8), cap * 8);
     const trunkGeo = new THREE.CapsuleGeometry(0.5, 0.4, 2, 6);
     this.trunks = inst(trunkGeo, cap, { roughness: 0.8 });
@@ -1473,7 +1551,7 @@ class Crowd {
         opacity: 0.23, depthWrite: false }), cap);
     this.shadow.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     this.shadow.frustumCulled = false; this.shadow.count = 0;
-    [this.head, this.hair, this.torso, this.neck, this.face, this.arms, this.legs, this.hands,
+    [this.head, this.hair, this.torso, this.torsoFemale, this.torsoChild, this.anatomy, this.neck, this.face, this.arms, this.legs, this.hands,
      this.feet, this.trunks].forEach((m) => this.group.add(m));
     this.group.add(this.shadow);
     this.rows = [];
@@ -1510,7 +1588,7 @@ class Crowd {
 
   update(dt, t, heldOn) {
     const big = this.big;
-    const c = { n: 0, na: 0, nl: 0, nh: 0, nhair: 0, nf: 0, nt: 0, ns: 0, nface: 0 };
+    const c = { n: 0, na: 0, nl: 0, nh: 0, nhair: 0, nf: 0, nt: 0, ns: 0, nface: 0, nm:0, nfm:0, nj:0, nan:0 };
     const size = this.size;
     const fast = !heldOn;
     this.actors.forEach((a) => {
@@ -1526,13 +1604,13 @@ class Crowd {
       this.shadow.setMatrixAt(c.ns++, _m);
       c.n++;
     });
-    [this.head, this.hair, this.torso, this.neck, this.face, this.arms, this.legs, this.hands,
+    [this.head, this.hair, this.torso, this.torsoFemale, this.torsoChild, this.anatomy, this.neck, this.face, this.arms, this.legs, this.hands,
      this.feet, this.trunks].forEach((m) => {
       if (m.instanceMatrix) m.instanceMatrix.needsUpdate = true;
       if (m.instanceColor) m.instanceColor.needsUpdate = true;
     });
     this.shadow.instanceMatrix.needsUpdate = true;
-    this.head.count = c.n; this.hair.count = c.nhair; this.torso.count = c.n; this.neck.count = c.n; this.face.count = c.nface;
+    this.head.count = c.n; this.hair.count = c.nhair; this.torso.count = c.nm; this.torsoFemale.count=c.nfm; this.torsoChild.count=c.nj; this.anatomy.count=c.nan; this.neck.count = c.n; this.face.count = c.nface;
     this.arms.count = c.na; this.legs.count = c.nl;
     this.hands.count = c.nh; this.feet.count = c.nf;
     this.trunks.count = c.nt; this.shadow.count = c.ns;
@@ -1558,19 +1636,26 @@ class Crowd {
     const {torsoR, limbR, headR} = bodyRadii(D, fat, strong);
     const skin = PAL.skin[a.id % 4];
     const hairC = a.age >= 60 ? 0xd9d9d9 : PAL.hair[(a.id * 3) % 5];
-    const cloth = key === "eden"
-      ? (a.sex ? PAL.swim[a.id % PAL.swim.length] : skin)
-      : (this.u.harsh ? PAL.fur : PAL.hide);
-    const legCloth = key === "eden" ? skin : cloth;
+    const dress=clothingOf(a,key,this.u);
+    const cloth=dress==="fur"?PAL.fur:skin;
+    const legCloth=dress==="fur"?PAL.fur:skin;
+    const adult=Number.isFinite(a.age)&&a.age>=18;
 
     // local points: x right, y up, z forward; the body quaternion maps them
     const pose = bodyLandmarks(D, lying, sitting);
-    const { hipY, shY, headY } = pose;
+    let { hipY, shY, headY } = pose;
+    const feet=a.moving&&!lying&&!sitting?[-1,1].map(side=>gaitFoot(a.walkDistance||0,H,side)):null;
+    if(feet){
+      const L=D.thigh+D.shin;
+      const allowed=Math.min(...feet.filter(f=>f.stance).map(f=>pose.ay+Math.sqrt(Math.max(0,L*L-f.z*f.z))));
+      const drop=Math.max(0,hipY-allowed+1e-5);hipY-=drop;shY-=drop;headY-=drop;
+    }
     const rootLift = lying ? lyingSupport(headR, torsoR, limbR) * big : 0;
     const base = root;
     const P = (x, y, z) => new THREE.Vector3(x * big, y * big, z * big)
       .applyQuaternion(bodyQ).add(base).add(_v.set(0, rootLift, 0));
-    const swing = a.moving ? Math.sin(t * (fast ? 9.0 : 5.2) + a.phase) * (0.085 * H) : 0;
+    const gaitPhase=(a.walkDistance||0)/(.58*H)*Math.PI*2;
+    const swing = a.moving ? Math.sin(gaitPhase) * (0.055 * H) : 0;
     let hipC, shC, headC;
     if (lying) {
       hipC = P(0, hipY, 0);
@@ -1588,8 +1673,10 @@ class Crowd {
     // Rib cage / waist / pelvis form one connected silhouette. The neck is
     // independent so shoulders cannot turn into a narrow half-body capsule.
     const bodyMid = P(0,(hipY+shY)/2,0);
-    ellipsoid(this.torso,c.n,bodyMid,bodyQ,
-      shHalf * 1.92 * big,(shY-hipY)/2 * big,torsoR * 1.24 * big,cloth);
+    const torsoMesh=!adult?this.torsoChild:a.sex===1?this.torsoFemale:this.torso;
+    const torsoIndex=!adult?(c.nj++):(a.sex===1?c.nfm++:c.nm++);
+    ellipsoid(torsoMesh,torsoIndex,bodyMid,bodyQ,
+      shHalf * big,(shY-hipY)/2 * big,torsoR * .90 * (1+.012*Math.sin(t*1.4+(a.phase||0))) * big,cloth);
     seg(this.neck, c.n, shC, headC, .035 * H * big, skin);
     // Skull has a tapered jaw and a scalp cap; the old full hair sphere
     // covered almost the whole face. Facial landmarks follow body orientation.
@@ -1599,32 +1686,55 @@ class Crowd {
       ellipsoid(this.hair,c.nhair++,P(0,headY+.07*headR,(sitting?.018*H:0)-.04*headR),bodyQ,
         headR*1.72*big,headR*2.14*big,headR*1.86*big,hairC);
     }
-    // Fine facial landmarks earn their geometry only at human scale. Children
-    // share face anatomy; no age ever receives explicit genital geometry.
+    // Facial landmarks are ordinary anatomy at every age. Sex-specific
+    // external detail below is separately gated by known adult age and dress.
     if (mode.view === "inside") {
       const detail=(x,y,z,sx,sy,sz,color)=>ellipsoid(this.face,c.nface++,
         P(x,y,z+(sitting?.018*H:0)),bodyQ,sx*big,sy*big,sz*big,color);
       for(const side of [-1,1]) {
         detail(side*.80*headR,headY-.03*headR,0,.23*headR,.40*headR,.24*headR,skin);
-        detail(side*.31*headR,headY+.10*headR,.83*headR,.14*headR,.105*headR,.075*headR,0x30291f);
+        detail(side*.31*headR,headY+.10*headR,.84*headR,.23*headR,.13*headR,.055*headR,0xd7cdbb);
+        detail(side*.31*headR,headY+.10*headR,.875*headR,.085*headR,.095*headR,.035*headR,0x30291f);
+        detail(side*.31*headR,headY+.29*headR,.78*headR,.28*headR,.09*headR,.11*headR,hairC);
       }
       detail(0,headY-.08*headR,.92*headR,.23*headR,.38*headR,.31*headR,skin);
       detail(0,headY-.43*headR,.85*headR,.42*headR,.052*headR,.045*headR,0x785345);
     }
-    // trunks (EDEN): a short brief over the pelvis
-    if (key === "eden") {
-      const cp = lying ? P(0, .012 * H, -.006 * H) : P(0, hipY - .018 * H, 0);
-      _q2.identity();
-      _m.compose(cp, bodyQ, _s.set(hipHalf * 1.5 * big, 0.10 * H * big, hipHalf * 1.15 * big));
-      this.trunks.setMatrixAt(c.nt, _m);
-      this.trunks.setColorAt(c.nt, _col.setHex(PAL.swim[a.id % 5]));
-      c.nt++;
+    const anatomical=(x,y,z,w,h,d,color=skin,q=bodyQ)=>ellipsoid(this.anatomy,c.nan++,P(x,y,z),q,w*big,h*big,d*big,color);
+    // Coverings occupy only the recorded garment's region. A hide wrap does
+    // not paint arms/legs brown; a swimsuit does not replace the whole torso.
+    if(dress && dress!=="fur") {
+      const color=dress==="swim"?PAL.swim[a.id%PAL.swim.length]:PAL.hide;
+      anatomical(0,hipY-.035*H,.005*H,hipHalf*2.14,.105*H,torsoR*1.46,color);
+      if(dress==="swim"&&a.sex===1&&a.age>=12)
+        anatomical(0,shY-.09*H,.015*H,shHalf*1.86,.062*H,torsoR*1.95,color);
+    }
+    if(mode.view==="inside") {
+      // An abdomen reflects condition without changing the record or skeleton.
+      if(!dress&&a.bmi>25)anatomical(0,hipY+.10*H,torsoR*.50,shHalf*1.5,.17*H,torsoR*.95);
+      if(visibleAdultAnatomy(a,dress,true)) {
+        if(a.sex===1) {
+          // Neutral external landmarks on an adult figure, never on a child.
+          const nippleY=shY-.10*H,ny=(nippleY-(hipY+shY)/2)/((shY-hipY)/2);
+          const nippleZ=torsoFront(true,.43,ny)*torsoR*.90;
+          anatomical(-shHalf*.43,nippleY,nippleZ,.012*H,.009*H,.008*H,0x8b5b49);
+          anatomical(shHalf*.43,nippleY,nippleZ,.012*H,.009*H,.008*H,0x8b5b49);
+          const pubicQ=bodyQ.clone().multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),.9));
+          anatomical(-.004*H,hipY-.035*H,torsoR*.36,.006*H,.034*H,.006*H,skin,pubicQ);
+          anatomical(.004*H,hipY-.035*H,torsoR*.36,.006*H,.034*H,.006*H,skin,pubicQ);
+        } else {
+          const shaftQ=bodyQ.clone().multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),-Math.atan2(.28*torsoR,.047*H)));
+          anatomical(0,hipY-.028*H,torsoR*.35,.035*H,.040*H,.035*H);
+          anatomical(0,hipY-.0515*H,torsoR*.54,.016*H,Math.hypot(.047*H,.28*torsoR),.018*H,skin,shaftQ);
+          anatomical(0,hipY-.066*H,torsoR*.28,.030*H,.026*H,.025*H);
+        }
+      }
     }
     // arms: shoulder -> elbow -> hand
     const armUp = a.act === A.HUNT || a.act === A.FIGHT || a.act === A.RITE ||
                   a.act === A.PLAY || a.act === A.WATCH;
     for (let side = -1; side <= 1; side += 2) {
-      const sx = side * shHalf * 0.94;
+      const sx = side * shHalf * 0.94, shoulderY=shY-.018*H;
       let ex, ey, ez, hx, hy, hz;
       if (lying) {
         ex = side * shHalf * 1.05; ey = shY - .16 * H; ez = -.006 * H;
@@ -1636,23 +1746,41 @@ class Crowd {
         ex = side * (shHalf + 0.06 * H); ey = shY - 0.02 * H; ez = 0.16 * H;
         hx = side * (shHalf + 0.10 * H); hy = shY + 0.10 * H; hz = 0.30 * H;
       } else {
-        const sw = swing * side;
+        const sw = feet ? -feet[side>0?1:0].z*.45 : 0;
         ex = side * (shHalf + 0.015 * H); ey = shY - 0.16 * H; ez = sw;
         hx = side * (shHalf + 0.025 * H); hy = shY - 0.31 * H; hz = sw * 1.5;
       }
-      const chain = limbChain({x:sx,y:shY,z:0}, {x:ex,y:ey,z:ez}, {x:hx,y:hy,z:hz}, D.upper, D.fore);
-      const shp = P(sx, shY, 0), el = P(chain.middle.x,chain.middle.y,chain.middle.z),
+      if(!lying&&!a.moving) {
+        const gesture=Math.sin(t*(fast?2.2:1.1)+(a.phase||0));
+        if((a.act===A.EAT||a.act===A.DRINK)&&side>0) {
+          hx=.025*H;hy=headY-.055*H;hz=.12*H;
+          ex=shHalf*1.2;ey=shY-.12*H;ez=.14*H;
+        } else if(a.act===A.TALK&&side>0) {
+          hy=shY-.16*H+gesture*.035*H;hz=.11*H;ex=shHalf*1.25;ey=shY-.15*H;ez=.07*H;
+        } else if(a.act===A.GROOM||a.act===A.TEND) {
+          hx=side*shHalf*.65;hy=shY-.20*H+gesture*.012*H;hz=.20*H;
+          ex=side*shHalf*1.2;ey=shY-.15*H;ez=.10*H;
+        } else if(a.act===A.FORAGE||a.act===A.FARM||a.act===A.BUILD) {
+          hx=side*shHalf*.70;hy=shY-.29*H+gesture*.025*H;hz=.14*H;
+          ex=side*shHalf*1.15;ey=shY-.15*H;ez=.10*H;
+        }
+      }
+      const chain = armIK({x:sx,y:shoulderY,z:0}, {x:hx,y:hy,z:hz}, {x:ex,y:ey,z:ez}, D.upper, D.fore);
+      const shp = P(sx, shoulderY, 0), el = P(chain.middle.x,chain.middle.y,chain.middle.z),
         hd = P(chain.end.x,chain.end.y,chain.end.z);
       seg(this.arms, c.na++, shp, el, limbR * 0.92 * big, skin);
       seg(this.arms, c.na++, el, hd, limbR * 0.78 * big, skin);
       ball(this.hands, c.nh++, shp, limbR * .70 * big, skin);
       ball(this.hands, c.nh++, el, limbR * .65 * big, skin);
-      ellipsoid(this.hands,c.nh,hd,bodyQ,limbR*1.55*big,limbR*2.3*big,limbR*.85*big,skin);
+      const handQ=new THREE.Quaternion().setFromUnitVectors(_up,new THREE.Vector3().subVectors(hd,el).normalize());
+      ellipsoid(this.hands,c.nh,hd,handQ,limbR*1.40*big,limbR*2.7*big,limbR*.65*big,skin);
       c.nh++;
+      const thumb=hd.clone().add(new THREE.Vector3(-side*limbR*.65*big,-limbR*.20*big,limbR*.15*big).applyQuaternion(bodyQ));
+      ellipsoid(this.hands,c.nh++,thumb,handQ,limbR*.60*big,limbR*1.2*big,limbR*.65*big,skin);
     }
     // legs: hip -> knee -> ankle, planted or swinging
     for (let side = -1; side <= 1; side += 2) {
-      const hx = side * hipHalf * 0.92;
+      const hx = side * hipHalf * 0.52;
       let kx = hx, ky, kz, ax = hx, ay, az;
       if (lying || sitting) {
         ky = pose.ky; kz = pose.kz; ay = pose.ay; az = pose.az;
@@ -1662,7 +1790,9 @@ class Crowd {
         ay = .032 * H; az = sw * 1.65;
         if (a.act === A.HUNT) { ky = hipY - 0.22 * H; kz = 0.10 * H; ay = .035 * H; az = 0.18 * H; }
       }
-      const chain = limbChain({x:hx,y:hipY,z:0}, {x:kx,y:ky,z:kz}, {x:ax,y:ay,z:az}, D.thigh, D.shin);
+      const gait=feet&&feet[side>0?1:0];
+      const chain = gait ? legIK({x:hx,y:hipY,z:0},{x:hx,y:pose.ay+gait.lift,z:gait.z},D.thigh,D.shin)
+        : limbChain({x:hx,y:hipY,z:0}, {x:kx,y:ky,z:kz}, {x:ax,y:ay,z:az}, D.thigh, D.shin);
       const hp = P(hx, hipY, 0), kn = P(chain.middle.x,chain.middle.y,chain.middle.z),
         an = P(chain.end.x,chain.end.y,chain.end.z);
       seg(this.legs, c.nl++, hp, kn, limbR * 1.18 * big, legCloth);
@@ -1717,7 +1847,7 @@ function worldLines(key, u) {
     return [head,
       "Y" + u.year + " · " + String(u.tod || "").toUpperCase() +
         " · POP " + u.pop + " · ITER " + u.iter,
-      String(u.phase || "").toUpperCase() + " · ALWAYS SPRING · " +
+      (u.pop===0?"EMPTY":String(u.phase || "").toUpperCase()) + " · ALWAYS SPRING · " +
         ((u.gauges && u.gauges.breeders) || 0) + " COMPETENT ADULTS 16–45 (NOT FERTILITY)",
       built,
       ((u.homeless || 0) > 0 ? u.homeless + " PLACELESS · " : "") +
@@ -1731,7 +1861,7 @@ function worldLines(key, u) {
   return [head,
     "Y" + u.year + " · " + String(u.tod || "").toUpperCase() +
       " · POP " + u.pop + " · ITER " + u.iter,
-    String(u.season || "").toUpperCase() + " · " + String(u.phase || "").toUpperCase() +
+    String(u.season || "").toUpperCase() + " · " + (u.pop===0?"EMPTY":String(u.phase || "").toUpperCase()) +
       " · " + camps + " CAMP" + (camps === 1 ? "" : "S"),
     huts + " HUTS · " + ((u.animals || []).length) + " ANIMALS · " +
       ((u.boats || []).length) + " BOATS · " + ((u.farms || []).length) + " FARMS",
@@ -1748,7 +1878,7 @@ function labelLines(key, u) {
     const pct = (v) => Math.round(clamp(+v || 0, 0, 1) * 100) + "%";
     return [head, at,
       "POOL " + pct(f.pool) + " · BAR " + pct(f.bar) + " · THEATER " + pct(f.theater),
-      String(u.phase || "").toUpperCase() + " · " +
+      (u.pop===0?"EMPTY":String(u.phase || "").toUpperCase()) + " · " +
         ((u.gauges && u.gauges.breeders) || 0) + " COMPETENT ADULTS 16–45 (NOT FERTILITY)"];
   }
   const camps = (u.settlements || []).length;
@@ -1975,7 +2105,7 @@ function updateSlate() {
   g.fillText("EDEN", 34, 158);
   g.fillStyle = "#ede6d6";
   g.fillText("Y" + e.year + " " + String(e.tod || "").toUpperCase() + " · POP " + e.pop +
-             " · " + String(e.phase || "").toUpperCase(), 132, 158);
+             " · " + (e.pop===0?"EMPTY":String(e.phase || "").toUpperCase()), 132, 158);
   g.fillStyle = "#a6c98a";
   g.font = '600 28px Jost, sans-serif'; g.fillText("LAGOON", 34, 204);
   g.fillStyle = "#ede6d6"; g.font = '400 28px Jost, sans-serif';
