@@ -1,0 +1,67 @@
+{
+ "vr_table": {
+  "fps": {
+   "frames": 481,
+   "median_ms": 16.7,
+   "p95_ms": 16.8,
+   "fps_med": 59.9,
+   "fps_mean": 60
+  },
+  "scene": {
+   "skinned_meshes": 0,
+   "figures": {
+    "eden": 0,
+    "lagoon": 0
+   },
+   "people": {
+    "eden": 169,
+    "lagoon": 17
+   },
+   "draw_calls": 132,
+   "triangles": 2048888
+  }
+ },
+ "vr_inside_eden": {
+  "fps": {
+   "frames": 601,
+   "median_ms": 16.7,
+   "p95_ms": 17.5,
+   "fps_med": 59.9,
+   "fps_mean": 60
+  },
+  "scene": {
+   "skinned_meshes": 160,
+   "figures": {
+    "eden": 40,
+    "lagoon": 0
+   },
+   "people": {
+    "eden": 169,
+    "lagoon": 17
+   },
+   "draw_calls": 256,
+   "triangles": 2080090
+  },
+  "figures_expected_cap": 40
+ },
+ "vr_scrollcheck_1024": [
+  768,
+  768
+ ],
+ "vr_scrollcheck_390": [
+  844,
+  844
+ ],
+ "index2d": {
+  "fps": {
+   "frames": 481,
+   "median_ms": 16.7,
+   "p95_ms": 17,
+   "fps_med": 59.9,
+   "fps_mean": 60
+  }
+ },
+ "page_errors": []
+}
+
+verdict: inside-EDEN 59.9 fps median, 40/40 skinned figures, OK

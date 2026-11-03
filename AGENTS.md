@@ -155,6 +155,23 @@ core is repeated inline below so an agent that skips the pointer still gets it.
   it, then pulls back to the largest camp. Its zoom ladder is three rungs —
   island, camp, hearth — at about 6, 18 and 84 CSS px of adult height. Do not turn it into a dashboard of
   charts that a human was never going to read.
+- **The headset viewer's near people are skinned bodies (owner-approved,
+  2026-11-04).** In `vr.html`, the people nearest the camera are drawn as
+  skinned GLTF bodies — Quaternius Universal Base Characters moved by the
+  Universal Animation Library, both CC0, repacked by `tools/build_humans.py`
+  and credited in `web/humans/CREDITS.md`. The record decides everything the
+  body shows: age sets head and leg proportion, BMI paints fat (a front belly)
+  or starving thinness, strength paints muscle, and each person carries one of
+  four skin tones, hair, beards and grey hair from 60. Everyone wears a garment
+  cut from their own skin mesh, so it follows every pose. Clips map to the
+  recorded activity (walk/jog/sprint by ground speed, work kneel, talk, fight,
+  dance; resting and eating sit on the ground; sleep is a curled side-lie —
+  never a death clip). Budgets: **40 skinned bodies on desktop, 24 in a
+  headset**; everyone beyond the budget, and any browser where the assets fail
+  to load, stays on the instanced figures — that fallback is a feature, not a
+  defect. `tools/build_humans.py` must stay the only path from the raw
+  Quaternius packs to `web/humans/`. `web/humans/study.html` is the figure
+  study where the bodies are judged directly.
 - The two universes are always shown **together on the first screen**: side
   by side on a wide screen, stacked one above the other under ~700 px. The
   comparison *is* the product; splitting them across pages or behind a tab
@@ -207,6 +224,9 @@ sim/minds.py       the people: bodies, minds, fertility, names
 sim/research.py    the hypotheses the books imply, and the run that tests them
 sim/server.py      tick loop, HTTP viewer, snapshot uploader
 web/index.html     full-resolution terrarium renderer (identical to docs/index.html)
+web/vr.html        the headset viewer: the same record seen from inside (identical to docs/vr.html)
+web/humans.js      skinned near-field humans for vr.html (identical to docs/humans.js)
+web/humans/        CC0 Quaternius bodies, hair and clips, repacked; credited in humans/CREDITS.md
 docs/              GitHub Pages mirror + the canonical design law
 tools/lab.py       bounded local harness without wall-clock delay
 tools/sweep.py     vary the pen's design and report what each one does

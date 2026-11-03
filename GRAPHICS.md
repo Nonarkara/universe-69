@@ -906,3 +906,50 @@ at the84px hearth rung. This is a projection/illustration improvement, not new
 physiology or a claim to surveyed human anatomy. Empty observer headings now
 say EMPTY instead of retaining an earlier growth phase; the engine and its
 natural reseed rules are untouched.
+
+### 2026-11-04 — skinned near-field humans in the headset viewer
+
+The near people in `vr.html` are now real skinned bodies instead of instanced
+segments: Quaternius Universal Base Characters moved by the Universal
+Animation Library, both CC0, loaded through three r160 `GLTFLoader` and
+`SkeletonUtils` (MIT, vendored in `web/addons/`, mirrored to `docs/`). Far
+people stay on the instanced figures, which also remain the fallback whenever
+asset loading fails — a page that cannot fetch the GLB still shows every
+person. Licences and provenance live in `web/humans/CREDITS.md`;
+`tools/build_humans.py` is the only path from the raw packs to `web/humans/`
+(1024 px JPEG textures, used clips only, ~10 MB).
+
+The record decides everything the body shows. Age sets head size and leg
+length; BMI paints fat as a front belly or starving thinness; strength paints
+muscle; each person carries one of four skin tones, a sex-appropriate
+hairpiece, beards on men, and grey hair from 60. The source bodies are painted
+as athletes, so their default muscle tone is deliberately toned down at
+material level. Everyone — children included — wears a garment cut from their
+own skin mesh (EDEN swimwear, LAGOON hide, winter fur), so clothing follows
+every pose instead of floating. The CC0 base meshes carry no genital detail;
+combined with universal clothing, nothing explicit can be drawn in 3D. Showing
+bare adults as bodies are remains the owner's decision, as in the 2D painter.
+
+Clips map to the recorded activity only. Walk, jog and sprint are matched to
+ground speed; work kneels, talking gestures, fighting punches, rites dance;
+resting, eating, tending and withdrawing sit on the ground with legs out;
+sleep is a curled side-lie after the first attempt read as corpses; mating and
+birth reuse the lying set without a death clip. Feet are planted on the
+terrain and the body leans into recorded travel. None of this writes to the
+record: `humans.js` only reads the same state the instanced crowd reads.
+
+Budgets: 40 skinned figures on desktop, 24 in a headset. The near layer picks
+by apparent size with hysteresis, so bodies do not pop at the edge; everyone
+past the budget stays on the instanced figures. `web/humans/study.html` shows
+eight body types in 13 poses for judging the bodies directly, independent of a
+live universe. `tests/test_humans.py` (14 cases) pins the asset contract.
+
+Measured the same day with an engine-grown crowd (169 people, EDEN year 114,
+lab arc on a dev instance): inside EDEN at human scale holds **59.9 fps
+median** with exactly 40/40 skinned figures (256 draw calls, 2.08 M
+triangles); the table view and the 2D terrarium also hold 59.9 fps at the same
+population; no page errors; the one-screen law holds at 1024 and 390. The
+instanced layer holds 1,000 people per world, 3.9× the documented live peak.
+Full numbers and retained captures: `docs/audits/2026-11-04-crowd/`. Quest
+frame rate remains unverified on real hardware.
+
