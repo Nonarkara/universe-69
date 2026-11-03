@@ -298,6 +298,9 @@ class Handler(BaseHTTPRequestHandler):
         elif path == "/three.module.min.js":
             with open(os.path.join(WEB, "three.module.min.js"), "rb") as f:
                 self._send(200, f.read(), "text/javascript; charset=utf-8")
+        elif path == "/humans.js":
+            with open(os.path.join(WEB, "humans.js"), "rb") as f:
+                self._send(200, f.read(), "text/javascript; charset=utf-8")
         elif path == "/config.js":
             self._send(200, "// local mode\n", "text/javascript")
         elif path == "/state":
@@ -310,7 +313,7 @@ class Handler(BaseHTTPRequestHandler):
             with lock:
                 payload = research.report(world)
             self._send(200, json.dumps(payload, separators=(",", ":")))
-        elif path.startswith(("/book/", "/archive/", "/fonts/")):
+        elif path.startswith(("/book/", "/archive/", "/fonts/", "/humans/", "/addons/")):
             # Read-only assets, confined to their real static directory.
             top = path.split("/", 2)[1]
             base = os.path.realpath(os.path.join(WEB, top))
@@ -320,6 +323,11 @@ class Handler(BaseHTTPRequestHandler):
                      ".md": "text/plain; charset=utf-8"}
             if top == "fonts":
                 kinds = {".woff2": "font/woff2", ".txt": "text/plain; charset=utf-8"}
+            elif top == "humans":
+                kinds = {".glb": "model/gltf-binary", ".jpg": "image/jpeg", ".md": "text/plain; charset=utf-8",
+                         ".html": "text/html; charset=utf-8"}
+            elif top == "addons":
+                kinds = {".js": "text/javascript; charset=utf-8"}
             kind = kinds.get(os.path.splitext(target)[1].lower())
             if kind and target.startswith(base + os.sep) and os.path.isfile(target):
                 with open(target, "rb") as f:

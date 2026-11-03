@@ -94,8 +94,10 @@
 </div></div>
 <div id="err"></div>
 
+<script type="importmap">{"imports":{"three":"./three.module.min.js"}}</script>
 <script type="module">
 import * as THREE from './three.module.min.js';
+import { loadHumans, HumanLayer } from './humans.js';
 
 /* UNIVERSE 69 — VR viewer.
    The record is the server's. This page only reads it: /state (the compact
@@ -1361,6 +1363,7 @@ function recordedStep(key, a, dt, heldOn, terrain) {
     a.px += dx / d * step; a.py += dy / d * step;
     a.yaw = Math.atan2(dx, dy);
     a.moving = step > 0;
+    a.speed = dt > 0 ? step / dt : 0;
     a.walkDistance = (a.walkDistance || 0) + step;
   }
   if (!a.moving) a.yaw = (a.face || 1) < 0 ? Math.PI : 0;
@@ -1556,6 +1559,12 @@ class Crowd {
     this.group.add(this.shadow);
     this.rows = [];
     this.actors = new Map();
+    // Near people get skinned bodies with captured motion (humans.js).
+    this.humans = new HumanLayer(this.group, (a) => {
+      const dress = clothingOf(a, this.key, this.u) || (this.key === "eden" ? "swim" : "hide");
+      return { dress, grey: a.age >= 60, hairColor: PAL.hair[(a.id * 3) % 5],
+        cloth: dress === "fur" ? PAL.furD : dress === "swim" ? PAL.swim[a.id % 5] : PAL.hide };
+    });
     this.heldAt = 0;
     this.setSource(u);
   }
@@ -1581,6 +1590,7 @@ class Crowd {
       }
     });
     for (const id of this.actors.keys()) if (!seen.has(id)) this.actors.delete(id);
+    if (this.humans) this.humans.prune(this.actors);
   }
 
   hold() { this.actors.forEach((a) => { a.px = a.x; a.py = a.y; }); }
@@ -1591,18 +1601,22 @@ class Crowd {
     const c = { n: 0, na: 0, nl: 0, nh: 0, nhair: 0, nf: 0, nt: 0, ns: 0, nface: 0, nm:0, nfm:0, nj:0, nan:0 };
     const size = this.size;
     const fast = !heldOn;
+    this.humans.pick(this.actors, camera, renderer.xr.isPresenting ? 24 : 40, performance.now(),
+      (a) => _v.set(a.px - size / 2, surfaceY(this.key, a.px, a.py), a.py - size / 2));
     this.actors.forEach((a) => {
       if (c.n >= this.cap) return;
       recordedStep(this.key, a, dt, heldOn, worldInfo && worldInfo.terrain);
       const gy = surfaceY(this.key, a.px, a.py);
       const root = new THREE.Vector3(a.px - size / 2, gy + 0.004, a.py - size / 2);
-      this.drawBody(a, root, t, big, fast, c);
+      const skinned = this.humans.has(a.id);
+      if (skinned) this.humans.draw(a, root, bodyDimensions(a.age, a.sex).H * big, dt);
+      else this.drawBody(a, root, t, big, fast, c);
       // shadow
       _q2.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
       _m.compose(_v.set(a.px - size / 2, gy + 0.006, a.py - size / 2), _q2,
                  _s.set(0.42 * big, 0.42 * big, 0.42 * big));
       this.shadow.setMatrixAt(c.ns++, _m);
-      c.n++;
+      if (!skinned) c.n++;   // head and neck instances are indexed by c.n
     });
     [this.head, this.hair, this.torso, this.torsoFemale, this.torsoChild, this.anatomy, this.neck, this.face, this.arms, this.legs, this.hands,
      this.feet, this.trunks].forEach((m) => {
@@ -2742,6 +2756,7 @@ function init() {
   }
   bindInput();
   initXR();
+  loadHumans();
   renderer.setAnimationLoop(frame);
   poll(true);
 }
