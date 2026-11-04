@@ -482,6 +482,27 @@ with LAGOON carrying the dead attempts' lessons — the choice is the
 owner's. Either way the published viewer on GitHub Pages is already the
 new one and reads the same mirror.
 
+### Adoption executed — 2026-11-04 (from the public packet)
+
+The owner ran the update on the instrument. The mirror now reports
+**engine 2026.11.03.2** at the new default clock (**1 year per real
+hour**, 2.5 s/part). The day number **continued** (117070, Y325) — the
+year-320 worlds were carried across by `engine.migrate()`, not restarted;
+no `--genesis` was run.
+
+- **EDEN4 emptied at Y325** — peak 19, the last person died at the cusp,
+  under the old rules. It will reseed as **EDEN5, the first reseed ever
+  processed under the new engine** (innocence roll, founding births
+  anchored at the founding day, EDEN amenities).
+- **LAGOON3 continues** — 36 people at Y325 in *predator_hunt*, growing
+  through the drought years; it carries the dead attempts' lessons.
+
+All figures re-derived from the public mirror packet, not private state.
+The reseed is visible in the mirror on its next upload. This is the start
+of the run's new phase: one world rerunning Calhoun's conditions under the
+new mechanisms, one world earning everything, both on the hour-per-year
+clock, observed and never helped.
+
 ## Historical engine 2026.10.28.4 — eight pairs, real needs, animals with places (re-derived 2026-10-28)
 
 Both worlds start from the same eight pairs. Food is gathered, carried and
