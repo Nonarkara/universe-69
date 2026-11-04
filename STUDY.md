@@ -414,7 +414,7 @@ Its cohorts do not match. It is not true infant survival and supports no
 comparison to a clinical or forager survival threshold; the viewer labels it
 YEARLINGS / PRIOR BIRTHS. The serialized column remains for compatibility.
 
-## Authorized MacBook restart — pending execution
+## Authorized MacBook restart — executed (superseded)
 
 The owner authorized a fresh start on the instrument. After the MacBook
 pulls engine **2026.10.30.1**, the planned restart begins with eight pairs
@@ -433,6 +433,54 @@ launchctl load ~/Library/LaunchAgents/com.universe69.sim.plist
 ```
 
 The first run's record is kept in the viewer (help card → ABOUT → *The First Run*).
+
+That restart did happen — the public packet now carries attempt EDEN4
+(seeded day 84263) — and the instrument has adopted every engine through
+**2026.11.01.1** (`d02775f`).
+
+## Adoption pending on the instrument — 2026.11.01.1 → 2026.11.03.2 (recorded 2026-11-04)
+
+The public packet (gist mirror, 2026-11-04, fresh upload) reports the
+instrument on **engine 2026.11.01.1** at the old pace (0.6 s/part, 100
+years per real day): **EDEN4** holds 5 people in phase *exploit* (peak 19 —
+a failed micro-attempt on its way to the empty pen), **LAGOON** holds 27
+at year 294 in *predator_hunt* through repeated droughts. On the old
+engine EDEN4 will auto-reseed under the same conditions.
+
+The repository is at **2026.11.03.2** and the instrument has not adopted:
+
+- `edaa698` — personal fuzzy needs, truthful terrarium views (2026.11.03.1)
+- `523e7b5` — one model year per real hour, human-scale graphics (2026.11.03.2)
+- `1fa5c79`, `52a5d61` — the skinned CC0 humans in the headset viewer
+  (renderer only; no trajectory change)
+- `2a979f8` — the crowd-test audit and docs
+
+**Pre-flight (2026-11-04):** the full unittest suite — 631 cases, including
+every engine-behaviour and migration path these two versions touch — is
+green on the workbench for the first time since the last two engine bumps
+(earlier sessions had run only partial modules). The viewer modules (153)
+and the crowd test at 169 people, 59.9 fps (`docs/audits/2026-11-04-crowd/`)
+are also green.
+
+**The workbench cannot reach the instrument.** No SSH path exists or is
+recorded here; every engine adoption so far was done by the owner pulling
+on that machine. The remaining step is therefore on the 2016 MacBook:
+
+```sh
+cd "/Users/admin/repos/Universe 69"
+git pull
+launchctl kickstart -k "gui/$(id -u)/com.universe69.sim"
+```
+
+`KeepAlive` restarts the server; SIGTERM saves the state first;
+`engine.migrate()` carries the 2026.11.01.1 state forward — **the same
+world continues under the new rules**, its `engine_history` recording the
+jump. That is a trajectory change to a 296-year-old run, made deliberately.
+A fresh start instead (`python3 sim/server.py --genesis` once, after the
+pull, then let the agent restart it) begins the new phase from eight pairs
+with LAGOON carrying the dead attempts' lessons — the choice is the
+owner's. Either way the published viewer on GitHub Pages is already the
+new one and reads the same mirror.
 
 ## Historical engine 2026.10.28.4 — eight pairs, real needs, animals with places (re-derived 2026-10-28)
 
