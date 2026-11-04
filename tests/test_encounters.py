@@ -133,3 +133,41 @@ class TestEncounters(unittest.TestCase):
         self.assertIsNone(frame['mother']);self.assertIsNone(frame['father'])
         self.assertIsNone(frame['traits'])
         self.assertIsNone(self.p['p']);self.assertIsNone(self.q['p'])
+
+
+class TestSocialSight(unittest.TestCase):
+    """2026.11.04.1: EDEN's mate/groom search used LAGOON's tight-camp radius
+    (SIGHT=6) against a pen whose nest boxes are spread around all four walls
+    of a 48-tile pen by design. Three consecutive live EDEN postmortems
+    (iterations 2-4) each stalled at generation 2 and died entirely of age --
+    the signature of candidates() finding nobody once founders scattered to
+    their own boxes. `social_sight()` must span the whole pen for EDEN and
+    leave LAGOON's radius exactly as it was."""
+
+    def person(self, pid, sex, x, y, kind='f'):
+        return dict(id=pid, s=sex, b=-20*360, x=x, y=y, tx=x, ty=y, a=minds.A_REST,
+                    c=True, w=False, ab=False, p=None, ene=1., hun=0., thirst=0., inj=0.,
+                    mom=None, dad=None, due=0)
+
+    def test_lagoon_radius_is_unchanged(self):
+        u = {'kind': 'LAGOON', 'day': 0}
+        self.assertEqual(encounters.social_sight(u), encounters.SIGHT)
+        near = self.person(1, 'f', 0, 0)
+        far = self.person(2, 'm', encounters.SIGHT + 1, 0)   # just past the old radius
+        self.assertEqual(encounters.candidates(u, near, [near, far], 'mate'), [])
+
+    def test_eden_search_spans_the_whole_pen_not_a_wall(self):
+        u = {'kind': 'EDEN', 'day': 0}  # default EDEN_SIZE=48 applies
+        self.assertGreater(encounters.social_sight(u), encounters.SIGHT)
+        near_wall = self.person(1, 'f', 4, 25)     # west wall, per EDEN_BOXES
+        far_wall = self.person(2, 'm', 44, 25)     # east wall: 40 tiles away
+        found = encounters.candidates(u, near_wall, [near_wall, far_wall], 'mate')
+        self.assertEqual([q['id'] for q in found], [2])
+
+    def test_eden_still_excludes_incompatible_people_at_any_distance(self):
+        u = {'kind': 'EDEN', 'day': 0}
+        p = self.person(1, 'f', 4, 25)
+        same_sex = self.person(2, 'f', 44, 25)
+        sibling = self.person(3, 'm', 44, 25)
+        sibling['mom'] = p['mom'] = 99
+        self.assertEqual(encounters.candidates(u, p, [p, same_sex, sibling], 'mate'), [])

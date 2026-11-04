@@ -1,8 +1,42 @@
-# Current clock boundary — 2026-11-03
+# Current engine boundary — 2026-11-04
 
-Engine `2026.11.03.2` changes the default to one 360-day model year per real
-hour (2.5 seconds per part). Per-part biological rules and RNG are unchanged.
-The figures below are version-specific historical trials, not runtime capacity
+Engine `2026.11.04.1` fixes EDEN's mate/groom search, which used the same
+6-tile local radius as LAGOON's tight camps against a 48-tile pen whose nest
+boxes are spread around all four walls by design. Audit trail:
+
+**The symptom, in the instrument's own record.** Three consecutive live
+EDEN postmortems on this run — iterations 2, 3 and 4, engine `2026.11.01.1`
+— each read: peak 18-20 (barely above the 16 founders), generation stuck
+at exactly 2, and cause of death `{'age': N}` for every single death, zero
+infant or violence deaths. That is not Calhoun's sink; it is almost nobody
+beyond the founders ever conceiving.
+
+**The cause, found with `tools/lab.py`-style isolated runs, not a guess.**
+`encounters.candidates(u, adam, people, 'mate')` returned `[]` for a founder
+at the pen's centre against fifteen other adults, all individually
+`available()`, because every one of them was more than 6 tiles away —
+expected, once founders scatter to nest boxes around a 48-tile perimeter.
+A 60-year isolated EDEN run under the old radius: peak 21, 13 conceptions,
+generation stuck at 2 the entire run. The same run re-examined at year 60
+showed the real reason generation never advanced past 2 *in that window*:
+none of the 28 generation-2 children had yet turned 16 — but the historical
+live postmortems ran 86-88 years, long past that, and still never produced
+a generation 3. Small populations plus the search-radius bug compounded:
+too few generation-2 children, from too few successful pairings, for enough
+of them to find a non-sibling partner once they did come of age.
+
+**The fix and its effect.** `encounters.social_sight(u)` returns the pen's
+own size for EDEN (not the camp-tuned constant) and the unchanged local
+radius for LAGOON. Same 90-year isolated run, same seed, after the fix:
+peak 56 and generation 3 by year 90, growing continuously, zero
+extinctions — where the old radius had already died by year ~87 in every
+one of three independent reseeds. `tests/test_encounters.py::TestSocialSight`
+pins both the widened EDEN radius and LAGOON's byte-identical-to-before one.
+
+Engine `2026.11.03.2`'s own change (default to one 360-day model year per
+real hour, 2.5 seconds per part) is unaffected by this fix — only EDEN's
+candidate search changed; LAGOON and the clock mapping did not. The figures
+below are version-specific historical trials, not runtime capacity
 measurements or observations of a restarted instrument. Current graphics/clock
 verification: [hourly audit](docs/audits/2026-11-03-hourly/README.md).
 

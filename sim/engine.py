@@ -65,7 +65,22 @@ GESTATION = 270
 # These are illustrative sensitivities, not fitted human psychology.
 # 2026.11.03.2 changes only the default wall-clock mapping: one model
 # year per real hour. Per-part biological and behavioral rules are unchanged.
-ENGINE_VERSION = "2026.11.03.2"
+# 2026.11.04.1 — EDEN could not see across its own pen. Mate/groom
+# candidate search used encounters.SIGHT=6 for both worlds; LAGOON's camps
+# are tight enough that this never mattered, but EDEN's nest boxes are
+# spread around all four walls of a 48-tile pen by design, so a search
+# radius of 6 only ever found a partner sharing the same wall. Audited
+# against three consecutive live postmortems (iterations 2-4, this
+# instrument, 2026-11-04): every one peaked at 18-20, stalled at
+# generation 2, and died entirely of age with zero infant or violence
+# deaths -- the signature of almost nobody beyond the founders ever
+# conceiving, not of Calhoun's sink. `encounters.social_sight()` now
+# covers the whole pen for EDEN; LAGOON's radius is byte-identical to
+# before. A 90-year lab run that stalled at generation 2 for 86+ years
+# under the old radius now reaches generation 3 by year 90 and keeps
+# growing. Every EDEN trajectory from the first mate search changes;
+# LAGOON does not change at all (STUDY.md records the before/after).
+ENGINE_VERSION = "2026.11.04.1"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the

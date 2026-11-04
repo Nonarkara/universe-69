@@ -14,6 +14,27 @@ SIGHT = 6
 CONTACT_SQUARED = 2  # adjacent, including a dry diagonal; no surveyed scale
 
 
+def social_sight(u: Mapping[str, Any]) -> float:
+    """How far a person can see a prospective partner or companion.
+
+    LAGOON's camps are tight, so the ordinary local SIGHT holds there. EDEN
+    spreads its nest boxes around all four walls of the pen by design
+    (Calhoun's actual architecture, `eden_assign`/`EDEN_BOXES`), and its own
+    condition is 'free': no bond, no travel, no courtship friction — "sex any
+    time they want" (DESIGN.md). Audited 2026-11-04: with SIGHT=6 against a
+    48-tile pen, `candidates()` returned empty for every founder whose home
+    box was not on the same wall as a compatible partner's — three
+    consecutive EDEN reseeds stalled at generation 2 with every death an
+    ordinary one of old age, because almost nobody not already standing next
+    to a partner could ever find one. The search now covers the whole pen,
+    not a corner of it; LAGOON is unchanged.
+    """
+    if u.get('kind') == 'LAGOON':
+        return SIGHT
+    from engine import eden_size
+    return eden_size(u)
+
+
 def migrate_person(p: Dict[str, Any]) -> None:
     p.setdefault('social', None)
 
@@ -69,8 +90,9 @@ def _dry(u: Mapping[str, Any], p: Mapping[str, Any], q: Mapping[str, Any], terra
 def candidates(u: Mapping[str, Any], p: Mapping[str, Any], people: Iterable[Dict[str, Any]],
                kind: str, terrain: Optional[Sequence] = None) -> List[Dict[str, Any]]:
     """Actually visible available people; selection/desire remains the caller's."""
+    reach = social_sight(u)
     return [q for q in people if _compatible(u,p,q,kind)
-            and (q['x']-p['x'])**2+(q['y']-p['y'])**2 <= SIGHT*SIGHT and _dry(u,p,q,terrain)]
+            and (q['x']-p['x'])**2+(q['y']-p['y'])**2 <= reach*reach and _dry(u,p,q,terrain)]
 
 
 def offer(u: Mapping[str, Any], p: Mapping[str, Any], byid: Mapping[int, Dict[str, Any]],
@@ -90,7 +112,8 @@ def propose(u: Mapping[str, Any], p: Dict[str, Any], q: Mapping[str, Any], kind:
     Recipient candidates must already have passed local terrain visibility via
     candidates/offer. capture independently rechecks actual contact terrain.
     """
-    if not _compatible(u,p,q,kind) or (q['x']-p['x'])**2+(q['y']-p['y'])**2 > SIGHT*SIGHT:
+    reach = social_sight(u)
+    if not _compatible(u,p,q,kind) or (q['x']-p['x'])**2+(q['y']-p['y'])**2 > reach*reach:
         return False
     incoming = q.get('social')
     own = p.get('social')
