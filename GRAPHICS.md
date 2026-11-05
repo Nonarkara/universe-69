@@ -424,6 +424,22 @@ with bare-ground sleeping; hide/fur bedding is drawn only when its existing
 clothing/cultural state supplies it, without a resort pillow. The cover reaches toward the ankles
 and is drawn at both near and far detail levels.
 
+**Audited 2026-11-05: a sleeper at the furthest LOD was a flat blob, not a
+mark.** `drawSketch` picked a detail tier from `32*k` alone, except that a
+lying figure (asleep, mating, or an infant) was excluded from the sub-10px
+`drawTiny` branch and always fell through to `drawFar` instead — a tier built
+for the 10-26px band, whose per-limb minimum-pixel floors (`Math.max(D.shW,
+2.2*px)` and the like) are sized for that band's `px`. Below 10px, `px=1/k`
+grows past those floors' working range and every limb collapses toward the
+same oversized minimum, erasing the taper that makes a trunk read as a trunk
+— worst for a sleeper, since night is half of every day and a sleeping camp
+is mostly what's on screen at a wide establishing shot. `drawTiny` draws from
+the same local joint positions with no assumption about the canvas's own
+rotation, so it holds up lying down exactly as well as standing: a lying
+figure now takes the same `32*k<10` branch a standing one does, with
+`drawSleepCover` still painted over it. Pinned by
+`test_a_lying_figure_gets_the_tiny_mark_below_10px_too` in `tests/test_style.py`.
+
 ## 8. Changelog
 
 Every change to the drawing gets a line here, newest first.

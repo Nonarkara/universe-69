@@ -130,6 +130,18 @@ class TestTheResolution(unittest.TestCase):
         self.assertIsNotNone(m)
         self.assertEqual(float(m.group(1)), 2.0)
 
+    def test_a_lying_figure_gets_the_tiny_mark_below_10px_too(self):
+        """Audited 2026-11-05: drawFar's per-limb minimum-pixel floors are
+        tuned for the 10-26 px band it owns. Below 10 px they swamp the real
+        anatomy and a lying figure (sleep, most of every night) balloons into
+        one flat, undifferentiated blob instead of drawTiny's proportioned
+        two-tone mark. A lying figure must take the same <10px branch a
+        standing one does."""
+        src = read_renderer()
+        body = src.split("function drawSketch(")[-1].split("\nfunction ")[0]
+        self.assertNotIn("32*k<10 && !lying", body)
+        self.assertRegex(body, r"if\s*\(32\*k<10\)\{")
+
 
 class TestOneScreen(unittest.TestCase):
     def test_the_page_never_scrolls(self):

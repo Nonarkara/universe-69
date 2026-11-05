@@ -1817,7 +1817,13 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
   var ink=Math.max(0.10, 0.82/k);             // a fine pen: about one device pixel
   var shX=J.chest[0], shY=J.shL[1]-0.9+(J.shR[1]-J.shL[1])/2, hipX=J.pelvis[0], hipY=J.pelvis[1];
 
-  if (32*k<10 && !lying){ drawTiny(g, J, D, k, tones, dress, v); g.restore(); return; }
+  // Below ~10 px, drawFar's per-limb minimum-pixel floors (tuned for the
+  // 10-26 px band) swamp the real anatomy and the figure balloons into a
+  // featureless blob — worst for a lying figure, where that blob is most of
+  // what's on screen (sleep is half of every day). drawTiny's marks are built
+  // from the same local joint positions and don't assume any particular
+  // canvas orientation, so they hold up lying down as well as standing.
+  if (32*k<10){ drawTiny(g, J, D, k, tones, dress, v); drawSleepCover(g,J,D,B,act,lying,dress,ink,bedding); g.restore(); return; }
   if (32*k<26){ drawFar(g, J, D, k, tones, dress, v, B, fem, P); drawSleepCover(g,J,D,B,act,lying,dress,ink,bedding); g.restore(); return; }
 
   function limb(x1,y1,x2,y2,w,col){            // a plain round-ended stroke (the neck)
