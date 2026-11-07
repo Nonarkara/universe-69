@@ -1600,10 +1600,16 @@ function drawFar(g, J, D, k, tones, dress, v, B, fem, P){
   var body=dress==="fur"?DRESS.fur:tones[0];
   g.fillStyle=body; g.fill(); g.strokeStyle=INK; g.lineWidth=edge*1.6; g.stroke();
   g.save(); g.clip(); g.fillStyle=dress==="fur"?DRESS.furD:tones[1];            // the shadow side
-  g.fillRect(shX+shW*0.25, shY-1, shW*2, hipY-shY+D.crotch+2); g.restore();
+  g.fillRect(shX+shW*0.25, shY-1, shW*2, hipY-shY+D.crotch+2);
+  // reflected light rim on the lit edge (manga form cue)
+  g.strokeStyle="rgba(244,240,228,0.22)"; g.lineWidth=Math.max(px,0.35);
+  g.beginPath(); trunk.forEach(function(p,i){ if (i) g.lineTo(p[0],p[1]); else g.moveTo(p[0],p[1]); }); g.closePath(); g.stroke();
+  g.restore();
   if (dress==="swim"||dress==="hide"){                                         // what covers the hips
     g.fillStyle=dress==="swim"?DRESS.swim[v%DRESS.swim.length]:DRESS.hide;
     g.fillRect(hipX-hpW, hipY-0.9, hpW*2, Math.max(1.6, D.crotch+1.0));
+    g.strokeStyle=INK; g.lineWidth=Math.max(px*0.7,0.3);
+    g.beginPath(); g.moveTo(hipX-hpW, hipY-0.9); g.lineTo(hipX+hpW, hipY-0.9); g.stroke(); // waistline
   }
   stroke([J.shR[0]+aoff*0.3,J.shR[1]], [J.elbR[0]+aoff,J.elbR[1]], [J.wriR[0]+aoff,J.wriR[1]], aw, tones[0]);
   g.fillStyle=tones[0]; g.strokeStyle=INK; g.lineWidth=edge*1.4;
