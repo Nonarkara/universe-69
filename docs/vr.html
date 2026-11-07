@@ -1379,12 +1379,15 @@ function bodyDimensions(age, sex) {
   const headH = H / HEADS[i], hipY = LEG_FRAC[i] * H;
   const shY = H - headH * (1 + (i <= 1 ? .12 : .30));
   const leg = (LEG_FRAC[i] - 1.1 / 32) * H;
+  // Slightly more natural adult proportions: broader shoulders for males,
+  // narrower waist taper implied via torsoFactor, longer limbs for adults.
+  const adultScale = i >= 7 ? 1 : i >= 5 ? 0.97 : 1;
   return {H, dm, hipY, shY, headY:H - headH / 2,
-    torsoFactor:blend(.101, female ? .093 : .101),
-    headR:headH / 2.12, shHalf:blend(SH_FRAC[Math.min(i,5)], female ? .104 : .118) * H,
-    hipHalf:blend(HP_FRAC[Math.min(i,5)], female ? .110 : .094) * H,
-    upper:ARM_FRAC[i] * H * .58, fore:ARM_FRAC[i] * H * .42,
-    thigh:leg * .53, shin:leg * .47};
+    torsoFactor:blend(.101, female ? .092 : .102) * adultScale,
+    headR:headH / 2.12, shHalf:blend(SH_FRAC[Math.min(i,5)], female ? .103 : .120) * H,
+    hipHalf:blend(HP_FRAC[Math.min(i,5)], female ? .111 : .093) * H,
+    upper:ARM_FRAC[i] * H * .575, fore:ARM_FRAC[i] * H * .425,
+    thigh:leg * .535, shin:leg * .465};
 }
 
 // Clothing follows the observed society, not a renderer-imposed uniform.

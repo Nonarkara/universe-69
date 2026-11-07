@@ -1518,6 +1518,45 @@ function limbOutline(a, j, e, w){
            off(e,n2,-w[6]/2), off(b2,n2,-w[5]/2), off(j,nk,-w[3]/2), off(b1,n1,-w[2]/2), off(a,n1,-w[0]/2) ];
 }
 
+// ---- manga rendering helpers (MANGA_PLAN.md Phase A) -----------------------
+// Screentone: halftone dot fill for mid-tones. Gated by size to stay cheap.
+function mangaScreentone(g, x, y, w, h, dotR, alpha, color){
+  if (!g || w < 2 || h < 2) return;
+  var step = Math.max(dotR * 2.4, 1.2);
+  g.save();
+  g.fillStyle = color || INK;
+  g.globalAlpha = alpha || 0.12;
+  for (var yy = y; yy < y + h; yy += step) {
+    for (var xx = x; xx < x + w; xx += step) {
+      g.beginPath(); g.arc(xx, yy, dotR, 0, 6.283); g.fill();
+    }
+  }
+  g.restore();
+}
+// Hard shadow: a clipped hard-edged shadow with a thin reflected-light rim.
+function mangaHardShadow(g, pathFn, dx, dy, shadowAlpha, rimAlpha){
+  if (!g) return;
+  g.save();
+  pathFn();
+  g.clip();
+  g.fillStyle = INK;
+  g.globalAlpha = shadowAlpha || 0.22;
+  pathFn();
+  g.translate(dx || 0.35, dy || 0.25);
+  g.fill();
+  g.restore();
+  if (rimAlpha) {
+    g.save();
+    pathFn(); g.clip();
+    g.strokeStyle = "#f4f0e4";
+    g.globalAlpha = rimAlpha;
+    g.lineWidth = 0.6;
+    g.stroke();
+    g.restore();
+  }
+}
+
+
 // A woven cover belongs to the body, in the same coordinates at every LOD.
 function drawSleepCover(g, J, D, B, act, lying, dress, ink, bedding){
   if (!lying || act!==A_SLEEP || B.stage===0 || bedding===false) return;
@@ -1639,57 +1678,96 @@ function drawTiny(g, J, D, k, tones, dress, v){
 // what the body is doing (MANGA_PLAN.md §1 — expression system). Derived
 // only from sprite-keyed inputs (act, body, wk), so the cache stays sound.
 function expressionOf(act, B, moving, wk){
-  if (act===A_SLEEP) return [0, 0, 0, 0];          // brow, lid 0..1, mouth, brow tilt
-  if (act===A_FIGHT)  return [1, 0.85, 4, -0.5];   // gritted teeth, brow down
-  if (act===A_HUNT || act===A_SCOUT) return [0.6, 1, 1, -0.4];
-  if (act===A_EAT)   return [0.1, 0.8, 3, 0];
-  if (act===A_TALK)  return [-0.5, 0.9, 2, 0.3];
-  if (act===A_WITHDRAW) return [0.6, 0.4, 5, 0.5]; // downcast: the beautiful ones
-  if (act===A_GROOM) return [-0.2, 0.75, 1, 0];
-  if (act===A_MATE || act===A_BIRTH) return [0.15, 0.7, 2, 0];
-  if (B && (B.gaunt || B.hungry)) return [0.45, 0.65, 5, 0.4];
-  if (B && B.stage===4) return [0.3, 0.7, 1, 0.2];
-  return [0, 0.85, 1, 0];
+  // Returns [brow, lid 0..1, mouth, brow tilt] — contract pinned by test_style
+  if (act===A_SLEEP) return [0, 0, 0, 0];          // closed
+  if (act===A_FIGHT)  return [1, 0.72, 4, -0.6];   // squint, gritted, tense
+  if (act===A_HUNT || act===A_SCOUT) return [0.55, 1, 1, -0.35]; // wide, focused
+  if (act===A_EAT)   return [0.1, 0.75, 3, 0];
+  if (act===A_TALK)  return [-0.45, 0.92, 2, 0.25];
+  if (act===A_WITHDRAW) return [0.55, 0.38, 5, 0.45]; // downcast, half-lidded
+  if (act===A_GROOM) return [-0.15, 0.78, 1, 0];
+  if (act===A_MATE || act===A_BIRTH) return [0.12, 0.68, 2, 0];
+  if (B && (B.gaunt || B.hungry)) return [0.5, 0.62, 5, 0.35];
+  if (B && B.stage===4) return [0.28, 0.72, 1, 0.18];
+  return [0, 0.88, 1, 0];
 }
-function drawEyeProfile(g, ex, ey, hr, lid, ink, detail){
-  var ew=hr*0.20, eh=hr*0.16, hh=eh*lid;
+function eyeShapeOf(act, B){
+  if (act===A_SLEEP) return 0;
+  if (act===A_FIGHT) return 1; // squint
+  if (act===A_HUNT || act===A_SCOUT) return 2; // wide
+  if (act===A_WITHDRAW) return 1;
+  if (B && (B.gaunt || B.hungry)) return 1;
+  return 0;
+}
+function cheekStressOf(act, B){
+  if (act===A_FIGHT) return 0.8;
+  if (act===A_HUNT || act===A_SCOUT) return 0.3;
+  if (act===A_WITHDRAW) return 0.2;
+  if (act===A_MATE || act===A_BIRTH) return 0.1;
+  if (B && (B.gaunt || B.hungry)) return 0.5;
+  if (B && B.stage===4) return 0.15;
+  return 0;
+}
+function drawEyeProfile(g, ex, ey, hr, lid, ink, detail, eyeShape){
+  var shape = eyeShape || 0; // 0 normal, 1 squint, 2 wide
+  var ew=hr*0.20 * (shape===2 ? 1.15 : shape===1 ? 0.85 : 1);
+  var eh=hr*0.16 * (shape===2 ? 1.25 : shape===1 ? 0.7 : 1);
+  var hh=eh*lid;
   if (lid<=0.02){                                   // closed: one lash line
     g.strokeStyle=INK; g.lineWidth=ink*1.1;
     g.beginPath(); g.moveTo(ex-ew,ey); g.quadraticCurveTo(ex,ey+eh*0.6,ex+ew,ey); g.stroke();
     return;
   }
+  // eye socket shadow (subtle)
+  if (detail) {
+    g.fillStyle=INK; g.globalAlpha=0.06;
+    g.beginPath(); g.ellipse(ex,ey-hh*0.15,ew*1.15,hh*1.3,0,0,6.283); g.fill();
+    g.globalAlpha=1;
+  }
   g.fillStyle="#f4f0e4"; g.strokeStyle=INK; g.lineWidth=ink*0.7;
   g.beginPath(); g.ellipse(ex,ey,ew,hh,0,0,6.283); g.fill();      // sclera
   if (detail){
-    g.fillStyle="#5a4632"; g.beginPath(); g.arc(ex+ew*0.15,ey,hh*0.62,0,6.283); g.fill();   // iris
-    g.fillStyle=INK; g.beginPath(); g.arc(ex+ew*0.15,ey,hh*0.34,0,6.283); g.fill();         // pupil
-    g.fillStyle="#f4f0e4"; g.beginPath(); g.arc(ex+ew*0.02,ey-hh*0.28,hh*0.16,0,6.283); g.fill();  // catch-light
+    var irisR = hh * (shape===1 ? 0.55 : 0.62);
+    g.fillStyle="#5a4632"; g.beginPath(); g.arc(ex+ew*0.15,ey,irisR,0,6.283); g.fill();   // iris
+    g.fillStyle=INK; g.beginPath(); g.arc(ex+ew*0.15,ey,irisR*0.52,0,6.283); g.fill();     // pupil
+    g.fillStyle="#f4f0e4"; g.beginPath(); g.arc(ex+ew*0.02,ey-hh*0.28,hh*0.14,0,6.283); g.fill();  // catch-light
+    if (shape===2) { // second catch-light for wide eyes
+      g.beginPath(); g.arc(ex+ew*0.22,ey-hh*0.12,hh*0.08,0,6.283); g.fill();
+    }
   } else {
     g.fillStyle=INK; g.beginPath(); g.arc(ex+ew*0.15,ey,Math.max(0.12,hh*0.6),0,6.283); g.fill();
   }
-  g.strokeStyle=INK; g.lineWidth=ink*1.3;                          // the upper lash, heavy
-  g.beginPath(); g.moveTo(ex-ew,ey-hh*0.4); g.quadraticCurveTo(ex,ey-hh*1.25,ex+ew,ey-hh*0.35); g.stroke();
-  if (detail){ g.lineWidth=ink*0.6;                                // the lower lash, thin
+  g.strokeStyle=INK; g.lineWidth=ink*(shape===1?1.5:1.3);          // upper lash, heavier when squinting
+  g.beginPath(); g.moveTo(ex-ew,ey-hh*0.4); g.quadraticCurveTo(ex,ey-hh*(shape===1?1.0:1.25),ex+ew,ey-hh*0.35); g.stroke();
+  if (detail){ g.lineWidth=ink*0.6;                                // lower lash, thin
     g.beginPath(); g.moveTo(ex-ew*0.7,ey+hh*0.8); g.quadraticCurveTo(ex,ey+hh*1.15,ex+ew*0.9,ey+hh*0.7); g.stroke(); }
 }
-function drawEyeFront(g, ex, ey, hr, lid, ink, detail, side){
-  var ew=hr*0.15, hh=hr*0.13*lid;
+function drawEyeFront(g, ex, ey, hr, lid, ink, detail, side, eyeShape){
+  var shape = eyeShape || 0;
+  var ew=hr*0.15 * (shape===2 ? 1.2 : shape===1 ? 0.8 : 1);
+  var hh=hr*0.13*lid * (shape===2 ? 1.2 : shape===1 ? 0.75 : 1);
   if (lid<=0.02){
     g.strokeStyle=INK; g.lineWidth=ink*1.1;
     g.beginPath(); g.moveTo(ex-ew,ey); g.lineTo(ex+ew,ey); g.stroke();
     return;
   }
+  if (detail) {
+    g.fillStyle=INK; g.globalAlpha=0.05;
+    g.beginPath(); g.ellipse(ex,ey-hh*0.1,ew*1.2,hh*1.25,0,0,6.283); g.fill();
+    g.globalAlpha=1;
+  }
   g.fillStyle="#f4f0e4"; g.strokeStyle=INK; g.lineWidth=ink*0.7;
   g.beginPath(); g.ellipse(ex,ey,ew,hh,0,0,6.283); g.fill();
   if (detail){
-    g.fillStyle="#5a4632"; g.beginPath(); g.arc(ex,ey+hh*0.05,hh*0.62,0,6.283); g.fill();
-    g.fillStyle=INK; g.beginPath(); g.arc(ex,ey+hh*0.05,hh*0.34,0,6.283); g.fill();
-    g.fillStyle="#f4f0e4"; g.beginPath(); g.arc(ex-hh*0.2,ey-hh*0.25,hh*0.16,0,6.283); g.fill();
+    var irisR = hh * (shape===1 ? 0.55 : 0.62);
+    g.fillStyle="#5a4632"; g.beginPath(); g.arc(ex,ey+hh*0.05,irisR,0,6.283); g.fill();
+    g.fillStyle=INK; g.beginPath(); g.arc(ex,ey+hh*0.05,irisR*0.52,0,6.283); g.fill();
+    g.fillStyle="#f4f0e4"; g.beginPath(); g.arc(ex-hh*0.2,ey-hh*0.25,hh*0.15,0,6.283); g.fill();
   } else {
     g.fillStyle=INK; g.beginPath(); g.arc(ex,ey,Math.max(0.12,hh*0.62),0,6.283); g.fill();
   }
-  g.strokeStyle=INK; g.lineWidth=ink*1.2;
-  g.beginPath(); g.moveTo(ex-ew,ey-hh*0.5); g.quadraticCurveTo(ex,ey-hh*1.3,ex+ew,ey-hh*0.5); g.stroke();
+  g.strokeStyle=INK; g.lineWidth=ink*(shape===1?1.4:1.2);
+  g.beginPath(); g.moveTo(ex-ew,ey-hh*0.5); g.quadraticCurveTo(ex,ey-hh*(shape===1?1.05:1.3),ex+ew,ey-hh*0.5); g.stroke();
 }
 function drawBrow(g, bx, by, len, tilt, lift, ink){
   g.strokeStyle=INK; g.lineWidth=ink*1.15;
@@ -2073,21 +2151,32 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
     g.closePath(); g.fill();
     if (s>=2) g.stroke();
     if (s>=2.5){                                 // strand clumps: hair moves as hair
-      g.strokeStyle=INK; g.lineWidth=ink*0.55;
-      var nstr=front?4:3;
+      g.strokeStyle=INK; g.lineWidth=ink*0.5;
+      var nstr=front?5:4;
       for (var st2=0;st2<nstr;st2++){
-        var t3=front ? (st2-1.5)/1.5 : 0.2+st2*0.28;
+        var t3=front ? (st2-(nstr-1)/2)/((nstr-1)/2) : 0.15+st2*0.22;
+        var sway = moving ? (st2%2===0?0.06:-0.04)*hr : 0;
         if (front){
           g.beginPath();
-          g.moveTo(hcx+t3*hr*0.12, hcy-hr*1.04);
-          g.quadraticCurveTo(hcx+t3*hr*0.75, hcy-hr*0.78,
-                             hcx+t3*hr*0.86, hcy-hr*0.12);
+          g.moveTo(hcx+t3*hr*0.10+sway*0.2, hcy-hr*1.03);
+          g.quadraticCurveTo(hcx+t3*hr*0.70+sway, hcy-hr*0.76,
+                             hcx+t3*hr*(0.82+0.06*Math.abs(t3))+sway*0.5, hcy-hr*(0.08-longHair*0.15));
           g.stroke();
+          // taper hint: thinner end stroke
+          if (s>=3.5) {
+            g.lineWidth=ink*0.3;
+            g.beginPath();
+            g.moveTo(hcx+t3*hr*0.70+sway, hcy-hr*0.76);
+            g.quadraticCurveTo(hcx+t3*hr*0.78+sway*0.7, hcy-hr*0.42,
+                               hcx+t3*hr*(0.82+0.06*Math.abs(t3))+sway*0.5, hcy-hr*(0.08-longHair*0.15));
+            g.stroke();
+            g.lineWidth=ink*0.5;
+          }
         } else {
           g.beginPath();
-          g.moveTo(hcx-hr*(0.55-t3*0.9), hcy-hr*1.02);
-          g.quadraticCurveTo(hcx-hr*(1.02-t3*0.75), hcy-hr*(0.55+t3*0.25),
-                             hcx-hr*(0.88-t3*0.55), hcy+hr*(0.02+t3*(longHair?0.5:0.22)));
+          g.moveTo(hcx-hr*(0.52-t3*0.85)+sway*0.3, hcy-hr*1.01);
+          g.quadraticCurveTo(hcx-hr*(1.0-t3*0.7)+sway, hcy-hr*(0.52+t3*0.22),
+                             hcx-hr*(0.86-t3*0.5)+sway*0.4, hcy+hr*(0.04+t3*(longHair?0.48:0.20)));
           g.stroke();
         }
       }
@@ -2095,32 +2184,62 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
   }
   if (view===1 && s>=2.2){                       // a face, toward us
     var e1=expressionOf(act,B,moving,wk);
-    drawEyeFront(g, hcx-hr*0.32, hcy-0.1, hr, e1[1], ink, s>=3.5, -1);
-    drawEyeFront(g, hcx+hr*0.32, hcy-0.1, hr, e1[1], ink, s>=3.5, 1);
+    var eyeShape1 = eyeShapeOf(act,B), cheek1 = cheekStressOf(act,B);
+    drawEyeFront(g, hcx-hr*0.32, hcy-0.1, hr, e1[1], ink, s>=3.5, -1, eyeShape1);
+    drawEyeFront(g, hcx+hr*0.32, hcy-0.1, hr, e1[1], ink, s>=3.5, 1, eyeShape1);
     drawBrow(g, hcx-hr*0.32, hcy-hr*0.30, hr*0.40, -e1[3], -e1[0]*hr*0.10, ink);
     drawBrow(g, hcx+hr*0.32, hcy-hr*0.30, hr*0.40, e1[3], -e1[0]*hr*0.10, ink);
+    if (s>=3.5 && cheek1 > 0.3) { // cheek tension at close zoom
+      g.strokeStyle=INK; g.globalAlpha=0.12 * cheek1; g.lineWidth=ink*0.5;
+      g.beginPath(); g.moveTo(hcx-hr*0.55, hcy+hr*0.35); g.quadraticCurveTo(hcx-hr*0.45, hcy+hr*0.5, hcx-hr*0.38, hcy+hr*0.45); g.stroke();
+      g.beginPath(); g.moveTo(hcx+hr*0.55, hcy+hr*0.35); g.quadraticCurveTo(hcx+hr*0.45, hcy+hr*0.5, hcx+hr*0.38, hcy+hr*0.45); g.stroke();
+      g.globalAlpha=1;
+    }
     g.strokeStyle=INK; g.lineWidth=ink*0.7;      // the nose: bridge and tip
     g.beginPath(); g.moveTo(hcx,hcy-hr*0.05); g.lineTo(hcx,hcy+hr*0.38); g.stroke();
+    if (s>=3.5) { // nostril hints
+      g.fillStyle=INK_SOFT; g.globalAlpha=0.5;
+      g.beginPath(); g.arc(hcx-hr*0.06, hcy+hr*0.42, hr*0.035, 0, 6.283); g.fill();
+      g.beginPath(); g.arc(hcx+hr*0.06, hcy+hr*0.42, hr*0.035, 0, 6.283); g.fill();
+      g.globalAlpha=1;
+    }
     drawMouthShape(g, hcx, hcy+hr*0.62, e1[2], ink, hr, 0.9);
   }
   if (view){ g.restore(); return; }
   if (s>=4){                                     // close enough for a real face
-    g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.6;
-    g.beginPath(); g.arc(hcx-hr*0.05, hcy+0.1, hr*0.22, -1.2, 1.4); g.stroke();             // ear
-    if (B.stage===4){ g.beginPath(); g.moveTo(hcx+hr*0.2,hcy+0.5); g.lineTo(hcx+hr*0.5,hcy+0.75); g.stroke(); }  // a line of age
-    g.fillStyle=INK_SOFT;                        // a nostril, where the nose ends
+    g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.55;
+    // ear: outer helix + inner antihelix
+    g.beginPath(); g.arc(hcx-hr*0.05, hcy+0.1, hr*0.22, -1.2, 1.4); g.stroke();
+    g.lineWidth=ink*0.4;
+    g.beginPath(); g.arc(hcx-hr*0.08, hcy+0.12, hr*0.12, -0.8, 1.0); g.stroke();
+    // age lines
+    if (B.stage===4){
+      g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.45;
+      g.beginPath(); g.moveTo(hcx+hr*0.2,hcy+0.5); g.lineTo(hcx+hr*0.5,hcy+0.75); g.stroke();
+      g.beginPath(); g.moveTo(hcx+hr*0.18,hcy+0.62); g.lineTo(hcx+hr*0.42,hcy+0.82); g.stroke();
+    }
+    g.fillStyle=INK_SOFT;                        // nostril
     g.beginPath(); g.arc(hcx+hr*0.80, hcy+hr*0.30, hr*0.055, 0, 6.283); g.fill();
-    if (!fem && adult){                          // stubble along the jaw
-      for (var bd=0;bd<6;bd++){
-        var bq=bd/5;
-        g.beginPath(); g.arc(hcx+hr*(0.55-0.95*bq), hcy+hr*(0.90-0.26*bq), hr*0.05, 0, 6.283); g.fill();
+    if (!fem && adult){                          // stubble/beard along the jaw
+      g.fillStyle=INK; g.globalAlpha=0.35;
+      for (var bd=0;bd<8;bd++){
+        var bq=bd/7;
+        var bx = hcx+hr*(0.58-1.05*bq), by = hcy+hr*(0.88-0.22*bq);
+        g.beginPath(); g.arc(bx, by, hr*0.042, 0, 6.283); g.fill();
       }
+      g.globalAlpha=1;
     }
   }
   if (s>=2.2){                                   // a face, looking where they face
     var e0=expressionOf(act,B,moving,wk);
-    drawEyeProfile(g, hcx+hr*0.44, hcy-hr*0.10, hr, e0[1], ink, s>=3.5);
+    var eyeShape0 = eyeShapeOf(act,B), cheek0 = cheekStressOf(act,B);
+    drawEyeProfile(g, hcx+hr*0.44, hcy-hr*0.10, hr, e0[1], ink, s>=3.5, eyeShape0);
     drawBrow(g, hcx+hr*0.44, hcy-hr*0.32, hr*0.36, e0[3], -e0[0]*hr*0.10, ink);
+    if (s>=3.5 && cheek0 > 0.3) {
+      g.strokeStyle=INK; g.globalAlpha=0.1 * cheek0; g.lineWidth=ink*0.45;
+      g.beginPath(); g.moveTo(hcx+hr*0.55, hcy+hr*0.25); g.quadraticCurveTo(hcx+hr*0.62, hcy+hr*0.4, hcx+hr*0.52, hcy+hr*0.38); g.stroke();
+      g.globalAlpha=1;
+    }
     g.strokeStyle=INK; g.lineWidth=ink*0.7;
     g.beginPath(); g.moveTo(hcx+hr*0.86,hcy+0.05); g.lineTo(hcx+hr*0.98,hcy+0.6); g.lineTo(hcx+hr*0.8,hcy+0.65); g.stroke();  // nose
     drawMouthShape(g, hcx+hr*0.60, hcy+hr*0.60, e0[2], ink, hr, 0.55);
