@@ -1685,31 +1685,48 @@ function drawTiny(g, J, D, k, tones, dress, v){
 // only from sprite-keyed inputs (act, body, wk), so the cache stays sound.
 function expressionOf(act, B, moving, wk){
   // Returns [brow, lid 0..1, mouth, brow tilt] — contract pinned by test_style
+  var has = function(n){ try { return typeof eval(n) !== 'undefined'; } catch(e){ return false; } };
+  var is = function(n){ return has(n) && act === eval(n); };
   if (act===A_SLEEP) return [0, 0, 0, 0];          // closed
   if (act===A_FIGHT)  return [1, 0.72, 4, -0.6];   // squint, gritted, tense
   if (act===A_HUNT || act===A_SCOUT) return [0.55, 1, 1, -0.35]; // wide, focused
-  if (act===A_EAT)   return [0.1, 0.75, 3, 0];
+  if (act===A_EAT || is('A_DRINK'))   return [0.1, 0.75, 3, 0];
   if (act===A_TALK)  return [-0.45, 0.92, 2, 0.25];
   if (act===A_WITHDRAW) return [0.55, 0.38, 5, 0.45]; // downcast, half-lidded
   if (act===A_GROOM) return [-0.15, 0.78, 1, 0];
   if (act===A_MATE || act===A_BIRTH) return [0.12, 0.68, 2, 0];
+  if (is('A_PLAY')) return [-0.3, 0.95, 1, 0.2];   // bright, engaged
+  if (is('A_FISH') || is('A_WATCH')) return [0.25, 0.9, 1, -0.1]; // attentive
+  if (is('A_FARM') || is('A_BUILD') || is('A_WORK')) return [0.2, 0.85, 1, -0.05]; // effort/focus
+  if (is('A_FORAGE')) return [0.15, 0.88, 1, -0.05];
+  if (is('A_CARRY')) return [0.3, 0.82, 1, -0.1];  // burdened focus
+  if (is('A_REST')) return [0.05, 0.55, 1, 0.05];  // relaxed, half-lidded
+  if (is('A_RITE')) return [0.1, 0.7, 0, 0];       // solemn/quiet
   if (B && (B.gaunt || B.hungry)) return [0.5, 0.62, 5, 0.35];
   if (B && B.stage===4) return [0.28, 0.72, 1, 0.18];
   return [0, 0.88, 1, 0];
 }
 function eyeShapeOf(act, B){
+  var has = function(n){ try { return typeof eval(n) !== 'undefined'; } catch(e){ return false; } };
+  var is = function(n){ return has(n) && act === eval(n); };
   if (act===A_SLEEP) return 0;
   if (act===A_FIGHT) return 1; // squint
   if (act===A_HUNT || act===A_SCOUT) return 2; // wide
+  if (is('A_PLAY')) return 2; // bright
   if (act===A_WITHDRAW) return 1;
+  if (is('A_CARRY') || is('A_FARM') || is('A_BUILD') || is('A_WORK')) return 1;
   if (B && (B.gaunt || B.hungry)) return 1;
   return 0;
 }
 function cheekStressOf(act, B){
+  var has = function(n){ try { return typeof eval(n) !== 'undefined'; } catch(e){ return false; } };
+  var is = function(n){ return has(n) && act === eval(n); };
   if (act===A_FIGHT) return 0.8;
   if (act===A_HUNT || act===A_SCOUT) return 0.3;
+  if (is('A_CARRY') || is('A_FARM') || is('A_BUILD') || is('A_WORK')) return 0.35;
+  if (act===A_BIRTH) return 0.6;
   if (act===A_WITHDRAW) return 0.2;
-  if (act===A_MATE || act===A_BIRTH) return 0.1;
+  if (act===A_MATE) return 0.1;
   if (B && (B.gaunt || B.hungry)) return 0.5;
   if (B && B.stage===4) return 0.15;
   return 0;
