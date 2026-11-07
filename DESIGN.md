@@ -58,6 +58,21 @@ arrive at different real times. Previous century trials remain historical
 per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
 release. This target is not a measured 2016 MacBook capacity claim.
 
+## Engine 2026.11.07.1: self-control brakes the withdrawal
+
+Changes EDEN trajectories when withdrawal becomes an option. LAGOON does
+not use this path. No saved fields; migration adds nothing.
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| Anomie: a competent adult with purpose < 0.25 may withdraw for good, and self-control is the brake (DESIGN "Minds and bodies"; Durkheim, *Suicide*) | The withdrawal option in `needs.assign` is scaled by restraint, `max(0.08, 1.0 - 0.75 × expressed self-control)`, so low-control adults in the sink step out of the pen more readily than high-control peers under identical conditions. | An illustrative human-agency choice, not a fitted personality coefficient. Withdrawal remains permanent (Calhoun: no recovery); the trigger conditions are unchanged. |
+
+Operational changes in the same release, neither of which moves a
+trajectory: `save_state` no longer writes the per-tick caches (`_ctx`,
+`_demos`, `_perception_grid`, `_site_grid`) — over half of a saved state
+file — and the runtime's tick loop now reports and survives an unexpected
+engine error instead of silently stopping while the page still answers.
+
 ## Engine 2026.11.03.1: shared instincts, personal fuzzy sensitivity
 
 This changes both worlds' future trajectories, including existing saves. No

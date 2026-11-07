@@ -185,15 +185,28 @@ def engine_loop():
             # ten seconds. The tick sequence is identical either way.
             batch = min(behind, 2000)
             evts = []
-            with lock:
-                for _ in range(batch):
-                    engine.tick_world(world, evts)
-                    # Record at the same calendar boundaries during catch-up
-                    # and normal operation, including across process restarts.
-                    day = world["eden"]["day"]
-                    if day // research.CADENCE > last_test:
-                        last_test = day // research.CADENCE
-                        research.record(world, research.evaluate(world))
+            try:
+                with lock:
+                    for _ in range(batch):
+                        engine.tick_world(world, evts)
+                        # Record at the same calendar boundaries during catch-up
+                        # and normal operation, including across process restarts.
+                        day = world["eden"]["day"]
+                        if day // research.CADENCE > last_test:
+                            last_test = day // research.CADENCE
+                            research.record(world, research.evaluate(world))
+            except Exception as exc:
+                # An unexpected engine error must not silently stop a run that
+                # is meant to outlive the process watching it: say so, save,
+                # and keep serving. The next batch retries the same tick.
+                status["engine_error"] = f"{type(exc).__name__}: {exc}"[:200]
+                status["engine_error_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
+                print(f"[universe69] TICK ERROR: {status['engine_error']}", flush=True)
+                try:
+                    with lock:
+                        engine.save_state(world, STATE_PATH)
+                except OSError:
+                    pass
             log_events(evts)
             if any(e[2] in ("extinction", "lesson") for e in evts):
                 update_histories()
@@ -343,6 +356,9 @@ class Handler(BaseHTTPRequestHandler):
             self._send(404, '{"err":"not found"}')
             return
         length = int(self.headers.get("content-length", 0) or 0)
+        if length > 1 << 20:
+            self._send(413, '{"err":"body too large"}')
+            return
         raw = self.rfile.read(length) if length else b"{}"
         try:
             body = json.loads(raw or b"{}")

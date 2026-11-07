@@ -2592,7 +2592,6 @@ def tick_lagoon(u, rng, events):
         needs.update_learning(u,p)
         needs.update_social(u,p)
         if p.get("ad", 0) <= 0 and p["x"] == p["tx"] and p["y"] == p["ty"]:
-            p["did"] = 0
             lagoon_assign(u, p, day, rng, shortfall)
         arrived = step_toward(p, terr_l, LAGOON_WALK)
         if arrived:
@@ -2610,7 +2609,6 @@ def tick_lagoon(u, rng, events):
                 needs.fulfil(u, p, day, rng, p.get("a"))
             p["ad"] = p.get("ad", 0) - 1
             if p["ad"] <= 0:
-                p["did"] = 0
                 lagoon_assign(u, p, day, rng, shortfall)
         # what you gathered, you carry home and put down
         needs.deposit(u, p, day)
@@ -3135,10 +3133,22 @@ def load_recorded_arcs():
 # ---------------------------------------------------------------- persistence
 
 def save_state(world, path):
+    """Write the world to disk atomically, without its per-tick caches.
+
+    Leading-underscore keys are the engine's convention for state rebuilt
+    every tick (the density context, the site/perception grids, demo
+    frames). They used to reach the file inside each universe — over half
+    of a saved state — slowing every periodic save and reload on the
+    instrument. They are dropped here only in the written copy; the live
+    world is never mutated, and each cache rebuilds itself with its own
+    staleness check on the next tick."""
     tmp = path + ".tmp"
-    slim = {k: ({kk: vv for kk, vv in v.items() if not kk.startswith("_")}
-                if isinstance(v, dict) else v)
-            for k, v in world.items()}
+    slim = {}
+    for k, v in world.items():
+        if isinstance(v, dict):
+            slim[k] = {kk: vv for kk, vv in v.items() if not kk.startswith("_")}
+        else:
+            slim[k] = v
     with open(tmp, "w") as f:
         json.dump(slim, f, separators=(",", ":"))
     os.replace(tmp, path)
