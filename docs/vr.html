@@ -1735,6 +1735,11 @@ class Crowd {
       if(dress==="swim"&&a.sex===1&&a.age>=12)
         anatomical(0,shY-.09*H,.015*H,shHalf*1.86,.062*H,torsoR*1.95,color);
     }
+    if(mode.view==="inside" && c.nan < this.cap * 24 - 2) {
+      // shoulder/acromion definition (budgeted)
+      anatomical(-shHalf*.92, shY-.01*H, 0, .030*H,.025*H,.030*H, skin);
+      anatomical(shHalf*.92, shY-.01*H, 0, .030*H,.025*H,.030*H, skin);
+    }
     if(mode.view==="inside") {
       // An abdomen reflects condition without changing the record or skeleton.
       if(!dress&&a.bmi>25)anatomical(0,hipY+.10*H,torsoR*.50,shHalf*1.5,.17*H,torsoR*.95);
@@ -1827,9 +1832,13 @@ class Crowd {
         an = P(chain.end.x,chain.end.y,chain.end.z);
       seg(this.legs, c.nl++, hp, kn, limbR * 1.18 * big, legCloth);
       seg(this.legs, c.nl++, kn, an, limbR * 1.02 * big, legCloth);
-      if (mode.view === "inside" && c.nan < this.cap * 24) {
+      if (mode.view === "inside" && c.nan < this.cap * 24 - 1) {
         // knee joint definition (budgeted anatomy)
         ellipsoid(this.anatomy,c.nan++,kn,bodyQ,limbR*.60*big,limbR*.55*big,limbR*.65*big,legCloth);
+      }
+      if (mode.view === "inside" && c.nan < this.cap * 24) {
+        // ankle definition (budgeted anatomy)
+        ellipsoid(this.anatomy,c.nan++,an,bodyQ,limbR*.48*big,limbR*.42*big,limbR*.52*big,skin);
       }
       ball(this.feet, c.nf++, hp, limbR * 1.05 * big, legCloth);
       ball(this.feet, c.nf++, kn, limbR * .85 * big, legCloth);
