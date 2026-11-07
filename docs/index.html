@@ -2260,6 +2260,13 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
     }
     g.closePath(); g.fill();
     if (s>=2) g.stroke();
+    if (s>=3.5) { // hair sheen highlight
+      g.strokeStyle="rgba(244,240,228,0.18)"; g.lineWidth=ink*0.6;
+      g.beginPath();
+      if (front) g.arc(hcx-hr*0.2, hcy-hr*0.72, hr*0.45, Math.PI*1.05, Math.PI*1.75);
+      else g.arc(hcx-hr*0.25, hcy-hr*0.70, hr*0.50, Math.PI*1.0, Math.PI*1.65);
+      g.stroke();
+    }
     if (s>=2.5){                                 // strand clumps: hair moves as hair
       g.strokeStyle=INK; g.lineWidth=ink*0.5;
       var nstr=front?5:4;
@@ -2313,6 +2320,11 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
       g.beginPath(); g.arc(hcx+hr*0.06, hcy+hr*0.42, hr*0.035, 0, 6.283); g.fill();
       g.globalAlpha=1;
     }
+    if (s>=4) { // subtle facial highlight
+      g.fillStyle="#f4f0e4"; g.globalAlpha=0.06;
+      g.beginPath(); g.ellipse(hcx-hr*0.12, hcy-hr*0.05, hr*0.22, hr*0.28, 0, 0, 6.283); g.fill();
+      g.globalAlpha=1;
+    }
     drawMouthShape(g, hcx, hcy+hr*0.62, e1[2], ink, hr, 0.9);
   }
   if (view){ g.restore(); return; }
@@ -2348,6 +2360,11 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
     if (s>=3.5 && cheek0 > 0.3) {
       g.strokeStyle=INK; g.globalAlpha=0.1 * cheek0; g.lineWidth=ink*0.45;
       g.beginPath(); g.moveTo(hcx+hr*0.55, hcy+hr*0.25); g.quadraticCurveTo(hcx+hr*0.62, hcy+hr*0.4, hcx+hr*0.52, hcy+hr*0.38); g.stroke();
+      g.globalAlpha=1;
+    }
+    if (s>=4) { // subtle cheek/skin highlight (manga rim)
+      g.fillStyle="#f4f0e4"; g.globalAlpha=0.08;
+      g.beginPath(); g.ellipse(hcx+hr*0.15, hcy-hr*0.05, hr*0.28, hr*0.35, -0.2, 0, 6.283); g.fill();
       g.globalAlpha=1;
     }
     g.strokeStyle=INK; g.lineWidth=ink*0.7;
@@ -2425,9 +2442,12 @@ function shadowSprite(ts){                      // one soft ellipse per zoom lev
   // A shadow is the size of the body that casts it, not the size of the
   // ground. It used to grow with the zoom until it swallowed the figure.
   var k=Math.round(ts*2); var s=shadowCache[k]; if (s) return s;
-  var w=Math.max(3,Math.round(ts*0.52)), h=Math.max(2,Math.round(ts*0.19));
+  var w=Math.max(3,Math.round(ts*0.54)), h=Math.max(2,Math.round(ts*0.20));
   var c=mkCanvas(w,h), g=c.getContext("2d");
-  g.fillStyle="rgba(0,0,0,0.20)"; g.beginPath(); g.ellipse(w/2,h/2,w/2,h/2,0,0,6.283); g.fill();
+  // Soft falloff: darker core, lighter edge (grounded manga shadow)
+  g.fillStyle="rgba(0,0,0,0.10)"; g.beginPath(); g.ellipse(w/2,h/2,w*0.50,h*0.50,0,0,6.283); g.fill();
+  g.fillStyle="rgba(0,0,0,0.14)"; g.beginPath(); g.ellipse(w/2,h/2,w*0.38,h*0.38,0,0,6.283); g.fill();
+  g.fillStyle="rgba(0,0,0,0.10)"; g.beginPath(); g.ellipse(w/2,h/2,w*0.24,h*0.24,0,0,6.283); g.fill();
   return (shadowCache[k]={c:c,w:w,h:h});
 }
 

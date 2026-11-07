@@ -219,11 +219,11 @@ function initRenderer() {
   const canvas = $("view");
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false,
     powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.5));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2.75));
   renderer.setSize(window.innerWidth, window.innerHeight, false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.06;
+  renderer.toneMappingExposure = 1.08;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.xr.enabled = true;
