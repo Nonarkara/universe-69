@@ -80,7 +80,14 @@ GESTATION = 270
 # under the old radius now reaches generation 3 by year 90 and keeps
 # growing. Every EDEN trajectory from the first mate search changes;
 # LAGOON does not change at all (STUDY.md records the before/after).
-ENGINE_VERSION = "2026.11.04.1"
+# 2026.11.07.1 — EDEN withdrawal respects self-control as a brake (DESIGN
+# "anomie": competent adults with purpose < 0.25 may withdraw; self-control
+# is the brake). The withdrawal option's score is scaled by restraint, an
+# illustrative human-agency choice, so low-control adults in the sink
+# withdraw more readily than high-control peers under the same conditions.
+# Changes EDEN trajectories when withdrawal becomes an option; LAGOON does
+# not use this path. Mating/encounter/reproduction rules are unchanged.
+ENGINE_VERSION = "2026.11.07.1"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the

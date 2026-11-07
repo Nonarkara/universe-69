@@ -1089,9 +1089,11 @@ def assign(u, p, day, rng, cond=None, engine=None):
     # A person with no company, no purpose and no work does not stay in the
     # middle of the pen. This is Calhoun's beautiful ones, and it is a
     # consequence here, not a script: it needs solitude, a low purpose and
-    # a world that does not ask anything of you.
+    # a world that does not ask anything of you. Self-control brakes it
+    # (DESIGN: anomie) — the same restraint that shapes every hard choice.
     if u.get("kind") == "EDEN" and sol < 0.25 and hun < 8 and p.get("pu", 0.5) < 0.25:
-        options.append((2.0 + 1.4 * (0.25 - sol), E.A_WITHDRAW, None, None))
+        restraint = max(0.08, 1.0 - 0.75 * _self_control(p, a))
+        options.append(((2.0 + 1.4 * (0.25 - sol)) * restraint, E.A_WITHDRAW, None, None))
 
     if not options:
         options.append((0.3, E.A_REST, _home_of(u, p), None))
