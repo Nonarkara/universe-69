@@ -2081,6 +2081,18 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
       g.fillStyle=INK_SOFT; g.globalAlpha=0.35;
       g.beginPath(); g.arc(wx, waY-0.15, Math.max(0.08, ink*0.6), 0, 6.283); g.fill();
       g.globalAlpha=1;
+      // scapula/spine hints (profile, Phase C+)
+      g.strokeStyle=INK_SOFT; g.globalAlpha=0.18; g.lineWidth=ink*0.4;
+      g.beginPath(); g.moveTo(wx-waW*0.35, shY+1.2); g.quadraticCurveTo(wx-waW*0.55, chestY+0.8, wx-waW*0.3, chestY+2.2); g.stroke();
+      g.beginPath(); g.moveTo(wx-waW*0.05, shY+0.8); g.quadraticCurveTo(wx-waW*0.12, (shY+hipY)/2, wx-waW*0.02, hipY-0.2); g.stroke();
+      g.globalAlpha=1;
+    }
+    // seated/lying compression cues (soft folds at close zoom)
+    if (s>=3.5 && !view && (P.sit || lying) && B.fat>=2 && !starving) {
+      g.strokeStyle=INK; g.globalAlpha=0.08; g.lineWidth=ink*0.45;
+      var cy = lying ? (waY + hipY)*0.52 : waY + 0.9;
+      g.beginPath(); g.moveTo(wx-waW*0.45, cy); g.quadraticCurveTo(wx, cy+0.35, wx+waW*0.55, cy-0.05); g.stroke();
+      g.globalAlpha=1;
     }
   }
   var bare = !dress || dress==="swim";
@@ -2116,6 +2128,10 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
       g.lineTo(hipX+0.5, crotchY+(fem?0.3:1.4)); g.lineTo(hipX-0.4, crotchY+(fem?0.3:1.4));
       g.lineTo(hipX-hpW*(fem?0.72:0.95), crotchY+(fem?-0.2:1.4));
       g.closePath(); g.fill(); g.stroke();
+      if (s>=3.5 && !view) { // fabric tension/fold hints
+        g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.45;
+        g.beginPath(); g.moveTo(hipX-hpW*0.2, hipY-0.2); g.quadraticCurveTo(hipX, hipY+0.5, hipX+hpW*0.3, hipY-0.1); g.stroke();
+      }
       if (fem && B.ab>=5){                           // a top, round the ribcage
         g.beginPath();
         g.moveTo(shX-shW*0.92, chestY+0.3);
@@ -2123,6 +2139,10 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
         g.lineTo(shX+shW*0.95+breast*0.9, chestY+1.9+breast);
         g.quadraticCurveTo(shX, chestY+2.4, shX-shW*0.92, chestY+1.8);
         g.closePath(); g.fill(); g.stroke();
+        if (s>=3.5 && !view) {
+          g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.4;
+          g.beginPath(); g.moveTo(shX-shW*0.3, chestY+1.2); g.quadraticCurveTo(shX+shW*0.1, chestY+1.5, shX+shW*0.5, chestY+1.25); g.stroke();
+        }
       }
     } else {
       var fur=dress==="fur", col=fur?DRESS.fur:DRESS.hide, colD=fur?DRESS.furD:DRESS.hideD;
@@ -2135,8 +2155,27 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
       g.fill();
       g.save(); g.clip(); g.fillStyle=colD; g.fillRect(hipX+hpW*0.25, top-1, hpW*3, bot-top+3); g.restore();   // its shadow side
       g.stroke();
+      if (s>=3 && !view) { // drape/fold lines (Phase D)
+        g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.45;
+        var fx1=(fur?shX:hipX)-tw*0.3, fx2=(fur?shX:hipX)+tw*0.2;
+        g.beginPath(); g.moveTo(fx1, top+0.8); g.quadraticCurveTo(fx1+0.3, (top+bot)*0.5, fx1-0.2, bot-0.6); g.stroke();
+        g.beginPath(); g.moveTo(fx2, top+1.0); g.quadraticCurveTo(fx2+0.4, (top+bot)*0.55, fx2+0.1, bot-0.5); g.stroke();
+        if (fur && s>=3.5) { // fur texture hint
+          g.strokeStyle=INK; g.globalAlpha=0.08; g.lineWidth=ink*0.3;
+          for (var fh=0; fh<4; fh++) {
+            var fy = top + 1.2 + fh*(bot-top-2)/3;
+            g.beginPath(); g.moveTo(fx1-0.4, fy); g.lineTo(fx1+0.5, fy+0.15); g.stroke();
+            g.beginPath(); g.moveTo(fx2-0.2, fy+0.1); g.lineTo(fx2+0.6, fy+0.25); g.stroke();
+          }
+          g.globalAlpha=1;
+        }
+      }
       if (!fur){ g.strokeStyle=colD; g.lineWidth=ink*1.2;                        // the belt
-        g.beginPath(); g.moveTo(hipX-hpW-0.1, top+0.4); g.lineTo(hipX+hpW+0.1, top+0.4); g.stroke(); }
+        g.beginPath(); g.moveTo(hipX-hpW-0.1, top+0.4); g.lineTo(hipX+hpW+0.1, top+0.4); g.stroke();
+        if (s>=3.5) { // knot/tie hint
+          g.lineWidth=ink*0.7; g.beginPath(); g.moveTo(hipX+hpW*0.1, top+0.4); g.lineTo(hipX+hpW*0.25, top+1.0); g.stroke();
+        }
+      }
     }
   }
 

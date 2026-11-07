@@ -1708,14 +1708,23 @@ class Crowd {
     if (mode.view === "inside") {
       const detail=(x,y,z,sx,sy,sz,color)=>ellipsoid(this.face,c.nface++,
         P(x,y,z+(sitting?.018*H:0)),bodyQ,sx*big,sy*big,sz*big,color);
+      // Expressive cues derived from activity (no new instance count)
+      const act = a.act;
+      const squint = (act===A.FIGHT || act===A.WITHDRAW) ? 0.72 : 1;
+      const wide = (act===A.HUNT || act===A.SCOUT || act===A.PLAY) ? 1.18 : 1;
+      const eyeOpen = act===A.SLEEP ? 0.05 : (act===A.REST ? 0.55 : 1) * squint;
+      const eyeW = .23*headR * wide;
+      const eyeH = .13*headR * Math.max(0.06, eyeOpen);
+      const mouthH = (act===A.TALK) ? .07*headR : (act===A.EAT) ? .075*headR : .045*headR;
+      const mouthW = (act===A.TALK || act===A.EAT) ? .46*headR : .42*headR;
       for(const side of [-1,1]) {
         detail(side*.80*headR,headY-.03*headR,0,.23*headR,.40*headR,.24*headR,skin);
-        detail(side*.31*headR,headY+.10*headR,.84*headR,.23*headR,.13*headR,.055*headR,0xd7cdbb);
-        detail(side*.31*headR,headY+.10*headR,.875*headR,.085*headR,.095*headR,.035*headR,0x30291f);
+        detail(side*.31*headR,headY+.10*headR,.84*headR,eyeW,eyeH,.055*headR,0xd7cdbb);
+        detail(side*.31*headR,headY+.10*headR,.875*headR,.085*headR,.095*headR*Math.max(0.2,eyeOpen),.035*headR,0x30291f);
         detail(side*.31*headR,headY+.29*headR,.78*headR,.28*headR,.09*headR,.11*headR,hairC);
       }
       detail(0,headY-.08*headR,.92*headR,.23*headR,.38*headR,.31*headR,skin);
-      detail(0,headY-.43*headR,.85*headR,.42*headR,.052*headR,.045*headR,0x785345);
+      detail(0,headY-.43*headR,.85*headR,mouthW,mouthH,.045*headR,0x785345);
     }
     const anatomical=(x,y,z,w,h,d,color=skin,q=bodyQ)=>ellipsoid(this.anatomy,c.nan++,P(x,y,z),q,w*big,h*big,d*big,color);
     // Coverings occupy only the recorded garment's region. A hide wrap does
