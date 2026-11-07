@@ -1796,6 +1796,10 @@ class Crowd {
         hd = P(chain.end.x,chain.end.y,chain.end.z);
       seg(this.arms, c.na++, shp, el, limbR * 0.92 * big, skin);
       seg(this.arms, c.na++, el, hd, limbR * 0.78 * big, skin);
+      if (mode.view === "inside" && c.nan < this.cap * 24) {
+        // elbow joint definition (budgeted anatomy)
+        ellipsoid(this.anatomy,c.nan++,el,bodyQ,limbR*.55*big,limbR*.50*big,limbR*.55*big,skin);
+      }
       ball(this.hands, c.nh++, shp, limbR * .70 * big, skin);
       ball(this.hands, c.nh++, el, limbR * .65 * big, skin);
       const handQ=new THREE.Quaternion().setFromUnitVectors(_up,new THREE.Vector3().subVectors(hd,el).normalize());
@@ -1823,6 +1827,10 @@ class Crowd {
         an = P(chain.end.x,chain.end.y,chain.end.z);
       seg(this.legs, c.nl++, hp, kn, limbR * 1.18 * big, legCloth);
       seg(this.legs, c.nl++, kn, an, limbR * 1.02 * big, legCloth);
+      if (mode.view === "inside" && c.nan < this.cap * 24) {
+        // knee joint definition (budgeted anatomy)
+        ellipsoid(this.anatomy,c.nan++,kn,bodyQ,limbR*.60*big,limbR*.55*big,limbR*.65*big,legCloth);
+      }
       ball(this.feet, c.nf++, hp, limbR * 1.05 * big, legCloth);
       ball(this.feet, c.nf++, kn, limbR * .85 * big, legCloth);
       ball(this.feet, c.nf++, an, limbR * .60 * big, skin);
