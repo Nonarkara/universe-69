@@ -10,6 +10,8 @@ import os
 import tempfile
 import time
 
+import scripture
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def archive_run(data):
@@ -110,6 +112,44 @@ def compile_book(world, root=None, data=None):
                 if universe and universe.get("founded_day", 0) <= e.get("d", 0) <= extinct_days[key]:
                     evs.append(e)
 
+    def scripture_block(u):
+        """The testament one world leaves, as the book's own chapter.
+
+        Pure reading: scripture.for_world never mutates the universe it
+        reads, so a book written at extinction cannot disturb the record
+        it is writing about."""
+        try:
+            s = scripture.for_world(u or {})
+        except Exception:
+            return ""
+        lines = [f"### {s.get('title', u.get('kind', ''))} — year {s.get('year', '?')}", ""]
+        for c in s.get("creed", []):
+            lines.append(f"> {c}")
+        lines.append("")
+        laws = s.get("commandments") or []
+        if laws:
+            lines.append("Laws the dead left:")
+            lines.append("")
+            lines += [f"{i}. {law}" for i, law in enumerate(laws, 1)]
+        else:
+            lines.append("_No law was ever written here._")
+        lines.append("")
+        myths = s.get("myths") or []
+        if myths:
+            lines.append("Myths earned by disaster:")
+            lines.append("")
+            lines += [f"- *{m[1]}* ({m[0]})" for m in myths]
+        c = s.get("cast") or []
+        if c:
+            lines.append("")
+            lines.append("The cast at the end:")
+            lines.append("")
+            lines += [f"- **{q['name']}**, {q['age']} — {q['who']}" for q in c]
+        lines.append("")
+        lines.append("_" + s.get("note", "") + "_")
+        lines.append("")
+        return "\n".join(lines)
+
     def pm_block(pm, name):
         if not pm:
             return f"### {name}\n\n(no postmortem recorded)\n"
@@ -145,6 +185,10 @@ def compile_book(world, root=None, data=None):
         f.write(pm_block(epm, "Universe 6 — EDEN"))
         f.write("\n")
         f.write(pm_block(lpm, "Universe 9 — LAGOON"))
+        f.write("\n## The scripture of each world, as the record leaves it\n\n")
+        f.write(scripture_block(eden))
+        f.write("\n")
+        f.write(scripture_block(lagoon))
         f.write("\n## Record of events\n\n")
         if evs:
             cur_year = None

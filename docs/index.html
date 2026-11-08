@@ -150,6 +150,23 @@
   #research.shortRuns .sheet { height:auto; max-height:calc(100dvh - 32px); }
   #research.shortRuns #resbody { flex:0 1 auto; }
   #research.shortRuns #respager { display:none; }
+
+  /* scripture: the worlds' own testament, read from the record */
+  .scr-creed blockquote { margin:0 0 6px; }
+  .scr-laws { margin:0 0 10px; padding-left:1.2em; }
+  .scr-laws li { margin:0 0 4px; }
+  .scr-h { font-family:var(--font-ui); font-size:12.5px; font-weight:600; letter-spacing:0.1em;
+           color:var(--muted); margin:14px 0 4px; }
+  .scr-row { padding:6px 0; border-bottom:1px solid var(--line); }
+  .scr-row:last-child { border-bottom:none; }
+  .scr-row .what { font-weight:600; }
+  .scr-row .note { color:var(--muted); font-size:14.5px; margin:2px 0 0; }
+  .scr-row .sofar { color:var(--accent); font-size:12.5px; font-family:var(--font-ui); }
+  .scr-cast { margin:0 0 8px; padding:0; list-style:none; }
+  .scr-cast li { margin:0 0 6px; max-width:66ch; }
+  .scr-cast .nm { font-weight:600; }
+  .scr-cast .ag { color:var(--muted); font-family:var(--font-ui); font-size:13px; }
+  .scr-none { font-style:italic; color:var(--muted); }
   .sheethead { flex:none; display:flex; align-items:center; gap:6px 12px; flex-wrap:wrap; padding:10px 16px 8px;
                border-bottom:1px solid var(--line); }
   .sheethead h2 { font-size:20px; font-weight:500; letter-spacing:0.02em; }
@@ -286,6 +303,7 @@
   <span class="hint">wheel zoom · drag pan · click to follow · WASD walk in · esc</span>
   <button id="walkbtn" title="Walk into the world you last touched">WALK</button>
   <button type="button" id="bookbtn" title="The book: how these two worlds came to be">BOOK</button>
+  <button type="button" id="scrbtn" title="The living scripture of each world: its covenant, its laws, its cast">SCRIPTURE</button>
   <button type="button" id="resbtn" title="What the books say, and what this world says">RESEARCH</button>
   <button type="button" id="timebtn" title="Slow the world to the pace a day actually takes">REAL-TIME</button>
   <button type="button" id="veilbtn" title="What you are watching">?</button>
@@ -363,6 +381,21 @@
     </div>
     <div id="resbody" class="page" tabindex="0" aria-label="Research reading area"><div id="resorig" class="read"></div><div id="resstory" hidden></div><div id="reslist" hidden></div><div id="resrunsbody" class="read" hidden></div></div>
     <div class="sheetfoot" id="respager"><button type="button" class="prev">‹ Prev</button><span class="pageind" aria-live="polite"></span><button type="button" class="next">Next ›</button></div>
+  </div>
+</div>
+<div id="scripture" class="modal" role="dialog" aria-modal="true" aria-labelledby="scrtype" hidden>
+  <div class="sheet">
+    <div class="sheethead">
+      <h2 id="scrtype">Scripture</h2>
+      <button type="button" id="scrclose" class="close">CLOSE</button>
+      <span id="scrsum" class="sum"></span>
+    </div>
+    <div class="tabs" role="group" aria-label="Which world's scripture">
+      <button id="scr-eden" aria-pressed="true" aria-label="The covenant of the resort — EDEN">EDEN · U6</button>
+      <button id="scr-lagoon" aria-pressed="false" aria-label="The way of the lagoon — LAGOON">LAGOON · U9</button>
+    </div>
+    <div id="scrbody" class="page read" tabindex="0" aria-label="Scripture reading area"></div>
+    <div class="sheetfoot" id="scrpager"><button type="button" class="prev">‹ Prev</button><span class="pageind" aria-live="polite"></span><button type="button" class="next">Next ›</button></div>
   </div>
 </div>
 <div id="book" class="modal" role="dialog" aria-modal="true" aria-labelledby="booktitle" hidden>
@@ -3382,7 +3415,7 @@ document.getElementById("timebtn").addEventListener("click", function(){
     .then(function(){ timePending=false; updateTimeUI(); });
 });
 document.addEventListener("keydown", function(e){
-  if (document.querySelector('#research:not([hidden]), #book:not([hidden]), #veil:not([hidden]), #fail:not([hidden])')) return;
+  if (document.querySelector('#research:not([hidden]), #book:not([hidden]), #veil:not([hidden]), #fail:not([hidden]), #scripture:not([hidden])')) return;
   if (e.target.closest('button') && (e.key===" " || e.key==="Enter")) return;
   if (e.key==="Escape"||e.key===" "){
     leaveWalk(); held={};
@@ -3935,6 +3968,7 @@ function fit(){
   if (state){ paintCard("e"); paintCard("l"); }
   if (!document.getElementById("veil").hidden) layoutIntro("keep");
   if (!document.getElementById("research").hidden) renderResearch("keep");
+  if (!document.getElementById("scripture").hidden) renderScripture("keep");
   if (!document.getElementById("book").hidden && book.data) layoutBook();
 }
 window.addEventListener("resize", function(){ alignWorldHeads(); fit(); });
@@ -4633,8 +4667,107 @@ document.getElementById("resbtn").onclick=function(){
   if (document.getElementById("research").hidden) openResearch(); else closeResearch();
 };
 document.getElementById("resclose").onclick=closeResearch;
+
+// =========================================================== the scripture
+// The worlds' own testament, read from the record (sim/scripture.py: a
+// reader, never a writer). This is the page that makes the pen followable:
+// the covenant a world's condition writes, the laws its dead left, the
+// myths its disasters earned, the rhythms a returning viewer can set a
+// watch by, the hazards nobody in the pen can see coming, and the cast —
+// the named people a day of watching comes to know.
+var scrTab="eden";
+function scriptureBlocks(s){
+  if (!s) return ['<p class="dim">The scripture is unavailable in this snapshot.</p>'];
+  var out=['<div class="col">'];
+  out.push('<h1>'+escapeHTML(s.title)+'</h1>');
+  out.push('<p class="epi">Year '+escapeHTML(s.year)+(s.kind==="EDEN"?' of an unending spring':' on the island')+' · <span class="by">read from the record</span></p>');
+  out.push('<div class="scr-creed">'+s.creed.map(function(c){return '<blockquote>'+escapeHTML(c)+'</blockquote>';}).join('')+'</div>');
+  out.push('<div class="scr-h">THE LAW</div>');
+  if (s.commandments && s.commandments.length){
+    out.push('<ol class="scr-laws">'+s.commandments.map(function(l){return '<li>'+escapeHTML(l)+'</li>';}).join('')+'</ol>');
+  } else {
+    out.push('<p class="scr-none">No law was ever written here. Nothing was asked.</p>');
+  }
+  if (s.kind==="LAGOON"){
+    out.push('<div class="scr-h">THE CANON</div>');
+    var canon=[];
+    if (s.totem) canon.push('They dance for <b>'+escapeHTML(s.totem)+'</b>'+(s.rites?(' — '+escapeHTML(s.rites)+' rite'+(s.rites===1?'':'s')+' kept'):'')+'.');
+    if (s.stories) canon.push(escapeHTML(s.stories)+' stories told around the fires so far.');
+    if (canon.length) out.push('<p>'+canon.join(' ')+'</p>');
+    if (s.myths && s.myths.length){
+      s.myths.forEach(function(m){
+        out.push('<blockquote>'+escapeHTML(m[1])+' <span class="ag">('+escapeHTML(m[0])+', year '+escapeHTML(m[2])+')</span></blockquote>'); });
+    } else {
+      out.push('<p class="scr-none">No disaster has yet earned a story.</p>');
+    }
+    if (s.gifts && s.gifts.length){
+      out.push('<p class="note">The gifts of the hands: '+s.gifts.map(esc).join(', ')+'.</p>');
+    }
+  } else {
+    out.push('<div class="scr-h">THE PROVISIONS</div>');
+    if (s.built && s.built.length){
+      out.push('<p>Built for pleasure: '+s.built.map(esc).join(', ')+'.</p>');
+    } else {
+      out.push('<p class="scr-none">Nothing built for pleasure yet: the pen is not crowded enough to be bored.</p>');
+    }
+    if (typeof s.ennui==="number"){
+      out.push('<p class="note">Ennui stands at '+escapeHTML(s.ennui)+': easy pleasure dulls appetite as the days repeat.</p>');
+    }
+    out.push('<p class="scr-none">No myths, no totem, no rites. Nobody here has told a story that binds — that emptiness is the condition being studied.</p>');
+  }
+  out.push('<div class="scr-h">THE RHYTHMS — WHAT DAWN WILL BRING</div>');
+  (s.rhythms||[]).forEach(function(r){
+    out.push('<div class="scr-row"><span class="what">'+escapeHTML(r.what)+'</span><p class="note">'+escapeHTML(r.note)+'</p></div>'); });
+  out.push('<div class="scr-h">THE UNSEEN — WHAT NOBODY IN THE PEN CAN PREDICT</div>');
+  (s.hazards||[]).forEach(function(h){
+    out.push('<div class="scr-row"><span class="what">'+escapeHTML(h.what)+'</span> '+
+             '<span class="sofar">'+(h.so_far? escapeHTML(h.so_far)+' so far':'none yet')+'</span>'+
+             '<p class="note">'+escapeHTML(h.note)+'</p></div>'); });
+  out.push('<div class="scr-h">THE CAST — THE PEOPLE TO FOLLOW</div>');
+  if (s.cast && s.cast.length){
+    out.push('<ul class="scr-cast">'+s.cast.map(function(c){
+      return '<li><span class="nm">'+escapeHTML(c.name)+'</span> <span class="ag">'+escapeHTML(c.age)+'</span> — '+escapeHTML(c.who)+'</li>'; }).join('')+'</ul>');
+  } else {
+    out.push('<p class="scr-none">The cast is not yet named.</p>');
+  }
+  out.push('<p class="note">'+escapeHTML(s.note)+'</p>');
+  out.push('</div>');
+  return out;
+}
+function renderScripture(where){
+  var P0=pagers.scr, s=state && state.scripture;
+  document.getElementById("scrsum").textContent = s ?
+    ["eden","lagoon"].map(function(k){ return s[k] ? (k==="eden"?"EDEN ":"LAGOON ")+"year "+s[k].year : ""; })
+      .filter(Boolean).join(" · ") : "no scripture in snapshot";
+  document.getElementById("scr-eden").setAttribute("aria-pressed", String(scrTab==="eden"));
+  document.getElementById("scr-lagoon").setAttribute("aria-pressed", String(scrTab==="lagoon"));
+  P0.target=document.getElementById("scrbody"); P0.cls="read";
+  P0.set(scriptureBlocks(s && s[scrTab]), where||"keep");
+}
+function scriptureView(tab){ scrTab=tab; renderScripture("first"); }
+function openScripture(){
+  held={};
+  document.getElementById("scripture").hidden=false;
+  document.getElementById("scrbtn").classList.add("on");
+  renderScripture("first");
+  document.getElementById("scrclose").focus();
+}
+function closeScripture(){
+  document.getElementById("scripture").hidden=true;
+  document.getElementById("scrbtn").classList.remove("on");
+  document.getElementById("scrbtn").focus();
+}
+document.getElementById("scrbtn").onclick=function(){
+  if (document.getElementById("scripture").hidden) openScripture(); else closeScripture();
+};
+document.getElementById("scrclose").onclick=closeScripture;
+document.getElementById("scr-eden").onclick=function(){ scriptureView("eden"); };
+document.getElementById("scr-lagoon").onclick=function(){ scriptureView("lagoon"); };
+pagers.scr=new Pager(document.getElementById("scrbody"), document.getElementById("scrbody"),
+                     document.getElementById("scrpager"), "read");
+
 document.addEventListener("keydown", function(ev){
-  var panel=["fail","book","research","veil"].map(function(id){return document.getElementById(id);})
+  var panel=["fail","book","research","veil","scripture"].map(function(id){return document.getElementById(id);})
     .find(function(el){return !el.hidden;});
   if (panel && ev.key==="Tab"){
     var controls=Array.from(panel.querySelectorAll('button, a[href], [tabindex="0"]')).filter(function(el){ return el.offsetParent!==null; });
@@ -4643,11 +4776,12 @@ document.addEventListener("keydown", function(ev){
     else if (!ev.shiftKey && document.activeElement===last){ ev.preventDefault(); first.focus(); }
   }
   if (panel && (ev.key==="ArrowLeft"||ev.key==="ArrowRight")){
-    var pg = panel.id==="book" ? pagers.book : panel.id==="research" ? pagers.res : panel.id==="veil" ? pagers.intro : null;
+    var pg = panel.id==="book" ? pagers.book : panel.id==="research" ? pagers.res : panel.id==="scripture" ? pagers.scr : panel.id==="veil" ? pagers.intro : null;
     if (pg){ ev.preventDefault(); pg.go(pg.i+(ev.key==="ArrowRight"?1:-1)); }
   }
   if (ev.key === "Escape" && panel && panel.id==="research") closeResearch();
   if (ev.key === "Escape" && panel && panel.id==="book") closeBook();
+  if (ev.key === "Escape" && panel && panel.id==="scripture") closeScripture();
   if (ev.key === "Escape" && panel && panel.id==="veil") document.getElementById("veilok").click();
 });
 

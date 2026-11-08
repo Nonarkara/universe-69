@@ -24,6 +24,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import engine
 import research
 import historian
+import scripture
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # The live run keeps its state in ./data. A development instance can be pointed
@@ -282,9 +283,26 @@ def snapshot(with_world=False):
         snap["status"] = dict(status)
         snap["research"] = research.report(world)
         snap["observations"] = observations
+        snap["scripture"] = scripture_of_world()
         if with_world:
             snap["world"] = world_payload()
     return snap
+
+
+_scripture_cache = {"sig": None, "value": None}
+
+
+def scripture_of_world():
+    """The testament of both worlds, recomputed once per simulated part.
+
+    Pure reading (scripture.py never mutates or draws); the cache only
+    spares the per-poll cost of re-deriving it between ticks."""
+    sig = (world["eden"]["day"], world["eden"].get("part", 0),
+           world["lagoon"]["day"], world["lagoon"].get("part", 0))
+    if _scripture_cache["sig"] != sig:
+        _scripture_cache["value"] = scripture.both(world)
+        _scripture_cache["sig"] = sig
+    return _scripture_cache["value"]
 
 
 class Handler(BaseHTTPRequestHandler):
