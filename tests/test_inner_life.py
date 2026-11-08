@@ -1,0 +1,227 @@
+"""The inner life: tastes, projects, bonds, moods, omens (2026.11.08.1).
+
+These mechanics exist so a viewer can follow a person — not a meter.
+Each test pins a consequence of the record: a taste is stable and
+bounded; a project is bent on, completes on the real outcome, and is
+counted; a bond grows from actual completed contact and is named once;
+a mood is a reading, never a state; an omen is strange at no one.
+"""
+
+import copy
+import json
+import random
+import sys
+import unittest
+
+sys.path.insert(0, "sim")
+sys.path.insert(0, "tools")
+
+import engine      # noqa: E402
+import needs       # noqa: E402
+import drives      # noqa: E402
+import minds       # noqa: E402
+import scripture   # noqa: E402
+
+
+def _world(parts=200):
+    w = engine.genesis(69, 1)
+    for _ in range(parts):
+        engine.tick_world(w, [])
+    return w
+
+
+class TestTastes(unittest.TestCase):
+    def setUp(self):
+        self.w = _world(60)
+        self.u = self.w["lagoon"]
+
+    def test_tastes_differ_between_people_and_are_bounded(self):
+        ts = [drives.taste(self.u, p, "company") for p in self.u["people"]]
+        self.assertEqual(len(set(ts)), len(ts), "two people share one taste")
+        for t in ts:
+            self.assertGreaterEqual(t, -1.0)
+            self.assertLessEqual(t, 1.0)
+
+    def test_a_taste_is_for_life(self):
+        p = self.u["people"][0]
+        self.assertEqual(drives.taste(self.u, p, "work"),
+                         drives.taste(self.u, p, "work"))
+
+    def test_identity_changes_the_taste_not_the_world(self):
+        p = self.u["people"][0]
+        w2 = copy.deepcopy(self.w)
+        q = next(c for c in w2["lagoon"]["people"] if c["id"] == p["id"])
+        q["id"] = 123456
+        self.assertNotEqual(drives.taste(self.u, p, "company"),
+                            drives.taste(w2["lagoon"], q, "company"))
+
+
+class TestProjects(unittest.TestCase):
+    def test_goals_form_and_complete(self):
+        w = _world(1200)                       # 300 days
+        done = sum(p.get("goals_done", 0)
+                   for k in ("eden", "lagoon") for p in w[k]["people"])
+        self.assertGreater(done, 0, "nobody ever saw a project through")
+        u = w["eden"]
+        p = next((q for q in u["people"] if q.get("goal")), None)
+        if p is not None:
+            self.assertIn(p["goal"]["cat"], drives.TASTE_CATEGORIES)
+            self.assertLess(p["goal"]["until"], u["day"] + 20)
+
+    def test_a_project_bends_its_own_choices(self):
+        w = _world(60)
+        u = w["lagoon"]
+        p = next(q for q in u["people"] if engine.age_of(q, u["day"]) >= minds.ADULT_AGE
+                 and not q.get("w"))
+        p["goal"] = {"what": "spend the days with people", "cat": "company",
+                     "until": u["day"] + 30}
+        counts = {"company": 0, "other": 0}
+        for t in range(60):
+            w2 = copy.deepcopy(w)
+            q = next(c for c in w2["lagoon"]["people"] if c["id"] == p["id"])
+            q["hun"] = 2.0; q["ene"] = 0.9; q["sol"] = 0.5; q["thirst"] = 0.0
+            act = needs.assign(w2["lagoon"], q, w2["lagoon"]["day"], random.Random(1000 + t))
+            counts["company" if needs.ACT_TASTE.get(act) == "company" else "other"] += 1
+        self.assertGreater(counts["company"], 0,
+                           "a company project never once bent a comfortable choice")
+
+
+class TestBonds(unittest.TestCase):
+    def test_completed_contact_grows_a_bond(self):
+        w = _world(60)
+        u = w["eden"]
+        a, b = u["people"][0], u["people"][1]
+        before = needs.aff_of(a, b["id"])
+        now = u.get("parts", 0)
+        engine.complete_social(u, [{"kind": "groom", "part": now, "ids": [a["id"], b["id"]]}])
+        self.assertGreater(needs.aff_of(a, b["id"]), before)
+        self.assertGreater(needs.aff_of(b, a["id"]), before)
+
+    def test_a_fight_turns_two_names_cold(self):
+        w = _world(60)
+        u = w["lagoon"]
+        men = [q for q in u["people"] if q["s"] == "m"
+               and engine.age_of(q, u["day"]) >= minds.ADULT_AGE and not q.get("w")]
+        a, b = men[0], men[1]
+        rng = random.Random(5)
+        before = needs.aff_of(a, b["id"])
+        engine.pick_fight(u, a, u["people"], rng)
+        self.assertLess(needs.aff_of(a, b["id"]), before)
+        self.assertLess(needs.aff_of(b, a["id"]), before)
+
+    def test_bonds_are_bounded_and_json_safe(self):
+        w = _world(60)
+        for k in ("eden", "lagoon"):
+            for p in w[k]["people"]:
+                aff = p.get("aff") or {}
+                self.assertLessEqual(len(aff), needs.AFF_KEEP)
+                for k2, v in aff.items():
+                    self.assertIsInstance(k2, str)
+                    json.dumps({k2: v})
+
+    def test_friendship_is_said_once(self):
+        w = engine.genesis(69, 1)
+        u = w["eden"]
+        a, b = u["people"][0], u["people"][1]
+        for _ in range(6):
+            needs.aff_touch(u, a, b["id"], 0.15)
+        lines = [e for e in u.get("_buff", []) if e[1] == "bond"]
+        self.assertEqual(len(lines), 1, "a friendship is named once, not every step")
+        self.assertIn("have become close", lines[0][2])
+
+
+class TestMoods(unittest.TestCase):
+    def test_moods_are_read_from_the_record(self):
+        w = _world(60)
+        u = w["eden"]
+        p = u["people"][0]
+        self.assertTrue(needs.mood_word(u, p))
+        p["hun"] = 30.0
+        self.assertEqual(needs.mood_word(u, p), "hungry")
+        p["hun"] = 0.0; p["gd"] = 0.9
+        self.assertEqual(needs.mood_word(u, p), "grieving")
+        p["gd"] = 0.0; p["aff"] = {"9": 0.9}
+        self.assertEqual(needs.mood_word(u, p), "warm")
+
+    def test_the_person_card_carries_the_inner_life(self):
+        snap = engine.summarize(_world(200))
+        d = next(iter(snap["u"]["eden"]["detail"].values()))
+        self.assertEqual(len(d), 16, "person detail changed shape")
+        self.assertIsInstance(d[13], str)          # mood
+        self.assertIsInstance(d[14], str)          # project
+        self.assertIsInstance(d[15], str)          # bond
+
+
+class TestOmens(unittest.TestCase):
+    def test_an_omen_is_strange_at_no_one(self):
+        w = engine.genesis(69, 1)
+        u = w["lagoon"]
+        rng = random.Random(0)
+        seen = 0
+        for _ in range(4000):
+            evts = []
+            engine.omen(u, rng, evts)
+            seen += len(evts)
+            if seen:
+                self.assertEqual(evts[0][2], "omen")
+                break
+        self.assertGreater(seen, 0, "no omen in 4000 rolls at p=0.004 is a broken roll")
+
+    def test_lore_keeps_the_story(self):
+        w = engine.genesis(69, 1)
+        u = w["lagoon"]
+        u["tech"] = ["lore"]
+        u["stories"] = 0.0
+        class FixedRng:
+            def random(self):
+                return 0.0                      # always fires
+            def randrange(self, n):
+                return 0
+        evts = []
+        engine.omen(u, FixedRng(), evts)
+        self.assertEqual(len(evts), 1)
+        self.assertGreater(u["stories"], 0.0, "a people with lore kept no story of it")
+
+
+class TestTheWholePerson(unittest.TestCase):
+    def test_determinism_holds_with_the_inner_life(self):
+        a, b = engine.genesis(69, 1), engine.genesis(69, 1)
+        for _ in range(200):
+            engine.tick_world(a, [])
+            engine.tick_world(b, [])
+        def norm(w):
+            w = copy.deepcopy(w)
+            w.pop("epoch", None); w.pop("clock", None)
+            for k in ("eden", "lagoon"):
+                for c in ("_ctx", "_demos", "_perception_grid", "_site_grid", "_buff"):
+                    w[k].pop(c, None)
+            return w
+        self.assertEqual(json.dumps(norm(a), sort_keys=True),
+                         json.dumps(norm(b), sort_keys=True))
+
+    def test_migration_gives_old_people_an_inner_life(self):
+        w = engine.genesis(69, 1)
+        for k in ("eden", "lagoon"):
+            for p in w[k]["people"]:
+                for field in ("goal", "aff", "goals_done"):
+                    p.pop(field, None)
+        snap = json.loads(json.dumps(w))        # a legacy save on disk
+        loaded = engine.migrate(engine.validate_world(snap))
+        for k in ("eden", "lagoon"):
+            for p in loaded[k]["people"]:
+                self.assertIsNone(p["goal"])
+                self.assertEqual(p["aff"], {})
+                self.assertEqual(p["goals_done"], 0)
+
+    def test_the_scripture_carries_the_chronicle(self):
+        s = scripture.both(_world(1200))
+        for k in ("eden", "lagoon"):
+            ch = s[k].get("chronicle")
+            self.assertIsNotNone(ch)
+            self.assertIn("close_pairs", ch)
+            self.assertIn("feuds", ch)
+            self.assertIn("bent_on", ch)
+
+
+if __name__ == "__main__":
+    unittest.main()

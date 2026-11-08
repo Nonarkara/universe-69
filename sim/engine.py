@@ -87,7 +87,21 @@ GESTATION = 270
 # withdraw more readily than high-control peers under the same conditions.
 # Changes EDEN trajectories when withdrawal becomes an option; LAGOON does
 # not use this path. Mating/encounter/reproduction rules are unchanged.
-ENGINE_VERSION = "2026.11.07.1"
+# 2026.11.08.1 — the inner life. (a) A personal taste for a kind of day
+# (drives.taste, identity-hashed in [-1,1], fixed for life) multiplies
+# open choices by up to TASTE_WEIGHT; urgent bodies still dominate. (b)
+# Personal projects (goal): a person with a free mind may commit to a
+# run-of-days project; it bends their own choices, completes on actual
+# outcomes, and can be given up — a life becomes an arc a viewer can
+# follow. (c) Bonds (aff): completed contact moves a bounded affinity —
+# mating/grooming up, fights down — tilting whom one sits beside, tends
+# and (a little) courts, crossing into friendship and feud that the
+# record names once each. (d) A rare, harmless omen; lore keeps it as
+# story. (e) The person card gains mood, project and bond, read from the
+# record (detail rows 13-15). All are consequences of the record, not
+# scripts. Changes trajectories in both worlds from the first open
+# choice; migration adds goal=None, aff={}, goals_done=0 per person.
+ENGINE_VERSION = "2026.11.08.1"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -528,7 +542,11 @@ def days(n):
 
 
 def complete_social(u, frames):
-    """Satisfy personal needs only through actual completed live contact."""
+    """Satisfy personal needs only through actual completed live contact.
+
+    The same completed contact is what grows and wears the bonds: mating
+    and grooming warm two people toward each other (a little each time,
+    bounded), and a company project advances on the real thing."""
     byid = {p["id"]: p for p in u["people"]}
     for frame in encounters.deduplicate(frames):
         if frame.get("part") != u.get("parts", u["day"] * PARTS_PER_DAY + u.get("part", 0)):
@@ -536,12 +554,20 @@ def complete_social(u, frames):
         pair = [byid.get(i) for i in frame["ids"]]
         if any(p is None or p.get("w") or p.get("ab") or not p.get("c", True) for p in pair):
             continue
+        a, b = pair
+        if frame["kind"] == "mate":
+            needs.aff_touch(u, a, b["id"], 0.25)
+            needs.aff_touch(u, b, a["id"], 0.25)
+        elif frame["kind"] == "groom":
+            needs.aff_touch(u, a, b["id"], 0.15)
+            needs.aff_touch(u, b, a["id"], 0.15)
         for p in pair:
             if frame["kind"] == "mate":
                 p["intimacy"] = 0.0
             elif frame["kind"] == "groom" and p.get("groom_day") != u["day"]:
                 p["sol"] = min(1.0, p.get("sol", 0.0) + .3)
                 p["groom_day"] = u["day"]
+            needs.goal_progress(u, p, minds.A_GROOM if frame["kind"] == "groom" else minds.A_MATE)
 
 
 def reproductive_contacts(u, frames):
@@ -1119,6 +1145,38 @@ def expand_pen(u, rng, events):
     return True
 
 
+def omen(u, rng, events):
+    """A rare, harmless wonder: the kind of thing a band tells a story
+    about. Once in a while the world is strange at no one, and a people
+    with lore keep it (stories are what lore is made of). Nothing is
+    asked of anybody; the sky simply does something worth naming."""
+    if rng.random() >= 0.004:
+        return
+    wonders = ["a long-tailed star crosses the night sky",
+               "the sun stands ringed with light at noon",
+               "a night of strange brightness — the sky glows to the north"]
+    if u["kind"] == "LAGOON":
+        wonders += ["the lagoon lies mirror-still from dawn to dusk",
+                    "a great fish leaps clear of the water, twice",
+                    "the tide leaves the shallows empty and full again"]
+    else:
+        wonders += ["the sea beyond the dome glows pale blue at the shore",
+                    "a bird the pen has never held circles the glass and leaves"]
+    w = wonders[rng.randrange(len(wonders))]
+    if u["kind"] == "LAGOON" and "lore" in u.get("tech", []):
+        u["stories"] = u.get("stories", 0.0) + 0.3
+    events.append((u["day"], u["kind"], "omen",
+                   f"{w[0].upper()}{w[1:]} — the people stop, and look, and go on."))
+
+
+def flush_buff(u, events):
+    """The inner life speaks: projects seen through or let go, friendships
+    grown, feuds declared. Buffered by needs.aff_touch/goal_progress during
+    the people loop; said once, here, in the world's own voice."""
+    for (day, kind, msg) in u.pop("_buff", []):
+        events.append((day, u["kind"], kind, msg))
+
+
 def tick_eden(u, rng, events):
     part = u.get("part", 0)
     day = u["day"]
@@ -1155,6 +1213,7 @@ def tick_eden(u, rng, events):
         fill_roles(u, rng, events)
     needs.ensure_sites(u)
     dead, born = [], []
+    omen(u, rng, events)
 
     # how many are at each hopper today — the sink feeds on its own crowd
     if part == 0 and day % 3 == 0:
@@ -1288,6 +1347,7 @@ def tick_eden(u, rng, events):
                 and near_hopper(u, p)):
             p["day_done"] = u["day"]
             needs.fulfil(u, p, day, rng, A_EAT)       # a meal at the hopper
+            needs.goal_progress(u, p, A_EAT)
         if arrived:
             needs.perform_craft(u,p,day)
             contacts.append(needs.capture_contact(u,p))
@@ -1295,11 +1355,13 @@ def tick_eden(u, rng, events):
                                          terrain=terrain_of(u) if u["kind"] == "LAGOON" else None)
             if meeting:
                 meetings.append(meeting)
+            needs.goal_progress(u, p, p.get("a"))   # arriving somewhere is progress too
             p["ad"] = p.get("ad", 0) - 1
             if p["ad"] <= 0:
                 eden_assign(u, p, day, rng, crowd)
         p["x"], p["y"] = pen_clamp(u, p["x"], p["y"])
 
+    flush_buff(u, events)
     remove_dead(u, dead)
     u["deaths_y"] += len(dead)
     u["births_y"] += len(born)
@@ -1827,7 +1889,8 @@ def square_off(p, q):
 
 def pick_fight(u, p, people, rng, reach=9):
     """Violence takes two. Find another man nearby, preferably one with
-    nothing to lose, and go at each other."""
+    nothing to lose, and go at each other. A man does not pick a friend;
+    and a fight, once picked, is what turns two names cold."""
     pool = [q for q in people
             if q is not p and q["s"] == "m" and not q["w"]
             and q.get("a") != A_FIGHT
@@ -1836,8 +1899,11 @@ def pick_fight(u, p, people, rng, reach=9):
     if not pool:
         return False
     pool.sort(key=lambda q: 0 if (q.get("box") is None or q["box"] < 0) else 1)
+    pool.sort(key=lambda q: needs.aff_of(p, q["id"]))       # enemies before friends
     q = pool[0] if rng.random() < 0.7 else rng.choice(pool)
     square_off(p, q)
+    needs.aff_touch(u, p, q["id"], -0.35)
+    needs.aff_touch(u, q, p["id"], -0.35)
     p["a"] = q["a"] = A_FIGHT
     p["ad"] = q["ad"] = days(2)
     return True
@@ -2421,6 +2487,7 @@ def tick_lagoon(u, rng, events):
 
     stocks = u["stocks"]
     plant_mult, fish_mult, winter = lagoon_season(day, u.get("terrain_version", 1) >= 2)
+    omen(u, rng, events)
     if u["drought"] > 0:
         plant_mult *= 0.45
     if winter and u["harsh_winter"]:
@@ -2607,6 +2674,8 @@ def tick_lagoon(u, rng, events):
             if u["day"] != p.get("day_done"):
                 p["day_done"] = u["day"]
                 needs.fulfil(u, p, day, rng, p.get("a"))
+                needs.goal_progress(u, p, p.get("a"))
+            needs.goal_progress(u, p, p.get("a"))   # arriving somewhere is progress too
             p["ad"] = p.get("ad", 0) - 1
             if p["ad"] <= 0:
                 lagoon_assign(u, p, day, rng, shortfall)
@@ -2618,6 +2687,7 @@ def tick_lagoon(u, rng, events):
     if starved:
         events.append((day, "LAGOON", "famine", famine_line(starved)))
 
+    flush_buff(u, events)
     # Lost loads remain lost; the dead release their living partners.
     remove_dead(u, dead)
     u["deaths_y"] += len(dead)
@@ -2936,7 +3006,11 @@ def person_detail(u, p, day, ctx):
             p.get("p") or 0, round(p.get("hun", 0.0), 1),
             minds.body_words(p, a), round(p.get("pu", 0.5), 2),
             round(p.get("ef", 0.5), 2), round(minds.aggression(p), 2),
-            round(p.get("bmi", 22.0), 1)]
+            round(p.get("bmi", 22.0), 1),
+            # 13-15: the inner life as the record shows it — one word for
+            # how the days have left them, the project they are bent on,
+            # and the one bond worth naming
+            needs.mood_word(u, p), needs.goal_text(p), needs.aff_note(p)]
 
 
 def active_craft(u: dict, p: dict) -> str:
@@ -3315,6 +3389,9 @@ def migrate(world):
             p.setdefault("f", 1)
             p.setdefault("mom", None)
             p.setdefault("dad", None)
+            p.setdefault("goal", None)        # the inner life (2026.11.08.1)
+            p.setdefault("aff", {})
+            p.setdefault("goals_done", 0)
             p.setdefault("pregnancy_father", None)
             p.setdefault("social", None)
             p.setdefault("groom_day", None)

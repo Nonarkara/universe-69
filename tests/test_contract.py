@@ -106,7 +106,7 @@ class TestSummarizeShape(unittest.TestCase):
             self.assertEqual(set(u["detail"]), ids,
                              "detail does not line up with the people drawn")
             for pid, d in u["detail"].items():
-                self.assertEqual(len(d), 13, "person detail changed shape")
+                self.assertEqual(len(d), 16, "person detail changed shape")
                 self.assertIsInstance(d[0], str)          # name
                 self.assertIsInstance(d[1], float)        # age in years
                 self.assertIsInstance(d[2], int)          # generation

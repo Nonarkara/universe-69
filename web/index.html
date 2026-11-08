@@ -3786,6 +3786,11 @@ function paintCard(key){
   var d=w.u.detail[String(w.id)]||[];
 
   if (d.length>11) bits.push("purpose\u00a0"+Math.round(d[9]*100)+"% · self\u2011control\u00a0"+Math.round(d[10]*100)+"% · temper\u00a0"+Math.round(d[11]*100)+"%");
+    if (d.length>15){
+      if (d[13]) bits.push("seems "+d[13]);
+      if (d[14]) bits.push("bent on: "+d[14]);
+      if (d[15]) bits.push(d[15]);
+    }
     title="<span class='nm'>"+escapeHTML(w.name)+"</span> · "+escapeHTML(w.act);
     blocks=["<p>"+escapeHTML(w.age)+" years · generation "+escapeHTML(w.gen)+" · "+escapeHTML(w.hun)+" hunger</p>",
       "<p>"+escapeHTML(key==="e"?"Nest box at "+w.hx+","+w.hy:"Hearth at "+w.hx+","+w.hy)+" · "+escapeHTML(pname)+"</p>"];
@@ -3845,8 +3850,9 @@ function paintCard(key){
 var KIND_GROUP={
   generation:"life", childbirth:"life", famine:"life", predator:"life",
   violence:"life", disease:"life",
+  project:"life", bond:"life",
   discovery:"world", disaster:"world", phase:"world", migration:"world",
-  feud:"world", culture:"world", ennui:"world",
+  feud:"world", culture:"world", ennui:"world", omen:"world",
   extinction:"end", reseed:"end", lesson:"end", epidemic:"end"
 };
 // kinds that arrive one person at a time and read better as one line
@@ -4715,6 +4721,16 @@ function scriptureBlocks(s){
     }
     out.push('<p class="scr-none">No myths, no totem, no rites. Nobody here has told a story that binds — that emptiness is the condition being studied.</p>');
   }
+  out.push('<div class="scr-h">THE CHRONICLE — THE STORYLINES RUNNING NOW</div>');
+  var ch=s.chronicle||{};
+  var lines=[];
+  if (ch.bent_on && ch.bent_on.length){
+    lines.push('<p>'+ch.bent_on.map(function(b){
+      return '<b>'+escapeHTML(b[0])+'</b> is bent on '+escapeHTML(b[1]); }).join('; ')+'.</p>'); }
+  else lines.push('<p class="scr-none">Nobody is bent on anything at this hour.</p>');
+  if (ch.close_pairs) lines.push('<p>'+ch.close_pairs+' pair'+(ch.close_pairs===1?' has':'s have')+' grown close — you will see them find each other.</p>');
+  if (ch.feuds) lines.push('<p class="scr-row"><span class="what">'+ch.feuds+' feud'+(ch.feuds===1?'':'s')+'</span> smouldering. Watch the crowds.</p>');
+  out.push(lines.length?lines.join(''):'');
   out.push('<div class="scr-h">THE RHYTHMS — WHAT DAWN WILL BRING</div>');
   (s.rhythms||[]).forEach(function(r){
     out.push('<div class="scr-row"><span class="what">'+escapeHTML(r.what)+'</span><p class="note">'+escapeHTML(r.note)+'</p></div>'); });

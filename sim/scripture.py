@@ -43,6 +43,10 @@ WK_WORDS = {WK_HUDDLE: "one of the placeless, pooled on the open floor",
             WK_BEAUTIFUL: "one of the beautiful ones: eats, sleeps, grooms, alone",
             WK_UPSTAIRS: "retreated to the highest boxes, and does not come down"}
 
+# Bond thresholds, kept beside needs.py's own (a reading, not a second law)
+FRIEND = 0.6
+FEUD = -0.6
+
 # The rhythms a viewer can set a watch by. Each row states a habit the
 # engine really has, with the constant that makes it true. This is the
 # engineered predictability — the reason a returning viewer knows what
@@ -225,6 +229,35 @@ def cast(u, limit=8):
     return picked[:limit]
 
 
+def chronicle(u):
+    """The storylines running right now, read from the people themselves.
+
+    This is the page's answer to 'what is there to watch today': who is
+    bent on what, whose bonds have grown into friendship, and which
+    names the record has turned cold. Bounded and derived — no history
+    is invented that the affinities and goals do not hold."""
+    day = u.get("day", 0)
+    byid = {q["id"]: q for q in u.get("people", [])}
+    bent, close, feuds = [], 0, 0
+    for q in u.get("people", []):
+        if q.get("goal") and not q.get("w"):
+            bent.append([q.get("n", "?"), q["goal"].get("what", "")])
+        for k, v in (q.get("aff") or {}).items():
+            try:
+                other = int(k)
+            except ValueError:
+                continue
+            if other <= q.get("id", 0):
+                continue                     # each pair counted once
+            if v >= FRIEND:
+                other_p = byid.get(other)
+                if other_p and not other_p.get("w"):
+                    close += 1
+            elif v <= FEUD:
+                feuds += 1
+    return {"bent_on": bent[:5], "close_pairs": close, "feuds": feuds}
+
+
 def for_world(u):
     """The testament of one universe, as plain JSON. Reads only."""
     kind = u.get("kind")
@@ -258,6 +291,7 @@ def for_world(u):
             "myths": myths, "totem": totem, "rites": rites,
             "stories": round(u.get("stories", 0.0), 1),
             "gifts": tech,
+            "chronicle": chronicle(u),
             "rhythms": [{"what": w, "note": n} for w, n in rhythms(u)],
             "hazards": hazards(u),
             "cast": cast(u),
@@ -284,6 +318,7 @@ def for_world(u):
         "amenities": {k: round(v, 2) for k, v in fac.items()},
         "built": built,
         "ennui": round(u.get("ennui", 0.0), 3),
+        "chronicle": chronicle(u),
         "rhythms": [{"what": w, "note": n} for w, n in rhythms(u)],
         "hazards": hazards(u),
         "cast": cast(u),

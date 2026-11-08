@@ -531,6 +531,180 @@ def nearest_site(u, p, kind, reach):
     return best, (bd ** 0.5 if best else None)
 
 
+# ---- the inner life -------------------------------------------------------
+# Three mechanics, all consequences of the record rather than scripts:
+#
+# TASTE (drives.taste): a stable personal lean toward a kind of day, from
+# identity alone. Applied where a choice is genuinely open; an urgent
+# body's dominant option survives any taste.
+#
+# PROJECTS (goal): a person with an open choice may commit to a personal
+# project for a run of days — grow the store, sit with kin, walk far,
+# master the craft. It biases their own decisions, completes on actual
+# outcomes, and can be given up. This is what makes a life an arc a
+# viewer can follow rather than a string of reactions.
+#
+# BONDS (aff): actual completed contact moves a bounded affinity between
+# two people — grooming and mating up, fights down, healing up. Affinity
+# tilts whom one sits beside, tends, and (a little) courts, and crosses
+# thresholds into friendship and feud. Bookkeeping over recorded history,
+# not a theory of mind.
+
+ACT_TASTE = {}
+for _a in (2, 3, 4, 5, 6, 18, 19):        # forage..scout, work
+    ACT_TASTE[_a] = "work"
+for _a in (7, 15, 16, 21):                # talk, play, rite, groom
+    ACT_TASTE[_a] = "company"
+for _a in (11, 17):                       # rest, sleep
+    ACT_TASTE[_a] = "still"
+for _a in (1, 19):                        # walk, scout
+    ACT_TASTE[_a] = "roam"
+for _a in (10, 22):                       # tend, drink
+    ACT_TASTE[_a] = "care"
+for _a in (12,):                          # eat
+    ACT_TASTE[_a] = "indulge"
+for _a in (14,):                          # fight
+    ACT_TASTE[_a] = "quarrel"
+
+GOAL_PHRASE = {
+    "work": "see a job through",
+    "company": "spend the days with people",
+    "still": "take the days easily",
+    "roam": "walk the far side of the world",
+    "care": "look after somebody",
+    "indulge": "eat well for a run of days",
+}
+
+GOAL_WEIGHT = 1.30        # a project bends its own choices
+TASTE_WEIGHT = 0.14       # a taste swings an open choice by up to this share
+AFF_WEIGHT_SIT = 25.0     # affinity pulls a companion this many tiles closer
+AFF_WEIGHT_TEND = 20.0
+AFF_FRIEND = 0.6
+AFF_FEUD = -0.6
+AFF_MAX = 1.0
+AFF_KEEP = 12             # bounded: the heart keeps only so many names
+
+
+def taste_factor(u, p, act):
+    """The multiplier one person's tastes put on one option."""
+    cat = ACT_TASTE.get(act)
+    if cat is None:
+        return 1.0
+    return 1.0 + TASTE_WEIGHT * drives.taste(u, p, cat)
+
+
+def aff_of(p, other_id):
+    try:
+        return (p.get("aff") or {}).get(str(other_id), 0.0)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def aff_touch(u, p, other_id, delta):
+    """Move a bond from what actually happened between two people.
+
+    Bounded in size and range, pruned deterministically, JSON-safe keys.
+    Threshold crossings are said out loud once: a friendship is when the
+    record shows two people kept choosing each other; a feud is when they
+    kept meeting badly."""
+    if other_id is None or not delta or other_id == p.get("id"):
+        return
+    aff = p.setdefault("aff", {})
+    key = str(other_id)
+    prev = aff.get(key, 0.0)
+    new = max(-AFF_MAX, min(AFF_MAX, prev + delta))
+    aff[key] = round(new, 3)
+    if len(aff) > AFF_KEEP:
+        for k in sorted(aff, key=lambda k: (-abs(aff[k]), int(k)))[AFF_KEEP:]:
+            del aff[k]
+    buf = u.setdefault("_buff", [])
+    day = u.get("day", 0)
+    if prev < AFF_FRIEND <= new:
+        buf.append((day, "bond", f"{p.get('n', '?')} and #{other_id} have become close."))
+    elif prev > AFF_FEUD >= new:
+        buf.append((day, "feud", f"{p.get('n', '?')} cannot abide #{other_id} any more."))
+
+
+def goal_progress(u, p, act):
+    """A project advances on the actual outcome, and ends there."""
+    goal = p.get("goal")
+    if not goal:
+        return
+    cat = ACT_TASTE.get(act)
+    if cat and cat == goal.get("cat"):
+        p["goal"] = None
+        p["goals_done"] = p.get("goals_done", 0) + 1
+        u.setdefault("_buff", []).append(
+            (u.get("day", 0), "project",
+             f"{p.get('n', '?')} has seen it through: {goal.get('what', 'the project')}."))
+    elif u.get("day", 0) > goal.get("until", 0):
+        p["goal"] = None
+        if u.get("day", 0) % 3 == 0:      # not every quiet giving-up is news
+            u.setdefault("_buff", []).append(
+                (u.get("day", 0), "project",
+                 f"{p.get('n', '?')} lets {goal.get('what', 'the project')} go."))
+
+
+def _maybe_form_goal(u, p, day, rng, act):
+    """A person with a free mind may commit to a project for a run of days."""
+    if p.get("goal") or rng.random() >= 0.02:
+        return
+    cat = ACT_TASTE.get(act)
+    what = GOAL_PHRASE.get(cat)
+    if not what:
+        return
+    # purpose proposes; temperament proposes its own kind of project
+    if drives.taste(u, p, cat) < -0.4 and rng.random() < 0.5:
+        return
+    p["goal"] = {"what": what, "cat": cat, "until": day + rng.randint(3, 9)}
+
+
+def mood_word(u, p):
+    """One word for how the days have left this person. Derived from the
+    record only — a reading the viewer can print, never a saved state."""
+    day = u.get("day", 0)
+    if p.get("gd", 0) > 0.5:
+        return "grieving"
+    if p.get("w"):
+        return "far away"
+    if p.get("hun", 0) > 25:
+        return "hungry"
+    if p.get("inj", 0) > 0.4:
+        return "aching"
+    if p.get("ene", 1) < 0.3:
+        return "weary"
+    aff = p.get("aff") or {}
+    if aff and min(aff.values()) <= AFF_FEUD:
+        return "feuding"
+    if p.get("goal"):
+        return "bent on something"
+    if aff and max(aff.values()) >= AFF_FRIEND:
+        return "warm"
+    if p.get("intimacy", 0) > 0.7 and u.get("kind") == "EDEN":
+        return "restless"
+    return "content"
+
+
+def aff_note(p):
+    """The one bond worth saying: the closest, or the worst."""
+    aff = p.get("aff") or {}
+    if not aff:
+        return ""
+    best = max(aff, key=lambda k: (aff[k], -int(k)))
+    worst = min(aff, key=lambda k: (aff[k], int(k)))
+    if aff[worst] <= AFF_FEUD:
+        return f"at odds with #{worst}"
+    if aff[best] >= AFF_FRIEND:
+        return f"close to #{best}"
+    return ""
+
+
+def goal_text(p):
+    """What a person is bent on, in words the viewer can print."""
+    goal = p.get("goal")
+    return goal.get("what", "") if goal else ""
+
+
 # ---- the body -----------------------------------------------------------
 
 def meters(u, p, day, rng, cond):
@@ -761,7 +935,14 @@ def _social_person(u, p, kind):
     if not people:
         return None
     incoming = encounters.offer(u,p,{q['id']:q for q in people},kind,terrain)
-    return incoming or min(people,key=lambda q:((q['x']-p['x'])**2+(q['y']-p['y'])**2,q['id']))
+    if incoming is not None:
+        return incoming
+    # nobody is asking: pick one's own companion, pulled toward the bonds
+    # actual history has grown and away from the dislikes
+    def pull(q):
+        return ((q['x']-p['x'])**2+(q['y']-p['y'])**2
+                - AFF_WEIGHT_SIT * aff_of(p, q['id']))
+    return min(people, key=pull)
 
 
 def _social_target(u, p, q, kind):
@@ -1000,14 +1181,16 @@ def assign(u, p, day, rng, cond=None, engine=None):
                     and (q['x']-p['x'])**2+(q['y']-p['y'])**2 <= SIGHT*SIGHT
                     and same_land(terrain_of(u),p['x'],p['y'],q['x'],q['y'])]
         if patients:
-            q = min(patients,key=lambda q:(q['x']-p['x'])**2+(q['y']-p['y'])**2)
+            q = min(patients, key=lambda q: ((q['x']-p['x'])**2+(q['y']-p['y'])**2
+                                             - AFF_WEIGHT_TEND * aff_of(p, q['id']), q['id']))
             options.append((.9*(1.-.5*want_food),E.A_TEND,(q['x'],q['y']),None))
 
     # Labor is a visible need, not permission to assign a helper's body.
     if a >= 16 and can_assist(u,p):
         mothers = [q for q in _visible_people(u,p) if q.get('a') == E.A_BIRTH]
         if mothers:
-            mother = min(mothers,key=lambda q:((q['x']-p['x'])**2+(q['y']-p['y'])**2,q['id']))
+            mother = min(mothers, key=lambda q: ((q['x']-p['x'])**2+(q['y']-p['y'])**2
+                                                 - AFF_WEIGHT_TEND * aff_of(p, q['id']), q['id']))
             options.append((.9*(1.-.5*want_food),E.A_TEND,(mother['x'],mother['y']),None))
 
     # --- work --------------------------------------------------------------
@@ -1099,26 +1282,37 @@ def assign(u, p, day, rng, cond=None, engine=None):
         options.append((0.3, E.A_REST, _home_of(u, p), None))
 
     # the score picks; the roulette only breaks near ties
+    # the taste of the person, and the pull of their own project, bend
+    # every option that is genuinely open; an urgent body's dominant
+    # option survives both. The original option travels with its score —
+    # the social intents below are keyed to the tuple's identity.
+    weighted = []
+    for o in options:
+        s, a, t, st = o
+        goal_w = GOAL_WEIGHT if (p.get("goal") and ACT_TASTE.get(a) == p["goal"].get("cat")) else 1.0
+        weighted.append((s * taste_factor(u, p, a) * goal_w, a, t, st, o))
+    options = weighted
     options.sort(key=lambda o: -o[0])
     best = options[0]
     if len(options) > 1 and options[1][0] > 0:
         top = [o for o in options if o[0] >= best[0] * 0.85]
         best = top[min(len(top) - 1, int(rng.random() * len(top)))]
 
-    score, act, target, site = best
-    if best is study_option:
+    score, act, target, site, orig = best
+    _maybe_form_goal(u, p, day, rng, act)
+    if orig is study_option:
         previous=p.get('learning')
         if not previous or (previous['teacher'],previous['tech']) != (study_note['teacher'],study_note['tech']):
             learning.start(p,study_note,u.get('parts',0))
     else:
         learning.interrupt(p)
-    p['teaching']=offer if best is teach_option else None
+    p['teaching']=offer if orig is teach_option else None
     p.pop("was", None)        # a fresh decision replaces any paused stint
     p['craft'] = ({'skill':craft_choice,'x':target[0],'y':target[1]}
                   if craft_choice and act == E.A_WORK else None)
     p["a"] = act
     p["ad"] = _duration(act, rng)
-    social = social_options.get(id(best))
+    social = social_options.get(id(orig))
     if social is not None:
         kind, companion = social
         encounters.propose(u,p,companion,kind,u.get('parts',0),target)

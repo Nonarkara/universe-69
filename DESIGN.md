@@ -58,6 +58,35 @@ arrive at different real times. Previous century trials remain historical
 per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
 release. This target is not a measured 2016 MacBook capacity claim.
 
+## Engine 2026.11.08.1: the inner life
+
+Changes both worlds' trajectories from the first open choice. Migration
+adds `goal=None`, `aff={}`, `goals_done=0` per person; no other saved
+fields. The person card gains three read-only fields (mood, project,
+bond) — `summarize` detail rows 13–15 — a renderer contract change pinned
+in `tests/test_contract.py` in the same commit.
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| Temperament shows in what a person does when nothing is urgent (Pinker ch.18: trait distributions; BOOKS.md reading of personality) | A personal **taste** for a kind of day (`drives.taste`, identity-hashed in [-1,1], fixed for life) multiplies genuinely open choices by up to 0.14; an urgent body's dominant option outranks any taste. | Illustrative temperament, not a measured human parameter. No new RNG, fields, or feedback. |
+| Purpose is a project one can name (Frankl; Little's personal projects) | A person with a free mind may commit to a run-of-days **project** (p≈0.02 per decision); it bends their own choices ×1.3, completes on the actual outcome (fulfil/arrival/completed contact), expires quietly, and is counted in `goals_done`. | The project list is fixed; pursuing one grants nothing but the doing. Events say completions, and sometimes quiet givings-up. |
+| Bonding is built from actual contact (Dunbar; Harari's gossip; Silk & house: primate bonds buffer stress) | Completed contact moves a bounded **affinity** between two people: mate +0.25, groom +0.15, fight −0.35; healing and tending prefer friends (−20/−25 tiles of pull). Affinity is capped at 12 names, pruned deterministically. Crossing 0.6 is a friendship, −0.6 a feud — each named once in the record. | Bookkeeping over recorded history, not a theory of mind. Affinity tilts whom one sits beside, tends and (a little) courts; it never gates availability, fertility or consent. |
+| Collective effervescence needs something to gather at (Durkheim) | A rare, harmless **omen** (p≈0.004/day): the sky or the shore is strange at no one. A people with lore keeps it as story (+0.3). | An event and, at most, a story — no mechanics are moved by it. |
+
+The engineered unpredictability is unchanged in kind: identity-derived
+sensitivities and tastes (stable per person, unseen across the cast), the
+85% near-tie roulette, mutation, private cycles, and now projects and
+bonds whose paths no one scripted. `tools/probe.py` measures all of it:
+person divergence, identity flip rate, urgent convergence, tie noise,
+projects seen through, friendships and feuds formed, and the habitability
+verdicts.
+
+Operational changes in the same release, neither of which moves a
+trajectory: `save_state` no longer writes the per-tick caches (`_ctx`,
+`_demos`, `_perception_grid`, `_site_grid`) — over half of a saved state
+file — and the runtime's tick loop now reports and survives an unexpected
+engine error instead of silently stopping while the page still answers.
+
 ## Engine 2026.11.07.1: self-control brakes the withdrawal
 
 Changes EDEN trajectories when withdrawal becomes an option. LAGOON does
@@ -67,11 +96,9 @@ not use this path. No saved fields; migration adds nothing.
 | --- | --- | --- |
 | Anomie: a competent adult with purpose < 0.25 may withdraw for good, and self-control is the brake (DESIGN "Minds and bodies"; Durkheim, *Suicide*) | The withdrawal option in `needs.assign` is scaled by restraint, `max(0.08, 1.0 - 0.75 × expressed self-control)`, so low-control adults in the sink step out of the pen more readily than high-control peers under identical conditions. | An illustrative human-agency choice, not a fitted personality coefficient. Withdrawal remains permanent (Calhoun: no recovery); the trigger conditions are unchanged. |
 
-Operational changes in the same release, neither of which moves a
-trajectory: `save_state` no longer writes the per-tick caches (`_ctx`,
-`_demos`, `_perception_grid`, `_site_grid`) — over half of a saved state
-file — and the runtime's tick loop now reports and survives an unexpected
-engine error instead of silently stopping while the page still answers.
+The operational changes (`save_state` cache stripping, the resilient
+tick loop) shipped in the same days and are recorded under 2026.11.08.1
+below; they move no trajectory.
 
 ## Engine 2026.11.03.1: shared instincts, personal fuzzy sensitivity
 

@@ -184,6 +184,10 @@ def new_mind(p, ef=0.5, ag=0.5):
               "skills": {}, "skill_day": None, "craft": None, "craft_part": None, "stories": 0.0,
               "inj": 0.0, "gd": 0.0, "gk": 0, "wk": 0, "fe": None,
               "dad": None, "pregnancy_father": None, "social": None, "groom_day": None, "intimacy": 0.0,
+              # the inner life: a personal project in progress, the bonds
+              # and dislikes actual contact has grown, and how many
+              # projects were seen through
+              "goal": None, "aff": {}, "goals_done": 0,
               "reproduction": None})
     return p
 

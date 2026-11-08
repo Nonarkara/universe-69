@@ -79,22 +79,25 @@ def independence(seeds=(69,), focals=6, trials=12, verbose=True):
         # interview at a daylight part: at dawn the band is still in bed
         while u["part"] not in (1, 2):
             engine.tick_world(world, [])
-        focals_n = 0
-        # -- across people: the same comfortable body, the same decision
-        # stream, given to every focal person in turn. Traits, memories,
-        # skills and kin differ; if choices still collapse to one, the
-        # world has a hive mind.
-        picks_people = []
-        for p in _focus_pool(u, focals):
-            focals_n += 1
-            w = copy.deepcopy(u)
-            q = next(c for c in w["people"] if c["id"] == p["id"])
-            q["hun"] = 2.0; q["ene"] = 0.95; q["sol"] = 0.85
-            q["thirst"] = 0.0; q["intimacy"] = 0.3
-            picks_people.append(needs.assign(w, q, w["day"], random.Random(1234)))
-        if picks_people:
-            share = max(picks_people.count(a) for a in set(picks_people)) / len(picks_people)
-            person_div.append(1.0 - share)
+        focals_n = len(_focus_pool(u, focals))
+        # -- across people: the same comfortable body, given to every
+        # focal person in turn, under several fixed decision streams.
+        # Traits, memories, skills and kin differ; if choices still
+        # collapse to one, the world has a hive mind.
+        stream_div = []
+        for stream in range(6):
+            picks_people = []
+            for p in _focus_pool(u, focals):
+                w = copy.deepcopy(u)
+                q = next(c for c in w["people"] if c["id"] == p["id"])
+                q["hun"] = 2.0; q["ene"] = 0.95; q["sol"] = 0.85
+                q["thirst"] = 0.0; q["intimacy"] = 0.3
+                picks_people.append(needs.assign(w, q, w["day"], random.Random(500 + stream)))
+            if picks_people:
+                share = max(picks_people.count(a) for a in set(picks_people)) / len(picks_people)
+                stream_div.append(1.0 - share)
+        if stream_div:
+            person_div.append(sum(stream_div) / len(stream_div))
         for p in _focus_pool(u, focals):
             # -- across identities: one person, many synthetic identities,
             # across sampled comfortable states. The midpoints move scores
@@ -229,6 +232,46 @@ def habitability(seeds=(69, 7), days=3000, verbose=True):
     return {"runs": runs, "verdicts": v}
 
 
+# ------------------------------------------------------------------ 2.5
+
+def inner_life(seeds=(69,), days=1200, verbose=True):
+    """Do the people have lives, or only needs?
+
+    Over a bounded arc: how many personal projects are seen through, how
+    many bonds grow to friendship, how many turn to feud. A world with
+    none of these is a world of reflexes — watchable for an hour, not a
+    day."""
+    out = {}
+    for seed in seeds:
+        world = engine.genesis(seed, 1)
+        friends = feuds = 0
+        for d in range(days):
+            engine.tick_world(world, [])
+            if d == days - 1:
+                for k in ("eden", "lagoon"):
+                    for p in world[k]["people"]:
+                        aff = p.get("aff") or {}
+                        friends += sum(1 for v in aff.values() if v >= needs.AFF_FRIEND)
+                        feuds += sum(1 for v in aff.values() if v <= needs.AFF_FEUD)
+        total_done = sum(p.get("goals_done", 0)
+                         for k in ("eden", "lagoon") for p in world[k]["people"])
+        out[seed] = {"projects_seen_through": total_done, "friendships": friends,
+                     "feuds": feuds}
+    agg = {"projects_seen_through": sum(r["projects_seen_through"] for r in out.values()),
+           "friendships": sum(r["friendships"] for r in out.values()),
+           "feuds": sum(r["feuds"] for r in out.values())}
+    verdicts = {"projects_happen": agg["projects_seen_through"] > 0,
+                "friendships_form": agg["friendships"] > 0}
+    if verbose:
+        print("\n== inner life ==")
+        for seed, r in out.items():
+            print(f"  seed {seed}: projects seen through {r['projects_seen_through']}, "
+                  f"friendships {r['friendships']}, feuds {r['feuds']}")
+        for k, ok in verdicts.items():
+            print(f"  [{'PASS' if ok else 'FAIL'}] {k}")
+    return {"per_seed": out, "verdicts": verdicts}
+
+
 # ------------------------------------------------------------------ 3
 
 def drama(verbose=True):
@@ -243,12 +286,20 @@ def drama(verbose=True):
             rows.append(("hazard", k, h["what"], h["note"]))
     rows.append(("hazard", "both", "Personal sensitivity",
                  "each need's midpoint sits in [.44,.56], fixed by identity: stable per person, unseen across the cast"))
+    rows.append(("hazard", "both", "Tastes",
+                 f"each person leans a stable +/-{needs.TASTE_WEIGHT:.2f} toward a kind of day (work, company, stillness, roaming, care); hunger outranks any taste"))
+    rows.append(("hazard", "both", "Personal projects",
+                 "a free mind may commit to a run-of-days project; it bends choices and completes on the real outcome"))
+    rows.append(("hazard", "both", "Bonds and feuds",
+                 f"actual contact moves a bounded affinity; {needs.AFF_FRIEND} is friendship, {needs.AFF_FEUD} is feud — both named once, in the record"))
     rows.append(("hazard", "both", "The near-tie roulette",
                  "choices within 15% of the best are broken by the world's dice: real noise, bounded"))
     rows.append(("hazard", "both", "Inheritance and drift",
                  f"mid-parent traits plus mutation (sd {minds.MUTATION_SD}); every child is a new temperament"))
     rows.append(("hazard", "both", "Private cycles",
                  "ovulation on private 24-35 day calendars; conception needs an actual exposed day"))
+    rows.append(("hazard", "both", "Omens",
+                 "about once in 250 days the world is strange at no one; a people with lore keeps the story"))
     if verbose:
         print("\n== drama: the components ==")
         for kind, k, what, note in rows:
@@ -272,6 +323,8 @@ def main():
                                            trials=args.trials)
     if args.only in (None, "drama"):
         out["drama"] = drama()
+    if args.only in (None, "inner"):
+        out["inner_life"] = inner_life(seeds=seeds, days=min(args.days, 1200))
     if args.only in (None, "habitability"):
         out["habitability"] = habitability(seeds=seeds, days=args.days)
     if args.out:
@@ -282,6 +335,8 @@ def main():
     if "independence" in out:
         i = out["independence"]
         verdicts += [i["person_divergence"] > 0.02, i["urgent_convergence"] >= 0.6]
+    if "inner_life" in out:
+        verdicts += list(out["inner_life"]["verdicts"].values())
     if "habitability" in out:
         verdicts += list(out["habitability"]["verdicts"].values())
     if verdicts:
