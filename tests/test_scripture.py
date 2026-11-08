@@ -119,7 +119,7 @@ class TestTheProbe(unittest.TestCase):
     def setUpClass(cls):
         import probe
         cls.probe = probe
-        cls.result = probe.independence(seeds=(69,), focals=4, trials=6, verbose=False)
+        cls.result = probe.independence(seeds=(69,), focals=6, trials=6, verbose=False)
 
     def test_people_in_the_same_state_choose_differently(self):
         self.assertGreater(self.result["person_divergence"], 0.02,
