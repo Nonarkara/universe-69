@@ -101,7 +101,22 @@ GESTATION = 270
 # record (detail rows 13-15). All are consequences of the record, not
 # scripts. Changes trajectories in both worlds from the first open
 # choice; migration adds goal=None, aff={}, goals_done=0 per person.
-ENGINE_VERSION = "2026.11.08.1"
+# 2026.11.09.1 — the long fuse. A grudge is not only named, it walks:
+# (a) the strongest cold name in the record can aim an aimless walk
+# (retargeted at p = 0.5, needs.RIVALRY_PULL) and is one more scored
+# choice, (0.16 × grudge depth) × (1 − 0.6 × hunger), amplified by a
+# taste for roaming — it chooses only where the feet go, and enemies
+# across open water are never walked to; (b) a brawl between strangers
+# cools by AFF_SCRATCH (net feudward: feuds are born in the crowd), a
+# brawl inside a feud gives AFF_SPEND back at its close (the peace in
+# the feud lived), so shallow feuds resolve in a clash or two and deep
+# ones burn for years; the crossing back over the feud threshold is
+# named once ("has made their peace"); (c) LAGOON's killings leave the
+# victim's kin a cold bond to the killer (−0.85) — the record's grudge,
+# now walkable. Changes both worlds' trajectories wherever a grudge is
+# alive; migration adds one transient, p["fx"] = None (a brawl under
+# way: [other id, was-feud]) — aff/goal/goals_done already exist.
+ENGINE_VERSION = "2026.11.09.1"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -1358,6 +1373,7 @@ def tick_eden(u, rng, events):
             needs.goal_progress(u, p, p.get("a"))   # arriving somewhere is progress too
             p["ad"] = p.get("ad", 0) - 1
             if p["ad"] <= 0:
+                needs.spend_quarrel(u, p)           # the brawl is over: what it cost
                 eden_assign(u, p, day, rng, crowd)
         p["x"], p["y"] = pen_clamp(u, p["x"], p["y"])
 
@@ -1904,6 +1920,10 @@ def pick_fight(u, p, people, rng, reach=9):
     square_off(p, q)
     needs.aff_touch(u, p, q["id"], -0.35)
     needs.aff_touch(u, q, p["id"], -0.35)
+    # the record of who this brawl was with, and whether it was a quarrel
+    # inside a feud; [id, feud?] survives the JSON round-trip as a list
+    p["fx"] = [q["id"], int(needs.aff_of(p, q["id"]) <= needs.AFF_FEUD)]
+    q["fx"] = [p["id"], int(needs.aff_of(q, p["id"]) <= needs.AFF_FEUD)]
     p["a"] = q["a"] = A_FIGHT
     p["ad"] = q["ad"] = days(2)
     return True
@@ -2332,6 +2352,10 @@ def lagoon_violence(u, p, a, people, byid, gone, dead, rng, events, shortfall=0.
         or q["id"] == victim.get("mom"))]
     for q in kin:
         q["gd"], q["gk"] = 1.0, p["id"]
+        # the killing itself is a name turned cold in another heart (the
+        # long fuse): the widow and the kin keep a feud-bond to the
+        # killer, and if their own feet answer it, they walk.
+        needs.aff_touch(u, q, p["id"], -0.85)
     p["gd"] = 0.0
     if why == "revenge":
         events.append((u["day"], "LAGOON", "violence",
@@ -2678,6 +2702,7 @@ def tick_lagoon(u, rng, events):
             needs.goal_progress(u, p, p.get("a"))   # arriving somewhere is progress too
             p["ad"] = p.get("ad", 0) - 1
             if p["ad"] <= 0:
+                needs.spend_quarrel(u, p)           # the brawl is over: what it cost
                 lagoon_assign(u, p, day, rng, shortfall)
         # what you gathered, you carry home and put down
         needs.deposit(u, p, day)
@@ -3010,7 +3035,7 @@ def person_detail(u, p, day, ctx):
             # 13-15: the inner life as the record shows it — one word for
             # how the days have left them, the project they are bent on,
             # and the one bond worth naming
-            needs.mood_word(u, p), needs.goal_text(p), needs.aff_note(p)]
+            needs.mood_word(u, p), needs.goal_text(p), needs.aff_note(u, p)]
 
 
 def active_craft(u: dict, p: dict) -> str:
@@ -3392,6 +3417,7 @@ def migrate(world):
             p.setdefault("goal", None)        # the inner life (2026.11.08.1)
             p.setdefault("aff", {})
             p.setdefault("goals_done", 0)
+            p.setdefault("fx", None)          # the brawl in progress (2026.11.09.1)
             p.setdefault("pregnancy_father", None)
             p.setdefault("social", None)
             p.setdefault("groom_day", None)

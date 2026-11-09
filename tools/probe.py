@@ -244,9 +244,15 @@ def inner_life(seeds=(69,), days=1200, verbose=True):
     out = {}
     for seed in seeds:
         world = engine.genesis(seed, 1)
-        friends = feuds = 0
+        friends = feuds = named_feuds = named_peace = 0
         for d in range(days):
-            engine.tick_world(world, [])
+            evts = []
+            engine.tick_world(world, evts)
+            for e in evts:
+                if e[2] == "feud":
+                    named_feuds += 1
+                elif e[2] == "peace":
+                    named_peace += 1
             if d == days - 1:
                 for k in ("eden", "lagoon"):
                     for p in world[k]["people"]:
@@ -256,17 +262,20 @@ def inner_life(seeds=(69,), days=1200, verbose=True):
         total_done = sum(p.get("goals_done", 0)
                          for k in ("eden", "lagoon") for p in world[k]["people"])
         out[seed] = {"projects_seen_through": total_done, "friendships": friends,
-                     "feuds": feuds}
+                     "feuds": feuds, "feuds_named": named_feuds,
+                     "reconciliations": named_peace}
     agg = {"projects_seen_through": sum(r["projects_seen_through"] for r in out.values()),
            "friendships": sum(r["friendships"] for r in out.values()),
-           "feuds": sum(r["feuds"] for r in out.values())}
+           "feuds": sum(r["feuds"] for r in out.values()),
+           "reconciliations": sum(r["reconciliations"] for r in out.values())}
     verdicts = {"projects_happen": agg["projects_seen_through"] > 0,
                 "friendships_form": agg["friendships"] > 0}
     if verbose:
         print("\n== inner life ==")
         for seed, r in out.items():
             print(f"  seed {seed}: projects seen through {r['projects_seen_through']}, "
-                  f"friendships {r['friendships']}, feuds {r['feuds']}")
+                  f"friendships {r['friendships']}, feuds {r['feuds']} "
+                  f"({r['feuds_named']} named, {r['reconciliations']} settled)")
         for k, ok in verdicts.items():
             print(f"  [{'PASS' if ok else 'FAIL'}] {k}")
     return {"per_seed": out, "verdicts": verdicts}
@@ -292,6 +301,8 @@ def drama(verbose=True):
                  "a free mind may commit to a run-of-days project; it bends choices and completes on the real outcome"))
     rows.append(("hazard", "both", "Bonds and feuds",
                  f"actual contact moves a bounded affinity; {needs.AFF_FRIEND} is friendship, {needs.AFF_FEUD} is feud — both named once, in the record"))
+    rows.append(("hazard", "both", "The long fuse",
+                 f"a grudge walks at its enemy (a scored choice up to {0.16:.2f} × depth), a feud-brawl gives {needs.AFF_SPEND} back when it closes, and a killing leaves the kin a cold bond — peace is named the way feud is"))
     rows.append(("hazard", "both", "The near-tie roulette",
                  "choices within 15% of the best are broken by the world's dice: real noise, bounded"))
     rows.append(("hazard", "both", "Inheritance and drift",

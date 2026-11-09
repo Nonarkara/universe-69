@@ -58,7 +58,7 @@ class TestClaims(unittest.TestCase):
         u = self.eden_pair()
         u['part'], u['std_years'], u['innocent'] = 1, 1, False
         rng = random.Random(1)
-        with patch.object(rng, 'random', side_effect=[0.0, 1.0]):
+        with patch.object(engine, 'omen'), patch.object(rng, 'random', side_effect=[0.0, 1.0]):
             engine.tick_eden(u, rng, [])
         self.assert_released(u)
         self.assertEqual(u['cod'], {'plague': 1})
@@ -86,6 +86,7 @@ class TestClaims(unittest.TestCase):
             return result
         rng=random.Random(1)
         with patch.object(reproduction,'_rng',side_effect=private_rng), \
+             patch.object(engine, 'omen'), \
              patch.object(rng,'random',side_effect=[0.,1.,.99]):
             engine.tick_eden(u,rng,[])
         self.assert_released(u)
@@ -290,7 +291,7 @@ class TestStagedDeathsAndBirths(unittest.TestCase):
         u['day'], u['part'] = 1, 1
         u['people'][1]['due'] = 1
         rng = random.Random(1)
-        with patch.object(engine.animals, 'tick', return_value=[]), patch.object(engine, 'lagoon_violence', return_value=False), patch.object(rng, 'random', side_effect=[0.5, 0.5, 0.5, 0.0]):
+        with patch.object(engine.animals, 'tick', return_value=[]), patch.object(engine, 'lagoon_violence', return_value=False), patch.object(engine, 'omen'), patch.object(rng, 'random', side_effect=[0.5, 0.5, 0.5, 0.0]):
             engine.tick_lagoon(u, rng, [])
         self.assertEqual(u['births_y'], 1)
         self.assertEqual(u['deaths_y'], 1)

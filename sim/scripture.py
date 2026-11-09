@@ -236,9 +236,9 @@ def chronicle(u):
     bent on what, whose bonds have grown into friendship, and which
     names the record has turned cold. Bounded and derived — no history
     is invented that the affinities and goals do not hold."""
-    day = u.get("day", 0)
     byid = {q["id"]: q for q in u.get("people", [])}
     bent, close, feuds = [], 0, 0
+    seen = set()
     for q in u.get("people", []):
         if q.get("goal") and not q.get("w"):
             bent.append([q.get("n", "?"), q["goal"].get("what", "")])
@@ -247,14 +247,17 @@ def chronicle(u):
                 other = int(k)
             except ValueError:
                 continue
-            if other <= q.get("id", 0):
+            pair = (min(q.get("id", 0), other), max(q.get("id", 0), other))
+            if pair in seen:
                 continue                     # each pair counted once
+            seen.add(pair)
+            other_p = byid.get(other)
             if v >= FRIEND:
-                other_p = byid.get(other)
                 if other_p and not other_p.get("w"):
                     close += 1
             elif v <= FEUD:
-                feuds += 1
+                if other_p is not None:
+                    feuds += 1               # names still warm on one side
     return {"bent_on": bent[:5], "close_pairs": close, "feuds": feuds}
 
 

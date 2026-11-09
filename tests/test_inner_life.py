@@ -1,4 +1,5 @@
-"""The inner life: tastes, projects, bonds, moods, omens (2026.11.08.1).
+"""The inner life: tastes, projects, bonds, moods, omens, the long fuse
+(2026.11.08.1 – 2026.11.09.1).
 
 These mechanics exist so a viewer can follow a person — not a meter.
 Each test pins a consequence of the record: a taste is stable and
@@ -181,6 +182,121 @@ class TestOmens(unittest.TestCase):
         engine.omen(u, FixedRng(), evts)
         self.assertEqual(len(evts), 1)
         self.assertGreater(u["stories"], 0.0, "a people with lore kept no story of it")
+
+
+class TestTheLongFuse(unittest.TestCase):
+    """A grudge is not only named, it walks; and peace is possible."""
+
+    def setUp(self):
+        self.w = _world(120)
+        self.u = self.w["eden"]
+
+    def test_peace_is_named_once(self):
+        u = self.u
+        a, b = u["people"][0], u["people"][1]
+        needs.aff_touch(u, a, b["id"], -0.7)      # into the feud: named
+        needs.aff_touch(u, a, b["id"], -0.1)      # deeper: not news
+        needs.aff_touch(u, a, b["id"], 0.85)      # out and past friendship: named
+        needs.aff_touch(u, a, b["id"], 0.1)       # warmer still: not news
+        kinds = [e[1] for e in u.get("_buff", [])]
+        self.assertEqual(kinds, ["feud", "peace"],
+                         "a feud and its peace are each named once, not every step")
+
+    def test_a_grudge_walks_toward_its_enemy(self):
+        u = self.w["lagoon"]
+        men = [q for q in u["people"] if q["s"] == "m" and not q.get("w")
+               and engine.age_of(q, u["day"]) >= minds.ADULT_AGE]
+        p, e = men[0], men[1]
+        rival = needs.rival_of(u, {**p, "aff": {str(e["id"]): -0.95}})
+        self.assertIsNotNone(rival, "a live adult enemy must be findable")
+        aimed = walks = 0
+        for t in range(24):
+            w2 = copy.deepcopy(self.w)
+            q = next(c for c in w2["lagoon"]["people"] if c["id"] == p["id"])
+            q["aff"] = {str(e["id"]): -0.95}
+            q["hun"] = 1.0; q["ene"] = 0.9; q["sol"] = 0.9; q["thirst"] = 0.0
+            act = needs.assign(w2["lagoon"], q, w2["lagoon"]["day"], random.Random(500 + t))
+            if q["tx"] == rival[1][0] and q["ty"] == rival[1][1]:
+                aimed += 1
+            if act == engine.A_WALK:
+                walks += 1
+        self.assertGreater(aimed, 0,
+                           "in 24 calm draws a deep grudge never once aimed the walk")
+        self.assertLess(aimed, 24,
+                        "the grudge leaves room for the rest of a life")
+
+    def test_rival_of_skips_the_dead_and_the_withdrawn(self):
+        u = self.u
+        men = [q for q in u["people"] if q["s"] == "m" and not q.get("w")
+               and engine.age_of(q, u["day"]) >= minds.ADULT_AGE]
+        p, dead_man, live = men[0], men[1], men[2]
+        u["people"].remove(dead_man)              # the record loses the name
+        p["aff"] = {str(dead_man["id"]): -1.0, str(live["id"]): -0.75}
+        rival = needs.rival_of(u, p)
+        self.assertEqual(rival[0], live["id"],
+                         "a grudge walks only to someone still here")
+        p["aff"] = {str(dead_man["id"]): -1.0}
+        self.assertIsNone(needs.rival_of(u, p),
+                          "no grudge walks with a gone name")
+        p["aff"] = {str(live["id"]): -0.8}
+        live["w"] = 1
+        try:
+            self.assertIsNone(needs.rival_of(u, p),
+                              "no grudge walks to the withdrawn")
+        finally:
+            live["w"] = 0
+
+    def test_a_quarrel_spent_gives_heat_back(self):
+        u = self.u
+        a, b = u["people"][0], u["people"][1]
+        a["aff"] = {str(b["id"]): -0.9}
+        a["a"] = minds.A_FIGHT
+        a["fx"] = [b["id"], 1]
+        before = needs.aff_of(a, b["id"])
+        needs.spend_quarrel(u, a)
+        self.assertGreaterEqual(needs.aff_of(a, b["id"]) - before,
+                                needs.AFF_SPEND - 1e-9)
+        self.assertIsNone(a["fx"])
+        lines = [e[2] for e in u.get("_buff", [])]
+        self.assertTrue(any("made their peace" in x for x in lines),
+                        "spending the last of a feud must be named")
+
+    def test_strangers_who_brawl_are_nudged_feudward(self):
+        u = self.u
+        a, b = u["people"][0], u["people"][1]
+        a["aff"] = {str(b["id"]): -0.15}
+        a["a"] = minds.A_FIGHT
+        a["fx"] = [b["id"], 0]
+        needs.spend_quarrel(u, a)
+        self.assertEqual(needs.aff_of(a, b["id"]), 0.0,
+                         "a stranger brawl cools by a scratch and is not a feud")
+
+    def test_a_killing_turns_the_kin_cold(self):
+        w = engine.genesis(7, 1)
+        u = w["lagoon"]
+        people = u["people"]
+        adults = [q for q in people if engine.age_of(q, u["day"]) >= minds.ADULT_AGE
+                  and not q.get("w")]
+        killer = next(q for q in adults if q["s"] == "m")
+        victim = next(q for q in adults if q is not killer)
+        kin = next(q for q in adults if q is not killer and q is not victim)
+        victim["p"] = kin["id"]                   # the kin: the victim's partner
+        byid = {q["id"]: q for q in people}
+        class Ledger:
+            def random(self):
+                return 0.0
+            def sample(self, seq, k):
+                return list(seq)[:k]
+        ledger = Ledger()
+        gone, dead = {}, []
+        engine.lagoon_violence(u, killer, minds.ADULT_AGE, people, byid,
+                               gone, dead, ledger, [])
+        self.assertIn(victim["id"], gone)
+        self.assertLessEqual(needs.aff_of(kin, killer["id"]), -0.85,
+                             "the killing leaves the kin a cold name")
+        feud_lines = [e for e in u.get("_buff", []) if e[1] == "feud"]
+        self.assertTrue(any(kin.get("n", "") in e[2] for e in feud_lines),
+                        "the record says who the feud belongs to")
 
 
 class TestTheWholePerson(unittest.TestCase):

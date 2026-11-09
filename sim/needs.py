@@ -583,6 +583,9 @@ AFF_FRIEND = 0.6
 AFF_FEUD = -0.6
 AFF_MAX = 1.0
 AFF_KEEP = 12             # bounded: the heart keeps only so many names
+RIVALRY_PULL = 0.5        # how often a grudge chooses which way to walk
+AFF_SPEND = 0.45          # a feud-brawl's close gives this much back
+AFF_SCRATCH = 0.15        # a brawl between strangers cools by this much
 
 
 def taste_factor(u, p, act):
@@ -621,8 +624,58 @@ def aff_touch(u, p, other_id, delta):
     day = u.get("day", 0)
     if prev < AFF_FRIEND <= new:
         buf.append((day, "bond", f"{p.get('n', '?')} and #{other_id} have become close."))
+    elif prev <= AFF_FEUD < new:
+        buf.append((day, "peace", f"{p.get('n', '?')} and #{other_id} have made their peace."))
     elif prev > AFF_FEUD >= new:
         buf.append((day, "feud", f"{p.get('n', '?')} cannot abide #{other_id} any more."))
+
+
+def spend_quarrel(u, p):
+    """A brawl, once spent, gives a little back — more if it was a feud.
+
+    A quarrel inside a feud is an institution, not just damage (Gluckman,
+    The Peace in the Feud): two men who walk away alive from the same
+    brawl have spent some of the heat, so its close returns AFF_SPEND of
+    the record where the feud's own pool keeps the fire. Ordinary
+    strangers who brawl cool only a scratch, AFF_SCRATCH — their net is
+    feudward, and so feuds are born in the crowd. Both touches only move
+    the same bounded record; nothing else is granted."""
+    from engine import A_FIGHT
+    fx = p.get("fx")
+    if not fx or p.get("a") != A_FIGHT:
+        return
+    fid, in_feud = fx[0], fx[1]
+    heat = AFF_SPEND if in_feud else AFF_SCRATCH
+    aff_touch(u, p, fid, heat)
+    p["fx"] = None
+
+
+def rival_of(u, p):
+    """The strongest grudge in the record, if the enemy can still be found.
+
+    The long fuse: a feud is kept in the heart (pruning keeps the
+    strongest names, and a grudge is strong), the enemy is worked out
+    from the record alone, and walking toward them is the whole
+    mechanic — what happens on meeting is already the world's to decide.
+    Returns (enemy id, position), or None if no live adult enemy can be
+    reached: withdrawn, across open water, or gone."""
+    aff = p.get("aff") or {}
+    foes = sorted((k for k, v in aff.items() if v <= AFF_FEUD),
+                  key=lambda k: (aff[k], int(k)))
+    for k in foes:
+        for q in u.get("people", []):
+            if q["id"] != int(k):
+                continue
+            from engine import age_of, ADULT_AGE, same_land, terrain_of
+            if q.get("w") or q.get("ab") or not q.get("c", True) \
+                    or age_of(q, u.get("day", 0)) < ADULT_AGE:
+                break                                  # the name is cold
+            if u.get("kind") == "LAGOON" and \
+                    not same_land(terrain_of(u), p["x"], p["y"], q["x"], q["y"]):
+                break                                  # the water decides
+            return (q["id"], (q["x"], q["y"]))
+    return None
+    return None
 
 
 def goal_progress(u, p, act):
@@ -685,17 +738,25 @@ def mood_word(u, p):
     return "content"
 
 
-def aff_note(p):
-    """The one bond worth saying: the closest, or the worst."""
+def aff_note(u, p):
+    """The one bond worth saying: the closest, or the worst, by name."""
     aff = p.get("aff") or {}
     if not aff:
         return ""
+    name_of = {}
+    if u is not None:
+        name_of = {q["id"]: q.get("n", "?") for q in u.get("people", [])}
+
+    def label(k):
+        n = name_of.get(int(k))
+        return n if n else "#" + k
+
     best = max(aff, key=lambda k: (aff[k], -int(k)))
     worst = min(aff, key=lambda k: (aff[k], int(k)))
     if aff[worst] <= AFF_FEUD:
-        return f"at odds with #{worst}"
+        return f"at odds with {label(worst)}"
     if aff[best] >= AFF_FRIEND:
-        return f"close to #{best}"
+        return f"close to {label(best)}"
     return ""
 
 
@@ -1251,6 +1312,19 @@ def assign(u, p, day, rng, cond=None, engine=None):
     if placeless and a >= 16:
         options.append((0.45 * (1.2 - p.get("pu", 0.5)), E.A_WALK, None, None))
 
+    # --- the long fuse -----------------------------------------------------
+    # A grudge is a place the feet know. Scored from what the record
+    # holds — how deep the feud sits, how hungry the body is — it is one
+    # more genuinely open choice, amplified by a taste for roaming, and
+    # it aims the walk at the enemy: what happens on arrival is already
+    # the world's to decide.
+    rival = rival_of(u, p)
+    if rival is not None and p.get("a") != E.A_FIGHT:
+        rid, spot = rival
+        grudge = -(p.get("aff") or {}).get(str(rid), AFF_FEUD)
+        options.append(((0.16 * grudge) * (1.0 - 0.6 * want_food),
+                        E.A_WALK, spot, None))
+
     # --- fighting ----------------------------------------------------------
     # A quarrel in a crowded pen is a fight; in a wood with two people in it,
     # it is a quarrel. This is the difference between the worlds, and it is a
@@ -1320,6 +1394,15 @@ def assign(u, p, day, rng, cond=None, engine=None):
         p['social'] = None
     if act == E.A_WALK and scout is not None and target == scout:
         p['ad'] = 0             # look again on arrival, not days of idling
+    # the long fuse: when the walk was aimless — scouting, or the
+    # placeless milling of a man with no post — a grudge may choose the
+    # destination. It chooses only where the feet go; what happens on
+    # meeting is already the world's to decide.
+    if act == E.A_WALK and (target is None or
+                            (scout is not None and target == scout)):
+        rival = rival_of(u, p)
+        if rival is not None and rng.random() < RIVALRY_PULL:
+            target = rival[1]
     if target is not None:
         p["tx"], p["ty"] = target
     if site is not None:
