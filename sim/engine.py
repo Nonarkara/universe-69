@@ -143,7 +143,16 @@ GESTATION = 270
 # inclination drops, and a price paid suppresses the exile — the
 # grievance is spent once. Changes LAGOON trajectories wherever a
 # killing leaves kin and the camp can pay.
-ENGINE_VERSION = "2026.11.10.2"
+# 2026.11.11.1 — the gift. A camp with lore and a full larder sends goods to
+# the nearest other camp on the same land once a year: the store really moves
+# (up to 25%, capped), a named pair — one from each camp — keeps the
+# partnership (affinity +0.25 both ways, a standing bond in st["gifts"],
+# bounded at three partners, pruned deterministically), and lore keeps the
+# exchange as a story. The kula is between partners, not crowds
+# (Malinowski). The partnership reaching 0.6 is what scripture counts as an
+# exchange partner. New saved field: st["gifts"] = {} (default in migrate).
+# Changes LAGOON trajectories from the first year two camps can both pay.
+ENGINE_VERSION = "2026.11.11.1"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -441,7 +450,7 @@ def genesis_universe(kind, seed, iteration=1, postmortems=None, lessons=None,
         u["farms"] = []            # [x, y] tilled tiles
         u["settlements"] = [{"x": 137, "y": 109, "r": 5,
                              "n": make_name(rng, minds.NAMES.get("LAGOON")),
-                             "store": 0.0}]
+                             "store": 0.0, "gifts": {}}]
         u["culture"] = []          # arts appear when bellies stay full
         u["continent"] = False     # the greater land, waiting across the strait
         u["drought"] = 0           # years remaining
@@ -2815,6 +2824,7 @@ def tick_lagoon(u, rng, events):
     if part == 0 and day > u.get("founded_day", 0) and day % DAYS_PER_YEAR == 0 and people:
         pop = len(people)
         year = day // DAYS_PER_YEAR
+        needs.kula(u, day, rng, events)
         if u["drought"] > 0:
             u["drought"] -= 1
         u["harsh_winter"] = rng.random() < 0.06 and u.get("terrain_version", 1) < 2
@@ -3420,6 +3430,7 @@ def migrate(world):
                     remaining -= st["store"]
             for st in sts:
                 st.setdefault("store", 0.0)
+                st.setdefault("gifts", {})      # the exchange ring (2026.11.11.1)
                 st.setdefault("water", 0.0)
                 st.setdefault("prepared", 0.)
                 st.setdefault("farm_food", 0.)

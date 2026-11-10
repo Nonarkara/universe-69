@@ -636,6 +636,87 @@ def aff_touch(u, p, other_id, delta):
                     f"{p.get('n', '?')} cannot abide {you} any more."))
 
 
+# ---- the gift between camps (Malinowski, Argonauts of the Western Pacific) --
+# A camp with lore and a full larder sends goods to another camp on the same
+# land. The store really moves, and a named pair — one from each camp — keeps
+# the partnership: the kula is between partners, not crowds. Over years the
+# partnerships become the ring the scripture counts. Bounded, once a year,
+# and only where there is something to give.
+GIFT_MIN_STORE = 3.0        # a camp does not give away its larder
+GIFT_MIN_ADULTS = 4         # a party needs people to send
+GIFT_PARTNERS = 3           # the ring keeps only so many standing partners
+GIFT_TRUST = 0.6            # a standing exchange partnership
+GIFT_SHARE = 0.25           # a gift gives up at most this share of the store
+GIFT_CAP = 2.0
+
+
+def exchange_partners(u):
+    """The standing partnerships between camps, each counted once."""
+    out = 0
+    seen = set()
+    for i, st in enumerate(u.get("settlements", [])):
+        for k, v in (st.get("gifts") or {}).items():
+            if v >= GIFT_TRUST:
+                key = (min(i, int(k)), max(i, int(k)))
+                if key not in seen:
+                    seen.add(key)
+                    out += 1
+    return out
+
+
+def kula(u, day, rng, events):
+    """The yearly exchange: a gift between camps, and the pair that keeps it."""
+    sts = u.get("settlements") or []
+    if len(sts) < 2 or "lore" not in (u.get("tech") or []):
+        return
+    from engine import age_of, ADULT_AGE, same_land, terrain_of
+    terr = terrain_of(u)
+    for si, st in enumerate(sts):
+        if st.get("store", 0.0) < GIFT_MIN_STORE:
+            continue
+        mine = [q for q in u.get("people", [])
+                if q.get("st", 0) == si and not q.get("w")
+                and age_of(q, day) >= ADULT_AGE]
+        if len(mine) < GIFT_MIN_ADULTS:
+            continue
+        # the nearest other camp with people in it, on walkable land
+        best, bd = None, 1 << 30
+        for ti, other in enumerate(sts):
+            if ti == si:
+                continue
+            theirs = [q for q in u.get("people", [])
+                      if q.get("st", 0) == ti and not q.get("w")
+                      and age_of(q, day) >= ADULT_AGE]
+            if len(theirs) < 2:
+                continue
+            d = (other["x"] - st["x"]) ** 2 + (other["y"] - st["y"]) ** 2
+            if d < bd and same_land(terr, st["x"], st["y"], other["x"], other["y"]):
+                bd, best = d, (ti, other, theirs)
+        if best is None:
+            continue
+        ti, other, theirs = best
+        giver = mine[rng.randrange(len(mine))]
+        taker = theirs[rng.randrange(len(theirs))]
+        goods = min(st["store"] * GIFT_SHARE, GIFT_CAP)
+        if goods < 0.5:
+            continue
+        st["store"] = st.get("store", 0.0) - goods
+        other["store"] = other.get("store", 0.0) + goods
+        # the partnership grows both ways, bounded, pruned deterministically
+        for a, b in ((st, ti), (other, si)):
+            gift = a.setdefault("gifts", {})
+            gift[str(b)] = min(1.0, gift.get(str(b), 0.0) + GIFT_SHARE)
+            if len(gift) > GIFT_PARTNERS:
+                for k in sorted(gift, key=lambda k: (-gift[k], int(k)))[GIFT_PARTNERS:]:
+                    del gift[k]
+        aff_touch(u, giver, taker["id"], 0.25)
+        aff_touch(u, taker, giver["id"], 0.25)
+        u["stories"] = u.get("stories", 0.0) + 0.1
+        events.append((day, "LAGOON", "gift",
+                       f"{giver.get('n', '?')} carries goods to {taker.get('n', '?')} — "
+                       f"the exchange between the camps is kept."))
+
+
 def spend_quarrel(u, p):
     """A brawl, once its time has run, gives a little back — more if it
     was a feud.

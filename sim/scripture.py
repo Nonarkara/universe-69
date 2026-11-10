@@ -46,6 +46,29 @@ WK_WORDS = {WK_HUDDLE: "one of the placeless, pooled on the open floor",
 # Bond thresholds, kept beside needs.py's own (a reading, not a second law)
 FRIEND = 0.6
 FEUD = -0.6
+# A standing exchange partnership between camps (needs.GIFT_TRUST, mirrored
+# here as a reading; the engine's own law lives in needs.py)
+GIFT_TRUST = 0.6
+
+
+def exchange_partners(u):
+    """The camps whose yearly gift has become a standing partnership,
+    each pair counted once. A reading of the record, not a second law."""
+    out = 0
+    seen = set()
+    for i, st in enumerate(u.get("settlements", [])):
+        for k, v in (st.get("gifts") or {}).items():
+            try:
+                other = int(k)
+            except ValueError:
+                continue
+            if v >= GIFT_TRUST:
+                key = (min(i, other), max(i, other))
+                if key in seen:
+                    continue
+                seen.add(key)
+                out += 1
+    return out
 
 # The rhythms a viewer can set a watch by. Each row states a habit the
 # engine really has, with the constant that makes it true. This is the
@@ -295,6 +318,7 @@ def for_world(u):
             "stories": round(u.get("stories", 0.0), 1),
             "gifts": tech,
             "chronicle": chronicle(u),
+            "exchange_partners": exchange_partners(u),
             "rhythms": [{"what": w, "note": n} for w, n in rhythms(u)],
             "hazards": hazards(u),
             "cast": cast(u),

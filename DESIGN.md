@@ -58,6 +58,15 @@ arrive at different real times. Previous century trials remain historical
 per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
 release. This target is not a measured 2016 MacBook capacity claim.
 
+## Engine 2026.11.11.1: the gift
+
+Changes LAGOON trajectories from the first year two camps can both pay.
+New saved field: `st["gifts"] = {}` per settlement (default in `migrate()`).
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| Exchange is a relationship between named partners, not a market between crowds, and it is what binds communities above the Dunbar line (Malinowski, *Argonauts of the Western Pacific*: the kula ring; Mauss on the prestation as a social fact) | The yearly **gift**: a camp with lore and a store holding ≥ 3 sends goods to the nearest other camp on the same land — the store really moves (up to 25%, capped at 2.0), and a named pair (one adult from each camp, drawn from the record's people) keeps the partnership: affinity +0.25 both ways, a standing bond in `st["gifts"]` bounded at three partners and pruned deterministically, and lore keeps the exchange as a story (+0.1). At 0.6 the partnership is standing — what the scripture counts as an exchange partner. | A gift is goods and a bond; nothing else moves. A camp that cannot pay, pays nothing. The receiver's store really rises, the giver's really falls. Pinned in `tests/test_gift.py` (gates, goods, bounds, four years to trust, the scripture's count). |
+
 ## Engine 2026.11.10.2: the blood price
 
 Changes LAGOON trajectories wherever a killing leaves kin and the camp
