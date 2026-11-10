@@ -2095,6 +2095,18 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
       : [w*1.00*f, w*0.96*m*f*thin, w*0.86*f*thin, w*0.64, w*0.78*m*thin, w*0.66*thin, w*0.48];
     if (starving) wd[3]=Math.max(wd[3], wd[1]*0.95);   // the joint is wider than the limb
     paintForm(g, limbOutline(a,j,e,wd), tn, ink, w*0.32);
+    if (s>=3 && tn!==shadeT){                 // the light that lives under skin:
+      g.save();                               // warmth where the body is near the
+      g.beginPath(); smoothPath(g, limbOutline(a,j,e,wd)); g.clip();   // light, cool at the far end
+      var lx=Math.min(a[0],j[0],e[0])-w, ly=Math.min(a[1],j[1],e[1])-w;
+      var bw=Math.max(a[0],j[0],e[0])-lx+w, bh=Math.max(a[1],j[1],e[1])-ly+w;
+      var lgx=g.createLinearGradient(lx, ly, lx+bw*0.7, ly+bh*0.7);
+      lgx.addColorStop(0, "rgba(255,238,208,0.34)");
+      lgx.addColorStop(0.45, "rgba(255,238,208,0)");
+      lgx.addColorStop(1, "rgba(72,42,22,0.20)");
+      g.fillStyle=lgx; g.fillRect(lx, ly, bw, bh);
+      g.restore();
+    }
     var dx=e[0]-j[0], dy=e[1]-j[1], dl=Math.hypot(dx,dy)||1;
     // Joint definition at close zoom: knee/elbow prominence, subtle tendon hint
     if (s>=3.5 && !view) {
@@ -2184,6 +2196,18 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
   ];
   g.beginPath(); smoothPath(g, trunk); g.fillStyle=tones[1]; g.fill();
   g.save(); g.clip();
+  if (s>=2.5){                      // the same light under the skin: warm at the
+    var tg=g.createLinearGradient(shX-shW, shY, hipX+hpW, crotchY+1.2);   // lit shoulder,
+    tg.addColorStop(0, "rgba(255,238,208,0.30)");                          // cooling to the
+    tg.addColorStop(0.5, "rgba(255,238,208,0)");                           // hip, with a
+    tg.addColorStop(1, "rgba(72,40,20,0.18)");                             // warm belly
+    g.fillStyle=tg;                                                       // bounce below
+    var tbw=shX+shW+2, tbh=crotchY-shY+2;
+    var tg2=g.createLinearGradient(0, crotchY+0.4, 0, crotchY+2.2);
+    tg2.addColorStop(0, "rgba(255,214,168,0.22)"); tg2.addColorStop(1, "rgba(255,214,168,0)");
+    g.fillStyle=tg; g.fillRect(shX-shW-2, shY-1, tbw, tbh);
+    g.fillStyle=tg2; g.fillRect(shX-shW-2, crotchY+0.2, tbw, 2.4);
+  }
   var o=shW*0.30;
   g.fillStyle=tones[0];
   g.beginPath(); g.ellipse(shX-o, chestY+0.2-o*0.3, shW*0.86, (waY-shY)*0.60+0.6, 0, 0, 6.283); g.fill();   // the ribcage
@@ -2380,7 +2404,15 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
   }
   skull(); g.fill();
   g.save(); g.clip(); g.fillStyle=SKD;                  // the side of the head away from the light
-  g.beginPath(); g.ellipse(hcx-hr*0.55, hcy+hr*0.35, hr*0.62, hr*1.0, 0.3, 0, 6.283); g.fill(); g.restore();
+  g.beginPath(); g.ellipse(hcx-hr*0.55, hcy+hr*0.35, hr*0.62, hr*1.0, 0.3, 0, 6.283); g.fill();
+  if (s>=2){                                            // and the light within it: a lit brow
+    var hg=g.createLinearGradient(hcx-hr*0.8, hcy-hr*0.9, hcx+hr*0.7, hcy+hr*1.0);   // and cheek,
+    hg.addColorStop(0, "rgba(255,238,208,0.36)");                                     // a cool jaw
+    hg.addColorStop(0.5, "rgba(255,238,208,0)");
+    hg.addColorStop(1, "rgba(72,42,22,0.22)");
+    g.fillStyle=hg; g.fillRect(hcx-hr*1.2, hcy-hr*1.2, hr*2.4, hr*2.4);
+  }
+  g.restore();
   skull(); g.strokeStyle=INK; g.lineWidth=ink*1.2; g.stroke();
   if (B.fat>=3){ g.strokeStyle=INK_SOFT; g.beginPath(); g.arc(hcx+0.2, hcy+hr*0.6, hr*0.6, 0.3, 2.6); g.stroke(); }   // a soft jaw
   if (starving||B.hungry){ g.strokeStyle=INK_SOFT; g.beginPath(); g.moveTo(hcx+hr*0.25,hcy+0.1); g.lineTo(hcx+hr*0.35,hcy+hr*0.55); g.stroke(); }  // hollow cheek
