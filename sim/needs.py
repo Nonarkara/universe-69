@@ -652,7 +652,13 @@ def spend_quarrel(u, p):
     fighter: a fight can be cut short by a reassignment, a withdrawal, or
     a killing, and the record still says when it was over."""
     fx = p.get("fx")
-    if not fx or u.get("parts", 0) < fx[2]:
+    if not fx:
+        return                      # no brawl under way
+    # States saved under 2026.11.09.1 carry the older two-field form
+    # [other, was-feud]; their brawl is over by definition (it was in
+    # progress when the file was written), so it settles on sight.
+    until = fx[2] if len(fx) > 2 else 0
+    if u.get("parts", 0) < until:
         return                      # the brawl is still on
     heat = AFF_SPEND if fx[1] else AFF_SCRATCH
     aff_touch(u, p, fx[0], heat)

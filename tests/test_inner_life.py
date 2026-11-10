@@ -290,6 +290,22 @@ class TestTheLongFuse(unittest.TestCase):
         self.assertTrue(any("made their peace" in e[3] for e in evts),
                         "the record must name the peace once")
 
+    def test_a_state_written_under_an_older_fx_shape_settles(self):
+        """Migration safety: .09.1 wrote the two-field fx.
+
+        The live instrument hit this as an IndexError on the first .09.2
+        tick; a brawl that was under way when the file was written is
+        over by definition and settles on sight."""
+        u = self.u
+        a, b = u["people"][0], u["people"][1]
+        a["aff"] = {str(b["id"]): -0.9}
+        a["fx"] = [b["id"], 1]
+        before = needs.aff_of(a, b["id"])
+        needs.spend_quarrel(u, a)
+        self.assertGreaterEqual(needs.aff_of(a, b["id"]) - before,
+                                needs.AFF_SPEND - 1e-9)
+        self.assertIsNone(a["fx"])
+
     def test_strangers_who_brawl_are_nudged_feudward(self):
         u = self.u
         a, b = u["people"][0], u["people"][1]

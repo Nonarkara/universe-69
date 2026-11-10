@@ -123,7 +123,12 @@ GESTATION = 270
 # needs.spend_quarrel (per part, both worlds) once parts >= until,
 # wherever the day has since taken the fighter. Migration default
 # fx=None; trajectories change wherever a brawl occurs.
-ENGINE_VERSION = "2026.11.09.2"
+# 2026.11.09.3 — the same-version hotfix: states written under .09.1
+# carry the older two-field fx; the clock read must not assume the new
+# third field. A legacy brawl settles on sight (it is over by
+# definition). Caught by the live instrument's first tick after the
+# .09.2 restart, exactly the check the history is kept for.
+ENGINE_VERSION = "2026.11.09.3"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
