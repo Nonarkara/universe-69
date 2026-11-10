@@ -42,6 +42,20 @@ verification: [hourly audit](docs/audits/2026-11-03-hourly/README.md).
 
 # STUDY — measurements from the running universes
 
+**2026-11-10 witness run — the long fuse (engine `2026.11.09.3`).** A bounded
+EDEN-only witness arc, seed 69, 120 model years (172,800 parts) on the
+workbench, the world's own continuity but a witness RNG lineage — not the live
+instrument's history and not quotable as such. The record: feuds named 1,572,
+peaces named 1,551, live feud-bonds at Y120 = 3; violence deaths 104, withdrawn
+57, population 16 → peak 221 (Y90) → 164 (Y120); cod {age 120, infant 271,
+violence 104}. Grudges begin at Y28 (crowd era), resolve within about a year,
+and the two counters track each other from then on: 19/19 by Y30, 1,422/1,402
+by Y100. The residual difference is feuds ended by death or still burning. An
+earlier witness under `2026.11.09.1` named 711 feuds and **0** peaces, which is
+how the misplaced quarrel-close was found; the 30-year seed-69 arc now reads
+7/7. Reproduction: the harness is chained-by-checkpoint (world parts + RNG
+state every five years) so an interrupted run resumes rather than repeats.
+
 **2026-11-03 boundary.** Engine `2026.11.03.1` adds bounded individual fuzzy
 need sensitivity and repairs fresh-choice readiness, partner-dependent desire
 and care preemption. It changes future trajectories. All prior numbers remain
