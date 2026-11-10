@@ -135,7 +135,15 @@ GESTATION = 270
 # or the death. Pure bookkeeping over the record's kin links; no new RNG,
 # no new fields. Changes LAGOON trajectories wherever a killing leaves
 # children.
-ENGINE_VERSION = "2026.11.10.1"
+# 2026.11.10.2 — the blood price. LAGOON's feuds had no non-blood exit
+# (a witness: 14 killings, 31 named feuds, 0 peaces in 80 years). The
+# camp with standing can now exact goods for a life: a camp-store price
+# (0.8 + 0.6 per kin, capped by the store; the kin's camp receives if
+# another camp), the feud cools by BLOOD_PRICE (needs.py), the revenge
+# inclination drops, and a price paid suppresses the exile — the
+# grievance is spent once. Changes LAGOON trajectories wherever a
+# killing leaves kin and the camp can pay.
+ENGINE_VERSION = "2026.11.10.2"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -2378,6 +2386,31 @@ def lagoon_violence(u, p, a, people, byid, gone, dead, rng, events, shortfall=0.
         # killer, and if their own feet answer it, they walk. Children
         # hold it silently until adulthood - the feud as an inheritance.
         needs.aff_touch(u, q, p["id"], -0.85)
+    paid = False
+    # The blood price: an arbiter with standing exacts goods for the life
+    # (Pinker ch.2 - the Leviathan's least violence; Gluckman; Mauss on the
+    # prestation that can settle a feud). LAGOON's violence is lethal-only,
+    # so this is its one non-blood exit: the goods are real (the camp's
+    # store pays, or another camp's store receives), the feud cools by
+    # what was paid - enough to cross the threshold, and the record names
+    # the peace the same way it names any other.
+    if kin and rng.random() < st.get("arb", 0.0) * 0.6:
+        price = min(st.get("store", 0.0), 0.8 + 0.6 * len(kin))
+        if price >= 0.5:
+            paid = True
+            st["store"] = max(0.0, st.get("store", 0.0) - price)
+            kst = u["settlements"][min(kin[0].get("st", 0), len(sts) - 1)]
+            if kst is not st:
+                kst["store"] = kst.get("store", 0.0) + price
+            for q in kin:
+                needs.aff_touch(u, q, p["id"], needs.BLOOD_PRICE)
+                q["gd"] *= 0.35
+            if "lore" in (u.get("tech") or []):
+                u["stories"] = u.get("stories", 0.0) + 0.1
+            events.append((u["day"], "LAGOON", "law",
+                           f"{st.get('n', 'The camp')} exacts a blood-price: "
+                           f"{p['n']} gives what he owes, and "
+                           f"{kin[0]['n']} takes it."))
     p["gd"] = 0.0
     if why == "revenge":
         events.append((u["day"], "LAGOON", "violence",
@@ -2387,7 +2420,9 @@ def lagoon_violence(u, p, a, people, byid, gone, dead, rng, events, shortfall=0.
                        f"{p['n']} kills {victim['n']} in a quarrel."
                        + (f" {kin[0]['n']} will not forget." if kin else "")))
     # a third party with standing punishes the killer (Pinker ch.2: Leviathan)
-    if rng.random() < st.get("arb", 0.0) * 0.8:
+    # — unless the life was already paid for: a camp that has taken the
+    # blood-price has spent its grievance, and exile would be counted twice.
+    if not paid and rng.random() < st.get("arb", 0.0) * 0.8:
         others = [i for i in range(len(sts)) if i != p.get("st", 0)]
         if others:
             ni = rng.choice(others)

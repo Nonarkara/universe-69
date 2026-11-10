@@ -89,5 +89,90 @@ class TestTheInheritedFuse(unittest.TestCase):
         self.assertEqual(rival[0], killer["id"])
 
 
+class TestTheBloodPrice(unittest.TestCase):
+    """A killing's feud has one non-blood exit: the arbiter's price."""
+
+    def _lagoon(self):
+        w = engine.genesis(7, 1)
+        u = w["lagoon"]
+        for _ in range(120):
+            engine.tick_world(w, [])
+        return u
+
+    def _scene(self, arb=0.0, store=5.0):
+        u = self._lagoon()
+        adults = [q for q in u["people"]
+                  if engine.age_of(q, u["day"]) >= minds.ADULT_AGE and not q.get("w")]
+        killer = next(q for q in adults if q["s"] == "m")
+        victim = next(q for q in adults if q is not killer)
+        widow = next(q for q in adults if q is not killer and q is not victim)
+        victim["p"] = widow["id"]
+        killer["gd"], killer["gk"] = 0.0, 0
+        st = u["settlements"][killer.get("st", 0)]
+        st["arb"] = arb
+        st["store"] = store
+        return u, killer, victim, widow, st
+
+    def _ledger(self, victim, values):
+        state = {"i": 0}
+
+        class Ledger:
+            def random(self):
+                i = min(state["i"], len(values) - 1)
+                state["i"] += 1
+                return values[i]
+
+            def sample(self, seq, k):
+                return [victim] + [x for x in seq if x is not victim][:k - 1]
+
+        return Ledger()
+
+    def test_the_arbiter_exacts_a_price_and_the_feud_cools(self):
+        u, killer, victim, widow, st = self._scene(arb=1.0, store=5.0)
+        people = u["people"]
+        byid = {q["id"]: q for q in people}
+        evts = []
+        engine.lagoon_violence(u, killer, engine.age_of(killer, u["day"]),
+                               people, byid, {}, [],
+                               self._ledger(victim, [0.0, 0.0, 0.0, 0.99, 0.99]), evts)
+        laws = [e for e in evts if e[2] == "law"]
+        self.assertTrue(laws, "a camp with an arbiter and a store named no price")
+        self.assertIn("blood-price", laws[0][3])
+        price = min(5.0, 0.8 + 0.6 * 1)                # the widow is the only kin
+        self.assertEqual(st["store"], 5.0 - price,
+                         "the price is paid in real goods")
+        self.assertGreater(needs.aff_of(widow, killer["id"]), needs.AFF_FEUD,
+                           "the paid feud did not settle")
+        self.assertLess(widow["gd"], 1.0, "the revenge inclination is unmoved")
+        kinds = [e[2] if len(e) == 4 else e[1]
+                 for e in evts + u.get("_buff", [])]
+        self.assertIn("peace", kinds, "a feud settled by goods is still named")
+
+    def test_no_arbiter_no_store_no_price(self):
+        u, killer, victim, widow, st = self._scene(arb=0.0, store=5.0)
+        people = u["people"]
+        byid = {q["id"]: q for q in people}
+        evts = []
+        engine.lagoon_violence(u, killer, engine.age_of(killer, u["day"]),
+                               people, byid, {}, [],
+                               self._ledger(victim, [0.0, 0.0, 0.99, 0.99, 0.99]), evts)
+        self.assertFalse([e for e in evts if e[2] == "law"],
+                         "no arbiter exacted a price")
+        self.assertLessEqual(needs.aff_of(widow, killer["id"]), -0.85)
+        self.assertEqual(st["store"], 5.0)
+
+    def test_a_price_cannot_be_paid_from_an_empty_larder(self):
+        u, killer, victim, widow, st = self._scene(arb=1.0, store=0.2)
+        people = u["people"]
+        byid = {q["id"]: q for q in people}
+        evts = []
+        engine.lagoon_violence(u, killer, engine.age_of(killer, u["day"]),
+                               people, byid, {}, [],
+                               self._ledger(victim, [0.0, 0.0, 0.0, 0.99, 0.99]), evts)
+        self.assertFalse([e for e in evts if e[2] == "law"],
+                         "a camp that cannot pay still 'paid'")
+        self.assertEqual(st["store"], 0.2)
+
+
 if __name__ == "__main__":
     unittest.main()

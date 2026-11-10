@@ -586,6 +586,7 @@ AFF_KEEP = 12             # bounded: the heart keeps only so many names
 RIVALRY_PULL = 0.5        # how often a grudge chooses which way to walk
 AFF_SPEND = 0.45          # a feud-brawl's close gives this much back
 AFF_SCRATCH = 0.15        # a brawl between strangers cools by this much
+BLOOD_PRICE = 0.35        # what a life pays: the feud cools by this much
 
 
 def taste_factor(u, p, act):

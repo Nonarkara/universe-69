@@ -58,6 +58,19 @@ arrive at different real times. Previous century trials remain historical
 per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
 release. This target is not a measured 2016 MacBook capacity claim.
 
+## Engine 2026.11.10.2: the blood price
+
+Changes LAGOON trajectories wherever a killing leaves kin and the camp
+can pay. No new saved fields; the price is goods, grudge and record.
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| The least violence a demanding society can do is to put a price on a life (Pinker ch.2, the Leviathan; Gluckman on the peace in the feud; Mauss on the prestation that can end one) | The camp with standing (`arb`) exacts a **blood price** at p = 0.6 × arb: real goods from the camp's store (0.8 + 0.6 per kin, capped by the store; another camp's store receives if the kin live there), the feud cools by `BLOOD_PRICE` (0.35 — the widow's bond crosses the threshold and the record names the peace), the revenge inclination drops ×0.35, and a price paid suppresses the exile: the grievance is spent once. | Priced only from a store that holds ≥ 0.5; lore keeps the judgment as a story. Nothing else moves — the revenge roll itself is unchanged. Pinned in `tests/test_inherited_fuse.py`. |
+
+An 80-year LAGOON witness under `.10.1` — 14 killings, 31 named feuds,
+**0 peaces** — is the reason this row exists: LAGOON's feuds had no exit
+but death or exile.
+
 ## Engine 2026.11.10.1: the feud is an inheritance
 
 Changes LAGOON trajectories wherever a killing leaves children. No new

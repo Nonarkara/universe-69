@@ -250,9 +250,12 @@ class TestStagedDeathsAndBirths(unittest.TestCase):
         # (0.5 of a total weight of 4 = 1.0+3.0) lands past the unpaired
         # bystander's share (1.0) and into the paired rival's (3.0) — the
         # opposite of picking near[0], which would have been the bystander.
+        # The trailing 0.9 values keep the 2026.11.10.2 blood-price roll
+        # (no arbiter here) and the exile roll from firing: the quarrel
+        # stays a quarrel, as before.
         with patch.object(engine.minds, 'aggression', return_value=1.0), \
              patch.object(engine.minds, 'self_control', return_value=0.0), \
-             patch.object(rng, 'random', side_effect=[0.0, 0.5, 0.9, 0.9]), \
+             patch.object(rng, 'random', side_effect=[0.0, 0.5, 0.9, 0.9, 0.9]), \
              patch.object(rng, 'sample', return_value=[lone_bystander, paired_rival]):
             engine.lagoon_violence(
                 u, p, engine.age_of(p, 0), u['people'],
