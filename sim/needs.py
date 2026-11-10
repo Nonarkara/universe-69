@@ -622,16 +622,22 @@ def aff_touch(u, p, other_id, delta):
             del aff[k]
     buf = u.setdefault("_buff", [])
     day = u.get("day", 0)
+    name_of = {q["id"]: q.get("n", "?") for q in u.get("people", []) or []}
+    you = name_of.get(other_id, "#" + str(other_id))
     if prev < AFF_FRIEND <= new:
-        buf.append((day, "bond", f"{p.get('n', '?')} and #{other_id} have become close."))
+        buf.append((day, "bond",
+                    f"{p.get('n', '?')} and {you} have become close."))
     elif prev <= AFF_FEUD < new:
-        buf.append((day, "peace", f"{p.get('n', '?')} and #{other_id} have made their peace."))
+        buf.append((day, "peace",
+                    f"{p.get('n', '?')} and {you} have made their peace."))
     elif prev > AFF_FEUD >= new:
-        buf.append((day, "feud", f"{p.get('n', '?')} cannot abide #{other_id} any more."))
+        buf.append((day, "feud",
+                    f"{p.get('n', '?')} cannot abide {you} any more."))
 
 
 def spend_quarrel(u, p):
-    """A brawl, once spent, gives a little back — more if it was a feud.
+    """A brawl, once its time has run, gives a little back — more if it
+    was a feud.
 
     A quarrel inside a feud is an institution, not just damage (Gluckman,
     The Peace in the Feud): two men who walk away alive from the same
@@ -639,14 +645,17 @@ def spend_quarrel(u, p):
     the record where the feud's own pool keeps the fire. Ordinary
     strangers who brawl cool only a scratch, AFF_SCRATCH — their net is
     feudward, and so feuds are born in the crowd. Both touches only move
-    the same bounded record; nothing else is granted."""
-    from engine import A_FIGHT
+    the same bounded record; nothing else is granted.
+
+    The close is kept by the brawl's own clock (the third field of `fx`,
+    set in pick_fight), settled wherever the day has since taken the
+    fighter: a fight can be cut short by a reassignment, a withdrawal, or
+    a killing, and the record still says when it was over."""
     fx = p.get("fx")
-    if not fx or p.get("a") != A_FIGHT:
-        return
-    fid, in_feud = fx[0], fx[1]
-    heat = AFF_SPEND if in_feud else AFF_SCRATCH
-    aff_touch(u, p, fid, heat)
+    if not fx or u.get("parts", 0) < fx[2]:
+        return                      # the brawl is still on
+    heat = AFF_SPEND if fx[1] else AFF_SCRATCH
+    aff_touch(u, p, fx[0], heat)
     p["fx"] = None
 
 

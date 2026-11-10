@@ -251,7 +251,7 @@ class TestTheLongFuse(unittest.TestCase):
         a, b = u["people"][0], u["people"][1]
         a["aff"] = {str(b["id"]): -0.9}
         a["a"] = minds.A_FIGHT
-        a["fx"] = [b["id"], 1]
+        a["fx"] = [b["id"], 1, u.get("parts", 0)]     # the brawl's time has run
         before = needs.aff_of(a, b["id"])
         needs.spend_quarrel(u, a)
         self.assertGreaterEqual(needs.aff_of(a, b["id"]) - before,
@@ -261,12 +261,41 @@ class TestTheLongFuse(unittest.TestCase):
         self.assertTrue(any("made their peace" in x for x in lines),
                         "spending the last of a feud must be named")
 
+    def test_a_brawl_settles_on_its_own_clock(self):
+        """The full circuit: pick, stand, settle, and the record names the peace.
+
+        A fighter's day can cut the brawl short in several ways (a fresh
+        decision, a withdrawal). The quarrel's close is held by the brawl's
+        own stint, so the record settles whatever the day did next."""
+        u = self.u
+        men = [q for q in u["people"] if q["s"] == "m" and not q.get("w")
+               and engine.age_of(q, u["day"]) >= minds.ADULT_AGE]
+        a, b = men[0], men[1]
+        u["people"] = [a, b]                       # a pen of two
+        a["aff"] = {str(b["id"]): -0.9}
+        b["aff"] = {str(a["id"]): -0.9}
+        for q in (a, b):
+            q["x"] = 20; q["y"] = 20; q["tx"] = 20; q["ty"] = 20
+        self.assertTrue(engine.pick_fight(u, a, u["people"], random.Random(3)))
+        self.assertIsNotNone(a.get("fx"))
+        evts = []
+        for part in range(24):
+            engine.tick_eden(u, random.Random(200 + part), evts)
+            if not a.get("fx") and not b.get("fx"):
+                break
+        self.assertGreater(needs.aff_of(a, b["id"]), needs.AFF_FEUD,
+                           "a feud-brawl spent settled nothing")
+        kinds = [e[2] for e in evts]
+        self.assertIn("peace", kinds)
+        self.assertTrue(any("made their peace" in e[3] for e in evts),
+                        "the record must name the peace once")
+
     def test_strangers_who_brawl_are_nudged_feudward(self):
         u = self.u
         a, b = u["people"][0], u["people"][1]
         a["aff"] = {str(b["id"]): -0.15}
         a["a"] = minds.A_FIGHT
-        a["fx"] = [b["id"], 0]
+        a["fx"] = [b["id"], 0, u.get("parts", 0)]
         needs.spend_quarrel(u, a)
         self.assertEqual(needs.aff_of(a, b["id"]), 0.0,
                          "a stranger brawl cools by a scratch and is not a feud")

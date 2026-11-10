@@ -58,15 +58,18 @@ arrive at different real times. Previous century trials remain historical
 per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
 release. This target is not a measured 2016 MacBook capacity claim.
 
-## Engine 2026.11.09.1: the long fuse
+## Engine 2026.11.09.1–.2: the long fuse
 
 Changes both worlds' trajectories wherever a grudge is alive. Migration
-adds nothing — `aff`, `goal`, `goals_done` already exist.
+adds one transient, `p["fx"] = None` — a brawl under way, whose fields
+are `[other id, feud?, until]` and which is settled on its own clock,
+never needed by the model's logic. `aff`, `goal`, `goals_done` already
+exist.
 
 | Finding or explicit assumption | Mechanic | Boundary |
 | --- | --- | --- |
 | Feuds without consequence are texture, not drama; grudges wait and resurface (Dower: grudges waited decades — *Embracing Defeat*; revenge as a lived obligation: Pinker ch.1–2) | A grudge **walks**: the strongest cold name in the record can aim an aimless walk (retarget p = 0.5) and is one more scored choice, `(0.16 × grudge depth) × (1 − 0.6 × hunger)`; enemies across open water are never walked to. | The pull chooses only where the feet go. What happens on meeting is answered by the usual rules — a clash deepens the record, a shared space may mend it. |
-| The peace in the feud: brawling is a regulated institution, and a quarrel spent gives heat back (Gluckman, *The Peace in the Feud*, 1955) | A brawl between strangers cools by `AFF_SCRATCH` (0.15) — net feudward, so feuds are born in the crowd. A brawl inside a feud returns `AFF_SPEND` (0.45) at its close: shallow feuds resolve in a clash or two, deep ones burn for years, and crossing the threshold upward is named once ("has made their peace"). | One number moved per ended brawl; a man who dies in the brawl settles it another way. |
+| The peace in the feud: brawling is a regulated institution, and a quarrel spent gives heat back (Gluckman, *The Peace in the Feud*, 1955) | A brawl between strangers cools by `AFF_SCRATCH` (0.15) — net feudward, so feuds are born in the crowd. A brawl inside a feud returns `AFF_SPEND` (0.45) **at its close**, held by the brawl's own stint clock (`p["fx"] = [other, feud?, until]`, settled per part wherever the day has since taken the fighter — 2026.11.09.2: the act-exit hook never fired in practice; a 120-year witness named 711 feuds and 0 peaces). Shallow feuds resolve in a clash or two, deep ones burn for years, and crossing the threshold upward is named once ("has made their peace"). | One number moved per ended brawl; a man who dies in the brawl settles it another way. |
 | A killing is a name turned cold in other hearts (kin-based revenge was already in the engine's `gd`/`gk`; the *relationship*, not just the mood, is what the record holds) | LAGOON's killings leave the victim's kin a cold bond to the killer (−0.85): the feud is now in the record, and an adult whose feet answer it walks. | The revenge roll itself is unchanged; the walk is the only new consequence. |
 
 Feuds persist through the bounded heart (pruning keeps the strongest

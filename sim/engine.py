@@ -101,7 +101,7 @@ GESTATION = 270
 # record (detail rows 13-15). All are consequences of the record, not
 # scripts. Changes trajectories in both worlds from the first open
 # choice; migration adds goal=None, aff={}, goals_done=0 per person.
-# 2026.11.09.1 — the long fuse. A grudge is not only named, it walks:
+# 2026.11.09.1/.2 — the long fuse. A grudge is not only named, it walks:
 # (a) the strongest cold name in the record can aim an aimless walk
 # (retargeted at p = 0.5, needs.RIVALRY_PULL) and is one more scored
 # choice, (0.16 × grudge depth) × (1 − 0.6 × hunger), amplified by a
@@ -111,12 +111,19 @@ GESTATION = 270
 # brawl inside a feud gives AFF_SPEND back at its close (the peace in
 # the feud lived), so shallow feuds resolve in a clash or two and deep
 # ones burn for years; the crossing back over the feud threshold is
-# named once ("has made their peace"); (c) LAGOON's killings leave the
-# victim's kin a cold bond to the killer (−0.85) — the record's grudge,
-# now walkable. Changes both worlds' trajectories wherever a grudge is
-# alive; migration adds one transient, p["fx"] = None (a brawl under
-# way: [other id, was-feud]) — aff/goal/goals_done already exist.
-ENGINE_VERSION = "2026.11.09.1"
+# named once; (c) LAGOON's killings leave the victim's kin a cold bond to
+# the killer (−0.85) — the record's grudge, now walkable; (d) the bond
+# lines (close/peace/feud) name the other person, not the id.
+# 2026.11.09.2 corrects (b)'s close: it was keyed to the actor leaving
+# A_FIGHT, but a fighter's day can cut a brawl short by other doors (a
+# fresh decision, a withdrawal), so the close was never reached in
+# practice — the 120-year witness of .09.1 named 711 feuds and 0
+# peaces. The close is now held by the brawl's own clock:
+# p["fx"] = [other id, feud?, until] set in pick_fight, settled in
+# needs.spend_quarrel (per part, both worlds) once parts >= until,
+# wherever the day has since taken the fighter. Migration default
+# fx=None; trajectories change wherever a brawl occurs.
+ENGINE_VERSION = "2026.11.09.2"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -1355,6 +1362,7 @@ def tick_eden(u, rng, events):
             follow_mother(p, byid, lambda x, y: pen_clamp(u, x, y))
         needs.update_learning(u,p)
         needs.update_social(u,p)
+        needs.spend_quarrel(u, p)     # any brawl whose time has run is settled now
         if p.get("ad", 0) <= 0 and p["x"] == p["tx"] and p["y"] == p["ty"]:
             eden_assign(u, p, day, rng, crowd)
         arrived = step_toward(p)
@@ -1373,7 +1381,6 @@ def tick_eden(u, rng, events):
             needs.goal_progress(u, p, p.get("a"))   # arriving somewhere is progress too
             p["ad"] = p.get("ad", 0) - 1
             if p["ad"] <= 0:
-                needs.spend_quarrel(u, p)           # the brawl is over: what it cost
                 eden_assign(u, p, day, rng, crowd)
         p["x"], p["y"] = pen_clamp(u, p["x"], p["y"])
 
@@ -1920,12 +1927,14 @@ def pick_fight(u, p, people, rng, reach=9):
     square_off(p, q)
     needs.aff_touch(u, p, q["id"], -0.35)
     needs.aff_touch(u, q, p["id"], -0.35)
-    # the record of who this brawl was with, and whether it was a quarrel
-    # inside a feud; [id, feud?] survives the JSON round-trip as a list
-    p["fx"] = [q["id"], int(needs.aff_of(p, q["id"]) <= needs.AFF_FEUD)]
-    q["fx"] = [p["id"], int(needs.aff_of(q, p["id"]) <= needs.AFF_FEUD)]
     p["a"] = q["a"] = A_FIGHT
     p["ad"] = q["ad"] = days(2)
+    # the record of who this brawl was with, whether it was a quarrel
+    # inside a feud, and by when it is over; [id, feud?, until] survives
+    # the JSON round-trip as a list
+    until = u.get("parts", 0) + p["ad"]
+    p["fx"] = [q["id"], int(needs.aff_of(p, q["id"]) <= needs.AFF_FEUD), until]
+    q["fx"] = [p["id"], int(needs.aff_of(q, p["id"]) <= needs.AFF_FEUD), until]
     return True
 
 
@@ -2682,6 +2691,7 @@ def tick_lagoon(u, rng, events):
                                                  min(LAGOON_SIZE - 2, max(1, y))))
         needs.update_learning(u,p)
         needs.update_social(u,p)
+        needs.spend_quarrel(u, p)     # any brawl whose time has run is settled now
         if p.get("ad", 0) <= 0 and p["x"] == p["tx"] and p["y"] == p["ty"]:
             lagoon_assign(u, p, day, rng, shortfall)
         arrived = step_toward(p, terr_l, LAGOON_WALK)
@@ -2702,7 +2712,6 @@ def tick_lagoon(u, rng, events):
             needs.goal_progress(u, p, p.get("a"))   # arriving somewhere is progress too
             p["ad"] = p.get("ad", 0) - 1
             if p["ad"] <= 0:
-                needs.spend_quarrel(u, p)           # the brawl is over: what it cost
                 lagoon_assign(u, p, day, rng, shortfall)
         # what you gathered, you carry home and put down
         needs.deposit(u, p, day)
