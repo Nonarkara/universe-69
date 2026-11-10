@@ -42,6 +42,15 @@ verification: [hourly audit](docs/audits/2026-11-03-hourly/README.md).
 
 # STUDY — measurements from the running universes
 
+**2026-11-10 replication — the long fuse, three seeds (engine `2026.11.09.3`,
+witness rng lineages, EDEN-only, 60 years each).** Seed 7: 476 feuds, 475
+peaces (Y60 pop 209, violence 11). Seed 25: 423/421 (pop 196, violence 25).
+Seed 123: 469/466 (pop 220, violence 24). The one-for-one shape and the
+crowd-era onset (~Y30–40) replicate off seed 69's 120-year arc; the residual
+of 1–4 is feuds ended by death or still burning. `.10.1`'s inheritance
+change is LAGOON-side only, so these EDEN arcs describe the shipped engine's
+EDEN behavior unchanged.
+
 **2026-11-10 witness run — the long fuse (engine `2026.11.09.3`).** A bounded
 EDEN-only witness arc, seed 69, 120 model years (172,800 parts) on the
 workbench, the world's own continuity but a witness RNG lineage — not the live
