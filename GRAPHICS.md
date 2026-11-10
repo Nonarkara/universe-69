@@ -969,3 +969,27 @@ instanced layer holds 1,000 people per world, 3.9× the documented live peak.
 Full numbers and retained captures: `docs/audits/2026-11-04-crowd/`. Quest
 frame rate remains unverified on real hardware.
 
+
+## 2026-11-10: the frame gets a light
+
+The worlds were drawn well enough and shown badly: a flat fill under a flat
+frame. The terrarium now has a light model of its own, all of it reading the
+display light the record already carries — no new state, no simulation effect:
+
+- **The frame.** `atmosphere()` grades every world canvas once per frame: a
+  sky-light/ground-bounce gradient in soft-light (cool blue at night, warm
+  amber at dawn and dusk, neutral at high day), a low warm wash on the sun
+  side, and a multiply vignette that deepens at night. "A dark, warm room
+  looking into two lit worlds" was the palette's promise; this is the room.
+- **The surface.** A deterministic ground grain is painted into the cached
+  ground canvas (tile scale), and a device-pixel speckle pattern
+  (`grainScreen`) is tiled over the blit — the texture survives the
+  upscale at every rung, where tile-sized dots used to smooth away.
+- **EDEN's volume.** The pen's beach carries one long diagonal shade from
+  the same corner as the room's lamp, and the lodgings and buffet bars now
+  throw soft elliptical contact shadows instead of offset rectangles.
+
+Zoom gates, budgets and every pinned contract are unchanged; the skeletons,
+forms, screentones and hard shadows are untouched. Captures at 390/1024/1440
+(day, dusk, night, phase-forced via the real state) live in the audit folder;
+`tools/shoot.py` geometry checks hold (12/12, 11/11, 11/11).
