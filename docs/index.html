@@ -1689,7 +1689,7 @@ function drawSleepCover(g, J, D, B, act, lying, dress, ink, bedding){
 // daylight between them — in two tones of the skin, outlined so it reads
 // against sand. Below ~8 px the same marks collapse to an upright 2-tone
 // mark, still proportioned.
-function drawFar(g, J, D, k, tones, dress, v, B, fem, P){
+function drawFar(g, J, D, k, tones, dress, v, B, fem, P, f){
   var px=1/k, edge=Math.max(0.45*px, 0.25);
   var shX=J.chest[0], shY=J.shL[1]-0.9, hipX=J.pelvis[0], hipY=J.pelvis[1];
   var shW=Math.max(D.shW, 2.2*px), hpW=Math.max(D.hpW, 1.8*px), waW=Math.max(D.waW*0.9, 1.4*px);
@@ -1727,11 +1727,49 @@ function drawFar(g, J, D, k, tones, dress, v, B, fem, P){
   stroke([J.shR[0]+aoff*0.3,J.shR[1]], [J.elbR[0]+aoff,J.elbR[1]], [J.wriR[0]+aoff,J.wriR[1]], aw, tones[0]);
   g.fillStyle=tones[0]; g.strokeStyle=INK; g.lineWidth=edge*1.4;
   var hr=Math.max(D.hr, 1.3*px);
-  // Neck, jaw and hair survive camp scale; a round disc reads as a toy.
-  g.fillStyle=tones[1];g.fillRect(J.neck[0]-hr*.30,J.head[1]+hr*.55,hr*.60,hr);
-  g.fillStyle=tones[0];g.beginPath();g.ellipse(J.head[0],J.head[1],hr*.82,hr,0,0,6.283);g.fill();g.stroke();
+  // The head at camp scale: a skull with a jaw, a neck into the shoulder
+  // line, the hair as its silhouette over the skull, and — when there are
+  // pixels for it — a nose profile, an ear, and the eyes. A round disc reads
+  // as a toy; a jaw and a neck read as a person.
+  var hr=Math.max(D.hr, 1.3*px), hx0=J.head[0], hy0=J.head[1], face=f||1;
+  g.fillStyle=tones[1];                                  // the neck
+  g.save(); g.translate(J.neck[0], J.head[1]+hr*.45); g.rotate(face*(J.head[0]-J.neck[0])*0.14);
+  g.fillRect(-hr*.30, -hr*.30, hr*.60, hr*1.15); g.restore();
+  g.beginPath();                                         // the skull, tapering to the jaw
+  g.moveTo(hx0-hr*.80, hy0-hr*.08);
+  g.quadraticCurveTo(hx0-hr*.86, hy0-hr*.82, hx0-hr*.02, hy0-hr*.88);
+  g.quadraticCurveTo(hx0+hr*.84, hy0-hr*.74, hx0+hr*.80, hy0+hr*.02);
+  g.quadraticCurveTo(hx0+hr*.64, hy0+hr*.74, hx0-hr*.06, hy0+hr*.72);
+  g.quadraticCurveTo(hx0-hr*.60, hy0+hr*.62, hx0-hr*.80, hy0-hr*.08);
+  g.closePath(); g.fillStyle=tones[0]; g.fill();
+  g.strokeStyle=INK; g.lineWidth=Math.max(px,0.3); g.stroke();
   g.fillStyle=B.stage===4?ELDER_HAIR:HAIRS[(v*7+3)%HAIRS.length];
-  g.beginPath();g.ellipse(J.head[0]-hr*.12,J.head[1]-hr*.43,hr*.84,hr*.65,-.2,Math.PI*.8,Math.PI*2.1);g.fill();
+  g.beginPath();                                         // the hair's silhouette
+  g.moveTo(hx0-hr*.82, hy0-hr*.16);
+  g.quadraticCurveTo(hx0-hr*.90, hy0-hr*.86, hx0+hr*.02, hy0-hr*.94);
+  g.quadraticCurveTo(hx0+hr*.88, hy0-hr*.84, hx0+hr*.82, hy0-hr*.04);
+  g.quadraticCurveTo(hx0+hr*.50, hy0-hr*.36, hx0, hy0-hr*.42);
+  g.quadraticCurveTo(hx0-hr*.48, hy0-hr*.36, hx0-hr*.82, hy0-hr*.16);
+  g.closePath(); g.fill();
+  if (hr>=2.2 && f){                                    // a face where the pixels are
+    g.fillStyle=INK;
+    g.beginPath();                                       // the nose, to the facing side
+    g.moveTo(hx0+face*hr*.74, hy0+hr*.06);
+    g.lineTo(hx0+face*(hr*.74+Math.max(px*.35,.18)), hy0+hr*.26);
+    g.lineTo(hx0+face*hr*.72, hy0+hr*.32);
+    g.closePath(); g.fill();
+    g.beginPath(); g.ellipse(hx0-face*hr*.10, hy0+hr*.10, Math.max(px*.30,.16), Math.max(px*.38,.20), 0, 0, 6.283); g.fill();  // the ear
+    var ey=hy0-hr*.10, ex=face*hr*.44, ew=Math.max(px*.28,.12);
+    g.fillStyle="rgba(28,22,16,0.85)";
+    g.beginPath(); g.ellipse(hx0+ex, ey, ew, ew*1.15, 0, 0, 6.283); g.fill();
+    if (face>0 && hr>=3){                                // the second eye, on the far side
+      g.globalAlpha=0.55;
+      g.beginPath(); g.ellipse(hx0-face*hr*.30, ey, ew*.9, ew, 0, 0, 6.283); g.fill();
+      g.globalAlpha=1;
+    }
+    g.strokeStyle="rgba(28,22,16,0.5)"; g.lineWidth=Math.max(px*.18,.08);
+    g.beginPath(); g.moveTo(hx0+ex*1.15, ey-ew*1.6); g.lineTo(hx0+ex*.55, ey-ew*1.2); g.stroke();
+  }
   [J.ankL,J.ankR].forEach(function(a,i){g.fillStyle=tones[i?0:1];g.beginPath();g.ellipse(a[0]+D.headH*.18,a[1]+.25,D.headH*.43,Math.max(.28,px*.3),0,0,6.283);g.fill();});
   drawHeld(g, J, D, P||{}, B, Math.max(px*1.1, 0.6), true);
 }
@@ -1953,7 +1991,7 @@ function drawExternalAnatomy(g,J,D,B,sex,view,s,dress,private_,ink){
   g.restore();return true;
 }
 
-function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view, bedding){
+function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view, bedding, facing){
   var fem=(sex===1), adult=B.adult;
   // Sleeping, an infant, and two people making love are drawn lying down —
   // but only once they are there: nobody slides across the ground lying.
@@ -2038,7 +2076,8 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
   // from the same local joint positions and don't assume any particular
   // canvas orientation, so they hold up lying down as well as standing.
   if (32*k<10){ drawTiny(g, J, D, k, tones, dress, v); drawSleepCover(g,J,D,B,act,lying,dress,ink,bedding); g.restore(); return; }
-  if (32*k<26){ drawFar(g, J, D, k, tones, dress, v, B, fem, P); drawSleepCover(g,J,D,B,act,lying,dress,ink,bedding); g.restore(); return; }
+  var faceDir = (!view && !lying) ? (facing||1) : 0;    // a face the camera can see, or none
+  if (32*k<26){ drawFar(g, J, D, k, tones, dress, v, B, fem, P, faceDir); drawSleepCover(g,J,D,B,act,lying,dress,ink,bedding); g.restore(); return; }
 
   function limb(x1,y1,x2,y2,w,col){            // a plain round-ended stroke (the neck)
     g.strokeStyle=INK; g.lineWidth=w+ink*2;
@@ -2501,10 +2540,10 @@ function drawMating(g, cx, footY, s, m, f, view){
   // she lies nearer us, facing in; he lies behind her, facing out toward her
   g.save();
   g.translate(0, footY-6.2*k); g.scale(1,-1); g.translate(0, -(footY-6.2*k));
-  drawSketch(g, cx+1.2*k, footY-2.6*k, s, A_MATE, 0.35, false, m.v%20, Bm, m.sex, "", 0, 0);
+  drawSketch(g, cx+1.2*k, footY-2.6*k, s, A_MATE, 0.35, false, m.v%20, Bm, m.sex, "", 0, 0, 1);
   g.restore();
   g.save();
-  drawSketch(g, cx, footY+0.8*k, s, A_MATE, 0.6, false, f.v%20, Bf, f.sex, "", 0, 0);
+  drawSketch(g, cx, footY+0.8*k, s, A_MATE, 0.6, false, f.v%20, Bf, f.sex, "", 0, 0, 1);
   g.restore();
 }
 
@@ -2537,7 +2576,7 @@ function figureSprite(a, act, bucket, moving, s, dress, bedding){
   var B=bodyOf(a), wk=(act===A_WITHDRAW)?(a.wk||0):0;
   var view = !moving ? 0 : (Math.abs(a.vy||0)>1.2*Math.abs(a.vx||0) ? ((a.vy>0)?1:2) : 0);
   var key=act+"|"+B.ab+B.fat+B.mus+B.hurt+B.preg+B.hungry+B.gaunt+B.carry+B.infant+"|"+B.stage+"|"+B.adult+"|"+a.sex+"|"+(dress||"")+"|"+wk+"|"+
-          bk+"|"+(moving?1:0)+view+"|"+vk+"|"+sq+"|"+(bedding!==false);
+          bk+"|"+(moving?1:0)+view+"|"+(!view?(a.face||1):0)+"|"+vk+"|"+sq+"|"+(bedding!==false);
   var sp=spriteCache[key];
   if (sp) return sp;
   var cap = sq>=3 ? 420 : 1400;
@@ -2545,7 +2584,7 @@ function figureSprite(a, act, bucket, moving, s, dress, bedding){
   var W=Math.ceil(80*sq), H=Math.ceil(80*sq);
   var c=mkCanvas(W,H), g=c.getContext("2d");
   g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
-  drawSketch(g, W/2, H-2*sq, sq, act, bk/(moving?WALK_BUCKETS:GESTURE_BUCKETS)+(moving?0:0.02), moving, vk, B, a.sex, dress, wk, view, bedding);
+  drawSketch(g, W/2, H-2*sq, sq, act, bk/(moving?WALK_BUCKETS:GESTURE_BUCKETS)+(moving?0:0.02), moving, vk, B, a.sex, dress, wk, view, bedding, (!view?(a.face||1):0));
   sp={c:c, w:W, h:H, s:sq, view:view}; spriteCache[key]=sp; spriteCount++;
   return sp;
 }
