@@ -42,6 +42,18 @@ verification: [hourly audit](docs/audits/2026-11-03-hourly/README.md).
 
 # STUDY — measurements from the running universes
 
+**2026-11-11 controlled run — the gift (engine `2026.11.11.1`).** The 80-year
+plain witness never founded a second camp (a camp fissions only past its
+social limit — 80 people without lore — which this lagoon never reached), so
+a controlled run founded a second camp exactly as the engine's own fission
+does (same-land dry ground, 40% of the people move) and then left the worlds
+alone: **69 gifts in 60 years** between the two camps, a standing partnership
+by Y10 and held to the end, ~1 gift per year whenever both camps can pay
+(the rate follows the stores). The record names the pairs: *Parvati carries
+goods to Indra · Siddhartha to Ganga · Shiva to Maya · Arjuna to Krishna*.
+The plain seed-69 arc (1 camp all 80 years) is recorded beside it as the
+honest negative.
+
 **2026-11-10 replication — the long fuse, three seeds (engine `2026.11.09.3`,
 witness rng lineages, EDEN-only, 60 years each).** Seed 7: 476 feuds, 475
 peaces (Y60 pop 209, violence 11). Seed 25: 423/421 (pop 196, violence 25).
