@@ -266,7 +266,10 @@
   }
   /* Under ~700px the two worlds stack, each the full width of the phone, and
      each heading collapses to one line (tap it to open the rest). */
+  .mini { display:none; }
   @media (max-width: 700px) {
+    /* the masthead keeps every control: short words, not small ones */
+    .full { display:none; } .mini { display:inline; }
     /* Leave portrait-sized live views above the paged record on phones. */
     #god.tall #reclines { height:30vh; }
     #worlds { flex-direction:column; }
@@ -298,14 +301,14 @@
 </head>
 <body>
 <div id="masthead">
-  <span class="ttl">UNIVERSE 69</span>
+  <span class="ttl"><span class="full">UNIVERSE 69</span><span class="mini">U69</span></span>
   <span class="sub" id="pace">1 year / real hour · observed, never helped</span>
   <span class="hint">wheel zoom · drag pan · click to follow · WASD walk in · esc</span>
   <button id="walkbtn" title="Walk into the world you last touched">WALK</button>
   <button type="button" id="bookbtn" title="The book: how these two worlds came to be">BOOK</button>
-  <button type="button" id="scrbtn" title="The living scripture of each world: its covenant, its laws, its cast">SCRIPTURE</button>
+  <button type="button" id="scrbtn" title="The living scripture of each world: its covenant, its laws, its cast"><span class="full">SCRIPTURE</span><span class="mini">SCRI</span></button>
   <button type="button" id="resbtn" title="What the books say, and what this world says">RESEARCH</button>
-  <button type="button" id="timebtn" title="Slow the world to the pace a day actually takes">REAL-TIME</button>
+  <button type="button" id="timebtn" title="Slow the world to the pace a day actually takes"><span class="full">REAL-TIME</span><span class="mini">LIVE</span></button>
   <button type="button" id="veilbtn" title="What you are watching">?</button>
 </div>
 <div id="banner" class="banner" hidden></div>
