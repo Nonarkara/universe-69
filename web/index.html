@@ -1070,6 +1070,12 @@ var EDEN_WORLD={
     g.save(); rrect(3.4,3.4,W-6.8,W-6.8,2.4); g.clip();
     g.fillStyle=P.lawnD; for (var sx=3; sx<W; sx+=4) g.fillRect(sx,0,2,W);   // mown in stripes
     g.restore();
+    // the shore: a ring of wet sand and a foam line where the lawn meets
+    // the beach — the pen is an island, and islands have coastlines
+    g.strokeStyle=P.sandWet; g.lineWidth=0.55;
+    rrect(3.55,3.55,W-7.1,W-7.1,2.3); g.stroke();
+    g.strokeStyle=P.foam; g.globalAlpha=0.45; g.lineWidth=0.16;
+    rrect(3.66,3.66,W-7.32,W-7.32,2.2); g.stroke(); g.globalAlpha=1;
     // palms on the lawn, outside the dome
     for (var py=4;py<W-4;py+=3.5) for (var pxx=4;pxx<W-4;pxx+=3.5){
       if (!((pxx<EM-2||pxx>W-EM+1||py<EM-2||py>W-EM+1) && hash2(pxx|0,py|0)>0.5)) continue;
@@ -1080,11 +1086,28 @@ var EDEN_WORLD={
         g.beginPath(); g.ellipse(pxx+Math.cos(a)*0.55, py+Math.sin(a)*0.55, 0.62, 0.16, a, 0, 6.283); g.fill(); }
       g.fillStyle=P.palmL; g.beginPath(); disc(g,pxx-0.08,py-0.08,0.2); g.fill();
     }
-    // the pool, its deck and loungers, in the corner of the lawn
+    // the pool, its deck and loungers, in the corner of the lawn: water with
+    // depth — light where it is shallow, deep at the far end — the tile floor
+    // read through it, and caustics seeded on the surface
     g.fillStyle=P.deck; g.fillRect(4.2,4.2,7.2,5.6);
     g.fillStyle=P.rim; g.fillRect(4.7,4.7,4.6,3.4);
-    g.fillStyle=P.pool; g.fillRect(4.9,4.9,4.2,3);
-    g.fillStyle=P.poolL; g.globalAlpha=0.6; g.fillRect(4.9,4.9,4.2,0.45); g.globalAlpha=1;
+    var pg=g.createLinearGradient(4.9,4.9,9.1,7.9);
+    pg.addColorStop(0,P.poolL); pg.addColorStop(0.45,P.pool); pg.addColorStop(1,P.waterS);
+    g.fillStyle=pg; g.fillRect(4.9,4.9,4.2,3);
+    if (tb>=10){                                   // the tile floor, under the water
+      g.strokeStyle=P.waterL; g.globalAlpha=0.22; g.lineWidth=px*0.6;
+      for (var tq=0;tq<5;tq++){ g.beginPath(); g.moveTo(4.9,5.0+tq*0.55); g.lineTo(9.1,5.0+tq*0.55); g.stroke(); }
+      g.globalAlpha=1;
+    }
+    if (tb>=6){                                    // caustics: the light's own pattern
+      for (var ci=0;ci<26;ci++){
+        var cxx=5.0+hash2(ci,3)*3.8, cyy=5.0+hash2(ci,7)*2.6;
+        g.fillStyle=P.foam; g.globalAlpha=0.05+0.10*hash2(ci,11);
+        g.beginPath(); g.ellipse(cxx,cyy,0.12+hash2(ci,13)*0.22,0.05+hash2(ci,17)*0.08,hash2(ci,19)*3,0,6.283); g.fill();
+      }
+      g.globalAlpha=1;
+    }
+    g.strokeStyle=P.rim; g.lineWidth=Math.max(px,0.06); g.strokeRect(4.7,4.7,4.6,3.4);
     for (var lg=0;lg<3;lg++){ var ly=4.8+lg*1.55;
       g.fillStyle=P.lineSoft; g.fillRect(9.85,ly+0.1,1.3,0.55);
       g.fillStyle=CABANA[lg%CABANA.length]; g.fillRect(9.75,ly,1.3,0.55);
@@ -1229,12 +1252,40 @@ function edenNight(g, u, sx, sy, ts, canvas){
   g.restore();
 }
 
+// EDEN's pool, alive: the light travels across the water, the caustics
+// breathe, and a slow band of sky-reflection drifts. The resort's pool is
+// the one thing in the pen that is always moving, even when nobody swims.
+function edenPool(g, u, sx, sy, ts, canvas){
+  if (ts<8) return;
+  var px=(7-sx)*ts, py=(6.4-sy)*ts, w=4.2*ts, h=3*ts;
+  if (px<-w||py<-h||px>canvas.width+w||py>canvas.height+h) return;
+  var tod=displayLight(u), night=tod.dark>0.5;
+  g.save();
+  // a slow band of reflected sky, drifting the length of the pool
+  var band=((tick*0.014)%1.6-0.3);
+  g.globalCompositeOperation="lighter";
+  g.globalAlpha=night?0.10:0.16;
+  var bg=g.createLinearGradient(px, py, px+w*0.35, py+h);
+  bg.addColorStop(0,P.foam); bg.addColorStop(1,"transparent");
+  g.fillStyle=bg;
+  g.beginPath(); g.ellipse(px+w*(0.25+band*0.4), py+h*0.45, w*0.5, h*0.22, -0.15, 0, 6.283); g.fill();
+  // caustics: two families of hidden light, breathing out of phase
+  for (var c=0;c<7;c++){
+    var cxp=px+w*(0.15+0.7*hash2(c,3)), cyp=py+h*(0.2+0.6*hash2(c,9));
+    var rr=w*(0.10+0.09*hash2(c,5))*(1+0.18*Math.sin(tick*0.05+c*1.7));
+    g.globalAlpha=(night?0.05:0.09)*(0.6+0.4*Math.sin(tick*0.04+c*2.1));
+    g.fillStyle=P.poolL;
+    g.beginPath(); g.ellipse(cxp+(Math.sin(tick*0.02+c)*w*0.03), cyp, rr, rr*0.42, hash2(c,7)*3, 0, 6.283); g.fill();
+  }
+  g.restore();
+  g.globalCompositeOperation="source-over"; g.globalAlpha=1;
+}
 // The parts of the ground that move are painted every frame: light on the
 // water near the shore, and the fire. Three readings of the same sea — the
 // swell that lands as foam, the glint that drifts with the light, and now
 // and then a fish that jumps and leaves a widening ring.
 function drawLiveGround(g, key, u, sx, sy, hx, hy, ts, canvas){
-  if (key==="e") return;
+  if (key==="e"){ edenPool(g, u, sx, sy, ts, canvas); return; }
   if (ts<6) return;
   g.strokeStyle=P.foam; g.lineWidth=Math.max(1, ts*0.05);
   for (var i=0;i<water9.length;i++){
