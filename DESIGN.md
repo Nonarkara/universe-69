@@ -58,7 +58,16 @@ arrive at different real times. Previous century trials remain historical
 per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
 release. This target is not a measured 2016 MacBook capacity claim.
 
-## Engine 2026.11.09.1–.2: the long fuse
+## Engine 2026.11.10.1: the feud is an inheritance
+
+Changes LAGOON trajectories wherever a killing leaves children. No new
+fields; the cold bond is bookkeeping over the record's own kin links.
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| Kin feuds are inherited and can outlive the participants (Dower: the long memory; Pinker ch.1–2: the feud runs through the lineage, and the Leviathan's job is to stop it) | A killing's cold bond reaches the victim's children through **both** parents — `q.get("dad") == victim["id"]` joins `q.get("mom")`. A child holds it silently (the walk needs an adult) until the day they grow up, when the whole long-fuse apparatus applies: the walk, the spent quarrel, the peace or the death. | Pure bookkeeping; the revenge *roll* is unchanged (`gd`/`gk`). Pinned in `tests/test_inherited_fuse.py`: either parent's child inherits −0.85; a child cannot walk before adulthood; the grown child knows their enemy. |
+
+## Engine 2026.11.09.1–.3: the long fuse
 
 Changes both worlds' trajectories wherever a grudge is alive. Migration
 adds one transient, `p["fx"] = None` — a brawl under way, whose fields

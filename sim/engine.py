@@ -128,7 +128,14 @@ GESTATION = 270
 # third field. A legacy brawl settles on sight (it is over by
 # definition). Caught by the live instrument's first tick after the
 # .09.2 restart, exactly the check the history is kept for.
-ENGINE_VERSION = "2026.11.09.3"
+# 2026.11.10.1 — the feud is an inheritance. A killing's cold bond reaches
+# the victim's children through BOTH parents (2026.11.09.3 landed it only
+# through the mother); a child holds it silently until adulthood, and then
+# the usual long-fuse rules apply - the walk, the spent quarrel, the peace
+# or the death. Pure bookkeeping over the record's kin links; no new RNG,
+# no new fields. Changes LAGOON trajectories wherever a killing leaves
+# children.
+ENGINE_VERSION = "2026.11.10.1"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -2363,12 +2370,13 @@ def lagoon_violence(u, p, a, people, byid, gone, dead, rng, events, shortfall=0.
     victim["gd"] = 0.0
     kin = [q for q in people if q["id"] not in gone and q is not p and (
         q["id"] == victim.get("p") or q.get("mom") == victim["id"]
-        or q["id"] == victim.get("mom"))]
+        or q.get("dad") == victim["id"])]
     for q in kin:
         q["gd"], q["gk"] = 1.0, p["id"]
         # the killing itself is a name turned cold in another heart (the
         # long fuse): the widow and the kin keep a feud-bond to the
-        # killer, and if their own feet answer it, they walk.
+        # killer, and if their own feet answer it, they walk. Children
+        # hold it silently until adulthood - the feud as an inheritance.
         needs.aff_touch(u, q, p["id"], -0.85)
     p["gd"] = 0.0
     if why == "revenge":
