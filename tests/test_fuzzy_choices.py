@@ -35,7 +35,15 @@ class FuzzyChoices(unittest.TestCase):
                 reloaded, reloaded['people'][0], 0, random.Random(5)))
             self.assertEqual(u, reloaded)
             self.assertEqual(original['people'][0]['hun'], p['hun'])
-        self.assertEqual(choices, [engine.A_SLEEP, engine.A_EAT])
+        # The exact pair moved when the midpoint band widened to [.40,.60]
+        # (2026.11.12.1), but the mechanism is broader than one pair: identity
+        # alone — same body, same dice — must be able to flip a close choice.
+        seen = {choices[0]}
+        for pid in range(3, 40):
+            p = self.body(pid)
+            seen.add(needs.assign(self.world(p), p, 0, random.Random(5)))
+        self.assertGreater(len(seen), 1,
+                           "identity no longer resolves a close choice either way")
 
     def test_extreme_hunger_wins_for_every_personal_profile(self):
         for pid in range(1, 65):

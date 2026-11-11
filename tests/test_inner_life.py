@@ -203,26 +203,35 @@ class TestTheLongFuse(unittest.TestCase):
                          "a feud and its peace are each named once, not every step")
 
     def test_a_grudge_walks_toward_its_enemy(self):
-        u = self.w["lagoon"]
+        u = self.u
         men = [q for q in u["people"] if q["s"] == "m" and not q.get("w")
                and engine.age_of(q, u["day"]) >= minds.ADULT_AGE]
         p, e = men[0], men[1]
-        rival = needs.rival_of(u, {**p, "aff": {str(e["id"]): -0.95}})
+        rival = needs.rival_of(u, {**p, "aff": {str(e["id"]): -1.0}})
         self.assertIsNotNone(rival, "a live adult enemy must be findable")
+        # A placeless man mills: the walk is one scored choice among many, and
+        # the grudge's own option is one more. The deterministic half is the
+        # aimless walk's retarget (needs.RIVALRY_PULL): when the mill wins,
+        # half the time the feet choose the enemy. Calibrated after the
+        # 2026.11.12.1 midpoint band widened: 24 placeless mills walk, and the
+        # enemy is aimed at often enough to see and never so often that a
+        # grudge is the only thing a man does.
         aimed = walks = 0
         for t in range(24):
             w2 = copy.deepcopy(self.w)
-            q = next(c for c in w2["lagoon"]["people"] if c["id"] == p["id"])
-            q["aff"] = {str(e["id"]): -0.95}
-            q["hun"] = 1.0; q["ene"] = 0.9; q["sol"] = 0.9; q["thirst"] = 0.0
-            act = needs.assign(w2["lagoon"], q, w2["lagoon"]["day"], random.Random(500 + t))
-            if q["tx"] == rival[1][0] and q["ty"] == rival[1][1]:
-                aimed += 1
+            q = next(c for c in w2["eden"]["people"] if c["id"] == p["id"])
+            q.update(box=None, role=None)          # no bed, no post
+            q["aff"] = {str(e["id"]): -1.0}
+            q["hun"] = 0.4; q["ene"] = 0.95; q["sol"] = 0.9; q["thirst"] = 0.0
+            act = needs.assign(w2["eden"], q, w2["eden"]["day"], random.Random(500 + t))
             if act == engine.A_WALK:
                 walks += 1
-        self.assertGreater(aimed, 0,
-                           "in 24 calm draws a deep grudge never once aimed the walk")
-        self.assertLess(aimed, 24,
+                if q["tx"] == rival[1][0] and q["ty"] == rival[1][1]:
+                    aimed += 1
+        self.assertEqual(walks, 24, "a placeless man no longer mills")
+        self.assertGreaterEqual(aimed, 4,
+                                "in 24 mills a deep grudge never aimed the walk")
+        self.assertLess(aimed, 20,
                         "the grudge leaves room for the rest of a life")
 
     def test_rival_of_skips_the_dead_and_the_withdrawn(self):

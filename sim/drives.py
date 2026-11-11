@@ -4,7 +4,7 @@ Three overlapping triangular memberships have knots (0, midpoint, 1)
 and singleton outputs (0, .5, 1). Their normalized Sugeno output is the
 piecewise linear response below. Midpoint .5 is exactly the identity curve.
 
-The identity-derived midpoint in [.44, .56] is an illustrative, nonheritable
+The identity-derived midpoint in [.40, .60] is an illustrative, nonheritable
 preference, not an empirical personality measure or a gene/need association.
 Matched people in the two worlds share profiles through fseed. Iterations
 have distinct profiles; neither world kind nor changing bodily state enters
@@ -22,7 +22,7 @@ def midpoint(u: Dict[str, Any], p: Dict[str, Any], need: str) -> float:
     # Explicit separators/encoding avoid Python's process-randomized hash().
     digest = hashlib.sha256(json.dumps(identity, separators=(',', ':'), ensure_ascii=True).encode('ascii')).digest()
     unit = int.from_bytes(digest[:8], 'big') / float((1 << 64) - 1)
-    return .44 + .12 * unit
+    return .40 + .20 * unit
 
 
 def response(u: Dict[str, Any], p: Dict[str, Any], need: str, deficit: float) -> float:

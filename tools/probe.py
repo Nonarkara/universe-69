@@ -294,7 +294,7 @@ def drama(verbose=True):
         for h in scr[k]["hazards"]:
             rows.append(("hazard", k, h["what"], h["note"]))
     rows.append(("hazard", "both", "Personal sensitivity",
-                 "each need's midpoint sits in [.44,.56], fixed by identity: stable per person, unseen across the cast"))
+                 "each need's midpoint sits in [.40,.60], fixed by identity: stable per person, unseen across the cast"))
     rows.append(("hazard", "both", "Tastes",
                  f"each person leans a stable +/-{needs.TASTE_WEIGHT:.2f} toward a kind of day (work, company, stillness, roaming, care); hunger outranks any taste"))
     rows.append(("hazard", "both", "Personal projects",

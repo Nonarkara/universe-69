@@ -20,7 +20,8 @@ class TestDrives(unittest.TestCase):
             self.p['id'] = pid
             for need in ('food', 'rest', 'company', 'intimacy'):
                 m = drives.midpoint(self.u, self.p, need)
-                self.assertTrue(.44 <= m <= .56)
+                self.assertTrue(.40 <= m <= .60,
+                                "the personal midpoint left its band")
                 values = [drives.response(self.u, self.p, need, i/1000.) for i in range(1001)]
                 self.assertEqual(values, sorted(values))
                 self.assertEqual(values[0], 0.)

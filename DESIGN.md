@@ -58,6 +58,15 @@ arrive at different real times. Previous century trials remain historical
 per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
 release. This target is not a measured 2016 MacBook capacity claim.
 
+## Engine 2026.11.12.1: deeper individuality
+
+Changes both worlds' trajectories from the first decision that reads a
+need. No new fields; migration adds nothing.
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| Two fed, rested people in the same room should not answer alike (Pinker ch.18: trait distributions; the same brief's fuzzy-logic brief) | The identity-derived **personal midpoint** — the deficit at which a need's response equals .5 — widens from [.44,.56] to **[.40,.60]**. Who someone is now decides when hunger, loneliness or weariness begins to press, and by how much: a wider, still-fixed, still-auditable band of self. | Still illustrative nonheritable sensitivity — not a personality test or fitted human parameter. No new RNG, no feedback, no saved fields. Pinned in `tests/test_drives.py` (the band and the monotonic Sugeno rule). |
+
 ## Engine 2026.11.11.1: the gift
 
 Changes LAGOON trajectories from the first year two camps can both pay.
@@ -157,7 +166,7 @@ clinical probability, clock or resource coefficient changes; no new saved fields
 
 | Finding or explicit assumption | Mechanic | Boundary |
 | --- | --- | --- |
-| Shared bodily needs with slight individual variation (owner's fuzzy-logic brief) | `sim/drives.py` uses three overlapping memberships at 0, personal midpoint m, and 1 with outputs 0, .5, 1. The same normalized Sugeno rule scores food, rest, company and intimacy. m is in [.44,.56], fixed by shared founding seed, iteration, person ID and need. | Illustrative nonheritable sensitivity, not a personality test, neural model, gene association or fitted human parameter. Membership is urgency, not probability. |
+| Shared bodily needs with slight individual variation (owner's fuzzy-logic brief) | `sim/drives.py` uses three overlapping memberships at 0, personal midpoint m, and 1 with outputs 0, .5, 1. The same normalized Sugeno rule scores food, rest, company and intimacy. m is in [.40,.60] (2026.11.12.1, widened from [.44,.56]), fixed by shared founding seed, iteration, person ID and need. | Illustrative nonheritable sensitivity, not a personality test, neural model, gene association or fitted human parameter. Membership is urgency, not probability. |
 | A personal threshold must not become changing random motivation | Stable SHA-256 identity mapping adds no RNG draws, hidden learning, survival feedback or persistent fields. Matched founder IDs receive the same sensitivity in both worlds. | Descendants remain distinct people by iteration/ID; no claim this preference is genetically inherited. Existing inherited traits keep their separate meanings. |
 | Belly hunger differs from perceived camp scarcity | Transform own normalized hunger first; eating uses that same personal response. Gathering then competes against the existing max of own hunger and perceived larder demand. | Camp shortfall cannot make a fed belly hungry. Absolute urgency/body guards remain outside voluntary fuzzy scoring. |
 | A finished activity must allow a fresh own decision | Normalize only an arrived actor's completed stint before scoring; ongoing birth/withdrawal and peers' activity remain protected. | Removes stale SLEEP/care/groom labels; does not wake continuing sleepers or manufacture contact. |
