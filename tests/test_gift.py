@@ -25,6 +25,7 @@ def _two_camps(days=100, store=6.0, lore=True):
     u = w["lagoon"]
     for _ in range(days):
         engine.tick_world(w, [])
+    _TWO_CAMPS["w"] = w
     # a second camp on the same land, near the first
     st0 = u["settlements"][0]
     near = None
@@ -46,6 +47,13 @@ def _two_camps(days=100, store=6.0, lore=True):
     if lore:
         u["tech"] = list(set((u.get("tech") or []) + ["lore"]))
     return u
+
+
+_TWO_CAMPS = {}
+
+
+def w_of(u):
+    return _TWO_CAMPS["w"]
 
 
 def needs_is_land(u, x, y):
@@ -90,33 +98,54 @@ class TestTheGift(unittest.TestCase):
         u = _two_camps()
         a, b = u["settlements"]
         a["store"], b["store"] = 8.0, 0.0
-        stores_before = (a["store"], b["store"])
-        gifts_before = (dict(a["gifts"]), dict(b["gifts"]))
         evts = []
         needs.kula(u, u["day"], random.Random(5), evts)
-        gift_lines = [e for e in evts if e[2] == "gift"]
-        self.assertTrue(gift_lines, "a camp with lore and a store sent nothing")
-        self.assertLess(a["store"], stores_before[0])
-        self.assertGreater(b["store"], stores_before[1])
-        self.assertEqual(a["gifts"]["1"], needs.GIFT_SHARE)
-        self.assertEqual(b["gifts"]["0"], needs.GIFT_SHARE)
-        self.assertNotEqual(dict(a["gifts"]), gifts_before[0])
-        self.assertIn("the exchange between the camps is kept", gift_lines[0][3])
+        lines = [e for e in evts if e[2] == "gift"]
+        self.assertTrue(lines, "a camp with lore and a store sent nothing")
+        self.assertIn("sets out for", lines[0][3])
+        self.assertLess(a["store"], 8.0)                    # the goods leave with the pair
+        carriers = [q for q in u["people"] if q.get("gift")]
+        self.assertTrue(carriers, "the gift was teleported, not carried")
+        # the delivery, as the world actually runs it
+        walk_events = []
+        for _ in range(600):
+            engine.tick_world(w_of(u), walk_events)
+            if not any(q.get("gift") for q in u["people"]):
+                break
+        land = [e for e in walk_events if e[2] == "gift"]
+        self.assertTrue(land, "a party walked out and nothing arrived")
+        self.assertIn("brings the goods to", land[0][3])
+        self.assertGreater(b["store"], 0.0)
+        self.assertEqual(a["gifts"]["1"], needs.GIFT_SHARE * len(carriers))
+        self.assertEqual(b["gifts"]["0"], needs.GIFT_SHARE * len(carriers))
 
     def test_the_ring_is_bounded(self):
         u = _two_camps()
+        w = w_of(u)
         for st in u["settlements"]:
             st["gifts"] = {"9": 0.9, "8": 0.9, "7": 0.9, "6": 0.9}
+            st["store"] = 8.0
         needs.kula(u, u["day"], random.Random(3), [])
+        for _ in range(600):                    # until the parties are home
+            engine.tick_world(w, [])
+            if not any(q.get("gift") for q in u["people"]):
+                break
         for st in u["settlements"]:
             self.assertLessEqual(len(st["gifts"]), needs.GIFT_PARTNERS)
 
     def test_years_of_gifts_reach_trust_and_the_scripture_counts_them(self):
         u = _two_camps()
+        w = w_of(u)
         for st in u["settlements"]:
             st["store"] = 8.0
-        for _ in range(4):                          # four yearly exchanges
+        for _ in range(4):                          # four yearly exchanges, each walked
             needs.kula(u, u["day"], random.Random(11), [])
+            for st in u["settlements"]:
+                st["store"] = 8.0                    # a full larder each year
+            for _ in range(600):                    # until the parties are home
+                engine.tick_world(w, [])
+                if not any(q.get("gift") for q in u["people"]):
+                    break
         self.assertGreaterEqual(scripture.exchange_partners(u), 1,
                                 "four exchanges did not make a partnership")
         s = scripture.for_world(u)

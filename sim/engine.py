@@ -162,7 +162,16 @@ GESTATION = 270
 # person of fluid days barely leans at all — temperaments differ in kind,
 # not only direction. Every decision that reads a need or a taste moves;
 # no new fields, no new RNG, no feedback. Migration adds nothing.
-ENGINE_VERSION = "2026.11.12.2"
+# 2026.11.12.3 — the gift is walked, not teleported. 2026.11.11.1 moved
+# the goods by ledger alone; a pair of adults from the giver's camp now
+# carries them across the world's own movement (p["gift"] =
+# {to, goods, stage}), and the goods move only when a carrier stands at
+# the far camp. The partnership grows where they land; they walk home
+# after. A carrier who dies on the road loses the gift; a far camp with
+# no adult still receives the goods. Changes LAGOON trajectories
+# wherever two camps can exchange; migration adds one person field,
+# gift=None.
+ENGINE_VERSION = "2026.11.12.3"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -1764,6 +1773,20 @@ def _patch_for(pat, kind, rng, fallback):
 def lagoon_assign(u, p, day, rng, shortfall):
     """One step of a life: people live out of a home, go out to work a patch
     with the others, and come back. Nobody wanders to a random spot."""
+    # A gift-bearing party walks: out with the goods, home again after. The
+    # crossing is real travel through the world's own movement, and the goods
+    # move only when a carrier stands at the far camp.
+    if p.get("gift"):
+        g = p["gift"]
+        camps = u.get("settlements") or []
+        if 0 <= g.get("to", -1) < len(camps):
+            dest = camps[g["to"]]
+            spot = (p.get("hx", dest["x"]), p.get("hy", dest["y"])) \
+                if g.get("stage") == "back" else (dest["x"], dest["y"])
+            p["a"], p["ad"] = A_WALK, days(3)
+            p["tx"], p["ty"] = spot
+            return
+        p.pop("gift", None)
     si = min(p.get("st", 0), len(u["settlements"]) - 1)
     st = u["settlements"][si]
     a = age_of(p, day)
@@ -2759,6 +2782,8 @@ def tick_lagoon(u, rng, events):
         needs.update_learning(u,p)
         needs.update_social(u,p)
         needs.spend_quarrel(u, p)     # any brawl whose time has run is settled now
+        if p.get("gift") and p["x"] == p["tx"] and p["y"] == p["ty"]:
+            needs.gift_arrive(u, p, day, events)
         if p.get("ad", 0) <= 0 and p["x"] == p["tx"] and p["y"] == p["ty"]:
             lagoon_assign(u, p, day, rng, shortfall)
         arrived = step_toward(p, terr_l, LAGOON_WALK)
@@ -3496,6 +3521,7 @@ def migrate(world):
             p.setdefault("aff", {})
             p.setdefault("goals_done", 0)
             p.setdefault("fx", None)          # the brawl in progress (2026.11.09.1)
+            p.setdefault("gift", None)         # the gift party under way (2026.11.11.2)
             p.setdefault("pregnancy_father", None)
             p.setdefault("social", None)
             p.setdefault("groom_day", None)

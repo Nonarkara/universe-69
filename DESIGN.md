@@ -58,6 +58,15 @@ arrive at different real times. Previous century trials remain historical
 per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
 release. This target is not a measured 2016 MacBook capacity claim.
 
+## Engine 2026.11.12.3: the gift is walked
+
+Same row as `.11.1`, the passing of time made visible. New person field:
+`gift = None` (default in `migrate()`).
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| An exchange is a journey, and the journey is the bond: partners cross to each other, and the goods land where the people land (Malinowski's kula expeditions) | A **pair of adults** from the giver's camp carries the gift across the world's own movement (`p["gift"] = {to, goods, stage}`); the goods move **only when a carrier stands at the far camp**, the partnership grows where they land (`gift_arrive`), and they walk home after. A carrier who dies on the road loses the gift; a far camp with no adult still receives it. | The pair is drawn by the world's own walking — no teleporting, no invented motion. Pinned in `tests/test_gift.py` (the party walks; delivery moves the store and the partnership; the ring stays bounded; four walked exchanges reach trust). |
+
 ## Engine 2026.11.12.2: temperaments differ in strength, not only direction
 
 Same row as `.12.1`, second half; no new fields, migration adds nothing.

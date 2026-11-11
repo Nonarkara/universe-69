@@ -695,26 +695,50 @@ def kula(u, day, rng, events):
         if best is None:
             continue
         ti, other, theirs = best
-        giver = mine[rng.randrange(len(mine))]
-        taker = theirs[rng.randrange(len(theirs))]
         goods = min(st["store"] * GIFT_SHARE, GIFT_CAP)
         if goods < 0.5:
             continue
-        st["store"] = st.get("store", 0.0) - goods
-        other["store"] = other.get("store", 0.0) + goods
+        party = mine[:2]                              # a pair walks it, not a crowd
+        st["store"] = st.get("store", 0.0) - goods    # the goods leave with them
+        for giver in party:
+            giver["gift"] = {"to": ti, "goods": goods / len(party), "stage": "out"}
+        events.append((day, "LAGOON", "gift",
+                       f"{party[0].get('n', '?')} sets out for "
+                       f"{other.get('n', 'the far camp')} with goods — "
+                       f"the exchange between the camps is kept."))
+
+
+def gift_arrive(u, p, day, events):
+    """A carrier stands at the far camp: the goods move, the pair is made."""
+    g = p.pop("gift", None)
+    if not g:
+        return
+    camps = u.get("settlements") or []
+    if not (0 <= g.get("to", -1) < len(camps)):
+        return
+    if g.get("stage") == "out":
+        camps[g["to"]]["store"] = camps[g["to"]].get("store", 0.0) + g.get("goods", 0.0)
         # the partnership grows both ways, bounded, pruned deterministically
-        for a, b in ((st, ti), (other, si)):
+        for a, b in ((u["settlements"][p.get("st", 0)], g["to"]),
+                     (camps[g["to"]], p.get("st", 0))):
             gift = a.setdefault("gifts", {})
             gift[str(b)] = min(1.0, gift.get(str(b), 0.0) + GIFT_SHARE)
             if len(gift) > GIFT_PARTNERS:
                 for k in sorted(gift, key=lambda k: (-gift[k], int(k)))[GIFT_PARTNERS:]:
                     del gift[k]
-        aff_touch(u, giver, taker["id"], 0.25)
-        aff_touch(u, taker, giver["id"], 0.25)
+        # the partnership is made where the goods land; an empty far camp
+        # still receives the goods, and the carrier still walks home
+        mine = [q for q in u.get("people", [])
+                if q is not p and q.get("st", 0) == g["to"] and not q.get("w")]
         u["stories"] = u.get("stories", 0.0) + 0.1
-        events.append((day, "LAGOON", "gift",
-                       f"{giver.get('n', '?')} carries goods to {taker.get('n', '?')} — "
-                       f"the exchange between the camps is kept."))
+        if mine:
+            taker = mine[p["id"] % len(mine)]
+            aff_touch(u, p, taker["id"], 0.25)
+            aff_touch(u, taker, p["id"], 0.25)
+            events.append((day, "LAGOON", "gift",
+                           f"{p.get('n', '?')} brings the goods to {taker.get('n', '?')} — "
+                           f"the exchange between the camps is kept."))
+        p["gift"] = {"to": g["to"], "goods": 0.0, "stage": "back"}
 
 
 def spend_quarrel(u, p):
