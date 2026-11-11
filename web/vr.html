@@ -143,7 +143,7 @@ function peopleOf(k) {
 function personRow(r) {
   return { x: r[0], y: r[1], cls: r[2], sex: r[3], id: r[4], act: r[5],
            face: r[6], age: r[7], bmi: r[8], sn: r[9], inj: r[10], wk: r[11],
-           carry: r[12], hun: r[13] };
+           carry: r[12], hun: r[13], gift: r[14] | 0 };
 }
 
 async function getJSON(url) {
@@ -1464,6 +1464,7 @@ function limbChain(root, middleHint, endHint, first, second) {
 }
 
 const _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _q2 = new THREE.Quaternion(), _v = new THREE.Vector3();
+const _bq = new THREE.Quaternion(); const _c = new THREE.Color();
 const _a = new THREE.Vector3(), _b = new THREE.Vector3(), _mid = new THREE.Vector3();
 const _dir = new THREE.Vector3(), _s = new THREE.Vector3(), _col = new THREE.Color();
 const _up = new THREE.Vector3(0, 1, 0);
@@ -1569,6 +1570,11 @@ class Crowd {
         cloth: dress === "fur" ? PAL.furD : dress === "swim" ? PAL.swim[a.id % 5] : PAL.hide };
     });
     this.heldAt = 0;
+    // a gift party's bundle, at the hand (2026.11.12.3; the near bodies are
+    // skinned elsewhere and carry theirs when that path takes held items)
+    this.bundles = inst(new THREE.BoxGeometry(0.17, 0.20, 0.13), cap * 2);
+    this.bundles.castShadow = false;
+    this.group.add(this.bundles);
     this.setSource(u);
   }
 
@@ -1601,7 +1607,7 @@ class Crowd {
 
   update(dt, t, heldOn) {
     const big = this.big;
-    const c = { n: 0, na: 0, nl: 0, nh: 0, nhair: 0, nf: 0, nt: 0, ns: 0, nface: 0, nm:0, nfm:0, nj:0, nan:0 };
+    const c = { n: 0, na: 0, nl: 0, nh: 0, nhair: 0, nf: 0, nt: 0, ns: 0, nface: 0, nm:0, nfm:0, nj:0, nan:0, nb: 0 };
     const size = this.size;
     const fast = !heldOn;
     this.humans.pick(this.actors, camera, renderer.xr.isPresenting ? 24 : 40, performance.now(),
@@ -1620,6 +1626,17 @@ class Crowd {
                  _s.set(0.42 * big, 0.42 * big, 0.42 * big));
       this.shadow.setMatrixAt(c.ns++, _m);
       if (!skinned) c.n++;   // head and neck instances are indexed by c.n
+      // the bundle rides at the hand-side of the waist, turned with the body
+      if (a.gift && !skinned){
+        const D = bodyDimensions(a.age, a.sex);
+        const side = (a.id % 2 ? 1 : -1);
+        _m.compose(_v.set(a.px - size / 2 + side * D.shHalf * 0.95,
+                          gy + D.H * 0.46 * big, a.py - size / 2),
+                   _bq.setFromAxisAngle(_up, a.yaw), _s.set(big, big, big));
+        this.bundles.setMatrixAt(c.nb, _m);
+        _c.setHex(a.gift === 1 ? 0xc8a06a : 0xb98d54);
+        this.bundles.setColorAt(c.nb++, _c);
+      }
     });
     [this.head, this.hair, this.torso, this.torsoFemale, this.torsoChild, this.anatomy, this.neck, this.face, this.arms, this.legs, this.hands,
      this.feet, this.trunks].forEach((m) => {
@@ -1631,6 +1648,7 @@ class Crowd {
     this.arms.count = c.na; this.legs.count = c.nl;
     this.hands.count = c.nh; this.feet.count = c.nf;
     this.trunks.count = c.nt; this.shadow.count = c.ns;
+    this.bundles.count = c.nb;
   }
 
   drawBody(a, root, t, big, fast, c) {
