@@ -42,6 +42,17 @@ verification: [hourly audit](docs/audits/2026-11-03-hourly/README.md).
 
 # STUDY — measurements from the running universes
 
+**2026-11-11 re-derivation — the long fuse under the shipped engine
+(`2026.11.12.2`, same witness rng lineage as the first 120-year arc).**
+Feuds 1,947, peaces 1,924, live bonds 4 at Y120; final population 220 (peak
+221) against the `.09.3` arc's 164, withdrawn 77 against 57, violence deaths
+147 against 104. The fuse's shape is unchanged — onset at the crowd era
+(~Y32), the one-for-one count, the thin residue of grudges still burning —
+but the wider individuality band and the temperament strengths moved the
+century's demography: the sink no longer draws the pen down as far. Quoted
+from the shipped code, as the honesty rules require; the earlier `.09.3`
+figures above remain version-specific history.
+
 **2026-11-11 controlled run — the gift (engine `2026.11.11.1`).** The 80-year
 plain witness never founded a second camp (a camp fissions only past its
 social limit — 80 people without lore — which this lagoon never reached), so
