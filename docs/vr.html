@@ -2158,6 +2158,30 @@ function updateSlate() {
   g.fillStyle = "#a39b88"; g.font = '400 24px Jost, sans-serif';
   g.fillText(held.on ? "A/X continue · trigger teleport · B/Y world"
                      : "A/X real-time · trigger teleport · B/Y world", 34, 268);
+  // the living record, read where the camera is: who is bent on what, which
+  // pairs have grown close, which feuds smoulder, and the camps' exchange
+  const sc = (state.scripture && state.scripture.eden) || {};
+  const scL = (state.scripture && state.scripture.lagoon) || {};
+  const bits = [];
+  const bent = (sc.chronicle && sc.chronicle.bent_on || []).length;
+  if (bent) bits.push(bent + " BENT ON SOMETHING");
+  const close = (sc.chronicle && sc.chronicle.close_pairs) || 0;
+  if (close) bits.push(close + " CLOSE PAIR" + (close === 1 ? "" : "S"));
+  const fe = (sc.chronicle && sc.chronicle.feuds) || 0;
+  if (fe) bits.push(fe + " FEUD" + (fe === 1 ? "" : "S"));
+  if (bits.length) {
+    g.fillStyle = "#8ec5d6"; g.font = '400 24px Jost, sans-serif';
+    g.fillText(bits.join(" · "), 132, 196);
+  }
+  const bitsL = [];
+  const exch = scL.exchange_partners || 0;
+  if (exch) bitsL.push(exch + " EXCHANGE PARTNER" + (exch === 1 ? "" : "S"));
+  const feL = (scL.chronicle && scL.chronicle.feuds) || 0;
+  if (feL) bitsL.push(feL + " FEUD" + (feL === 1 ? "" : "S"));
+  if (bitsL.length) {
+    g.fillStyle = "#a6c98a"; g.font = '400 24px Jost, sans-serif';
+    g.fillText(bitsL.join(" · "), 180, 242);
+  }
   slate.tex.needsUpdate = true;
 }
 
