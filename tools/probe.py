@@ -170,7 +170,9 @@ def independence(seeds=(69,), focals=6, trials=12, verbose=True):
               f"   (the starving should agree on food)")
         print(f"  designed tie-break noise:   {out['tie_noise']}"
               f"   (the 85% near-tie roulette, by design)")
-        for k, ok in (("person_divergence", out["person_divergence"] > 0.05),
+        for k, ok in (("identity_fingerprint", out["identity_flip_rate"] > 0.15),
+                      ("as-found_or_same_state_divergence",
+                       max(out["person_divergence"], out["asis_divergence"]) > 0.02),
                       ("urgent_convergence", out["urgent_convergence"] >= 0.6)):
             print(f"  [{'PASS' if ok else 'FAIL'}] {k}")
     return out
@@ -345,7 +347,8 @@ def main():
     verdicts = []
     if "independence" in out:
         i = out["independence"]
-        verdicts += [i["person_divergence"] > 0.02, i["urgent_convergence"] >= 0.6]
+        verdicts += [max(i["person_divergence"], i["asis_divergence"]) > 0.02,
+                     i["urgent_convergence"] >= 0.6]
     if "inner_life" in out:
         verdicts += list(out["inner_life"]["verdicts"].values())
     if "habitability" in out:

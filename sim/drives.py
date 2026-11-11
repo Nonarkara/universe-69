@@ -41,7 +41,12 @@ def response(u: Dict[str, Any], p: Dict[str, Any], need: str, deficit: float) ->
 # in the same room choose differently: one leans to company, one to the
 # work, one to the walk. The spread is chosen so an urgent body still
 # dominates (hunger beats any taste) and a comfortable choice can tip.
+# The strength multiplier (2026.11.12.2) makes temperaments differ in
+# kind, not only direction: a person of settled habit leans hard, a
+# person of fluid days barely leans at all.
 TASTE_SPREAD = 0.14
+TASTE_STRENGTH_LO = 0.5
+TASTE_STRENGTH_HI = 1.5
 
 TASTE_CATEGORIES = ("work", "company", "still", "roam", "care", "indulge", "quarrel")
 
@@ -57,4 +62,5 @@ def taste(u: Dict[str, Any], p: Dict[str, Any], category: str) -> float:
     digest = hashlib.sha256(json.dumps(identity, separators=(',', ':'),
                                        ensure_ascii=True).encode('ascii')).digest()
     unit = int.from_bytes(digest[:8], 'big') / float((1 << 64) - 1)
-    return 2.0 * unit - 1.0
+    strength = int.from_bytes(digest[8:16], 'big') / float((1 << 64) - 1)
+    return (2.0 * unit - 1.0) * (TASTE_STRENGTH_LO + (TASTE_STRENGTH_HI - TASTE_STRENGTH_LO) * strength)

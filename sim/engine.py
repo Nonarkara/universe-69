@@ -152,14 +152,17 @@ GESTATION = 270
 # (Malinowski). The partnership reaching 0.6 is what scripture counts as an
 # exchange partner. New saved field: st["gifts"] = {} (default in migrate).
 # Changes LAGOON trajectories from the first year two camps can both pay.
-# 2026.11.12.1 — deeper individuality. The identity-derived personal
+# 2026.11.12.1/.2 — deeper individuality. (a) The identity-derived personal
 # midpoint (drives.midpoint, the deficit at which a need's response is
 # .5) widens from [.44,.56] to [.40,.60]: the same body in the same
-# situation now leans harder its own way, because who someone is decides
-# when hunger or loneliness or weariness starts to press. Every decision
-# that reads a need moves; no new fields, no new RNG, no feedback.
-# Migration adds nothing.
-ENGINE_VERSION = "2026.11.12.1"
+# situation leans harder its own way, because who someone is decides when
+# hunger or loneliness or weariness starts to press. (b) The taste's
+# strength is itself identity-hashed, in [0.5, 1.5] of the lean: a
+# creature of settled habit tips its open choices by up to a fifth, a
+# person of fluid days barely leans at all — temperaments differ in kind,
+# not only direction. Every decision that reads a need or a taste moves;
+# no new fields, no new RNG, no feedback. Migration adds nothing.
+ENGINE_VERSION = "2026.11.12.2"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the

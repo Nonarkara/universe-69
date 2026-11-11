@@ -40,8 +40,16 @@ class TestTastes(unittest.TestCase):
         ts = [drives.taste(self.u, p, "company") for p in self.u["people"]]
         self.assertEqual(len(set(ts)), len(ts), "two people share one taste")
         for t in ts:
-            self.assertGreaterEqual(t, -1.0)
-            self.assertLessEqual(t, 1.0)
+            self.assertGreaterEqual(t, -drives.TASTE_STRENGTH_HI)
+            self.assertLessEqual(t, drives.TASTE_STRENGTH_HI)
+
+    def test_temperaments_differ_in_strength_not_only_direction(self):
+        # 2026.11.12.2: the lean's strength is identity-hashed, so the cast
+        # holds settled habits and fluid days, not one uniform wobble.
+        cast = [abs(drives.taste(self.u, p, "company"))
+                for p in self.u["people"]]
+        self.assertGreater(max(cast) - min(cast), 0.6,
+                           "everyone leans with the same strength")
 
     def test_a_taste_is_for_life(self):
         p = self.u["people"][0]

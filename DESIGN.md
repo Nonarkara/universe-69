@@ -58,6 +58,14 @@ arrive at different real times. Previous century trials remain historical
 per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
 release. This target is not a measured 2016 MacBook capacity claim.
 
+## Engine 2026.11.12.2: temperaments differ in strength, not only direction
+
+Same row as `.12.1`, second half; no new fields, migration adds nothing.
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| People differ not only in *what* they lean toward but in *how hard*: a creature of settled habit and a person of fluid days are different kinds of people (Pinker ch.18: trait distributions differ in variance across the Big Five, not only in means) | The taste's **strength** is identity-hashed, in [0.5, 1.5] of the lean: a settled habit tips a genuinely open choice by up to a fifth, a fluid temperament barely leans at all. | Still identity-derived and fixed for life; still subordinate to an urgent body — hunger outranks any taste at any strength. Pinned in `tests/test_inner_life.py` (the bound, and the cast's spread of strengths). |
+
 ## Engine 2026.11.12.1: deeper individuality
 
 Changes both worlds' trajectories from the first decision that reads a
