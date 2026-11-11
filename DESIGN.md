@@ -58,6 +58,15 @@ arrive at different real times. Previous century trials remain historical
 per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
 release. This target is not a measured 2016 MacBook capacity claim.
 
+## Engine 2026.11.12.4: the hearth passes
+
+Changes LAGOON records wherever a death leaves children. No new fields;
+migration adds nothing.
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| A home is held across a generation; the dead leave their place to their young (the domestic continuity every forager kinship system already runs on) | The **eldest child** of the dead keeps their home in LAGOON: the hearth's coordinates pass, and the record says it once — *"X keeps Y's hearth."* Already-held hearths are not re-named. | Bookkeeping over the kinship the record already holds; no new fields, no RNG. EDEN's homes are boxes, claimed and released — a pen has no hearths to pass, and its deaths are silent. Pinned in `tests/test_hearth.py`. |
+
 ## Engine 2026.11.12.3: the gift is walked
 
 Same row as `.11.1`, the passing of time made visible. New person field:

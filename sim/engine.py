@@ -171,7 +171,13 @@ GESTATION = 270
 # no adult still receives the goods. Changes LAGOON trajectories
 # wherever two camps can exchange; migration adds one person field,
 # gift=None.
-ENGINE_VERSION = "2026.11.12.3"
+# 2026.11.12.4 — the hearth passes. In LAGOON, the eldest child of the dead
+# keeps their home: the place is held across a generation and the record says
+# so once ("X keeps Y's hearth"). Pure bookkeeping over the kinship the
+# record already holds; no new fields, no new RNG. EDEN's homes are boxes,
+# claimed and released — a pen has no hearths to pass. Changes LAGOON
+# records wherever a death leaves children.
+ENGINE_VERSION = "2026.11.12.4"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -719,6 +725,23 @@ def remove_dead(u, dead):
                 occ[str(box)] = max(0, occ.get(str(box), 0) - 1)
     people[:] = [p for p in people if p["id"] not in ids]
     clear_widows(people, removed)
+    # The hearth passes: in the lagoon, the eldest child of the dead takes up
+    # their home — a place is held across a generation, and the record says so
+    # once. Pure bookkeeping over the kinship the record already holds.
+    if u["kind"] == "LAGOON":
+        for p in removed:
+            kids = [q for q in people
+                    if not q.get("w") and q.get("id") != p["id"]
+                    and (q.get("mom") == p["id"] or q.get("dad") == p["id"])]
+            if not kids:
+                continue
+            heir = min(kids, key=lambda q: (q.get("b", 0), -q["id"]))   # the eldest
+            if (heir.get("hx"), heir.get("hy")) == (p.get("hx"), p.get("hy")):
+                continue
+            heir["hx"], heir["hy"] = p.get("hx", heir["hx"]), p.get("hy", heir["hy"])
+            u.setdefault("_buff", []).append(
+                (u.get("day", 0), "heir",
+                 f"{heir.get('n', '?')} keeps {p.get('n', '?')}'s hearth."))
     if "_ctx" in u:
         u["_ctx"] = day_context(people, u["day"])
 
