@@ -118,12 +118,14 @@ class TestSummarizeShape(unittest.TestCase):
 
     def test_people_rows_have_fourteen_positional_fields(self):
         """[x, y, cls, sex, id, act, face, age, bmi, strength, injury, wk,
-        carry, hunger] — the renderer indexes these; the body fields draw the
-        figure, carry draws the load coming home, hunger the thin face."""
+        carry, hunger, gift] — the renderer indexes these; the body fields
+        draw the figure, carry draws the load coming home, hunger the thin
+        face, and gift the bundle an exchange party walks with (2026.11.12.3,
+        the fifteenth field; older rows simply lack it)."""
         for key in ("eden", "lagoon"):
             for p in self.snap["u"][key]["people"]:
-                self.assertEqual(len(p), 14)
-                x, y, cls, sex, pid, act, face, age, bmi, sn, inj, wk, carry, hun = p
+                self.assertIn(len(p), (14, 15))
+                x, y, cls, sex, pid, act, face, age, bmi, sn, inj, wk, carry, hun = p[:14]
                 self.assertIn(carry, (0, 1, 2))
                 self.assertTrue(0 <= hun <= 9)
                 for v in (age, bmi, sn, inj, wk):

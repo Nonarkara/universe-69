@@ -1533,7 +1533,8 @@ function bodyOf(a){
            hungry: a.hungry?1:0,
            gaunt: (a.hun>=7)?1:0,                // hunger 7/10 or worse: drawn and gaunt
            carry: a.carry|0,                       // 1 a load on the back, 2 a carcass on the shoulders
-           infant: a.infant?1:0 };
+           infant: a.infant?1:0,
+           gift: a.gift|0 };                      // a gift party: 1 outbound, 2 homeward
 }
 // The rig's measurements for one body, in the figure's 32-unit space.
 function rigDims(B, sex){
@@ -1832,7 +1833,20 @@ function drawFar(g, J, D, k, tones, dress, v, B, fem, P, f){
 function drawHeld(g, J, D, P, B, lw, far){
   var hx=J.wriR[0], hy=J.wriR[1]+0.6;
   g.lineCap="round";
-  if (P.tool===1){
+  // a gift party carries the exchange: a bound bundle at the hand, seen at
+  // every size, so the crossing between camps can be watched (2026.11.12.3)
+  if (B && B.gift){
+    var gw=lw*(far?2.6:3.2), gh=gw*(far?0.78:0.92);
+    g.fillStyle=B.gift===1?"#c8a06a":"#b98d54"; g.strokeStyle=INK; g.lineWidth=lw*(far?0.7:0.9);
+    g.beginPath(); g.moveTo(hx-gw/2, hy);
+    g.lineTo(hx+gw/2, hy); g.lineTo(hx+gw/2+gw*0.08, hy-gh);
+    g.lineTo(hx-gw/2+gw*0.08, hy-gh); g.closePath(); g.fill(); g.stroke();
+    g.beginPath(); g.moveTo(hx-gw/2+gw*0.06, hy-gh*0.55); g.lineTo(hx+gw/2+gw*0.06, hy-gh*0.55); g.stroke();  // the binding
+    if (!far){                                   // a fish tail or a leaf shows at the top
+      g.fillStyle=B.gift===1?"#7d9a5a":"#8fa05e";
+      g.beginPath(); g.ellipse(hx+gw*0.16, hy-gh-gw*0.10, gw*0.30, gw*0.14, 0.5, 0, 6.283); g.fill();
+    }
+  } else if (P.tool===1){
     var ang=P.toolAng, L=14;
     g.strokeStyle=INK; g.lineWidth=lw;
     g.beginPath(); g.moveTo(hx-Math.cos(ang)*4, hy-Math.sin(ang)*4); g.lineTo(hx+Math.cos(ang)*L, hy+Math.sin(ang)*L); g.stroke();
@@ -2718,6 +2732,7 @@ function syncActors(map, people, ox, detail){
     // 14-field rows (engine 2026.10.28.4): what they carry, how hungry (tenths)
     a.carry = p.length>12 ? (p[12]|0) : 0;
     a.hun = p.length>13 ? (p[13]|0) : -1;
+    a.gift = p.length>14 ? (p[14]|0) : 0;   // a gift party under way (2026.11.12.3)
     var d=detail&&detail[String(id)]; a.pid=d?d[6]:0; a.preg=d?((d[3]&4)?1:0):0;
     a.hungry = a.hun>=0 ? (a.hun>=5?1:0) : (d?((d[3]&32)?1:0):0);
     a.infant = d?((d[3]&8)?1:0):0;

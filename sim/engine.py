@@ -3191,7 +3191,10 @@ def summarize(world):
                         # 12: carrying food home (0 none, 1 a load, 2 a carcass)
                         0 if p.get("carry", 0.0) <= 0 else 2 if p.get("carry_kind") in ("deer", "cat") else 1,
                         # 13: hunger in tenths of the way to starving
-                        min(9, int(p.get("hun", 0.0) / needs.HUNGER_MAX * 10))])
+                        min(9, int(p.get("hun", 0.0) / needs.HUNGER_MAX * 10)),
+                        # 14: a gift party under way (0 no, 1 outbound, 2 homeward)
+                        0 if not p.get("gift") else
+                        1 if p["gift"].get("stage") == "out" else 2])
             detail[str(p["id"])] = person_detail(u, p, day, ctx)
         # u.part is the next tick. Show the light of the activity we just
         # simulated, so a night on watch is seen at night rather than dawn.
