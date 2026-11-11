@@ -2032,6 +2032,34 @@ function topActs(u) {
 }
 
 let hudLast = "", showRecord = false, recordPage = 0;
+
+// Who you are standing beside: the nearest person in the record to the
+// player, in tiles, with their own inner life — the reading the 2D card
+// gives a follower, carried into the headset.
+function nearestPerson(key, u) {
+  if (!u || !u.people) return null;
+  const S = worldSize(key);
+  const px = playerAt.x + S / 2, pz = playerAt.z + S / 2;
+  let best = null, bd = 16;                                  // four tiles, squared
+  u.people.forEach((p) => {
+    if (!p || p.length < 5) return;
+    const dx = p[0] - px, dz = p[1] - pz, d = dx * dx + dz * dz;
+    if (d < bd) { bd = d; best = p; }
+  });
+  if (!best) return null;
+  const d = (u.detail || {})[String(best[4])];
+  const act = ACT_WORD[best[5]] || "still";
+  const bits = [];
+  if (d && d.length > 13 && d[13]) bits.push(d[13]);
+  if (d && d.length > 14 && d[14]) bits.push("bent on: " + d[14]);
+  if (d && d.length > 15 && d[15]) bits.push(d[15]);
+  return {
+    name: d ? d[0] : ("#" + best[4]),
+    age: d ? d[1] : "?",
+    act,
+    bits
+  };
+}
 function updateHUD() {
   const el = $("readout");
   if (!el) return;
@@ -2075,6 +2103,12 @@ function updateHUD() {
   } else {
     const key = mode.active, u = state.u[key];
     html += summary(key, u) + '<div class="row">' + esc(topActs(u)) + '</div>';
+    const beside = nearestPerson(key, u);
+    if (beside) {
+      html += '<div class="row">beside you · <b>' + esc(beside.name) + '</b>, ' +
+        esc(beside.age) + ' · ' + esc(beside.act) +
+        (beside.bits.length ? ' · ' + esc(beside.bits.join(" · ")) : "") + '</div>';
+    }
   }
   if (html !== hudLast) {
     const focusId = document.activeElement && document.activeElement.id;
