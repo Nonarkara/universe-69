@@ -1224,8 +1224,17 @@ function edenNight(g, u, sx, sy, ts, canvas){
   var tod=displayLight(u).tod;
   if (tod!=="night" && tod!=="dusk") return;
   var lit=tod==="night"?0.65:0.32, S=u.size||48;
-  var boxes=(u.boxes_xy&&u.boxes_xy.length)?u.boxes_xy:EDEN_BOXES_FALLBACK;
   g.save();
+  // the moon on the sea beyond the glass: a path of light lying on the
+  // water outside the dome, warmer as the dusk deepens, gone by day
+  var mLit=tod==="night"?0.34:0.16;
+  g.globalCompositeOperation="lighter"; g.globalAlpha=mLit;
+  var mw=Math.max(6*ts, canvas.width*0.9), mx=canvas.width*0.5, my=canvas.height*0.5+ (S+2*EM)*ts*0.5;
+  var mp=g.createLinearGradient(mx-mw*0.5, my, mx+mw*0.5, my);
+  mp.addColorStop(0,"rgba(190,214,232,0)"); mp.addColorStop(0.5,"rgba(190,214,232,0.9)"); mp.addColorStop(1,"rgba(190,214,232,0)");
+  g.fillStyle=mp; g.fillRect(mx-mw*0.5, my-mw*0.10, mw, mw*0.20);
+  g.globalAlpha=1;
+  var boxes=(u.boxes_xy&&u.boxes_xy.length)?u.boxes_xy:EDEN_BOXES_FALLBACK;
   boxes.forEach(function(box, bi){
     var ac=alcoveFor(box,S), x=(ac[0]+EM-sx)*ts, y=(ac[1]+EM-sy)*ts;
     if (x<-4*ts||y<-4*ts||x>canvas.width+4*ts||y>canvas.height+4*ts) return;
