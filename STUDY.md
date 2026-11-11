@@ -65,6 +65,15 @@ goods to Indra · Siddhartha to Ganga · Shiva to Maya · Arjuna to Krishna*.
 The plain seed-69 arc (1 camp all 80 years) is recorded beside it as the
 honest negative.
 
+**2026-11-11 re-derivation — the gift, walked (engine `2026.11.12.3`, same
+controlled setup).** 81 parties set out across the lagoon in 60 years (162
+named landings — a pair carries each gift), a standing partnership by Y10 and
+held; the pace is roughly one party a year early and slows as the two camps'
+population falls to 10 by Y60. Against `.11.1`'s 69 ledger-gifts, the walked
+exchange moves about a third more often, because the pair that carries it is
+also the pair the record names. The plain seed-69 arc (1 camp all 80 years)
+remains the honest negative beside it.
+
 **2026-11-10 replication — the long fuse, three seeds (engine `2026.11.09.3`,
 witness rng lineages, EDEN-only, 60 years each).** Seed 7: 476 feuds, 475
 peaces (Y60 pop 209, violence 11). Seed 25: 423/421 (pop 196, violence 25).
