@@ -2200,16 +2200,29 @@ function drawSketch(g, cx, footY, s, act, c, moving, v, B, sex, dress, wk, view,
         g.beginPath(); g.moveTo(toe-0.08, sole-0.08); g.lineTo(toe-0.02, sole-0.18); g.stroke();
       }
     } else {
-      // the hand: a small mitten along the forearm's line, no spikes
+      // the hand: a mitten with a thumb at the wrist, and — at the tight
+      // rung — actual fingers, because a hand is not a paw
       var hl=D.headH*0.62, hw=hl*0.42, ux=dx/dl, uy=dy/dl;
       g.beginPath(); g.ellipse(e[0]+ux*hl*0.42, e[1]+uy*hl*0.42, hl*0.5, hw*0.5, Math.atan2(uy,ux), 0, 6.283);
       g.fill(); g.stroke();
-      if (s>=4) { // finger separation hints (MANGA_PLAN E1)
-        g.strokeStyle=INK_SOFT; g.lineWidth=ink*0.35;
-        var fx=e[0]+ux*hl*0.65, fy=e[1]+uy*hl*0.65;
-        for (var fi=0; fi<2; fi++) {
-          var fa = Math.atan2(uy,ux) + (fi-0.5)*0.35;
-          g.beginPath(); g.moveTo(fx, fy); g.lineTo(fx+Math.cos(fa)*hl*0.22, fy+Math.sin(fa)*hl*0.22); g.stroke();
+      var ang=Math.atan2(uy,ux), nX=-uy, nY=ux;                    // the forearm's normal
+      g.lineWidth=Math.max(ink*0.9, 0.08);                          // the thumb, off the side
+      g.strokeStyle=INK;
+      g.beginPath(); g.moveTo(e[0]+ux*hl*0.05-nX*hw*0.30, e[1]+uy*hl*0.05-nY*hw*0.30);
+      g.quadraticCurveTo(e[0]+ux*hl*0.22-nX*hw*0.95, e[1]+uy*hl*0.22-nY*hw*0.95,
+                         e[0]+ux*hl*0.30-nX*hw*1.25, e[1]+uy*hl*0.30-nY*hw*1.25);
+      g.stroke();
+      if (s>=4) { // the fingers, from the knuckles out
+        g.strokeStyle=INK_SOFT; g.lineWidth=Math.max(ink*0.35, 0.06);
+        for (var fi=0; fi<4; fi++){
+          var spread=(fi-1.5)/1.5;
+          var kx=e[0]+ux*hl*0.62+nX*hw*spread*0.55, ky=e[1]+uy*hl*0.62+nY*hw*spread*0.55;
+          var len=hl*(0.16-Math.abs(spread)*0.03);
+          var fa=ang+spread*0.42;
+          g.beginPath(); g.moveTo(kx, ky);
+          g.quadraticCurveTo(kx+Math.cos(fa)*len*0.6+nX*hw*spread*0.25, ky+Math.sin(fa)*len*0.6+nY*hw*spread*0.25,
+                             kx+Math.cos(fa)*len+nX*hw*spread*0.1, ky+Math.sin(fa)*len+nY*hw*spread*0.1);
+          g.stroke();
         }
       }
     }

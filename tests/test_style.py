@@ -323,7 +323,19 @@ class TestTheStandingBody(unittest.TestCase):
 
     def test_hands_are_mittens_and_small_figures_have_their_own_drawing(self):
         body = self.src.split("function drawSketch(")[1].split("\nfunction ")[0]
-        self.assertNotIn("fingers", body, "hands grew spikes again")
+        # The mittens decision stands at every size except the tightest rung,
+        # where 2026.11.12.3 gave the rig real hands: a thumb off the forearm's
+        # normal, and four tapered fingers from the knuckles out, gated on
+        # s>=4. They are drawn as tapering quads along the hand's own axes,
+        # never as straight-line spikes.
+        finger_block = body.split("the fingers, from the knuckles out")
+        self.assertTrue(len(finger_block) > 1, "the hand has no fingers at all")
+        gated = finger_block[1].split("ink*0.9")[0]
+        self.assertIn("s>=4", gated, "fingers must be gated to the tight rung")
+        self.assertIn("quadraticCurveTo", finger_block[1],
+                      "fingers must taper, not spike")
+        self.assertNotIn("lineTo(fx+Math.cos", body,
+                         "the old straight-line spikes returned")
         self.assertIn("function drawFar(", self.src)      # 10-26 px: silhouette first
         self.assertIn("function drawTiny(", self.src)     # under 10 px: an upright mark
 
