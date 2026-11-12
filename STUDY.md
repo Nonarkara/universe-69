@@ -42,6 +42,29 @@ verification: [hourly audit](docs/audits/2026-11-03-hourly/README.md).
 
 # STUDY — measurements from the running universes
 
+**2026-11-12 the wild ring opens (live instrument, engine `2026.11.12.4`,
+LAGOON Y507).** The plain lagoon finally fissioned on its own — Meera and
+Parvati, two camps on the same land — and the gift ring opened *in the wild*:
+`exchange_partners: 1`, thirty gift events in the record, the last reading
+*"Sita brings the goods to Brahma — the exchange between the camps is kept."*
+This retires the caveat recorded twice below (the ring had only been seen in
+controlled two-camp witnesses). The sink-era contraction made it watchable in
+a second way: the slate reads pop 37 under **183 huts** — homes persisting
+across the die-off, which is exactly the domestic continuity the hearth pass
+(`2026.11.12.4`) holds in place; the same record carries its first wild
+keeping, *"Ganga keeps Krishna's hearth."*
+
+**2026-11-12 VR verified under headless WebGL (SwiftShader).** The headset
+page — module graph, humans rig, instanced crowd with the gift bundles, held
+items, the beside-you readout — loads and renders with **zero page errors and
+zero console errors**. The table view renders both worlds at dusk
+(`vr-table.png`); entering the lagoon puts the player inside a hut at night
+among near bodies, and the readout names the person beside them:
+*"beside you · Brahma, 35.6 · drinking · warm · close to #435"* — name, age,
+activity, mood, and the named bond, read from the same detail rows the 2D
+card draws (`vr-inside.png`). Physical-headset verification remains
+outstanding (no hardware); everything short of it is now evidenced.
+
 **2026-11-11 re-derivation — the long fuse under the shipped engine
 (`2026.11.12.2`, same witness rng lineage as the first 120-year arc).**
 Feuds 1,947, peaces 1,924, live bonds 4 at Y120; final population 220 (peak
