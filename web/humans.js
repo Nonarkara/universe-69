@@ -234,6 +234,33 @@ class Figure {
     // A gift party carries the exchange: a bound bundle at the hand, warm
     // outbound and a shade deeper homeward (2026.11.12.3/2026.11.12.5).
     if (a.gift) this.addBundle(a.gift);
+    else this.addHeld(a);
+  }
+
+  // What the hands hold: a shaft with a tip (hunt, fish), a hoe's blade
+  // (farm), a basket (forage), a load (build) — the 2D mapping, on the rig.
+  addHeld(a) {
+    const hand = this.bones.hand_r || this.bones.hand_l || this.bones.lowerarm_r;
+    if (!hand) return;
+    const isHand = /^hand/i.test(hand.name);
+    const place = (g, mat, x, y, z) => {
+      const m = new THREE.Mesh(g, mat);
+      m.position.set(isHand ? x : x + 0.02, isHand ? y : y - 0.23, isHand ? z : z + 0.02);
+      m.castShadow = true;
+      hand.add(m);
+      return m;
+    };
+    if (a.act === A.HUNT || a.act === A.FISH) {
+      place(HELD.shaft, WOOD, 0.04, -0.10, 0.10);
+      place(HELD.tip, STONE, 0.04, -0.78, 0.10);
+    } else if (a.act === A.FARM) {
+      place(HELD.shaft, WOOD, 0.05, -0.06, 0.06);
+      place(HELD.blade, STONE, 0.05, -0.60, 0.10);
+    } else if (a.act === A.FORAGE) {
+      place(HELD.basket, WOOD, 0.02, -0.06, 0.10);
+    } else if (a.act === A.BUILD) {
+      place(HELD.load, WOOD, 0.02, -0.05, 0.10);
+    }
   }
 
   addBundle(stage) {
@@ -383,6 +410,18 @@ class Figure {
 const _p = new THREE.Vector3(), _c = new THREE.Vector3(), _w = new THREE.Vector3(), _ax = new THREE.Vector3();
 // A gift party's bundle, bound, about a head and a half wide.
 const BUNDLE_GEO = new THREE.BoxGeometry(0.20, 0.15, 0.14);
+// What the hands hold, by the record's activity: the shaft for a spear or a
+// rod, the blade of a hoe, a basket, a load (the 2D rig's own mapping,
+// carried onto the near bodies).
+const HELD = {
+  shaft: new THREE.BoxGeometry(0.028, 0.95, 0.028),
+  tip: new THREE.BoxGeometry(0.055, 0.16, 0.028),
+  blade: new THREE.BoxGeometry(0.20, 0.14, 0.03),
+  basket: new THREE.BoxGeometry(0.19, 0.13, 0.17),
+  load: new THREE.BoxGeometry(0.20, 0.16, 0.24),
+};
+const WOOD = new THREE.MeshStandardMaterial({ color: 0x6b4a2e, roughness: .85 });
+const STONE = new THREE.MeshStandardMaterial({ color: 0xa49c8c, roughness: .9 });
 const _q1 = new THREE.Quaternion(), _q2 = new THREE.Quaternion(), _q3 = new THREE.Quaternion();
 
 // One figure outside any crowd, for the figure study page.
