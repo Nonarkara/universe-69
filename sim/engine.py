@@ -181,7 +181,14 @@ GESTATION = 270
 # when the aff_note names someone not among the living it now reads
 # "#435, gone" instead of a bare number. Display text only: no field, no
 # RNG, no trajectory changes in either world.
-ENGINE_VERSION = "2026.11.12.5"
+# 2026.11.12.6 — the roof passes with the hearth. A bonded pair's hut
+# outlives them; when the other side of the owning pair is gone too, the
+# heir's pair takes it over if they have raised none of their own (and
+# continues whatever work the dead began). A living widow keeps her roof;
+# a lone heir keeps the hearth but not a pair's bed. Changes LAGOON
+# trajectories wherever a pair dies leaving a child in a pair; EDEN
+# untouched. No new fields, no new RNG.
+ENGINE_VERSION = "2026.11.12.6"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
@@ -733,19 +740,46 @@ def remove_dead(u, dead):
     # their home — a place is held across a generation, and the record says so
     # once. Pure bookkeeping over the kinship the record already holds.
     if u["kind"] == "LAGOON":
+        done_hh = set()          # couples whose household already passed
         for p in removed:
             kids = [q for q in people
                     if not q.get("w") and q.get("id") != p["id"]
                     and (q.get("mom") == p["id"] or q.get("dad") == p["id"])]
             if not kids:
                 continue
+            partner = p.get("p")
+            if partner is not None and partner in ids:
+                hh = frozenset((p["id"], partner))
+                if hh in done_hh:
+                    continue                  # one household, one passing
+                mate = next((r for r in removed if r["id"] == partner), None)
+                mkids = {q["id"] for q in people if not q.get("w")
+                         and (q.get("mom") == partner or q.get("dad") == partner)}
+                if mate is not None and mkids and mkids <= {q["id"] for q in kids}:
+                    done_hh.add(hh)           # the same children: settle once
             heir = min(kids, key=lambda q: (q.get("b", 0), -q["id"]))   # the eldest
             if (heir.get("hx"), heir.get("hy")) == (p.get("hx"), p.get("hy")):
                 continue
             heir["hx"], heir["hy"] = p.get("hx", heir["hx"]), p.get("hy", heir["hy"])
+            # The roof passes with the hearth: a bonded pair's hut outlives
+            # them, and when the other side of the owning pair is gone too,
+            # the heir's pair — if they have raised no roof of their own —
+            # takes it over, finishing whatever work the dead began. A living
+            # widow keeps her roof. An heir without a pair keeps the hearth
+            # but not the hut (a lone sleeper has no use for a pair's bed).
+            said = f"{heir.get('n', '?')} keeps {p.get('n', '?')}'s hearth."
+            if p.get("p") is not None and p["p"] in ids:
+                st = needs.camp_of(u, p)
+                hp = heir.get("p")
+                if st is not None and hp is not None and heir.get("st", 0) == p.get("st", 0):
+                    key = min(p["id"], p["p"])
+                    roof = next((h for h in st.get("huts") or () if h["own"] == key), None)
+                    if roof is not None and needs.hut_of(u, heir) is None:
+                        roof["own"] = min(heir["id"], hp)
+                        said = (f"{heir.get('n', '?')} keeps "
+                                f"{p.get('n', '?')}'s hearth and roof.")
             u.setdefault("_buff", []).append(
-                (u.get("day", 0), "heir",
-                 f"{heir.get('n', '?')} keeps {p.get('n', '?')}'s hearth."))
+                (u.get("day", 0), "heir", said))
     if "_ctx" in u:
         u["_ctx"] = day_context(people, u["day"])
 

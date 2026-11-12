@@ -58,6 +58,15 @@ arrive at different real times. Previous century trials remain historical
 per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
 release. This target is not a measured 2016 MacBook capacity claim.
 
+## Engine 2026.11.12.6: the roof passes with the hearth
+
+Changes LAGOON trajectories wherever a pair dies leaving a child who is
+in a pair. No new fields; migration adds nothing.
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| A bonded pair's hut outlives them (huts accumulate — the live slate read 183 huts for 37 people); the young of the pair's own body, not strangers, take over the dead's roof, the way hearth and hut pass together in every forager inheritance | When the hearth passes (engine `2026.11.12.4`) and **both** members of the dead's owning pair are gone, the heir's pair — if they have raised no hut of their own — claims the dead pair's hut and continues its unfinished work under their own labor. A living widow keeps her roof. An heir without a pair keeps the hearth but not the hut (a lone sleeper has no use for a pair's bed). The record line becomes *"X keeps Y's hearth and roof."* | Bookkeeping over the huts and kinship the record already holds; no new fields, no RNG. EDEN untouched. Pinned in `tests/test_hearth.py`. |
+
 ## Engine 2026.11.12.5: the card says "gone"
 
 Display text only; no field, no RNG; changes no trajectories in either

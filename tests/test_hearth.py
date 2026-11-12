@@ -13,6 +13,7 @@ sys.path.insert(0, "sim")
 
 import engine   # noqa: E402
 import minds    # noqa: E402
+import needs    # noqa: E402
 
 
 def _family(world_key="lagoon"):
@@ -91,6 +92,97 @@ class TestTheHearthPasses(unittest.TestCase):
         self.assertNotEqual((p.get("hx"), p.get("hy")), (None, None))
         self.assertFalse([e for e in u.get("_buff", []) if e[1] == "heir"],
                          "EDEN named a passing it does not have")
+
+
+def _pair(u, a, b):
+    """Bond two adults the way the engine's pairings do."""
+    a["p"], b["p"] = b["id"], a["id"]
+
+
+def _hut(u, owner_key, done=True):
+    st = u["settlements"][0]
+    h = {"own": owner_key, "x": st["x"] + 2, "y": st["y"] + 2,
+         "w": needs.HUT_WORK if done else needs.HUT_WORK * 0.4,
+         "done": done}
+    st.setdefault("huts", []).append(h)
+    return h
+
+
+class TestTheRoofPasses(unittest.TestCase):
+    """The roof passes with the hearth (2026.11.12.6): the dead pair's hut
+    goes to the heir's pair when they have none, a widow keeps hers, a lone
+    heir keeps the hearth but not a pair's bed."""
+
+    def setUp(self):
+        w = engine.genesis(7, 1)
+        for _ in range(2400):
+            engine.tick_world(w, [])
+        self.w = w
+        self.u = w["lagoon"]
+        adults = [q for q in self.u["people"]
+                  if engine.age_of(q, self.u["day"]) >= minds.ADULT_AGE
+                  and not q.get("w")]
+        # a founding couple with a finished hut, and their eldest child in
+        # a pair of their own, living apart
+        self.dad = adults[0]
+        self.mom = adults[1]
+        _pair(self.u, self.dad, self.mom)
+        self.kid = adults[2]
+        self.kidmate = adults[3]
+        _pair(self.u, self.kid, self.kidmate)
+        # the kinship, explicit: the eldest child of this couple, however
+        # the generated world happened to arrange its families
+        self.kid["mom"], self.kid["dad"] = self.dad["id"], self.mom["id"]
+        for q in (self.kid, self.kidmate):
+            q["hx"], q["hy"] = 3, 3
+        self.hut = _hut(self.u, min(self.dad["id"], self.mom["id"]))
+
+    def test_the_heirs_pair_takes_the_roof(self):
+        _pair_key = min(self.dad["id"], self.mom["id"])
+        engine.remove_dead(self.u, [self.dad, self.mom])
+        self.assertEqual(self.hut["own"], min(self.kid["id"], self.kidmate["id"]),
+                         "the roof did not pass to the heir's pair")
+        line = [e for e in self.u.get("_buff", []) if e[1] == "heir"]
+        self.assertTrue(any("hearth and roof" in e[2] for e in line),
+                         "the record did not say the roof passed")
+
+    def test_a_living_widow_keeps_her_roof(self):
+        engine.remove_dead(self.u, [self.dad])
+        self.assertEqual(self.hut["own"], min(self.dad["id"], self.mom["id"]),
+                         "the widow's roof was taken")
+        line = [e for e in self.u.get("_buff", []) if e[1] == "heir"]
+        self.assertTrue(line and all("roof" not in e[2] for e in line),
+                        "the record said a roof that did not pass")
+
+    def test_an_heir_who_has_a_roof_does_not_take_another(self):
+        own = _hut(self.u, min(self.kid["id"], self.kidmate["id"]))
+        self.assertIsNot(own, self.hut, "sanity: two distinct huts")
+        engine.remove_dead(self.u, [self.dad, self.mom])
+        self.assertEqual(self.hut["own"], min(self.dad["id"], self.mom["id"]),
+                         "the heir's pair took a roof they did not need")
+        self.assertEqual(own["own"], min(self.kid["id"], self.kidmate["id"]))
+
+    def test_a_lone_heir_keeps_the_hearth_not_the_bed(self):
+        self.kid["p"] = None
+        self.kidmate["p"] = None
+        engine.remove_dead(self.u, [self.dad, self.mom])
+        self.assertEqual(self.hut["own"], min(self.dad["id"], self.mom["id"]),
+                         "a lone heir was given a pair's bed")
+        self.assertEqual((self.kid["hx"], self.kid["hy"]),
+                         (self.dad["hx"], self.dad["hy"]),
+                         "the hearth still passed to the eldest child")
+        line = [e for e in self.u.get("_buff", []) if e[1] == "heir"]
+        self.assertTrue(line and all("roof" not in e[2] for e in line))
+
+    def test_the_unfinished_roof_is_taken_and_continued(self):
+        self.hut["w"] = needs.HUT_WORK * 0.4
+        self.hut["done"] = False
+        engine.remove_dead(self.u, [self.dad, self.mom])
+        self.assertEqual(self.hut["own"], min(self.kid["id"], self.kidmate["id"]),
+                         "an unfinished roof was left orphaned")
+        # the heir's pair finds it as their own and continues the work
+        h = needs.hut_of(self.u, self.kid)
+        self.assertIs(h, self.hut, "the heir's pair does not find the roof")
 
 
 if __name__ == "__main__":
