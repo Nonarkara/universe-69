@@ -42,6 +42,25 @@ verification: [hourly audit](docs/audits/2026-11-03-hourly/README.md).
 
 # STUDY — measurements from the running universes
 
+**2026-11-12 the sink verdict — two 130-year arcs on the shipped engine
+(`2026.11.12.5`-imported; EDEN-only, and `.12.6` is LAGOON-only, so the
+figures stand for the shipped code). Seed 69, witness rng lineages 999 and
+31337, chained checkpoints every 5 years.** The behavioral sink arrives as
+Calhoun described it — and it no longer collapses the pen. The fuse ignites
+on schedule (lineage 999: 0 feuds to Y30, 221 by Y50; the crowd era), the
+withdrawn class follows it (16 at Y60 → 43 at Y75 → 82 at Y85, peaking at
+95 of 280 — about a third of the pen — lineage 31337 the same at 99 of 248),
+breeding slows late (births fall from 10–14 a year to 2–6), and the era's
+deaths are age, infancy and violence (157 and 125 violent deaths across 130
+years; starvation 4 and 2 — the pen is fed). What does not arrive is the
+die-off: the pen peaks (280, 274) and **plateaus high** — 239 and 223 at
+Y130, still two-thirds the peak, births and deaths near balance. Against
+the `.12.2` re-derivation (pop 220, withdrawn 77 at Y120), the wider
+individuality moved the ceiling up and the floor nowhere in sight: the
+sink's *shape* is intact, its *depth* is gone. Two independent lineages
+agree; the historical `.09.3` arc (164 at Y120) was one lineage's luck,
+recorded as such.
+
 **2026-11-12 the wild ring opens (live instrument, engine `2026.11.12.4`,
 LAGOON Y507).** The plain lagoon finally fissioned on its own — Meera and
 Parvati, two camps on the same land — and the gift ring opened *in the wild*:
@@ -105,7 +124,11 @@ held, and the hearth pass itself visible in the arc's record: **6 keepings**
 81/162 the cadence is ~7% higher — different household placements feeding
 the same yearly rule — but the shape is unchanged: one party a year early,
 slowing as the camps thin (pop 14 at Y60), one partnership pair throughout.
-Measured on the shipped engine, as the honesty rules require.
+Measured on the shipped engine, as the honesty rules require. Re-derived
+again on `2026.11.12.6` (the roof passes with the hearth), fresh lineage:
+**identical** — 87 parties, 174 landings, partnership from Y10, 6 keepings.
+The roof pass never touched this arc's gift cadence; recorded as the honest
+negative it is.
 
 **2026-11-10 replication — the long fuse, three seeds (engine `2026.11.09.3`,
 witness rng lineages, EDEN-only, 60 years each).** Seed 7: 476 feuds, 475
