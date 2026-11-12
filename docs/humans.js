@@ -231,6 +231,22 @@ class Figure {
     this.addHair(a, look);
     this.dress(look.dress, look);
     this.shape(a);
+    // A gift party carries the exchange: a bound bundle at the hand, warm
+    // outbound and a shade deeper homeward (2026.11.12.3/2026.11.12.5).
+    if (a.gift) this.addBundle(a.gift);
+  }
+
+  addBundle(stage) {
+    const hand = this.bones.hand_r || this.bones.hand_l || this.bones.lowerarm_r;
+    if (!hand) return;
+    const isHand = /^hand/i.test(hand.name);
+    const m = new THREE.Mesh(BUNDLE_GEO,
+      new THREE.MeshStandardMaterial({ color: stage === 1 ? 0xc8a06a : 0xb98d54,
+                                       roughness: .82 }));
+    m.position.set(isHand ? 0.03 : 0.02, isHand ? -0.02 : -0.23, isHand ? 0.05 : 0.02);
+    m.castShadow = true;
+    hand.add(m);
+    this.bundle = m;
   }
 
   skinOpts(a, look) {
@@ -365,6 +381,8 @@ class Figure {
   }
 }
 const _p = new THREE.Vector3(), _c = new THREE.Vector3(), _w = new THREE.Vector3(), _ax = new THREE.Vector3();
+// A gift party's bundle, bound, about a head and a half wide.
+const BUNDLE_GEO = new THREE.BoxGeometry(0.20, 0.15, 0.14);
 const _q1 = new THREE.Quaternion(), _q2 = new THREE.Quaternion(), _q3 = new THREE.Quaternion();
 
 // One figure outside any crowd, for the figure study page.
