@@ -3396,6 +3396,26 @@ function paintOverlay(key){
     }
   }
 
+  // The camps' names, above each cluster, at the rungs where reading is
+  // kind (the lagoon has more than one camp now; the map should say whose
+  // cluster is whose). A quiet pill, the way the news labels wear.
+  if (key==="l" && u && u.settlements && ts>=6.5){
+    g.font=Math.round(Math.max(10, Math.min(15, ts*0.5))*dpr)+"px "+P.fontUI;
+    u.settlements.forEach(function(s){
+      if (!s.n) return;
+      var px=(s.x+s.r-sx)*ts, py=(s.y-0.9-sy)*ts;
+      if (px<-80||py<-40||px>ov.width+80||py>ov.height+40) return;
+      var wpx=g.measureText(s.n).width;
+      var bw=wpx+8*dpr, bh=13*dpr;
+      var bx=Math.round(px-bw/2), by=Math.round(py-bh);
+      if (bx<0||by<0||bx+bw>ov.width||by+bh>ov.height) return;
+      g.fillStyle="rgba(20,19,15,0.62)";
+      g.fillRect(bx, by, Math.round(bw), Math.round(bh));
+      g.fillStyle=P.ink;
+      g.fillText(s.n, Math.round(px-wpx/2), Math.round(by+10*dpr));
+    });
+  }
+
   var s=ts*1.45/32;                        // figure scale, as in render()
   g.textAlign="center"; g.textBaseline="alphabetic";
   g.font=Math.round(11*dpr)+"px "+P.fontUI;
