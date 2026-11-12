@@ -58,6 +58,15 @@ arrive at different real times. Previous century trials remain historical
 per-part evidence for 2026.11.03.1, not clock/throughput measurements for this
 release. This target is not a measured 2016 MacBook capacity claim.
 
+## Engine 2026.11.12.5: the card says "gone"
+
+Display text only; no field, no RNG; changes no trajectories in either
+world.
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| A bond can outlive its other side (grief is held, not cleared); the dead are not in the people, so a card naming the closest bond by bare id strands the reader | `aff_note`'s unnamed label reads *"#435, gone"* instead of *"#435"* — for close bonds and feuds alike. | Text shown on cards and the VR beside-you line only. No mechanic, no trajectory change. |
+
 ## Engine 2026.11.12.4: the hearth passes
 
 Changes LAGOON records wherever a death leaves children. No new fields;

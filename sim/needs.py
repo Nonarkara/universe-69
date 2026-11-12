@@ -869,8 +869,11 @@ def aff_note(u, p):
         name_of = {q["id"]: q.get("n", "?") for q in u.get("people", [])}
 
     def label(k):
+        # a bond can outlive its other side (grief is held, not cleared):
+        # the dead are not in the people, so say so rather than strand the
+        # reader with a bare number (2026.11.12.5, display text only)
         n = name_of.get(int(k))
-        return n if n else "#" + k
+        return n if n else "#" + k + ", gone"
 
     best = max(aff, key=lambda k: (aff[k], -int(k)))
     worst = min(aff, key=lambda k: (aff[k], int(k)))

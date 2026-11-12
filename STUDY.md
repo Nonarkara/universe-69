@@ -97,6 +97,16 @@ exchange moves about a third more often, because the pair that carries it is
 also the pair the record names. The plain seed-69 arc (1 camp all 80 years)
 remains the honest negative beside it.
 
+**2026-11-12 re-derivation — the gift under the hearth (engine
+`2026.11.12.4`, same controlled setup, fresh lineage).** 87 parties set out
+in 60 years (174 named landings), the standing partnership again from Y10 and
+held, and the hearth pass itself visible in the arc's record: **6 keepings**
+(*"X keeps Y's hearth"*) as deaths left children behind. Against `.12.3`'s
+81/162 the cadence is ~7% higher — different household placements feeding
+the same yearly rule — but the shape is unchanged: one party a year early,
+slowing as the camps thin (pop 14 at Y60), one partnership pair throughout.
+Measured on the shipped engine, as the honesty rules require.
+
 **2026-11-10 replication — the long fuse, three seeds (engine `2026.11.09.3`,
 witness rng lineages, EDEN-only, 60 years each).** Seed 7: 476 feuds, 475
 peaces (Y60 pop 209, violence 11). Seed 25: 423/421 (pop 196, violence 25).

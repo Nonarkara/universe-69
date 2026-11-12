@@ -177,7 +177,11 @@ GESTATION = 270
 # record already holds; no new fields, no new RNG. EDEN's homes are boxes,
 # claimed and released — a pen has no hearths to pass. Changes LAGOON
 # records wherever a death leaves children.
-ENGINE_VERSION = "2026.11.12.4"
+# 2026.11.12.5 — the card says "gone". A bond can outlive its other side;
+# when the aff_note names someone not among the living it now reads
+# "#435, gone" instead of a bare number. Display text only: no field, no
+# RNG, no trajectory changes in either world.
+ENGINE_VERSION = "2026.11.12.5"
 
 # A day is four parts. The calendar still counts days, but a world now has a
 # dark half and a light one, and the things people do at night are not the
