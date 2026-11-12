@@ -87,7 +87,9 @@ would be the engine quietly clearing the dead's houses, which the mechanic
 does not do; the hypothesis is pinned structurally in
 `tests/test_research.py`, and the story's thread gained its chapter, "The
 hearth, and the first address." Read-only: moves no trajectory in either
-world.
+world. Captured panel evidence archived at `docs/audits/2026-11-13-research/`,
+where the claim shows as **SUPPORTED** with 43 test iterations on the live
+instrument.
 
 **2026-11-12 VR verified under headless WebGL (SwiftShader).** The headset
 page — module graph, humans rig, instanced crowd with the gift bundles, held
