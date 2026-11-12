@@ -6,4 +6,5 @@ data/events.ndjson
 data/archive/
 data/postmortems/
 data/history-books/
+data/chronicle/
 __pycache__/

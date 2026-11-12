@@ -209,6 +209,21 @@ def m_lagoon_max_settlement(u):
     return float(max(counts.values())) if counts else None
 
 
+def m_lagoon_orphan_roofs(u):
+    """The share of finished roofs that no living pair holds.
+
+    A hut is raised under a pair's key (the smaller of the two owners' ids)
+    and is never demolished, so the roofs of the dead stand on beside the
+    roofs of the living. A widow still holds her roof — the key lives on in
+    her — but a roof whose whole owning pair is gone belongs to the dead.
+    """
+    held = {min(p["id"], p["p"]) for p in _people(u)
+            if p.get("p") is not None}
+    fin = [h for st in (u.get("settlements") or [])
+              for h in (st.get("huts") or []) if h.get("done")]
+    return _share(sum(1 for h in fin if h.get("own") not in held), len(fin))
+
+
 def m_lagoon_paired(u):
     a = _adults(u)
     return _share(sum(1 for p in a if p.get("p") is not None), len(a))
@@ -265,6 +280,7 @@ METRICS = {
     "lagoon_settlements": m_lagoon_settlements,
     "lagoon_farms": m_lagoon_farms,
     "lagoon_max_settlement": m_lagoon_max_settlement,
+    "lagoon_orphan_roofs": m_lagoon_orphan_roofs,
     "lagoon_paired": m_lagoon_paired,
     "lagoon_hunger": m_lagoon_hunger,
     "lagoon_ef_mean": m_lagoon_ef_mean,
@@ -468,6 +484,22 @@ HYPOTHESES = [
                 "men aged 16–30, so this is the model's own assumption on trial.",
         "min_year": 20, "min_pop": 20,
     },
+    {
+        "id": "H-LAGOON-ROOFS",
+        "world": "LAGOON",
+        "statement": "The dead leave their roofs standing: in an old lagoon, "
+                     "more than half the finished huts belong to no living pair.",
+        "source": "DESIGN.md, 'Universe 9 — LAGOON' — the hearth passes "
+                  "(2026.11.12.4), the roof passes with the hearth "
+                  "(2026.11.12.6); the record's own keepings",
+        "metric": "lagoon_orphan_roofs", "test": "gte", "value": 0.50,
+        "note": "A hut is raised once and inherited after that; roofs are "
+                "never demolished, so they must accumulate past what the "
+                "living pair into. A falling share would mean the engine is "
+                "quietly clearing the dead's houses — a tidiness foragers "
+                "do not have.",
+        "min_year": 100, "min_pop": 15, "min_deaths": 30,
+    },
 ]
 
 
@@ -504,6 +536,19 @@ HISTORY = [
         "source": "Slingerland, *Drunk* ch. 3 (fire, cooking, the shared night); "
                   "Harari, *Nexus* ch. 2; the model's own night watch",
         "hypos": ["H-LAGOON-PURPOSE", "H-LAGOON-PAIRED"],
+    },
+    {
+        "t": "The hearth",
+        "when": "and the first address",
+        "claim": "A home is not a shelter but an address that outlives its "
+                 "keeper. What makes a band a line of families is that the "
+                 "place a dead man kept passes to his young: the hut is "
+                 "raised once and inherited many times, and a camp grows "
+                 "roofs the way a book grows pages.",
+        "source": "DESIGN.md, 'Universe 9 — LAGOON' — the hearth passes "
+                  "(2026.11.12.4), the roof passes with the hearth "
+                  "(2026.11.12.6)",
+        "hypos": ["H-LAGOON-ROOFS"],
     },
     {
         "t": "The band",

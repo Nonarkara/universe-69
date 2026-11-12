@@ -67,6 +67,16 @@ in a pair. No new fields; migration adds nothing.
 | --- | --- | --- |
 | A bonded pair's hut outlives them (huts accumulate — the live slate read 183 huts for 37 people); the young of the pair's own body, not strangers, take over the dead's roof, the way hearth and hut pass together in every forager inheritance | When the hearth passes (engine `2026.11.12.4`) and **both** members of the dead's owning pair are gone, the heir's pair — if they have raised no hut of their own — claims the dead pair's hut and continues its unfinished work under their own labor. A living widow keeps her roof. An heir without a pair keeps the hearth but not the hut (a lone sleeper has no use for a pair's bed). The record line becomes *"X keeps Y's hearth and roof."* | Bookkeeping over the huts and kinship the record already holds; no new fields, no RNG. EDEN untouched. Pinned in `tests/test_hearth.py`. |
 
+## Research layer, 2026-11-12: the dead leave their roofs standing
+
+Not an engine change: `sim/research.py` is the observation layer — it reads
+the universes and writes only the research record, so this moves no
+trajectory in either world and takes no engine version.
+
+| Finding or explicit assumption | Mechanic | Boundary |
+| --- | --- | --- |
+| Roofs are raised once and inherited after that (hearth `2026.11.12.4`, roof `2026.11.12.6`); a finished hut is never demolished, so an old lagoon must stand under more roofs than the living can pair into | Hypothesis `H-LAGOON-ROOFS` — *in an old lagoon, more than half the finished huts belong to no living pair* — measured by `lagoon_orphan_roofs`: the share of finished huts whose owning pair (the pair key a hut is raised under) has no living member; a widow still holds her roof. Gates: 100 years, 15 living, 30 deaths. First live reading 0.974 (150 of 154 finished roofs; 11 finished roofs per living pair, Y517). | Read-only measurement at the usual cadence; a falling share would mean the engine clears the dead's houses, which no mechanic does. The story thread gained the chapter "The hearth, and the first address". Pinned structurally in `tests/test_research.py`. |
+
 ## Engine 2026.11.12.5: the card says "gone"
 
 Display text only; no field, no RNG; changes no trajectories in either

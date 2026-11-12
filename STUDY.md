@@ -73,6 +73,22 @@ across the die-off, which is exactly the domestic continuity the hearth pass
 (`2026.11.12.4`) holds in place; the same record carries its first wild
 keeping, *"Ganga keeps Krishna's hearth."*
 
+**2026-11-12 the domestic test opens (live instrument, research layer on
+shipped engine `2026.11.12.6`, LAGOON Y517).** The continuity the wild-ring
+entry reached by eye is now a standing claim the panel tests at every
+cadence — `H-LAGOON-ROOFS`: *in an old lagoon, more than half the finished
+huts belong to no living pair.* The metric `lagoon_orphan_roofs` holds a
+roof for the living while any of its owning pair survives (a widow keeps
+her roof), and reads **0.974**: **150 of 154** finished roofs belong to the
+dead, **11 finished roofs per living pair**. That is hut inheritance made
+arithmetic — roofs are raised once, inherited after that, and never
+demolished, so the camp's skyline belongs to its ancestors. A falling share
+would be the engine quietly clearing the dead's houses, which the mechanic
+does not do; the hypothesis is pinned structurally in
+`tests/test_research.py`, and the story's thread gained its chapter, "The
+hearth, and the first address." Read-only: moves no trajectory in either
+world.
+
 **2026-11-12 VR verified under headless WebGL (SwiftShader).** The headset
 page — module graph, humans rig, instanced crowd with the gift bundles, held
 items, the beside-you readout — loads and renders with **zero page errors and
