@@ -101,6 +101,32 @@ among near bodies, and the readout names the person beside them:
 activity, mood, and the named bond, read from the same detail rows the 2D
 card draws (`vr-inside.png`). Physical-headset verification remains
 outstanding (no hardware); everything short of it is now evidenced.
+One honest negative beside it: the gift bundle on a carrier was verified
+in the rig's code path and in the 2D viewer (contract field 14; the Y518
+crossings), but no headless capture has caught a **walking carrier** up
+close — the kula sends a party once a year and the window is the few days
+the walk takes; repeated polling during the 2026-11-13 session found no
+carrier in flight. The claim to verify remains: a bundle riding at the
+hand of a near body, seen from inside.
+
+**2026-11-13 the live pen's fifth life ends.** The instrument's own EDEN
+line — the one that has been ticking through every engine since the
+founders arrived — emptied at day 191942 (Y533): `extinct_day 191942`,
+iteration 5, peak 201, generation 6 reached. The last census rows read two
+alive at Y531–533; the save now reads pop 0. The Observers' law holds: 30
+quiet years before a reseed, so the pen sits empty until day 202742
+(Y563), when iteration 6 begins from the same seed lineage with the
+postmortems and lessons carried over ("as they were: the same castaways,
+at the ages they have"). The lagoon carries on beside the empty pen: pop
+33, two camps, the standing exchange partnership. Note the contrast with
+the witness verdict above: the two 130-year controlled lineages plateaued
+high, while the live lineage — older engine history, different rolls — ran
+the arc all the way down. The two kinds of evidence are not the same
+thing, and the determinism study says so: the controlled lineages are
+figures the shipped code re-derives; the live arc is the record of one
+long run that crossed many engine boundaries, a lineage's anecdote and
+nothing more. Now there are three lineages on the shelf, and they do not
+agree — which is the finding.
 
 **2026-11-11 re-derivation — the long fuse under the shipped engine
 (`2026.11.12.2`, same witness rng lineage as the first 120-year arc).**
