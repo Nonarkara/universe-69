@@ -109,6 +109,19 @@ the walk takes; repeated polling during the 2026-11-13 session found no
 carrier in flight. The claim to verify remains: a bundle riding at the
 hand of a near body, seen from inside.
 
+**2026-11-14 the window was caught, the close evidence was not.** At the
+Y561 boundary four carriers set out at once — ids 498/504 from Meera,
+513/514 from Parvati, both camps qualifying — and the headless viewer
+caught three departure frames with zero page errors. Two shortfalls, both
+diagnosed: the beside-you readout never named a carrier (it named
+Nakula, a sleeper) because the spawn stands 4.5–6.5 tiles from the camp
+center while the readout radius is 4 tiles — the carriers passed outside
+it at every sampled moment; and no departure frame shows an identifiable
+bundle on a walking body (a white puff in one frame is ambiguous —
+unverifiable, so not evidence). The return window never fired during the
+75-minute watch. Next attempt stands the player at the camp center
+itself, where the carriers begin and end their walk.
+
 **2026-11-13 the live pen's fifth life ends.** The instrument's own EDEN
 line — the one that has been ticking through every engine since the
 founders arrived — emptied at day 191942 (Y533): `extinct_day 191942`,
