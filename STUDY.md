@@ -140,6 +140,25 @@ figures the shipped code re-derives; the live arc is the record of one
 long run that crossed many engine boundaries, a lineage's anecdote and
 nothing more. Now there are three lineages on the shelf, and they do not
 agree — which is the finding.
+**2026-11-14 iteration 6 begins.** The Observers' law held to the day:
+the pen reseeded at day 202743 (Y563), one day past the thirty-year
+quiet. Verified against the shipped code, 11/11: iteration 6, seed 503
+(= 498 + 5), fseed 69 unchanged, the same sixteen founders at the ages
+they have (18–42), founded_day the reseed day, four postmortems and
+seventeen engine-history rows carried, phases back at strive,
+extinct_day cleared, and the record line — "The Observers reseed the
+pen. Iteration 6 begins under the same controlled conditions." One
+asymmetry now on the shelf: EDEN's reseed drops the lessons list
+(iteration 6 opens with lessons []), while LAGOON's reseed path carries
+them — the lagoon still holds "preserve" and "cleanliness" from its own
+dead. The pen forgets how to behave; the lagoon remembers. LAGOON itself
+is untouched by the reseed: Y563, two camps, the standing exchange
+partnership, H-LAGOON-ROOFS reading 0.982 (543x tested, 543x supported),
+the Y562 kula completed with all four arrivals recorded — though the VR
+close-up of a bundle on a walking carrier remains the open negative.
+The VR page is now public as a frozen snapshot at vr.nonarkara.org (the
+West World); the live instrument stays local, and no trajectory moved.
+
 
 **2026-11-11 re-derivation — the long fuse under the shipped engine
 (`2026.11.12.2`, same witness rng lineage as the first 120-year arc).**
