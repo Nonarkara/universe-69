@@ -230,6 +230,29 @@ with no grid anywhere — pinned as `cache-lattice.png` (before) and
 `cache-fixed.png` (after) beside the other evidence. Viewer only; no
 trajectory moved; style and contract batteries green (95 OK) with the
 mirror in the same commit.
+**2026-11-15 the Y588 kula window: the readout chain closes, the bundle
+stays unseen.** The boundary exchange fired at day 211680 exactly on
+schedule; watch v2 burst 14 frames across gens 211680–211713. Two honest
+notes on how the evidence landed. First, a mechanics correction to the
+standing assumption: the gift events at d211680 show *sets out* and
+*brings the goods* sharing one model day — at 10 s a model-day the walk
+is compressed to minutes, not the several-real-minutes-each-way the
+earlier watches assumed, so the capture window is the boundary tick
+itself. Second, the live pairing failed on the script side (the beside
+line was parsed as innerHTML and kept its age suffix), so the person
+rows were resolved after the fact: /state at gen 211680 showed the four
+outbound carriers by id — #554 Bhagavati, #557 Devadatta, #561 Ganesh,
+#564 Kaikeyi, all gift field 1 — matching the gift events name for name,
+and the readout named **Kaikeyi** beside the player at gen 211680→211682
+and again at 211700→211701, **Ganesh** at 211695→211698. So the
+player-relative signal and the engine's carrier list agree in the same
+generations. What is still missing is the pixel: the frames show the camp
+at dusk with held items (a staff and grey box) but no bundle identifiable
+at the waist at that distance and light. Watch v3 is armed for Y589
+(day 212040) with plain-text beside parsing, name→id resolution at
+capture time, and a burst triggered only when the beside line names a
+carrier — the frame, the readout and the carrier row will then be bound
+by construction, not by reconstruction.
 
 
 
