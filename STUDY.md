@@ -276,8 +276,26 @@ gone" while the `/state` carrier list names **#561 Ganesh, gift=2
 bound in one capture, pinned as `vr-gift4-ctx-000.png` (zoom:
 `vr-gift4-ctx-000-zoom.png`). The bundle pixels remain unidentifiable at
 that distance and light — three windows, three negatives — but the
-proximity claim no longer rests on post-hoc reconstruction. Watch v4
-(browser/beside names de-shadowed) is armed for Y591 (day 212760).
+proximity claim no longer rests on post-hoc reconstruction.
+**2026-11-15 Y591: the live binding fires.** Watch v4 (browser/beside
+names de-shadowed; clean close, zero page errors) armed for day 212745
+and woke on the boundary: at **d212760** — exactly 360·591, the Y591
+boundary, one tick before the events landed — the poll saw beside
+"Ganesh" resolving to person row #561 (x=140, y=93, gift=2 homeward,
+already at the camp edge), and the beside-carrier burst fired:
+14 frames across d212760→212789. The events show the exchange in that
+tick: Ganesh sets out for Meera; Ganesh brings the goods to Nirvana;
+Kaikeyi brings the goods to Mahakashyapa. The arrival read four minutes
+earlier already named Ganesh beside the player; the burst's frames 00
+and 12 (pinned `vr-gift4-b1-00.png`, `vr-gift4-b1-12.png`) hold the
+readout "beside you · Ganesh, 39.6" at d212762 (gift=2, hands at his
+sides, at the fire) and d212787 (gift=0, delivered). So the trigger
+works end-to-end — but **four windows, four negatives on the bundle
+box**: the gift rides the waist only during the one-model-day walk,
+and every capture to date has landed before or after it. Watch v5
+therefore triggers on the outbound leg itself (any person with gift
+field 1, present at the boundary tick) with a 0.2 s burst, beside or
+not — armed for the Y592 boundary (day 213120).
 
 
 
