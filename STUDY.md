@@ -194,6 +194,23 @@ deployed snapshot now carries the world (245 KB total). Tree and palm
 shadows stop drawing below ~3 device px a tile, where they merged into a
 smear. Before/after pinned at `docs/audits/2026-11-15-graphics/`; style
 and contract batteries green (95 OK) with the mirror in the same commit.
+**2026-11-15 the deployed tree proves clean; the domain still serves the
+old hub.** The exact files the Pages repo carries were checked headless:
+`2d.html` renders the frozen snapshot with the checkerboard-free ground
+and a fully painted lagoon (pinned as
+`docs/audits/2026-11-15-graphics/westworld-2d-deployed.png`), zero page
+errors. The flip itself has not landed: `vr.nonarkara.org` still answers
+with the old hub ("VR · nonarkara", linking arena/games/league/life)
+behind Cloudflare proxy addresses (104.21.x/172.67.x, `cf-cache-status:
+HIT`), and our paths — `/snapshot.json`, `/vr.html`, `/2d.html` — return
+404, so the origin is the old site regardless of cache. That pattern fits
+a Cloudflare Pages project still holding the custom domain, in which case
+a DNS record change alone would not detach it. Honest note while waiting:
+the `events` tail carries no death events at all (zero across both worlds
+over d209945–211399) — the census is the authority, and it shows LAGOON
+Y587 pop 17→16 with deaths=1, births 0. The hearth watch: at d211331
+"[heir] Bhagavati keeps Kaikeyi's hearth" — the hearth line again, the
+roof still unseen.
 
 
 
