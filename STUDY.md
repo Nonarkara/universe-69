@@ -296,6 +296,21 @@ and every capture to date has landed before or after it. Watch v5
 therefore triggers on the outbound leg itself (any person with gift
 field 1, present at the boundary tick) with a 0.2 s burst, beside or
 not — armed for the Y592 boundary (day 213120).
+**2026-11-15 Y592: the outbound trigger fired, and the window is
+smaller than the camera.** At d213120 exactly the poll caught #561
+Ganesh gift=1 at (139,103) and #564 Kaikeyi gift=1 at (145,91) — both
+outbound — and the 50-frame 0.2 s burst began. Frame 0, shot within
+half a second, already reads day 213121 with `out: []`: the gift==1
+outbound state lasted less than one engine tick, shorter than any
+poll, so the waist bundle was never in view — the walk is sub-tick.
+The zoomed frames (`vr-gift5-o1-00-zoom.png`, `-01-zoom.png`) show the
+carriers home by the fire, hands empty; the only warm masses near a
+hand belong to a non-carrier at the fire and are not identifiable as
+the bundle. Fifth negative, and the sharpest: the mechanism is proven
+by the trigger log and the same-tick exchange events, not by pixels.
+No viewer-side watch can catch a state that ends inside one tick; that
+would need an engine- or page-side hook, outside the viewer-only
+discipline, and it was not built.
 
 
 
