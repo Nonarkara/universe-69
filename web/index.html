@@ -589,19 +589,25 @@ function drawGround(g, key, world, u, sx, sy, hx, hy, W, H){
 }
 function disc(g, x, y, r){ g.moveTo(x+r, y); g.arc(x, y, r, 0, 6.283); }
 // A deterministic grain over painted ground: the difference between a flat
-// fill and a surface. Two speckles a tile, seeded by tile position, cheap
+// fill and a surface. Three speckles a tile, seeded by tile position, cheap
 // enough at every rung and stable in the ground canvas cache.
 // tb (cache device px per tile) sizes the speckle: a tile fraction here is
 // half a tile of solid ink — the checkerboard the terrarium showed for
 // months. A speckle is a pixel or two of the cache, nothing more.
+// The seed deserves its own warning: hash2 returns a number in [0,1), and
+// consuming it with integer shifts (h>>>8, h%2) zeroes everything — one
+// dark dot at every tile corner, a perfect lattice. This grain read it
+// wrong for months. The offsets now come from the float itself.
 function groundGrain(g, x0, y0, x1, y1, step, tb){
   step=step||1; tb=tb||4;
   var ss=Math.max(1.6/tb, 0.05);
   for (var y=Math.floor(y0)-1; y<=Math.ceil(y1)+1; y+=step) for (var x=Math.floor(x0)-1; x<=Math.ceil(x1)+1; x+=step){
-    var h=hash2(x*92837111^y*689287499, x*335911^y*977);
-    var a=((h>>>8)%1000)/1000, b=((h>>>18)%1000)/1000;
-    g.fillStyle=(h%2)?"rgba(22,18,10,0.10)":"rgba(255,248,228,0.07)";
-    g.fillRect(x+a*step*0.82, y+b*step*0.82, ss, ss);
+    for (var j=0;j<3;j++){
+      var r1=hash2(x*7+j*104729, y*13+j*7919);
+      var r2=hash2(y*13+j*7919+11, x*7+j*104729+7);
+      g.fillStyle=(r1<0.5)?"rgba(22,18,10,0.08)":"rgba(255,248,228,0.05)";
+      g.fillRect(x+r1*step, y+r2*step, ss, ss);
+    }
   }
 }
 // The same grain, in screen space: a device-pixel speckle tiled once through

@@ -211,6 +211,25 @@ over d209945–211399) — the census is the authority, and it shows LAGOON
 Y587 pop 17→16 with deaths=1, births 0. The hearth watch: at d211331
 "[heir] Bhagavati keeps Kaikeyi's hearth" — the hearth line again, the
 roof still unseen.
+**2026-11-15 the lattice dies — and the checkerboard's true root is
+found.** The user looked again that evening and the ground still showed a
+regular dot grid, and the ablation proved it: with `groundGrain` and the
+screen grain both no-op'd in the live page, the lattice survived, so the
+hunt went one level deeper — the ground cache itself was dumped as an
+image, and it carried a perfect one-dot-per-tile lattice. The real root
+cause was not the speckle size at all (that fix was real but partial):
+`hash2` returns a number in **[0,1)**, and `groundGrain` had been
+consuming it with integer shifts — `h>>>8`, `h%2` — which on a fraction
+collapse to zero. Every speckle sat at exactly the tile corner and every
+parity picked the dark ink: the original checkerboard was literally
+"one half-tile dark square at every tile corner", and after the size fix
+the same bug became "one dark dot at every tile corner". The offsets now
+come from the hash float directly (two hash calls per speckle, small
+exact inputs), and the cache dump after the fix shows an organic scatter
+with no grid anywhere — pinned as `cache-lattice.png` (before) and
+`cache-fixed.png` (after) beside the other evidence. Viewer only; no
+trajectory moved; style and contract batteries green (95 OK) with the
+mirror in the same commit.
 
 
 
