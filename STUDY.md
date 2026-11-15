@@ -158,6 +158,27 @@ the Y562 kula completed with all four arrivals recorded — though the VR
 close-up of a bundle on a walking carrier remains the open negative.
 The VR page is now public as a frozen snapshot at vr.nonarkara.org (the
 West World); the live instrument stays local, and no trajectory moved.
+**2026-11-15 the West World is built; the domain awaits its DNS.** The
+public viewing room is live at the repo `vr.nonarkara.org` (GitHub Pages,
+built): the VR page and the 2D terrarium, byte-identical copies of the
+shipped `web/` sources, both reading a frozen `snapshot.json` through the
+same `config.js` `SNAPSHOT_URL` hook the live mirror uses. Verified in a
+real headless browser against the pushed tree: the lagoon renders, the
+beside-you readout names the nearest person, zero page errors. The
+snapshot refreshed once (Y582: EDEN pop 33, LAGOON pop 18). The custom
+domain is registered at GitHub and `nonarkara.github.io/vr.nonarkara.org`
+already redirects to it — but `vr.nonarkara.org` itself still answers with
+the old VR hub, because its DNS still points elsewhere (Cloudflare). The
+flip is one record at the DNS provider: CNAME `vr.nonarkara.org` to
+`nonarkara.github.io` (or A records 185.199.108.153-111.153), then GitHub
+provisions the certificate. Until then the West World is visitable at the
+github.io URL only. The Y562 exchange completed in the record (four
+arrivals: Bhishma→Apsara, Chandraprabha→Rahul, Sita→Devadatta,
+Duryodhana→Nirvana); the Y564 exchange completed too (Kaikeyi→Menaka/
+Nirvana/Sariputra, Ganesh→Bhagavati, Bhagavati→Rahul). The VR close-up of
+a bundle on a walking carrier remains the open negative; next window at
+the Y565 boundary, day 203400.
+
 
 
 **2026-11-11 re-derivation — the long fuse under the shipped engine
