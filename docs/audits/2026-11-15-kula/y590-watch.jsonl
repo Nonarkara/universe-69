@@ -1,0 +1,4 @@
+{"tag": "arrival", "day": 211993, "beside": "Amrapali", "camps": [[137, 109], [145, 91]], "note": "after walk to camp center", "wall": 1794747584.063}
+{"tag": "arrival", "day": 212382, "beside": null, "camps": [[137, 109], [145, 91]], "note": "after walk to camp center", "wall": 1794751473.269}
+{"tag": "ctx", "frame": "vr-gift4-ctx-000.png", "day": 212400, "beside": null, "carriers": ["#561 g140 (93.0,2.0)", "#564 g147 (90.0,2.0)"], "wall": 1794751677.847}
+{"tag": "end", "beside_bursts": 0, "ctx_frames": 1, "pageerrors": 0, "errs": [], "wall": 1794752377.92}

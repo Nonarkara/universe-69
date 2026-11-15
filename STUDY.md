@@ -253,6 +253,31 @@ at the waist at that distance and light. Watch v3 is armed for Y589
 capture time, and a burst triggered only when the beside line names a
 carrier — the frame, the readout and the carrier row will then be bound
 by construction, not by reconstruction.
+**2026-11-15 the Y589 window was missed; Y590 closed the binding by
+ladder, not by luck.** The boundary exchanges fired on schedule at
+d212040 (Y589: Ganesh sets out for Meera; Kaikeyi and Ganesh bring the
+goods) and d212400 (Y590: same ring, Ganesh home to Nirvana, Kaikeyi
+home to Mahakashyapa) — one model day, as at Y588. Honest accounting of
+the instrumentation: watch v3 (plain-text beside parsing, live
+name→id resolution) crashed 8 minutes before the Y589 boundary on a
+missing generator-expression clause; the frame-level window was lost, and
+the events are all we have for that year (Ganesh out, goods delivered —
+the mechanism works; nobody was photographed). The v3 fix worked, but the
+Y590 watch carried a second script bug one level deeper (a beside-name
+read shadowed the browser handle and crashed the close at the end — after
+the log was written), and the beside-carrier burst fired zero times
+because the beside read preceded the screenshot by one poll. The year's
+window was nonetheless captured through the watch's context path: at
+d212400, with carriers within 8 tiles of a camp, the frame shows the camp
+at dawn beside the fire and the readout in *that same frame* reads
+"beside you · **Ganesh, 38.6** · foraging · feuding · at odds with #537,
+gone" while the `/state` carrier list names **#561 Ganesh, gift=2
+(homeward)** alongside #564 Kaikeyi — frame, readout, and carrier row
+bound in one capture, pinned as `vr-gift4-ctx-000.png` (zoom:
+`vr-gift4-ctx-000-zoom.png`). The bundle pixels remain unidentifiable at
+that distance and light — three windows, three negatives — but the
+proximity claim no longer rests on post-hoc reconstruction. Watch v4
+(browser/beside names de-shadowed) is armed for Y591 (day 212760).
 
 
 
