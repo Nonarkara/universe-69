@@ -576,7 +576,10 @@ function drawGround(g, key, world, u, sx, sy, hx, hy, W, H){
     gc.setTransform(tb,0,0,tb,-x0*tb,-y0*tb);
     gc.lineCap="round"; gc.lineJoin="round";
     world.paint(gc, u, x0, y0, x1, y1, tb);
-    groundGrain(gc, x0, y0, x1, y1, 1);      // a surface, not a flat fill
+    // a surface, not a flat fill — but only where a tile has enough pixels
+    // for a speckle to read as texture; below that the speckles upscale
+    // into a checkerboard, and grainScreen carries the surface instead
+    if (tb>=4) groundGrain(gc, x0, y0, x1, y1, 1, tb);
     gc.setTransform(1,0,0,1,0,0);
     gr=ground[key]={c:c, tb:tb, sig:sig, x0:x0, y0:y0, x1:x1, y1:y1};
   }
@@ -588,13 +591,17 @@ function disc(g, x, y, r){ g.moveTo(x+r, y); g.arc(x, y, r, 0, 6.283); }
 // A deterministic grain over painted ground: the difference between a flat
 // fill and a surface. Two speckles a tile, seeded by tile position, cheap
 // enough at every rung and stable in the ground canvas cache.
-function groundGrain(g, x0, y0, x1, y1, step){
-  step=step||1;
+// tb (cache device px per tile) sizes the speckle: a tile fraction here is
+// half a tile of solid ink — the checkerboard the terrarium showed for
+// months. A speckle is a pixel or two of the cache, nothing more.
+function groundGrain(g, x0, y0, x1, y1, step, tb){
+  step=step||1; tb=tb||4;
+  var ss=Math.max(1.6/tb, 0.05);
   for (var y=Math.floor(y0)-1; y<=Math.ceil(y1)+1; y+=step) for (var x=Math.floor(x0)-1; x<=Math.ceil(x1)+1; x+=step){
     var h=hash2(x*92837111^y*689287499, x*335911^y*977);
     var a=((h>>>8)%1000)/1000, b=((h>>>18)%1000)/1000;
     g.fillStyle=(h%2)?"rgba(22,18,10,0.10)":"rgba(255,248,228,0.07)";
-    g.fillRect(x+a*step*0.82, y+b*step*0.82, Math.max(0.5, step*0.16), Math.max(0.5, step*0.16));
+    g.fillRect(x+a*step*0.82, y+b*step*0.82, ss, ss);
   }
 }
 // The same grain, in screen space: a device-pixel speckle tiled once through
@@ -904,10 +911,14 @@ var LAGOON_WORLD={
         }
       }
     }
-    g.fillStyle=P.shadowSoft; g.beginPath();
-    for (i=0;i<trees.length;i+=3) { g.moveTo(trees[i]+0.3+trees[i+2],trees[i+1]+0.35); g.ellipse(trees[i]+0.3,trees[i+1]+0.35,trees[i+2],trees[i+2]*0.75,0,0,6.283); }
-    for (i=0;i<scrubs.length;i+=3) { g.moveTo(scrubs[i]+0.2+scrubs[i+2],scrubs[i+1]+0.25); g.ellipse(scrubs[i]+0.2,scrubs[i+1]+0.25,scrubs[i+2],scrubs[i+2]*0.7,0,0,6.283); }
-    g.fill();
+    // tree shadows merge into a dark smear below ~3 device px a tile; the
+    // crowns carry the shape there, and the screen grain carries texture
+    if (tb>=3){
+      g.fillStyle=P.shadowSoft; g.beginPath();
+      for (i=0;i<trees.length;i+=3) { g.moveTo(trees[i]+0.3+trees[i+2],trees[i+1]+0.35); g.ellipse(trees[i]+0.3,trees[i+1]+0.35,trees[i+2],trees[i+2]*0.75,0,0,6.283); }
+      for (i=0;i<scrubs.length;i+=3) { g.moveTo(scrubs[i]+0.2+scrubs[i+2],scrubs[i+1]+0.25); g.ellipse(scrubs[i]+0.2,scrubs[i+1]+0.25,scrubs[i+2],scrubs[i+2]*0.7,0,0,6.283); }
+      g.fill();
+    }
     g.fillStyle=P.canD; g.beginPath();
     for (i=0;i<trees.length;i+=3) crown(g, trees[i], trees[i+1], trees[i+2],hash2(trees[i],trees[i+1]));
     for (i=0;i<scrubs.length;i+=3) disc(g, scrubs[i], scrubs[i+1], scrubs[i+2]);
@@ -1083,7 +1094,7 @@ var EDEN_WORLD={
     for (var py=4;py<W-4;py+=3.5) for (var pxx=4;pxx<W-4;pxx+=3.5){
       if (!((pxx<EM-2||pxx>W-EM+1||py<EM-2||py>W-EM+1) && hash2(pxx|0,py|0)>0.5)) continue;
       if (pxx<12 && py<11) continue;                                  // the pool's corner
-      g.fillStyle=P.shadowSoft; g.beginPath(); g.ellipse(pxx+0.5,py+0.6,0.9,0.4,0,0,6.283); g.fill();
+      if (tb>=3){ g.fillStyle=P.shadowSoft; g.beginPath(); g.ellipse(pxx+0.5,py+0.6,0.9,0.4,0,0,6.283); g.fill(); }
       g.fillStyle=P.palm;
       for (var f=0;f<7;f++){ var a=f*0.9+hash2(pxx|0,f)*0.3;
         g.beginPath(); g.ellipse(pxx+Math.cos(a)*0.55, py+Math.sin(a)*0.55, 0.62, 0.16, a, 0, 6.283); g.fill(); }

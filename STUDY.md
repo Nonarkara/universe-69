@@ -178,6 +178,23 @@ Duryodhana→Nirvana); the Y564 exchange completed too (Kaikeyi→Menaka/
 Nirvana/Sariputra, Ganesh→Bhagavati, Bhagavati→Rahul). The VR close-up of
 a bundle on a walking carrier remains the open negative; next window at
 the Y565 boundary, day 203400.
+**2026-11-15 the checkerboard dies; the snapshot's black lagoon dies with
+it.** Two graphics defects, both found the same afternoon, both fixed in
+the viewer only (no trajectory moved, no engine version taken). First:
+the ground cache's grain painted each speckle as half a tile of solid ink
+(`fillRect` at width 0.5 in a space where one unit is one tile), so every
+sand and lawn field showed a regular checkerboard of grey squares — the
+terrarium's oldest visual complaint, finally diagnosed as a units bug,
+not a design. Speckles are now one to two cache pixels, drawn only where
+a tile has enough pixels to read as texture (below that the screen-space
+grain carries the surface). Second: the public snapshot page drew the
+lagoon as a black field, because a snapshot carried no `/world` payload
+and the mirror viewer reads `st.world.terrain` in snapshot mode; the
+deployed snapshot now carries the world (245 KB total). Tree and palm
+shadows stop drawing below ~3 device px a tile, where they merged into a
+smear. Before/after pinned at `docs/audits/2026-11-15-graphics/`; style
+and contract batteries green (95 OK) with the mirror in the same commit.
+
 
 
 
