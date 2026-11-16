@@ -361,6 +361,31 @@ suite ran green — `test_style` 2 s, `test_contract` 14 s, `test_vr` 1 s,
 `test_engine` 77 tests / 757 s, and the whole `unittest discover -s tests`
 at 697 tests / 1085 s, `OK`.
 
+**2026-11-17 the live record at Y617, and the snapshot refreshed to meet
+it.** Read at d222301 (engine `2026.11.12.6`): EDEN, iteration 6 on the
+stored counter, climbs to 123 — its stored peak — gen 4, `exploit` since
+d564 of the iteration, nobody homeless, `box_free` 101 of 224 slots,
+`box_vacant` 6; LAGOON, iteration 3, holds 17 across two camps (Meera,
+197 huts, store 854.1; Parvati, 27 huts, store 1311.5), 8 technologies
+through agriculture, dry season, food 94.4 days after the Y617 storm
+"destroys most of the stores" (d222120), lessons [preserve, cleanliness].
+The `phase` field now reads `agriculture` while `phases` still logs only
+[0, strive]. The event tail (last 500, all since d218798) still carries no
+death events; it does carry the kula alive in the live lineage: nine gift
+events on exactly the two annual exchange days (d221760 = Y616, d222120 =
+Y617, both day % 360 == 0), every one completed — "the exchange between
+the camps is kept" — Bhagavati→Parvati and Ganesh→Meera via
+Brahma→Duryodhana→Ganesh at Y616, Ganesh→Meera via Tara and
+Duryodhana→Tara at Y617; and Mahakashyapa keeps Bhagavati's hearth
+(d222004, Y616). Stored cod reads LAGOON {dehydration 306, violence 112,
+infant 85, age 78, accident 38, starvation 30, childbirth 17, feud 2},
+EDEN {age 13, infant 21, starvation 2, violence 1} — the field's
+accumulation window is still unpinned (§5), so cite as stored, not as a
+rate. The deployed snapshot was refreshed to this day (d222301, 218 KB
+compact, `2c359ca`) and headless-verified before push: `2d.html` and
+`vr.html` render the Y617 record, zero page errors. The domain still waits
+on the DNS flip; the watcher is on window 626–770.
+
 
 
 **2026-11-11 re-derivation — the long fuse under the shipped engine
