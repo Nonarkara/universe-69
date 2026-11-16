@@ -326,6 +326,21 @@ not a single lucky draw. (Run 2's first 1.4 min were lost to a stale
 `OUTDIR` reference in the checkpoint writer — fixed, verified, no data
 lost; run 1's record is the untouched baseline.)
 
+**2026-11-16 the deployed snapshot refreshed to Y607.** The West World's
+frozen `snapshot.json` had been serving Y590 since the deploy; today it is
+rebuilt from the live instrument's `/state` merged with `/world` (same
+schema the mirror uses, 212 KB compact) and pushed to
+`Nonarkara/vr.nonarkara.org` as `20de4bf`. The rebuilt snapshot reads d218798
+— Y607 at the build: EDEN pop 83, LAGOON pop 17, engine `2026.11.12.6` —
+checked headless on a scratch static server before push: `2d.html` and
+`vr.html` both render with zero page errors (screenshots
+`/tmp/u69w/deploy-2d-fresh.png`, `/tmp/u69w/deploy-vr-fresh.png`). What is
+**not** verified: the deployed domain itself, because DNS has not flipped —
+`vr.nonarkara.org` still resolves to the old Cloudflare hub (104.21.65.217 /
+172.67.192.186), `nonarkara.github.io/vr.nonarkara.org/` 301s to it, and both
+`snapshot.json` and the tree 404 behind it. The fresh snapshot is committed
+and waiting; end-to-end verification remains blocked on the user-side DNS
+record change, exactly as on 2026-11-15.
 
 
 
