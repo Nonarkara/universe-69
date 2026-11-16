@@ -340,7 +340,20 @@ checked headless on a scratch static server before push: `2d.html` and
 172.67.192.186), `nonarkara.github.io/vr.nonarkara.org/` 301s to it, and both
 `snapshot.json` and the tree 404 behind it. The fresh snapshot is committed
 and waiting; end-to-end verification remains blocked on the user-side DNS
-record change, exactly as on 2026-11-15.
+record change, exactly as on 2026-11-15. The trees were re-audited
+byte-for-byte after the push: every shipped `web/` file is identical to its
+`docs/` counterpart (the mirror rule) and to its Pages copy, with
+`web/index.html` shipped as `2d.html`; the only deploy-only files are the
+landing page and ops files (`.nojekyll`, `CNAME`, `README.md`,
+`build_landing.py`, `config.js`, `index.html`, `pages.json`,
+`snapshot.json`), and the only `docs/`-only files are the gist-snapshot hook
+`config.js`, `MANGA_PLAN.md`, and the `audits/` and `design-laws/` records.
+The Pages README's refresh instructions were wrong in a way that would have
+undone the 2026-11-15 fix — they wrote bare `/state` to `snapshot.json`,
+which loses the `/world` payload and renders the lagoon black; the deployed
+README now documents the `/state`+`/world` merge with a headless check of
+both pages before push, plus a grey-cloud note for the DNS flip
+(`044ce14`).
 
 
 
