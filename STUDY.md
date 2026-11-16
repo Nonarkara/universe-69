@@ -311,6 +311,20 @@ by the trigger log and the same-tick exchange events, not by pixels.
 No viewer-side watch can catch a state that ends inside one tick; that
 would need an engine- or page-side hook, outside the viewer-only
 discipline, and it was not built.
+**2026-11-16 the arc is reproducible.** Two independent processes —
+`full_arc.py` run 1 (Y130 cap, 268 min) and run 2 (400-year cap, still
+ticking at Y335) — both began from `engine.genesis(seed=69, attempt=1)`,
+the first universe exactly as founded (EDEN seed 489, LAGOON 492, fseed
+69). Run 2's checkpoint already covers years 1–130, and every one of the
+260 common rows — both worlds × 130 years × 11 fields (day, pop, peak,
+gen_max, phase, phases, births_y, deaths_y, bad_years, cod, census_len,
+iterations) — matches run 1 with **zero mismatches**. Spot-checked: Y1
+EDEN 16/16/1, Y50 EDEN 169/172/4, Y100 EDEN 229/243/6, Y130 EDEN 173/243/7,
+Y130 LAGOON 31/57/7, all identical. The engine is deterministic across
+processes, not merely within one; the witness arc is a real measurement,
+not a single lucky draw. (Run 2's first 1.4 min were lost to a stale
+`OUTDIR` reference in the checkpoint writer — fixed, verified, no data
+lost; run 1's record is the untouched baseline.)
 
 
 
