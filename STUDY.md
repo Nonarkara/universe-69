@@ -353,7 +353,10 @@ undone the 2026-11-15 fix — they wrote bare `/state` to `snapshot.json`,
 which loses the `/world` payload and renders the lagoon black; the deployed
 README now documents the `/state`+`/world` merge with a headless check of
 both pages before push, plus a grey-cloud note for the DNS flip
-(`044ce14`).
+(`044ce14`). Health check on the same day, engine untouched: the full
+suite ran green — `test_style` 2 s, `test_contract` 14 s, `test_vr` 1 s,
+`test_engine` 77 tests / 757 s, and the whole `unittest discover -s tests`
+at 697 tests / 1085 s, `OK`.
 
 
 
