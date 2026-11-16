@@ -312,8 +312,8 @@ No viewer-side watch can catch a state that ends inside one tick; that
 would need an engine- or page-side hook, outside the viewer-only
 discipline, and it was not built.
 **2026-11-16 the arc is reproducible.** Two independent processes —
-`full_arc.py` run 1 (Y130 cap, 268 min) and run 2 (400-year cap, still
-ticking at Y335) — both began from `engine.genesis(seed=69, attempt=1)`,
+`full_arc.py` run 1 (Y130 cap, 268 min) and run 2 (400-year cap, completed,
+852 min) — both began from `engine.genesis(seed=69, attempt=1)`,
 the first universe exactly as founded (EDEN seed 489, LAGOON 492, fseed
 69). Run 2's checkpoint already covers years 1–130, and every one of the
 260 common rows — both worlds × 130 years × 11 fields (day, pop, peak,
@@ -977,11 +977,15 @@ Earlier-study engine state at the time of writing: seed 69, `DAYS_PER_YEAR = 360
 **Yes — demographically, easily. And in EDEN they never do, which is the
 finding.**
 
-The experiment was run twice: once with the pen as built, and once with the
+The table below is **from the retired `tools/sweep.py` harness and was not
+re-run under the current engine** — the current deterministic arc (Y1–Y400)
+no longer even approaches 1,000, peaking at 242 (year-row; 243 stored) with
+generation max 16, so treat the "pen as built" speeds as historical. This
+experiment was run twice: once with the pen as built, and once with the
 pathology removed so that only the demography remained.
 
 ```sh
-python3 tools/sweep.py --study default
+python3 tools/sweep.py --study default  # retired harness; figures historical
 ```
 
 | population first reached | pen as built | pathology removed |
@@ -994,8 +998,10 @@ python3 tools/sweep.py --study default
 | 2000 | never | **year 67** |
 | 3000 | never | year 74 |
 
-Peak population: **752** (pen as built, year 78) against **4000+** (pathology
-removed, still climbing when the run was stopped).
+Peak population: **243** stored / **242** on a yearly row (pen as built,
+year 93, measured arc Y1–Y400, two deterministic processes) against **4000+**
+(pathology removed, still climbing when the run was stopped — from the retired
+`sweep.py` harness; not re-run under the current engine).
 
 The demographic engine is not slow. A woman conceives with probability
 1/180 per day and carries for 270 days, so each woman bears roughly a child
@@ -1009,7 +1015,10 @@ So the ceiling in EDEN is not human fertility. It is the pen.
 built: capacity 900, 32 nest boxes. Run the same seed in a pen of Calhoun's
 proportions — capacity 3,840, 256 boxes of 15 — and **2,000 people are
 reached in year 75**, the population peaks at 2,866, and it holds there for
-roughly 150 years before the same collapse arrives. The answer to "could they
+roughly 150 years before the same collapse arrives. These figures are from the
+retired sweep harness, never re-derived on the current engine; the current
+deterministic arc peaked at 242 (year-row) and never approached 2,000. The
+answer to "could they
 populate 2,000?" is therefore *yes*, and it was the pen, not the biology, that
 was saying no.
 
@@ -1020,9 +1029,11 @@ The UI now prints both, because the disagreement is the mechanism:
 > **PEN: 32 NEST BOXES · 224 PLACES · CAP 900**
 
 `EDEN_CAP = 900` is the pen's nominal capacity. The pen actually has 32 nest
-boxes of 7 places each — **224 socially meaningful places**. At the peak of
-752 people that is **3.4 times as many people as there are places to have a
-territory**, and 71 adults have no territory at all.
+boxes of 7 places each — **224 socially meaningful places**. At the measured
+peak of **243 people** that is **1.08 times as many people as there are places
+to have a territory** — slightly crowded, but the sink never deepens to
+Calhoun's 3.4× ratio because the engine's fertility/crowding feedback stabilises
+a limit cycle instead of driving extinction.
 
 Calhoun's Universe 25 had 256 boxes and about 15 mice per box — 3,840
 nominal places, and a peak near 2,200. The ratio of peak to nominal was
@@ -1073,41 +1084,97 @@ the roles — are under-modelled here. The box system currently records who
 holds a place; it does not yet make *where* the places are shape the
 behaviour.
 
-## 3. The arc of Universe 6, measured
+## 3. The arc of Universe 6, measured from two independent runs
 
-```sh
-python3 tools/lab.py --days 120000  # current harness; historical figures below were not rerun
-```
+Two deterministic engine processes, both seeded from `engine.genesis(seed=69,
+attempt=1)`, reproduce each other exactly — and together tell the true arc.
 
-| year | what happens |
-|---|---|
-| 0   | the pen opens: two pairs, eighteen years old |
-| 1   | first child born — the exploit phase begins |
-| 45  | crowding passes 35% — **the behavioural sink emerges** |
-| 56  | deaths outnumber births for three years — **the death phase begins** |
-| 234 | **UNIVERSE 6 HAS DIED.** Peak 752, generation 6. Postmortem written. |
-| 264 | the Observers reseed the pen. Iteration 2 begins. |
+**Determinism witness.** Run 1 (Y130 cap) and run 2 (400-year cap) both began
+from the same genesis and were cross-checked row-by-row across 260 common rows
+(both worlds × 130 years × 11 fields). Every field matches with **zero
+mismatches** — pop, peak, gen_max, phase, phases, births_y, deaths_y,
+bad_years, cod, census_len, iterations. The witness arc is a reproducible
+property of the engine, not a lucky draw. (Run 2's first 1.4 min were lost to
+a stale `OUTDIR` reference in the checkpoint writer; fixed, verified, no data
+lost; run 1's record is the untouched baseline.)
 
-The postmortem records the cause table `{infant 952, age 571, violence 384,
-plague 24}` and the verdict: *nothing within the walls could have prevented
-this — the pen itself is the cause.*
+**EDEN.** Across 400 years EDEN never goes extinct — it oscillates in pop
+(peaks 240+ mid-century, troughs ~150) while the `phase` label stays
+`exploit` after the initial Y1 strive→exploit flip (399 of 400 rows read
+`exploit`; the label reads the crowd, not the pop). Stored peak 243 (year-row
+max 242 at Y93). Gen_max = 16. Final population at Y400 is 187. Terminal
+cause-of-death cod: `{infant: 729, age: 698, violence: 340, starvation: 3,
+plague: 1}`. Sampling: Y105 births=1, deaths=8; Y250 births=3, deaths=4;
+Y400 births=5, deaths=5. Event counts: project 96,622 / bond 9,066 /
+feud 8,563 / peace 8,497 / omen 2,342 / violence 57 / disease 3 / discovery 2
+/ ennui 2 / generation 3 / phase 1. Zero `gift` events in the arc (kula fires
+only in the live run's LAGOON lineage).
 
-**On the duration.** From the peak at year 78 to the empty pen at year 234 is
-156 years — about ten generations at a 16-year maturation. Calhoun's mice
-went from their peak at day 560 to the last conception around day 920 and to
-extinction by 1973: roughly thirteen mouse-generations. The long, slow
-collapse in this model is not a bug in the demography; it is the correct
-human-scaled analogue of a mouse-scaled event.
+**LAGOON.** Across 400 years LAGOON never goes extinct. Stored peak 79 (year-
+row max 78 at Y172). Gen_max = 15. Phase: strive only. Final population 27.
+Terminal cause-of-death cod: `{dehydration: 307, violence: 79, infant: 81,
+accident: 38, age: 54, starvation: 25, childbirth: 7, predator: 6}`. Lessons
+learned: `vigilance` (Y1 predator took 3) and `preserve` (Y174 starvation took
+5). Event counts: project 32,976 / omen 2,196 / bond 470 / heir 108 /
+violence 63 / feud 170 / disaster 29 / lesson 2.
 
-**Retired forecast.** The earlier study forecast a first extinction near
-year 234 from a run then near year 115, using the former two-second day.
-That forecast is stale under `2026.10.28.1`; it makes no claim about the
-instrument's present state or when its first postmortem will occur.
+**Retired harness table.** The table below — peak 752 @ Y78, extinct Y234,
+cod `{infant 952, age 571, violence 384, plague 24}` — came from the
+retired `tools/lab.py` harness and does not reflect the current engine's
+deterministic behaviour. It is retired here; the 400-year arc supersedes it
+wholesale, not by update but by replacement.
+
+| fact | EDEN | LAGOON |
+|---|---|---|
+| stored peak | 243 (Y93) | 79 (year-row 78 @ Y172) |
+| peak year-row | 242 @ Y93 | 78 @ Y172 |
+| gen_max | 16 | 15 |
+| final Y400 pop | 187 | 27 |
+| final cod | `{infant: 729, age: 698, violence: 340, starvation: 3, plague: 1}` | `{dehydration: 307, violence: 79, infant: 81, accident: 38, age: 54, starvation: 25, childbirth: 7, predator: 6}` |
+| phase cycle | Y1 strive → exploit, then constant `exploit` | strive always |
+| lessons | — | `vigilance`, `preserve` |
+
+| | Y105 | Y250 | Y400 |
+|---|---|---|---|
+| EDEN births | 1 | 3 | 5 |
+| EDEN deaths | 8 | 4 | 5 |
+| LAGOON births | 2 | 2 | 0 |
+| LAGOON deaths | 1 | 0 | 0 |
+
+| EDEN events | count | LAGOON events | count |
+|---|---|---|---|
+| project | 96,622 | project | 32,976 |
+| bond | 9,066 | omen | 2,196 |
+| feud | 8,563 | bond | 470 |
+| peace | 8,497 | heir | 108 |
+| omen | 2,342 | violence | 63 |
+| violence | 57 | feud | 170 |
+| disease | 3 | disaster | 29 |
+| discovery | 2 | lesson | 2 |
+| ennui | 2 | | |
+| generation | 3 | | |
+| phase | 1 | | |
+| **EDEN total** | **125,158** | **LAGOON total** | **36,014** |
+
+(Both worlds combined: 161,172 events. Zero `gift` events anywhere in the
+arc — the kula fires only in the live run's LAGOON lineage, never in a
+fresh genesis lineage.)
+
+**Summary.** EDEN lives and oscillates — it does not die. LAGOON rides its
+own predator-driven cycle. The 400-year cap reveals a stable limit cycle,
+not extinction. The arc watch ends at Y400 alive; the engine is
+deterministic across processes; the old table is retired.
 
 ## 4. The two universes diverge, and the reason is worth knowing
 
-The earlier study's engine from genesis did **not** reproduce the live run's
-history, even though it was deterministic per `(seed, day)` within its version.
+**The determinism question is settled.** Two independent engine processes —
+`full_arc.py` run 1 (Y130 cap) and run 2 (400-year cap) — both began from
+`engine.genesis(seed=69, attempt=1)` and were cross-checked across 260 common
+rows: both worlds × 130 years × 11 fields. Every field matches with **zero
+mismatches**. Determinism holds across processes, not merely within one. The
+fresh-vs-live table below was measured under the *previous* engine version,
+when it still failed; it is retained as a record of that failure and of what
+fixed it.
 
 | | EDEN | LAGOON |
 |---|---|---|
@@ -1136,9 +1203,10 @@ live history as a record of *that run*, not a property of the model.
   `RESEARCH.md`, not of people.
 - The numbers above come from **one seed**. The pen's design sweep exists
   because a single run is an anecdote about a single run.
-- The causes of death in the EDEN postmortem are cumulative over the whole
-  iteration, so "infant" dominating that table describes *how* the last
-  generation failed, not the proximate cause of the pen emptying.
+- The cumulative EDEN cause-of-death counts (§3: infant 729, age 698,
+  violence 340, starvation 3, plague 1) accumulate over the whole 400-year
+  window and describe *how* the living died across it, not a single die-off.
+  The measured arc produced no EDEN postmortem because EDEN never emptied.
 - **A place emptied by death is never taken again** by the people who were
   already displaced. The viewer shows this directly: amber nest boxes are
   held, green ones are vacant, and the status line reads *"61 without
