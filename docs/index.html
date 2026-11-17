@@ -3340,6 +3340,52 @@ function render(canvas, world, map, key, u){
     c.forEach(function(a,i){ var ang=i*2.39996, rr=r*Math.sqrt((i+0.5)/c.length);
       a.nudge=Math.cos(ang)*rr; a.nudgeY=Math.sin(ang)*rr*0.7; a.crowdScale=shrink; });
   });
+  // The fan keeps bodies of one tile apart; bodies whose drawn torsos
+  // still overlap — not only across neighbouring tiles but at any
+  // concentration the fan's cap-free spiral leaves behind — are
+  // interpenetrating (GRAPHICS.md §6 item 1). They are separated here:
+  // display only, the record's position untouched, a deterministic local
+  // relaxation. Still, uncoupled, upright people are bucketed into tile
+  // cells; overlapping pairs are pushed apart in x until they clear.
+  // Nobody is moved by more than a tile and a half, and nothing here
+  // changes who is drawn, only where their pixels land.
+  (function separateOverlapping(){
+    var P=[], idx={};
+    list.forEach(function(a){ if (a.moving||coupled[a.id]) return;
+      var b=bodyOf(a), ab=b.ab|0, dact=(a.drawAct===undefined)?a.act:a.drawAct;
+      if (dact===A_SLEEP||dact===A_MATE||b.stage===0) return;   // lying down: the fan and the mats carry them
+      var st=STATURE[ab]||1, cs=a.crowdScale||1;
+      var o={a:a, x:a.x+(a.nudge||0), y:a.y+(a.nudgeY||0),
+             w:0.13*st*([0.66,0.8,1.0,1.24,1.55][b.fat]||1)*cs, h:1.68*st*cs, n:a.nudge||0};
+      P.push(o);
+      var k=Math.round(o.x)+","+Math.round(o.y);
+      (idx[k]||(idx[k]=[])).push(o); });
+    for (var sweep=0;sweep<3;sweep++){
+      var moved=0;
+      Object.keys(idx).forEach(function(k){
+        var p=k.split(","), cx=+p[0], cy=+p[1];
+        idx[k].forEach(function(a){
+          for (var dy=-1;dy<=1;dy++) for (var dx=-1;dx<=1;dx++){
+            var g=idx[(cx+dx)+","+(cy+dy)]; if (!g) continue;
+            g.forEach(function(b){
+              if (b.a.id<=a.a.id) return;                    // each pair once
+              var ddx=b.x-a.x;
+              if (Math.abs(ddx)>=a.w+b.w) return;
+              if (Math.abs(b.y-a.y)>=Math.min(a.h,b.h)*0.92) return;
+              var push=Math.min(0.75,(a.w+b.w-Math.abs(ddx))/2+0.015);
+              var s=(Math.abs(ddx)<1e-4)?((a.a.id%2===0)?-1:1):((ddx>=0)?1:-1);
+              a.n-=s*push; b.n+=s*push; a.x-=s*push; b.x+=s*push;
+              moved++;
+            });
+          }
+        });
+      });
+      if (!moved) break;
+      idx={};                                              // re-bucket so the cells stay honest
+      P.forEach(function(o){ var k=Math.round(o.x)+","+Math.round(o.y); (idx[k]||(idx[k]=[])).push(o); });
+    }
+    P.forEach(function(o){ o.a.nudge=o.n; });
+  })();
   list.sort(function(a,b){ return (a.y+a.nudgeY)-(b.y+b.nudgeY); });
   var sh=shadowSprite(ts);
   var drawnPair={};

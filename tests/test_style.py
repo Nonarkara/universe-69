@@ -442,6 +442,25 @@ class TestTheWorldsAtWork(unittest.TestCase):
         self.assertIn("else if (o.tree) drawTree(g, o.tree[0], o.tree[1], o.tree[2], o.tree[3], tb);", self.src)
         self.assertNotIn("for (i=0;i<trees.length;i+=3) crown(", self.src)
 
+    def test_cross_tile_crowds_are_separated_before_the_ysort(self):
+        # GRAPHICS.md §6 item 1 (second half): people who are NOT on the
+        # same tile but whose drawn torsos still overlap are separated by
+        # a display-only deterministic relaxation, run between the same-tile
+        # fan and the y-sort. Eligibility excludes the lying (A_SLEEP,
+        # A_MATE) and infants (stage===0) — the fan and the mats carry
+        # them — and the pass writes nothing but nudge onto the actor.
+        # Pin the chain so a silent revert fails loudly.
+        self.assertIn("(function separateOverlapping(){", self.src)
+        self.assertIn("if (dact===A_SLEEP||dact===A_MATE||b.stage===0) return;", self.src)
+        self.assertIn("var push=Math.min(0.75,(a.w+b.w-Math.abs(ddx))/2+0.015);", self.src)
+        self.assertIn("P.forEach(function(o){ o.a.nudge=o.n; });", self.src)
+        # order: same-tile fan, then separation, then the y-sort
+        fan = self.src.index("var crowd={};")
+        sep = self.src.index("(function separateOverlapping(){")
+        srt = self.src.index("list.sort(function(a,b){ return (a.y+a.nudgeY)-(b.y+b.nudgeY); });", fan)
+        self.assertLess(fan, sep)
+        self.assertLess(sep, srt)
+
 
 class TestTheReader(unittest.TestCase):
     """The Book, its timeline, and the archive of the first run, in one reader."""

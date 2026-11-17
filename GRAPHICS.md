@@ -356,7 +356,7 @@ and made the shoulder line read. Nothing else.
 
 This is the honest list. Each line is a defect, not a design.
 
-1. **Crowds interpenetrate.** *(partially fixed 2026-11-01)* The same-tile
+1. *(fixed 2026-11-18, second half)* The same-tile
    spiral already existed, but its spread was capped at a 0.46-tile radius
    and every figure stayed life-size regardless of how many shared the tile
    — fine for a hopper queue of five, not for the sixty or more that pile
@@ -365,15 +365,25 @@ This is the honest list. Each line is a defect, not a design.
    neighbours' space) and each figure in a crowd of more than ~9 shrinks
    toward a 0.4× floor as a function of `n`. The decision this makes is
    "nobody is hidden; a packed crowd reads as smaller, denser bodies, the
-   way a real packed room does" — not true occlusion, and not yet audited
-   against the live 1,600-person death phase itself (`tools/lab.py`
-   confirms the model's numbers; it does not render anything). *Still
-   missing: separation between people who are NOT on the same tile but
-   whose grown or shrunk sprites still overlap at extreme local density.
-   The other half of this clause — depth ordering against the world's own
-   geometry — is fixed (items 6 and 6a), and the people pass is y-sorted
-   by feet, so cross-tile people order already existed; at extreme local
-   density the sprites still overlap.*
+   way a real packed room does" — not true occlusion. The remaining
+   clause — people who are NOT on the same tile whose grown or shrunk
+   sprites still overlap — is fixed too (2026-11-18): a display-only
+   deterministic relaxation (`separateOverlapping()`) runs between the fan
+   and the y-sort. Still, uncoupled, upright people only (`A_SLEEP`,
+   `A_MATE` and infants excluded — the mats carry them); torso half-width
+   `0.13·STATURE·FAT_W·crowdScale`, height `1.68·STATURE·crowdScale`;
+   one-tile grid buckets; up to three sweeps, re-bucketing between sweeps;
+   symmetric x-push `min(0.75, (w₁+w₂)−|dx|)/2 + 0.015)` per side, dead
+   stacks resolved by id parity; mutates only `nudge`. On the frozen
+   Y617 record the 20 genuine cross-tile overlapping pairs (dx ≈ 0–0.3,
+   dy ≈ 0.1–1.1 — the hopper crowd at (50,23)/(49,23)/(50,24) and the
+   cluster at (24,48)/(24,49)) all clear to **zero residual in three
+   sweeps**, at a cost of ≈ +0.8–1.0 ms per EDEN frame at 123 people.
+   The caveat that survives both halves, and is unchanged by either:
+   **the live death phase itself is unaudited** — the frozen record is
+   the only extremity of density on disk, and 20 → 0 is one record's
+   number. Depth ordering against the world's own geometry is fixed
+   (items 6, 6a, 6b). Evidence: `docs/audits/2026-11-18-density/`.
 2. **A crowded establishing shot cannot supply portraits.** It frames the
    largest camp; documentary close shots and manual zoom provide individual
    detail. Very crowded populations still
@@ -477,6 +487,31 @@ figure now takes the same `32*k<10` branch a standing one does, with
 
 Every change to the drawing gets a line here, newest first.
 
+- **2026-11-18 — crowds stop standing inside each other.** §6 item 1,
+  fixed (second half); a changelog line above stands and its "sprites
+  still overlap" clause is superseded by this fix. A display-only
+  deterministic relaxation (`separateOverlapping()` in `render()`) runs
+  between the same-tile fan and the y-sort: still, uncoupled, upright
+  people — `A_SLEEP`, `A_MATE` and infants excluded, their mats carry
+  them — are bucketed into one-tile cells and overlapping pairs are
+  pushed apart symmetrically in x, `min(0.75, (w₁+w₂)−|dx|)/2 + 0.015)`
+  per side, up to three sweeps with the cells re-bucketed between sweeps;
+  dead stacks resolve by id parity; the pass mutates only `nudge` and
+  never the record. On the frozen Y617 record (EDEN, POP 123) the
+  before/after witness is two frame pairs — the hopper crowd at
+  (50,23)/(49,23)/(50,24) and the cluster at (24,48)/(24,49) — where
+  **20 genuine cross-tile pairs clear to 0 residual in three sweeps**;
+  at the pixel level an interpenetrating mass now reads as five distinct
+  people, and the prone infant in the corner is untouched. Cost, measured
+  single-render (90 samples, min/median) because poll traffic pollutes
+  batch totals: ≈ +0.8–1.0 ms per EDEN frame, +0.1–0.2 ms on LAGOON at
+  17 people; an A/B build with the pass removed renders at the previous
+  build's speed, so the delta is the pass, and it scales with local
+  overlapping pairs, not with population. Viewer-only; no trajectory
+  moved; engine untouched at `2026.11.12.6`. The live death phase remains
+  unaudited — said plainly; the witness is the frozen record, and 20 → 0
+  is one record's number. Evidence and honest negatives live in
+  `docs/audits/2026-11-18-density/`.
 - **2026-11-18 — the woods hide whoever stands behind them.** §6 item 6b,
   fixed. LAGOON's tree crowns left the baked ground layer and are painted
   per-frame in the people's own back-to-front order, the same merge as
@@ -514,7 +549,8 @@ Every change to the drawing gets a line here, newest first.
   6's witness stands, and the negative is recorded, not staged. §6 item 1's
   stale clause was reworded: depth ordering against the world's own
   geometry is fixed (items 6 and 6a); cross-tile people order already
-  existed; separation at extreme local density remains open and unaudited.
+  existed. Separation at extreme local density was then open — 2026-11-18
+  closes it (see that entry).
   Viewer-only; no trajectory moved; engine untouched at `2026.11.12.6`.
   Evidence and honest negatives live in
   `docs/audits/2026-11-17-occluders/`.

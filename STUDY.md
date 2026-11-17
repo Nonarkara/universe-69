@@ -474,10 +474,47 @@ y changed by 0.8 tiles. Behind, half the body is lost to the crown; in
 front, the whole figure stands over its south lobe. The record on disk is
 untouched (591's on-record position is (144, 92)); the absence of a natural
 witness is recorded, not staged. §6 item 1 — separation at extreme local
-density — remains open, and the live death phase is still unaudited.
+density — was then open; the next entry closes it (and the live death
+phase remains unaudited).
 Batteries green: `test_style` 76 (a new pin fails loudly on a silent
 revert of the merge or the painter), `test_contract` 20, `test_vr` 36;
 mirror identical; evidence in `docs/audits/2026-11-17-trees/`.
+
+**2026-11-18 the crowd stops standing inside each other.**
+Viewer-only composition pass — no engine change, no trajectory moved,
+nothing quoted from the drawing. The same-tile fan decides who is drawn
+and how big; it could not see (and the uncapped radius could spill)
+people on neighbouring tiles whose sprites landed together. Between the
+fan and the y-sort, a display-only deterministic relaxation
+(`separateOverlapping()`) now pushes still, uncoupled, upright people
+apart along x: one-tile grid buckets, up to three sweeps re-bucketed
+between sweeps, symmetric push `min(0.75, (w₁+w₂)−|dx|)/2 + 0.015)` per
+side, dead stacks resolved by actor id parity, and `A_SLEEP`/`A_MATE`/
+infants excluded — their mats carry them, and moving a body on its mat
+would be a lie about the record. On the frozen Y617 record the probe
+found 20 genuine cross-tile overlapping pairs (dx ≈ 0–0.3, dy ≈ 0.1–1.1)
+around the hopper crowd at (50,23)/(49,23)/(50,24) and the cluster at
+(24,48)/(24,49); after the pass, residual pairs are zero in three sweeps.
+The before/after frames at both clusters show an interpenetrating mass
+resolving into five distinct people, the seated man in yellow shifting
+out clear of the bikini pair, the prone infant untouched. The cost,
+measured single-render — 90 samples, min/median, because poll traffic
+pollutes whole-batch totals: ≈ +0.8–1.0 ms per EDEN frame at POP 123,
++0.1–0.2 ms on LAGOON at 17; an A/B build with the pass removed renders
+at the previous build's speed, so the delta is the pass, and it scales
+with local overlapping pairs, not with population. MSH verified at
+Y641 · POP 210 (LAGOON 16): camp at 390/1024/1440 DAY+NIGHT and island
+at 1440 DAY+NIGHT — the 1024 NIGHT frame re-taken with a 60-attempt
+loop against the part clock — zero pageerrors, chrome intact at every
+width. The honest limits, unchanged by any of it: the live death phase
+is still unaudited (the frozen record is the only extremity of density
+on disk), lying bodies are deliberately not separated, a mover cutting
+through a crowd may overlap it on the frame they pass, and 20 → 0 is one
+record's number. Batteries green: `test_style` 77 (a new pin fails
+loudly on a silent revert of the pass or its placement before the
+y-sort), `test_contract` 20, `test_vr` 36; mirror identical; evidence in
+`docs/audits/2026-11-18-density/`. §6 item 1 closes its second half; the
+depth-ordering half had closed with items 6, 6a and 6b.
 
 **2026-11-11 re-derivation — the long fuse under the shipped engine
 (`2026.11.12.2`, same witness rng lineage as the first 120-year arc).**
