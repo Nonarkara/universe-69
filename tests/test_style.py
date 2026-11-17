@@ -461,6 +461,24 @@ class TestTheWorldsAtWork(unittest.TestCase):
         self.assertLess(fan, sep)
         self.assertLess(sep, srt)
 
+    def test_crowd_members_share_one_sprite_per_visible_difference(self):
+        # §6 item 1: a crowd member drawn at crowdScale < 1 shows no limb
+        # difference, so the shared sprite cache keys on the drawn size
+        # (s*crowdScale), not the nominal figure scale — otherwise a
+        # packed crowd needs far more keys than the cache holds and the
+        # safety valve wipes everything, every frame. Pin the gate so a
+        # silent revert (nominal-scale keys) fails loudly.
+        self.assertIn("var ds = s*(a.crowdScale||1);", self.src)
+        self.assertIn("var vk = ds>=3 ? (a.v%20) : (ds>=2 ? (a.v%4) : (ds>=1.5 ? (a.v%2) : 0));", self.src)
+        self.assertIn("var bk = ds>=2.5 ? bucket : Math.floor(bucket/4)*4;", self.src)
+
+    def test_fit_wipes_the_sprite_cache_only_when_the_canvas_size_changes(self):
+        # §6 item 1: fit() runs on every HUD reflow (ResizeObserver) — which
+        # is what happens when the crowd grows and POP text wraps. The
+        # shared sprite cache must die only with a canvas-size change.
+        self.assertIn('var spriteCache={}, spriteCount=0, spriteBakeKey="";', self.src)
+        self.assertIn('if (bakeKey !== spriteBakeKey){ spriteCache={}; spriteCount=0; spriteBakeKey=bakeKey; }', self.src)
+
 
 class TestTheReader(unittest.TestCase):
     """The Book, its timeline, and the archive of the first run, in one reader."""

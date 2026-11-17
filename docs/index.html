@@ -2754,22 +2754,29 @@ function matingSprite(m, f, view, s){
 }
 
 // ---- sprite cache: one render per (pose, zoom), then a blit per person -----
-var spriteCache={}, spriteCount=0;
+var spriteCache={}, spriteCount=0, spriteBakeKey="";
 function figureSprite(a, act, bucket, moving, s, dress, bedding){
   // Individual variation is only visible close up, so it only enters the
   // cache key when zoomed in; crowds share sprites and stay cheap. The key
   // fixes everything the drawing reads, so a cached figure is never someone
   // else's body.
+  // Variation only reads at the size the eye can see (§6 item 1: a
+  // packed crowd at crowdScale 0.4 shows no limb difference). Key the
+  // shared sprites on the drawn size — otherwise a 700-person crowd
+  // needs far more keys than the cache cap and the wipe-everything
+  // policy below destroys and rebuilds the whole cache every frame.
+  var ds = s*(a.crowdScale||1);
   var sq = Math.max(2.0, s>=2 ? Math.round(s) : Math.round(s*8)/8);
-  var vk = s>=2 ? (a.v%20) : (s>=1.25 ? (a.v%4) : 0);
-  var bk = s>=1.25 ? bucket : Math.floor(bucket/4)*4;
+  var vk = ds>=3 ? (a.v%20) : (ds>=2 ? (a.v%4) : (ds>=1.5 ? (a.v%2) : 0));
+  var bk = ds>=2.5 ? bucket : Math.floor(bucket/4)*4;
   var B=bodyOf(a), wk=(act===A_WITHDRAW)?(a.wk||0):0;
   var view = !moving ? 0 : (Math.abs(a.vy||0)>1.2*Math.abs(a.vx||0) ? ((a.vy>0)?1:2) : 0);
   var key=act+"|"+B.ab+B.fat+B.mus+B.hurt+B.preg+B.hungry+B.gaunt+B.carry+B.infant+"|"+B.stage+"|"+B.adult+"|"+a.sex+"|"+(dress||"")+"|"+wk+"|"+
           bk+"|"+(moving?1:0)+view+"|"+(!view?(a.face||1):0)+"|"+vk+"|"+sq+"|"+(bedding!==false);
   var sp=spriteCache[key];
   if (sp) return sp;
-  var cap = sq>=3 ? 420 : 1400;
+  var cap = sq>=3 ? 2048 : 4096;
+  // Safety valve only: the drawn-size gates keep the live key space bounded.
   if (spriteCount>cap){ spriteCache={}; spriteCount=0; }
   var W=Math.ceil(80*sq), H=Math.ceil(80*sq);
   var c=mkCanvas(W,H), g=c.getContext("2d");
@@ -4410,7 +4417,12 @@ function fit(){
     var ov=document.getElementById(id==="c6"?"o6":"o9");
     ov.width=cv.width; ov.height=cv.height;
   });
-  spriteCache={}; spriteCount=0;
+  // Sprites scale with canvas pixels, so they must die with a canvas-size
+  // change — and only then. fit() also runs on HUD reflows (ResizeObserver),
+  // which is exactly what happens when the crowd grows and POP text wraps;
+  // wiping the shared cache then would rebuild every sprite mid-phase.
+  var bakeKey = ["c6","c9"].map(function(id){ var cv=document.getElementById(id); return cv.width+"x"+cv.height; }).join("|");
+  if (bakeKey !== spriteBakeKey){ spriteCache={}; spriteCount=0; spriteBakeKey=bakeKey; }
   stripSeq=""; updateStrip();
   if (typeof pagers==="undefined") return;
   if (pagers.rec){ pagers.rec.sig=""; updateRecords(null); }

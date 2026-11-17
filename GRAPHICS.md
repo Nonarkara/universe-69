@@ -487,6 +487,29 @@ figure now takes the same `32*k<10` branch a standing one does, with
 
 Every change to the drawing gets a line here, newest first.
 
+- **2026-11-18 — the crowd cache stops wiping itself.** §6 item 1's
+  extremity question — what a 1,000-body heap would do — measured on a
+  synthetic graft (300/600/1,200 labeled-synthetic bodies on the frozen
+  Y617 record, scratch only). Painting dominated everything: at 423
+  bodies, geometry costs 5.7 ms, the cross-tile pass is ~free, and the
+  same-tile fan *helps* (528 ms without it). The real defect was the
+  sprite cache: `figureSprite` keyed variation on the **nominal** scale
+  `s`, never on the drawn size `s·crowdScale`, so a 0.4× crowd member
+  carried a ~20k-key space against a 420/1400-cap wipe-everything valve
+  and the cache emptied and rebuilt every frame; and `fit()` — on every
+  HUD reflow via ResizeObserver — wiped the whole cache unconditionally.
+  Fix: keys read the drawn size (`ds≥3`→20 variants, `ds≥2`→4,
+  `ds≥1.5`→2, else 0; walk bucket quantizes below 2.5); caps 420/1400 →
+  2048/4096 as a labeled safety valve; `fit()` wipes only when a canvas
+  size actually changed (`spriteBakeKey`). Measured single renders
+  (min/median): 223 bodies 27.7/93.6 → 2.9/3.5 ms; 723: 1053/1132 →
+  267/281 ms; 1323: 2082/2137 → 406/470 ms; the 123 baseline is
+  unchanged at 1.2/1.4 ms. 423 remains bimodal (87.5/174.9), likely one
+  genuine canvas re-bake per window; not chased. No visual change by
+  construction (keys, not paint); chrome untouched (zero DOM delta); LAGOON
+  untouched; engine untouched at `2026.11.12.6`. The live death phase
+  remains unaudited — stated plainly, again. Evidence and honest
+  negatives in `docs/audits/2026-11-18-crowd-cache/`.
 - **2026-11-18 — crowds stop standing inside each other.** §6 item 1,
   fixed (second half); a changelog line above stands and its "sprites
   still overlap" clause is superseded by this fix. A display-only

@@ -480,6 +480,35 @@ Batteries green: `test_style` 76 (a new pin fails loudly on a silent
 revert of the merge or the painter), `test_contract` 20, `test_vr` 36;
 mirror identical; evidence in `docs/audits/2026-11-17-trees/`.
 
+**2026-11-18 the crowd cache stops wiping itself.**
+Viewer-only cache fix, no engine change, no trajectory moved, nothing
+quoted from the drawing. The density audit's open question — how the
+drawing pipeline survives a heap far denser than the frozen record — was
+measured on a synthetic graft: 300/600/1,200 labeled-synthetic bodies
+spiralled onto the hopper cluster in a scratch copy of the viewer. The
+result led somewhere the audit could not: `figureSprite`'s cache key
+varied limb variation and wall resolution on the *nominal* figure scale
+and never on the size actually drawn (`s·crowdScale`), so a 0.4× crowd
+member carried the close-up key space (~20,000 keys) into a cache whose
+safety valve emptied everything past 420/1400 — and `fit()`, which runs
+on every HUD reflow through the ResizeObserver (exactly what happens
+when POP text wraps as a crowd grows), wiped the cache unconditionally.
+Both are fixed: keys read the drawn size (20 variants only at drawn
+scale ≥ 3; walk buckets quantize below 2.5; caps are a labeled safety
+valve at 2048/4096); `fit()` re-bakes sprites only when a canvas size
+actually changes (`spriteBakeKey`). Measured single renders: 223 bodies
+27.7/93.6 → 2.9/3.5 ms; 723: 1053/1132 → 267/281 ms; 1323:
+2082/2137 → 406/470 ms; the 123 baseline unchanged at 1.2/1.4 ms. 423
+bodies stays bimodal (87.5/174.9) and is recorded as such. The geometry
+pass was never the problem (5.7 ms at 423); the cross-tile separation
+pass is ~free; the synthetic graft is labeled synthetic throughout and
+is not a measurement of the model; the live death phase remains
+unaudited. Batteries green: `test_style` 79 (two new pins fail loudly on
+a silent revert of either fix), `test_contract` 20, `test_vr` 36; mirror
+byte-identical; chrome untouched (zero DOM delta); engine untouched at
+`2026.11.12.6`. Evidence and honest negatives in
+`docs/audits/2026-11-18-crowd-cache/`.
+
 **2026-11-18 the crowd stops standing inside each other.**
 Viewer-only composition pass — no engine change, no trajectory moved,
 nothing quoted from the drawing. The same-tile fan decides who is drawn
