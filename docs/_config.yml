@@ -1,0 +1,25 @@
+# GitHub Pages publishes this folder from main with Jekyll (legacy
+# "pages build and deployment"; source path /docs). With no config, Jekyll
+# publishes every file here.
+#
+# docs/audits is retained evidence — screenshots, fixtures, logs, and the
+# scripts that made them. The viewer never requests it. It is most of the
+# folder (about 202 MiB and 1,700 files) and it is what makes the
+# github-pages artifact about 221 MB. actions/deploy-pages then sits in
+# syncing_files until its ten-minute limit, so a successful build still
+# fails to go live. The files stay in the repository; this list only keeps
+# them out of the published site.
+#
+# Setting `exclude` replaces Jekyll 3.10's default list. github-pages also
+# adds "CNAME" only when that default list is left untouched, so the
+# defaults are repeated here (github-pages v232, jekyll v3.10.0).
+exclude:
+  - audits
+  - CNAME
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
