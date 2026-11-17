@@ -368,9 +368,12 @@ This is the honest list. Each line is a defect, not a design.
    way a real packed room does" — not true occlusion, and not yet audited
    against the live 1,600-person death phase itself (`tools/lab.py`
    confirms the model's numbers; it does not render anything). *Still
-   missing: occlusion between people who are NOT on the same tile but
-   whose grown or shrunk sprites still overlap at extreme local density,
-   and any depth ordering against the world's own geometry (see 6 below).*
+   missing: separation between people who are NOT on the same tile but
+   whose grown or shrunk sprites still overlap at extreme local density.
+   The other half of this clause — depth ordering against the world's own
+   geometry — is fixed (items 6 and 6a), and the people pass is y-sorted
+   by feet, so cross-tile people order already existed; at extreme local
+   density the sprites still overlap.*
 2. **A crowded establishing shot cannot supply portraits.** It frames the
    largest camp; documentary close shots and manual zoom provide individual
    detail. Very crowded populations still
@@ -389,17 +392,25 @@ This is the honest list. Each line is a defect, not a design.
    hearth.
 5. *(fixed 2026-10-28: the grade is painted after the people and the fire
    after the grade, so firelight now reaches the figures in its circle.)*
-6. *(fixed 2026-11-17: huts and EDEN lodgings; trees, buffet bars and camp
-   assets are not occluders yet — see 6a)* Huts and cabanas were in the baked
+6. *(fixed 2026-11-17: huts and EDEN lodgings; the rest of the list is
+   6a/6b)* Huts and cabanas were in the baked
    layer, so a person always drew over them, even when standing behind.
    They are now painted per-frame in the people's own back-to-front order
    (huts and lodgings merged into the people's y-sort in `render()`), so a
    person behind a roofline is lost to it and a person in front still
    stands over it.
-6a. *(open, scoped out of item 6 on purpose)* Tree crowns, the buffet bars
-   and the camp assets (granary, pen, records bench, hearth stone ring) are
-   still baked and are not occluders yet; a person under a crown still reads
-   over it.
+6a. *(fixed 2026-11-17: buffet bars, camp assets, hearth ring; the camp's
+   perimeter wall ring stays baked)* The EDEN buffet bars, the LAGOON camp
+   assets (granary, pen, records bench) and the hearth stone ring left the
+   baked layer and are painted per-frame in the same merge (keys `Y+2`,
+   `s.y+1.85`, `s.y+4.0`, `s.y-1.3`, `s.y+2.41` beside the person key
+   `a.y+a.nudgeY`), so a person behind a counter or a half-built store is
+   lost to it. The wall ring stays baked on purpose: its north and south
+   faces want opposite sort orders, so no single key is right, and a
+   person behind it still reads over it.
+6b. *(open)* Tree crowns are still batched into one single-pass paint;
+   lifting them per-frame costs real time for a mild gain, and a person
+   under a crown still reads over it.
 7. *(fixed 2026-10-28: children have their own proportions by age band.)*
    The current pair uses two calls to the same rigged body painter.
 8. *(fixed 2026-11-02: a standing activity's animation budget doubled from
@@ -457,6 +468,25 @@ figure now takes the same `32*k<10` branch a standing one does, with
 ## 8. Changelog
 
 Every change to the drawing gets a line here, newest first.
+
+- **2026-11-17 — the counter, the grain store and the hearth join the
+  order.** §6 item 6a, fixed. The EDEN buffet bars, the LAGOON camp assets
+  (granary, pen, records bench) and the hearth stone ring left the baked
+  ground layer and are painted per-frame in the people's own back-to-front
+  order, the same painter's-algorithm merge as item 6 (bars `Y+2`; assets
+  `s.y+1.85` / `s.y+4.0` / `s.y-1.3`; hearth `s.y+2.41`; person
+  `a.y+a.nudgeY`). The four standalone painters replaced the single
+  `drawCampAssets`. The camp's perimeter wall ring stays baked on purpose —
+  its north and south faces want opposite sort orders. Trees stay baked and
+  are now tracked as item 6b. The frozen record held no still person behind
+  any of the new occluders, so no pixel-level witness exists for them; item
+  6's witness stands, and the negative is recorded, not staged. §6 item 1's
+  stale clause was reworded: depth ordering against the world's own
+  geometry is fixed (items 6 and 6a); cross-tile people order already
+  existed; separation at extreme local density remains open and unaudited.
+  Viewer-only; no trajectory moved; engine untouched at `2026.11.12.6`.
+  Evidence and honest negatives live in
+  `docs/audits/2026-11-17-occluders/`.
 
 - **2026-11-17 — the world's own geometry hides whoever stands behind it.**
   §6 item 6, partially closed. LAGOON's huts and EDEN's lodgings left the

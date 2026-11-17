@@ -420,8 +420,12 @@ class TestTheWorldsAtWork(unittest.TestCase):
     def test_eden_is_a_resort_island(self):
         body = self.src.split("var EDEN_WORLD={")[1].split("\n};")[0]
         for part in ("a resort island in a calm, painted sea", "the dome's edge",
-                     "stools along the counter", "loungers", "the pool"):
+                     "buffet bars are painted per-frame", "loungers", "the pool"):
             self.assertIn(part, body)
+        # the bars themselves moved out of the baked layer into the per-frame
+        # occlusion merge (GRAPHICS.md §6 item 6a); the stools line lives on
+        # in drawBuffetBar — pin both so a silent revert fails loudly
+        self.assertIn("stools along the counter", self.src)
 
 
 class TestTheReader(unittest.TestCase):

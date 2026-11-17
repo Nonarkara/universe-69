@@ -434,6 +434,26 @@ frame is sub-pixel (its still people stand at x=21 against an edge at
 21.06); said plainly rather than staged. Batteries green: `test_style` 75,
 `test_contract` 20, `test_vr` 36.
 
+**2026-11-17 the counter, the grain store and the hearth join the order.**
+Viewer-only repaint — no engine change, no trajectory moved. The buffet
+bars, the LAGOON camp assets and the hearth stone ring left the baked
+ground layer and are painted per-frame in the same merge as item 6, closing
+§6 item 6a: a person behind a counter or a half-built store is lost to it;
+a person in front still stands over it. The camp's perimeter wall ring
+stays baked on purpose (no single sort key fits its two faces), and the
+tree crowns stay baked as the new item 6b — their batched single-pass paint
+is a cost decision, not an oversight. The witness here is an honest
+negative: the frozen snapshot at Y617 holds no still person behind any of
+the new occluders (both camps record zero granary/pen/bench progress; the
+only drawn site is the hearth ring where fire is recorded, with nobody
+behind it), so no frame was staged to pretend otherwise — item 6's witness
+stands, and the gap is named. §6 item 1's clause was reworded to match what
+the tree now shows: depth ordering against the world's own geometry is
+fixed, cross-tile people order always existed, and separation at extreme
+local density remains open and unaudited against the live death phase.
+Batteries green: `test_style` 75, `test_contract` 20, `test_vr` 36; mirror
+identical; evidence in `docs/audits/2026-11-17-occluders/`.
+
 **2026-11-11 re-derivation — the long fuse under the shipped engine
 (`2026.11.12.2`, same witness rng lineage as the first 120-year arc).**
 Feuds 1,947, peaces 1,924, live bonds 4 at Y120; final population 220 (peak
