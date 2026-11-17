@@ -102,12 +102,10 @@ bodies survive), not a product defect.
   exercises differently.
 - **223/723/1323: ≈ 27–30× / 4× / 5× faster.** All still faster than
   pre-fix by an order of magnitude at every synthetic size.
-- **423 remains bimodal** (min 87.5 / median 174.9). Unexplained after
-  the cache fix. Likely one genuine canvas re-bake (HUD reflow →
-  ResizeObserver → canvas-size change → one wholesale sprite rebuild)
-  landing inside the 60-sample window, plus the plain fill-rate cost of
-  a 423-body pile at this zoom. Not chased further; the 15 fps backoff
-  absorbs it and no claim is made that 423 closes to baseline.
+- **423 remains bimodal** (min 87.5 / median 174.9). The cause is now
+  known and is **not** the one guessed in the first version of this file;
+  see *Addendum — the bimodality, measured to death* below. The 15 fps
+  backoff absorbs it and no claim is made that 423 closes to baseline.
 - At ≥ 723 in frame the `costAvg > 26 → 15 fps` backoff engages by
   design; these zooms frame a global heap no auto-camera rung produces
   (both worlds auto-frame the camp/hearth close).
@@ -146,6 +144,73 @@ bodies survive), not a product defect.
   zero pageerrors in every stress run.
 - The drawing change carries no measurement of the model; the engine is
   untouched at `2026.11.12.6`; no world's trajectory moved.
+
+## Addendum (2026-11-18, later): the bimodality, measured to death
+
+The first version of this file closed the question with "likely one
+genuine canvas re-bake (HUD reflow → ResizeObserver → one wholesale
+sprite rebuild) landing inside the sampling window". That guess was
+**wrong**, and this addendum replaces it with measurement. Everything
+below ran in the same scratch harness (headless Chromium, dpr=1,
+1440×900, EDEN node (50, 23.5) th 4.5, 423 bodies = 123 record + 300
+synthetic, fetchJSON frozen, single `render()` calls).
+
+1. **Full distribution, 90 back-to-back renders.** Two tight clusters:
+   18 cheap frames at 87.6–96 ms (mean 90.3) and 72 heavy frames at
+   179.1–234.4 ms (mean 193.3); 90-sample mean 172.7. The cheap frames
+   fall at call indices **4, 9, 14, … 89 — period exactly 5 in call-
+   count space**, in both the plain run and a run with a forced GC
+   before every render (which shifted all times +10–20 ms and moved no
+   cadence). GC is not the mechanism.
+2. **Identical draw lists.** Instrumenting
+   `CanvasRenderingContext2D.prototype` (counts per render): 645
+   `drawImage`, 8 `fillRect`, 16 `save` / 16 `restore`, 13 `translate`,
+   13 `scale` — **identical on cheap and heavy frames**. The JavaScript
+   emits the same work every frame; the 2× is per-call cost
+   (rasterization), not fewer operations.
+3. **The attribution migrates inside the frame.** Per-method timing over
+   10 frames: heavy frames charge either `drawImage` ≈ 180–188 ms, or
+   `save` ≈ 102–108 ms **and** `restore` ≈ 95–96 ms (frames 0 and 5 in
+   the sample), while cheap frames charge `drawImage` ≈ 90 ms with
+   `save`/`restore` ≈ 0. The deferred flush lands on whichever call
+   forces it, and on every 5th call roughly half of it does not land at
+   all — it lands on the *next* frame as `save`/`restore` cost.
+4. **The 1 Hz theory is rejected.** Cheap-frame wall-clock spacing in a
+   10-frame sample is 885 ms (at ~185 ms per call), not any second
+   boundary; the cheap frame is every 5th *call* regardless of wall
+   time, and the period survives forced GC.
+5. **Off-DOM, the cadence does not exist.** The identical scene, draw
+   list and 423 bodies rendered to a detached scratch canvas: flat
+   293–368 ms after a 1084 ms first-call bake, no period-5 structure.
+   The cadence requires the canvas to be **in the document and
+   composited**.
+
+**Conclusion.** The 423 bimodality is the compositor's deferred-raster
+scheduling on a DOM-attached, software-rastered (SwiftShader) canvas in
+headless Chromium — raster work carried across paint boundaries and
+charged to whichever call forces the flush. It is not a page defect, not
+the sprite cache, not GC, and not HUD feedback (the timed loop runs
+inside one task; canvases never re-sized, `fit()` never re-entered,
+`spriteBakeKey` constant throughout). The withdrawal of the "one genuine
+re-bake per window" guess is recorded here on purpose: a plausible
+story is not evidence.
+
+What this does and does not change:
+
+- The recorded min/median (87.5 / 174.9) still describe the sample
+  distribution honestly; the distribution is flush attribution, not two
+  code paths. On real hardware (GPU, a real compositor) the attribution
+  will look nothing like this; the "headless times are not hardware
+  times" caveat applies with force, and the Quest frame rate remains
+  the honest unknown it already was.
+- No JavaScript path does less work on a cheap frame; there is nothing
+  to optimize away. No viewer change is justified or made. If a live
+  death phase is ever watched under load for this shape, expect
+  compositing strategy (canvas layerization, `desynchronized`) to matter
+  more than any
+  script change.
+- Mean cost at 423 in this harness is ~173 ms per frame; the 15 fps
+  backoff still absorbs it by design.
 
 ## Batteries
 

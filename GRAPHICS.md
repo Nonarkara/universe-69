@@ -517,8 +517,10 @@ Every change to the drawing gets a line here, newest first.
   size actually changed (`spriteBakeKey`). Measured single renders
   (min/median): 223 bodies 27.7/93.6 → 2.9/3.5 ms; 723: 1053/1132 →
   267/281 ms; 1323: 2082/2137 → 406/470 ms; the 123 baseline is
-  unchanged at 1.2/1.4 ms. 423 remains bimodal (87.5/174.9), likely one
-  genuine canvas re-bake per window; not chased. No visual change by
+  unchanged at 1.2/1.4 ms. 423 remains bimodal (87.5/174.9) — since
+  explained as compositor flush attribution on the software-rastered
+  canvas (period 5 in call space; identical draw lists; vanishes
+  off-DOM), not a code path; see the audit addendum. No visual change by
   construction (keys, not paint); chrome untouched (zero DOM delta); LAGOON
   untouched; engine untouched at `2026.11.12.6`. The live death phase
   remains unaudited — stated plainly, again. Evidence and honest

@@ -512,7 +512,10 @@ valve at 2048/4096); `fit()` re-bakes sprites only when a canvas size
 actually changes (`spriteBakeKey`). Measured single renders: 223 bodies
 27.7/93.6 → 2.9/3.5 ms; 723: 1053/1132 → 267/281 ms; 1323:
 2082/2137 → 406/470 ms; the 123 baseline unchanged at 1.2/1.4 ms. 423
-bodies stays bimodal (87.5/174.9) and is recorded as such. The geometry
+bodies stays bimodal (87.5/174.9) and is recorded as such — since
+traced to compositor flush attribution in the software-raster harness
+(period 5 in call space, identical draw lists, no cadence off-DOM),
+not to the code; see the audit addendum. The geometry
 pass was never the problem (5.7 ms at 423); the cross-tile separation
 pass is ~free; the synthetic graft is labeled synthetic throughout and
 is not a measurement of the model; the live death phase remains
