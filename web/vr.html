@@ -60,8 +60,13 @@
     font-size:13px;line-height:1.6;display:none}
   .keys{position:absolute;right:16px;bottom:16px;font-size:12px;line-height:1.7;
     color:var(--muted);text-align:right;pointer-events:none;background:rgba(20,19,15,.88);padding:4px 6px}
+  /* Optional frame-time readout (?perf=1); absent entirely when off. */
+  #perf{position:fixed;right:16px;bottom:84px;z-index:3;pointer-events:none;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;line-height:1.5;
+    color:var(--lagoon);background:rgba(20,19,15,.82);border:1px solid var(--line);
+    border-radius:2px;padding:4px 7px;white-space:nowrap}
   @media (max-width:700px){
-    #readout{font-size:12px;bottom:10px} #hint{display:none} .keys{display:none}
+    #readout{font-size:12px;bottom:10px} #hint{display:none} .keys{display:none} #perf{bottom:10px}
     .brand{top:8px} .brand span{display:none}
     #nav{top:34px;left:10px;right:10px;max-width:none;justify-content:flex-start}
     #nav button{padding:6px 7px;min-height:34px;font-size:11px}
@@ -120,6 +125,28 @@ import { loadHumans, HumanLayer } from './humans.js';
 const SNAP = window.SNAPSHOT_URL || null;
 const POLL_MS = SNAP ? 15000 : 1200;
 const $ = (id) => document.getElementById(id);
+/* Optional frame-time readout: `?perf=1`. Off by default; when off, not one
+   element is created and the frame loop pays one boolean check. The median
+   of up to 60 frame deltas is shown with the draw calls and triangles of
+   the last rendered frame — a desktop smoke check anyone can run, and the
+   first honest frame-time datum from the Quest. */
+const PERF = (() => { try { return new URLSearchParams(location.search).get("perf") === "1"; } catch (e) { return false; } })();
+const perfRing = PERF ? new Float32Array(60) : null;
+let perfIdx = 0, perfCount = 0, perfPrev = 0, perfLast = 0, perfEl = null;
+function perfSample() {
+  if (!PERF) return;
+  const now = performance.now();
+  const dt = perfPrev ? now - perfPrev : 16.7;
+  perfPrev = now;
+  perfRing[perfIdx] = dt; perfIdx = (perfIdx + 1) % 60; if (perfCount < 60) perfCount++;
+  if (!perfEl) { perfEl = document.createElement("div"); perfEl.id = "perf"; document.body.appendChild(perfEl); }
+  if (now - perfLast < 250) return;
+  perfLast = now;
+  const s = Array.from(perfRing.subarray(0, perfCount)).sort((a, b) => a - b);
+  const med = s[s.length >> 1];
+  const info = renderer.info.render;
+  perfEl.textContent = med.toFixed(1) + " ms · " + (info.calls | 0) + " draws · " + (info.triangles | 0) + " tris";
+}
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const smooth = (t) => t * t * (3 - 2 * t);
@@ -2874,6 +2901,7 @@ function frame() {
     if (now - lastHudAt > 1000) { lastHudAt = now; updateHUD(); }
   }
   renderer.render(scene, camera);
+  perfSample();
 }
 
 function applyQueryMode() {

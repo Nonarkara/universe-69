@@ -480,6 +480,19 @@ Batteries green: `test_style` 76 (a new pin fails loudly on a silent
 revert of the merge or the painter), `test_contract` 20, `test_vr` 36;
 mirror identical; evidence in `docs/audits/2026-11-17-trees/`.
 
+**2026-11-18 VR frame-time honesty, opt-in.**
+`vr.html` gains `?perf=1`: a rolling median of up to 60 frame deltas
+plus the last frame's draw calls and triangles on a fixed mono badge;
+off by default and, when off, not one element is created — the frame
+loop pays one boolean. Headless Chromium (SwiftShader) verified the
+badge, the zero-DOM default and zero pageerrors, and yields only the
+TABLE view's scene counts (138 draws, ~1.6M triangles) — frame times
+under SwiftShader are seconds and are not a hardware figure. The Quest
+frame rate remains unverified on real hardware; GRAPHICS.md's standing
+line now says exactly that and points at the flag. Viewer-only; mirror
+identical; deploy vr.html synced; engine untouched at `2026.11.12.6`;
+evidence and limits in `docs/audits/2026-11-18-vr-perf/`.
+
 **2026-11-18 the crowd cache stops wiping itself.**
 Viewer-only cache fix, no engine change, no trajectory moved, nothing
 quoted from the drawing. The density audit's open question — how the

@@ -487,6 +487,19 @@ figure now takes the same `32*k<10` branch a standing one does, with
 
 Every change to the drawing gets a line here, newest first.
 
+- **2026-11-18 — VR frame-time honesty, opt-in.** `vr.html` gains
+  `?perf=1`: a rolling median of up to 60 frame deltas plus the last
+  frame's draw calls and triangles (`renderer.info.render`) on a fixed
+  mono badge, `pointer-events:none`; off by default, and when off not
+  one element is created and the frame loop pays a single boolean.
+  Headless Chromium (SwiftShader) capture verifies the badge, the
+  zero-DOM default and zero pageerrors; it establishes the TABLE
+  view's scene counts (138 draws, ~1.6M tris) and **not** a hardware
+  frame time — the Quest remains the honest unknown until someone
+  wears it, and this change is the instrument, not the measurement.
+  Viewer-only; mirror identical; deploy vr.html synced; no trajectory
+  moved; engine untouched at `2026.11.12.6`. Evidence and limits in
+  `docs/audits/2026-11-18-vr-perf/`.
 - **2026-11-18 — the crowd cache stops wiping itself.** §6 item 1's
   extremity question — what a 1,000-body heap would do — measured on a
   synthetic graft (300/600/1,200 labeled-synthetic bodies on the frozen
@@ -1020,8 +1033,13 @@ slow the instrument. CONTINUE applies the newest record. The former REAL-TIME
 button has been renamed INSPECT to make that distinction visible.
 
 The device-resolution cap rises from 2 to 2.5. Extra face geometry is enabled
-only inside a world; crowds still share draw calls. MacBook/Quest frame rate
-must be measured on those devices before any performance claim.
+only inside a world; crowds still share draw calls. Frame rate must be
+measured on MacBook/Quest before any performance claim — `?perf=1` (2026-11-18)
+puts a rolling 60-frame frame-time median and the last frame's draw
+calls/triangles on a fixed badge (zero DOM when off); a headless-SwiftShader
+capture proved only the scene counts (138 draws, ~1.6M tris at the table),
+never a hardware figure. Quest remains the honest unknown until someone
+wears it.
 
 ### 2026-11-03 — human anatomy, clothing and distance-driven 3D gait
 
