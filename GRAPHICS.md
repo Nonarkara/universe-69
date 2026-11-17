@@ -389,9 +389,17 @@ This is the honest list. Each line is a defect, not a design.
    hearth.
 5. *(fixed 2026-10-28: the grade is painted after the people and the fire
    after the grade, so firelight now reaches the figures in its circle.)*
-6. **No occlusion from the world's own geometry.** Huts, trees and cabanas are
-   in the baked layer, so a person always draws over a hut, even when they
-   are standing behind it.
+6. *(fixed 2026-11-17: huts and EDEN lodgings; trees, buffet bars and camp
+   assets are not occluders yet — see 6a)* Huts and cabanas were in the baked
+   layer, so a person always drew over them, even when standing behind.
+   They are now painted per-frame in the people's own back-to-front order
+   (huts and lodgings merged into the people's y-sort in `render()`), so a
+   person behind a roofline is lost to it and a person in front still
+   stands over it.
+6a. *(open, scoped out of item 6 on purpose)* Tree crowns, the buffet bars
+   and the camp assets (granary, pen, records bench, hearth stone ring) are
+   still baked and are not occluders yet; a person under a crown still reads
+   over it.
 7. *(fixed 2026-10-28: children have their own proportions by age band.)*
    The current pair uses two calls to the same rigged body painter.
 8. *(fixed 2026-11-02: a standing activity's animation budget doubled from
@@ -449,6 +457,22 @@ figure now takes the same `32*k<10` branch a standing one does, with
 ## 8. Changelog
 
 Every change to the drawing gets a line here, newest first.
+
+- **2026-11-17 — the world's own geometry hides whoever stands behind it.**
+  §6 item 6, partially closed. LAGOON's huts and EDEN's lodgings left the
+  baked ground layer and are painted per-frame in the people's own
+  back-to-front order (a painter's-algorithm merge in `render()`, keyed
+  beside the people: hut `h[1]+1.05`, lodging `Y+2`, person
+  `a.y+a.nudgeY`), so a person behind a roofline is lost to it and a person
+  in front still stands over it. The baked painter's culling is kept
+  (off-view skipped, water sites not drawn). Trees, the buffet bars and the
+  camp assets remain baked and are not occluders yet — §6 item 6a. Item 1
+  (crowd interpenetration at extreme density) is untouched: this is depth
+  ordering against buildings, not co-location. Viewer-only; no trajectory
+  moved; engine untouched at `2026.11.12.6`. Witnesses and honest negatives
+  (the live record moves faster than a camera can aim, so the witness
+  frames come from the deployed frozen snapshot; the EDEN facade clip is
+  sub-pixel) live in `docs/audits/2026-11-17-occlusion/`.
 
 - **2026-11-17 — EDEN's lodgings read as buildings, and the dome's sky has a
   night.** §6 item 3 closed. The condos and capsule hotels were a flat 2×2

@@ -414,6 +414,26 @@ a dsf-2 shot straddles the 2.5-second part clock, and §6 items 1 and 6
 remain open. Batteries green: `test_style` 75, `test_contract` 20,
 `test_vr` 36.
 
+**2026-11-17 the world's own geometry hides whoever stands behind it.**
+Viewer-only repaint — no engine change, no trajectory moved. LAGOON's huts
+and EDEN's lodgings left the baked ground layer and are painted per-frame
+in the people's own back-to-front order (a painter's-algorithm merge in
+`render()`, y-keyed beside the people), closing §6 item 6: a person behind
+a roofline is lost to it; a person in front still stands over it. Trees,
+the buffet bars and the camp assets remain baked and are not occluders yet
+(§6 item 6a, scoped out on purpose), and item 1 — crowd interpenetration
+at extreme density — is untouched. The live record moves faster than a
+camera can aim (a followed actor crossed two tiles between setting the
+camera and the shutter), so the witness frames come from the deployed
+frozen snapshot: actors 592/597 (on the hut tile) and 599 (key 90.0, before
+the hut's key 90.05) are absent from the behind-ordering frame, while
+595/579/589 (keys 90.81–91.1) paint over the same hut's base — both halves
+read off the frame and off the page's sort keys, recorded in
+`docs/audits/2026-11-17-occlusion/`. The EDEN facade's clip in the same
+frame is sub-pixel (its still people stand at x=21 against an edge at
+21.06); said plainly rather than staged. Batteries green: `test_style` 75,
+`test_contract` 20, `test_vr` 36.
+
 **2026-11-11 re-derivation — the long fuse under the shipped engine
 (`2026.11.12.2`, same witness rng lineage as the first 120-year arc).**
 Feuds 1,947, peaces 1,924, live bonds 4 at Y120; final population 220 (peak

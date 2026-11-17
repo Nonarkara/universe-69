@@ -981,11 +981,9 @@ var LAGOON_WORLD={
     // how far along it is — a frame of poles, then thatch climbing it, then a
     // finished hut with its door. Before shelter they sleep in the open, and
     // nothing is drawn for a hut that does not exist.
-    (u.huts||[]).forEach(function(h){
-      if (h[0]<x0-2||h[0]>x1+2||h[1]<y0-2||h[1]>y1+2) return;
-      if (k(h[0],h[1])===2) return;                 // a hut site the record puts on water is not drawn
-      drawHut(g, h[0]+0.5, h[1]+0.5, Math.max(0,Math.min(1,+h[2]||0)), tb);
-    });
+    // huts are painted per-frame with the people, back to front, so a
+    // person standing behind one is hidden by it (GRAPHICS.md §6 item 6) —
+    // see drawHut and the merge in render().
     // the camps: the hearth, and a wall of stone once they can build one
     var walled=!Array.isArray(u.camp_state)&&(u.tech||[]).indexOf("metallurgy")>=0;
     (u.settlements||[]).forEach(function(s){
@@ -1043,6 +1041,30 @@ function drawHut(g, x, y, p, tb){
   g.fillStyle=P.hutdoor; g.beginPath(); g.moveTo(x-0.22,gy+0.28); g.lineTo(x-0.22,gy-0.35); g.quadraticCurveTo(x,gy-0.62,x+0.22,gy-0.35); g.lineTo(x+0.22,gy+0.28); g.closePath(); g.fill();
 }
 
+// A lodging block as a standalone form, like drawHut: drawn per-frame in
+// the people's back-to-front order (GRAPHICS.md §6 item 6) so it can hide a
+// person standing behind it. Tile units; tb is the pixels-per-tile the line
+// widths are expressed in.
+function drawEdenLodging(g, X, Y, bi, tb){
+  var px=1/tb, col=CABANA[bi%CABANA.length];
+  g.fillStyle=P.shadowSoft; g.beginPath(); g.ellipse(X+1.18,Y+2.12,1.6,0.46,0,0,6.283); g.fill();
+  g.fillStyle=col; g.fillRect(X-0.06,Y,2.12,0.5);                       // roof plane
+  g.fillStyle="rgba(255,246,226,0.26)"; g.fillRect(X-0.06,Y,2.12,0.10);  // its sunlit top sliver
+  g.fillStyle="rgba(20,16,9,0.30)"; g.fillRect(X-0.06,Y+0.40,2.12,0.12); // the fascia shadow
+  g.fillStyle=bi%2===0?P.condo:P.capsule; g.fillRect(X,Y+0.5,2,1.5);
+  g.fillStyle="rgba(20,16,9,0.30)"; g.fillRect(X,Y+0.5,2,1.5);           // the front face, in shade
+  g.fillStyle="rgba(255,246,226,0.22)"; g.fillRect(X,Y+0.5,0.30,1.5);    // the west edge, lit
+  g.fillStyle="rgba(20,16,9,0.22)"; g.fillRect(X+1.70,Y+0.5,0.30,1.5);   // the east jamb, deeper
+  if (tb>=10){
+    if (bi%2===0){ g.fillStyle=P.window; g.fillRect(X+0.28,Y+0.82,0.42,0.36); g.fillRect(X+1.30,Y+0.82,0.42,0.36);
+      g.fillStyle=P.hutdoor; g.fillRect(X+0.79,Y+1.32,0.44,0.68); }
+    else { g.fillStyle=P.pod; for (var rr=0;rr<3;rr++) for (var cc=0;cc<3;cc++) g.fillRect(X+0.18+cc*0.58,Y+0.72+rr*0.42,0.4,0.28); }
+  }
+  g.strokeStyle=P.lineSoft; g.lineWidth=px; g.strokeRect(X,Y,2,2);
+}
+// A water tile of the LAGOON terrain, for the per-frame hut merge (the
+// baked painter's local k() is out of scope at draw time).
+function lagoonIsWater(x,y){ var T=terr9; if(!T) return false; return (x<0||y<0||x>=T.length||y>=T.length)?true:T[y][x]===2; }
 // ---- EDEN -------------------------------------------------------------------
 var base6Key=null;
 // The pen's default architecture, mirroring the engine's. The model sends the
@@ -1168,30 +1190,9 @@ var EDEN_WORLD={
       var mx=c0+r*Math.cos(ang), my=c0+r*Math.sin(ang);
       g.fillStyle=(mi%3===0)?P.mat1:(mi%3===1?P.mat2:P.mat3); g.globalAlpha=0.45; g.fillRect(mx-0.5,my-0.2,1.0,0.42); g.globalAlpha=1;
     }
-    // lodgings, where the model's places are: condos for households (even),
-    // capsule hotels for singles (odd) — the same number of places either way.
-    // Drawn as volumes under the same top-left light as everything else:
-    // a CABANA-coloured roof plane catching it, a front face in shade with a
-    // lit west edge and a deeper east jamb, so a resort block reads as a
-    // building on the lawn, not a flat tile.
-    var bl=(u.boxes_xy&&u.boxes_xy.length)?u.boxes_xy:EDEN_BOXES_FALLBACK;
-    for (var bi=0;bi<bl.length;bi++){
-      var ac=alcoveFor(bl[bi],S), X=ac[0], Y=ac[1], col=CABANA[bi%CABANA.length];
-      g.fillStyle=P.shadowSoft; g.beginPath(); g.ellipse(X+1.18,Y+2.12,1.6,0.46,0,0,6.283); g.fill();
-      g.fillStyle=col; g.fillRect(X-0.06,Y,2.12,0.5);                       // roof plane
-      g.fillStyle="rgba(255,246,226,0.26)"; g.fillRect(X-0.06,Y,2.12,0.10);  // its sunlit top sliver
-      g.fillStyle="rgba(20,16,9,0.30)"; g.fillRect(X-0.06,Y+0.40,2.12,0.12); // the fascia shadow
-      g.fillStyle=bi%2===0?P.condo:P.capsule; g.fillRect(X,Y+0.5,2,1.5);
-      g.fillStyle="rgba(20,16,9,0.30)"; g.fillRect(X,Y+0.5,2,1.5);           // the front face, in shade
-      g.fillStyle="rgba(255,246,226,0.22)"; g.fillRect(X,Y+0.5,0.30,1.5);    // the west edge, lit
-      g.fillStyle="rgba(20,16,9,0.22)"; g.fillRect(X+1.70,Y+0.5,0.30,1.5);   // the east jamb, deeper
-      if (tb>=10){
-        if (bi%2===0){ g.fillStyle=P.window; g.fillRect(X+0.28,Y+0.82,0.42,0.36); g.fillRect(X+1.30,Y+0.82,0.42,0.36);
-          g.fillStyle=P.hutdoor; g.fillRect(X+0.79,Y+1.32,0.44,0.68); }
-        else { g.fillStyle=P.pod; for (var rr=0;rr<3;rr++) for (var cc=0;cc<3;cc++) g.fillRect(X+0.18+cc*0.58,Y+0.72+rr*0.42,0.4,0.28); }
-      }
-      g.strokeStyle=P.lineSoft; g.lineWidth=px; g.strokeRect(X,Y,2,2);
-    }
+    // lodgings are painted per-frame with the people, back to front, so a
+    // person standing behind one is hidden by it (GRAPHICS.md §6 item 6) —
+    // see drawEdenLodging and the merge in render().
     // the buffet bars: thatch over a counter of fruit that never runs out
     [[8,8],[S-10,8],[8,S-10],[S-10,S-10]].forEach(function(hp){
       var X=hp[0], Y=hp[1];
@@ -3334,7 +3335,34 @@ function render(canvas, world, map, key, u){
   list.sort(function(a,b){ return (a.y+a.nudgeY)-(b.y+b.nudgeY); });
   var sh=shadowSprite(ts);
   var drawnPair={};
+  // The world's own geometry hides the people behind it (GRAPHICS.md §6
+  // item 6). Huts and lodgings left the baked ground layer and are painted
+  // here, merged into the people's own back-to-front order, so a person
+  // behind a roofline is lost to it and a person in front still stands over
+  // it. Tree crowns, the buffet bars and the camp assets are not occluders
+  // yet; a person under a crown still reads over it.
+  var occl=[], oi=0;
+  if (key==="l"){
+    (u.huts||[]).forEach(function(h){
+      if (h[0]<sx-3||h[0]>sx+2*hx+3||h[1]<sy-4||h[1]>sy+2*hy+4) return;
+      if (lagoonIsWater(h[0],h[1])) return;          // a hut site the record puts on water is not drawn
+      occl.push({y:h[1]+1.05, hut:[h[0],h[1],Math.max(0,Math.min(1,+h[2]||0))]});
+    });
+  } else if (key==="e"){
+    var bl=(u.boxes_xy&&u.boxes_xy.length)?u.boxes_xy:EDEN_BOXES_FALLBACK;
+    for (var bi=0;bi<bl.length;bi++){
+      var ac=alcoveFor(bl[bi],S), X=ac[0], Y=ac[1];
+      if (X+2<sx||X>sx+2*hx||Y+2<sy||Y>sy+2*hy) continue;
+      occl.push({y:Y+2, box:bl[bi], bi:bi, X:X, Y:Y});
+    }
+  }
+  occl.sort(function(p,q){ return p.y-q.y; });
+  function drawOccl(){ var o=occl[oi++]; g.save(); g.setTransform(ts,0,0,ts,-sx*ts,-sy*ts);
+    if (o.hut) drawHut(g, o.hut[0]+0.5, o.hut[1]+0.5, o.hut[2], ts);
+    else drawEdenLodging(g, o.X, o.Y, o.bi, ts);
+    g.restore(); }
   for (var i=0;i<list.length;i++){
+    while (oi<occl.length && occl[oi].y<=list[i].y+(list[i].nudgeY||0)) drawOccl();
     var a=list[i];
     var px=(a.x+(a.nudge||0)-sx)*ts+ts/2, py=(a.y+(a.nudgeY||0)-sy-(a.lift||0))*ts+ts*0.95; a.lift=0;
     if (px<-60||py<-90||px>canvas.width+60||py>canvas.height+60) continue;
@@ -3376,6 +3404,7 @@ function render(canvas, world, map, key, u){
     else { g.save(); g.translate(Math.round(px), Math.round(py-dh+2*sp.s*scale)); g.scale(-1,1);
            g.drawImage(sp.c, Math.round(-dw/2), 0, Math.round(dw), Math.round(dh)); g.restore(); }
   }
+  while (oi<occl.length) drawOccl();   // structures in front of everybody
   drawParticles(g, key, sx, sy, ts, canvas.width);
   // light: the hour grades the whole scene, and the season grades it again.
   // It is painted AFTER the people, so a figure at night is as dark as the
