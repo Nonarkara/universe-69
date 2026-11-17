@@ -826,6 +826,20 @@ function drawBuffetBar(g, X, Y){
   g.fillStyle=P.trunk;                                     // stools along the counter
   for (var st=0;st<4;st++){ g.beginPath(); disc(g, X+0.25+st*0.5, Y+2.35, 0.17); g.fill(); }
 }
+// A wood crown as the people are drawn: a shadow thrown to the bottom
+// right, a crown in shade, the lit side of the crown toward the light —
+// the same three strokes the baked layer used to make in one batch, now
+// one tree at a time so the woods can hide whoever stands behind them
+// (GRAPHICS.md §6 item 6b). The key is the shadow's south edge, so a
+// person north of it is lost to the crown and a person south of it stands
+// over the tree.
+function drawTree(g, x, y, r, seed, tb){
+  if (tb>=3){ g.fillStyle=P.shadowSoft; g.beginPath();
+    g.moveTo(x+0.3+r, y+0.35); g.ellipse(x+0.3, y+0.35, r, r*0.75, 0, 0, 6.283); g.fill(); }
+  g.fillStyle=P.canD; g.beginPath(); crown(g, x, y, r, seed); g.fill();
+  g.fillStyle=P.can; g.beginPath(); crown(g, x-r*0.13, y-r*0.16, r*0.78, seed); g.fill();
+  if (tb>=10){ g.fillStyle=P.canL; g.beginPath(); crown(g, x-r*0.26, y-r*0.3, r*0.39, seed); g.fill(); }
+}
 
 // ---- LAGOON ---------------------------------------------------------------
 var LAGOON_WORLD={
@@ -907,9 +921,10 @@ var LAGOON_WORLD={
       }
       g.fill(); g.globalAlpha=1;
     }
-    // trees: a shadow thrown to the bottom right, a crown in shade, the lit
-    // side of the crown toward the light
-    var trees=[], scrubs=[], palms=[], mangs=[];
+    // scrubs and the shore's palms and mangroves; the woods themselves are
+    // painted per-frame in the people's own order (GRAPHICS.md §6 item 6b) —
+    // see drawTree and the merge in render()
+    var scrubs=[], palms=[], mangs=[];
     function enclosed(wx, wy){             // water walled by land = a lagoon
       var n=0;
       if (k(wx-1,wy)!==2) n++; if (k(wx+1,wy)!==2) n++;
@@ -918,9 +933,7 @@ var LAGOON_WORLD={
     }
     for (y=Math.max(1,y0-1);y<Math.min(S-1,y1+1);y++) for (x=Math.max(1,x0-1);x<Math.min(S-1,x1+1);x++){
       v=T[y][x];
-      if ((v===1 && hash2(x*3,y*5)>0.42) || (v===0 && hash2(x*7,y*11)>0.985))
-        trees.push(x+0.5+(hash2(x,y*3)-0.5)*0.5, y+0.5+(hash2(x*5,y)-0.5)*0.5, 0.62+hash2(x+1,y+2)*0.38);
-      else if (v===5 && hash2(x*17,y*13)>0.90)          // the hill country: scraggle
+      if (v===5 && hash2(x*17,y*13)>0.90)          // the hill country: scraggle
         scrubs.push(x+0.5, y+0.5, 0.34+hash2(x+3,y+9)*0.22);
       else if (v===3 && (k(x-1,y)===2||k(x+1,y)===2||k(x,y-1)===2||k(x,y+1)===2)){
         var hag=hash2(x*31,y*19);
@@ -932,25 +945,19 @@ var LAGOON_WORLD={
         }
       }
     }
-    // tree shadows merge into a dark smear below ~3 device px a tile; the
-    // crowns carry the shape there, and the screen grain carries texture
+    // scrub shadows merge into a dark smear below ~3 device px a tile; the
+    // screen grain carries texture there
     if (tb>=3){
       g.fillStyle=P.shadowSoft; g.beginPath();
-      for (i=0;i<trees.length;i+=3) { g.moveTo(trees[i]+0.3+trees[i+2],trees[i+1]+0.35); g.ellipse(trees[i]+0.3,trees[i+1]+0.35,trees[i+2],trees[i+2]*0.75,0,0,6.283); }
       for (i=0;i<scrubs.length;i+=3) { g.moveTo(scrubs[i]+0.2+scrubs[i+2],scrubs[i+1]+0.25); g.ellipse(scrubs[i]+0.2,scrubs[i+1]+0.25,scrubs[i+2],scrubs[i+2]*0.7,0,0,6.283); }
       g.fill();
     }
     g.fillStyle=P.canD; g.beginPath();
-    for (i=0;i<trees.length;i+=3) crown(g, trees[i], trees[i+1], trees[i+2],hash2(trees[i],trees[i+1]));
     for (i=0;i<scrubs.length;i+=3) disc(g, scrubs[i], scrubs[i+1], scrubs[i+2]);
     g.fill();
     g.fillStyle=P.can; g.beginPath();
-    for (i=0;i<trees.length;i+=3) crown(g, trees[i]-trees[i+2]*0.13, trees[i+1]-trees[i+2]*0.16, trees[i+2]*0.78,hash2(trees[i],trees[i+1]));
     for (i=0;i<scrubs.length;i+=3) disc(g, scrubs[i]-scrubs[i+2]*0.2, scrubs[i+1]-scrubs[i+2]*0.24, scrubs[i+2]*0.6);
     g.fill();
-    if (tb>=10){ g.fillStyle=P.canL; g.beginPath();
-      for (i=0;i<trees.length;i+=3) crown(g, trees[i]-trees[i+2]*0.26, trees[i+1]-trees[i+2]*0.3, trees[i+2]*0.39,hash2(trees[i]+3,trees[i+1]));
-      g.fill(); }
     if (tb>=8){ g.fillStyle=P.hillL; g.beginPath();
       for (i=0;i<scrubs.length;i+=3) disc(g, scrubs[i]-scrubs[i+2]*0.3, scrubs[i+1]-scrubs[i+2]*0.3, scrubs[i+2]*0.4);
       g.fill(); }
@@ -3337,14 +3344,14 @@ function render(canvas, world, map, key, u){
   var sh=shadowSprite(ts);
   var drawnPair={};
   // The world's own geometry hides the people behind it (GRAPHICS.md §6
-  // items 6 and 6a). Huts, lodgings, buffet bars, camp assets and hearth
-  // rings left the baked layer and are painted here, merged into the
-  // people's own back-to-front order, so a person behind a roofline is lost
-  // to it and a person in front still stands over it. Tree crowns are not
-  // occluders yet (§6 item 6b); a person under a crown still reads over it,
-  // and neither is the camp's perimeter wall, whose single sort key would
+  // items 6, 6a and 6b). Huts, lodgings, buffet bars, camp assets, hearth
+  // rings and the wood crowns left the baked layer and are painted here,
+  // merged into the people's own back-to-front order, so a person behind a
+  // roofline or a crown is lost to it and a person in front still stands
+  // over it. Scrubs, palms and mangroves stay baked (they are low), and so
+  // does the camp's perimeter wall ring, whose single sort key would
   // wrongly cover the people inside it.
-  var occl=[], oi=0;
+  var occl=[], oi=0, tb=groundStep(ts);
   if (key==="l"){
     (u.huts||[]).forEach(function(h){
       if (h[0]<sx-3||h[0]>sx+2*hx+3||h[1]<sy-4||h[1]>sy+2*hy+4) return;
@@ -3362,6 +3369,19 @@ function render(canvas, world, map, key, u){
       if (p>0) occl.push({y:s.y-1.3, bench:{x:s.x+1.3, y:s.y-1.8, p:p, done:!!local.writing}});
       if (local.fire) occl.push({y:s.y+2.41, hearth:{x:s.x+2.75, y:s.y+2.1}});
     });
+    // the woods: the same predicate and positions the baked painter used,
+    // culled to the viewport with a margin wider than the largest crown
+    var TL=terr9;
+    for (var tyy=Math.max(1,Math.floor(sy)-2); tyy<Math.min(S-1,Math.ceil(sy+2*hy)+2); tyy++)
+      for (var txx=Math.max(1,Math.floor(sx)-2); txx<Math.min(S-1,Math.ceil(sx+2*hx)+2); txx++){
+        var tv=TL[tyy][txx];
+        if ((tv===1 && hash2(txx*3,tyy*5)>0.42) || (tv===0 && hash2(txx*7,tyy*11)>0.985)){
+          var txd=txx+0.5+(hash2(txx,tyy*3)-0.5)*0.5,
+              tyd=tyy+0.5+(hash2(txx*5,tyy)-0.5)*0.5,
+              tr=0.62+hash2(txx+1,tyy+2)*0.38;
+          occl.push({y:tyd+0.35+tr*0.75, tree:[txd,tyd,tr,hash2(txd,tyd)]});
+        }
+      }
   } else if (key==="e"){
     var bl=(u.boxes_xy&&u.boxes_xy.length)?u.boxes_xy:EDEN_BOXES_FALLBACK;
     for (var bi=0;bi<bl.length;bi++){
@@ -3384,6 +3404,7 @@ function render(canvas, world, map, key, u){
     else if (o.pen) drawPen(g, o.pen.x, o.pen.y, o.pen.p, o.pen.done, ts);
     else if (o.bench) drawBench(g, o.bench.x, o.bench.y, o.bench.p, o.bench.done, ts);
     else if (o.hearth) drawHearthRing(g, o.hearth.x, o.hearth.y);
+    else if (o.tree) drawTree(g, o.tree[0], o.tree[1], o.tree[2], o.tree[3], tb);
     g.restore(); }
   for (var i=0;i<list.length;i++){
     while (oi<occl.length && occl[oi].y<=list[i].y+(list[i].nudgeY||0)) drawOccl();

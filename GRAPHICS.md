@@ -408,9 +408,17 @@ This is the honest list. Each line is a defect, not a design.
    lost to it. The wall ring stays baked on purpose: its north and south
    faces want opposite sort orders, so no single key is right, and a
    person behind it still reads over it.
-6b. *(open)* Tree crowns are still batched into one single-pass paint;
-   lifting them per-frame costs real time for a mild gain, and a person
-   under a crown still reads over it.
+6b. *(fixed 2026-11-17/18; scrubs, palms, mangroves and the camp's
+   perimeter wall stay baked)* Tree crowns left the baked layer and are
+   painted per-frame in the same merge (key `tyd+0.35+tr*0.75`, the
+   shadow's south edge, beside the person key `a.y+a.nudgeY`), so a person
+   behind a crown is lost to it and a person in front still stands over it.
+   Measured before lifting: the bake is a cached offscreen canvas, but only
+   36 crowns are visible at the camp rung (≈0.3 ms a frame); the whole-map
+   upper bound (613 crowns, 12.4 ms) is unreachable at any named rung. The
+   frozen record held no clean natural witness (its still people cluster
+   on one hut-crowded tile); the witness is a controlled A/B in a scratch
+   copy and is recorded in `docs/audits/2026-11-17-trees/`.
 7. *(fixed 2026-10-28: children have their own proportions by age band.)*
    The current pair uses two calls to the same rigged body painter.
 8. *(fixed 2026-11-02: a standing activity's animation budget doubled from
@@ -468,6 +476,29 @@ figure now takes the same `32*k<10` branch a standing one does, with
 ## 8. Changelog
 
 Every change to the drawing gets a line here, newest first.
+
+- **2026-11-18 — the woods hide whoever stands behind them.** §6 item 6b,
+  fixed. LAGOON's tree crowns left the baked ground layer and are painted
+  per-frame in the people's own back-to-front order, the same merge as
+  items 6 and 6a (key `tyd+0.35+tr*0.75`, the shadow's south edge; person
+  `a.y+a.nudgeY`); the standalone `drawTree` painter makes the same three
+  strokes the bake used to batch (shadow, shade crown, lit side) at the same
+  detail thresholds, and the collection reuses the bake's own predicate and
+  positions, culled to the viewport. Scrubs, palms and mangroves stay baked
+  (they are low), the camp's perimeter wall stays baked (6a's reason), and
+  EDEN has no trees to lift. The cost was measured before the change, not
+  assumed: 36 crowns visible at the camp rung ≈ 0.3 ms a frame, against a
+  whole-map upper bound of 12.4 ms that no named rung reaches. The frozen
+  record held no clean natural witness — its still people behind a crown
+  all sit on the hut-crowded tile (144–145, 89–92), where hut and crown
+  are ambiguous, and with a hut-free margin the clean-candidate list is
+  empty — so the witness is a controlled A/B in a scratch copy (never
+  deployed, server stopped): actor 591 display-shifted onto a clean crown,
+  same camera, same clock, only y changed; behind, half the body is lost to
+  the crown, in front, the whole figure stands over its south lobe. The
+  record on disk is untouched. Viewer-only; no trajectory moved; engine
+  untouched at `2026.11.12.6`. Evidence and honest negatives live in
+  `docs/audits/2026-11-17-trees/`.
 
 - **2026-11-17 — the counter, the grain store and the hearth join the
   order.** §6 item 6a, fixed. The EDEN buffet bars, the LAGOON camp assets

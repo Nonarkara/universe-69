@@ -427,6 +427,21 @@ class TestTheWorldsAtWork(unittest.TestCase):
         # in drawBuffetBar — pin both so a silent revert fails loudly
         self.assertIn("stools along the counter", self.src)
 
+    def test_tree_crowns_occlude_in_the_people_order(self):
+        # GRAPHICS.md §6 item 6b: the woods' crowns left the baked LAGOON
+        # layer and are painted per-frame in the people's own back-to-front
+        # order. The bake keeps only the low growth, the merge collects the
+        # crowns with the bake's own predicate, keyed at the shadow's south
+        # edge, and drawTree is reached only through the merge — pin the
+        # whole chain so a silent revert fails loudly (the negative pin is
+        # the baked layer no longer batching crowns into one pass)
+        self.assertIn("var scrubs=[], palms=[], mangs=[];", self.src)
+        self.assertIn("function drawTree(g, x, y, r, seed, tb){", self.src)
+        self.assertIn("var occl=[], oi=0, tb=groundStep(ts);", self.src)
+        self.assertIn("occl.push({y:tyd+0.35+tr*0.75, tree:[txd,tyd,tr,hash2(txd,tyd)]});", self.src)
+        self.assertIn("else if (o.tree) drawTree(g, o.tree[0], o.tree[1], o.tree[2], o.tree[3], tb);", self.src)
+        self.assertNotIn("for (i=0;i<trees.length;i+=3) crown(", self.src)
+
 
 class TestTheReader(unittest.TestCase):
     """The Book, its timeline, and the archive of the first run, in one reader."""

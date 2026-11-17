@@ -454,6 +454,31 @@ local density remains open and unaudited against the live death phase.
 Batteries green: `test_style` 75, `test_contract` 20, `test_vr` 36; mirror
 identical; evidence in `docs/audits/2026-11-17-occluders/`.
 
+**2026-11-18 the woods hide whoever stands behind them.**
+Viewer-only repaint — no engine change, no trajectory moved. LAGOON's tree
+crowns left the baked ground layer and are painted per-frame in the same
+merge as items 6 and 6a, closing §6 item 6b: a person behind a crown is
+lost to it; a person in front still stands over it. The cost was measured
+before the lifting, not assumed — the bake is a cached offscreen canvas,
+but the whole-map paint of 613 crowns is 12.4 ms while the camp rung sees
+36 (≈0.3 ms a frame), so the crowns ride the people's own order and the
+scrubs, palms, mangroves and the camp's perimeter wall stay baked. The
+frozen record held no clean natural witness: its still people behind a
+crown all cluster on the hut-crowded tile (144–145, 89–92), where hut and
+crown are ambiguous, and with a hut-free margin the clean-candidate list
+is empty — so the witness is a controlled A/B in a scratch copy of the
+viewer, never deployed and now stopped: actor 591 display-shifted onto a
+clean crown at (20.3, 8.28), same load, same camera, same clock
+(`Y617 · DAY · POP 123` read before and after both shots), only the display
+y changed by 0.8 tiles. Behind, half the body is lost to the crown; in
+front, the whole figure stands over its south lobe. The record on disk is
+untouched (591's on-record position is (144, 92)); the absence of a natural
+witness is recorded, not staged. §6 item 1 — separation at extreme local
+density — remains open, and the live death phase is still unaudited.
+Batteries green: `test_style` 76 (a new pin fails loudly on a silent
+revert of the merge or the painter), `test_contract` 20, `test_vr` 36;
+mirror identical; evidence in `docs/audits/2026-11-17-trees/`.
+
 **2026-11-11 re-derivation — the long fuse under the shipped engine
 (`2026.11.12.2`, same witness rng lineage as the first 120-year arc).**
 Feuds 1,947, peaces 1,924, live bonds 4 at Y120; final population 220 (peak
