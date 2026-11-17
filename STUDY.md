@@ -383,13 +383,36 @@ EDEN {age 13, infant 21, starvation 2, violence 1} — the field's
 accumulation window is still unpinned (§5), so cite as stored, not as a
 rate. The deployed snapshot was refreshed to this day (d222301, 218 KB
 compact, `2c359ca`) and headless-verified before push: `2d.html` and
-`vr.html` render the Y617 record, zero page errors. The domain still waits
-on the DNS flip; the watcher is on window 626–770.
+`vr.html` render the Y617 record, zero page errors. The domain still waits on the
+DNS flip; the watcher's window 626–770 elapsed all-404 (the old hub, not
+the cache), and window 771–915 is armed (`/tmp/u69w/watcher-771-915.log`).
 
 
 
 
 **Chronicle — The Iterations.** The visitor-facing iteration history is now wired into the viewer as *The Iterations* book, registered under `READER_DOCS` in `web/index.html`. The book records every engine boundary, every observed behaviour, and every agreed-on or disagreed-upon figure, from the first two-seed life to year 617. Its chapters cover: how the worlds were made and why there are two; the first uncontrolled run (EDEN peaked at 749 Y79, sank to 47 at Y175, behavioural sink arrived in year 45; LAGOON's island wrote its culture in years of plenty and starved in year 173); the three silent-pen iterations (2–4) where EDEN's mate-search radius of 6 tiles against 48-tile pen geometry produced peak 18‑20, generation stuck at 2, and the entire world was almost never conceiving — the fix (`social_sight()`) gave EDEN its own size and left LAGOON identical; iteration 5 emptied at day 191942 (Y533) and reseeded iteration 6 at day 202743 (Y563) seed 503=498+5; iteration 6 climbs to 123 at Y617 with exploit since d564, 101 free/6 vacant; LAGOON's third life at Y617 holds 17 in two camps (Meera 197 huts, Parvati 27), agriculture, dry season, 94.4 food-days after the storm that destroyed most stores (d222120), lessons [preserve, cleanliness]. The kula's walk runs through the live lineage: at Y588–Y592 five carriers set out, four honest negatives were recorded across five watch windows, and at Y616–Y617 nine gift events completed across the two exchange days — each exchange kept between camps, Bhagavati→Parvati and Ganesh→Meera via the named chain of carriers, and Mahakashyapa kept Bhagavati's hearth. The witness arc (260 rows, 130 years, zero mismatches) confirms that the same seed produces the same history; EDEN never goes extinct in 400 years (stored peak 243 at year-row 242, generation 16, final population 187 riding its own cycle with lessons preserve and retain; LAGOON's own peak 79 at year 172). The honest ledger records what is open: census is the authority, event log is a sampler, cause-of-death tables are cumulative and unpinned (cite as stored), and the West World exists as a frozen snapshot (`snapshot.json` read via `window.SNAPSHOT_URL="snapshot.json"`). This book is registered as `archive/history.json` and read from the `?` veil sheet button labelled THE ITERATIONS.
+
+**2026-11-17 EDEN's lodgings get volume, and the dome's sky gets a night.**
+Viewer-only repaint in the cached painter and the per-frame night pass — no
+engine change, no trajectory moved, nothing quoted from the drawing. The
+resort's condos and capsule hotels are drawn as volumes under the same
+top-left light the rest of the world uses: a CABANA roof plane with a
+sunlit top sliver and a fascia shadow, a shaded front face with a lit west
+edge and a deeper east jamb, and a contact shadow at the base; the night
+windows in `edenNight` moved to that face's own coordinates, so day and
+night paint the same building. §6 item 3 in GRAPHICS.md — the absent
+exterior night-sky artwork — is closed for the dome: the horizon band the
+daylight painter paints with clouds becomes a deterministic star field and
+a small moon at dusk and night. Evidence captured from the live interface
+through a read-only proxy to the instrument (390/1024/1440, night and day
+parts, island-rung and clips; each file's clock label read back and
+matching), in `docs/audits/2026-11-17-realism/` — including the honest
+negatives: the display light cycles four times per model year so a DAY
+clock can sit under a dark display phase (the lit windows are the night
+painter doing designed work), the 1440 frames were taken at dsf 1 because
+a dsf-2 shot straddles the 2.5-second part clock, and §6 items 1 and 6
+remain open. Batteries green: `test_style` 75, `test_contract` 20,
+`test_vr` 36.
 
 **2026-11-11 re-derivation — the long fuse under the shipped engine
 (`2026.11.12.2`, same witness rng lineage as the first 120-year arc).**

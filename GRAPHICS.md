@@ -375,9 +375,15 @@ This is the honest list. Each line is a defect, not a design.
    largest camp; documentary close shots and manual zoom provide individual
    detail. Very crowded populations still
    require further visual review on the instrument.
-3. **EDEN retains the daytime ground artwork under its night grade.** Its
-   windows and outdoor pool now have correctly aligned light after the grade.
-   A separate exterior night-sky artwork is still absent.
+3. *(fixed 2026-11-17: the dome's painted horizon band becomes a star field
+   and a small moon at dusk and night — deterministic `hash2` positions, a
+   few stars breathing on the tick — and the resort's lodgings are drawn as
+   volumes under the same top-left light as everything else: CABANA roof
+   plane, shaded front face, lit west edge, contact shadow. The night
+   windows moved to the day painter's own face coordinates. Evidence:
+   `docs/audits/2026-11-17-realism/`. The ground underneath the grade is
+   still the day artwork by design — the grade is light, not a second
+   world.)*
 4. **The island rung is a map.** At 6 px a person is a body's mass; it is
    only reached on request (key 1, wheel). The auto camera uses camp and
    hearth.
@@ -443,6 +449,23 @@ figure now takes the same `32*k<10` branch a standing one does, with
 ## 8. Changelog
 
 Every change to the drawing gets a line here, newest first.
+
+- **2026-11-17 — EDEN's lodgings read as buildings, and the dome's sky has a
+  night.** §6 item 3 closed. The condos and capsule hotels were a flat 2×2
+  tile with a colour band; they are now volumes under the same top-left
+  light as everything else — CABANA roof plane with a sunlit top sliver and a
+  fascia shadow, a shaded front face with a lit west edge and a deeper east
+  jamb, a contact shadow hugging the base — with the windows, pods and door
+  on that face. `edenNight`'s lit windows moved to the face's own
+  coordinates, so day and night paint the same building. The horizon band
+  the daylight painter paints with clouds becomes a star field and a small
+  moon (crater seas in half shade) at dusk and night: deterministic `hash2`
+  positions per band, a few stars breathing on the tick, `P.cloud` only, no
+  new palette token, no new chrome. Viewer-only; no trajectory moved.
+  Captures and honest negatives (the display light cycles 4× a model year,
+  so a DAY clock can sit under a dark display phase; the 1440 frames were
+  taken at dsf 1 because a dsf-2 shot straddles the 2.5 s part clock) live in
+  `docs/audits/2026-11-17-realism/`.
 
 - **2026-11-02 — a gesture gets its own cycle, not the walk's leftovers.**
   §6 item 8: standing activities (farming, fishing, talking, grooming,

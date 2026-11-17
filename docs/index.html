@@ -1169,17 +1169,26 @@ var EDEN_WORLD={
       g.fillStyle=(mi%3===0)?P.mat1:(mi%3===1?P.mat2:P.mat3); g.globalAlpha=0.45; g.fillRect(mx-0.5,my-0.2,1.0,0.42); g.globalAlpha=1;
     }
     // lodgings, where the model's places are: condos for households (even),
-    // capsule hotels for singles (odd) — the same number of places either way
+    // capsule hotels for singles (odd) — the same number of places either way.
+    // Drawn as volumes under the same top-left light as everything else:
+    // a CABANA-coloured roof plane catching it, a front face in shade with a
+    // lit west edge and a deeper east jamb, so a resort block reads as a
+    // building on the lawn, not a flat tile.
     var bl=(u.boxes_xy&&u.boxes_xy.length)?u.boxes_xy:EDEN_BOXES_FALLBACK;
     for (var bi=0;bi<bl.length;bi++){
       var ac=alcoveFor(bl[bi],S), X=ac[0], Y=ac[1], col=CABANA[bi%CABANA.length];
-      g.fillStyle=P.shadowSoft; g.beginPath(); g.ellipse(X+1.1,Y+2.35,1.5,0.5,0,0,6.283); g.fill();
-      g.fillStyle=bi%2===0?P.condo:P.capsule; g.fillRect(X,Y,2,2);
-      g.fillStyle=col; g.fillRect(X,Y,2,0.36);
+      g.fillStyle=P.shadowSoft; g.beginPath(); g.ellipse(X+1.18,Y+2.12,1.6,0.46,0,0,6.283); g.fill();
+      g.fillStyle=col; g.fillRect(X-0.06,Y,2.12,0.5);                       // roof plane
+      g.fillStyle="rgba(255,246,226,0.26)"; g.fillRect(X-0.06,Y,2.12,0.10);  // its sunlit top sliver
+      g.fillStyle="rgba(20,16,9,0.30)"; g.fillRect(X-0.06,Y+0.40,2.12,0.12); // the fascia shadow
+      g.fillStyle=bi%2===0?P.condo:P.capsule; g.fillRect(X,Y+0.5,2,1.5);
+      g.fillStyle="rgba(20,16,9,0.30)"; g.fillRect(X,Y+0.5,2,1.5);           // the front face, in shade
+      g.fillStyle="rgba(255,246,226,0.22)"; g.fillRect(X,Y+0.5,0.30,1.5);    // the west edge, lit
+      g.fillStyle="rgba(20,16,9,0.22)"; g.fillRect(X+1.70,Y+0.5,0.30,1.5);   // the east jamb, deeper
       if (tb>=10){
-        if (bi%2===0){ g.fillStyle=P.window; g.fillRect(X+0.25,Y+0.6,0.42,0.34); g.fillRect(X+1.33,Y+0.6,0.42,0.34);
-          g.fillStyle=P.hutdoor; g.fillRect(X+0.78,Y+1.3,0.44,0.7); }
-        else { g.fillStyle=P.pod; for (var rr=0;rr<3;rr++) for (var cc=0;cc<3;cc++) g.fillRect(X+0.18+cc*0.58,Y+0.5+rr*0.48,0.4,0.3); }
+        if (bi%2===0){ g.fillStyle=P.window; g.fillRect(X+0.28,Y+0.82,0.42,0.36); g.fillRect(X+1.30,Y+0.82,0.42,0.36);
+          g.fillStyle=P.hutdoor; g.fillRect(X+0.79,Y+1.32,0.44,0.68); }
+        else { g.fillStyle=P.pod; for (var rr=0;rr<3;rr++) for (var cc=0;cc<3;cc++) g.fillRect(X+0.18+cc*0.58,Y+0.72+rr*0.42,0.4,0.28); }
       }
       g.strokeStyle=P.lineSoft; g.lineWidth=px; g.strokeRect(X,Y,2,2);
     }
@@ -1251,6 +1260,39 @@ function edenNight(g, u, sx, sy, ts, canvas){
   mp.addColorStop(0,"rgba(190,214,232,0)"); mp.addColorStop(0.5,"rgba(190,214,232,0.9)"); mp.addColorStop(1,"rgba(190,214,232,0)");
   g.fillStyle=mp; g.fillRect(mx-mw*0.5, my-mw*0.10, mw, mw*0.20);
   g.globalAlpha=1;
+  // the dome's painted horizon, at night: the band the daylight painted
+  // with clouds becomes a star field and a small moon — the resort lit
+  // under the sky the wall was painted with. Star positions are a
+  // deterministic hash2 of band index, never random; a few stars breathe
+  // on the slow tick so the band reads as sky, not as dust.
+  var wx0=(EM-sx)*ts, wy0=(EM-sy)*ts, ww=S*ts, wh=ww;
+  function skyBand(bx0,by0,bw,bh,seed){
+    if (bx0+bw<0||by0+bh<0||bx0>canvas.width||by0>canvas.height) return;
+    var n=Math.max(16,Math.min(110,Math.round(bw*bh/850)));
+    for (var i=0;i<n;i++){
+      var h1=hash2(i*3+1,seed), h2v=hash2(i*5+2,seed), h3=hash2(i*7+3,seed);
+      var sr=0.5+h3*1.15, breathe=(i%5===0)?0.55+0.45*Math.abs(Math.sin(tick*0.02+h1*6.283)):0.85;
+      g.globalCompositeOperation="source-over"; g.globalAlpha=lit*0.85*breathe;
+      g.fillStyle=P.cloud;
+      g.fillRect(bx0+h1*bw, by0+h2v*bh, sr, sr);
+    }
+  }
+  skyBand(wx0, wy0, ww, 2*ts, 11);               // north wall
+  skyBand(wx0, wy0+wh-2*ts, ww, 2*ts, 23);        // south wall
+  skyBand(wx0, wy0, 2*ts, wh, 37);                // west wall
+  skyBand(wx0+ww-2*ts, wy0, 2*ts, wh, 53);       // east wall
+  var mcx=wx0+ww*0.74, mcy=wy0+ts, mr=Math.max(1.8,ts*0.55);
+  if (mcx>-mr*3.2&&mcy>-mr*3.2&&mcx<canvas.width+mr*3.2&&mcy<canvas.height+mr*3.2){
+    g.globalCompositeOperation="lighter"; g.globalAlpha=lit*0.85;
+    var mg=g.createRadialGradient(mcx,mcy,0,mcx,mcy,mr*3.2);
+    mg.addColorStop(0,"rgba(238,242,244,0.9)"); mg.addColorStop(0.45,"rgba(190,214,232,0.28)"); mg.addColorStop(1,"transparent");
+    g.fillStyle=mg; g.fillRect(mcx-mr*3.2,mcy-mr*3.2,mr*6.4,mr*6.4);
+    g.globalCompositeOperation="source-over"; g.globalAlpha=lit;
+    g.fillStyle=P.cloud; g.beginPath(); g.arc(mcx,mcy,mr,0,6.283); g.fill();
+    g.globalAlpha=lit*0.5;
+    g.fillStyle=P.seam; g.beginPath(); g.arc(mcx-mr*0.35,mcy-mr*0.18,mr*0.7,0,6.283); g.fill();  // the seas of the moon, in half shade
+  }
+  g.globalAlpha=1;
   var boxes=(u.boxes_xy&&u.boxes_xy.length)?u.boxes_xy:EDEN_BOXES_FALLBACK;
   boxes.forEach(function(box, bi){
     var ac=alcoveFor(box,S), x=(ac[0]+EM-sx)*ts, y=(ac[1]+EM-sy)*ts;
@@ -1258,11 +1300,11 @@ function edenNight(g, u, sx, sy, ts, canvas){
     g.globalCompositeOperation="source-over";
     g.globalAlpha=lit; g.fillStyle=P.fire;
     if (bi%2===0){
-      g.fillRect(x+0.25*ts,y+0.6*ts,0.42*ts,0.34*ts);
-      g.fillRect(x+1.33*ts,y+0.6*ts,0.42*ts,0.34*ts);
+      g.fillRect(x+0.28*ts,y+0.82*ts,0.42*ts,0.36*ts);
+      g.fillRect(x+1.30*ts,y+0.82*ts,0.42*ts,0.36*ts);
     } else {
       for (var row=0;row<3;row++) for (var col=0;col<3;col++){
-        if ((row+col+bi)%4!==0) g.fillRect(x+(0.18+col*0.58)*ts,y+(0.5+row*0.48)*ts,0.4*ts,0.3*ts);
+        if ((row+col+bi)%4!==0) g.fillRect(x+(0.18+col*0.58)*ts,y+(0.72+row*0.42)*ts,0.4*ts,0.28*ts);
       }
     }
     g.globalCompositeOperation="lighter"; g.globalAlpha=lit*0.3;
