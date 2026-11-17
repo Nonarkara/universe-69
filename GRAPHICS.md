@@ -386,8 +386,13 @@ This is the honest list. Each line is a defect, not a design.
    (items 6, 6a, 6b). Evidence: `docs/audits/2026-11-18-density/`.
 2. **A crowded establishing shot cannot supply portraits.** It frames the
    largest camp; documentary close shots and manual zoom provide individual
-   detail. Very crowded populations still
-   require further visual review on the instrument.
+   detail — the close-shot legibility clause was witnessed 2026-11-18 on
+   the frozen Y617 record (hearth rung at th=1.15; click-select → follow +
+   card with name/activity/vitals; zero pageerrors); evidence and honest
+   negatives in `docs/audits/2026-11-18-close-shot/`. Very crowded
+   populations still
+   require further visual review on the instrument (the live run sits at
+   POP 207; no death-phase heap exists on disk and none was fabricated).
 3. *(fixed 2026-11-17: the dome's painted horizon band becomes a star field
    and a small moon at dusk and night — deterministic `hash2` positions, a
    few stars breathing on the tick — and the resort's lodgings are drawn as
