@@ -1,0 +1,101 @@
+{
+  "title": "The Iterations",
+  "subtitle": "Every age of Universe 6 and Universe 9 · 26 October 2026 to the present · engine 2026.10.27 → 2026.11.12.6",
+  "author": "The Observers",
+  "chapters": [
+    {
+      "id": "how-the-worlds-were-made",
+      "title": "How the worlds were made, and why there is more than one life",
+      "era": {"from": 0, "to": 0, "label": "The design"},
+      "blocks": [
+        {"t": "p", "text": "Two sealed universes live on one old 2016 MacBook, observed and never helped. EDEN, Universe 6, is John Calhoun's Universe 25 rebuilt for humans: a resort under a dome where food, water and a bed cost nothing, and the only scarce things are room and something worth doing. LAGOON, Universe 9, is the first-sapiens world: a tropical island off a greater shore, with woods, fish, freshwater, seasons, big cats — and nothing given."},
+        {"t": "p", "text": "The Observers have one asymmetry written into the law. A dead world is spared nothing: the pen reseeds under the same controlled conditions, empty-handed, and repeats itself. The lagoon reseeds carrying what its dead learned — a list of instincts, passed on without a single word. The pen forgets how to behave; the lagoon remembers. That difference is the experiment."},
+        {"t": "p", "text": "Everything in this book comes from the record: the census first (it is the authority on who lives), the event log second (a sampler, never a whole life), and every figure tagged with the engine version that produced it. Where the record disagrees with the story people like to tell, the record wins, and the disagreement is printed beside it."}
+      ]
+    },
+    {
+      "id": "iteration-one",
+      "title": "Iteration 1 — the pen and the island, 26–28 October 2026",
+      "era": {"from": 0, "to": 175, "label": "First run · engines 2026.10.27–2026.10.28.1"},
+      "blocks": [
+        {"t": "p", "text": "The first two universes began on the evening of 26 October 2026 with two pairs each — young, and not yet knowing what their bodies were for — and ran, unhelped, until the evening of 28 October. In those two real days they lived 175 years. EDEN's first child was born before the first year closed. For forty years the pen grew the way a well-fed population grows, and in year 79 it peaked at 749 people."},
+        {"t": "p", "text": "In year 45 crowding passed a third of the pen's nominal room and the behavioural sink appeared: fights near the hoppers, people crowding the one bar where others already ate, mothers losing infants. The last child was born in year 144; for the final thirty-one years nobody was. When the run was stopped in year 175, forty-seven people remained and forty-five of them had withdrawn — apart, and done. The pen's cause-of-death table read: infant 1,102, age 556, violence 401, plague 31. More infants had been lost than adults had died of every other cause together, in a resort where food never ran out."},
+        {"t": "p", "text": "On the island the same two pairs met the world in order. An ice-age winter came in year 1 and a drought in year 3; that same year Selu tamed fire. Raka knapped the first stone tool in year 4, Selu learned to fish in year 5, Raka raised the first shelter in year 8. In year 10 starvation took five of them, and the survivors carried a new instinct — to preserve — passed on without a single word. Rimailo's shared stories began to bind the bands in year 46. Raess sowed seed on purpose in year 60; by year 64 Setaba's granaries held a surplus. Then, with food enough and nothing chasing them, came the arts: cave paintings in year 75, drum songs in 88, the dance of the tides in 100, then carved totems, the story of the stars, spirit masks, tattoo rites, the great feast, shell jewellery and a long game."},
+        {"t": "p", "text": "In year 101 Noveon built boats that could face open water, and in year 104 the Veshaka tribe crossed the strait to the greater shore — a land without end. Healing lore spread in 105; in year 163 Baur's hunters learned to kill the big cat. In year 164 Tashari, 310 strong, became a chiefdom with Kata to speak for it, and in 166 Mita made marks that remembered. The island had begun to write. Then, in year 173, an ice-age winter came down on the lagoon and the granaries were not enough: 362 people starved — more than half the island — among them Kata, who spoke for Tashari. By year 175 the survivors were 373 and having children again."},
+        {"t": "note", "text": "This iteration's full story, with the charts, lives in the reader's other archive, \"The First Run\". Its audit is part of the record and not a footnote: much of the first run's behaviour was theatre — the food was a formula, EDEN's phases were switches, the two worlds had two rulebooks, and the animals were numbers. The second run was rebuilt to stop every one of those things, and every iteration after this one is a different animal from it. Numbers before the audit are history, kept because deleting a failed run is how a record starts lying."}
+      ]
+    },
+    {
+      "id": "iterations-two-to-four",
+      "title": "Iterations 2–4 — the silent pen",
+      "era": {"from": 0, "to": 0, "label": "Live lineage · engines 2026.11.01.1 → 2026.11.04.1"},
+      "blocks": [
+        {"t": "p", "text": "The live instrument's EDEN line — the one that has been ticking through every engine since the founders arrived — had crossed into its second life when the rebuilt engine landed. Three consecutive postmortems on that run, iterations 2, 3 and 4, read the same every time: peak 18 to 20, barely above the sixteen founders; generation stuck at exactly 2; every death from age, zero infant and zero violence deaths. That is not Calhoun's sink. It is almost nobody conceiving."},
+        {"t": "p", "text": "The cause was found with isolated runs, not a guess. The mate search used a six-tile local radius — right for LAGOON's tight camps, blind in a forty-eight-tile pen whose nest boxes sit on all four walls by design. At the pen's centre, fifteen adults were each individually available and each more than six tiles away. The fix was one function: `social_sight()` gives EDEN its own size to search, and leaves LAGOON's radius byte-identical to what it was. The same ninety-year isolated run after the fix: peak 56, generation 3, growing continuously, zero extinctions — where the old radius had died by year 87 in every one of three independent reseeds."},
+        {"t": "note", "text": "The fix moved trajectories: all numbers from the silent-pen years are history. Their postmortems were carried forward by the reseed, and that is all that was carried — the pen keeps its lessons list empty on purpose. Every figure in this chapter is tagged to engines that are no longer the shipped code."}
+      ]
+    },
+    {
+      "id": "iteration-five",
+      "title": "Iteration 5 — the emptying",
+      "era": {"from": 0, "to": 0, "label": "Live lineage"},
+      "blocks": [
+        {"t": "p", "text": "Under the repaired engine the live pen found its generations again, climbed to a stored peak of 201, reached generation 6 — and still emptied. At day 191,942 — year 533 — the record wrote its only whole death for EDEN on the live line: `extinct_day 191942`, iteration 5. The last census rows held two people alive; the save read population zero."},
+        {"t": "p", "text": "Then the Observers' law held, to the day. The pen sat quiet for thirty years, and at day 202,742 — year 563 — the reseed began: iteration 6."},
+        {"t": "note", "text": "This is the record's only witnessed EDEN death: five lives, one emptying. The live line crossed many engine boundaries on the way down, and the determinism study later in this book says exactly what that costs — the live arc is one lineage's anecdote. The controlled lineages are the figures the shipped code re-derives. Both kinds are kept, and they disagree; the disagreement is the finding."}
+      ]
+    },
+    {
+      "id": "iteration-six",
+      "title": "Iteration 6 — the pen at its peak, and rising",
+      "era": {"from": 0, "to": 0, "label": "Live lineage · current"},
+      "blocks": [
+        {"t": "p", "text": "At day 202,743 the pen began again: iteration 6, seed 503 (= 498 + 5), fseed 69 unchanged, the same sixteen founders at the ages they have (18 to 42), founded_day at the reseed, four postmortems and seventeen engine-history rows carried, phases back at strive, extinct_day cleared. The record line reads: \"The Observers reseed the pen. Iteration 6 begins under the same controlled conditions.\""},
+        {"t": "p", "text": "Read at year 617, day 222,301: 123 people — a stored peak, since the pen is still climbing — generation 4, exploit since day 564 of the iteration, nobody homeless, 101 of 224 places free, six boxes vacant. The sink is not a place yet. The pen is simply growing, in the version of the engine that has been running since early November."},
+        {"t": "note", "text": "The reseed path drops EDEN's lessons and carries LAGOON's. Asymmetry is the experiment, not an oversight: the pen must repeat its own conditions or the comparison dies. Numbers here are the instrument's own, engine 2026.11.12.6, read while it ticks at ten seconds a model day."}
+      ]
+    },
+    {
+      "id": "lagoon-the-island",
+      "title": "LAGOON — the island that remembers",
+      "era": {"from": 0, "to": 0, "label": "Live lineage · third life"},
+      "blocks": [
+        {"t": "p", "text": "The island's first life ended at the year-173 famine recorded above: 373 of 658 alive, the chiefdom's voice among the dead. Its later lives are the lagoon the instrument carries today — third iteration, year 617: seventeen people in two camps, Meera (197 huts, store 854.1) and Parvati (27 huts, store 1,311.5), eight technologies through agriculture, and the instincts `preserve` and `cleanliness` carried from its own dead."},
+        {"t": "p", "text": "The Y617 storm \"destroys most of the stores\" (day 222,120); the tally that follows leaves 94.4 days of food. The hearth pass keeps the camp's continuity through deaths: \"Mahakashyapa keeps Bhagavati's hearth\" (day 222,004, year 616)."},
+        {"t": "p", "text": "And the skyline is inheritance. At year 517 the research panel's `H-LAGOON-ROOFS` read 0.974: 150 of 154 finished roofs belong to no living pair — eleven finished roofs per living pair. A roof is raised once, held for the living while any of its owning pair survives, and never demolished. The camp's horizon belongs to its ancestors; the lagged count is the mechanic, not a bug."},
+        {"t": "note", "text": "The lagoon's population is not its viability. The live island has carried seventeen people through a storm and a dry season while its dead hold most of the roofs. Headcount is a reading; the record says so everywhere it can."}
+      ]
+    },
+    {
+      "id": "the-kula",
+      "title": "The kula — the walk that ends inside one tick",
+      "era": {"from": 0, "to": 0, "label": "The exchange, measured"},
+      "blocks": [
+        {"t": "p", "text": "The lagoon's two camps keep an exchange: once a year, on the day the model year turns, a party sets out with goods and names both ends of the walk — carrier to recipient. In the live record the ring has been watched year after year: at Y588 four carriers set out (Bhagavati, Devadatta, Ganesh, Kaikeyi); at Y590 Ganesh came home to Nirvana and Kaikeyi home to Mahakashyapa; at Y591 Ganesh went out and back inside the same boundary; at Y592 both were outbound again. At Y616 and Y617 the live record carries nine gift events across the two exchange days, every one completed — \"the exchange between the camps is kept.\""},
+        {"t": "p", "text": "The controlled two-camp runs measured the cadence on the shipped code: 69 gifts in 60 years under `2026.11.11.1`, then 81 parties and 162 named landings when the pair walks it under `2026.11.12.3`, then 87 parties, 174 landings and 6 hearth keepings under `.12.4` — and `.12.6` reproduced it identically, 87 and 174 and 6, on a fresh lineage. The gift rate follows the stores; the plain seed-69 arc, which never found a second camp, is kept beside every one of these runs as the honest negative."},
+        {"t": "p", "text": "What the record proves is the mechanism: trigger logs, named carriers and same-tick exchange events. What it does not have is the photograph. The outbound state `gift == 1` lasts less than one engine tick — the 0.2-second burst fired at the boundary read frame 0, half a second later, already on the next day with nothing out. Five watch windows across Y588 to Y592, five honest negatives. The waist bundle is real. No poll can catch it, and no engine hook was added to try, because the instrument's discipline is viewer-only."}
+      ]
+    },
+    {
+      "id": "the-witness",
+      "title": "The witness — two machines, one arc",
+      "era": {"from": 0, "to": 400, "label": "Seed 69 · engines 2026.11.12.5/.12.6"},
+      "blocks": [
+        {"t": "p", "text": "The engine's central promise is that the same seed produces the same history, every time, within one version. On 16 November that promise was put on the table: two independent processes, one capped at year 130 and one run to year 400, each began from `genesis(seed=69, attempt=1)` — the first universe exactly as founded. Compared row by row, all 260 common rows (both worlds × 130 years × 11 fields) matched with **zero mismatches**. The witness arc is a property of the code, not a lucky draw."},
+        {"t": "p", "text": "And the four-hundred-year arc says what the two-century arcs only suggested: **EDEN never goes extinct.** It oscillates — stored peak 243 (year-row 242) at year 93, troughs near 150, final year-400 population 187, generation max 16 — while its phase label reads `exploit` for 399 of the 400 rows after the year-one flip. The label reads the crowd, not the population: there is no strive↔exploit cycle to point at, and the record says so."},
+        {"t": "p", "text": "**LAGOON never goes extinct either.** Stored peak 79 (year-row 78) at year 172, generation 15, final year-400 population 27, riding its own predator-and-hunger cycle with the lessons `vigilance` and `preserve`. Both worlds were alive at the cap. EDEN's 400-year cause-of-death table (`infant 729, age 698, violence 340, starvation 3, plague 1`) accumulates over the window, not a die-off; the table's exact window is not pinned and is cited as stored."},
+        {"t": "note", "text": "The retired harness's old figures — peak 752, extinct year 234, cod infant 952 / age 571 / violence 384 / plague 24 — remain in STUDY.md as history and nowhere else. They are not this engine. Every number in this chapter was re-derived from the shipped code before it was written down, and the tag on each one is the version that produced it."}
+      ]
+    },
+    {
+      "id": "honest-ledger",
+      "title": "The honest ledger",
+      "era": {"from": 0, "to": 0, "label": "What is open"},
+      "blocks": [
+        {"t": "p", "text": "What the record can say and what it cannot. The census is the authority on who lives; the event log is a sampler, and its counts are windows, not lifetimes. The cause-of-death tables accumulate over whatever window produced them, and the reset semantics are not pinned — so a terminal table is cited as stored, never as a rate. A figure is only as good as the engine version beside it, and every earlier version's figures are history."},
+        {"t": "p", "text": "What is genuinely open. The live pen has died once — iteration 5 — and reseeded; its sixth life is 617 years into a genesis arc that, run from the same seed on the shipped code, does not die at all. Both truths are kept side by side, and the disagreement is the finding, not a defect to hide. The kula's walk is proven and unphotographed. The West World exists as a frozen snapshot of this record; no headset has worn it yet, and the instrument has never been entered by an Observer."},
+        {"t": "note", "text": "The instrument keeps ticking on the 2016 MacBook at ten seconds a model day — a year every real hour. It was at year 617 when this book was written, and the book does not claim to be ahead of it. Come back and the record will have moved; that is the point of a record."}
+      ]
+    }
+  ]
+}

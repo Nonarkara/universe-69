@@ -355,10 +355,10 @@
     <p><b class="lagoon">LAGOON</b> is universe 9: a Sri Lanka-inspired tropical island of woods, fish, freshwater and predators, shaped by wet and dry seasons. Nothing is given.</p>
     <p>Watch only. You cannot feed them or step in. They keep living while you are away — by default, one year in one real hour.</p>
     <p>Timelapse runs one 360-day year per real hour: a day every ten seconds. The display light turns four times per year, rather than flashing through every model night. The clock label still reports the actual model time. In real-time mode, light follows the actual dawn, day, dusk and night. In LAGOON the band comes in to the fire after dark and takes turns keeping watch. EDEN never closes, but it goes to bed.</p>
-    <p class="dim">THE FIRST RUN keeps the record of the original two universes: what they did, what we missed, what failed.</p>
+    <p class="dim">THE FIRST RUN keeps the record of the original two universes: what they did, what we missed, what failed. THE ITERATIONS carries every age of both worlds since.</p>
     <p class="dim">Wheel to look closer, drag to pan, click a person to follow, 1 · 2 · 3 for island, camp and hearth, WASD to walk in among them. BOOK and RESEARCH read in pages: ‹ › or the arrow keys.</p>
     </div>
-    <div class="sheetfoot"><button type="button" id="veilok" class="primary">WATCH</button><button type="button" id="archivebtn" title="The record of the first run: screenshots, stories, what we missed, what failed">THE FIRST RUN</button></div>
+    <div class="sheetfoot"><button type="button" id="veilok" class="primary">WATCH</button><button type="button" id="archivebtn" title="The record of the first run: screenshots, stories, what we missed, what failed">THE FIRST RUN</button><button type="button" id="historybtn" title="Every age of both worlds, from the first run to the present">THE ITERATIONS</button></div>
   </div>
 </div>
 <div id="fail" class="modal" role="dialog" aria-modal="true" aria-labelledby="failtitle" hidden>
@@ -4643,7 +4643,7 @@ function isStub(b){ return /STUB/.test((b&&b.title)||"")||(b&&b.stub); }
 // ---- the book -----------------------------------------------------------------
 var book={ data:null, loading:null, pages:[], chapterOf:[], tocPages:0, src:"book/book.json", cache:{} };
 // The same reader opens the Book and the archive of the first run.
-var READER_DOCS={ "book/book.json":{title:"The Book"}, "archive/archive.json":{title:"The First Run"} };
+var READER_DOCS={ "book/book.json":{title:"The Book"}, "archive/archive.json":{title:"The First Run"}, "archive/history.json":{title:"The Iterations"} };
 function loadJSONOnce(url){
   return fetch(url, {cache:"no-store"}).then(function(r){ if (!r.ok) throw new Error("HTTP "+r.status); return r.json(); });
 }
@@ -4783,6 +4783,7 @@ pagers.book.onturn=function(i){
 };
 document.getElementById("bookbtn").onclick=function(){ if (document.getElementById("book").hidden || book.src!=="book/book.json") openBook("book/book.json"); else closeBook(); };
 document.getElementById("archivebtn").onclick=function(){ markIntro(); openBook("archive/archive.json"); };
+document.getElementById("historybtn").onclick=function(){ markIntro(); openBook("archive/history.json"); };
 document.getElementById("bookclose").onclick=closeBook;
 document.getElementById("booktoc").onclick=function(){ pagers.book.go(0); };
 document.getElementById("bookbody").addEventListener("click", function(e){
