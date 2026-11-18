@@ -292,7 +292,11 @@ The drawing is ink over a flat wash of skin, the way a figure study is drawn.
   a joint cap, and a loose second pass over the main line.
 - **Head.** A skull and a jaw, not an egg. Hair as strokes; the back of the
   head is a filled shape; the face is only drawn when the figure is close
-  enough for a face to be legible.
+  enough for a face to be legible. Below the `s>=3.5` detail rung the eye
+  is a bold dark almond — drawn to stay ink at ~1 px, where the old pale
+  sclera read as a smear — and above it the layered eye (sclera, iris,
+  pupil, catch-light). Fingers arrive at `s>=3.0` and the toe hint at
+  `s>=3.2` (2026-11-18).
 - **Hands and feet.** A hand is a palm with a thumb and finger strokes; a foot
   is a wedge with a heel and a toe that meets the ground.
 - **The body is the record.** Width follows BMI, muscle follows strength
@@ -492,6 +496,22 @@ figure now takes the same `32*k<10` branch a standing one does, with
 
 Every change to the drawing gets a line here, newest first.
 
+- **2026-11-18 — the far-tier eye (and quieter fingers/toes).** Owner
+  direction: more precise anatomy. The honest part that moved: below the
+  `s>=3.5` detail rung the eye was a pale sclera with a sub-pixel pupil —
+  legible as nothing at the hearth rung (`s≈2.6`, the eye is ~1.1 px). It
+  is now a bold dark almond; the layered tier (sclera/iris/pupil/
+  catch-light), the closed-lash branch, all gates that decide *whether* a
+  face exists, and every anatomy pin are untouched. Fingers draw from
+  `s>=3.0` (was 4), the toe separation hint from `s>=3.2` (was 4). Zero
+  DOM delta — canvas paint only, so the MSH chrome cost is unchanged (no
+  chrome before/after measured or claimed); engine untouched at
+  `2026.11.12.6`; no trajectory moved. Pixel evidence (synthetic fixtures,
+  8× head crops, 1,920/2,880,000 channel diffs, max 86), the gate run
+  (135 tests OK after the mirror re-sync), the three-viewport MSH checks
+  (12/12, 11/11, 11/11, zero errors) and the honest limits (at s=2.6 the
+  fix makes one pixel ink, not a face) are in
+  `docs/audits/2026-11-18-anatomy/`.
 - **2026-11-18 — VR frame-time honesty, opt-in.** `vr.html` gains
   `?perf=1`: a rolling median of up to 60 frame deltas plus the last
   frame's draw calls and triangles (`renderer.info.render`) on a fixed

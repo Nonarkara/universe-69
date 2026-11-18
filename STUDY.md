@@ -561,6 +561,27 @@ y-sort), `test_contract` 20, `test_vr` 36; mirror identical; evidence in
 `docs/audits/2026-11-18-density/`. §6 item 1 closes its second half; the
 depth-ordering half had closed with items 6, 6a and 6b.
 
+**2026-11-18 the far-tier eye (and quieter fingers/toes).** Viewer-only
+figure change — no engine change, no trajectory moved. The owner asked for
+more precise anatomy of people; the honest reading of what the drawing
+could actually support: below the `s>=3.5` detail rung the eye was a pale
+sclera with a sub-pixel dark dot — at the hearth rung (`s≈2.6`) that read
+as nothing, so the eye is now a bold dark almond drawn to stay ink at ~1
+px. The layered tier (sclera/iris/pupil/catch-light), the closed-lash
+branch, every face's existence gate (`s>=2.2`) and every anatomy pin are
+untouched; fingers draw from `s>=3.0` (was 4) and the toe hint from `s>=3.2`
+(was 4). Zero DOM delta; the MSH chrome cost is unchanged because there is
+no chrome to measure. Batteries green: `test_style`/`test_contract`/
+`test_vr` 135 (the two mirror failures before the `docs/` re-sync were the
+contract doing its job); three viewports 12/12, 11/11, 11/11 with zero
+browser errors; synthetic-fixture pixel diff 1,920 of 2,880,000 channel
+values (max 86), all in the eye region — at s=2.6 the fix makes one pixel
+ink, not a face, and no claim beyond that is made; the island rung and
+very crowded populations remain as they were (§6 item 2 open, the live
+death phase absent, the watcher armed). Mirror identical; engine untouched
+at `2026.11.12.6`; evidence and limits in
+`docs/audits/2026-11-18-anatomy/`.
+
 **2026-11-11 re-derivation — the long fuse under the shipped engine
 (`2026.11.12.2`, same witness rng lineage as the first 120-year arc).**
 Feuds 1,947, peaces 1,924, live bonds 4 at Y120; final population 220 (peak
